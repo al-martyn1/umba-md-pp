@@ -53,9 +53,9 @@ int operator()( const std::string                               &a           //!
     {
         std::string errMsg;
         std::string strVal;
-        int intVal;
+        //int intVal;
         //unsigned uintVal;
-        std::size_t szVal;
+        //std::size_t szVal;
         bool boolVal;
 
         if (opt.name.empty())
@@ -144,86 +144,86 @@ int operator()( const std::string                               &a           //!
             cerrWriter.forceSetConsoleType(res);
         }
 
-        else if ( opt.setParam("CATID",true)
-               || opt.isOption("subst-category") || opt.isOption('S') 
-               // || opt.setParam("VAL",true)
-               || opt.setDescription("Subst category CATID with file relative path. By default, category with empty ID will be renamed."))
-        {
-            if (argsParser.hasHelpOption) return 0;
+        // else if ( opt.setParam("CATID",true)
+        //        || opt.isOption("subst-category") || opt.isOption('S') 
+        //        // || opt.setParam("VAL",true)
+        //        || opt.setDescription("Subst category CATID with file relative path. By default, category with empty ID will be renamed."))
+        // {
+        //     if (argsParser.hasHelpOption) return 0;
+        //  
+        //     if (!opt.getParamValue(strVal,errMsg))
+        //     {
+        //         LOG_ERR_OPT<<errMsg<<"\n";
+        //         return -1;
+        //     }
+        //     
+        //     substCategoryName = strVal;
+        //     return 0;
+        // }
 
-            if (!opt.getParamValue(strVal,errMsg))
-            {
-                LOG_ERR_OPT<<errMsg<<"\n";
-                return -1;
-            }
-            
-            substCategoryName = strVal;
-            return 0;
-        }
+        // else if ( opt.setParam("LANGTAGFORMAT",true)
+        //        || opt.isOption("lang-tag-format") || opt.isOption('T') 
+        //        // || opt.setParam("VAL",true)
+        //        || opt.setDescription( "Set language tag format for output. LANGTAGFORMAT can be one of:\n"
+        //                               "LangTag - en-US\n"
+        //                               "LangId - 409\n"
+        //                               "LangIdFull - 0409\n"
+        //                               "LangIdX - 0x409\n"
+        //                               "LangIdFullX - 0x0409\n"
+        //                             )
+        //         )
+        // {
+        //     if (argsParser.hasHelpOption) return 0;
+        //  
+        //     if (!opt.getParamValue(strVal,errMsg))
+        //     {
+        //         LOG_ERR_OPT<<errMsg<<"\n";
+        //         return -1;
+        //     }
+        //     
+        //     marty_tr::ELangTagFormat tmp = marty_tr::enum_deserialize(strVal, marty_tr::ELangTagFormat::invalid);
+        //     switch(tmp)
+        //     {
+        //         //case marty_tr::ELangTagFormat::invalid           : break;
+        //         case marty_tr::ELangTagFormat::langTag           : break;
+        //         //case marty_tr::ELangTagFormat::langTagNeutral    : break;
+        //         //case marty_tr::ELangTagFormat::langTagNeutralAuto: break;
+        //         case marty_tr::ELangTagFormat::langId            : break;
+        //         case marty_tr::ELangTagFormat::langIdFull        : break;
+        //         case marty_tr::ELangTagFormat::langIdX           : break;
+        //         case marty_tr::ELangTagFormat::langIdFullX       : break;
+        //         default:
+        //             LOG_ERR_OPT<<"invalid LANGTAGFORMAT value: '"<<strVal<<"'"<<"\n";
+        //             return -1;
+        //     }
+        //  
+        //     langTagFormat = tmp;
+        //  
+        //     return 0;
+        // }
 
-        else if ( opt.setParam("LANGTAGFORMAT",true)
-               || opt.isOption("lang-tag-format") || opt.isOption('T') 
-               // || opt.setParam("VAL",true)
-               || opt.setDescription( "Set language tag format for output. LANGTAGFORMAT can be one of:\n"
-                                      "LangTag - en-US\n"
-                                      "LangId - 409\n"
-                                      "LangIdFull - 0409\n"
-                                      "LangIdX - 0x409\n"
-                                      "LangIdFullX - 0x0409\n"
-                                    )
-                )
-        {
-            if (argsParser.hasHelpOption) return 0;
-
-            if (!opt.getParamValue(strVal,errMsg))
-            {
-                LOG_ERR_OPT<<errMsg<<"\n";
-                return -1;
-            }
-            
-            marty_tr::ELangTagFormat tmp = marty_tr::enum_deserialize(strVal, marty_tr::ELangTagFormat::invalid);
-            switch(tmp)
-            {
-                //case marty_tr::ELangTagFormat::invalid           : break;
-                case marty_tr::ELangTagFormat::langTag           : break;
-                //case marty_tr::ELangTagFormat::langTagNeutral    : break;
-                //case marty_tr::ELangTagFormat::langTagNeutralAuto: break;
-                case marty_tr::ELangTagFormat::langId            : break;
-                case marty_tr::ELangTagFormat::langIdFull        : break;
-                case marty_tr::ELangTagFormat::langIdX           : break;
-                case marty_tr::ELangTagFormat::langIdFullX       : break;
-                default:
-                    LOG_ERR_OPT<<"invalid LANGTAGFORMAT value: '"<<strVal<<"'"<<"\n";
-                    return -1;
-            }
-
-            langTagFormat = tmp;
-
-            return 0;
-        }
-
-        else if ( opt.setParam("INDENT",2)
-               || opt.isOption("json-indent") || opt.isOption("indent")
-               // || opt.setParam("VAL",true)
-               || opt.setDescription("Set indent for nesting levels in final JSON."))
-        {
-            if (argsParser.hasHelpOption) return 0;
-
-            if (!opt.getParamValue(intVal,errMsg))
-            {
-                LOG_ERR_OPT<<errMsg<<"\n";
-                return -1;
-            }
-
-            if (intVal<0)
-            {
-                LOG_ERR_OPT<<"invalid option value (--json-indent)"<<"\n";
-                return -1;
-            }
-            
-            jsonIndent = (unsigned)intVal;
-            return 0;
-        }
+        // else if ( opt.setParam("INDENT",2)
+        //        || opt.isOption("json-indent") || opt.isOption("indent")
+        //        // || opt.setParam("VAL",true)
+        //        || opt.setDescription("Set indent for nesting levels in final JSON."))
+        // {
+        //     if (argsParser.hasHelpOption) return 0;
+        //  
+        //     if (!opt.getParamValue(intVal,errMsg))
+        //     {
+        //         LOG_ERR_OPT<<errMsg<<"\n";
+        //         return -1;
+        //     }
+        //  
+        //     if (intVal<0)
+        //     {
+        //         LOG_ERR_OPT<<"invalid option value (--json-indent)"<<"\n";
+        //         return -1;
+        //     }
+        //     
+        //     jsonIndent = (unsigned)intVal;
+        //     return 0;
+        // }
 
         else if ( opt.setParam("?MODE",true)
                || opt.isOption("overwrite") || opt.isOption('Y') 

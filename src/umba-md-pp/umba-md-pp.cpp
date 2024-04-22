@@ -80,7 +80,7 @@ unsigned jsonIndent     = 2;
 
 std::string               outputFilename;
 std::string               substCategoryName;
-marty_tr::ELangTagFormat  langTagFormat = marty_tr::ELangTagFormat::langIdFull; // langId;
+//marty_tr::ELangTagFormat  langTagFormat = marty_tr::ELangTagFormat::langIdFull; // langId;
 //bool        substSategory = false;
 
 using marty_cpp::ELinefeedType;
@@ -222,74 +222,74 @@ int main(int argc, char* argv[])
     unsigned errCount = 0;
 
 
-    marty_tr::tr_set_lang_tag_format(langTagFormat);
+    // marty_tr::tr_set_lang_tag_format(langTagFormat);
 
     std::string curFile; // = fileName;
     unsigned lineNo = 0;
 
-    auto errReportHandler = marty_tr::makeErrReportHandler( marty_tr::DefaultMessageNotFoundHandler(), 
-                          [&](const std::string& msgId, const std::string& msgCur, const std::string& msgNew, const std::string& catId, const std::string& langId)
-                          {
-                              LOG_ERR << umba::formatMessage("translation already exist, language: $(lang), category: $(category), message: '$(msg)'\n"
-                                                             "Current text: '$(textCur)'\n"
-                                                             "New text    : '$(textNew)'\n"
-                                                            )
-                                                            .arg("lang"    , langId)
-                                                            .arg("category", catId)
-                                                            .arg("msg"     , msgId)
-                                                            .arg("textCur" , msgCur)
-                                                            .arg("textNew" , msgNew)
-                                                            .toString()
-                                      ; // << "\n";
-
-                              // need warning as error
-                              // errCount++;
-
-                              return true; // allow overwite prev translation
-                          }
-                          ,
-                          [&](const std::string& catId, const std::string& msgId) // messageNotFullyTranslated
-                          {
-                              LOG_WARN_OPT("tr") << umba::formatMessage("message '$(catId):$(msgId)' not fully translated")
-                                                                       .arg("catId", catId)
-                                                                       .arg("msgId", msgId)
-                                                                       .toString()
-                                                 << "\n";
-
-                              // need warning as error
-                              // errCount++;
-                          }
-                          ,
-                          [&](const std::string& lang, const std::string& langTag) // messageMissingTranslation
-                          {
-                              if (lang!=langTag)
-                              {
-                                  LOG_WARN_OPT("tr") << "  " << umba::formatMessage("missing translation: $(langOrg) - $(langTag)")
-                                                                           .arg("langOrg", lang)
-                                                                           .arg("langTag", langTag)
-                                                                           .toString()
-                                                 << "\n";
-                              }
-                              else
-                              {
-                                  LOG_WARN_OPT("tr") << "  " << umba::formatMessage("missing translation: $(langOrg)")
-                                                                           .arg("langOrg",lang)
-                                                                           .toString()
-                                                 << "\n";
-                              }
-
-                              // need warning as error
-                              // errCount++;
-                          }
-
-                );
+    // auto errReportHandler = marty_tr::makeErrReportHandler( marty_tr::DefaultMessageNotFoundHandler(), 
+    //                       [&](const std::string& msgId, const std::string& msgCur, const std::string& msgNew, const std::string& catId, const std::string& langId)
+    //                       {
+    //                           LOG_ERR << umba::formatMessage("translation already exist, language: $(lang), category: $(category), message: '$(msg)'\n"
+    //                                                          "Current text: '$(textCur)'\n"
+    //                                                          "New text    : '$(textNew)'\n"
+    //                                                         )
+    //                                                         .arg("lang"    , langId)
+    //                                                         .arg("category", catId)
+    //                                                         .arg("msg"     , msgId)
+    //                                                         .arg("textCur" , msgCur)
+    //                                                         .arg("textNew" , msgNew)
+    //                                                         .toString()
+    //                                   ; // << "\n";
+    //  
+    //                           // need warning as error
+    //                           // errCount++;
+    //  
+    //                           return true; // allow overwite prev translation
+    //                       }
+    //                       ,
+    //                       [&](const std::string& catId, const std::string& msgId) // messageNotFullyTranslated
+    //                       {
+    //                           LOG_WARN_OPT("tr") << umba::formatMessage("message '$(catId):$(msgId)' not fully translated")
+    //                                                                    .arg("catId", catId)
+    //                                                                    .arg("msgId", msgId)
+    //                                                                    .toString()
+    //                                              << "\n";
+    //  
+    //                           // need warning as error
+    //                           // errCount++;
+    //                       }
+    //                       ,
+    //                       [&](const std::string& lang, const std::string& langTag) // messageMissingTranslation
+    //                       {
+    //                           if (lang!=langTag)
+    //                           {
+    //                               LOG_WARN_OPT("tr") << "  " << umba::formatMessage("missing translation: $(langOrg) - $(langTag)")
+    //                                                                        .arg("langOrg", lang)
+    //                                                                        .arg("langTag", langTag)
+    //                                                                        .toString()
+    //                                              << "\n";
+    //                           }
+    //                           else
+    //                           {
+    //                               LOG_WARN_OPT("tr") << "  " << umba::formatMessage("missing translation: $(langOrg)")
+    //                                                                        .arg("langOrg",lang)
+    //                                                                        .toString()
+    //                                              << "\n";
+    //                           }
+    //  
+    //                           // need warning as error
+    //                           // errCount++;
+    //                       }
+    //  
+    //             );
 
     // virtual void messageNotFullyTranslated(const std::string& msgId, const std::string& catId) = 0;
     //  
     // virtual void messageMissingTranslation(const std::string& lang, const std::string& lanfTag) = 0;
 
 
-    marty_tr::tr_set_err_handler(&errReportHandler);
+    // marty_tr::tr_set_err_handler(&errReportHandler);
 
     encoding::EncodingsApi* pEncodingsApi = encoding::getEncodingsApi();
 
@@ -321,25 +321,25 @@ int main(int argc, char* argv[])
             // LOG_MSG_OPT << "Relative name   : '" << relFileName << "'" << "\n";
         }
 
-        std::string fileCatId = umba::filename::getPathFile(relFileName);
-        if (marty_tr::getLocaleInfo(umba::filename::getName(fileCatId), true /* neutralAllowed */))
-        {
-            fileCatId = umba::filename::getPath(fileCatId); // Локаль была найдена как последний компонент пути (имя файла) - обрезаем
-        }
-        else
-        {
-            // Локаль в имени файла, отделена символом подчеркивания
-            std::string::size_type pos = fileCatId.rfind('_');
-            if (pos!=fileCatId.npos && marty_tr::getLocaleInfo(umba::filename::getName(std::string(fileCatId, pos+1, std::string::npos)), true /* neutralAllowed */))
-            {
-                fileCatId = std::string(fileCatId, 0, pos);
-            }
-        }
-        
-        if (!argsParser.quet)
-        {
-            // LOG_MSG_OPT << "File category ID: '" << fileCatId << "'" << "\n";
-        }
+        // std::string fileCatId = umba::filename::getPathFile(relFileName);
+        // if (marty_tr::getLocaleInfo(umba::filename::getName(fileCatId), true /* neutralAllowed */))
+        // {
+        //     fileCatId = umba::filename::getPath(fileCatId); // Локаль была найдена как последний компонент пути (имя файла) - обрезаем
+        // }
+        // else
+        // {
+        //     // Локаль в имени файла, отделена символом подчеркивания
+        //     std::string::size_type pos = fileCatId.rfind('_');
+        //     if (pos!=fileCatId.npos && marty_tr::getLocaleInfo(umba::filename::getName(std::string(fileCatId, pos+1, std::string::npos)), true /* neutralAllowed */))
+        //     {
+        //         fileCatId = std::string(fileCatId, 0, pos);
+        //     }
+        // }
+        //  
+        // if (!argsParser.quet)
+        // {
+        //     // LOG_MSG_OPT << "File category ID: '" << fileCatId << "'" << "\n";
+        // }
 
         
 
@@ -357,32 +357,32 @@ int main(int argc, char* argv[])
         
         std::string utfText = pEncodingsApi->convert( fileData.data()+bomSize, fileData.size()-bomSize, cpId, encoding::EncodingsApi::cpid_UTF8 );
 
-        marty_tr::all_translations_map_t trMap;
-        try
-        {
-            trMap = marty_tr::tr_parse_translations_data(utfText);
-        }
-        catch(const std::exception &e)
-        {
-            //LOG_ERR << ": failed to parse translations file: " << e.what() << "\n";
-            LOG_ERR << umba::formatMessage("failed to parse translations file: '$(what)'")
-                                          .arg("what",e.what())
-                                          .toString()
-                    << "\n";
-            errCount++;
-        }
-
-        if (!marty_tr::tr_replace_category(trMap, substCategoryName, fileCatId))
-        {
-            LOG_ERR << umba::formatMessage("failed to rename category '$(categoryFrom)' to '$(categoryTo)' - category '$(categoryTo)' already exist")
-                                          .arg("categoryFrom",substCategoryName.empty() ? std::string("<EMPTY>") : substCategoryName)
-                                          .arg("categoryTo",fileCatId)
-                                          .toString()
-                    << "\n";
-        }
-
-
-        marty_tr::tr_add_custom_translations(trMap);
+        // marty_tr::all_translations_map_t trMap;
+        // try
+        // {
+        //     trMap = marty_tr::tr_parse_translations_data(utfText);
+        // }
+        // catch(const std::exception &e)
+        // {
+        //     //LOG_ERR << ": failed to parse translations file: " << e.what() << "\n";
+        //     LOG_ERR << umba::formatMessage("failed to parse translations file: '$(what)'")
+        //                                   .arg("what",e.what())
+        //                                   .toString()
+        //             << "\n";
+        //     errCount++;
+        // }
+        //  
+        // if (!marty_tr::tr_replace_category(trMap, substCategoryName, fileCatId))
+        // {
+        //     LOG_ERR << umba::formatMessage("failed to rename category '$(categoryFrom)' to '$(categoryTo)' - category '$(categoryTo)' already exist")
+        //                                   .arg("categoryFrom",substCategoryName.empty() ? std::string("<EMPTY>") : substCategoryName)
+        //                                   .arg("categoryTo",fileCatId)
+        //                                   .toString()
+        //             << "\n";
+        // }
+        //  
+        //  
+        // marty_tr::tr_add_custom_translations(trMap);
 
     } // for(const auto &fileName : foundFiles)
 
@@ -466,7 +466,7 @@ int main(int argc, char* argv[])
     } // for(const auto &msgCatKvp : msgLangs)
     #endif
 
-    marty_tr::tr_check_translation_completeness();
+    // marty_tr::tr_check_translation_completeness();
 
     // if (!argsParser.quet)
     // {
@@ -479,22 +479,22 @@ int main(int argc, char* argv[])
     if (!errCount || bForce)
     {
         
-        std::string finalTrText = marty_tr::tr_serialize_translations(marty_tr::tr_get_all_translations(), jsonIndent /* indent */);
-
-        if (outputFileType!=umba::cli_tool_helpers::IoFileType::stdoutFile)
-        {
-            finalTrText = marty_cpp::converLfToOutputFormat(finalTrText, outputLinefeed);
-        }
-        
-        if (!umba::cli_tool_helpers::writeFile(outputFileType, outputFilename, finalTrText, bOverwrite))
-        {
-            LOG_ERR_OPT << umba::formatMessage("failed to write output file: '$(fileName)'")
-                                              .arg("fileName",outputFilename)
-                                              .toString()
-                        << "\n";
-    
-            return 1;
-        }
+        // std::string finalTrText = marty_tr::tr_serialize_translations(marty_tr::tr_get_all_translations(), jsonIndent /* indent */);
+        //  
+        // if (outputFileType!=umba::cli_tool_helpers::IoFileType::stdoutFile)
+        // {
+        //     finalTrText = marty_cpp::converLfToOutputFormat(finalTrText, outputLinefeed);
+        // }
+        //  
+        // if (!umba::cli_tool_helpers::writeFile(outputFileType, outputFilename, finalTrText, bOverwrite))
+        // {
+        //     LOG_ERR_OPT << umba::formatMessage("failed to write output file: '$(fileName)'")
+        //                                       .arg("fileName",outputFilename)
+        //                                       .toString()
+        //                 << "\n";
+        //  
+        //     return 1;
+        // }
     }
     else
     {

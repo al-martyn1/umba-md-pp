@@ -1,0 +1,5 @@
+{
+    "includePath": ["${workspaceFolder}/_libs", "${workspaceFolder}/_libs/encoding", "${workspaceFolder}/_libs/sfmt/inc"],
+    "configurationProvider": "ms-vscode.cmake-tools"
+    
+}
