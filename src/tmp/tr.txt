@@ -1,0 +1,4 @@
+AssetManager - readTranslations - или это автоматом?
+AssetManager - readCustomTranslations - где искать, /home.translations?
+AssetManager - addCustomTranslationsFromJson
+

@@ -242,22 +242,22 @@ int operator()( const std::string                               &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("?MODE",true)
-               || opt.isOption("force-generate") || opt.isOption("force") || opt.isOption('F') 
-               // || opt.setParam("VAL",true)
-               || opt.setDescription("Force generate output ignoring all input errors."))
-        {
-            if (argsParser.hasHelpOption) return 0;
-
-            if (!opt.getParamValue(boolVal,errMsg))
-            {
-                LOG_ERR_OPT<<errMsg<<"\n";
-                return -1;
-            }
-            
-            bForce = boolVal;
-            return 0;
-        }
+        // else if ( opt.setParam("?MODE",true)
+        //        || opt.isOption("force-generate") || opt.isOption("force") || opt.isOption('F') 
+        //        // || opt.setParam("VAL",true)
+        //        || opt.setDescription("Force generate output ignoring all input errors."))
+        // {
+        //     if (argsParser.hasHelpOption) return 0;
+        //  
+        //     if (!opt.getParamValue(boolVal,errMsg))
+        //     {
+        //         LOG_ERR_OPT<<errMsg<<"\n";
+        //         return -1;
+        //     }
+        //     
+        //     bForce = boolVal;
+        //     return 0;
+        // }
 
         else if ( opt.setParam("LINEFEED",umba::command_line::OptionType::optString)
                || opt.isOption("linefeed") || opt.isOption("LF") || opt.isOption('L')
@@ -279,95 +279,95 @@ int operator()( const std::string                               &a           //!
                 return -1;
             }
             
-            ELinefeedType tmp = marty_cpp::enum_deserialize( strVal, ELinefeedType::invalid );
-            if (tmp==ELinefeedType::invalid)
+            marty_cpp::ELinefeedType tmp = marty_cpp::enum_deserialize( strVal, marty_cpp::ELinefeedType::invalid );
+            if (tmp== marty_cpp::ELinefeedType::invalid)
             {
                 LOG_ERR_OPT<<"Invalid linefeed option value: "<<strVal<<"\n";
                 return -1;
             }
 
-            outputLinefeed = tmp;
+            appConfig.outputLinefeed = tmp;
 
             return 0;
         }
 
-        else if ( opt.isOption("exclude-files") || opt.isOption('X') || opt.setParam("MASK,...")
-               || opt.setDescription("Exclude files from parsing. The 'MASK' parameter is a simple file mask, where '*' "
-                                     "means any number of any chars, and '?' means exact one of any char. In addition, "
-                                     "symbol '^' in front and/or back of the mask means that the mask will be bound to beginning/ending "
-                                     "of the tested file name.\n"
-                                     "Also, regular expresion syntax allowed in form '" + 
-                                     umba::regex_helpers::getRawEcmaRegexPrefix<std::string>() + "YOURREGEX'. The regular expresions supports\n"
-                                     "See also: C++ Modified ECMA Script regular expression grammar - https://en.cppreference.com/w/cpp/regex/ecmascript"
-                                    )
-                )
-        {
-            if (argsParser.hasHelpOption) return 0;
-            
-            if (!opt.hasArg())
-            {
-                LOG_ERR_OPT<<"exclude files mask not taken (--exclude-files)\n";
-                return -1;
-            }
-
-            std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
-            appConfig.excludeFilesMaskList.insert(appConfig.excludeFilesMaskList.end(), lst.begin(), lst.end());
-
-            return 0;
-        }
-
-        else if ( opt.isOption("include-files") || opt.isOption('I') || opt.setParam("MASK,...")
-               || opt.setDescription("Include C/C++ names for output. Only files which file name matched any of taken masks, will be added to output.\n"
-                                     "Note: exclude masks also performed on included names\n"
-                                     "For details about 'MASK' parameter see '--exclude-files' option description.\n"
-                                     "Use\n"
-                                     "'--include-files=*.json^,*.jsn^,*.yaml^,*.yml^' to process resources\n"
-                                    )
-                )
-        {
-            if (argsParser.hasHelpOption) return 0;
-            
-            if (!opt.hasArg())
-            {
-                LOG_ERR_OPT<<"include names mask not taken (--include-names)\n";
-                return -1;
-            }
-
-            std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
-            appConfig.includeFilesMaskList.insert(appConfig.includeFilesMaskList.end(), lst.begin(), lst.end());
-
-            return 0;
-        }
+        // else if ( opt.isOption("exclude-files") || opt.isOption('X') || opt.setParam("MASK,...")
+        //        || opt.setDescription("Exclude files from parsing. The 'MASK' parameter is a simple file mask, where '*' "
+        //                              "means any number of any chars, and '?' means exact one of any char. In addition, "
+        //                              "symbol '^' in front and/or back of the mask means that the mask will be bound to beginning/ending "
+        //                              "of the tested file name.\n"
+        //                              "Also, regular expresion syntax allowed in form '" + 
+        //                              umba::regex_helpers::getRawEcmaRegexPrefix<std::string>() + "YOURREGEX'. The regular expresions supports\n"
+        //                              "See also: C++ Modified ECMA Script regular expression grammar - https://en.cppreference.com/w/cpp/regex/ecmascript"
+        //                             )
+        //         )
+        // {
+        //     if (argsParser.hasHelpOption) return 0;
+        //     
+        //     if (!opt.hasArg())
+        //     {
+        //         LOG_ERR_OPT<<"exclude files mask not taken (--exclude-files)\n";
+        //         return -1;
+        //     }
+        //  
+        //     std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
+        //     appConfig.excludeFilesMaskList.insert(appConfig.excludeFilesMaskList.end(), lst.begin(), lst.end());
+        //  
+        //     return 0;
+        // }
+        //  
+        // else if ( opt.isOption("include-files") || opt.isOption('I') || opt.setParam("MASK,...")
+        //        || opt.setDescription("Include C/C++ names for output. Only files which file name matched any of taken masks, will be added to output.\n"
+        //                              "Note: exclude masks also performed on included names\n"
+        //                              "For details about 'MASK' parameter see '--exclude-files' option description.\n"
+        //                              "Use\n"
+        //                              "'--include-files=*.json^,*.jsn^,*.yaml^,*.yml^' to process resources\n"
+        //                             )
+        //         )
+        // {
+        //     if (argsParser.hasHelpOption) return 0;
+        //     
+        //     if (!opt.hasArg())
+        //     {
+        //         LOG_ERR_OPT<<"include names mask not taken (--include-names)\n";
+        //         return -1;
+        //     }
+        //  
+        //     std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
+        //     appConfig.includeFilesMaskList.insert(appConfig.includeFilesMaskList.end(), lst.begin(), lst.end());
+        //  
+        //     return 0;
+        // }
 
         else if ( opt.setParam("PATH")
-               || opt.isOption("path") || opt.isOption("scan") || opt.isOption('P')
-               || opt.setDescription("Add path to scan path list"))
+               || opt.isOption("add-examples-path") || opt.isOption('I')
+               || opt.setDescription("Add paths list for examples searching"))
         {
             if (argsParser.hasHelpOption) return 0;
             
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Adding path to scan path list requires argument (--path)\n";
+                LOG_ERR_OPT<<"Adding path for examples searching requires argument (--add-examples-path)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg; // umba::macros::substMacros(opt.optArg,umba::macros::MacroTextFromMapOrEnv<std::string>(appConfig.macros),umba::macros::keepUnknownVars);
-            appConfig.scanPaths.push_back(makeAbsPath(optArg));
+            appConfig.samplesPaths.push_back(makeAbsPath(optArg));
 
             return 0;
         }
 
-        else if ( opt.isOption("all")
-               || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")
-                )
-        {
-            if (argsParser.hasHelpOption) return 0;
-            
-            appConfig.allFiles = true;
-
-            return 0;
-        }
-
+        // else if ( opt.isOption("all")
+        //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")
+        //         )
+        // {
+        //     if (argsParser.hasHelpOption) return 0;
+        //     
+        //     appConfig.allFiles = true;
+        //  
+        //     return 0;
+        // }
+        //  
         else if ( opt.isOption("gcc")
                || opt.setDescription("GCC messages format instead of MSVC format")
                 )
@@ -476,7 +476,15 @@ int operator()( const std::string                               &a           //!
     
     }
 
-    outputFilename = makeAbsPath(a);
+    if (inputFilename.empty())
+    {
+        inputFilename = makeAbsPath(a);
+    }
+    else
+    {
+        outputFilename = makeAbsPath(a);
+    }
+    
 
     return 0;
 
