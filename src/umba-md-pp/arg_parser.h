@@ -426,21 +426,21 @@ int operator()( const std::string                               &a           //!
         }
 
         else if ( opt.setParam("OPTS")
-               || opt.isOption("set-snippet-options") || opt.isOption('S')
-               || opt.setDescription("Set default snippet options"))
+               || opt.isOption("set-insert-options") || opt.isOption('O')
+               || opt.setDescription("Set default insert options"))
         {
             if (argsParser.hasHelpOption) return 0;
             
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting default snippet options requires argument (--set-snippet-options)\n";
+                LOG_ERR_OPT<<"Setting default insert options requires argument (--set-insert-options)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
-            if (!appConfig.updateSnippetOptions(optArg))
+            if (!appConfig.updateInsertOptions(optArg))
             {
-                LOG_ERR_OPT<<"Setting default snippet options failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR_OPT<<"Setting default insert options failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 

@@ -52,9 +52,16 @@ struct AppConfig
     std::unordered_set<SnippetOptions>                    snippetOptions;
 
 
-    bool updateSnippetOptions(const std::string &opts)
+    bool updateInsertOptions(const std::string &opts)
     {
-        return deserializeSnippetOptions(opts, snippetOptions);
+        if (!deserializeSnippetOptions(opts, &snippetOptions))
+        {
+            return false;
+        }
+
+        snippetOptions.erase(SnippetOptions::doc); // document insert mode can't be configured by default, only explicit mode allowed for doc mode
+
+        return true;
     }
 
     // umba::string_plus::trim(lineCopy);
@@ -91,23 +98,75 @@ struct AppConfig
         return utfText;
     }
 
-
-    bool findSamplesFile(const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText) const
+    static
+    bool readInputFile(const std::string &inputFilename, std::string &inputFileText)
     {
-         for(auto path: samplesPaths)
+        std::string inputFileTextOrg;
+
+        if (!umba::filesys::readFile(inputFilename, inputFileTextOrg))
+        {
+            return false;
+        }
+
+        inputFileText = autoEncodeToUtf(inputFileTextOrg);
+        inputFileText = marty_cpp::normalizeCrLfToLf(inputFileText);
+
+        return true;
+    }
+
+    static
+    bool findSamplesFileImpl(const std::vector<std::string> &samplesPathsVec, const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText)
+    {
+         for(auto path: samplesPathsVec)
          {
              auto fullName = umba::filename::appendPath(path, lookFor);
-             std::string orgText;
-             if (umba::filesys::readFile(fullName, orgText))
+             if (readInputFile(fullName, foundFileText))
              {
-                 orgText           = autoEncodeToUtf(orgText);
-                 foundFileText     = marty_cpp::normalizeCrLfToLf(orgText);
-                 foundFullFilename = fullName;
-                 return true;
+                  foundFullFilename = fullName;
+                  return true;
              }
+             // std::string orgText;
+             // if (umba::filesys::readFile(fullName, orgText))
+             // {
+             //     orgText           = autoEncodeToUtf(orgText);
+             //     foundFileText     = marty_cpp::normalizeCrLfToLf(orgText);
+             //     foundFullFilename = fullName;
+             //     return true;
+             // }
          }
 
          return false;
+    }
+
+    bool findSamplesFile(const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText) const
+    {
+        return findSamplesFileImpl(samplesPaths, lookFor, foundFullFilename, foundFileText);
+    }
+
+    bool findSamplesFileUseExtraPath(const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText, const std::string &extraPath) const
+    {
+        auto p = samplesPaths;
+        p.emplace_back(extraPath);
+        return findSamplesFileImpl(p, lookFor, foundFullFilename, foundFileText);
+    }
+
+    bool findSamplesFileUseExtraPathFromFilename(const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText, const std::string &fileInsertedFrom) const
+    {
+        return findSamplesFileUseExtraPath(lookFor, foundFullFilename, foundFileText, umba::filename::getPath(fileInsertedFrom));
+    }
+
+    static
+    bool findDocFileByPath(const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText, const std::string &includedFromPath)
+    {
+        std::vector<std::string> docPaths;
+        docPaths.emplace_back(includedFromPath);
+        return findSamplesFileImpl(docPaths, lookFor, foundFullFilename, foundFileText);
+    }
+
+    static
+    bool findDocFileByIncludedFilename(const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText, const std::string &includedFromFile)
+    {
+        return findDocFileByPath(lookFor, foundFullFilename, foundFileText, umba::filename::getPath(includedFromFile));
     }
 
     static

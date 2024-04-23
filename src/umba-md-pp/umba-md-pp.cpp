@@ -88,6 +88,11 @@ AppConfig appConfig;
 // Парсер параметров командной строки
 #include "arg_parser.h"
 
+//
+std::string curFile;
+unsigned lineNo = 0;
+
+#include "utils.h"
 
 
 int main(int argc, char* argv[])
@@ -117,7 +122,7 @@ int main(int argc, char* argv[])
 
             #else // if
 
-                std::string rootPath = "";
+                std::string rootPath = "..\\";
 
             #endif
 
@@ -125,7 +130,7 @@ int main(int argc, char* argv[])
 
         argsParser.args.clear();
         argsParser.args.push_back("--add-examples-path=" + rootPath + "src");
-        argsParser.args.push_back("--cut-options=lineno,notrim,notag");
+        argsParser.args.push_back("--set-insert-options=lineno,notrim,notag");
         argsParser.args.push_back(rootPath + "tests\\test01.md");
     }
 
@@ -186,7 +191,8 @@ int main(int argc, char* argv[])
 
 
     std::string inputFileText;
-    if (!umba::filesys::readFile(inputFilename, inputFileText))
+    //if (!umba::filesys::readFile(inputFilename, inputFileText))
+    if (AppConfig::readInputFile(inputFilename, inputFileText))
     {
         LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
                                           .arg("fileName",inputFilename)
@@ -196,24 +202,26 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    UMBA_USED(lineNo);
 
-    std::string curFile = inputFilename; // = fileName;
+    //std::string 
+    curFile = inputFilename; // = fileName;
     //unsigned lineNo = 0;
 
-    std::unordered_set<SnippetOptions> snippetFlagsOptions = appConfig.snippetOptions;
-    std::string snippetFile;
-    std::string snippetTag ;
-    if (!parseSnippetInsertionCommandLine(snippetFlagsOptions, "#!insert{no-lineno} path/to/sample/file.cpp#TAG", snippetFile, snippetTag))
-    {
-    }
+    // std::unordered_set<SnippetOptions> snippetFlagsOptions = appConfig.snippetOptions;
+    // std::string snippetFile;
+    // std::string snippetTag ;
+    // if (!parseSnippetInsertionCommandLine(snippetFlagsOptions, "#!insert{no-lineno} path/to/sample/file.cpp#TAG", snippetFile, snippetTag))
+    // {
+    // }
 
-    inputFileText = AppConfig::autoEncodeToUtf(inputFileText);
+    //inputFileText = AppConfig::autoEncodeToUtf(inputFileText);
 
-
+    std::string resText = processMdFile(appConfig, inputFileText, inputFilename);
 
     //TODO: !!! если файл существует, его надо обнулить
 
-    std::string resultText = marty_cpp::converLfToOutputFormat(inputFileText, appConfig.outputLinefeed);
+    //std::string resultText = marty_cpp::converLfToOutputFormat(inputFileText, appConfig.outputLinefeed);
 
 
 
@@ -226,7 +234,7 @@ int main(int argc, char* argv[])
 
         umba::cli_tool_helpers::writeOutput( outputFilename, outputFileType
                                            , encoding::ToUtf8(), encoding::FromUtf8()
-                                           , resultText, std::string() // bomData
+                                           , resText, std::string() // bomData
                                            , true /* fromFile */, true /* utfSource */ , bOverwrite
                                            );
     } // try

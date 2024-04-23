@@ -27,6 +27,8 @@ enum class SnippetOptions : std::uint32_t
     langTag      = 0x1031 /*!< Add language tag */,
     noFilename   = 0x1040 /*!< Do not add filename to listing */,
     filename     = 0x1041 /*!< Add filename to listing */,
+    noDoc        = 0x1050 /*!< -doc */,
+    doc          = 0x1051 /*!< +doc */,
     raise        = 0x2011 /*!< Numeric option */
 
 }; // enum class SnippetOptions : std::uint32_t
@@ -43,6 +45,8 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::trim         , "Trim"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::tag          , "Tag"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::filename     , "Filename"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noDoc        , "NoDoc"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::doc          , "Doc"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::raise        , "Raise"      );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( SnippetOptions, std::map, 1 )
 
@@ -79,6 +83,10 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag          , "lang-tag"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag          , "lang_tag"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filename     , "filename"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc        , "no-doc"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc        , "no_doc"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc        , "nodoc"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::doc          , "doc"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::raise        , "raise"        );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetOptions, std::map, 1 )
 

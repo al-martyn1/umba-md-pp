@@ -18,7 +18,7 @@
 
 
 inline
-bool deserializeSnippetOptions(const std::string &optListStr, std::unordered_set<SnippetOptions> &flagOptions, std::unordered_map<SnippetOptions, int> *pIntOptions=0)
+bool deserializeSnippetOptions(const std::string &optListStr, std::unordered_set<SnippetOptions> *pFlagOptions, std::unordered_map<SnippetOptions, int> *pIntOptions=0)
 {
     std::vector<std::string> optList = marty_cpp::splitToLinesSimple(optListStr, false, ',');
 
@@ -29,71 +29,73 @@ bool deserializeSnippetOptions(const std::string &optListStr, std::unordered_set
         std::string optName, optVal;
         if (umba::string_plus::split_to_pair(opt, optName, optVal, '='))
         {
-            if (!pIntOptions)
+            if (pIntOptions)
             {
-                return false; // numeric options not allowed
+                umba::string_plus::trim(optName);
+                umba::string_plus::trim(optVal);
+    
+                auto optId = enum_deserialize(optName, SnippetOptions::invalid);
+                if (optId==SnippetOptions::invalid)
+                {
+                    return false;
+                }
+    
+                if ((((std::uint32_t)optId)&0xF000u)!=0x2000u)
+                {
+                    // Not a numeric option
+                    return false;
+                }
+    
+                try
+                {
+                    int iVal = std::stoi(optVal);
+                    std::unordered_map<SnippetOptions, int> &intOptions = *pIntOptions;
+                    intOptions[optId] = iVal;
+                }
+                catch(...)
+                {
+                    return false;
+                }
             }
 
-            umba::string_plus::trim(optName);
-            umba::string_plus::trim(optVal);
-
-            auto optId = enum_deserialize(optName, SnippetOptions::invalid);
-            if (optId==SnippetOptions::invalid)
-            {
-                return false;
-            }
-
-            if ((((std::uint32_t)optId)&0xF000u)!=0x2000u)
-            {
-                // Not a numeric option
-                return false;
-            }
-
-            try
-            {
-                int iVal = std::stoi(optVal);
-                std::unordered_map<SnippetOptions, int> &intOptions = *pIntOptions;
-                intOptions[optId] = iVal;
-            }
-            catch(...)
-            {
-                return false;
-            }
 
         }
         else // flag option
         {
-            auto optId = enum_deserialize(opt, SnippetOptions::invalid);
-            if (optId==SnippetOptions::invalid)
+            if (pFlagOptions)
             {
-                return false;
-            }
+                std::unordered_set<SnippetOptions> &flagOptions = *pFlagOptions;
 
-            if ((((std::uint32_t)optId)&0xF000u)!=0x1000u)
-            {
-                // Not a flag option
-                return false;
-            }
-
-            bool isOff = false;
-            if ((((std::uint32_t)optId)&0x0001u)==0x0000u)
-            {
-                isOff = true;
-            }
-
-            auto baseOpt = (SnippetOptions)(((std::uint32_t)optId)|0x0001u);
-
-            if (isOff)
-            {
-                flagOptions.erase(baseOpt);
-            }
-            else
-            {
-                flagOptions.insert(baseOpt);
-            }
-        
-        }
+                auto optId = enum_deserialize(opt, SnippetOptions::invalid);
+                if (optId==SnippetOptions::invalid)
+                {
+                    return false;
+                }
     
+                if ((((std::uint32_t)optId)&0xF000u)!=0x1000u)
+                {
+                    // Not a flag option
+                    return false;
+                }
+    
+                bool isOff = false;
+                if ((((std::uint32_t)optId)&0x0001u)==0x0000u)
+                {
+                    isOff = true;
+                }
+    
+                auto baseOpt = (SnippetOptions)(((std::uint32_t)optId)|0x0001u);
+    
+                if (isOff)
+                {
+                    flagOptions.erase(baseOpt);
+                }
+                else
+                {
+                    flagOptions.insert(baseOpt);
+                }
+            }
+        }
     }
 
     return true;
@@ -115,7 +117,7 @@ bool parseSnippetInsertionCommandLine(std::unordered_set<SnippetOptions> &snippe
 {
     umba::string_plus::trim(line);
 
-    if (!umba::string_plus::starts_with_and_strip(line, ("#!snippet")))
+    if (!umba::string_plus::starts_with_and_strip(line, ("#!insert")))
         return false;
 
     umba::string_plus::trim(line);
@@ -130,12 +132,12 @@ bool parseSnippetInsertionCommandLine(std::unordered_set<SnippetOptions> &snippe
         if (idx==line.size())
             return false; // не нашли завершающую фигурную скобку - что-то пошло не так
 
-        auto optionsString = std::string(line, (std::string::size_type)1u, idx); //!!!
-        line.erase(0u, idx); //!!!
+        auto optionsString = std::string(line, (std::string::size_type)1u, idx-1u); //!!!
+        line.erase(0u, idx+1); //!!!
         umba::string_plus::trim(line);
 
         // обновляем переданные нам дефолтные опции
-        if (deserializeSnippetOptions(optionsString, snippetFlagsOptions))
+        if (deserializeSnippetOptions(optionsString, &snippetFlagsOptions))
             return false; // что-то пошло не так
 
     }
