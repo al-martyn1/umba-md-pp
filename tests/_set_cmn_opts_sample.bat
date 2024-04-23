@@ -1,1 +1,1 @@
-set CMN=--overwrite
+@set CMNOPTS=--overwrite
