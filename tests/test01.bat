@@ -1,3 +1,3 @@
-@if exist set_pp.bat @call set_pp.bat
+@if exist _setup.bat @call _setup.bat
 %PP% test01.md_ test01.md
 

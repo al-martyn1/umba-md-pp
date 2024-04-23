@@ -1,2 +1,2 @@
-@if exist set_pp.bat       @call set_pp.bat
-@if exist set_cmn_opts.bat @call set_cmn_opts.bat
+@if exist _set_pp.bat       @call _set_pp.bat
+@if exist _set_cmn_opts.bat @call _set_cmn_opts.bat
