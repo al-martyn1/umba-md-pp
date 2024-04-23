@@ -358,7 +358,9 @@ int operator()( const std::string                               &a           //!
         }
 
         else if ( opt.setParam("LANG:EXT[,EXT...]")
-               || opt.isOption("add-lang-file-extention") || opt.isOption('E')
+               || opt.isOption("add-lang-file-extention")
+               || opt.isOption("add-lang-file-extentions")
+               || opt.isOption('E')
                || opt.setDescription("Add file extention for the lang for lang detection"))
         {
             if (argsParser.hasHelpOption) return 0;
@@ -382,7 +384,8 @@ int operator()( const std::string                               &a           //!
         }
 
         else if ( opt.setParam("LANG:PREFIX")
-               || opt.isOption("set-lang-cut-prefix") || opt.isOption('P')
+               || opt.isOption("set-lang-cut-prefix")
+               || opt.isOption('P')
                || opt.setDescription("Set prefix for the cut labels in the lang files"))
         {
             if (argsParser.hasHelpOption) return 0;
