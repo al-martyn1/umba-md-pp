@@ -37,7 +37,7 @@
 #include "umba/filesys.h"
 #include "umba/filename.h"
 #include "umba/format_message.h"
-
+#include "snippet_options.h"
 //
 #include "encoding/encoding.h"
 
@@ -125,6 +125,7 @@ int main(int argc, char* argv[])
 
         argsParser.args.clear();
         argsParser.args.push_back("--add-examples-path=" + rootPath + "src");
+        argsParser.args.push_back("--cut-options=lineno,notrim,notag");
         argsParser.args.push_back(rootPath + "tests\\test01.md");
     }
 
@@ -182,6 +183,8 @@ int main(int argc, char* argv[])
 
     //unsigned errCount = 0;
 
+
+
     std::string inputFileText;
     if (!umba::filesys::readFile(inputFilename, inputFileText))
     {
@@ -196,6 +199,13 @@ int main(int argc, char* argv[])
 
     std::string curFile = inputFilename; // = fileName;
     //unsigned lineNo = 0;
+
+    std::unordered_set<SnippetOptions> snippetFlagsOptions = appConfig.snippetOptions;
+    std::string snippetFile;
+    std::string snippetTag ;
+    if (!parseSnippetInsertionCommandLine(snippetFlagsOptions, "#!insert{no-lineno} path/to/sample/file.cpp#TAG", snippetFile, snippetTag))
+    {
+    }
 
     inputFileText = AppConfig::autoEncodeToUtf(inputFileText);
 

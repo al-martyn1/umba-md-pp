@@ -150,7 +150,7 @@ bool parseSnippetInsertionCommandLine(std::unordered_set<SnippetOptions> &snippe
     }
     else
     {
-        snippetTag .assign(line, hashPos+1u, hashPos.npos);
+        snippetTag .assign(line, hashPos+1u, line.npos);
         snippetFile.assign(line, 0u, hashPos);
     }
 
