@@ -15,19 +15,19 @@ enum class SnippetOptions : std::uint32_t
 {
     invalid      = (std::uint32_t)(-1),
     unknown      = (std::uint32_t)(-1),
-    noLineNo     = 0x0010 /*!< Do not add line numbers to generated listing */,
-    lineNo       = 0x0011 /*!< Add line numbers to generated listing */,
-    noTrim       = 0x0020 /*!< Do not trim left inserted code */,
-    noTrimLeft   = 0x0020 /*!< Do not trim left inserted code */,
-    trim         = 0x0021 /*!< Trim left inserted code */,
-    trimLeft     = 0x0021 /*!< Trim left inserted code */,
-    noTag        = 0x0030 /*!< Do not add language tag */,
-    noLangTag    = 0x0030 /*!< Do not add language tag */,
-    tag          = 0x0031 /*!< Add language tag */,
-    langTag      = 0x0031 /*!< Add language tag */,
-    noFilename   = 0x0040 /*!< Do not add filename to listing */,
-    filename     = 0x0041 /*!< Add filename to listing */,
-    raise        = 0x1001 /*!< Numeric option */
+    noLineNo     = 0x1010 /*!< Do not add line numbers to generated listing */,
+    lineNo       = 0x1011 /*!< Add line numbers to generated listing */,
+    noTrim       = 0x1020 /*!< Do not trim left inserted code */,
+    noTrimLeft   = 0x1020 /*!< Do not trim left inserted code */,
+    trim         = 0x1021 /*!< Trim left inserted code */,
+    trimLeft     = 0x1021 /*!< Trim left inserted code */,
+    noTag        = 0x1030 /*!< Do not add language tag */,
+    noLangTag    = 0x1030 /*!< Do not add language tag */,
+    tag          = 0x1031 /*!< Add language tag */,
+    langTag      = 0x1031 /*!< Add language tag */,
+    noFilename   = 0x1040 /*!< Do not add filename to listing */,
+    filename     = 0x1041 /*!< Add filename to listing */,
+    raise        = 0x2011 /*!< Numeric option */
 
 }; // enum class SnippetOptions : std::uint32_t
 
