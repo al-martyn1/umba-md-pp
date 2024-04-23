@@ -1,5 +1,9 @@
---add-lang-file-extention=C++:cpp,cxx,c++,cc,h,hpp,h++
+--add-lang-file-extentions=C++:cpp,cxx,c++,cc,h,hpp,h++
 --set-lang-cut-prefix=C++://#!
 --set-lang-listing-tag=C++:cpp
+#
+--add-lang-file-extentions=Squrrel:nut,nuts
+--set-lang-cut-prefix=Squrrel://#!
+--set-lang-listing-tag=Squrrel:lua
 
 
