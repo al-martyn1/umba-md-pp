@@ -27,8 +27,12 @@ enum class SnippetOptions : std::uint32_t
     langTag      = 0x1031 /*!< Add language tag */,
     noFilename   = 0x1040 /*!< Do not add filename to listing */,
     filename     = 0x1041 /*!< Add filename to listing */,
-    noDoc        = 0x1050 /*!< -doc */,
-    doc          = 0x1051 /*!< +doc */,
+    noPath       = 0x1050 /*!< Do not add full path to filename (filename option) */,
+    path         = 0x1051 /*!< Add full path to filename (filename option) */,
+    noFail       = 0x1060 /*!< If insert failed, don't add insert command text to result */,
+    fail         = 0x1061 /*!< If insert failed, add command insert command text to result */,
+    noDoc        = 0x10F0 /*!< -doc */,
+    doc          = 0x10F1 /*!< +doc */,
     raise        = 0x2011 /*!< Numeric option */
 
 }; // enum class SnippetOptions : std::uint32_t
@@ -45,6 +49,10 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::trim         , "Trim"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::tag          , "Tag"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::filename     , "Filename"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noPath       , "NoPath"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::path         , "Path"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFail       , "NoFail"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::fail         , "Fail"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noDoc        , "NoDoc"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::doc          , "Doc"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::raise        , "Raise"      );
@@ -83,6 +91,14 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag          , "lang-tag"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag          , "lang_tag"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filename     , "filename"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath       , "no-path"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath       , "no_path"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath       , "nopath"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::path         , "path"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFail       , "no-fail"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFail       , "no_fail"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFail       , "nofail"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fail         , "fail"         );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc        , "no-doc"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc        , "no_doc"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc        , "nodoc"        );
