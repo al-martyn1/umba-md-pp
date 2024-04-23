@@ -100,7 +100,7 @@ bool deserializeSnippetOptions(const std::string &optListStr, std::unordered_set
 }
 
 inline
-bool testFlagSnippetOption(std::unordered_set<SnippetOptions> &flagOptions, SnippetOptions opt)
+bool testFlagSnippetOption(const std::unordered_set<SnippetOptions> &flagOptions, SnippetOptions opt)
 {
     auto baseOpt = (SnippetOptions)(((std::uint32_t)opt)|0x0001u);
 
@@ -109,6 +109,59 @@ bool testFlagSnippetOption(std::unordered_set<SnippetOptions> &flagOptions, Snip
 
     return false;
 }
+
+inline
+bool parseSnippetInsertionCommandLine(std::unordered_set<SnippetOptions> &snippetFlagsOptions, std::string line, std::string &snippetFile, std::string &snippetTag)
+{
+    umba::string_plus::trim(line);
+
+    if (!umba::string_plus::starts_with_and_strip(line, ("#!snippet")))
+        return false;
+
+    umba::string_plus::trim(line);
+
+    if (line.empty())
+        return false;
+
+    if (line[0]=='{')
+    {
+        std::string::size_type idx = 1u;
+        for(; idx!=line.size() && line[idx]!='}'; ++idx) { }
+        if (idx==line.size())
+            return false; // не нашли завершающую фигурную скобку - что-то пошло не так
+
+        auto optionsString = std::string(line, (std::string::size_type)1u, idx); //!!!
+        line.erase(0u, idx); //!!!
+        umba::string_plus::trim(line);
+
+        // обновляем переданные нам дефолтные опции
+        if (deserializeSnippetOptions(optionsString, snippetFlagsOptions))
+            return false; // что-то пошло не так
+
+    }
+
+    auto hashPos = line.find('#');
+
+    if (hashPos==line.npos)
+    {
+        // Нет тэга - включаем весь файл
+        snippetTag.clear();
+        snippetFile = line;
+    }
+    else
+    {
+        snippetTag .assign(line, hashPos+1u, hashPos.npos);
+        snippetFile.assign(line, 0u, hashPos);
+    }
+
+    return true;
+}
+
+
+
+
+
+
 
 
         //     auto docGenCommand = dotNutDocGen::enum_deserialize(strVal, dotNutDocGen::DocGenCommand::invalid);
