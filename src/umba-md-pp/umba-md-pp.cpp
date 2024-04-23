@@ -113,9 +113,9 @@ int main(int argc, char* argv[])
 
             #if defined(__GNUC__)
 
-                std::string rootPath = "";
+                std::string rootPath = "..\\..\\..\\..\\..\\";
 
-            #ellse // if
+            #else // if
 
                 std::string rootPath = "";
 
@@ -124,6 +124,7 @@ int main(int argc, char* argv[])
         #endif
 
         argsParser.args.clear();
+        argsParser.args.push_back("--add-examples-path=" + rootPath + "src");
         argsParser.args.push_back(rootPath + "tests\\test01.md");
     }
 
