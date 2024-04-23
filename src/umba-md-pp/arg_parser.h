@@ -404,7 +404,7 @@ int operator()( const std::string                               &a           //!
         }
 
         else if ( opt.setParam("LANG:TAG")
-               || opt.isOption("set-lang-listing-tag") || opt.isOption('P')
+               || opt.isOption("set-lang-listing-tag") || opt.isOption('T')
                || opt.setDescription("Set target markdown tag for the code section"))
         {
             if (argsParser.hasHelpOption) return 0;
@@ -425,7 +425,27 @@ int operator()( const std::string                               &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("OPTS")
+               || opt.isOption("set-snippet-options") || opt.isOption('S')
+               || opt.setDescription("Set default snippet options"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting default snippet options requires argument (--set-snippet-options)\n";
+                return -1;
+            }
 
+            auto optArg = opt.optArg;
+            if (!appConfig.updateSnippetOptions(optArg))
+            {
+                LOG_ERR_OPT<<"Setting default snippet options failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+
+            return 0;
+        }
 
         // else if ( opt.isOption("all")
         //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")

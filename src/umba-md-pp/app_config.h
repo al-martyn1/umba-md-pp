@@ -1,10 +1,7 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <map>
-#include <unordered_map>
 
+#include "snippet_options.h"
 //
 #include "encoding/encoding.h"
 //
@@ -19,6 +16,14 @@
 #include "umba/filesys.h"
 //
 #include "marty_cpp/src_normalization.h"
+
+//
+#include <string>
+#include <vector>
+#include <map>
+#include <unordered_map>
+
+
 
 //----------------------------------------------------------------------------
 
@@ -41,15 +46,22 @@ struct AppConfig
         marty_cpp::ELinefeedType outputLinefeed = marty_cpp::ELinefeedType::lf;
     #endif
 
-    // bool                                     allFiles = false;
-    // bool                                     scanMode = false;
-    std::vector<std::string>                 samplesPaths;
-    // std::vector<std::string>                 includeFilesMaskList;
-    // std::vector<std::string>                 excludeFilesMaskList;
-
+    std::vector<std::string>                              samplesPaths;
     std::unordered_map<std::string, std::string>          extToLang  ;
     std::unordered_map<std::string, LangOptions>          langOptions;
+    std::unordered_set<SnippetOptions>                    snippetOptions;
 
+
+    bool updateSnippetOptions(const std::string &opts)
+    {
+        return deserializeSnippetOptions(opts, snippetOptions);
+    }
+
+    // umba::string_plus::trim(lineCopy);
+    // if (!umba::string_plus::starts_with_and_strip(lineCopy, tagPrefix))
+    //     return false;
+
+    // std::unordered_set<SnippetOptions>                    snippetOptions;
 
     void addSamplesPaths( const std::vector<std::string> &pl )
     {
