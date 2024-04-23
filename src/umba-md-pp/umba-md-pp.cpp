@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
         argsParser.args.clear();
         argsParser.args.push_back("--add-examples-path=" + rootPath + "src");
         argsParser.args.push_back("--set-insert-options=lineno,notrim,notag");
-        argsParser.args.push_back(rootPath + "tests\\test01.md");
+        argsParser.args.push_back(rootPath + "tests\\test01.md_");
     }
 
     //programLocationInfo = argsParser.programLocationInfo;
@@ -192,7 +192,7 @@ int main(int argc, char* argv[])
 
     std::string inputFileText;
     //if (!umba::filesys::readFile(inputFilename, inputFileText))
-    if (AppConfig::readInputFile(inputFilename, inputFileText))
+    if (!AppConfig::readInputFile(inputFilename, inputFileText))
     {
         LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
                                           .arg("fileName",inputFilename)
