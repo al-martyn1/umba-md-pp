@@ -351,11 +351,81 @@ int operator()( const std::string                               &a           //!
                 return -1;
             }
 
-            auto optArg = opt.optArg; // umba::macros::substMacros(opt.optArg,umba::macros::MacroTextFromMapOrEnv<std::string>(appConfig.macros),umba::macros::keepUnknownVars);
+            auto optArg = opt.optArg;
             appConfig.samplesPaths.push_back(makeAbsPath(optArg));
 
             return 0;
         }
+
+        else if ( opt.setParam("LANG:EXT[,EXT...]")
+               || opt.isOption("add-lang-file-extention") || opt.isOption('E')
+               || opt.setDescription("Add file extention for the lang for lang detection"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Adding lang file extention requires argument (--add-lang-file-extention)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.addLangExtentions(optArg))
+            {
+                LOG_ERR_OPT<<"Adding lang file extention failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+            
+
+
+            return 0;
+        }
+
+        else if ( opt.setParam("LANG:PREFIX")
+               || opt.isOption("set-lang-cut-prefix") || opt.isOption('P')
+               || opt.setDescription("Set prefix for the cut labels in the lang files"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting lang cut prefix requires argument (--set-lang-cut-prefix)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.setLangCutPrefix(optArg))
+            {
+                LOG_ERR_OPT<<"Setting lang cut prefix failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("LANG:TAG")
+               || opt.isOption("set-lang-listing-tag") || opt.isOption('P')
+               || opt.setDescription("Set target markdown tag for the code section"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting target markdown tag for the code section requires argument (--set-lang-listing-tag)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.setLangListingTag(optArg))
+            {
+                LOG_ERR_OPT<<"Setting target markdown tag for the code section failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+
 
         // else if ( opt.isOption("all")
         //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")

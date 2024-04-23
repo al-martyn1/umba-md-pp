@@ -204,7 +204,7 @@ struct AppConfig
 
 
     //----------------------------------------------------------------------------
-    // --set-lang-kisting-tag=nut,sq
+    // --set-lang-listing-tag=nut,sq
     bool setLangListingTag(const std::string &lang, const std::string &listingTag)
     {
         langOptions[lang].listingTag = listingTag;
