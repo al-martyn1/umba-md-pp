@@ -31,6 +31,7 @@
 // if:VAL<
 
 
+//----------------------------------------------------------------------------
 inline
 std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec()
 {
@@ -43,6 +44,7 @@ std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperators
                                                                     };
 }
 
+//----------------------------------------------------------------------------
 inline
 const std::vector< std::pair<ConditionOperators, std::string> >& getConditionOperatorsInfoVec()
 {
@@ -50,7 +52,7 @@ const std::vector< std::pair<ConditionOperators, std::string> >& getConditionOpe
     return vec;
 }
 
-
+//----------------------------------------------------------------------------
 inline
 ConditionOperators splitCondition(std::string str, std::string &left, std::string &right)
 {
@@ -71,7 +73,7 @@ ConditionOperators splitCondition(std::string str, std::string &left, std::strin
     return ConditionOperators::unknown;
 }
 
-
+//----------------------------------------------------------------------------
 inline
 bool isConditionVar(std::string &condVal)
 {
@@ -92,6 +94,7 @@ bool isConditionVar(std::string &condVal)
 
 }
 
+//----------------------------------------------------------------------------
 inline
 bool isConditionTrue(const std::unordered_map<std::string, std::string> &condVars, std::string condStr)
 {
@@ -149,6 +152,7 @@ bool isConditionTrue(const std::unordered_map<std::string, std::string> &condVar
     }
 }
 
+//----------------------------------------------------------------------------
 inline
 bool splitToPair(const std::string &str, std::string &first, std::string &second, char ch)
 {
@@ -162,6 +166,31 @@ bool splitToPair(const std::string &str, std::string &first, std::string &second
     return false;
 }
 
+//----------------------------------------------------------------------------
+inline
+// std::string serializeSnippetOptions(const std::unordered_set<SnippetOptions> &flagOptions, const std::unordered_map<SnippetOptions, int> &intOptions)
+std::string serializeSnippetOptions(std::unordered_set<SnippetOptions> flagOptions, const std::unordered_map<SnippetOptions, int> &intOptions)
+{
+    flagOptions.erase(SnippetOptions::snippetOptions);
+
+    std::vector<std::string> optList;
+
+    for(std::unordered_set<SnippetOptions>::const_iterator fit=flagOptions.begin(); fit!=flagOptions.end(); ++fit)
+    {
+        optList.emplace_back(enum_serialize(*fit));
+    }
+
+    for(std::unordered_map<SnippetOptions, int>::const_iterator fit=intOptions.begin(); fit!=intOptions.end(); ++fit)
+    {
+        std::string optName = enum_serialize(fit->first);
+        std::string optVal  = std::to_string(fit->second);
+        optList.emplace_back(optName+"="+optVal);
+    }
+
+    return umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( optList.begin(), optList.end(), std::string(",") );
+}
+
+//----------------------------------------------------------------------------
 inline
 SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optListStr, std::unordered_set<SnippetOptions> *pFlagOptions, std::unordered_map<SnippetOptions, int> *pIntOptions=0, const std::unordered_map<std::string, std::string> *pCondVars=0)
 {
@@ -277,6 +306,7 @@ SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optList
     return SnippetOptionsParsingResult::ok;
 }
 
+//----------------------------------------------------------------------------
 inline
 bool testFlagSnippetOption(const std::unordered_set<SnippetOptions> &flagOptions, SnippetOptions opt)
 {
@@ -288,6 +318,7 @@ bool testFlagSnippetOption(const std::unordered_set<SnippetOptions> &flagOptions
     return false;
 }
 
+//----------------------------------------------------------------------------
 inline
 SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set<SnippetOptions>       &snippetFlagsOptions
                                                             , std::unordered_map<SnippetOptions, int>  &snippetIntOptions

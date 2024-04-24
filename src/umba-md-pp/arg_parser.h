@@ -347,12 +347,16 @@ int operator()( const std::string                               &a           //!
             
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Adding path for examples searching requires argument (--add-examples-path)\n";
+                LOG_ERR_OPT<<"Adding paths for examples searching requires argument (--add-examples-path)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
-            appConfig.samplesPaths.push_back(makeAbsPath(optArg));
+            if (!appConfig.addSamplesPaths(optArg))
+            {
+                LOG_ERR_OPT<<"Adding paths for examples searching failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
 
             return 0;
         }
@@ -377,8 +381,6 @@ int operator()( const std::string                               &a           //!
                 LOG_ERR_OPT<<"Adding lang file extention failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
-            
-
 
             return 0;
         }

@@ -6,6 +6,7 @@
 
 //
 #include <stack>
+#include <string>
 
 inline
 bool isInsertCommand(std::string line)
@@ -35,6 +36,59 @@ bool isHeaderCommand(std::string line)
     return idx>0;
 }
 
+
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> trimLeadingSpaces(std::vector<std::string> lines, bool bTrim)
+{
+    std::size_t minLeadingSpaces = 4096u;
+    for(auto &l : lines)
+    {
+        umba::string_plus::rtrim(l); // убираем конечные пробелы
+        if (l.empty())
+        {
+            continue; // на пустых строках нет смысла париться
+        }
+
+        std::size_t i = 0u;
+        for(; i!=l.size(); ++i)
+        {
+            if (l[i]!=' ')
+                break;
+        }
+
+        // либо брякнулись, либо дошли до конца
+
+        minLeadingSpaces = std::min(minLeadingSpaces, i);
+    }
+
+    if (!bTrim)
+    {
+        return lines;
+    }
+
+    if (!minLeadingSpaces)
+    {
+        return lines;
+    }
+
+    for(auto &l : lines)
+    {
+        if (l.empty())
+        {
+            continue; // на пустых строках нет смысла париться
+        }
+
+        if (l.size()<minLeadingSpaces)
+        {
+            continue;
+        }
+
+        l.erase(0, minLeadingSpaces);
+    }
+
+    return lines;
+}
 
 //----------------------------------------------------------------------------
 inline
@@ -149,7 +203,7 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
                                             , const std::string           &tagPrefix
                                             , ListingNestedTagsMode       listingNestedTagsMode
                                             , std::size_t                 tabSize=4u
-                                            , bool                        trimLeadingSpaces_a = true
+                                            //, bool                        trimLeadingSpaces_a = true
                                             )
 {
     marty_cpp::expandTabsToSpaces(lines, tabSize);
@@ -389,6 +443,8 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
 
             if (isInsertCommand(line))
             {
+                //resLines.emplace_back("!!! insert (1)");
+
                 auto snippetFlagsOptions = appCfg.snippetOptions;
                 std::unordered_map<SnippetOptions, int> intOptions;
                 std::string snippetFile;
@@ -399,9 +455,12 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
                 if (parseRes==SnippetOptionsParsingResult::okButCondition)
                 {
                     // condition failed, simple skip it
+                    //resLines.emplace_back("!!! insert (2)");
                 }
                 else if (parseRes==SnippetOptionsParsingResult::fail)
                 {
+                    //resLines.emplace_back("!!! insert (3)");
+
                     // optionally adding it to document
                     // Тестируем только те опции, которые были заданы из командной строки
                     // if (testFlagSnippetOption(appCfg.snippetOptions, SnippetOptions::fail))
@@ -412,28 +471,47 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
                 }
                 else // process it unconditionally
                 {
-                    if (testFlagSnippetOption(appCfg.snippetOptions, SnippetOptions::doc))
+                    //resLines.emplace_back("!!! insert (4)");
+
+                    if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::doc))
                     {
                         // insert as document
                         // intOptions, SnippetOptions::raise
 
+                        //resLines.emplace_back("!!! insert (5)");
+
                         if (alreadyIncludedDocs.find(snippetFile)!=alreadyIncludedDocs.end())
                         {
+                            //resLines.emplace_back("!!! insert (6)");
+
                             // already included
                             // simple skip it? Or not?
                             resLines.emplace_back(line);
                             continue;
                         }
 
+                        //resLines.emplace_back("!!! insert (7)");
+
                         std::string foundFullFilename;
                         std::string foundFileText;
                         auto findRes = appCfg.findDocFileByIncludedFromFilename(snippetFile, foundFullFilename, foundFileText, curFilename);
                         if (!findRes)
                         {
+                            //resLines.emplace_back("!!! insert (8)");
+    
                             // document not found
-                            resLines.emplace_back(line);
+                            // Если fail-опция не установлена, то не выводим ничего
+                            // По умолчанию в конфигах .options - установлена
+                            // Но если мы хотим тихо ничего не делать при обломе поиска подключаемого файла, то надо явно указать no-fail
+                            if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
+                            {
+                                //resLines.emplace_back("!!! insert (9)");
+                                resLines.emplace_back(line);
+                            }
                             continue;
                         }
+
+                        //resLines.emplace_back("!!! insert (10)");
 
                         std::vector<std::string> docLines = marty_cpp::splitToLinesSimple(foundFileText);
                         std::unordered_set<std::string> alreadyIncludedDocsCopy = alreadyIncludedDocs;
@@ -449,13 +527,24 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
                     }
                     else // insert as code snippet 
                     {
+                        //resLines.emplace_back("!!! insert (11)");
+
                         std::string foundFullFilename;
                         std::string foundFileText;
                         auto findRes = appCfg.findSamplesFile(snippetFile, foundFullFilename, foundFileText /* , curFilename */ );
                         if (!findRes)
                         {
+                            //resLines.emplace_back("!!! insert (12)");
+    
                             // snippets file not found
-                            resLines.emplace_back(line);
+                            // Если fail-опция не установлена, то не выводим ничего
+                            // По умолчанию в конфигах .options - установлена
+                            // Но если мы хотим тихо ничего не делать при обломе поиска подключаемого файла, то надо явно указать no-fail
+                            if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
+                            {
+                                //resLines.emplace_back("!!! insert (13)");
+                                resLines.emplace_back(line);
+                            }
                             continue;
                         }
 
@@ -499,32 +588,120 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
                                     // Не знаем, как искать тэг - нет информации по тому, какой префикс используется для тэгов сниппетов в данном языке
                                     // Поэтому просто ошибка
                                     resLines.emplace_back(line);
+                                    //resLines.emplace_back("!!! insert (14)");
+            
                                     continue;
-                                
                                 }
-                                
+
+                                ListingNestedTagsMode listingNestedTagsMode = ListingNestedTagsMode::remove;
+
+                                if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::keepCutTags))
+                                {
+                                    listingNestedTagsMode = ListingNestedTagsMode::keep;
+                                }
+                                else if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo))
+                                {
+                                    listingNestedTagsMode = ListingNestedTagsMode::emptyLine;
+                                }
+
+                                insertLines = extractCodeFragment(snippetsFileLines, firstLineIdx, snippetTag, snippetTagPrefix, listingNestedTagsMode, 4u /* tabSize */ );
+
+                                //std::vector<std::string> trimLeadingSpaces(std::vector<std::string> lines, bool bTrim)
+                                //trimLeadingSpaces(lines, trimLeadingSpaces_a)
                             }
 
-                            insertLines = snippetsFileLines;
+                            // insertLines = snippetsFileLines;
                         }
 
-                        
-                    
-                    }
+                        // 
+                        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimLeft))
+                        {
+                            insertLines = trimLeadingSpaces(insertLines, true);
+                        }
 
-    // noDoc        = 0x10F0 /*!< -doc */,
-    // doc          = 0x10F1 /*!< +doc */,
-    // raise        = 0x2011 /*!< Numeric option */
+                        std::string firstLineNoStr = std::to_string(firstLineIdx+1u);
+
+                        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo))
+                        {
+                            std::size_t lastLineIdx = firstLineIdx + insertLines.size();
+                            ++firstLineIdx;
+    
+                            std::size_t numDigits = 0;
+                            std::size_t lastLineIdxRest = lastLineIdx;
+                            while(lastLineIdxRest>0)
+                            {
+                                ++numDigits;
+                                lastLineIdxRest /= 10u;
+                            }
+
+                            for( auto &l : insertLines)
+                            {
+                                std::string lineNoStr = std::to_string(firstLineIdx++);
+                                std::string fullLineNoStr = std::string(numDigits-lineNoStr.size(), ' ');
+                                fullLineNoStr.append(lineNoStr);
+                                fullLineNoStr.append(1u, ':');
+                                fullLineNoStr.append(1u, ' ');
+                                l = fullLineNoStr + l;
+                            }
+                        }
+
+                        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::snippetOptions))
+                        {
+                            std::string snippetOptionsLine = serializeSnippetOptions(snippetFlagsOptions, intOptions);
+                            resLines.emplace_back("{" + snippetOptionsLine + "}");
+                        }
+
+                        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filename))
+                        {
+                            std::string filename = umba::filename::normalizePathSeparators(snippetFile, '/');
+                            if (!testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::path))
+                            {
+                                filename = umba::filename::normalizePathSeparators(umba::filename::getFileName(snippetFile), '/');
+                            }
+
+                            if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filenameLineNo))
+                            {
+                                filename.append(1u,':');
+                                filename.append(firstLineNoStr);
+                            }
+
+                            resLines.emplace_back(filename); //TODO: !!! Нужно добавить обрамление
+                        }
+
+                        //std::string lang = appCfg.getLangByFilename(foundFullFilename);
+                        std::string listingLangTag;
+                        if (!lang.empty())
+                        {
+                            listingLangTag = appCfg.getLangListingTag(lang);
+                        }
+
+                        std::string lstStart = std::string(3u,'`');
+                        std::string lstEnd   = lstStart;
+                        if (!listingLangTag.empty())
+                        {
+                            lstStart.append(listingLangTag); //TODO: !!! Нужно добавить обрамление
+                        }
+
+                        resLines.emplace_back(lstStart);
+                        resLines.insert(resLines.end(), insertLines.begin(), insertLines.end());
+                        resLines.emplace_back(lstEnd);
+
+                    } // end of insert as code snippet 
                 
                 }
+
+            } // if (isInsertCommand(line))
+
+            else // Some other conditions
+            {
+                resLines.emplace_back(line);
             }
         
-        }
+        } // end normal mode
 
     }
 
-
-    return lines;
+    return resLines;
 }
 
 

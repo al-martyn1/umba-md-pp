@@ -96,10 +96,11 @@ struct AppConfig
 
     // std::unordered_set<SnippetOptions>                    snippetOptions;
 
-    void addSamplesPaths( const std::vector<std::string> &pl )
+    bool addSamplesPaths( const std::vector<std::string> &pl )
     {
         //std::vector<FilenameStringType> &dirs = m_lookupMap[lvl].lookupDirs;
         samplesPaths.insert( samplesPaths.end(), pl.begin(), pl.end() );
+        return true;
     }
 
     //! Добавляет пути поиска примеров
@@ -107,9 +108,9 @@ struct AppConfig
         - Win32 - ';' (точка с запятой, semicolon)
         - Linux - ':' (двоеточие, colon)
      */
-    void addSamplesPaths( const std::string &pl )
+    bool addSamplesPaths( const std::string &pl )
     {
-        addSamplesPaths( umba::filename::splitPathList( pl ) );
+        return addSamplesPaths( umba::filename::splitPathList( pl ) );
     }
 
     static
