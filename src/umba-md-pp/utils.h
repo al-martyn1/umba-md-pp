@@ -184,7 +184,7 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
                  fragmentLines.emplace_back(std::string());
                  break;
 
-            case marty_simplesquirrel::ListingNestedTagsMode::invalid :
+            case ListingNestedTagsMode::invalid :
                  break;
         }
     };
@@ -209,7 +209,7 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
     auto openCodeFragment = [&](std::string tagName)
     {
         openedTags.emplace_back(tagName);
-    }
+    };
 
     auto closeCurTag = [&]()
     {
@@ -218,10 +218,10 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
         openedTags.pop_back();
     };
 
-    auto getTagLevel = [&]()
-    {
-        return openedTags.size();
-    };
+    // auto getTagLevel = [&]()
+    // {
+    //     return openedTags.size();
+    // };
 
     auto isTargetFragmentTagOpened = [&]()
     {
@@ -236,7 +236,7 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
         }
 
         return false;
-    }
+    };
 
     auto isTargetFragmentTagOnTop = [&]()
     {
@@ -280,7 +280,7 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
 
         // Строка - тэговая
         std::string curTag;
-        extractCodeTagFromLine(tag, tagPrefix, curTag);
+        extractCodeTagFromLine(l, tagPrefix, curTag);
 
         if (isClosingTag(curTag))
         {
@@ -300,6 +300,11 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
         }
 
         // Если тэг не закрывающий, то он - открывающий
+        // Или он может быть пустым при пустом стеке
+        if (curTag.empty())
+        {
+            continue; // Игнорим закрывающие тэги, когда не было открывающих
+        }
 
         if (curTag==targetFragmentTag)
         {
@@ -359,7 +364,7 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
 inline
 std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs=std::unordered_set<std::string>())
 {
-    std::vector<std::string> resLines; resLines.reserve(lines);
+    std::vector<std::string> resLines; resLines.reserve(lines.size());
     bool inListing = false;
 
     for(auto line: lines)
@@ -469,7 +474,7 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
                         {
                             // Тут надо искать конкретные строки, но пока вставляем всё, что есть
                             std::size_t startLineNo = 0;
-                            std::size_t &endLineNo  = 0;
+                            std::size_t endLineNo   = 0;
                             if (isCodeTagLinesRange(snippetTag, startLineNo, endLineNo))
                             {
                                 firstLineIdx = startLineNo;
