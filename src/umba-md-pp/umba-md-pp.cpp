@@ -188,6 +188,35 @@ int main(int argc, char* argv[])
 
     //unsigned errCount = 0;
 
+    // auto testCondition = [&](std::string cond, bool expectedRes)
+    // {
+    //     std::cout << "Condition: " << cond << "\n";
+    //     try
+    //     {
+    //         bool res = isConditionTrue(appConfig.conditionVars, cond);
+    //         if (res==expectedRes)
+    //         {
+    //             std::cout << " + passed, res: " << (res?"true":"false") << "\n";
+    //         }
+    //         else
+    //         {
+    //             std::cout << " - failed, res: " << (res?"true":"false") << ", expected: " << (expectedRes?"true":"false") << "\n";
+    //         }
+    //     }
+    //     catch(...)
+    //     {
+    //         std::cout << " - unexpected error\n";
+    //     }
+    // };
+    
+    // appConfig.addConditionVar("A", "A");
+    // appConfig.addConditionVar("B", "B");
+    // appConfig.addConditionVar("C:C");
+    // testCondition("$A==A", true);
+    // testCondition("$A!=A", false);
+    // testCondition("$A!=$A", false);
+    // testCondition("$A!=$B", true);
+    // testCondition("$C!=C", false);
 
 
     std::string inputFileText;

@@ -50,11 +50,37 @@ struct AppConfig
     std::unordered_map<std::string, std::string>          extToLang  ;
     std::unordered_map<std::string, LangOptions>          langOptions;
     std::unordered_set<SnippetOptions>                    snippetOptions;
+    std::unordered_map<std::string, std::string>          conditionVars;
 
+
+    bool addConditionVar(std::string name, std::string value)
+    {
+        umba::string_plus::trim(name);
+        umba::string_plus::trim(value);
+
+        if (name.empty())
+            return false;
+
+        conditionVars[name] = value;
+        return true;
+    }
+
+    bool addConditionVar(std::string nameValue)
+    {
+        umba::string_plus::trim(nameValue);
+        
+        std::vector<std::string> nameValuePair = marty_cpp::splitToLinesSimple(nameValue, false, ':');
+        if (nameValuePair.empty())
+            return false;
+        if (nameValuePair.size()<2)
+            return addConditionVar(nameValue,std::string());
+        else
+            return addConditionVar(nameValuePair[0],nameValuePair[1]);
+    }
 
     bool updateInsertOptions(const std::string &opts)
     {
-        if (!deserializeSnippetOptions(opts, &snippetOptions))
+        if (deserializeSnippetOptions(opts, &snippetOptions)!=SnippetOptionsParsingResult::ok)
         {
             return false;
         }
@@ -76,10 +102,10 @@ struct AppConfig
         samplesPaths.insert( samplesPaths.end(), pl.begin(), pl.end() );
     }
 
-    //! Äîáàâëÿåò ïóòè ïîèñêà ïðèìåðîâ
-    /*! Ðàçäåëèòåëåì ÿâëÿåòñÿ ñïåö ñèìâîë:
-        - Win32 - ';' (òî÷êà ñ çàïÿòîé, semicolon)
-        - Linux - ':' (äâîåòî÷èå, colon)
+    //! Ð”Ð¾Ð±Ð°Ð²Ð»ÑÐµÑ‚ Ð¿ÑƒÑ‚Ð¸ Ð¿Ð¾Ð¸ÑÐºÐ° Ð¿Ñ€Ð¸Ð¼ÐµÑ€Ð¾Ð²
+    /*! Ð Ð°Ð·Ð´ÐµÐ»Ð¸Ñ‚ÐµÐ»ÐµÐ¼ ÑÐ²Ð»ÑÐµÑ‚ÑÑ ÑÐ¿ÐµÑ† ÑÐ¸Ð¼Ð²Ð¾Ð»:
+        - Win32 - ';' (Ñ‚Ð¾Ñ‡ÐºÐ° Ñ Ð·Ð°Ð¿ÑÑ‚Ð¾Ð¹, semicolon)
+        - Linux - ':' (Ð´Ð²Ð¾ÐµÑ‚Ð¾Ñ‡Ð¸Ðµ, colon)
      */
     void addSamplesPaths( const std::string &pl )
     {
@@ -164,7 +190,7 @@ struct AppConfig
     }
 
     static
-    bool findDocFileByIncludedFilename(const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText, const std::string &includedFromFile)
+    bool findDocFileByIncludedFromFilename(const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText, const std::string &includedFromFile)
     {
         return findDocFileByPath(lookFor, foundFullFilename, foundFileText, umba::filename::getPath(includedFromFile));
     }

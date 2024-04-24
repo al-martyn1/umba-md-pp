@@ -1,0 +1,4 @@
+invalid,unknown =-1
+keep            = 0 // keep lines with tags
+remove          = 1 // remove lines with tags
+empty,emptyLine = 2 // replace lines with tags with empty lines

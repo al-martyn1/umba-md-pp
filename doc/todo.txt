@@ -141,7 +141,21 @@ markdown preprocessor
       + самый простой варик - ничего не генерить )
 
 
+9) Support for GitHub Alerts
+https://www.doxygen.nl/manual/markdown.html#mddox_github_alerts
+https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 
 
+In the GitHub version of markdown there is the support for so called alerts, the syntax is similar to a one level block quote followied by [!<alert>] where <alert> can be one of note, warning, tip, caution or important. In doxygen these alerts are translated into normal doxygen commands:
+
+    > [!note] is translated to \note
+    > [!warning] is translated to \warning
+    > [!tip] is translated to \remark
+    > [!caution] is translated to \attention
+    > [!important] is translated to \important
+
+Example:
+> [!note]
+> The special text for the note
 
 

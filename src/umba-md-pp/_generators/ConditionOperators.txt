@@ -1,0 +1,7 @@
+invalid,unknown=-1
+equal         = 0  // ==
+notEqual      = 1  // !=
+greaterEqual  = 2  // >=
+lessEqual     = 3  // <=
+greater       = 4  // > 
+less          = 5  // < 

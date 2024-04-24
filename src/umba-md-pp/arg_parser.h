@@ -450,6 +450,28 @@ int operator()( const std::string                               &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("VAR:VAL")
+               || opt.isOption("set-condition-var") || opt.isOption('C')
+               || opt.setDescription("Set condition variable"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting condition variable requires argument (--set-condition-var)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.addConditionVar(optArg))
+            {
+                LOG_ERR_OPT<<"Setting condition variable failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
         // else if ( opt.isOption("all")
         //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")
         //         )

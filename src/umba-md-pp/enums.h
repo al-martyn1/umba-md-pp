@@ -107,3 +107,108 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetOptions, std::map, 1 )
 
 
+enum class SnippetOptionsParsingResult : std::uint32_t
+{
+    invalid          = (std::uint32_t)(-1),
+    unknown          = (std::uint32_t)(-1),
+    fail             = 0x0000 /*!< Parsing failed */,
+    ok               = 0x0001 /*!< Parsing ok, conditions met */,
+    okButCondition   = 0x0002 /*!< Parsing ok, but conditions not met */
+
+}; // enum class SnippetOptionsParsingResult : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(SnippetOptionsParsingResult)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptionsParsingResult, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptionsParsingResult::invalid          , "Invalid"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptionsParsingResult::fail             , "Fail"           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptionsParsingResult::ok               , "Ok"             );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptionsParsingResult::okButCondition   , "OkButCondition" );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( SnippetOptionsParsingResult, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptionsParsingResult, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptionsParsingResult::invalid          , "invalid"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptionsParsingResult::invalid          , "unknown"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptionsParsingResult::fail             , "fail"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptionsParsingResult::ok               , "ok"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptionsParsingResult::okButCondition   , "ok-but-condition" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptionsParsingResult::okButCondition   , "ok_but_condition" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptionsParsingResult::okButCondition   , "okbutcondition"   );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetOptionsParsingResult, std::map, 1 )
+
+
+enum class ConditionOperators : std::uint32_t
+{
+    invalid        = (std::uint32_t)(-1),
+    unknown        = (std::uint32_t)(-1),
+    equal          = 0x0000 /*!< == */,
+    notEqual       = 0x0001 /*!< != */,
+    greaterEqual   = 0x0002 /*!< >= */,
+    lessEqual      = 0x0003 /*!< <= */,
+    greater        = 0x0004 /*!< > */,
+    less           = 0x0005 /*!< < */
+
+}; // enum class ConditionOperators : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(ConditionOperators)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ConditionOperators, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ConditionOperators::less           , "Less"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ConditionOperators::lessEqual      , "LessEqual"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ConditionOperators::invalid        , "Invalid"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ConditionOperators::equal          , "Equal"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ConditionOperators::notEqual       , "NotEqual"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ConditionOperators::greaterEqual   , "GreaterEqual" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ConditionOperators::greater        , "Greater"      );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ConditionOperators, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ConditionOperators, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::less           , "less"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::lessEqual      , "less-equal"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::lessEqual      , "less_equal"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::lessEqual      , "lessequal"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::invalid        , "invalid"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::invalid        , "unknown"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::equal          , "equal"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::notEqual       , "not-equal"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::notEqual       , "not_equal"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::notEqual       , "notequal"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::greaterEqual   , "greater-equal" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::greaterEqual   , "greater_equal" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::greaterEqual   , "greaterequal"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ConditionOperators::greater        , "greater"       );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ConditionOperators, std::map, 1 )
+
+
+enum class ListingNestedTagsMode : std::uint32_t
+{
+    invalid     = (std::uint32_t)(-1),
+    unknown     = (std::uint32_t)(-1),
+    keep        = 0x0000 /*!< keep lines with tags */,
+    remove      = 0x0001 /*!< remove lines with tags */,
+    empty       = 0x0002 /*!< replace lines with tags with empty lines */,
+    emptyLine   = 0x0002 /*!< replace lines with tags with empty lines */
+
+}; // enum class ListingNestedTagsMode : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(ListingNestedTagsMode)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ListingNestedTagsMode, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ListingNestedTagsMode::keep      , "Keep"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ListingNestedTagsMode::invalid   , "Invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ListingNestedTagsMode::remove    , "Remove"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ListingNestedTagsMode::empty     , "Empty"   );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ListingNestedTagsMode, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ListingNestedTagsMode, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ListingNestedTagsMode::keep      , "keep"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ListingNestedTagsMode::invalid   , "invalid"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ListingNestedTagsMode::invalid   , "unknown"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ListingNestedTagsMode::remove    , "remove"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ListingNestedTagsMode::empty     , "empty"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ListingNestedTagsMode::empty     , "empty-line" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ListingNestedTagsMode::empty     , "empty_line" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ListingNestedTagsMode::empty     , "emptyline"  );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ListingNestedTagsMode, std::map, 1 )
+
+

@@ -1,0 +1,4 @@
+invalid,unknown=-1
+fail             =0 // Parsing failed
+ok               =1 // Parsing ok, conditions met
+okButCondition   =2 // Parsing ok, but conditions not met

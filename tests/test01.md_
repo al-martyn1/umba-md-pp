@@ -1,13 +1,19 @@
 
 # Title
 ## Subtitle
+### Русский заголовок третьего уровня
 
 ```
 lst existing
-#!sample{lineno} ..\src\umba-md-pp\log.h#6-9 - this command not processed due it in listing
+#!insert{lineno} ..\src\umba-md-pp\log.h#6-12 - this command not processed due it in listing
 ```
 
-#!sample{lineno} ..\src\umba-md-pp\log.h#6-9
+https://moonbase59.github.io/gh-toc/
+https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
+Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
+todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
+
+#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
 
 # Other Title
 

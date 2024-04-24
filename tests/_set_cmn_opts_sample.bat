@@ -1,1 +1,1 @@
-@set CMNOPTS=--overwrite
+@set CMNOPTS=--overwrite --add-examples-path=%~dp0\..

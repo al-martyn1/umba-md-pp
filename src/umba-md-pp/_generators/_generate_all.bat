@@ -32,6 +32,9 @@
 
 
 umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% ^
-%SNIPPETOPTIONS_GEN_FLAGS%                %UINT32% -E=SnippetOptions %HEX4%               -F=@SnippetOptions.txt         ^
+%SNIPPETOPTIONS_GEN_FLAGS%                %UINT32% %HEX4% -E=SnippetOptions                -F=@SnippetOptions.txt               ^
+                                          %UINT32% %HEX4% -E=SnippetOptionsParsingResult   -F=@SnippetOptionsParsingResult.txt  ^
+                                          %UINT32% %HEX4% -E=ConditionOperators            -F=@ConditionOperators.txt           ^
+                                          %UINT32% %HEX4% -E=ListingNestedTagsMode         -F=@ListingNestedTagsMode.txt        ^
 ..\enums.h
 
