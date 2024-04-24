@@ -10,7 +10,9 @@ filename             =0x1041 // Add filename to listing
 noPath               =0x1050 // Do not add full path to filename (filename option)
 path                 =0x1051 // Add full path to filename (filename option)
 noFail               =0x1060 // If insert failed, don't add insert command text to result
-fail                 =0x1061 // If insert failed, add command insert command text to result
+fail                 =0x1061 // If insert failed, add insert command text to result
+noKeepCutTags        =0x1070 // Don't keep nested cut tags/markers
+keepCutTags          =0x1071 // Keep nested cut tags/markers
 #
 noDoc                =0x10F0 // -doc
 doc                  =0x10F1 // +doc

@@ -92,7 +92,7 @@ AppConfig appConfig;
 std::string curFile;
 unsigned lineNo = 0;
 
-#include "utils.h"
+#include "processing.h"
 
 
 int main(int argc, char* argv[])
