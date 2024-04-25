@@ -5,6 +5,8 @@
 #include "marty_cpp/src_normalization.h"
 
 #include "umba/transliteration.h"
+#include "umba/id_gen.h"
+
 
 //
 #include <stack>
@@ -622,11 +624,11 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
                 return true; // Открывающая '[' не найдена
 
             std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
-            id = umba::generateIdFromText(takenId);
+            id = umba::generateIdFromText_generic(takenId, '-');
         }
         else
         {
-            id = umba::generateIdFromText(headerText);
+            id = umba::generateIdFromText_generic(headerText, '-');
         }
 
         ++usedIds[id];
