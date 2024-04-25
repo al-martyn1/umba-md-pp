@@ -1,11 +1,6 @@
 
 # Title
 
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
-
-#!insert{lineno} src\umba-md-pp\log.h#6-12
-
-
 // Print lines, noKeepCutTags #print-ver-all
 #!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
@@ -14,7 +9,17 @@
 #!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
 
+// No lines, keepCutTags   #print-ver-all
+#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+
+
+// printCommitHash
+#!insert{lineno} cpp/print_ver.h#printCommitHash
+
+
+// printOnlyVersion
 #!insert{lineno} cpp/print_ver.h#printOnlyVersion
+
 
 ## Subtitle
 ### Русский заголовок третьего уровня
