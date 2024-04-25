@@ -26,6 +26,15 @@ bool isInsertCommand(std::string line)
 
 //----------------------------------------------------------------------------
 inline
+bool isSingleLineComment(std::string line)
+{
+    umba::string_plus::trim(line);
+
+    return umba::string_plus::starts_with(line, ("#//"));
+}
+
+//----------------------------------------------------------------------------
+inline
 bool isListingCommand(std::string line)
 {
     umba::string_plus::trim(line);
@@ -405,6 +414,11 @@ std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::
             resLines.emplace_back(line);
         }
 
+        else if (isSingleLineComment(line))
+        {
+            // Пропускаем коменты
+        }
+
         else // normal mode
         {
             if (isListingCommand(line))
@@ -650,6 +664,12 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
 
             resLines.emplace_back(line);
         }
+
+        else if (isSingleLineComment(line))
+        {
+            // Пропускаем коменты
+        }
+
         else // normal mode
         {
             if (isListingCommand(line))
