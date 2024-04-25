@@ -1,0 +1,6 @@
+invalid,unknown=-1
+noNumericSections             =0x1010
+numericSections               =0x1011
+noGenerateSectionId           =0x1020
+generateSectionId             =0x1021
+

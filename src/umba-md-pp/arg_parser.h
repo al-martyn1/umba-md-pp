@@ -452,6 +452,28 @@ int operator()( const std::string                               &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("OPTS")
+               || opt.isOption("processing-options") || opt.isOption('P')
+               || opt.setDescription("Set processing (output generation) options"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting processing options requires argument (--processing-options)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.updateProcessingOptions(optArg))
+            {
+                LOG_ERR_OPT<<"Setting processing options failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
         else if ( opt.setParam("VAR:VAL")
                || opt.isOption("set-condition-var") || opt.isOption('C')
                || opt.setDescription("Set condition variable"))

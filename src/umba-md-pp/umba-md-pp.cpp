@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
         //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
         argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
-        argsParser.args.push_back(rootPath + "tests\\test01.md_");
+        argsParser.args.push_back(rootPath + "tests\\test03.md_");
     }
 
     //programLocationInfo = argsParser.programLocationInfo;
@@ -221,6 +221,9 @@ int main(int argc, char* argv[])
     // testCondition("$A!=$B", true);
     // testCondition("$C!=C", false);
 
+    // std::string levelStr;
+    // std::string headerText;
+    // splitHeaderLine("   ### Some ##", levelStr, headerText);
 
     std::string inputFileText;
     //if (!umba::filesys::readFile(inputFilename, inputFileText))

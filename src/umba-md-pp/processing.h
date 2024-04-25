@@ -383,7 +383,232 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
 //----------------------------------------------------------------------------
 std::string processMdFile(const AppConfig &appCfg, std::string fileText, const std::string &curFilename);
 
+//----------------------------------------------------------------------------
+template<typename HeaderLineHandler> inline
+std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::vector<std::string> &lines, HeaderLineHandler handler)
+{
+    std::vector<std::string> resLines; resLines.reserve(lines.size());
 
+    bool inListing = false;
+
+    for(const auto &line: lines)
+    {
+        if (inListing)
+        {
+            if (isListingCommand(line))
+            {
+                inListing = false;
+            }
+
+            resLines.emplace_back(line);
+        }
+
+        else // normal mode
+        {
+            if (isListingCommand(line))
+            {
+                inListing = true;
+                resLines.emplace_back(line);
+                continue;
+            }
+
+            if (isInsertCommand(line))
+            {
+                resLines.emplace_back(line);
+                continue;
+            }
+
+            if (isHeaderCommand(line))
+            {
+                std::string lCopy = line;
+                if (handler(lCopy))
+                {
+                    resLines.emplace_back(lCopy);
+                }
+                continue;
+            }
+
+            resLines.emplace_back(line);
+        }
+    }
+
+    return resLines;
+}
+
+//----------------------------------------------------------------------------
+inline
+bool splitHeaderLine(const std::string &line, std::string &levelStr, std::string &headerText)
+{
+    std::size_t hashPos = 0;
+    while(hashPos!=line.size() && line[hashPos]!='#' )
+    {
+        ++hashPos;
+    }
+
+    if (hashPos==line.size())
+        return false;
+
+    std::size_t nextPos = hashPos;
+    while(nextPos!=line.size() && line[nextPos]=='#' )
+    {
+        ++nextPos;
+    }
+
+    levelStr.assign(line, hashPos, nextPos-hashPos);
+
+    while(nextPos!=line.size() && line[nextPos]==' ' )
+    {
+        ++nextPos;
+    }
+
+    headerText.assign(line, nextPos, line.npos);
+
+    umba::string_plus::rtrim(headerText, [](char ch) { return ch=='#'; } );
+    umba::string_plus::rtrim(headerText);
+
+    return true;
+}
+
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> raiseHeaders(const AppConfig &appCfg, const std::vector<std::string> &lines, int raiseVal)
+{
+    // Ограничиваем изменение разумной величиной
+    if (raiseVal>3)
+        raiseVal = 3;
+    if (raiseVal<-3)
+        raiseVal = -3;
+
+    if (!raiseVal)
+         return lines;
+
+    auto raiseHeader = [&](std::string &line) -> bool
+    {
+        std::string levelStr;
+        std::string headerText;
+        
+        if (!splitHeaderLine(line, levelStr, headerText))
+            return true;
+
+        std::size_t newHeaderSize = levelStr.size();
+
+        int rv = raiseVal;
+
+        if (rv<0)
+        {
+            rv = -rv;
+            newHeaderSize += (std::size_t)rv;
+        }
+        else
+        {
+            if (rv<=(int)newHeaderSize)
+            {
+                newHeaderSize -= (std::size_t)rv;
+            }
+            else
+            {
+                newHeaderSize = 0;
+            }
+        }
+
+        if (newHeaderSize==0)
+           newHeaderSize = 1;
+
+        line = std::string(newHeaderSize, '#') + std::string(1u, ' ') + headerText;
+
+        return true;
+    };
+
+    return processHeaderLines(appCfg, lines, raiseHeader);
+}
+
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> generateSecionNumbers(const AppConfig &appCfg, const std::vector<std::string> &lines)
+{
+    int sectionCounters[16] = { 0 }; // Не более 16 уровней секций
+
+    auto generateSectionNumber = [&](std::size_t lvl)
+    {
+        std::string resStr;
+
+        if (lvl>16)
+            lvl = 16;
+
+        for(std::size_t i=0; i!=lvl; ++i)
+        {
+            resStr += std::to_string(sectionCounters[i] /* +1 */ );
+            resStr += ".";
+        }
+    
+        return resStr;
+    };
+
+    auto processSectionNumber = [&](std::string &line) -> bool
+    {
+        std::string levelStr;
+        std::string headerText;
+        
+        if (!splitHeaderLine(line, levelStr, headerText))
+            return true;
+    
+        if (levelStr.empty())
+            return true;
+
+        std::size_t curSectionLevel = levelStr.size();
+        if (!curSectionLevel || curSectionLevel>=16u)
+            return true;
+
+        ++sectionCounters[curSectionLevel-1];
+
+        line = levelStr + std::string(1u,' ') + generateSectionNumber(curSectionLevel) + std::string(1u,' ') + headerText;
+        for( /* ++curSectionLevel */ ; curSectionLevel!=16u; ++curSectionLevel)
+        {
+            sectionCounters[curSectionLevel] = 0;
+        }
+
+        return true;
+    };
+
+    return processHeaderLines(appCfg, lines, processSectionNumber);
+}
+
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::vector<std::string> &lines)
+{
+    auto processSectionHeader = [&](std::string &line) -> bool
+    {
+        std::string levelStr;
+        std::string headerText;
+        
+        if (!splitHeaderLine(line, levelStr, headerText))
+            return true;
+
+        if (headerText.empty())
+            return true;
+
+        if (headerText.back()==']')
+        {
+            // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря
+            std::size_t idx = headerText.size();
+            for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
+
+            if (idx==0)
+                return true; // Открывающая '[' не найдена
+
+            std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
+
+            line = levelStr + std::string(1u,' ') + headerText + std::string(" {#") + takenId + std::string("}");
+
+            return true;
+        }
+
+        return true;
+    };
+
+    return processHeaderLines(appCfg, lines, processSectionHeader);
+}
 
 //----------------------------------------------------------------------------
 inline
@@ -490,6 +715,12 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
                         std::vector<std::string> processedDocLines = processMdFileLines(appCfg, docLines, foundFullFilename, alreadyIncludedDocsCopy);
 
                         //TODO: !!! raise titles here
+                        //std::vector<std::string> raiseHeaders(const AppConfig &appCfg, const std::vector<std::string> &lines, int raiseVal)
+                        std::unordered_map<SnippetOptions, int>::const_iterator raiseOptIt = intOptions.find(SnippetOptions::raise);
+                        if (raiseOptIt!=intOptions.end() && raiseOptIt->second!=0)
+                        {
+                            processedDocLines = raiseHeaders(appCfg, processedDocLines, raiseOptIt->second);
+                        }
 
                         resLines.insert(resLines.end(), processedDocLines.begin(), processedDocLines.end());
                         
@@ -743,6 +974,17 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
     std::vector<std::string> lines = marty_cpp::splitToLinesSimple(fileText);
 
     auto resLines = processMdFileLines(appCfg, lines, curFilename);
+
+    if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
+    {
+        resLines = generateSecionNumbers(appCfg, resLines);
+    }
+
+    if (appCfg.testProcessingOption(ProcessingOptions::generateSectionId))
+    {
+        resLines = generateSectionIds(appCfg, resLines);
+    }
+
 
     return marty_cpp::mergeLines(resLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
 }

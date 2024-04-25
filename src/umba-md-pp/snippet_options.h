@@ -308,6 +308,51 @@ SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optList
 
 //----------------------------------------------------------------------------
 inline
+SnippetOptionsParsingResult deserializeProcessingOptions(const std::string &optListStr, std::unordered_set<ProcessingOptions> &flagOptions)
+{
+    std::vector<std::string> optList = marty_cpp::splitToLinesSimple(optListStr, false, ',');
+
+    for(auto opt : optList)
+    {
+        umba::string_plus::trim(opt);
+
+        auto optId = enum_deserialize(opt, ProcessingOptions::invalid);
+        if (optId==ProcessingOptions::invalid)
+        {
+            return SnippetOptionsParsingResult::fail;
+        }
+    
+        if ((((std::uint32_t)optId)&0xF000u)!=0x1000u)
+        {
+            // Not a flag option
+            return SnippetOptionsParsingResult::fail;
+        }
+    
+        bool isOff = false;
+        if ((((std::uint32_t)optId)&0x0001u)==0x0000u)
+        {
+            isOff = true;
+        }
+    
+        auto baseOpt = (ProcessingOptions)(((std::uint32_t)optId)|0x0001u);
+    
+        if (isOff)
+        {
+            flagOptions.erase(baseOpt);
+        }
+        else
+        {
+            flagOptions.insert(baseOpt);
+        }
+        
+        
+    }
+
+    return SnippetOptionsParsingResult::ok;
+}
+
+//----------------------------------------------------------------------------
+inline
 bool testFlagSnippetOption(const std::unordered_set<SnippetOptions> &flagOptions, SnippetOptions opt)
 {
     auto baseOpt = (SnippetOptions)(((std::uint32_t)opt)|0x0001u);

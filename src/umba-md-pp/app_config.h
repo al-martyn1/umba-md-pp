@@ -52,6 +52,8 @@ struct AppConfig
     std::unordered_set<SnippetOptions>                    snippetOptions;
     std::unordered_map<std::string, std::string>          conditionVars;
 
+    std::unordered_set<ProcessingOptions>                 processingOptions;
+
 
     bool addConditionVar(std::string name, std::string value)
     {
@@ -89,6 +91,28 @@ struct AppConfig
 
         return true;
     }
+
+    bool updateProcessingOptions(const std::string &opts)
+    {
+        if (deserializeProcessingOptions(opts, processingOptions)!=SnippetOptionsParsingResult::ok)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool testProcessingOption(ProcessingOptions opt) const
+    {
+        auto baseOpt = (ProcessingOptions)(((std::uint32_t)opt)|0x0001u);
+    
+        if (processingOptions.find(baseOpt)!=processingOptions.end())
+            return true;
+    
+        return false;
+    }
+
+
 
     // umba::string_plus::trim(lineCopy);
     // if (!umba::string_plus::starts_with_and_strip(lineCopy, tagPrefix))
