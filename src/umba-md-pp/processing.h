@@ -8,6 +8,12 @@
 #include <stack>
 #include <string>
 
+//----------------------------------------------------------------------------
+
+
+
+
+//----------------------------------------------------------------------------
 inline
 bool isInsertCommand(std::string line)
 {
@@ -16,6 +22,7 @@ bool isInsertCommand(std::string line)
     return umba::string_plus::starts_with(line, ("#!insert"));
 }
 
+//----------------------------------------------------------------------------
 inline
 bool isListingCommand(std::string line)
 {
@@ -24,6 +31,7 @@ bool isListingCommand(std::string line)
     return umba::string_plus::starts_with(line, ("```")) || umba::string_plus::starts_with(line, ("~~~"));
 }
 
+//----------------------------------------------------------------------------
 inline
 bool isHeaderCommand(std::string line)
 {
@@ -35,7 +43,6 @@ bool isHeaderCommand(std::string line)
 
     return idx>0;
 }
-
 
 //----------------------------------------------------------------------------
 inline
@@ -185,6 +192,7 @@ bool extractCodeTagFromLine(std::string &line, const std::string &tagPrefix)
     return true;
 }
 
+//----------------------------------------------------------------------------
 inline
 bool extractCodeTagFromLine(std::string line, const std::string &tagPrefix, std::string &targetTag)
 {
@@ -372,9 +380,12 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
     return fragmentLines;
 }
 
-
+//----------------------------------------------------------------------------
 std::string processMdFile(const AppConfig &appCfg, std::string fileText, const std::string &curFilename);
 
+
+
+//----------------------------------------------------------------------------
 inline
 std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs=std::unordered_set<std::string>())
 {
@@ -724,7 +735,7 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
     return resLines;
 }
 
-
+//----------------------------------------------------------------------------
 inline
 std::string processMdFile(const AppConfig &appCfg, std::string fileText, const std::string &curFilename)
 {
