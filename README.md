@@ -1,6 +1,6 @@
 ---
 Title      : Препроцессор для Markdown
-Description: Утилита, добовляющая некоторые возможности к Markdown
+Description: "Утилита, добавляющая некоторые возможности к Markdown"
 Author     : al-martyn1
 Author     : Тесть Тестович
 Author     : Иванов Иван Иваныч
@@ -15,3 +15,5 @@ Tags       : yaml, markdown, metadata
 в .MD документ, ну и по мелочам присунул.
 
 Смотри [todo](doc/todo.txt)
+
+# Тестовый заголовок на русском языке
