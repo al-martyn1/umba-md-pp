@@ -33,6 +33,5 @@ void printBuildDateTime( const std::string &indent = "" )   // 32
 {                                                           // 33
     std::cout<<indent<<"Built at "<<appBuildDate<<" "<<appBuildTime<<"\n";
 }                                                           // 35
-//#!
-                                                            // 37
+
 
