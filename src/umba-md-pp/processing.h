@@ -593,6 +593,9 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
         if (headerText.empty())
             return true;
 
+        if (headerText.back()=='}') // already has id?
+            return true;
+
         std::string id;
 
         if (headerText.back()==']')
