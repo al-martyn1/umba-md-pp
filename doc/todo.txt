@@ -159,3 +159,37 @@ Example:
 > The special text for the note
 
 
+10) Коментарии
+#// однострочный
+#/* бла-бла
+#*/
+бла-бла #*/
+
+Или многострочные не нужны?
+
+
+11) Метаданные
+
+    https://stackoverflow.com/questions/44215896/markdown-metadata-format
+    https://jekyllrb.com/docs/front-matter/
+
+    YAML metadata in Markdown - https://peterbabic.dev/blog/yaml-metadata-in-markdown/
+    category, tags, slug, time or title
+
+    https://fletcher.github.io/MultiMarkdown-5/metadata.html
+
+    https://github.blog/2013-09-27-viewing-yaml-metadata-in-your-documents/
+
+    GitHub Markup - https://github.com/github/markup
+      https://github.com/github/markup?tab=readme-ov-file#markups
+      https://github.com/github-linguist/linguist#syntax-highlighting
+
+    https://python-markdown.github.io/extensions/meta_data/
+
+
+12) Генераторы сайтов на маркдауне
+
+Transform your plain text into static websites and blogs - http://jekyllrb.com/
+GitHub Pages. Websites for you and your projects - https://pages.github.com/
+
+
