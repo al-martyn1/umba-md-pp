@@ -4,6 +4,8 @@
 //
 #include "marty_cpp/src_normalization.h"
 
+#include "umba/transliteration.h"
+
 //
 #include <stack>
 #include <string>
@@ -573,10 +575,13 @@ std::vector<std::string> generateSecionNumbers(const AppConfig &appCfg, const st
     return processHeaderLines(appCfg, lines, processSectionNumber);
 }
 
+
 //----------------------------------------------------------------------------
 inline
 std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::vector<std::string> &lines)
 {
+    std::unordered_map<std::string, std::size_t> usedIds;
+
     auto processSectionHeader = [&](std::string &line) -> bool
     {
         std::string levelStr;
@@ -588,6 +593,8 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
         if (headerText.empty())
             return true;
 
+        std::string id;
+
         if (headerText.back()==']')
         {
             // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря
@@ -598,11 +605,23 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
                 return true; // Открывающая '[' не найдена
 
             std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
-
-            line = levelStr + std::string(1u,' ') + headerText + std::string(" {#") + takenId + std::string("}");
-
-            return true;
+            id = umba::generateIdFromText(takenId);
         }
+        else
+        {
+            id = umba::generateIdFromText(headerText);
+        }
+
+        ++usedIds[id];
+
+        if (usedIds[id]>1)
+        {
+            auto n = usedIds[id];
+            id.append(1,'-');
+            id.append(std::to_string(n));
+        }
+
+        line = levelStr + std::string(1u,' ') + headerText + std::string(" {#") + id + std::string("}");
 
         return true;
     };
@@ -975,16 +994,15 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
 
     auto resLines = processMdFileLines(appCfg, lines, curFilename);
 
-    if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
-    {
-        resLines = generateSecionNumbers(appCfg, resLines);
-    }
-
     if (appCfg.testProcessingOption(ProcessingOptions::generateSectionId))
     {
         resLines = generateSectionIds(appCfg, resLines);
     }
 
+    if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
+    {
+        resLines = generateSecionNumbers(appCfg, resLines);
+    }
 
     return marty_cpp::mergeLines(resLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
 }
