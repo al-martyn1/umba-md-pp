@@ -289,6 +289,7 @@ int main(int argc, char* argv[])
 
    // Fix for MinGW problem - https://sourceforge.net/p/mingw-w64/bugs/942/
    // https://github.com/brechtsanders/winlibs_mingw/issues/106
+   // https://stackoverflow.com/questions/74999026/is-there-the-commandlinetoargva-function-in-windows-c-c-vs-2022
 
 
    #include <winsock2.h>
