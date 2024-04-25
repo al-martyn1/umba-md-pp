@@ -17,6 +17,8 @@ noFilenameLineNo     =0x1080 // Do not add line number to filename before liting
 filenameLineNo       =0x1081 // Add line number to filename before liting
 noSnippetOptions     =0x1090 // Do not add actual snippet options line before listing
 snippetOptions       =0x1091 // Add actual snippet options line before listing
+noTrimArround        =0x10A0 // Do not trim empty lines before and after listing
+trimArround          =0x10A1 // Trim empty lines before and after listing
 
 #
 noDoc                =0x10F0 // -doc

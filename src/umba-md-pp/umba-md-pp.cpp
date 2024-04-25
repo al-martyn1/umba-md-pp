@@ -133,7 +133,7 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");
         argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
         //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
-        argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options");
+        argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
         argsParser.args.push_back(rootPath + "tests\\test01.md_");
     }
 

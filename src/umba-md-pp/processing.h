@@ -216,12 +216,6 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
 
     std::vector<std::string> fragmentLines; fragmentLines.reserve(lines.size());
 
-    //std::size_t startLineNo = 0;
-    //std::size_t endLineNo   = 0;
-
-    //bool startFound = false;
-    //int tagLevel    = 0;
-
 
     auto addTagLine = [&](const std::string &line)
     {
@@ -368,48 +362,14 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
         // Если наш целевой тэг открыт, то надо добавить строчку, а тут идёт обработка вложенных тэгов
         if (isTargetFragmentTagOpened())
         {
-            fragmentLines.emplace_back(l);
+            //fragmentLines.emplace_back(l);
+            addTagLine(l);
         }
 
         openCodeFragment(curTag);
-
-        #if 0
-        if (!tag.empty())
-        {
-            // открывающий тэг
-            ++tagLevel;
-            addTagLine(l);
-        }
-        else
-        {
-            // закрывающий тэг
-            --tagLevel;
-            if (tagLevel!=0) 
-            {
-                addTagLine(l);
-            }
-            else
-            {
-                // Тут, опа, закончился наш блок
-                break;
-            }
-            
-        }
-        #endif
-
     }
 
     return fragmentLines;
-
-    // MARTY_ARG_USED(targetFragmentTag);
-    // MARTY_ARG_USED(tagPrefix);
-    // MARTY_ARG_USED(listingNestedTagsMode);
-    //  
-    // return lfNormalizedText; // пока просто всё целиком возвращаем
-
-    //StringType marty_cpp::stripTextTrailingSpaces(const StringType &str)
-    //StringType stripLineTrailingSpaces(StringType str)
-    //void stripLineTrailingSpaces(std::vector<StringType> &v)
 }
 
 
@@ -618,6 +578,66 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
                         {
                             insertLines = trimLeadingSpaces(insertLines, true);
                         }
+
+
+                        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimArround))
+                        {
+                            //std::vector<std::string> newLines1; newLines1.reserve(insertLines.size());
+
+                            std::vector<std::string>::const_iterator itNonEmptyFirst = insertLines.begin();
+                            for(
+                               ; itNonEmptyFirst!=insertLines.end()
+                               ; ++itNonEmptyFirst, ++firstLineIdx
+                               )
+                            {
+                                auto l = *itNonEmptyFirst;
+                                umba::string_plus::trim(l);
+                                if (!l.empty())
+                                {
+                                    //++itNonEmptyFirst;
+                                    break;
+                                }
+                            }
+
+                            // Удаляем пустые строки в начале блока
+                            insertLines.erase(insertLines.begin(), itNonEmptyFirst);
+
+
+                            std::vector<std::string>::const_iterator itNonEmptyLast = insertLines.begin();
+                            for(std::vector<std::string>::const_iterator it=itNonEmptyLast; it!=insertLines.end(); ++it)
+                            {
+                                auto l = *it;
+                                umba::string_plus::trim(l);
+                                if (!l.empty())
+                                {
+                                    itNonEmptyLast = it;
+                                }
+                            }
+
+                            if (itNonEmptyLast!=insertLines.end())
+                            {
+                                ++itNonEmptyLast;
+                                insertLines.erase(itNonEmptyLast, insertLines.end());
+                            }
+
+
+                            // for(auto l: insertLines)
+                            // {
+                            //     umba::string_plus::trim(l);
+                            //     if (l.empty())
+                            //     {
+                            //         ++firstLineIdx;
+                            //         continue;
+                            //     }
+                            //  
+                            //     newLines1.emplace_back(l);
+                            // }
+                            //  
+                            //  
+                            // insertLines = newLines1;
+                        
+                        }
+
 
                         std::string firstLineNoStr = std::to_string(firstLineIdx+1u);
 
