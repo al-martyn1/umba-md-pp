@@ -140,6 +140,12 @@ markdown preprocessor
       + генерить транслит-метку
       + самый простой варик - ничего не генерить )
 
+   GitHub (ПшеРги)
+   https://gist.github.com/asabaylus/3071099?permalink_comment_id=3366191
+   So, characters like á,é,í,ó,ú,Á,É,Í,Ó,Ú,Ñ,ñ are just omitted in anchors.
+   #Definición (note the Spanish accent in the "o")
+   [Ir a definición](#definicin)
+
 
 9) Support for GitHub Alerts
 https://www.doxygen.nl/manual/markdown.html#mddox_github_alerts
@@ -201,6 +207,8 @@ Example:
 
 Transform your plain text into static websites and blogs - http://jekyllrb.com/
 GitHub Pages. Websites for you and your projects - https://pages.github.com/
+
+VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
 
 
 14) Опция --batch, позволяющая сканировать и обрабатывать пачки документов в пакетном режиме
