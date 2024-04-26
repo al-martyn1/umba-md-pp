@@ -1158,11 +1158,6 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
 
     auto resLines = processMdFileLines(appCfg, lines, curFilename);
 
-    if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
-    {
-        resLines = generateSecionNumbers(appCfg, resLines);
-    }
-
     bool generateSecIds = false;
     if ((appCfg.targetRenderer==TargetRenderer::doxygen && (appCfg.testProcessingOption(ProcessingOptions::generateToc) || appCfg.testProcessingOption(ProcessingOptions::generateSectionId) ) ) )
     {
@@ -1185,6 +1180,14 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
     {
         resLines = generateSectionIds(appCfg, resLines);
     }
+
+    // Нумерация - всегда в конце, иначе из-за изменения количества заголовков ссылки каждый раз будут новые, что будет просто пипец
+    if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
+    {
+        resLines = generateSecionNumbers(appCfg, resLines);
+    }
+
+
     // std::unordered_set<ProcessingOptions>                 processingOptions;
     //  
     // TargetRenderer                                        targetRenderer = TargetRenderer::github;
