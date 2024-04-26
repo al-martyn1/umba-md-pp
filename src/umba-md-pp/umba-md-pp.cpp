@@ -37,6 +37,8 @@
 #include "umba/filesys.h"
 #include "umba/filename.h"
 #include "umba/format_message.h"
+#include "umba/id_gen.h"
+//
 #include "snippet_options.h"
 //
 #include "encoding/encoding.h"
@@ -134,7 +136,10 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
         //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
         argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
-        argsParser.args.push_back(rootPath + "tests\\test03.md_");
+        argsParser.args.push_back("--processing-options=generate-toc");
+        // argsParser.args.push_back("");
+        // argsParser.args.push_back("");
+        argsParser.args.push_back(rootPath + "tests\\test04.md_");
     }
 
     //programLocationInfo = argsParser.programLocationInfo;
@@ -220,6 +225,27 @@ int main(int argc, char* argv[])
     // testCondition("$A!=$A", false);
     // testCondition("$A!=$B", true);
     // testCondition("$C!=C", false);
+
+    // auto testGhIdGen = [&](std::string s)
+    // {
+    //     std::cout << s << ": [" << umba::generateIdFromText_forGitHub(s) << "]\n";
+    // };
+    //  
+    // testGhIdGen("Воскл-бакс! \"#$");
+    // testGhIdGen("Прцнт-апоз%&'");
+    // testGhIdGen("Опнскб-плюс()*+");
+    // testGhIdGen("Зпт,");
+    // testGhIdGen("Минус-");
+    // testGhIdGen("Тчк.");
+    // testGhIdGen("Дел-вопр/:;<=>?");
+    // testGhIdGen("Соб-подч@[\\]^_");
+    // testGhIdGen("Бктик`");
+    // testGhIdGen("ФгСкбЛ{");
+    // testGhIdGen("ФгСкбП}");
+    // testGhIdGen("Ор|");
+    // testGhIdGen("Тильда~");
+    // testGhIdGen("English Title");
+     
 
     // std::string levelStr;
     // std::string headerText;

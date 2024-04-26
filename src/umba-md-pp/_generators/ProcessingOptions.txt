@@ -3,4 +3,6 @@ noNumericSections             =0x1010
 numericSections               =0x1011
 noGenerateSectionId           =0x1020
 generateSectionId             =0x1021
+NoGenerateToc                 =0x1030
+generateToc                   =0x1031
 

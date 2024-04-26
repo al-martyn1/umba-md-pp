@@ -496,6 +496,31 @@ int operator()( const std::string                               &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("NAME")
+               || opt.isOption("target-renderer") || opt.isOption('R')
+               || opt.setDescription("Set target renderer (github/doxygen). "))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting target renderer requires argument (--target-renderer)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            auto renderer = enum_deserialize(optArg, TargetRenderer::invalid);
+            if (renderer==TargetRenderer::invalid)
+            {
+                LOG_ERR_OPT<<"Setting target renderer failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+
+            appConfig.targetRenderer = renderer;
+
+            return 0;
+        }
+
         // else if ( opt.isOption("all")
         //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")
         //         )

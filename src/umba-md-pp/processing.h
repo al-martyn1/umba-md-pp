@@ -11,6 +11,7 @@
 //
 #include <stack>
 #include <string>
+#include <utility>
 
 //----------------------------------------------------------------------------
 
@@ -484,6 +485,8 @@ bool splitHeaderLine(const std::string &line, std::string &levelStr, std::string
     umba::string_plus::rtrim(headerText, [](char ch) { return ch=='#'; } );
     umba::string_plus::rtrim(headerText);
 
+    umba::string_plus::rtrim(levelStr);
+
     return true;
 }
 
@@ -594,41 +597,170 @@ std::vector<std::string> generateSecionNumbers(const AppConfig &appCfg, const st
 
 //----------------------------------------------------------------------------
 inline
+std::string generateSectionIdImpl(const AppConfig &appCfg, const std::string secText)
+{
+    if (appCfg.targetRenderer==TargetRenderer::github)
+    {
+        return umba::generateIdFromText_forGitHub(secText);
+    }
+    else if (appCfg.targetRenderer==TargetRenderer::doxygen)
+    {
+        return umba::generateIdFromText_generic(secText, '-');
+    }
+    else
+    {
+        return std::string();
+    }
+}
+
+//----------------------------------------------------------------------------
+inline
+std::string generateSectionId(const AppConfig &appCfg, const std::string secLine, std::size_t *pLevel=0, std::string *pHeaderText=0)
+{
+    if (pLevel)
+    {
+        *pLevel = 0;
+    }
+
+    std::string levelStr;
+    std::string headerText;
+
+    if (!splitHeaderLine(secLine, levelStr, headerText))
+        return std::string();
+
+    if (pHeaderText)
+    {
+        *pHeaderText = headerText;
+    }
+
+    if (headerText.empty())
+        return std::string();
+
+    if (headerText.back()=='}') // already has id?
+        return std::string();
+
+    // if (appCfg.targetRenderer!=TargetRenderer::doxygen)
+    //     return std::string(); // Нужно только для доксигена
+
+    if (pLevel)
+    {
+        *pLevel = levelStr.size();
+    }
+
+    if (headerText.back()==']' && appCfg.targetRenderer==TargetRenderer::doxygen)
+    {
+        // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря (только doxygen)
+        std::size_t idx = headerText.size();
+        for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
+
+        if (idx==0)
+        {
+            return generateSectionIdImpl(appCfg, headerText);
+        }
+
+        std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
+        return generateSectionIdImpl(appCfg, takenId);
+    }
+    else
+    {
+        return  generateSectionIdImpl(appCfg, headerText);
+    }
+
+}
+//----------------------------------------------------------------------------
+inline
 std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::vector<std::string> &lines)
 {
     std::unordered_map<std::string, std::size_t> usedIds;
 
     auto processSectionHeader = [&](std::string &line) -> bool
     {
+        // std::string levelStr;
+        // std::string headerText;
+        //  
+        // if (!splitHeaderLine(line, levelStr, headerText))
+        //     return true;
+        //  
+        // if (headerText.empty())
+        //     return true;
+        //  
+        // if (headerText.back()=='}') // already has id?
+        //     return true;
+        //  
+        // if (appCfg.targetRenderer!=TargetRenderer::doxygen)
+        //     return true; // Нужо только для доксигена
+
+        std::size_t headerLevel = 0;
+        std::string headerText;
+        std::string id = generateSectionId(appCfg, line, &headerLevel, &headerText);
+        if (headerLevel==0 || id.empty())
+            return true;
+
+        // if (headerText.back()==']')
+        // {
+        //     // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря
+        //     std::size_t idx = headerText.size();
+        //     for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
+        //  
+        //     if (idx==0)
+        //         return true; // Открывающая '[' не найдена
+        //  
+        //     std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
+        //     id = umba::generateIdFromText_generic(takenId, '-');
+        // }
+        // else
+        // {
+        //     id = umba::generateIdFromText_generic(headerText, '-');
+        // }
+
+        ++usedIds[id];
+
+        if (usedIds[id]>1)
+        {
+            auto n = usedIds[id];
+            id.append(1,'-');
+            id.append(std::to_string(n));
+        }
+
+        line = std::string(headerLevel, '#') + std::string(1u,' ') + headerText + std::string(" {#") + id + std::string("}");
+
+        return true;
+    };
+
+    return processHeaderLines(appCfg, lines, processSectionHeader);
+}
+
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::vector<std::string> &lines)
+{
+    std::unordered_map<std::string, std::size_t> usedIds;
+
+    std::vector<std::string> tocLines;
+
+    auto processSectionHeader = [&](std::string &line) -> bool
+    {
         std::string levelStr;
         std::string headerText;
-        
+    
         if (!splitHeaderLine(line, levelStr, headerText))
-            return true;
+            return false;
 
-        if (headerText.empty())
-            return true;
+        std::size_t headerLevel = 0;
+        std::string id = generateSectionId(appCfg, line, &headerLevel);
 
-        if (headerText.back()=='}') // already has id?
-            return true;
+        if (!headerLevel)
+            return false; // нам не надо в целевой вектор ничего добавлять
 
-        std::string id;
+        std::string tocLine = std::string(headerLevel*2u /* +2u */ , ' ');
+        tocLine.append("- ");
 
-        if (headerText.back()==']')
+        if (id.empty())
         {
-            // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря
-            std::size_t idx = headerText.size();
-            for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
-
-            if (idx==0)
-                return true; // Открывающая '[' не найдена
-
-            std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
-            id = umba::generateIdFromText_generic(takenId, '-');
-        }
-        else
-        {
-            id = umba::generateIdFromText_generic(headerText, '-');
+            // Generate simple text entry
+            tocLine.append(headerText);
+            tocLines.emplace_back(tocLine);
+            return false;
         }
 
         ++usedIds[id];
@@ -640,12 +772,19 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
             id.append(std::to_string(n));
         }
 
-        line = levelStr + std::string(1u,' ') + headerText + std::string(" {#") + id + std::string("}");
+        tocLine.append("[");
+        tocLine.append(headerText);
+        tocLine.append("](#");
+        tocLine.append(id);
+        tocLine.append(")");
+        tocLines.emplace_back(tocLine);
 
-        return true;
+        return false;
     };
 
-    return processHeaderLines(appCfg, lines, processSectionHeader);
+    processHeaderLines(appCfg, lines, processSectionHeader);
+
+    return tocLines;
 }
 
 //----------------------------------------------------------------------------
@@ -1019,15 +1158,38 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
 
     auto resLines = processMdFileLines(appCfg, lines, curFilename);
 
-    if (appCfg.testProcessingOption(ProcessingOptions::generateSectionId))
-    {
-        resLines = generateSectionIds(appCfg, resLines);
-    }
-
     if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
     {
         resLines = generateSecionNumbers(appCfg, resLines);
     }
+
+    bool generateSecIds = false;
+    if ((appCfg.targetRenderer==TargetRenderer::doxygen && (appCfg.testProcessingOption(ProcessingOptions::generateToc) || appCfg.testProcessingOption(ProcessingOptions::generateSectionId) ) ) )
+    {
+        // Генерировать идентификаторы секций нужно, если у нас целевой рендерер - доксиген, и явно задано генерировать ID секций, или генерировать "Содержание"
+        // Для генерации "Содержания" для гитхаба ID секций генерировать не нужно
+        generateSecIds = true;
+    }
+
+    // Тут надо сгенерировать "Содержание"
+    if (appCfg.testProcessingOption(ProcessingOptions::generateToc))
+    {
+        // Пока просто в начало пихаем
+        std::vector<std::string> tocLines = generateTocLines(appCfg, resLines);
+        std::vector<std::string> tmpLines = tocLines;
+        tmpLines.insert(tmpLines.end(), resLines.begin(), resLines.end());
+        std::swap(tmpLines, resLines);
+    }
+
+    if (generateSecIds)
+    {
+        resLines = generateSectionIds(appCfg, resLines);
+    }
+    // std::unordered_set<ProcessingOptions>                 processingOptions;
+    //  
+    // TargetRenderer                                        targetRenderer = TargetRenderer::github;
+
+
 
     return marty_cpp::mergeLines(resLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
 }

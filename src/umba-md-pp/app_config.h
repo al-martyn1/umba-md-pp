@@ -54,6 +54,8 @@ struct AppConfig
 
     std::unordered_set<ProcessingOptions>                 processingOptions;
 
+    TargetRenderer                                        targetRenderer = TargetRenderer::github;
+
 
     bool addConditionVar(std::string name, std::string value)
     {
