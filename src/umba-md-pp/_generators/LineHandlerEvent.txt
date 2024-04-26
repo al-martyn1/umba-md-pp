@@ -1,0 +1,12 @@
+invalid,unknown=-1
+normalLine    =0
+listingLine
+listingStart
+listingEnd
+insertCommand
+tocCommand
+headerCommand
+metaLine
+metaStart
+metaEnd
+

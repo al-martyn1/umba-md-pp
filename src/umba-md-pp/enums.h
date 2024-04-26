@@ -326,3 +326,100 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( TargetRenderer, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( TargetRenderer, std::map, 1 )
 
 
+enum class LineHandlerEvent : std::uint32_t
+{
+    invalid         = (std::uint32_t)(-1),
+    unknown         = (std::uint32_t)(-1),
+    normalLine      = 0x0000,
+    listingLine     = 0x0001,
+    listingStart    = 0x0002,
+    listingEnd      = 0x0003,
+    insertCommand   = 0x0004,
+    tocCommand      = 0x0005,
+    headerCommand   = 0x0006,
+    metaLine        = 0x0007,
+    metaStart       = 0x0008,
+    metaEnd         = 0x0009
+
+}; // enum class LineHandlerEvent : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(LineHandlerEvent)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::normalLine      , "NormalLine"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::invalid         , "Invalid"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingStart    , "ListingStart"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingLine     , "ListingLine"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "ListingEnd"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "HeaderCommand" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "InsertCommand" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "TocCommand"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaLine        , "MetaLine"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaStart       , "MetaStart"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "MetaEnd"       );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( LineHandlerEvent, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::normalLine      , "normal-line"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::normalLine      , "normal_line"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::normalLine      , "normalline"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::invalid         , "invalid"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::invalid         , "unknown"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingStart    , "listing-start"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingStart    , "listing_start"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingStart    , "listingstart"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingLine     , "listing-line"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingLine     , "listing_line"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingLine     , "listingline"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "listing-end"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "listing_end"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "listingend"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "header-command" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "header_command" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "headercommand"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "insert-command" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "insert_command" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "insertcommand"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "toc-command"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "toc_command"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "toccommand"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaLine        , "meta-line"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaLine        , "meta_line"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaLine        , "metaline"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaStart       , "meta-start"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaStart       , "meta_start"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaStart       , "metastart"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "meta-end"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "meta_end"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "metaend"        );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( LineHandlerEvent, std::map, 1 )
+
+
+enum class PreprocessorParsingState : std::uint32_t
+{
+    invalid   = (std::uint32_t)(-1),
+    unknown   = (std::uint32_t)(-1),
+    normal    = 0x0000,
+    listing   = 0x0001,
+    meta      = 0x0002
+
+}; // enum class PreprocessorParsingState : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(PreprocessorParsingState)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PreprocessorParsingState, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::meta      , "Meta"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::invalid   , "Invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::normal    , "Normal"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::listing   , "Listing" );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( PreprocessorParsingState, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorParsingState, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::meta      , "meta"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::invalid   , "unknown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::normal    , "normal"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::listing   , "listing" );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PreprocessorParsingState, std::map, 1 )
+
+

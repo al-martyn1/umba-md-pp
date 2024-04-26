@@ -23,8 +23,15 @@ inline
 bool isInsertCommand(std::string line)
 {
     umba::string_plus::trim(line);
-
     return umba::string_plus::starts_with(line, ("#!insert"));
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isTocCommand(std::string line)
+{
+    umba::string_plus::trim(line);
+    return umba::string_plus::starts_with(line, ("#!toc"));
 }
 
 //----------------------------------------------------------------------------
@@ -32,7 +39,6 @@ inline
 bool isSingleLineComment(std::string line)
 {
     umba::string_plus::trim(line);
-
     return umba::string_plus::starts_with(line, ("#//"));
 }
 
@@ -41,8 +47,23 @@ inline
 bool isListingCommand(std::string line)
 {
     umba::string_plus::trim(line);
-
     return umba::string_plus::starts_with(line, ("```")) || umba::string_plus::starts_with(line, ("~~~"));
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isMetaStartCommand(std::string line)
+{
+    umba::string_plus::trim(line);
+    return umba::string_plus::starts_with(line, ("---"));
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isMetaEndCommand(std::string line)
+{
+    umba::string_plus::trim(line);
+    return umba::string_plus::starts_with(line, ("---")) || umba::string_plus::starts_with(line, ("..."));
 }
 
 //----------------------------------------------------------------------------
@@ -398,23 +419,148 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
 std::string processMdFile(const AppConfig &appCfg, std::string fileText, const std::string &curFilename);
 
 //----------------------------------------------------------------------------
-template<typename HeaderLineHandler> inline
-std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::vector<std::string> &lines, HeaderLineHandler handler)
+//! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line)
+template<typename LineHandler> inline
+std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector<std::string> &lines, LineHandler handler)
 {
     std::vector<std::string> resLines; resLines.reserve(lines.size());
 
+    PreprocessorParsingState state = PreprocessorParsingState::normal;
+
+    for(auto line: lines)
+    {
+        if (state==PreprocessorParsingState::listing)
+        {
+            if (isListingCommand(line))
+            {
+                state = PreprocessorParsingState::normal;
+                if (handler(LineHandlerEvent::listingEnd, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+            }
+            else
+            {
+                if (handler(LineHandlerEvent::listingLine, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+            }
+        }
+        else if (state==PreprocessorParsingState::meta)
+        {
+            if (isMetaEndCommand(line))
+            {
+                state = PreprocessorParsingState::normal;
+                if (handler(LineHandlerEvent::metaEnd, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+            }
+            else
+            {
+                if (handler(LineHandlerEvent::metaLine, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+            }
+        }
+        else if (state==PreprocessorParsingState::normal)
+        {
+            if (isListingCommand(line))
+            {
+                state = PreprocessorParsingState::listing;
+                if (handler(LineHandlerEvent::listingStart, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+                continue;
+            }
+
+            if (isMetaStartCommand(line))
+            {
+                state = PreprocessorParsingState::meta;
+                if (handler(LineHandlerEvent::metaStart, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+                continue;
+            }
+
+            if (isInsertCommand(line))
+            {
+                if (handler(LineHandlerEvent::insertCommand, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+                continue;
+            }
+
+            if (isTocCommand(line))
+            {
+                if (handler(LineHandlerEvent::tocCommand, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+                continue;
+            }
+
+            if (isHeaderCommand(line))
+            {
+                // std::string lCopy = line;
+                // if (handler(lCopy))
+                // {
+                //     resLines.emplace_back(lCopy);
+                // }
+                if (handler(LineHandlerEvent::headerCommand, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+                continue;
+            }
+
+            if (handler(LineHandlerEvent::normalLine, resLines, line))
+            {
+                resLines.emplace_back(line);
+            }
+        }
+        else
+        {
+            // Something goes wrong
+        }
+    }
+
+
+// bool isMetaStartCommand(std::string line)
+// bool isMetaEndCommand(std::string line)
+// LineHandlerEvent
+//     metaLine        = 0x0007,
+//     metaStart       = 0x0008,
+//     metaEnd         = 0x0009
+
+
+    #if 0
     bool inListing = false;
 
-    for(const auto &line: lines)
+    for(auto line: lines)
     {
         if (inListing)
         {
             if (isListingCommand(line))
             {
                 inListing = false;
+                if (handler(LineHandlerEvent::listingEnd, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
             }
-
-            resLines.emplace_back(line);
+            else
+            {
+                if (handler(LineHandlerEvent::listingLine, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+            }
         }
 
         else if (isSingleLineComment(line))
@@ -427,31 +573,135 @@ std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::
             if (isListingCommand(line))
             {
                 inListing = true;
-                resLines.emplace_back(line);
+                if (handler(LineHandlerEvent::listingStart, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
                 continue;
             }
 
             if (isInsertCommand(line))
             {
-                resLines.emplace_back(line);
+                if (handler(LineHandlerEvent::insertCommand, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
+                continue;
+            }
+
+            if (isTocCommand(line))
+            {
+                if (handler(LineHandlerEvent::tocCommand, resLines, line))
+                {
+                    resLines.emplace_back(line);
+                }
                 continue;
             }
 
             if (isHeaderCommand(line))
             {
-                std::string lCopy = line;
-                if (handler(lCopy))
+                // std::string lCopy = line;
+                // if (handler(lCopy))
+                // {
+                //     resLines.emplace_back(lCopy);
+                // }
+                if (handler(LineHandlerEvent::headerCommand, resLines, line))
                 {
-                    resLines.emplace_back(lCopy);
+                    resLines.emplace_back(line);
                 }
                 continue;
             }
 
-            resLines.emplace_back(line);
+            if (handler(LineHandlerEvent::normalLine, resLines, line))
+            {
+                resLines.emplace_back(line);
+            }
         }
     }
+    #endif
 
     return resLines;
+}
+
+//----------------------------------------------------------------------------
+template<typename HeaderLineHandler> inline
+std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
+{
+    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line)
+    {
+        if (event!=LineHandlerEvent::headerCommand)
+        {
+            return true;
+        }
+
+        if (headerHandler(line))
+        {
+            //resLines.emplace_back(line);
+            return true;
+        }
+
+        return false;
+    };
+
+    return processLines(appCfg, lines, handler);
+
+    // std::vector<std::string> resLines; resLines.reserve(lines.size());
+    //  
+    // bool inListing = false;
+    //  
+    // for(const auto &line: lines)
+    // {
+    //     if (inListing)
+    //     {
+    //         if (isListingCommand(line))
+    //         {
+    //             inListing = false;
+    //         }
+    //  
+    //         resLines.emplace_back(line);
+    //     }
+    //  
+    //     else if (isSingleLineComment(line))
+    //     {
+    //         // Пропускаем коменты
+    //     }
+    //  
+    //     else // normal mode
+    //     {
+    //         if (isListingCommand(line))
+    //         {
+    //             inListing = true;
+    //             resLines.emplace_back(line);
+    //             continue;
+    //         }
+    //  
+    //         if (isInsertCommand(line))
+    //         {
+    //             resLines.emplace_back(line);
+    //             continue;
+    //         }
+    //  
+    //         if (isTocCommand(line))
+    //         {
+    //             resLines.emplace_back(line);
+    //             continue;
+    //         }
+    //  
+    //         if (isHeaderCommand(line))
+    //         {
+    //             std::string lCopy = line;
+    //             if (handler(lCopy))
+    //             {
+    //                 resLines.emplace_back(lCopy);
+    //             }
+    //             continue;
+    //         }
+    //  
+    //         resLines.emplace_back(line);
+    //     }
+    // }
+    //  
+    // return resLines;
 }
 
 //----------------------------------------------------------------------------
