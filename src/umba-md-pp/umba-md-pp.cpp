@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
         //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
         argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
-        argsParser.args.push_back("--processing-options=generate-toc");
+        argsParser.args.push_back("--processing-options=generate-toc,numeric-sections");
         // argsParser.args.push_back("");
         // argsParser.args.push_back("");
         argsParser.args.push_back(rootPath + "tests\\test04.md_");

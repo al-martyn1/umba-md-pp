@@ -597,8 +597,36 @@ std::vector<std::string> generateSecionNumbers(const AppConfig &appCfg, const st
 
 //----------------------------------------------------------------------------
 inline
-std::string generateSectionIdImpl(const AppConfig &appCfg, const std::string secText)
+bool isSectionNumber(const std::string &str)
 {
+    for(auto ch: str)
+    {
+        if (ch>='0' && ch<='9')
+           continue;
+        if (ch=='.')
+           continue;
+
+        return false;
+    }
+
+    return true;
+}
+
+//----------------------------------------------------------------------------
+inline
+std::string generateSectionIdImpl(const AppConfig &appCfg, std::string secText)
+{
+    auto spacePos = secText.find(' ');
+    if (spacePos!=secText.npos)
+    {
+        if (isSectionNumber(std::string(secText, 0, spacePos)))
+        {
+            secText.erase(0, spacePos+1);
+        }
+    }
+
+    umba::string_plus::rtrim(secText);
+
     if (appCfg.targetRenderer==TargetRenderer::github)
     {
         return umba::generateIdFromText_forGitHub(secText);
@@ -1158,6 +1186,11 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
 
     auto resLines = processMdFileLines(appCfg, lines, curFilename);
 
+    if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
+    {
+        resLines = generateSecionNumbers(appCfg, resLines);
+    }
+
     bool generateSecIds = false;
     if ((appCfg.targetRenderer==TargetRenderer::doxygen && (appCfg.testProcessingOption(ProcessingOptions::generateToc) || appCfg.testProcessingOption(ProcessingOptions::generateSectionId) ) ) )
     {
@@ -1181,18 +1214,8 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
         resLines = generateSectionIds(appCfg, resLines);
     }
 
-    // Нумерация - всегда в конце, иначе из-за изменения количества заголовков ссылки каждый раз будут новые, что будет просто пипец
-    if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
-    {
-        resLines = generateSecionNumbers(appCfg, resLines);
-    }
-
-
     // std::unordered_set<ProcessingOptions>                 processingOptions;
-    //  
     // TargetRenderer                                        targetRenderer = TargetRenderer::github;
-
-
 
     return marty_cpp::mergeLines(resLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
 }
