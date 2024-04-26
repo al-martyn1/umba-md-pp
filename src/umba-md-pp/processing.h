@@ -616,13 +616,22 @@ bool isSectionNumber(const std::string &str)
 inline
 std::string generateSectionIdImpl(const AppConfig &appCfg, std::string secText)
 {
-    auto spacePos = secText.find(' ');
-    if (spacePos!=secText.npos)
+    if (appCfg.targetRenderer==TargetRenderer::github)
     {
-        if (isSectionNumber(std::string(secText, 0, spacePos)))
+    }
+    else if (appCfg.targetRenderer==TargetRenderer::doxygen)
+    {
+        auto spacePos = secText.find(' ');
+        if (spacePos!=secText.npos)
         {
-            secText.erase(0, spacePos+1);
+            if (isSectionNumber(std::string(secText, 0, spacePos)))
+            {
+                secText.erase(0, spacePos+1);
+            }
         }
+    }
+    else
+    {
     }
 
     umba::string_plus::rtrim(secText);
