@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--processing-options=generate-toc,numeric-sections");
         // argsParser.args.push_back("");
         // argsParser.args.push_back("");
-        argsParser.args.push_back(rootPath + "tests\\test04.md_");
+        argsParser.args.push_back(rootPath + "tests\\test01.md_");
     }
 
     //programLocationInfo = argsParser.programLocationInfo;

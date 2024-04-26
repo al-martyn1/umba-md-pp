@@ -309,17 +309,8 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
         openedTags.pop_back();
     };
 
-    // auto getTagLevel = [&]()
-    // {
-    //     return openedTags.size();
-    // };
-
     auto isTargetFragmentTagOpened = [&]()
     {
-        // if (openedTags.empty())
-        //     return false;
-        //  
-        // return openedTags.top()targetFragmentTag;
         for(const auto &openedTag: openedTags)
         {
             if (openedTag==targetFragmentTag)
@@ -340,17 +331,9 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
         return false;
     };
 
-    // bool isClosingTag(std::string tagName)
-    // void openCodeFragment(std::string tagName)
-    // void closeCurTag()
-    // std::size_t getTagLevel()
-    // bool isTargetFragmentTagOpened() // открыт ли целевой фрагмент?
-
 
     std::size_t lineIdx = 0;
-    //std::size_t endLineNo   = 0;
 
-    //for(auto l: lines)
     for(; lineIdx!=lines.size(); ++lineIdx)
     {
         auto l = lines[lineIdx]; 
@@ -358,9 +341,6 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
         if (!isCodeTagLine(l, tagPrefix))
         {
             // Строка обычная, не тэговая
-
-            //if (startFound)
-            //if (tagLevel!=0)
             if (isTargetFragmentTagOpened())
             {
                 fragmentLines.emplace_back(l);
@@ -419,68 +399,84 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
 std::string processMdFile(const AppConfig &appCfg, std::string fileText, const std::string &curFilename);
 
 //----------------------------------------------------------------------------
-//! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line)
+//! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
 template<typename LineHandler> inline
 std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector<std::string> &lines, LineHandler handler)
 {
     std::vector<std::string> resLines; resLines.reserve(lines.size());
 
+    if (lines.empty())
+        return resLines;
+
+    std::size_t lastLineIdx = lines.size()-1;
+
     PreprocessorParsingState state = PreprocessorParsingState::normal;
 
-    for(auto line: lines)
+    //for(auto line: lines)
+    for(std::size_t idx=0u; idx!=lines.size(); ++idx)
     {
-        if (state==PreprocessorParsingState::listing)
+        std::string line = lines[idx];
+
+        if (state==PreprocessorParsingState::listing) // listing mode
         {
             if (isListingCommand(line))
             {
                 state = PreprocessorParsingState::normal;
-                if (handler(LineHandlerEvent::listingEnd, resLines, line))
+                if (handler(LineHandlerEvent::listingEnd, resLines, line, idx, lastLineIdx))
                 {
                     resLines.emplace_back(line);
                 }
             }
             else
             {
-                if (handler(LineHandlerEvent::listingLine, resLines, line))
+                if (handler(LineHandlerEvent::listingLine, resLines, line, idx, lastLineIdx))
                 {
                     resLines.emplace_back(line);
                 }
             }
         }
-        else if (state==PreprocessorParsingState::meta)
+
+        else if (state==PreprocessorParsingState::meta) // meta mode
         {
             if (isMetaEndCommand(line))
             {
                 state = PreprocessorParsingState::normal;
-                if (handler(LineHandlerEvent::metaEnd, resLines, line))
+                if (handler(LineHandlerEvent::metaEnd, resLines, line, idx, lastLineIdx))
                 {
                     resLines.emplace_back(line);
                 }
             }
             else
             {
-                if (handler(LineHandlerEvent::metaLine, resLines, line))
+                if (handler(LineHandlerEvent::metaLine, resLines, line, idx, lastLineIdx))
                 {
                     resLines.emplace_back(line);
                 }
             }
         }
-        else if (state==PreprocessorParsingState::normal)
+
+        else if (state==PreprocessorParsingState::normal) // normal mode
         {
+            if (isSingleLineComment(line))
+            {
+                // Пропускаем коменты
+                continue;
+            }
+
             if (isListingCommand(line))
             {
                 state = PreprocessorParsingState::listing;
-                if (handler(LineHandlerEvent::listingStart, resLines, line))
+                if (handler(LineHandlerEvent::listingStart, resLines, line, idx, lastLineIdx))
                 {
                     resLines.emplace_back(line);
                 }
                 continue;
             }
 
-            if (isMetaStartCommand(line))
+            if (isMetaStartCommand(line) && idx==0) // metadata allowed only at the beginning of the file
             {
                 state = PreprocessorParsingState::meta;
-                if (handler(LineHandlerEvent::metaStart, resLines, line))
+                if (handler(LineHandlerEvent::metaStart, resLines, line, idx, lastLineIdx))
                 {
                     resLines.emplace_back(line);
                 }
@@ -489,7 +485,7 @@ std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector
 
             if (isInsertCommand(line))
             {
-                if (handler(LineHandlerEvent::insertCommand, resLines, line))
+                if (handler(LineHandlerEvent::insertCommand, resLines, line, idx, lastLineIdx))
                 {
                     resLines.emplace_back(line);
                 }
@@ -498,7 +494,7 @@ std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector
 
             if (isTocCommand(line))
             {
-                if (handler(LineHandlerEvent::tocCommand, resLines, line))
+                if (handler(LineHandlerEvent::tocCommand, resLines, line, idx, lastLineIdx))
                 {
                     resLines.emplace_back(line);
                 }
@@ -507,37 +503,24 @@ std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector
 
             if (isHeaderCommand(line))
             {
-                // std::string lCopy = line;
-                // if (handler(lCopy))
-                // {
-                //     resLines.emplace_back(lCopy);
-                // }
-                if (handler(LineHandlerEvent::headerCommand, resLines, line))
+                if (handler(LineHandlerEvent::headerCommand, resLines, line, idx, lastLineIdx))
                 {
                     resLines.emplace_back(line);
                 }
                 continue;
             }
 
-            if (handler(LineHandlerEvent::normalLine, resLines, line))
+            if (handler(LineHandlerEvent::normalLine, resLines, line, idx, lastLineIdx))
             {
                 resLines.emplace_back(line);
             }
         }
+
         else
         {
             // Something goes wrong
         }
     }
-
-
-// bool isMetaStartCommand(std::string line)
-// bool isMetaEndCommand(std::string line)
-// LineHandlerEvent
-//     metaLine        = 0x0007,
-//     metaStart       = 0x0008,
-//     metaEnd         = 0x0009
-
 
     #if 0
     bool inListing = false;
@@ -627,7 +610,7 @@ std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector
 template<typename HeaderLineHandler> inline
 std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
 {
-    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line)
+    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
         if (event!=LineHandlerEvent::headerCommand)
         {
@@ -1075,9 +1058,483 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
 }
 
 //----------------------------------------------------------------------------
-inline
-std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs=std::unordered_set<std::string>())
+// //----------------------------------------------------------------------------
+// template<typename HeaderLineHandler> inline
+// std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
+// {
+//     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+//     {
+//         if (event!=LineHandlerEvent::headerCommand)
+//         {
+//             return true;
+//         }
+//  
+//         if (headerHandler(line))
+//         {
+//             //resLines.emplace_back(line);
+//             return true;
+//         }
+//  
+//         return false;
+//     };
+//  
+//     return processLines(appCfg, lines, handler);
+
+//----------------------------------------------------------------------------
+std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs=std::unordered_set<std::string>());
+
+//----------------------------------------------------------------------------
+template <typename SetType> inline
+SetType updatedSet(const SetType &s, typename SetType::key_type k, bool bAddKey /*else remove*/)
 {
+    SetType sCopy = s;
+    if (bAddKey)
+    {
+        sCopy.insert(k);
+    }
+    else
+    {
+        sCopy.erase(k);
+    }
+
+    return sCopy;
+}
+
+//----------------------------------------------------------------------------
+template<typename VectorType> inline
+void vectorPushBack(VectorType &pushBackTo, const VectorType &pushFrom)
+{
+    pushBackTo.insert( pushBackTo.end(), pushFrom.begin(), pushFrom.end() );
+}
+
+//----------------------------------------------------------------------------
+inline
+bool insertDoc( const AppConfig          &appCfg
+              , std::vector<std::string> &resLines
+              , const std::string        &insertCommandLine
+              , const std::string        &curFilename
+              , const std::string        &docFile
+              , const std::unordered_set<SnippetOptions>      &snippetFlagsOptions
+              , const std::unordered_map<SnippetOptions, int> &intOptions;
+              )
+{
+    std::string foundFullFilename;
+    std::string foundFileText;
+    auto findRes = appCfg.findDocFileByIncludedFromFilename(docFile, foundFullFilename, foundFileText, curFilename);
+    if (!findRes) // document not found
+    {
+        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
+        {
+            return false; // сфейли
+        }
+    }
+
+    // файл может включаться под разными именами, через всякие .. или ., слэши опять же разные
+    std::string foundFullFilenameCanonical = umba::filename::makeCanonical( foundFullFilename, '/' );
+
+    if (alreadyIncludedDocs.find(foundFullFilenameCanonical)!=alreadyIncludedDocs.end())
+    {
+        return true; // делаем вид, что всё хорошо, а на самом деле предотвратили рекурсивное подключение одного и того же файла
+    }
+
+    
+    std::vector<std::string> docLines = marty_cpp::splitToLinesSimple(foundFileText);
+    //std::unordered_set<std::string> alreadyIncludedDocsCopy = alreadyIncludedDocs;
+    //alreadyIncludedDocsCopy.insert(foundFullFilename);
+    std::vector<std::string> processedDocLines = processMdFileLines(appCfg, docLines, foundFullFilename, updatedSet(alreadyIncludedDocs, foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */ );
+    
+    //TODO: !!! extract meta info here
+
+    std::unordered_map<SnippetOptions, int>::const_iterator raiseOptIt = intOptions.find(SnippetOptions::raise);
+    if (raiseOptIt!=intOptions.end() && raiseOptIt->second!=0)
+    {
+        processedDocLines = raiseHeaders(appCfg, processedDocLines, raiseOptIt->second);
+    }
+    
+    resLines.insert(resLines.end(), processedDocLines.begin(), processedDocLines.end());
+    
+    return true; // всё хорошо
+    
+}
+
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> prepareSnippetLines( const AppConfig                &appCfg
+                                            , std::vector<std::string>       lines
+                                            , std::size_t                    firstLineIdx
+                                            , bool                           bTrimLeft
+                                            , bool                           trimArround
+                                            , bool                           addLineNumbers
+                                            )
+{
+    lines = trimLeadingSpaces(lines, bTrimLeft);
+
+    if (trimArround)
+    {
+        std::vector<std::string>::const_iterator itNonEmptyFirst = lines.begin();
+        for(
+           ; itNonEmptyFirst!=lines.end()
+           ; ++itNonEmptyFirst, ++firstLineIdx
+           )
+        {
+            auto l = *itNonEmptyFirst;
+            umba::string_plus::trim(l);
+            if (!l.empty())
+                break;
+        }
+    
+        // Удаляем пустые строки в начале блока
+        lines.erase(lines.begin(), itNonEmptyFirst);
+    
+    
+        std::vector<std::string>::const_iterator itNonEmptyLast = lines.begin();
+        for(std::vector<std::string>::const_iterator it=itNonEmptyLast; it!=lines.end(); ++it)
+        {
+            auto l = *it;
+            umba::string_plus::trim(l);
+            if (!l.empty())
+            {
+                itNonEmptyLast = it;
+            }
+        }
+    
+        if (itNonEmptyLast!=lines.end())
+        {
+            ++itNonEmptyLast;
+            lines.erase(itNonEmptyLast, insertLines.end());
+        }
+    }
+
+    if (addLineNumbers)
+    {
+        std::size_t lastLineIdx = firstLineIdx + insertLines.size();
+        ++firstLineIdx;
+    
+        std::size_t numDigits = 0;
+        std::size_t lastLineIdxRest = lastLineIdx;
+        while(lastLineIdxRest>0)
+        {
+            ++numDigits;
+            lastLineIdxRest /= 10u;
+        }
+    
+        for( auto &l : lines)
+        {
+            std::string lineNoStr = std::to_string(firstLineIdx++);
+            std::string fullLineNoStr = std::string(numDigits-lineNoStr.size(), ' ');
+            fullLineNoStr.append(lineNoStr);
+            fullLineNoStr.append(1u, ':');
+            fullLineNoStr.append(1u, ' ');
+            l = fullLineNoStr + l;
+        }
+    }
+
+    return lines;
+}
+
+//----------------------------------------------------------------------------
+//! Возвращает true, если всё хорошо и исходную строку не надо вставлять
+inline
+bool insertSnippet( const AppConfig          &appCfg
+                  , std::vector<std::string> &resLines
+                  , const std::string        &insertCommandLine
+                  , const std::string        &curFilename
+                  , const std::string        &docFile
+                  , const std::unordered_set<SnippetOptions>      &snippetFlagsOptions
+                  , const std::unordered_map<SnippetOptions, int> &intOptions;
+                  )
+{
+    bool fTrimLeading = testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimLeft);
+
+    std::string foundFullFilename;
+    std::string foundFileText;
+    auto findRes = appCfg.findSamplesFile(snippetFile, foundFullFilename, foundFileText /* , curFilename */ );
+    if (!findRes)
+    {
+        bool noFail = !testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
+        // если noFail, возвращаем true, что не включит оригинальную строку в результат для сигнализации автору об ошибке
+        return noFail;
+    }
+
+    std::vector<std::string> snippetsFileLines = marty_cpp::splitToLinesSimple(foundFileText);
+    std::vector<std::string> insertLines; insertLines.reserve(snippetsFileLines.size());
+    std::size_t firstLineIdx = 0;
+    
+    std::string lang = appCfg.getLangByFilename(foundFullFilename);
+
+    if (snippetTag.empty())
+    {    
+        snippetsFileLines = prepareSnippetLines( appCfg, snippetsFileLines
+                                               , 0u // firstLineIdx
+                                               , testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimLeft)    // bTrimLeft
+                                               , testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimArround) // trimArround
+                                               , testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo)      // addLineNumbers
+                                               );
+        vectorPushBack(resLines, snippetsFileLines); // вставляем файл целиком
+        return true; // всё хорошо, не включит исходную строку
+    }
+
+    std::size_t startLineNo = 0;
+    std::size_t endLineNo   = 0;
+    if (isCodeTagLinesRange(snippetTag, startLineNo, endLineNo))
+    {
+        std::vector<std::string> insertSnippetLines;
+        firstLineIdx = startLineNo;
+        for(std::size_t idx=startLineNo; idx!=endLineNo; ++idx)
+        {
+            if (idx>=snippetsFileLines.size())
+                break;
+            insertSnippetLines.emplace_back(snippetsFileLines[idx]);
+        }
+
+        vectorPushBack(resLines, insertSnippetLines);
+    }
+
+
+
+}
+
+
+    
+    
+    {
+        // Тут надо искать конкретные строки, но пока вставляем всё, что есть
+        std::size_t startLineNo = 0;
+        std::size_t endLineNo   = 0;
+        if (isCodeTagLinesRange(snippetTag, startLineNo, endLineNo))
+        {
+            firstLineIdx = startLineNo;
+            for(std::size_t idx=startLineNo; idx!=endLineNo; ++idx)
+            {
+                if (idx>=snippetsFileLines.size())
+                    break;
+                insertLines.emplace_back(snippetsFileLines[idx]);
+            }
+            
+        }
+        else // Тут надо искать по текстовому тэгу
+        {
+            std::string snippetTagPrefix;
+            if (!lang.empty())
+            {
+                snippetTagPrefix = appCfg.getLangCutPrefix(lang);
+            }
+    
+            if (snippetTagPrefix.empty())
+            {
+                // Не знаем, как искать тэг - нет информации по тому, какой префикс используется для тэгов сниппетов в данном языке
+                // Поэтому просто ошибка
+                resLines.emplace_back(line);
+                //resLines.emplace_back("!!! insert (14)");
+    
+                continue;
+            }
+    
+            ListingNestedTagsMode listingNestedTagsMode = ListingNestedTagsMode::remove;
+    
+            if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::keepCutTags))
+            {
+                listingNestedTagsMode = ListingNestedTagsMode::keep;
+            }
+            else if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo))
+            {
+                listingNestedTagsMode = ListingNestedTagsMode::emptyLine;
+            }
+    
+            insertLines = extractCodeFragment(snippetsFileLines, firstLineIdx, snippetTag, snippetTagPrefix, listingNestedTagsMode, 4u /* tabSize */ );
+    
+            //std::vector<std::string> trimLeadingSpaces(std::vector<std::string> lines, bool bTrim)
+            //trimLeadingSpaces(lines, trimLeadingSpaces_a)
+        }
+    
+        // insertLines = snippetsFileLines;
+    }
+    
+    // 
+    if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimLeft))
+    {
+        insertLines = trimLeadingSpaces(insertLines, true);
+    }
+    
+    
+    if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimArround))
+    {
+        //std::vector<std::string> newLines1; newLines1.reserve(insertLines.size());
+    
+        std::vector<std::string>::const_iterator itNonEmptyFirst = insertLines.begin();
+        for(
+           ; itNonEmptyFirst!=insertLines.end()
+           ; ++itNonEmptyFirst, ++firstLineIdx
+           )
+        {
+            auto l = *itNonEmptyFirst;
+            umba::string_plus::trim(l);
+            if (!l.empty())
+            {
+                //++itNonEmptyFirst;
+                break;
+            }
+        }
+    
+        // Удаляем пустые строки в начале блока
+        insertLines.erase(insertLines.begin(), itNonEmptyFirst);
+    
+    
+        std::vector<std::string>::const_iterator itNonEmptyLast = insertLines.begin();
+        for(std::vector<std::string>::const_iterator it=itNonEmptyLast; it!=insertLines.end(); ++it)
+        {
+            auto l = *it;
+            umba::string_plus::trim(l);
+            if (!l.empty())
+            {
+                itNonEmptyLast = it;
+            }
+        }
+    
+        if (itNonEmptyLast!=insertLines.end())
+        {
+            ++itNonEmptyLast;
+            insertLines.erase(itNonEmptyLast, insertLines.end());
+        }
+    
+    }
+    
+    
+    std::string firstLineNoStr = std::to_string(firstLineIdx+1u);
+    
+    if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo))
+    {
+        std::size_t lastLineIdx = firstLineIdx + insertLines.size();
+        ++firstLineIdx;
+    
+        std::size_t numDigits = 0;
+        std::size_t lastLineIdxRest = lastLineIdx;
+        while(lastLineIdxRest>0)
+        {
+            ++numDigits;
+            lastLineIdxRest /= 10u;
+        }
+    
+        for( auto &l : insertLines)
+        {
+            std::string lineNoStr = std::to_string(firstLineIdx++);
+            std::string fullLineNoStr = std::string(numDigits-lineNoStr.size(), ' ');
+            fullLineNoStr.append(lineNoStr);
+            fullLineNoStr.append(1u, ':');
+            fullLineNoStr.append(1u, ' ');
+            l = fullLineNoStr + l;
+        }
+    }
+    
+    if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::snippetOptions))
+    {
+        std::string snippetOptionsLine = serializeSnippetOptions(snippetFlagsOptions, intOptions);
+        resLines.emplace_back("{" + snippetOptionsLine + "}");
+    }
+    
+    if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filename))
+    {
+        std::string filename = umba::filename::normalizePathSeparators(snippetFile, '/');
+        if (!testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::path))
+        {
+            filename = umba::filename::normalizePathSeparators(umba::filename::getFileName(snippetFile), '/');
+        }
+    
+        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filenameLineNo))
+        {
+            filename.append(1u,':');
+            filename.append(firstLineNoStr);
+        }
+    
+        resLines.emplace_back(filename); //TODO: !!! Нужно добавить обрамление
+    }
+    
+    //std::string lang = appCfg.getLangByFilename(foundFullFilename);
+    std::string listingLangTag;
+    if (!lang.empty())
+    {
+        listingLangTag = appCfg.getLangListingTag(lang);
+    }
+    
+    std::string lstStart = std::string(3u,'`');
+    std::string lstEnd   = lstStart;
+    if (!listingLangTag.empty())
+    {
+        lstStart.append(listingLangTag); //TODO: !!! Нужно добавить обрамление
+    }
+    
+    resLines.emplace_back(lstStart);
+    resLines.insert(resLines.end(), insertLines.begin(), insertLines.end());
+    resLines.emplace_back(lstEnd);
+    
+    } // end of insert as code snippet 
+
+
+
+
+
+
+
+
+
+
+
+
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs /* =std::unordered_set<std::string>() */ )
+{
+
+    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+    {
+        if (event!=LineHandlerEvent::insertCommand)
+        {
+            return true;
+        }
+ 
+        auto snippetFlagsOptions = appCfg.snippetOptions;
+        std::unordered_map<SnippetOptions, int> intOptions;
+        std::string snippetFile;
+        std::string snippetTag ;
+        SnippetOptionsParsingResult parseRes = parseSnippetInsertionCommandLine( snippetFlagsOptions, intOptions, appCfg.conditionVars
+                                                                               , line, snippetFile, snippetTag
+                                                                               );
+        if (parseRes==SnippetOptionsParsingResult::okButCondition)
+            return false; // prevent insertion
+
+        if (parseRes==SnippetOptionsParsingResult::fail)
+            return true; // insert source line when fail
+
+        // SnippetOptionsParsingResult::ok
+
+        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::doc))
+        {
+            // если фейл, и insertDoc возвращает false, то возвращаем true для вставки текущей строки, пусть автор документа разбирается,
+            // в чем он накосячил, увидев такой выхлоп в виде заголовка с '!'
+            // Если fail-опция не установлена, то не выводим ничего
+            // По умолчанию в конфигах .options - установлена
+            // Но если мы хотим тихо ничего не делать при обломе поиска подключаемого файла, то надо явно указать no-fail
+            return !insertDoc( appCfg, resLines, line // insertCommandLine
+                             , curFilename
+                             , snippetFile // docFile
+                             , snippetFlagsOptions
+                             , intOptions
+                             );
+        }
+
+
+ 
+        //return false;
+    };
+ 
+    return processLines(appCfg, lines, handler);
+
+
+
+
+
+
+
     std::vector<std::string> resLines; resLines.reserve(lines.size());
     bool inListing = false;
 
@@ -1148,10 +1605,6 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
 
                         if (alreadyIncludedDocs.find(snippetFile)!=alreadyIncludedDocs.end())
                         {
-                            //resLines.emplace_back("!!! insert (6)");
-
-                            // already included
-                            // simple skip it? Or not?
                             resLines.emplace_back(line);
                             continue;
                         }
@@ -1332,22 +1785,6 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
                                 insertLines.erase(itNonEmptyLast, insertLines.end());
                             }
 
-
-                            // for(auto l: insertLines)
-                            // {
-                            //     umba::string_plus::trim(l);
-                            //     if (l.empty())
-                            //     {
-                            //         ++firstLineIdx;
-                            //         continue;
-                            //     }
-                            //  
-                            //     newLines1.emplace_back(l);
-                            // }
-                            //  
-                            //  
-                            // insertLines = newLines1;
-                        
                         }
 
 
