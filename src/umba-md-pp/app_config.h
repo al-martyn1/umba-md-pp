@@ -107,7 +107,7 @@ struct AppConfig
         return addMetaTagSerialize(t, r);
     }
 
-    bool serializeMetaTag(const std::string &t) const
+    std::string serializeMetaTag(const std::string &t) const
     {
         auto it = metaTagSerializeMap.find(t);
         return it!=metaTagSerializeMap.end() ? it->second : t;
