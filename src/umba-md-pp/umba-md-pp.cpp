@@ -131,12 +131,16 @@ int main(int argc, char* argv[])
         #endif
 
         argsParser.args.clear();
+
+        argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
+
         argsParser.args.push_back("--overwrite");
         argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");
         argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
         //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
         argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
         argsParser.args.push_back("--processing-options=generate-toc,numeric-sections");
+
         // argsParser.args.push_back("");
         // argsParser.args.push_back("");
         argsParser.args.push_back(rootPath + "tests\\test01.md_");
