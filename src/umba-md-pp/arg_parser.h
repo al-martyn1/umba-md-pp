@@ -142,6 +142,8 @@ int operator()( const std::string                               &a           //!
 
             coutWriter.forceSetConsoleType(res);
             cerrWriter.forceSetConsoleType(res);
+
+            return 0;
         }
 
         // else if ( opt.setParam("CATID",true)
@@ -560,6 +562,56 @@ int operator()( const std::string                               &a           //!
                 LOG_ERR_OPT<<"Adding meta tag name for serialization failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
+            return 0;
+        }
+
+
+
+        else if (opt.setParam("LEVEL", 0, "0/inf/infinite|" 
+                                        "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16" 
+                             )
+              || opt.setInitial(0) || opt.isOption("numeric-sections-max-level") 
+              || opt.setDescription("Set max level for numeration")
+              )
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            unsigned numMaxLevel = 0;
+            auto mapper = [](int i) -> unsigned
+                          {
+                              return (unsigned)i;
+                          };
+            if (!opt.getParamValue( numMaxLevel, errMsg, mapper ) )
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.numSecMaxLevel = numMaxLevel;
+            return 0;
+        }
+
+        else if (opt.setParam("LEVEL", 0, "0/inf/infinite|" 
+                                        "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16" 
+                             )
+              || opt.setInitial(0) || opt.isOption("toc-max-level") 
+              || opt.setDescription("Set max level for table of contents (TOC)")
+              )
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            unsigned numMaxLevel = 0;
+            auto mapper = [](int i) -> unsigned
+                          {
+                              return (unsigned)i;
+                          };
+            if (!opt.getParamValue( numMaxLevel, errMsg, mapper ) )
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.tocMaxLevel = numMaxLevel;
             return 0;
         }
 

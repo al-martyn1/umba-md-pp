@@ -60,6 +60,9 @@ struct AppConfig
     std::unordered_map<std::string, std::string>          metaTagReplaceMap;
     std::unordered_map<std::string, std::string>          metaTagSerializeMap;
 
+    unsigned                                              numSecMaxLevel = 0;
+    unsigned                                              tocMaxLevel = 0;
+
 
     bool addMetaTagReplace(const std::string &t, const std::string &r)
     {
