@@ -801,19 +801,62 @@ std::vector<std::string> generateSecionNumbers(const AppConfig &appCfg, const st
 
 //----------------------------------------------------------------------------
 inline
-bool isSectionNumber(const std::string &str)
+bool isSectionNumberChar(char ch)
+{
+    if (ch>='0' && ch<='9')
+        return true;
+
+    if (ch=='.')
+        return true;
+
+    return false;
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isSectionNumberStringHelper(const std::string &str)
 {
     for(auto ch: str)
     {
-        if (ch>='0' && ch<='9')
-           continue;
-        if (ch=='.')
+        if (isSectionNumberChar(ch))
            continue;
 
         return false;
     }
 
     return true;
+}
+//----------------------------------------------------------------------------
+inline
+bool isSectionNumber(const std::string &str, bool allowAppendixStyleNumbers=false)
+{
+    if (str.empty())
+       return false;
+
+    // Первый символ может быть латинской буквой
+    if (allowAppendixStyleNumbers)
+    {
+        if (str[0]>='A' && str[0]<='Z' && isSectionNumberStringHelper(std::string(str, 1, std::string::npos)))
+            return true;
+    }
+
+    if (isSectionNumberStringHelper(str))
+        return true;
+
+    return false;
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isAppendixSectionNumber(const std::string &str)
+{
+    if (str.empty())
+       return false;
+
+    if (str[0]>='A' && str[0]<='Z')
+        return true;
+
+    return false;
 }
 
 //----------------------------------------------------------------------------
@@ -888,21 +931,23 @@ std::string generateSectionId(const AppConfig &appCfg, const std::string secLine
         *pLevel = levelStr.size();
     }
 
-    if (headerText.back()==']' && appCfg.targetRenderer==TargetRenderer::doxygen)
-    {
-        // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря (только doxygen)
-        std::size_t idx = headerText.size();
-        for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
+    // Не делаем никаких исключений для 
 
-        if (idx==0)
-        {
-            return generateSectionIdImpl(appCfg, headerText);
-        }
-
-        std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
-        return generateSectionIdImpl(appCfg, takenId);
-    }
-    else
+    // if (headerText.back()==']' && appCfg.targetRenderer==TargetRenderer::doxygen)
+    // {
+    //     // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря (только doxygen)
+    //     std::size_t idx = headerText.size();
+    //     for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
+    //  
+    //     if (idx==0)
+    //     {
+    //         return generateSectionIdImpl(appCfg, headerText);
+    //     }
+    //  
+    //     std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
+    //     return generateSectionIdImpl(appCfg, takenId);
+    // }
+    // else
     {
         return  generateSectionIdImpl(appCfg, headerText);
     }
@@ -916,43 +961,11 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
 
     auto processSectionHeader = [&](std::string &line) -> bool
     {
-        // std::string levelStr;
-        // std::string headerText;
-        //  
-        // if (!splitHeaderLine(line, levelStr, headerText))
-        //     return true;
-        //  
-        // if (headerText.empty())
-        //     return true;
-        //  
-        // if (headerText.back()=='}') // already has id?
-        //     return true;
-        //  
-        // if (appCfg.targetRenderer!=TargetRenderer::doxygen)
-        //     return true; // Нужо только для доксигена
-
         std::size_t headerLevel = 0;
         std::string headerText;
         std::string id = generateSectionId(appCfg, line, &headerLevel, &headerText);
         if (headerLevel==0 || id.empty())
             return true;
-
-        // if (headerText.back()==']')
-        // {
-        //     // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря
-        //     std::size_t idx = headerText.size();
-        //     for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
-        //  
-        //     if (idx==0)
-        //         return true; // Открывающая '[' не найдена
-        //  
-        //     std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
-        //     id = umba::generateIdFromText_generic(takenId, '-');
-        // }
-        // else
-        // {
-        //     id = umba::generateIdFromText_generic(headerText, '-');
-        // }
 
         ++usedIds[id];
 
@@ -1029,29 +1042,6 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
 }
 
 //----------------------------------------------------------------------------
-// //----------------------------------------------------------------------------
-// template<typename HeaderLineHandler> inline
-// std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
-// {
-//     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
-//     {
-//         if (event!=LineHandlerEvent::headerCommand)
-//         {
-//             return true;
-//         }
-//  
-//         if (headerHandler(line))
-//         {
-//             //resLines.emplace_back(line);
-//             return true;
-//         }
-//  
-//         return false;
-//     };
-//  
-//     return processLines(appCfg, lines, handler);
-
-//----------------------------------------------------------------------------
 std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Document &docTo, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs);
 
 //----------------------------------------------------------------------------
@@ -1090,9 +1080,10 @@ bool insertDoc( const AppConfig          &appCfg
 
     
     std::vector<std::string> docLines = marty_cpp::splitToLinesSimple(foundFileText);
-    //std::unordered_set<std::string> alreadyIncludedDocsCopy = alreadyIncludedDocs;
-    //alreadyIncludedDocsCopy.insert(foundFullFilename);
-    std::vector<std::string> processedDocLines = parseMarkdownFileLines(appCfg, docTo, docLines, foundFullFilename, umba::updatedSet(alreadyIncludedDocs, foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */ );
+    std::vector<std::string> processedDocLines = parseMarkdownFileLines( appCfg, docTo, docLines, foundFullFilename
+                                                                       , umba::updatedSet(alreadyIncludedDocs
+                                                                       , foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */
+                                                                       );
     
     //TODO: !!! extract meta info here
 
@@ -1112,16 +1103,16 @@ bool insertDoc( const AppConfig          &appCfg
 
 //----------------------------------------------------------------------------
 inline
-std::vector<std::string> prepareSnippetLines( const AppConfig                &appCfg
-                                            , std::vector<std::string>       lines
-                                            , std::string                    snippetFilename
-                                            , std::size_t                    firstLineIdx
-                                            , bool                           bTrimLeft
-                                            , bool                           trimArround
-                                            , bool                           addLineNumbers
-                                            , bool                           addFilename
-                                            , bool                           addFilenameOnly
-                                            , bool                           addFilenameLineNumber
+std::vector<std::string> prepareSnippetLines( const AppConfig            &appCfg
+                                            , std::vector<std::string>   lines
+                                            , std::string                snippetFilename
+                                            , std::size_t                firstLineIdx
+                                            , bool                       bTrimLeft
+                                            , bool                       trimArround
+                                            , bool                       addLineNumbers
+                                            , bool                       addFilename
+                                            , bool                       addFilenameOnly
+                                            , bool                       addFilenameLineNumber
                                             )
 {
     lines = trimLeadingSpaces(lines, bTrimLeft);
