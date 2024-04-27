@@ -171,20 +171,33 @@ inline
 // std::string serializeSnippetOptions(const std::unordered_set<SnippetOptions> &flagOptions, const std::unordered_map<SnippetOptions, int> &intOptions)
 std::string serializeSnippetOptions(std::unordered_set<SnippetOptions> flagOptions, const std::unordered_map<SnippetOptions, int> &intOptions)
 {
+
     flagOptions.erase(SnippetOptions::snippetOptions);
 
-    std::vector<std::string> optList;
+    std::set<std::string> flagOptionStrings;
 
     for(std::unordered_set<SnippetOptions>::const_iterator fit=flagOptions.begin(); fit!=flagOptions.end(); ++fit)
     {
-        optList.emplace_back(enum_serialize(*fit));
+        flagOptionStrings.insert(enum_serialize(*fit));
+        //optList.emplace_back(enum_serialize(*fit));
     }
 
+    std::map<std::string,std::string> intOptionStrings;
     for(std::unordered_map<SnippetOptions, int>::const_iterator fit=intOptions.begin(); fit!=intOptions.end(); ++fit)
     {
         std::string optName = enum_serialize(fit->first);
         std::string optVal  = std::to_string(fit->second);
-        optList.emplace_back(optName+"="+optVal);
+        //optList.emplace_back(optName+"="+optVal);
+        intOptionStrings[optName] = optVal;
+    }
+
+    std::vector<std::string> optList;
+    for(auto opt: flagOptionStrings)
+        optList.emplace_back(opt);
+
+    for(auto it=intOptionStrings.begin(); it!=intOptionStrings.end(); ++it)
+    {
+        optList.emplace_back(it->first+"="+it->second);
     }
 
     return umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( optList.begin(), optList.end(), std::string(",") );
