@@ -2,3 +2,4 @@ invalid,unknown=-1
 normal
 listing
 meta
+comment

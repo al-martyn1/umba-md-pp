@@ -46,6 +46,22 @@ bool isSingleLineComment(std::string line)
 
 //----------------------------------------------------------------------------
 inline
+bool isMultiLineCommentStart(std::string line)
+{
+    umba::string_plus::trim(line);
+    return umba::string_plus::starts_with(line, ("#/*"));
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isMultiLineCommentEnd(std::string line)
+{
+    umba::string_plus::trim(line);
+    return umba::string_plus::ends_with(line, ("#*/"));
+}
+
+//----------------------------------------------------------------------------
+inline
 bool isListingCommand(std::string line)
 {
     umba::string_plus::trim(line);
@@ -499,11 +515,26 @@ std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector
             }
         }
 
+
+        else if (state==PreprocessorParsingState::comment) // comment mode
+        {
+            if (isMultiLineCommentEnd(line))
+                state = PreprocessorParsingState::normal; // Больше ничего не делаем, строка всё ещё от комента
+        }
+        
+        
         else if (state==PreprocessorParsingState::normal) // normal mode
         {
             if (isSingleLineComment(line))
             {
                 // Пропускаем коменты
+                continue;
+            }
+
+            if (isMultiLineCommentStart(line))
+            {
+                // Пропускаем многострочные коменты
+                state = PreprocessorParsingState::comment;
                 continue;
             }
 

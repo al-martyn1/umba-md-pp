@@ -401,7 +401,8 @@ enum class PreprocessorParsingState : std::uint32_t
     unknown   = (std::uint32_t)(-1),
     normal    = 0x0000,
     listing   = 0x0001,
-    meta      = 0x0002
+    meta      = 0x0002,
+    comment   = 0x0003
 
 }; // enum class PreprocessorParsingState : std::uint32_t
 
@@ -412,6 +413,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PreprocessorParsingState, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::invalid   , "Invalid" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::normal    , "Normal"  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::listing   , "Listing" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::comment   , "Comment" );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( PreprocessorParsingState, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorParsingState, std::map, 1 )
@@ -420,6 +422,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorParsingState, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::invalid   , "unknown" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::normal    , "normal"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::listing   , "listing" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::comment   , "comment" );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PreprocessorParsingState, std::map, 1 )
 
 
