@@ -201,7 +201,8 @@ Example:
        чтобы можно было задавать тэги на русском.
     3) Надо обумать, как всё это разбирать
 
-
+       --meta-tag-replace=avtor:author
+       --meta-tag-serialize=author:Author
 
 13) Генераторы сайтов на маркдауне
 
@@ -225,6 +226,11 @@ VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
     Временные файлы в %TEMP%\.umba-md-pp-view\$(FilenameHash)\
     Желательно открывать так, чтобы Word не лочил файл, но может не получится. Ну, или убивать может получится тот ворд, 
     в котором открыт текущий документ.
+
+    Doxygen можно поискать тут:
+    Компьютер\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\doxygen_is1
+    "Inno Setup: App Path"
+    "InstallLocation"
 
 
 17) TOC - Table Of Content и ссылки на разделы.
