@@ -261,6 +261,26 @@ bool extractCodeTagFromLine(std::string line, const std::string &tagPrefix, std:
 
     return true;
 }
+
+//----------------------------------------------------------------------------
+inline
+void makeShureEmptyLine(std::vector<std::string> &lines)
+{
+    if (lines.empty())
+    {
+        lines.emplace_back(std::string());
+    }
+    else
+    {
+        std::string lastLine = lines.back();
+        umba::string_plus::trim(lastLine);
+        if (!lastLine.empty())
+        {
+            lines.emplace_back(std::string());
+        }
+    }
+}
+
 //----------------------------------------------------------------------------
 inline
 std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
@@ -1125,6 +1145,7 @@ bool insertDoc( const AppConfig          &appCfg
     {
         if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
         {
+            makeShureEmptyLine(resLines);
             resLines.emplace_back("!!! File not found");
             return false; // сфейли
         }
@@ -1152,7 +1173,9 @@ bool insertDoc( const AppConfig          &appCfg
         processedDocLines = raiseHeaders(appCfg, processedDocLines, raiseOptIt->second);
     }
     
-    resLines.insert(resLines.end(), processedDocLines.begin(), processedDocLines.end());
+    makeShureEmptyLine(resLines);
+    //resLines.insert(resLines.end(), processedDocLines.begin(), processedDocLines.end());
+    umba::vectorPushBack(resLines, processedDocLines);
     
     return true; // всё хорошо
     
@@ -1307,6 +1330,7 @@ bool insertSnippet( const AppConfig          &appCfg
         // если noFail, возвращаем true, что не включит оригинальную строку в результат для сигнализации автору об ошибке
         if (!noFail)
         {
+            makeShureEmptyLine(resLines);
             resLines.emplace_back("!!! File not found");
         }
         return noFail;
@@ -1330,6 +1354,7 @@ bool insertSnippet( const AppConfig          &appCfg
                                           , fAddFilenameOnly
                                           , fAddFilenameLineNumber
                                           );
+        makeShureEmptyLine(resLines);
         umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
         return true; // всё хорошо, не включит исходную строку
     }
@@ -1357,6 +1382,7 @@ bool insertSnippet( const AppConfig          &appCfg
                                           , fAddFilenameOnly
                                           , fAddFilenameLineNumber
                                           );
+        makeShureEmptyLine(resLines);
         umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
         return true; // всё хорошо, не включит исходную строку
     }
@@ -1369,6 +1395,7 @@ bool insertSnippet( const AppConfig          &appCfg
 
     if (snippetTagPrefix.empty()) // Не знаем, как искать тэг - нет информации по тому, какой префикс используется для тэгов сниппетов в данном языке
     {
+        makeShureEmptyLine(resLines);
         resLines.emplace_back("!!! Unknown language, can't looking for tag");
         return false; // Поэтому просто ошибка, исходная строка будет включена
     }
@@ -1396,6 +1423,7 @@ bool insertSnippet( const AppConfig          &appCfg
                                       , fAddFilenameOnly
                                       , fAddFilenameLineNumber
                                       );
+        makeShureEmptyLine(resLines);
     umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
     return true; // всё хорошо, не включит исходную строку
 }
@@ -1424,7 +1452,9 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
 
         if (parseRes==SnippetOptionsParsingResult::fail)
         {
+            makeShureEmptyLine(resLines);
             resLines.emplace_back("!!! Options parsing error");
+            makeShureEmptyLine(resLines);
             resLines.emplace_back(serializeSnippetOptions(snippetFlagsOptions, intOptions));
             return true; // insert source line when fail
         }
@@ -1432,6 +1462,7 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
 
         if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::snippetOptions))
         {
+            makeShureEmptyLine(resLines);
             resLines.emplace_back(serializeSnippetOptions(snippetFlagsOptions, intOptions));
         }
 
