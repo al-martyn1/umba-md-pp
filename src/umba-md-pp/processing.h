@@ -1148,6 +1148,7 @@ bool insertDoc( const AppConfig          &appCfg
     {
         if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
         {
+            resLines.emplace_back("!!! File not found");
             return false; // сфейли
         }
     }
@@ -1327,6 +1328,10 @@ bool insertSnippet( const AppConfig          &appCfg
     {
         bool noFail = !testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
         // если noFail, возвращаем true, что не включит оригинальную строку в результат для сигнализации автору об ошибке
+        if (!noFail)
+        {
+            resLines.emplace_back("!!! File not found");
+        }
         return noFail;
     }
 
@@ -1387,6 +1392,7 @@ bool insertSnippet( const AppConfig          &appCfg
 
     if (snippetTagPrefix.empty()) // Не знаем, как искать тэг - нет информации по тому, какой префикс используется для тэгов сниппетов в данном языке
     {
+        resLines.emplace_back("!!! Unknown language, can't looking for tag");
         return false; // Поэтому просто ошибка, исходная строка будет включена
     }
 
@@ -1440,8 +1446,11 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
             return false; // prevent insertion
 
         if (parseRes==SnippetOptionsParsingResult::fail)
+        {
+            resLines.emplace_back("!!! Options parsing error");
+            resLines.emplace_back(serializeSnippetOptions(snippetFlagsOptions, intOptions));
             return true; // insert source line when fail
-
+        }
         // SnippetOptionsParsingResult::ok
 
         if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::snippetOptions))
