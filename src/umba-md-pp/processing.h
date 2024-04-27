@@ -1,6 +1,7 @@
 #pragma once
 
 #include "app_config.h"
+#include "document.h"
 //
 #include "marty_cpp/src_normalization.h"
 
@@ -565,86 +566,39 @@ std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector
         }
     }
 
-    #if 0
-    bool inListing = false;
+    return resLines;
+}
 
-    for(auto line: lines)
+//----------------------------------------------------------------------------
+std::vector<std::string> collectMetadataLines(const AppConfig &appCfg, const std::vector<std::string> &lines, std::vector<std::string> &metadataLines)
+{
+    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
-        if (inListing)
+        if (event==LineHandlerEvent::metaStart || event==LineHandlerEvent::metaEnd)
         {
-            if (isListingCommand(line))
-            {
-                inListing = false;
-                if (handler(LineHandlerEvent::listingEnd, resLines, line))
-                {
-                    resLines.emplace_back(line);
-                }
-            }
-            else
-            {
-                if (handler(LineHandlerEvent::listingLine, resLines, line))
-                {
-                    resLines.emplace_back(line);
-                }
-            }
+            return false; // prevent to add this line to result lines
         }
-
-        else if (isSingleLineComment(line))
+        else if (event==LineHandlerEvent::metaLine)
         {
-            // Пропускаем коменты
+            metadataLines.emplace_back(line);
+            return false; // prevent to add this line to result lines
         }
-
-        else // normal mode
+        else
         {
-            if (isListingCommand(line))
-            {
-                inListing = true;
-                if (handler(LineHandlerEvent::listingStart, resLines, line))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (isInsertCommand(line))
-            {
-                if (handler(LineHandlerEvent::insertCommand, resLines, line))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (isTocCommand(line))
-            {
-                if (handler(LineHandlerEvent::tocCommand, resLines, line))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (isHeaderCommand(line))
-            {
-                // std::string lCopy = line;
-                // if (handler(lCopy))
-                // {
-                //     resLines.emplace_back(lCopy);
-                // }
-                if (handler(LineHandlerEvent::headerCommand, resLines, line))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (handler(LineHandlerEvent::normalLine, resLines, line))
-            {
-                resLines.emplace_back(line);
-            }
+            return true; // allow line to be added to output
         }
-    }
-    #endif
+    };
+
+    return processLines(appCfg, lines, handler);
+}
+
+//----------------------------------------------------------------------------
+std::vector<std::string> collectMetadataToText(const AppConfig &appCfg, const std::vector<std::string> &lines, std::string &metadataText)
+{
+    std::vector<std::string> metadataLines;
+    std::vector<std::string> resLines = collectMetadataLines(appCfg, lines, metadataLines);
+
+    metadataText = marty_cpp::mergeLines(resLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
 
     return resLines;
 }
@@ -671,63 +625,6 @@ std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::
 
     return processLines(appCfg, lines, handler);
 
-    // std::vector<std::string> resLines; resLines.reserve(lines.size());
-    //  
-    // bool inListing = false;
-    //  
-    // for(const auto &line: lines)
-    // {
-    //     if (inListing)
-    //     {
-    //         if (isListingCommand(line))
-    //         {
-    //             inListing = false;
-    //         }
-    //  
-    //         resLines.emplace_back(line);
-    //     }
-    //  
-    //     else if (isSingleLineComment(line))
-    //     {
-    //         // Пропускаем коменты
-    //     }
-    //  
-    //     else // normal mode
-    //     {
-    //         if (isListingCommand(line))
-    //         {
-    //             inListing = true;
-    //             resLines.emplace_back(line);
-    //             continue;
-    //         }
-    //  
-    //         if (isInsertCommand(line))
-    //         {
-    //             resLines.emplace_back(line);
-    //             continue;
-    //         }
-    //  
-    //         if (isTocCommand(line))
-    //         {
-    //             resLines.emplace_back(line);
-    //             continue;
-    //         }
-    //  
-    //         if (isHeaderCommand(line))
-    //         {
-    //             std::string lCopy = line;
-    //             if (handler(lCopy))
-    //             {
-    //                 resLines.emplace_back(lCopy);
-    //             }
-    //             continue;
-    //         }
-    //  
-    //         resLines.emplace_back(line);
-    //     }
-    // }
-    //  
-    // return resLines;
 }
 
 //----------------------------------------------------------------------------
