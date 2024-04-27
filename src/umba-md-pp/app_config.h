@@ -9,6 +9,7 @@
 #include "umba/enum_helpers.h"
 #include "umba/flag_helpers.h"
 #include "umba/string_plus.h"
+#include "umba/id_gen.h"
 //
 //#include "umba/regex_helpers.h"
 //
@@ -55,6 +56,62 @@ struct AppConfig
     std::unordered_set<ProcessingOptions>                 processingOptions;
 
     TargetRenderer                                        targetRenderer = TargetRenderer::github;
+
+    std::unordered_map<std::string, std::string>          metaTagReplaceMap;
+    std::unordered_map<std::string, std::string>          metaTagSerializeMap;
+
+
+    bool addMetaTagReplace(const std::string &t, const std::string &r)
+    {
+        metaTagReplaceMap[marty_cpp::toLower(t)] = marty_cpp::toLower(r);
+        return true;
+    }
+
+    bool addMetaTagReplace(const std::string &trPair)
+    {
+        std::string t;
+        std::string r;
+        if (!umba::string_plus::split_to_pair(trPair, t, r, ':'))
+        {
+            return false;
+        }
+
+        return addMetaTagReplace(t, r);
+    }
+
+    std::string makeCanonicalMetaTag(const std::string &t) const
+    {
+        std::string candis = marty_cpp::toLower(umba::generateIdFromText_generic(t, 0));
+        auto it = metaTagReplaceMap.find(candis);
+        return it!=metaTagReplaceMap.end() ? it->second : candis;
+        //Candace Dutton
+        //Candice Patton
+        // candidate
+    }
+
+    bool addMetaTagSerialize(const std::string &t, const std::string &r)
+    {
+        metaTagSerializeMap[marty_cpp::toLower(t)] = r;
+        return true;
+    }
+
+    bool addMetaTagSerialize(const std::string &trPair)
+    {
+        std::string t;
+        std::string r;
+        if (!umba::string_plus::split_to_pair(trPair, t, r, ':'))
+        {
+            return false;
+        }
+
+        return addMetaTagSerialize(t, r);
+    }
+
+    bool serializeMetaTag(const std::string &t) const
+    {
+        auto it = metaTagSerializeMap.find(t);
+        return it!=metaTagSerializeMap.end() ? it->second : t;
+    }
 
 
     bool addConditionVar(std::string name, std::string value)

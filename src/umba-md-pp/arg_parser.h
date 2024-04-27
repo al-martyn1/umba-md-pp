@@ -521,6 +521,49 @@ int operator()( const std::string                               &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("TAG:REPLACETO")
+               || opt.isOption("meta-tag-replace") || opt.isOption('m')
+               || opt.setDescription("Add meta tag name replacement."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Adding meta tag name replacement requires argument (--meta-tag-replace)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.addMetaTagReplace(optArg))
+            {
+                LOG_ERR_OPT<<"Adding meta tag name replacement failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+            return 0;
+        }
+
+        else if ( opt.setParam("TAG:SERIALIZETO")
+               || opt.isOption("meta-tag-serialize") || opt.isOption('M')
+               || opt.setDescription("Add meta tag name for serialization."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Adding meta tag name for serialization requires argument (--meta-tag-serialize)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.addMetaTagSerialize(optArg))
+            {
+                LOG_ERR_OPT<<"Adding meta tag name for serialization failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+            return 0;
+        }
+
+
         // else if ( opt.isOption("all")
         //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")
         //         )
