@@ -1,14 +1,14 @@
 
 # 1. Title
 
-Doc,Path,Filename,FilenameLineNo,Fail,TrimArround,Raise=-2
+Doc,Fail,Filename,FilenameLineNo,Path,TrimArround,Raise=-2
 
 
 ### 1.0.1. Title
 
 // Print lines, noKeepCutTags #print-ver-all
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
@@ -46,7 +46,7 @@ cpp/print_ver.h:7
 
 // Print lines, keepCutTags   #print-ver-all
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
@@ -84,7 +84,7 @@ cpp/print_ver.h:7
 
 // No lines, keepCutTags   #print-ver-all
 
-TrimArround,Fail,FilenameLineNo,Filename,Path
+Fail,Filename,FilenameLineNo,Path,TrimArround
 
 cpp/print_ver.h:6
 ```cpp
@@ -116,7 +116,7 @@ void printBuildDateTime( const std::string &indent = "" )   // 32
 
 // printCommitHash
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:25
 ```cpp
@@ -131,7 +131,7 @@ cpp/print_ver.h:25
 
 // printOnlyVersion
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
@@ -155,12 +155,12 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 !!! File not found
 #!insert{lineno} ..\src\umba-md-pp\log.h#6-12
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
@@ -195,7 +195,7 @@ cpp/print_ver.h:7
 35: }                                                           // 35
 ```
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
@@ -214,7 +214,7 @@ Bla-bla.
 
 // Print lines, noKeepCutTags #print-ver-all
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
@@ -252,7 +252,7 @@ cpp/print_ver.h:7
 
 // Print lines, keepCutTags   #print-ver-all
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
@@ -290,7 +290,7 @@ cpp/print_ver.h:7
 
 // No lines, keepCutTags   #print-ver-all
 
-TrimArround,Fail,FilenameLineNo,Filename,Path
+Fail,Filename,FilenameLineNo,Path,TrimArround
 
 cpp/print_ver.h:6
 ```cpp
@@ -322,7 +322,7 @@ void printBuildDateTime( const std::string &indent = "" )   // 32
 
 // printCommitHash
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:25
 ```cpp
@@ -337,7 +337,7 @@ cpp/print_ver.h:25
 
 // printOnlyVersion
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
@@ -361,12 +361,12 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 !!! File not found
 #!insert{lineno} ..\src\umba-md-pp\log.h#6-12
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
@@ -401,7 +401,7 @@ cpp/print_ver.h:7
 35: }                                                           // 35
 ```
 
-LineNo,Path,Filename,FilenameLineNo,Fail,TrimArround
+Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
 cpp/print_ver.h:7
 ```cpp
