@@ -23,11 +23,7 @@ inline
 bool isInsertCommand(std::string line)
 {
     umba::string_plus::trim(line);
-    if (umba::string_plus::starts_with(line, ("#!insert")))
-        return true;
-    if (umba::string_plus::starts_with(line, ("#$insert")))
-        return true;
-    return false;
+    return (umba::string_plus::starts_with(line, ("#!insert")) || umba::string_plus::starts_with(line, ("#$insert")));
 }
 
 //----------------------------------------------------------------------------
@@ -35,7 +31,7 @@ inline
 bool isTocCommand(std::string line)
 {
     umba::string_plus::trim(line);
-    return umba::string_plus::starts_with(line, ("#!toc"));
+    return (umba::string_plus::starts_with(line, ("#!toc")) || umba::string_plus::starts_with(line, ("#$toc")));
 }
 
 //----------------------------------------------------------------------------
