@@ -373,7 +373,7 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
 {
     umba::string_plus::trim(line);
 
-    if (!umba::string_plus::starts_with_and_strip(line, ("#!insert")))
+    if (!umba::string_plus::starts_with_and_strip(line, ("#!insert")) && !umba::string_plus::starts_with_and_strip(line, ("#$insert")))
         return SnippetOptionsParsingResult::fail;
 
     umba::string_plus::trim(line);
@@ -416,15 +416,3 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
 }
 
 
-
-
-
-
-
-
-        //     auto docGenCommand = dotNutDocGen::enum_deserialize(strVal, dotNutDocGen::DocGenCommand::invalid);
-        //     if (docGenCommand==dotNutDocGen::DocGenCommand::invalid)
-        //     {
-        //         LOG_ERR_OPT<<"Invalid value in "<<opt.argOrg<<" option"<<", allowed vals: translation,tr/markdown,md/listing,lst/document,doc\n";
-        //         return -1;
-        //     }

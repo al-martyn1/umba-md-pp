@@ -23,7 +23,11 @@ inline
 bool isInsertCommand(std::string line)
 {
     umba::string_plus::trim(line);
-    return umba::string_plus::starts_with(line, ("#!insert"));
+    if (umba::string_plus::starts_with(line, ("#!insert")))
+        return true;
+    if (umba::string_plus::starts_with(line, ("#$insert")))
+        return true;
+    return false;
 }
 
 //----------------------------------------------------------------------------
@@ -1533,9 +1537,3 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
 }
 
 
-
-// SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set<SnippetOptions>       &snippetFlagsOptions
-//                                                             , std::unordered_map<SnippetOptions, int>  &snippetIntOptions
-//                                                             , const std::unordered_map<std::string, std::string> &condVars
-//                                                             , std::string line, std::string &snippetFile, std::string &snippetTag
-//                                                             )
