@@ -570,38 +570,38 @@ std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector
 }
 
 //----------------------------------------------------------------------------
-std::vector<std::string> collectMetadataLines(const AppConfig &appCfg, const std::vector<std::string> &lines, std::vector<std::string> &metadataLines)
-{
-    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
-    {
-        if (event==LineHandlerEvent::metaStart || event==LineHandlerEvent::metaEnd)
-        {
-            return false; // prevent to add this line to result lines
-        }
-        else if (event==LineHandlerEvent::metaLine)
-        {
-            metadataLines.emplace_back(line);
-            return false; // prevent to add this line to result lines
-        }
-        else
-        {
-            return true; // allow line to be added to output
-        }
-    };
-
-    return processLines(appCfg, lines, handler);
-}
-
-//----------------------------------------------------------------------------
-std::vector<std::string> collectMetadataToText(const AppConfig &appCfg, const std::vector<std::string> &lines, std::string &metadataText)
-{
-    std::vector<std::string> metadataLines;
-    std::vector<std::string> resLines = collectMetadataLines(appCfg, lines, metadataLines);
-
-    metadataText = marty_cpp::mergeLines(resLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
-
-    return resLines;
-}
+// std::vector<std::string> collectMetadataLines(const AppConfig &appCfg, const std::vector<std::string> &lines, std::vector<std::string> &metadataLines)
+// {
+//     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+//     {
+//         if (event==LineHandlerEvent::metaStart || event==LineHandlerEvent::metaEnd)
+//         {
+//             return false; // prevent to add this line to result lines
+//         }
+//         else if (event==LineHandlerEvent::metaLine)
+//         {
+//             metadataLines.emplace_back(line);
+//             return false; // prevent to add this line to result lines
+//         }
+//         else
+//         {
+//             return true; // allow line to be added to output
+//         }
+//     };
+//  
+//     return processLines(appCfg, lines, handler);
+// }
+//  
+// //----------------------------------------------------------------------------
+// std::vector<std::string> collectMetadataToText(const AppConfig &appCfg, const std::vector<std::string> &lines, std::string &metadataText)
+// {
+//     std::vector<std::string> metadataLines;
+//     std::vector<std::string> resLines = collectMetadataLines(appCfg, lines, metadataLines);
+//  
+//     metadataText = marty_cpp::mergeLines(resLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
+//  
+//     return resLines;
+// }
 
 //----------------------------------------------------------------------------
 template<typename HeaderLineHandler> inline
@@ -1021,11 +1021,12 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
 //     return processLines(appCfg, lines, handler);
 
 //----------------------------------------------------------------------------
-std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs);
+std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Document &docTo, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs);
 
 //----------------------------------------------------------------------------
 inline
 bool insertDoc( const AppConfig          &appCfg
+              , Document                 &docTo
               , std::vector<std::string> &resLines
               , const std::string        &insertCommandLine
               , const std::string        &curFilename
@@ -1060,7 +1061,7 @@ bool insertDoc( const AppConfig          &appCfg
     std::vector<std::string> docLines = marty_cpp::splitToLinesSimple(foundFileText);
     //std::unordered_set<std::string> alreadyIncludedDocsCopy = alreadyIncludedDocs;
     //alreadyIncludedDocsCopy.insert(foundFullFilename);
-    std::vector<std::string> processedDocLines = processMdFileLines(appCfg, docLines, foundFullFilename, umba::updatedSet(alreadyIncludedDocs, foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */ );
+    std::vector<std::string> processedDocLines = parseMarkdownFileLines(appCfg, docTo, docLines, foundFullFilename, umba::updatedSet(alreadyIncludedDocs, foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */ );
     
     //TODO: !!! extract meta info here
 
@@ -1326,12 +1327,64 @@ bool insertSnippet( const AppConfig          &appCfg
 }
 
 //----------------------------------------------------------------------------
+
+// std::vector<std::string> collectMetadataLines(const AppConfig &appCfg, const std::vector<std::string> &lines, std::vector<std::string> &metadataLines)
+// {
+//     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+//     {
+//         if (event==LineHandlerEvent::metaStart || event==LineHandlerEvent::metaEnd)
+//         {
+//             return false; // prevent to add this line to result lines
+//         }
+//         else if (event==LineHandlerEvent::metaLine)
+//         {
+//             metadataLines.emplace_back(line);
+//             return false; // prevent to add this line to result lines
+//         }
+//         else
+//         {
+//             return true; // allow line to be added to output
+//         }
+//     };
+//  
+//     return processLines(appCfg, lines, handler);
+// }
+//  
+// //----------------------------------------------------------------------------
+// std::vector<std::string> collectMetadataToText(const AppConfig &appCfg, const std::vector<std::string> &lines, std::string &metadataText)
+// {
+//     std::vector<std::string> metadataLines;
+//     std::vector<std::string> resLines = collectMetadataLines(appCfg, lines, metadataLines);
+//  
+//     metadataText = marty_cpp::mergeLines(resLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
+//  
+//     return resLines;
+// }
+
 inline
-std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs )
+std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Document &docTo, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs )
 {
+    std::vector<std::string> metadataLines;
 
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
+        if (event==LineHandlerEvent::metaStart)
+        {
+            return false; // prevent to add this line to result lines
+        }
+        else if (event==LineHandlerEvent::metaEnd)
+        {
+            std::string metadataText = marty_cpp::mergeLines(resLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
+            docTo.collectedMetadataTexts.emplace_back(metadataText);
+            return false; // prevent to add this line to result lines
+        }
+        else if (event==LineHandlerEvent::metaLine)
+        {
+            metadataLines.emplace_back(line);
+            return false; // prevent to add this line to result lines
+        }
+
+
         if (event!=LineHandlerEvent::insertCommand)
         {
             return true;
@@ -1370,7 +1423,7 @@ std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::
             // Если fail-опция не установлена, то не выводим ничего
             // По умолчанию в конфигах .options - установлена
             // Но если мы хотим тихо ничего не делать при обломе поиска подключаемого файла, то надо явно указать no-fail
-            return !insertDoc( appCfg, resLines, line // insertCommandLine
+            return !insertDoc( appCfg, docTo, resLines, line // insertCommandLine
                              , curFilename
                              , snippetFile // docFile
                              , snippetFlagsOptions
@@ -1401,7 +1454,8 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
     //fileText = marty_cpp::normalizeCrLfToLf(fileText);
     std::vector<std::string> lines = marty_cpp::splitToLinesSimple(fileText);
 
-    auto resLines = processMdFileLines(appCfg, lines, curFilename, std::unordered_set<std::string>()/*alreadyIncludedDocs*/);
+    Document docTo;
+    auto resLines = parseMarkdownFileLines(appCfg, docTo, lines, curFilename, std::unordered_set<std::string>()/*alreadyIncludedDocs*/);
 
     if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
     {
