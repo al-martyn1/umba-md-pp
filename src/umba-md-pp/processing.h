@@ -6,6 +6,7 @@
 
 #include "umba/transliteration.h"
 #include "umba/id_gen.h"
+#include "umba/container_utility.h"
 
 
 //
@@ -1106,30 +1107,6 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
 std::vector<std::string> processMdFileLines(const AppConfig &appCfg, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs);
 
 //----------------------------------------------------------------------------
-template <typename SetType> inline
-SetType updatedSet(const SetType &s, typename SetType::key_type k, bool bAddKey /*else remove*/)
-{
-    SetType sCopy = s;
-    if (bAddKey)
-    {
-        sCopy.insert(k);
-    }
-    else
-    {
-        sCopy.erase(k);
-    }
-
-    return sCopy;
-}
-
-//----------------------------------------------------------------------------
-template<typename VectorType> inline
-void vectorPushBack(VectorType &pushBackTo, const VectorType &pushFrom)
-{
-    pushBackTo.insert( pushBackTo.end(), pushFrom.begin(), pushFrom.end() );
-}
-
-//----------------------------------------------------------------------------
 inline
 bool insertDoc( const AppConfig          &appCfg
               , std::vector<std::string> &resLines
@@ -1165,7 +1142,7 @@ bool insertDoc( const AppConfig          &appCfg
     std::vector<std::string> docLines = marty_cpp::splitToLinesSimple(foundFileText);
     //std::unordered_set<std::string> alreadyIncludedDocsCopy = alreadyIncludedDocs;
     //alreadyIncludedDocsCopy.insert(foundFullFilename);
-    std::vector<std::string> processedDocLines = processMdFileLines(appCfg, docLines, foundFullFilename, updatedSet(alreadyIncludedDocs, foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */ );
+    std::vector<std::string> processedDocLines = processMdFileLines(appCfg, docLines, foundFullFilename, umba::updatedSet(alreadyIncludedDocs, foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */ );
     
     //TODO: !!! extract meta info here
 
@@ -1293,7 +1270,7 @@ std::vector<std::string> prepareSnippetLines( const AppConfig                &ap
     }
     
     resLines.emplace_back(lstStart);
-    vectorPushBack(resLines, lines);
+    umba::vectorPushBack(resLines, lines);
     resLines.emplace_back(lstEnd);
     
     return resLines;
@@ -1353,7 +1330,7 @@ bool insertSnippet( const AppConfig          &appCfg
                                           , fAddFilenameOnly
                                           , fAddFilenameLineNumber
                                           );
-        vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
+        umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
         return true; // всё хорошо, не включит исходную строку
     }
 
@@ -1380,7 +1357,7 @@ bool insertSnippet( const AppConfig          &appCfg
                                           , fAddFilenameOnly
                                           , fAddFilenameLineNumber
                                           );
-        vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
+        umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
         return true; // всё хорошо, не включит исходную строку
     }
 
@@ -1419,7 +1396,7 @@ bool insertSnippet( const AppConfig          &appCfg
                                       , fAddFilenameOnly
                                       , fAddFilenameLineNumber
                                       );
-    vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
+    umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
     return true; // всё хорошо, не включит исходную строку
 }
 
