@@ -904,6 +904,7 @@ std::string generateSectionId(const AppConfig &appCfg, const std::string secLine
 
 }
 //----------------------------------------------------------------------------
+#if 0
 inline
 std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::vector<std::string> &lines)
 {
@@ -934,6 +935,7 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
 
     return processHeaderLines(appCfg, lines, processSectionHeader);
 }
+#endif
 //----------------------------------------------------------------------------
     // resLines = generateSecionsExtra( appCfg, resLines, docTo
                                    // , true // update doc info
@@ -1081,6 +1083,7 @@ std::vector<std::string> generateSecionsExtra( const AppConfig                &a
 
 
 //----------------------------------------------------------------------------
+#if 0
 inline
 std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::vector<std::string> &lines)
 {
@@ -1136,6 +1139,7 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
 
     return tocLines;
 }
+#endif
 
 //----------------------------------------------------------------------------
 std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Document &docTo, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs);
@@ -1625,14 +1629,176 @@ std::vector<std::string> processTocCommands(const AppConfig &appCfg, Document &d
 }
 
 //----------------------------------------------------------------------------
+// Ищем закрывающий символ с учетом возможной вложенности, предполагается, что первый открывающий уже пройден
+inline
+std::string::size_type findPairedChar(const std::string &line, std::string::size_type pos, const char chOpen, const char chClose)
+{
+    if (pos>=line.size())
+        return line.npos;
+
+    std::size_t openCount = 1;
+
+    for(; pos!=line.size(); ++pos)
+    {
+        char ch = line[pos];
+
+        if (ch==chOpen)
+        {
+            ++openCount;
+            continue;
+        }
+
+        if (ch==chClose)
+        {
+            --openCount;
+            if (openCount==0)
+                return pos;
+        }
+    }
+
+    return line.npos;
+}
+
+//----------------------------------------------------------------------------
+inline
+std::string updateInDocRefs(const AppConfig &appCfg, Document &doc, const std::string &line)
+{
+    // Идея по ссылкам на разделы. Указываем в них просто текст заголовка - [Какой-то текст](#Просто полный текст заголовка)
+    // Также для каждого заголовка можно задать частично или полностью квалифицированную ссылку. Потом распарсим текст на предмет 
+    // ссылок и сделаем замену.
+    //  
+    // В теле текста линка можно задать просто [$] - тогда будет вставлен текст заголовка, если задать [#] - тогда будет вставлен 
+    // только номер заголовка, если есть нумерация, или его текст, если нумерации нет, [#$] - номер и текст заголовка, если есть нумерация,
+    // или только текст, если нумерации нет.
+
+    std::string resLine; resLine.reserve(line.size());
+
+    std::string::size_type pos = 0;
+    for(; pos!=line.size(); )
+    {
+        char ch = line[pos];
+
+        if (ch!='[')
+        {
+            resLine.append(1,ch);
+            ++pos;
+            continue;
+        }
+
+        auto closePos = findPairedChar(line, pos+1, '[', ']');
+        if (closePos==line.npos) // ничего не нашли, надо тупо остаток строки вместе с текущим символом '[' перекинуть в результат и вернуть его
+        {
+            resLine.append(line, pos, line.npos);
+            return resLine;
+        }
+
+        std::string linkText = std::string(line, pos+1, closePos-pos-1);
+
+        pos = closePos+1;
+        if (pos==line.size() || line[pos]!='(')
+        {
+            resLine.append(1,'[');
+            resLine.append(linkText);
+            resLine.append(1,']');
+	        if (pos==line.size())
+	            return resLine;
+	        else
+	            continue;
+        }
+
+
+        auto roundClosePos = findPairedChar(line, pos+1, '(', ')');
+        if (roundClosePos==line.npos)
+        {
+            resLine.append(1,'[');
+            resLine.append(linkText);
+            resLine.append(1,']');
+            resLine.append(line, pos, line.npos);
+            return resLine;
+        }
+
+
+        std::string linkRef = std::string(line, pos+1, roundClosePos-pos-1);
+
+        pos = roundClosePos+1;
+
+        // process link here
+        //resLine.append("[]()");
+
+        std::string linkTextTrimmed = linkText;
+        umba::string_plus::trim(linkTextTrimmed);
+
+        std::string linkRefTrimmed = linkRef;
+        umba::string_plus::trim(linkRefTrimmed);
+        umba::string_plus::ltrim(linkRefTrimmed, [](char ch) { return ch=='#'; } ); // убираем решетки слева
+
+
+        SectionInfo secInfo;
+        if (!doc.findSectionInfo(linkRefTrimmed, secInfo))
+        {
+            resLine.append(1,'[');
+            resLine.append(linkText);
+            resLine.append(1,']');
+            resLine.append(1,'(');
+            resLine.append(linkRef);
+            resLine.append(1,')');
+        }
+
+        if (linkTextTrimmed=="$")
+        {
+            linkTextTrimmed = secInfo.originalTitle;
+        }
+        else if (linkTextTrimmed=="#")
+        {
+            if (secInfo.sectionNumber.empty())
+                linkTextTrimmed = secInfo.originalTitle;
+            else
+                linkTextTrimmed = secInfo.sectionNumber;
+        }
+        else if (linkTextTrimmed=="#$")
+        {
+            linkTextTrimmed = secInfo.fullTitle;
+        }
+
+        resLine.append(1,'[');
+        resLine.append(linkTextTrimmed);
+        resLine.append(1,']');
+        resLine.append(1,'(');
+        resLine.append(secInfo.sectionTargetId);
+        resLine.append(1,')');
+
+    }
+
+    return resLine;
+}
+
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> updateInDocRefs(const AppConfig &appCfg, Document &doc, const std::vector<std::string> &lines)
+{
+    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+    {
+        if (event!=LineHandlerEvent::normalLine)
+        {
+            return true;
+        }
+
+        line = updateInDocRefs(appCfg, doc, line);
+        return true;
+    };
+
+    return processLines(appCfg, lines, handler);
+}
+
+//----------------------------------------------------------------------------
 inline
 std::string processMdFile(const AppConfig &appCfg, std::string fileText, const std::string &curFilename)
 {
     //fileText = marty_cpp::normalizeCrLfToLf(fileText);
     std::vector<std::string> lines = marty_cpp::splitToLinesSimple(fileText);
 
-    Document docTo;
-    auto resLines = parseMarkdownFileLines(appCfg, docTo, lines, curFilename, std::unordered_set<std::string>()/*alreadyIncludedDocs*/);
+    Document doc;
+    auto resLines = parseMarkdownFileLines(appCfg, doc, lines, curFilename, std::unordered_set<std::string>()/*alreadyIncludedDocs*/);
 
     // Генерировать идентификаторы секций нужно, если у нас целевой рендерер - доксиген, и явно задано генерировать ID секций, или генерировать "Содержание"
     // Для генерации "Содержания" для гитхаба ID секций генерировать не нужно
@@ -1652,7 +1818,7 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
     bool henerateIdWithSectionNumber  = appCfg.targetRenderer==TargetRenderer::github ;
 
 
-    resLines = generateSecionsExtra( appCfg, resLines, docTo
+    resLines = generateSecionsExtra( appCfg, resLines, doc
                                    , true // update doc info
                                    , true // update header
                                    , appCfg.testProcessingOption(ProcessingOptions::numericSections) // нужно или нет реально генерить номера секций
@@ -1660,13 +1826,16 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
                                    , needSpecialIdInSectionHeader
                                    );
 
+    resLines = updateInDocRefs(appCfg, doc, resLines);
+
+
     bool tocAdded = false;
-    resLines = processTocCommands(appCfg, docTo, resLines, tocAdded);
+    resLines = processTocCommands(appCfg, doc, resLines, tocAdded);
 
     if (!tocAdded && appCfg.testProcessingOption(ProcessingOptions::generateToc))
     {
-        std::vector<std::string> tmpLines = docTo.tocLines;
-        //umba::vectorPushBack(tmpLines, docTo.tocLines);
+        std::vector<std::string> tmpLines = doc.tocLines;
+        //umba::vectorPushBack(tmpLines, doc.tocLines);
         makeShureEmptyLine(tmpLines);
         umba::vectorPushBack(tmpLines, resLines);
         std::swap(tmpLines, resLines);
