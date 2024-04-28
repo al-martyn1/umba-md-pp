@@ -455,7 +455,7 @@ int operator()( const std::string                               &a           //!
         }
 
         else if ( opt.setParam("OPTS")
-               || opt.isOption("processing-options") || opt.isOption('P')
+               || opt.isOption("processing-options") // || opt.isOption('P') // conflict with set-lang-cut-prefix option
                || opt.setDescription("Set processing (output generation) options"))
         {
             if (argsParser.hasHelpOption) return 0;
