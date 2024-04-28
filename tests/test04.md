@@ -33,6 +33,8 @@
   - пабам, ссылка на раздел, с его номером: [1.3.1](#user-content-131-параграф-3)
   - пабам, ссылка на раздел, с его названием и номером: [1.3.1 Параграф 3](#user-content-131-параграф-3)
   - пабам, ссылка на раздел, с произвольным текстом: [ссылка](#user-content-131-параграф-3)
+  - ссылка в гугель, для теста: [вас завалят рекламой](google.com)
+  - ссылка в гугель, для теста (с http): [вас завалят рекламой](http://google.com)
 
 [2.3.1](#user-content-231-level-3) Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla.
 Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla.

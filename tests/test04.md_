@@ -17,6 +17,8 @@
   - пабам, ссылка на раздел, с его номером: [#](#Параграф 3)
   - пабам, ссылка на раздел, с его названием и номером: [#$](#Параграф 3)
   - пабам, ссылка на раздел, с произвольным текстом: [ссылка](#Параграф 3)
+  - ссылка в гугель, для теста: [вас завалят рекламой](google.com)
+  - ссылка в гугель, для теста (с http): [вас завалят рекламой](http://google.com)
 
 [#](#Level 3) Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla.
 Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla. Bla-bla.
