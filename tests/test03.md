@@ -1,10 +1,14 @@
 
-# 1. Title
+# 1 Title
+
+Test03
 
 Doc,Fail,Filename,FilenameLineNo,Path,TrimArround,Raise=-2
 
 
-### 1.0.1. Title
+### 1.0.1 Title
+
+Test01
 
 // Print lines, noKeepCutTags #print-ver-all
 
@@ -142,8 +146,8 @@ cpp/print_ver.h:7
 ```
 
 
-#### 1.0.1.1. Subtitle
-##### 1.0.1.1.1. Русский заголовок третьего уровня
+#### 1.0.1.1 Subtitle
+##### 1.0.1.1.1 Русский заголовок третьего уровня
 
 ```
 lst existing
@@ -205,13 +209,14 @@ cpp/print_ver.h:7
 10: }                                                           // 10
 ```
 
-### 1.0.2. Other Title
+### 1.0.2 Other Title
 
-#### 1.0.2.1. Other Subtitle
+#### 1.0.2.1 Other Subtitle
 
 Bla-bla.
 
 
+
 // Print lines, noKeepCutTags #print-ver-all
 
 Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
@@ -348,8 +353,8 @@ cpp/print_ver.h:7
 ```
 
 
-## 1.1. Subtitle
-### 1.1.1. Русский заголовок третьего уровня
+## 1.1 Subtitle
+### 1.1.1 Русский заголовок третьего уровня
 
 ```
 lst existing
@@ -411,9 +416,9 @@ cpp/print_ver.h:7
 10: }                                                           // 10
 ```
 
-# 2. Other Title
+# 2 Other Title
 
-## 2.1. Other Subtitle
+## 2.1 Other Subtitle
 
 Bla-bla.
 
