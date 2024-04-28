@@ -64,6 +64,21 @@ struct AppConfig
     unsigned                                              tocMaxLevel = 0;
 
 
+    void checkAdjustDocNumericLevels()
+    {
+		// Всё, что попадает в содержание, должно иметь номера
+		// numSecMaxLevel - то, что нумеруется
+		// tocMaxLevel    - то, что попадает в содержание
+
+        if ( numSecMaxLevel // Лимит уровня для нумерации установлен
+          && tocMaxLevel    // Лимит того, что попадает в содержание - тоже установлен
+           ) 
+		{
+            if (numSecMaxLevel<tocMaxLevel)
+                numSecMaxLevel = tocMaxLevel;
+        }
+    }
+
     bool addMetaTagReplace(const std::string &t, const std::string &r)
     {
         metaTagReplaceMap[marty_cpp::toLower(t)] = marty_cpp::toLower(r);

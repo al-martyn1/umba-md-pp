@@ -143,7 +143,7 @@ int main(int argc, char* argv[])
 
         // argsParser.args.push_back("");
         // argsParser.args.push_back("");
-        argsParser.args.push_back(rootPath + "tests\\test01.md_");
+        argsParser.args.push_back(rootPath + "tests\\test04.md_");
     }
 
     //programLocationInfo = argsParser.programLocationInfo;
@@ -281,6 +281,8 @@ int main(int argc, char* argv[])
     // }
 
     //inputFileText = AppConfig::autoEncodeToUtf(inputFileText);
+
+    appConfig.checkAdjustDocNumericLevels();
 
     std::string resText = processMdFile(appConfig, inputFileText, inputFilename);
 

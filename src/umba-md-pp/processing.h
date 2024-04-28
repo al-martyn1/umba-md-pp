@@ -749,58 +749,6 @@ std::vector<std::string> raiseHeaders(const AppConfig &appCfg, const std::vector
 
 //----------------------------------------------------------------------------
 inline
-std::vector<std::string> generateSecionNumbers(const AppConfig &appCfg, const std::vector<std::string> &lines)
-{
-    int sectionCounters[16] = { 0 }; // Не более 16 уровней секций
-
-    auto generateSectionNumber = [&](std::size_t lvl)
-    {
-        std::string resStr;
-
-        if (lvl>16)
-            lvl = 16;
-
-        for(std::size_t i=0; i!=lvl; ++i)
-        {
-            resStr += std::to_string(sectionCounters[i] /* +1 */ );
-            resStr += ".";
-        }
-    
-        return resStr;
-    };
-
-    auto processSectionNumber = [&](std::string &line) -> bool
-    {
-        std::string levelStr;
-        std::string headerText;
-        
-        if (!splitHeaderLine(line, levelStr, headerText))
-            return true;
-    
-        if (levelStr.empty())
-            return true;
-
-        std::size_t curSectionLevel = levelStr.size();
-        if (!curSectionLevel || curSectionLevel>=16u)
-            return true;
-
-        ++sectionCounters[curSectionLevel-1];
-
-        line = levelStr + std::string(1u,' ') + generateSectionNumber(curSectionLevel) + std::string(1u,' ') + headerText;
-        for( /* ++curSectionLevel */ ; curSectionLevel!=16u; ++curSectionLevel)
-        {
-            sectionCounters[curSectionLevel] = 0;
-        }
-
-        return true;
-    };
-
-    return processHeaderLines(appCfg, lines, processSectionNumber);
-}
-
-
-//----------------------------------------------------------------------------
-inline
 bool isSectionNumberChar(char ch)
 {
     if (ch>='0' && ch<='9')
@@ -868,14 +816,15 @@ std::string generateSectionIdImpl(const AppConfig &appCfg, std::string secText)
     }
     else if (appCfg.targetRenderer==TargetRenderer::doxygen)
     {
-        auto spacePos = secText.find(' ');
-        if (spacePos!=secText.npos)
-        {
-            if (isSectionNumber(std::string(secText, 0, spacePos)))
-            {
-                secText.erase(0, spacePos+1);
-            }
-        }
+        // Для доксигена зачем-то делаю исключение и чекаю-удаляю номер раздела
+        // auto spacePos = secText.find(' ');
+        // if (spacePos!=secText.npos)
+        // {
+        //     if (isSectionNumber(std::string(secText, 0, spacePos)))
+        //     {
+        //         secText.erase(0, spacePos+1);
+        //     }
+        // }
     }
     else
     {
@@ -920,8 +869,9 @@ std::string generateSectionId(const AppConfig &appCfg, const std::string secLine
     if (headerText.empty())
         return std::string();
 
-    if (headerText.back()=='}') // already has id?
-        return std::string();
+    // Доксигеновская тема, не завязываемся на неё
+    // if (headerText.back()=='}') // already has id?
+    //     return std::string();
 
     // if (appCfg.targetRenderer!=TargetRenderer::doxygen)
     //     return std::string(); // Нужно только для доксигена
@@ -949,7 +899,7 @@ std::string generateSectionId(const AppConfig &appCfg, const std::string secLine
     // }
     // else
     {
-        return  generateSectionIdImpl(appCfg, headerText);
+        return generateSectionIdImpl(appCfg, headerText);
     }
 
 }
@@ -963,6 +913,7 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
     {
         std::size_t headerLevel = 0;
         std::string headerText;
+
         std::string id = generateSectionId(appCfg, line, &headerLevel, &headerText);
         if (headerLevel==0 || id.empty())
             return true;
@@ -983,6 +934,151 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
 
     return processHeaderLines(appCfg, lines, processSectionHeader);
 }
+//----------------------------------------------------------------------------
+    // resLines = generateSecionsExtra( appCfg, resLines, docTo
+                                   // , true // update doc info
+                                   // , true // update title
+    //                                , appCfg.testProcessingOption(ProcessingOptions::numericSections) // нужно или нет реально генерить номера секций
+    //                                );
+
+    // std::vector<std::string> tocLines;
+
+//----------------------------------------------------------------------------
+const std::size_t maxSectionLevelsTotal = 64;
+
+//----------------------------------------------------------------------------
+inline
+std::string generateSectionNumberImpl(std::size_t lvl, const int *sectionCounters)
+{
+    std::string resStr;
+
+    if (lvl>maxSectionLevelsTotal)
+        lvl = maxSectionLevelsTotal;
+
+    for(std::size_t i=0; i!=lvl; ++i)
+    {
+        // resStr += std::to_string(sectionCounters[i] /* +1 */ );
+        // resStr += ".";
+        if (!resStr.empty())
+            resStr += ".";
+        resStr += std::to_string(sectionCounters[i] /* +1 */ );
+    }
+
+    return resStr;
+}
+
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> generateSecionsExtra( const AppConfig                &appCfg
+                                             , const std::vector<std::string> &lines
+                                             , Document                       &docTo
+                                             , bool                           updateDocInfo
+                                             , bool                           updateHeader
+                                             , bool                           numerateSections
+                                             , bool                           idWithSecNumber
+                                             , bool                           addIdToHeader
+                                             )
+{
+    
+    int sectionCounters[maxSectionLevelsTotal] = { 0 }; // Не более maxSectionLevelsTotal уровней секций
+    std::unordered_map<std::string, std::size_t> usedIds;
+
+    auto generateSectionNumber = [&](std::size_t lvl) { return generateSectionNumberImpl(lvl, &sectionCounters[0]); };
+
+    auto processSectionNumber = [&](std::string &line) -> bool
+    {
+        
+        std::string levelStr;
+        std::string headerText;
+        
+        if (!splitHeaderLine(line, levelStr, headerText))
+            return true;
+    
+        if (levelStr.empty())
+            return true;
+
+        //std::size_t headerLevel = levelStr.size();
+
+        std::size_t curSectionLevel = levelStr.size();
+        if (!curSectionLevel || curSectionLevel>=maxSectionLevelsTotal)
+            return true;
+
+        ++sectionCounters[curSectionLevel-1];
+
+        umba::string_plus::trim(headerText);
+
+        SectionInfo secInfo;
+        secInfo.sectionLevel    = curSectionLevel;
+        secInfo.originalTitle   = headerText     ;
+        secInfo.fullTitle       = headerText     ;
+        if (numerateSections)
+        {
+            if (appCfg.numSecMaxLevel==0 || curSectionLevel<=(std::size_t)appCfg.numSecMaxLevel)
+            {
+                secInfo.sectionNumber   = generateSectionNumber(curSectionLevel);
+                secInfo.fullTitle       = secInfo.sectionNumber + std::string(1u,' ') + headerText;
+            }
+        }
+
+        //idWithSecNumber
+        //std::string id = generateSectionId(appCfg, line, &headerLevel, &headerText);
+        std::string id = generateSectionIdImpl(appCfg, idWithSecNumber ? secInfo.fullTitle : secInfo.originalTitle);
+
+        ++usedIds[id];
+
+        if (usedIds[id]>1)
+        {
+            auto n = usedIds[id];
+            id.append(1,'-');
+            id.append(std::to_string(n));
+        }
+        
+        secInfo.sectionTargetId = id;
+
+        std::string newTitleStr = levelStr + std::string(1u,' ') + secInfo.fullTitle;
+
+        if (addIdToHeader)
+        {
+            newTitleStr += std::string(" {#") + secInfo.sectionTargetId + std::string("}");
+        }
+
+        if (updateHeader)
+        {
+            line = newTitleStr;
+        }
+
+        if (updateDocInfo)
+        {
+            if (appCfg.tocMaxLevel==0 || curSectionLevel<=(std::size_t)appCfg.tocMaxLevel)
+            {
+                std::string tocLine = std::string(curSectionLevel*2u /* +2u */ , ' ');
+                tocLine.append("- ");
+                tocLine.append("[");
+                tocLine.append(secInfo.fullTitle);
+                tocLine.append("](#");
+                tocLine.append(secInfo.sectionTargetId);
+                tocLine.append(")");
+
+                docTo.tocLines.emplace_back(tocLine);
+            }
+
+            docTo.sectionInfos[secInfo.originalTitle].emplace_back(secInfo);
+        }
+
+
+        // line = levelStr + std::string(1u,' ') + generateSectionNumber(curSectionLevel) + std::string(1u,' ') + headerText;
+        for( /* ++curSectionLevel */ ; curSectionLevel!=maxSectionLevelsTotal; ++curSectionLevel)
+        {
+            sectionCounters[curSectionLevel] = 0;
+        }
+        
+        return true;
+    };
+
+    return processHeaderLines(appCfg, lines, processSectionNumber);
+}
+
+
 
 //----------------------------------------------------------------------------
 inline
@@ -1469,6 +1565,65 @@ std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Documen
     return processLines(appCfg, lines, handler);
 }
 
+// //----------------------------------------------------------------------------
+// template<typename HeaderLineHandler> inline
+// std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
+// {
+//     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+//     {
+//         if (event!=LineHandlerEvent::headerCommand)
+//         {
+//             return true;
+//         }
+//  
+//         if (headerHandler(line))
+//         {
+//             //resLines.emplace_back(line);
+//             return true;
+//         }
+//  
+//         return false;
+//     };
+//  
+//     return processLines(appCfg, lines, handler);
+//  
+// }
+
+// LineHandlerEvent::tocCommand
+
+//----------------------------------------------------------------------------
+std::vector<std::string> processTocCommands(const AppConfig &appCfg, Document &doc, const std::vector<std::string> &lines, bool &tocAdded)
+{
+    std::size_t numTocFound = 0;
+
+    tocAdded = false;
+
+    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+    {
+        if (event!=LineHandlerEvent::tocCommand)
+        {
+            return true;
+        }
+
+        if (numTocFound==0)
+        {
+            if (appCfg.testProcessingOption(ProcessingOptions::generateToc))
+            {
+                makeShureEmptyLine(resLines);
+                umba::vectorPushBack(resLines, doc.tocLines);
+                makeShureEmptyLine(resLines);
+                tocAdded = true;
+            }
+        }
+
+        ++numTocFound;
+
+        return false;
+    };
+
+    return processLines(appCfg, lines, handler);
+}
+
 //----------------------------------------------------------------------------
 inline
 std::string processMdFile(const AppConfig &appCfg, std::string fileText, const std::string &curFilename)
@@ -1479,36 +1634,43 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
     Document docTo;
     auto resLines = parseMarkdownFileLines(appCfg, docTo, lines, curFilename, std::unordered_set<std::string>()/*alreadyIncludedDocs*/);
 
-    if (appCfg.testProcessingOption(ProcessingOptions::numericSections))
-    {
-        resLines = generateSecionNumbers(appCfg, resLines);
-    }
+    // Генерировать идентификаторы секций нужно, если у нас целевой рендерер - доксиген, и явно задано генерировать ID секций, или генерировать "Содержание"
+    // Для генерации "Содержания" для гитхаба ID секций генерировать не нужно
 
+    // Или, если целевой рендерер доксиген - нам всегда нужны идентификатры секций, чтобы на них ссылаться.
     bool generateSecIds = false;
-    if ((appCfg.targetRenderer==TargetRenderer::doxygen && (appCfg.testProcessingOption(ProcessingOptions::generateToc) || appCfg.testProcessingOption(ProcessingOptions::generateSectionId) ) ) )
+    if ( appCfg.targetRenderer==TargetRenderer::doxygen 
+      // && ( appCfg.testProcessingOption(ProcessingOptions::generateToc)
+      //   || appCfg.testProcessingOption(ProcessingOptions::generateSectionId)
+      //    )
+       )
     {
-        // Генерировать идентификаторы секций нужно, если у нас целевой рендерер - доксиген, и явно задано генерировать ID секций, или генерировать "Содержание"
-        // Для генерации "Содержания" для гитхаба ID секций генерировать не нужно
         generateSecIds = true;
     }
 
-    // Тут надо сгенерировать "Содержание"
-    if (appCfg.testProcessingOption(ProcessingOptions::generateToc))
+    bool needSpecialIdInSectionHeader = appCfg.targetRenderer==TargetRenderer::doxygen;
+    bool henerateIdWithSectionNumber  = appCfg.targetRenderer==TargetRenderer::github ;
+
+
+    resLines = generateSecionsExtra( appCfg, resLines, docTo
+                                   , true // update doc info
+                                   , true // update header
+                                   , appCfg.testProcessingOption(ProcessingOptions::numericSections) // нужно или нет реально генерить номера секций
+                                   , henerateIdWithSectionNumber
+                                   , needSpecialIdInSectionHeader
+                                   );
+
+    bool tocAdded = false;
+    resLines = processTocCommands(appCfg, docTo, resLines, tocAdded);
+
+    if (!tocAdded && appCfg.testProcessingOption(ProcessingOptions::generateToc))
     {
-        // Пока просто в начало пихаем
-        std::vector<std::string> tocLines = generateTocLines(appCfg, resLines);
-        std::vector<std::string> tmpLines = tocLines;
-        tmpLines.insert(tmpLines.end(), resLines.begin(), resLines.end());
+        std::vector<std::string> tmpLines = docTo.tocLines;
+        //umba::vectorPushBack(tmpLines, docTo.tocLines);
+        makeShureEmptyLine(tmpLines);
+        umba::vectorPushBack(tmpLines, resLines);
         std::swap(tmpLines, resLines);
     }
-
-    if (generateSecIds)
-    {
-        resLines = generateSectionIds(appCfg, resLines);
-    }
-
-    // std::unordered_set<ProcessingOptions>                 processingOptions;
-    // TargetRenderer                                        targetRenderer = TargetRenderer::github;
 
     return marty_cpp::mergeLines(resLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
 }
