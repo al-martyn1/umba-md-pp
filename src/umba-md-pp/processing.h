@@ -1764,6 +1764,7 @@ std::string updateInDocRefs(const AppConfig &appCfg, Document &doc, const std::s
         resLine.append(linkTextTrimmed);
         resLine.append(1,']');
         resLine.append(1,'(');
+        resLine.append(1,'#');
         resLine.append(secInfo.sectionTargetId);
         resLine.append(1,')');
 
