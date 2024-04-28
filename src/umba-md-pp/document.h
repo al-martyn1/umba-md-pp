@@ -26,6 +26,25 @@ struct Document
 
     std::map<std::string, std::vector<SectionInfo> >   sectionInfos; //!< Инфа о секциях. OrgTitle->Info. Вектор - потому, что могут быть дубликаты, а мультимап я чёт не любли и не использую
 
+    bool findSectionInfo(const std::string &orgTitle, SectionInfo &secInfo, std::size_t *pNumFoundSections=0) const
+    {
+        std::map<std::string, std::vector<SectionInfo> >::const_iterator it = sectionInfos.find(orgTitle);
+        if (it==sectionInfos.end() || it->second.empty())
+        {
+            return false;
+        }
+
+        secInfo = it->second[0];
+
+        if (pNumFoundSections)
+        {
+            *pNumFoundSections = it->second.size();
+        }
+
+        return true;
+    }
+
+
 }; // struct Document
 
 
