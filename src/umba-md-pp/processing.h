@@ -1717,8 +1717,17 @@ std::string updateInDocRefs(const AppConfig &appCfg, Document &doc, const std::s
             return resLine;
         }
 
+        if ((pos+1)==line.npos || line[pos+1]!='#') // ссылка не локальная, значит, не наш вариант. Специально отделил от предыдущего if'а
+        {
+            resLine.append(1,'[');
+            resLine.append(linkText);
+            resLine.append(1,']');
+            resLine.append(line, pos, line.npos);
+            return resLine;
+        }
 
-        std::string linkRef = std::string(line, pos+1, roundClosePos-pos-1);
+        // std::string linkRef = std::string(line, pos+1, roundClosePos-pos-1); // не убирать, тут с решеткой, которую надо всё равно удалять
+        std::string linkRef = std::string(line, pos+2, roundClosePos-pos-2); // тут мы копируем без решетки
 
         pos = roundClosePos+1;
 
@@ -1730,7 +1739,7 @@ std::string updateInDocRefs(const AppConfig &appCfg, Document &doc, const std::s
 
         std::string linkRefTrimmed = linkRef;
         umba::string_plus::trim(linkRefTrimmed);
-        umba::string_plus::ltrim(linkRefTrimmed, [](char ch) { return ch=='#'; } ); // убираем решетки слева
+        // umba::string_plus::ltrim(linkRefTrimmed, [](char ch) { return ch=='#'; } ); // убираем решетки слева
 
 
         SectionInfo secInfo;
@@ -1744,7 +1753,7 @@ std::string updateInDocRefs(const AppConfig &appCfg, Document &doc, const std::s
             resLine.append(1,')');
         }
 
-        if (linkTextTrimmed=="$")
+        if (linkTextTrimmed.empty() || linkTextTrimmed=="$")
         {
             linkTextTrimmed = secInfo.originalTitle;
         }
