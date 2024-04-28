@@ -924,7 +924,7 @@ std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::
         {
             auto n = usedIds[id];
             id.append(1,'-');
-            id.append(std::to_string(n));
+            id.append(std::to_string(n-1));
         }
 
         line = std::string(headerLevel, '#') + std::string(1u,' ') + headerText + std::string(" {#") + id + std::string("}");
@@ -1030,7 +1030,7 @@ std::vector<std::string> generateSecionsExtra( const AppConfig                &a
         {
             auto n = usedIds[id];
             id.append(1,'-');
-            id.append(std::to_string(n));
+            id.append(std::to_string(n-1));
         }
         
         secInfo.sectionTargetId = id;
@@ -1119,7 +1119,7 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
         {
             auto n = usedIds[id];
             id.append(1,'-');
-            id.append(std::to_string(n));
+            id.append(std::to_string(n-1));
         }
 
         tocLine.append("[");
