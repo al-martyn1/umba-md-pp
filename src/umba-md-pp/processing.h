@@ -1181,7 +1181,7 @@ bool insertDoc( const AppConfig          &appCfg
     if (appCfg.checkIsInsertRestricted(fName))
     {
         makeShureEmptyLine(resLines);
-        resLines.emplace_back("!!! Insertion is restricted");
+        resLines.emplace_back("!!! Doc insertion is restricted");
         return false; // сфейли
     }
     //bool checkIsInsertRestricted(const std::string &fName) const
@@ -1363,12 +1363,13 @@ bool insertSnippet( const AppConfig          &appCfg
         return noFail;
     }
 
-    if (appCfg.checkIsInsertRestricted(fName))
-    {
-        makeShureEmptyLine(resLines);
-        resLines.emplace_back("!!! Insertion is restricted");
-        return false; // сфейли
-    }
+    // Сниппеты не рестриктим, они и так по явно заданным папкам только ищутся
+    // if (appCfg.checkIsInsertRestricted(fName))
+    // {
+    //     makeShureEmptyLine(resLines);
+    //     resLines.emplace_back("!!! Insertion is restricted");
+    //     return false; // сфейли
+    // }
 
 
     std::vector<std::string> snippetsFileLines = marty_cpp::splitToLinesSimple(foundFileText);
