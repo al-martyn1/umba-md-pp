@@ -1178,7 +1178,7 @@ bool insertDoc( const AppConfig          &appCfg
         return true; // делаем вид, что всё хорошо, а на самом деле предотвратили рекурсивное подключение одного и того же файла
     }
 
-    if (appCfg.checkIsInsertRestricted(fName))
+    if (appCfg.checkIsInsertRestricted(foundFullFilename))
     {
         makeShureEmptyLine(resLines);
         resLines.emplace_back("!!! Doc insertion is restricted");

@@ -48,7 +48,7 @@ struct AppConfig
     #endif
 
     std::vector<std::string>                              samplesPaths;
-    std::vector<std::string>                              strictPath ;
+    std::string                                           strictPath ;
     std::unordered_map<std::string, std::string>          extToLang  ;
     std::unordered_map<std::string, LangOptions>          langOptions;
     std::unordered_set<SnippetOptions>                    snippetOptions;
@@ -65,9 +65,14 @@ struct AppConfig
     unsigned                                              tocMaxLevel = 0;
 
 
-    void setStrictPath(const std::string &p) const
+    void setStrictPath(const std::string &p)
     {
-        strictPath = umba::filename::stripLastPathSepCopy(umba::filename::makeCanonical(p))
+        strictPath = umba::filename::stripLastPathSepCopy(umba::filename::makeCanonical(p));
+    }
+
+    void setStrictPathFromFilename(const std::string &fName)
+    {
+        setStrictPath(umba::filename::getPath(fName));
     }
 
     //! Возвращает true, если включение запрещено

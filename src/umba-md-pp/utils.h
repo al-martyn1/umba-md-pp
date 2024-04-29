@@ -2,8 +2,8 @@
     \brief Разные утилитки
  */
 
-#include "filename.h"
-#include "filesys.h"
+#include "umba/filename.h"
+#include "umba/filesys.h"
 
 //
 #include <string>
@@ -26,7 +26,7 @@ bool findProjectOptionsFileImpl(const std::string &mdFile, std::string &foundOpt
             }
         }
 
-        stripLastPathSep(optPath);
+        umba::filename::stripLastPathSep(optPath);
         std::string optPathNext = umba::filename::getPath(optPath);
         if (optPathNext.empty() || optPathNext==optPath)
         {
@@ -41,6 +41,6 @@ bool findProjectOptionsFileImpl(const std::string &mdFile, std::string &foundOpt
 inline
 bool findProjectOptionsFile(const std::string &mdFile, std::string &foundOptionsFile)
 {
-    return findProjectOptionsFileImpl(mdFile, foundOptionsFile, std::vector<std::string>{".md-pp.options", ".umba-md-pp.options"})
+    return findProjectOptionsFileImpl(mdFile, foundOptionsFile, std::vector<std::string>{".md-pp.options", ".umba-md-pp.options"});
 }
 

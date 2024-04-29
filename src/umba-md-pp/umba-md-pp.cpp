@@ -217,6 +217,7 @@ int main(int argc, char* argv[])
 
     UMBA_USED(lineNo);
 
+    appConfig.setStrictPathFromFilename(inputFilename);
 
 
 
@@ -229,6 +230,13 @@ int main(int argc, char* argv[])
     appConfig.checkAdjustDocNumericLevels();
 
     std::string resText = processMdFile(appConfig, inputFileText, inputFilename);
+
+    std::string projectOptionsFile;
+    if (findProjectOptionsFile(inputFilename, projectOptionsFile))
+    {
+        appConfig.setStrictPathFromFilename(projectOptionsFile);
+        argsParser.parseOptionsFile(projectOptionsFile);
+    }
 
 
     try
