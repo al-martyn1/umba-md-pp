@@ -276,8 +276,10 @@ struct AppConfig
     }
 
     static
-    bool findSamplesFileImpl(const std::vector<std::string> &samplesPathsVec, const std::string &lookFor, std::string &foundFullFilename, std::string &foundFileText)
+    bool findSamplesFileImpl(const std::vector<std::string> &samplesPathsVec, std::string lookFor, std::string &foundFullFilename, std::string &foundFileText)
     {
+         lookFor = umba::filename::makeCanonical(lookFor);
+
          for(auto path: samplesPathsVec)
          {
              auto fullName = umba::filename::appendPath(path, lookFor);
