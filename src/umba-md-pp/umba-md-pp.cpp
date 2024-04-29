@@ -42,6 +42,8 @@
 #include "snippet_options.h"
 //
 #include "encoding/encoding.h"
+//
+#include "utils.h"
 
 
 #if defined(WIN32) || defined(_WIN32)

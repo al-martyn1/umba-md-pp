@@ -1178,6 +1178,13 @@ bool insertDoc( const AppConfig          &appCfg
         return true; // делаем вид, что всё хорошо, а на самом деле предотвратили рекурсивное подключение одного и того же файла
     }
 
+    if (appCfg.checkIsInsertRestricted(fName))
+    {
+        makeShureEmptyLine(resLines);
+        resLines.emplace_back("!!! Insertion is restricted");
+        return false; // сфейли
+    }
+    //bool checkIsInsertRestricted(const std::string &fName) const
     
     std::vector<std::string> docLines = marty_cpp::splitToLinesSimple(foundFileText);
     std::vector<std::string> processedDocLines = parseMarkdownFileLines( appCfg, docTo, docLines, foundFullFilename
@@ -1355,6 +1362,14 @@ bool insertSnippet( const AppConfig          &appCfg
         }
         return noFail;
     }
+
+    if (appCfg.checkIsInsertRestricted(fName))
+    {
+        makeShureEmptyLine(resLines);
+        resLines.emplace_back("!!! Insertion is restricted");
+        return false; // сфейли
+    }
+
 
     std::vector<std::string> snippetsFileLines = marty_cpp::splitToLinesSimple(foundFileText);
     std::vector<std::string> insertLines; insertLines.reserve(snippetsFileLines.size());

@@ -48,6 +48,7 @@ struct AppConfig
     #endif
 
     std::vector<std::string>                              samplesPaths;
+    std::vector<std::string>                              strictPath ;
     std::unordered_map<std::string, std::string>          extToLang  ;
     std::unordered_map<std::string, LangOptions>          langOptions;
     std::unordered_set<SnippetOptions>                    snippetOptions;
@@ -62,6 +63,33 @@ struct AppConfig
 
     unsigned                                              numSecMaxLevel = 0;
     unsigned                                              tocMaxLevel = 0;
+
+
+    void setStrictPath(const std::string &p) const
+    {
+        strictPath = umba::filename::stripLastPathSepCopy(umba::filename::makeCanonical(p))
+    }
+
+    //! Возвращает true, если включение запрещено
+    bool checkIsInsertRestricted(const std::string &fName) const
+    {
+        if (strictPath.empty())
+        {
+            return false; // не запрещено - путь ограничитель не задан
+        }
+
+        if (!testProcessingOption(ProcessingOptions::strictInsert))
+        {
+            return false; // не запрещено по опциям
+        }
+
+        if (umba::filename::isSubPathName(strictPath, fName))
+        {
+            return false; // не запрещено - файл расположен в пределах разрешенного корня
+        }
+
+        return true; // Запрещено
+    }
 
 
     void checkAdjustDocNumericLevels()
