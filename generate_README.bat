@@ -7,6 +7,11 @@
 @set INSERT_OPTIONS=--set-insert-options=filename,path,filenameLineNo,fail,trim-arround,no-snippet-options
 @set OPTS=--overwrite --add-examples-path=%SNIPPETS_PATHS% %PROCESSING_OPTIONS% %SEC_LEVELS% %INSERT_OPTIONS%
 
-@%PP% %OPTS% %OPTS% README.md_ README.md
+@set RUN=%PP% %OPTS% %OPTS% README.md_ README.md
+@echo %RUN% > README.log
+
+%RUN%
+
+@rem generate-toc
 
 @call clean-help.bat
