@@ -161,8 +161,16 @@ todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-starte
 
 Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
-!!! File not found
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+../src/umba-md-pp/log.h:6
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
 Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
@@ -368,8 +376,16 @@ todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-starte
 
 Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 
-!!! File not found
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+../src/umba-md-pp/log.h:6
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
 Fail,Filename,FilenameLineNo,LineNo,Path,TrimArround
 

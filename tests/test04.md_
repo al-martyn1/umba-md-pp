@@ -1,3 +1,27 @@
+---
+Title      : Препроцессор для Markdown
+Отмазка    : fff
+Отмазки    : fff
+disclaimer : ddd
+Заголовок  : fff
+Описание   : aaa
+Категория  : aaa
+Категории  : aaa
+Тэг        : a
+Тэги       : a
+Дата       : a
+Description: Test number four
+Value      : 123
+Авторы     : aaa
+Author     : 
+  - al-martyn1
+  - Тесть Тестович
+  - Иванов Иван Иваныч
+Category   : Programming tools
+Date       : April 25, 2024
+Tags       : yaml, markdown, metadata
+Тэги       : абра, швабра, кадабра
+---
 
 #!toc
 
