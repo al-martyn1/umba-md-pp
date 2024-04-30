@@ -1,9 +1,49 @@
---add-lang-file-extentions=C++:cpp,cxx,c++,cc,h,hpp,h++
+# Metatags misspelling replaces and transliteration result replaces
+--meta-tag-replace=avtor:author
+--meta-tag-replace=avtory:author
+--meta-tag-replace=authors:author
+--meta-tag-replace=tegi:tags
+--meta-tag-replace=teg:tags
+--meta-tag-replace=data:date
+--meta-tag-replace=zagolovok:title
+--meta-tag-replace=kategorii:category
+--meta-tag-replace=kategoriya:category
+--meta-tag-replace=categories:category
+--meta-tag-replace=opisanie:description
+--meta-tag-replace=otmazka:disclaimer
+--meta-tag-replace=otmazki:disclaimer
+--meta-tag-replace=disclaimers:disclaimer
+
+# Metatags serialization
+--meta-tag-serialize=title:Title
+--meta-tag-serialize=disclaimer:Disclaimer
+--meta-tag-serialize=description:Description
+--meta-tag-serialize=author:Author
+--meta-tag-serialize=category:Category
+--meta-tag-serialize=date:Date
+--meta-tag-serialize=tags:Tags
+
+# С++
+--add-lang-file-extentions=C++:cpp,cxx,c++,cc,h,hpp,h++,ixx,i++,i
 --set-lang-cut-prefix=C++://#!
 --set-lang-listing-tag=C++:cpp
-#
+
+# Squrrel
 --add-lang-file-extentions=Squrrel:nut,nuts
 --set-lang-cut-prefix=Squrrel://#!
 --set-lang-listing-tag=Squrrel:lua
 
+meta-tag-replace
+meta-tag-serialize
 
+
+parseDocumentMetadata exception
+parseDocumentMetadata: tags: yaml, markdown, metadata
+parseDocumentMetadata: title: Препроцессор для Markdown
+parseDocumentMetadata exception
+parseDocumentMetadata: kategorii: aaa
+parseDocumentMetadata: kategoriya: aaa
+parseDocumentMetadata: opisanie: aaa
+parseDocumentMetadata: teg: a
+parseDocumentMetadata: tegi: абра, швабра, кадабра
+Writting output to: F:\_github\umba-tools\umba-md-pp\tests\test04.md
