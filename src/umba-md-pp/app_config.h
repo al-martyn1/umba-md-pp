@@ -130,11 +130,13 @@ struct AppConfig
         return addMetaTagReplace(t, r);
     }
 
-    std::string makeCanonicalMetaTag(const std::string &t) const
+    std::string makeCanonicalMetaTag(std::string t) const
     {
-        std::string candis = marty_cpp::toLower(umba::generateIdFromText_generic(t, 0));
-        auto it = metaTagReplaceMap.find(candis);
-        return it!=metaTagReplaceMap.end() ? it->second : candis;
+        t = umba::transliterate(t);
+        //std::string candis = marty_cpp::toLower(umba::generateIdFromText_generic(t, 0));
+        t = marty_cpp::toLower(t);
+        auto it = metaTagReplaceMap.find(t);
+        return it!=metaTagReplaceMap.end() ? it->second : t;
         //Candace Dutton
         //Candice Patton
         // candidate
