@@ -27,5 +27,7 @@ set PREFIX=git@%BASE%:%ACC%
 git clone %PREFIX%/umba_mm_mod_encodings.git   %~dp0\encoding
 git clone %PREFIX%/marty_cpp.git               %~dp0\marty_cpp
 git clone %PREFIX%/marty_yaml_toml_json.git    %~dp0\marty_yaml_toml_json
+git clone %PREFIX%/forks-nlohmann-json.git     %~dp0\nlohmann
 git clone %PREFIX%/umba_mm_mod_sfmt.git        %~dp0\sfmt
 git clone %PREFIX%/umba_mm_mod_umba.git        %~dp0\umba
+
