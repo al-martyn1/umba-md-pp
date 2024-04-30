@@ -64,6 +64,7 @@ include_directories(
   "${LIBS_ROOT}"
   "${LIBS_ROOT}/encoding"
   "${LIBS_ROOT}/sfmt/inc"
+  "${LIBS_ROOT}/nlohmann/include"
 )
 
 #set (SOURCES
