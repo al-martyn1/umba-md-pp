@@ -1,5 +1,6 @@
 invalid,unknown=-1
 normalLine    =0
+documentEnd
 listingLine
 listingStart
 listingEnd

@@ -341,15 +341,16 @@ enum class LineHandlerEvent : std::uint32_t
     invalid         = (std::uint32_t)(-1),
     unknown         = (std::uint32_t)(-1),
     normalLine      = 0x0000,
-    listingLine     = 0x0001,
-    listingStart    = 0x0002,
-    listingEnd      = 0x0003,
-    insertCommand   = 0x0004,
-    tocCommand      = 0x0005,
-    headerCommand   = 0x0006,
-    metaLine        = 0x0007,
-    metaStart       = 0x0008,
-    metaEnd         = 0x0009
+    documentEnd     = 0x0001,
+    listingLine     = 0x0002,
+    listingStart    = 0x0003,
+    listingEnd      = 0x0004,
+    insertCommand   = 0x0005,
+    tocCommand      = 0x0006,
+    headerCommand   = 0x0007,
+    metaLine        = 0x0008,
+    metaStart       = 0x0009,
+    metaEnd         = 0x000A
 
 }; // enum class LineHandlerEvent : std::uint32_t
 
@@ -358,11 +359,12 @@ MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(LineHandlerEvent)
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::normalLine      , "NormalLine"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::invalid         , "Invalid"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "InsertCommand" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "HeaderCommand" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::documentEnd     , "DocumentEnd"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingStart    , "ListingStart"  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingLine     , "ListingLine"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "ListingEnd"    );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "HeaderCommand" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "InsertCommand" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "TocCommand"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaLine        , "MetaLine"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaStart       , "MetaStart"     );
@@ -375,6 +377,15 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::normalLine      , "normalline"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::invalid         , "invalid"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::invalid         , "unknown"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "insert-command" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "insert_command" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "insertcommand"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "header-command" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "header_command" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "headercommand"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::documentEnd     , "document-end"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::documentEnd     , "document_end"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::documentEnd     , "documentend"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingStart    , "listing-start"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingStart    , "listing_start"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingStart    , "listingstart"   );
@@ -384,12 +395,6 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "listing-end"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "listing_end"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "listingend"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "header-command" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "header_command" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "headercommand"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "insert-command" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "insert_command" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::insertCommand   , "insertcommand"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "toc-command"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "toc_command"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "toccommand"     );
@@ -434,5 +439,59 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorParsingState, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::listing   , "listing" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::comment   , "comment" );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PreprocessorParsingState, std::map, 1 )
+
+
+enum class MetaTagType : std::uint32_t
+{
+    invalid       = (std::uint32_t)(-1),
+    unknown       = (std::uint32_t)(-1),
+    textFirst     = 0x0000 /*!< Simple text, allowed multiple definitions, but only first value is applied */,
+    textReplace   = 0x0001 /*!< Simple text, allowed multiple definitions, but only last value is applied */,
+    textLast      = 0x0001 /*!< Simple text, allowed multiple definitions, but only last value is applied */,
+    textMerge     = 0x0002 /*!< Text fragments will be merged to paras */,
+    list          = 0x0003 /*!< Normal list */,
+    commaList     = 0x0004 /*!< List, but can be represented as simple text with comma separated items */,
+    set           = 0x0005 /*!< Normal set */,
+    commaSet      = 0x0006 /*!< Set, but can be represented as simple text with comma separated items */
+
+}; // enum class MetaTagType : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(MetaTagType)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MetaTagType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::commaSet      , "CommaSet"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::commaList     , "CommaList"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::invalid       , "Invalid"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textFirst     , "TextFirst"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textReplace   , "TextReplace" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textMerge     , "TextMerge"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::list          , "List"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::set           , "Set"         );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MetaTagType, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaSet      , "comma-set"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaSet      , "comma_set"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaSet      , "commaset"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaList     , "comma-list"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaList     , "comma_list"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaList     , "commalist"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::invalid       , "invalid"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::invalid       , "unknown"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textFirst     , "text-first"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textFirst     , "text_first"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textFirst     , "textfirst"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textReplace   , "text-replace" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textReplace   , "text-last"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textReplace   , "text_replace" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textReplace   , "textlast"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textReplace   , "textreplace"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textReplace   , "text_last"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textMerge     , "text-merge"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textMerge     , "text_merge"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textMerge     , "textmerge"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::list          , "list"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::set           , "set"          );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MetaTagType, std::map, 1 )
 
 
