@@ -18,7 +18,7 @@
     включение (`#!insert{line-no} snippets.cpp#CODE_FRAGMENT_NAME`);
   - умеет задавать условные переменные для проверки их при включении файлов или фрагментов кода (`--set-condition-var=ALLOW_EXTERNAL_INC:1`);
   - умеет при включении файлов или фрагментов кода из внешних файлов проверять заданные условия и производить 
-    включение документов/фрагментов кода по условию (`#!insert{ifdef:$ALLOW_EXTERNAL_INC,if:$ALLOW_EXTERNAL_INC!=0,if:$google_inc!=0} google_inc.md`);
+    включение документов/фрагментов кода по условию (`#!insert{ifdef:ALLOW_EXTERNAL_INC,if:$ALLOW_EXTERNAL_INC!=0,if:$google_inc!=0} google_inc.md`);
   - умеет в условное включение документов и/или фрагментов кода при наличии файла документа/кода: при ошибке 
     включения документа можно подавить сообщения об ошибках (`#!insert{no-fail} ...`);
   - умеет однострочные коментарии вида `#//`;
@@ -81,16 +81,8 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-../src/umba-md-pp/log.h:6
-```cpp
- 6: // source parsing errors
- 7: // requires std::stringr curFile, unsigned lineNo in log scope
- 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
- 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
-10: 
-11: // options and other errors
-12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
-```
+!!! File not found
+#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
 
 !!! File not found
 #!insert{lineno} cpp/print_ver.h#print-ver-all
