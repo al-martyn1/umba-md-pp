@@ -33,17 +33,21 @@
 #include "encoding/encoding.h"
 #include "umba/cli_tool_helpers.h"
 #include "umba/time_service.h"
-// #include "umba/scanners.h"
+
 #include "umba/filesys.h"
 #include "umba/filename.h"
 #include "umba/format_message.h"
 #include "umba/id_gen.h"
-//
+
 #include "snippet_options.h"
-//
+
 #include "encoding/encoding.h"
-//
 #include "utils.h"
+
+#include "marty_yaml_toml_json/json_utils.h"
+#include "marty_yaml_toml_json/yaml_json.h"
+#include "marty_yaml_toml_json/yaml_utils.h"
+
 
 
 #if defined(WIN32) || defined(_WIN32)
