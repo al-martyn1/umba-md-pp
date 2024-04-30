@@ -9,6 +9,9 @@
 #include "umba/id_gen.h"
 #include "umba/container_utility.h"
 
+#include "marty_yaml_toml_json/json_utils.h"
+#include "marty_yaml_toml_json/yaml_json.h"
+#include "marty_yaml_toml_json/yaml_utils.h"
 
 //
 #include <stack>
@@ -19,6 +22,80 @@
 
 
 
+
+//----------------------------------------------------------------------------
+
+// enum class value_t : std::uint8_t
+// {
+//     null,             ///< null value
+//     object,           ///< object (unordered set of name/value pairs)
+//     array,            ///< array (ordered collection of values)
+//     string,           ///< string value
+//     boolean,          ///< boolean value
+//     number_integer,   ///< number value (signed integer)
+//     number_unsigned,  ///< number value (unsigned integer)
+//     number_float,     ///< number value (floating-point)
+//     binary,           ///< binary array (ordered collection of bytes)
+//     discarded         ///< discarded by the parser callback function
+// };
+
+
+
+inline
+void parseDocumentMetadata(const AppConfig &appCfg, Document &doc)
+{
+    for(const auto &metaText : doc.collectedMetadataTexts)
+    {
+        std::string errMsg;
+        std::string tmpJson;
+        marty::json_utils::FileFormat detectedFormat = marty::json_utils::FileFormat::unknown;
+        nlohmann::json j = marty::json_utils::parseJsonOrYaml( metaText, true /* allowComments */ , &errMsg, &tmpJson, &detectedFormat );
+         
+        if (detectedFormat==marty::json_utils::FileFormat::unknown)
+            continue;
+
+        nlohmann::detail::value_t jType = j.type();
+        if (jType!=nlohmann::detail::value_t::object)
+            continue;
+
+
+        for (auto el : j.items())
+        {
+            try
+            {
+	            std::string strKey = el.key();
+                strKey = appCfg.makeCanonicalMetaTag(strKey);
+
+	            std::string strVal = el.value();
+                LOG_MSG_OPT << "parseDocumentMetadata: " << strKey << ": " << strVal << "\n";
+            }
+            catch(...)
+            {
+                LOG_MSG_OPT << "parseDocumentMetadata exception\n";
+            }
+
+        }
+    
+    }
+
+
+}
+    // std::string errMsg;
+    // std::string tmpJson;
+    // marty::json_utils::FileFormat detectedFormat = marty::json_utils::FileFormat::unknown;
+    // nlohmann::json j = marty::json_utils::parseJsonOrYaml( in, true /* allowComments */ , &errMsg, &tmpJson, &detectedFormat );
+    //  
+    // if (detectedFormat==marty::json_utils::FileFormat::unknown)
+    // {
+    //     std::cerr << testInputFileName << ": error: " << errMsg << std::endl;
+    //     if (!tmpJson.empty())
+    //     {
+    //         std::cerr << "JSON:" << std::endl;
+    //         std::cerr << tmpJson << std::endl;
+    //     }
+    //     
+    //     return 1;
+    // }
 
 //----------------------------------------------------------------------------
 inline
@@ -596,6 +673,9 @@ std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector
             // Something goes wrong
         }
     }
+
+    std::string finalLine;
+    handler(LineHandlerEvent::documentEnd, resLines, finalLine, 0 /* idx */ , lastLineIdx);
 
     return resLines;
 }
@@ -1459,7 +1539,7 @@ bool insertSnippet( const AppConfig          &appCfg
                                       , fAddFilenameOnly
                                       , fAddFilenameLineNumber
                                       );
-        makeShureEmptyLine(resLines);
+    makeShureEmptyLine(resLines);
     umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
     return true; // всё хорошо, не включит исходную строку
 }
@@ -1506,14 +1586,28 @@ std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Documen
 
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
-        if (event==LineHandlerEvent::metaStart)
+        if (event==LineHandlerEvent::documentEnd)
+        {
+            if (!metadataLines.empty())
+            {
+                std::string metadataText = marty_cpp::mergeLines(metadataLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
+	            docTo.collectedMetadataTexts.emplace_back(metadataText);
+	            metadataLines.clear();
+            }
+        }
+
+        else if (event==LineHandlerEvent::metaStart)
         {
             return false; // prevent to add this line to result lines
         }
         else if (event==LineHandlerEvent::metaEnd)
         {
-            std::string metadataText = marty_cpp::mergeLines(resLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
-            docTo.collectedMetadataTexts.emplace_back(metadataText);
+            if (!metadataLines.empty())
+            {
+                std::string metadataText = marty_cpp::mergeLines(metadataLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
+	            docTo.collectedMetadataTexts.emplace_back(metadataText);
+	            metadataLines.clear();
+            }
             return false; // prevent to add this line to result lines
         }
         else if (event==LineHandlerEvent::metaLine)
@@ -1866,6 +1960,8 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
         umba::vectorPushBack(tmpLines, resLines);
         std::swap(tmpLines, resLines);
     }
+
+    parseDocumentMetadata(appCfg, doc);
 
     return marty_cpp::mergeLines(resLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
 }
