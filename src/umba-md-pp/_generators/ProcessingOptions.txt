@@ -7,4 +7,6 @@ NoGenerateToc                 =0x1030
 generateToc                   =0x1031
 noStrictInsert                =0x1040
 strictInsert                  =0x1041
+noMetaData                    =0x1050
+metaData                      =0x1051
 

@@ -145,7 +145,9 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
         //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
         argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
-        argsParser.args.push_back("--processing-options=generate-toc");
+        argsParser.args.push_back("--processing-options=generate-toc,meta-data");
+        argsParser.args.push_back("--serialize-meta-tags=title,descripion,author");
+        
 
         // argsParser.args.push_back("");
         // argsParser.args.push_back("");
@@ -233,8 +235,6 @@ int main(int argc, char* argv[])
 
     appConfig.checkAdjustDocNumericLevels();
 
-    std::string resText = processMdFile(appConfig, inputFileText, inputFilename);
-
     std::string projectOptionsFile;
     if (findProjectOptionsFile(inputFilename, projectOptionsFile))
     {
@@ -242,6 +242,8 @@ int main(int argc, char* argv[])
         argsParser.parseOptionsFile(projectOptionsFile);
     }
 
+
+    std::string resText = processMdFile(appConfig, inputFileText, inputFilename);
 
     try
     {

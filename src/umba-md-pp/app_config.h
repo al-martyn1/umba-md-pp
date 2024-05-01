@@ -61,10 +61,35 @@ struct AppConfig
     std::unordered_map<std::string, std::string>          metaTagReplaceMap;
     std::unordered_map<std::string, std::string>          metaTagSerializeMap;
     std::unordered_map<std::string, MetaTagType>          metaTagTypeMap;
+    std::vector<std::string>                              metaTagsSerializeList;
 
     unsigned                                              numSecMaxLevel = 0;
     unsigned                                              tocMaxLevel = 0;
 
+
+    bool setMetaTagSerializeList(std::string str)
+    {
+        if (str.empty())
+            return true;
+
+        if (str.front()=='+')
+        {
+            str.erase(0,1);
+        }
+        else
+        {
+            metaTagsSerializeList.clear();
+        }
+
+        auto tags = marty_cpp::splitToLinesSimple(str, false, ',');
+
+        for(auto t: tags)
+        {
+            metaTagsSerializeList.emplace_back(makeCanonicalMetaTag(t));
+        }
+
+        return true;
+    }
 
     bool addMetaTagType(const std::string &typeStr, const std::vector<std::string> &tags)
     {
@@ -101,6 +126,11 @@ struct AppConfig
         std::unordered_map<std::string, MetaTagType>::const_iterator  mit = metaTagTypeMap.find(makeCanonicalMetaTag(tag));
         return mit!=metaTagTypeMap.end() ? mit->second : MetaTagType::textFirst;
     }
+
+    // std::string getMetaTagText(const std::string &tag) const
+    // {
+    //  
+    // }
     
 
     void setStrictPath(const std::string &p)

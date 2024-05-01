@@ -586,6 +586,27 @@ int operator()( const std::string                               &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("TAG[,TAG...]")
+               ||  /* opt.isOption("meta-tag-serialize") || opt.isOption("meta-tag-serialize-list") || */  opt.isOption("serialize-meta-tags") // || opt.isOption('M')
+               || opt.setDescription("Set/append meta tag serialize list."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting meta tag serialize list requires argument (--meta-tag-serialize)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.setMetaTagSerializeList(optArg))
+            {
+                LOG_ERR_OPT<<"Setting meta tag serialize list failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+            return 0;
+        }
+
 
         else if (opt.setParam("LEVEL", 0, "0/inf/infinite|" 
                                         "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16" 

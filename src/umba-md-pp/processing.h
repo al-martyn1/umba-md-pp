@@ -14,9 +14,12 @@
 #include "marty_yaml_toml_json/yaml_utils.h"
 
 //
+#include <yaml-cpp/yaml.h>
+//
 #include <stack>
 #include <string>
 #include <utility>
+#include <sstream>
 
 //----------------------------------------------------------------------------
 
@@ -24,6 +27,193 @@
 
 
 //----------------------------------------------------------------------------
+inline
+std::string generateDocMetadata(const AppConfig &appCfg, Document &doc)
+{
+    YAML::Emitter emitter;
+    emitter << YAML::BeginMap;
+
+    // emitter << YAML::Key << "var1" << YAML::Value << "value1";
+
+    std::vector<std::string>::const_iterator mtIt = appCfg.metaTagsSerializeList.begin();
+    for(; mtIt!=appCfg.metaTagsSerializeList.end(); ++mtIt)
+    {
+        std::string tagSerializedName = appCfg.serializeMetaTag(*mtIt);
+        if (tagSerializedName.empty())
+            continue;
+
+        std::unordered_map<std::string, std::vector<std::string> >::const_iterator tit = doc.tagsData.find(appCfg.makeCanonicalMetaTag(*mtIt));
+        if (tit==doc.tagsData.end())
+            continue;
+
+        if (tit->second.empty())
+            continue;
+
+        const std::vector<std::string> &tagData = tit->second;
+
+        // Имя тэга не пустое, вектор со значениями также не пуст, надо что-то выдать
+
+        emitter << YAML::Key << tagSerializedName;
+
+        MetaTagType metaTagType = appCfg.getMetaTagType(*mtIt);
+
+        if (metaTagType==MetaTagType::textFirst) /* Simple text, allowed multiple definitions, but only first value is applied */
+        {
+            emitter << YAML::Value << tagData.front();
+        }
+        else if (metaTagType==MetaTagType::textReplace) /* Simple text, allowed multiple definitions, but only last value is applied */
+        {
+            emitter << YAML::Value << tagData.back();
+        }
+        else if (metaTagType==MetaTagType::textMerge) /* Text fragments will be merged to paras */
+        {
+            auto text = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string("\n\n") );
+            emitter << YAML::Value << text;
+        }
+        else if (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList)
+        {
+            emitter << YAML::BeginSeq;
+            for(auto tv : tagData)
+            {
+                emitter << tv;
+            }
+            emitter << YAML::EndSeq;
+        }
+        else if (metaTagType==MetaTagType::set || metaTagType==MetaTagType::commaSet)
+        {
+            std::set<std::string> s;
+            for(auto tv : tagData)
+            {
+                s.insert(tv);
+            }
+
+            emitter << YAML::BeginSeq;
+            for(auto sv : s)
+            {
+                emitter << sv;
+            }
+            emitter << YAML::EndSeq;
+
+        }
+        else
+        {
+            emitter << std::string();
+        }
+
+        //    emitter << YAML::EndSeq;
+
+    }
+
+// enum EMITTER_MANIP {
+//   // general manipulators
+//   Auto,
+//   TagByKind,
+//   Newline,
+//  
+//   // output character set
+//   EmitNonAscii,
+//   EscapeNonAscii,
+//   EscapeAsJson,
+//  
+//   // string manipulators
+//   // Auto, // duplicate
+//   SingleQuoted,
+//   DoubleQuoted,
+//   Literal,
+//  
+//   // null manipulators
+//   LowerNull,
+//   UpperNull,
+//   CamelNull,
+//   TildeNull,
+//  
+//   // bool manipulators
+//   YesNoBool,      // yes, no
+//   TrueFalseBool,  // true, false
+//   OnOffBool,      // on, off
+//   UpperCase,      // TRUE, N
+//   LowerCase,      // f, yes
+//   CamelCase,      // No, Off
+//   LongBool,       // yes, On
+//   ShortBool,      // y, t
+//  
+//   // int manipulators
+//   Dec,
+//   Hex,
+//   Oct,
+//  
+//   // document manipulators
+//   BeginDoc,
+//   EndDoc,
+//  
+//   // sequence manipulators
+//   BeginSeq,
+//   EndSeq,
+//   Flow,
+//   Block,
+//  
+//   // map manipulators
+//   BeginMap,
+//   EndMap,
+//   Key,
+//   Value,
+//   // Flow, // duplicate
+//   // Block, // duplicate
+//   // Auto, // duplicate
+//   LongKey
+// };
+
+    emitter << YAML::EndMap;
+
+    // std::ofstream ofout(file);
+    // ofout << emitter.c_str();
+
+    std::ostringstream oss;
+
+    oss << emitter.c_str();
+
+    return oss.str();
+
+}
+
+//----------------------------------------------------------------------------
+
+template<typename JsonNodeType>
+bool getJsonNodeTypeValueAsString(const JsonNodeType &j, std::string &resVal)
+{
+    nlohmann::detail::value_t valType = j.type();
+    if (valType==nlohmann::detail::value_t::string)
+    {
+        resVal = j.get<std::string>();
+        return true;
+    }
+    else if (valType==nlohmann::detail::value_t::boolean)
+    {
+        auto bv = j.get<bool>();
+        resVal = bv ? "true" : "false";
+        return true;
+    }
+    else if (valType==nlohmann::detail::value_t::number_integer)
+    {
+        resVal = std::to_string(j.get<int>());
+        return true;
+    }
+    else if (valType==nlohmann::detail::value_t::number_unsigned)
+    {
+        resVal = std::to_string(j.get<unsigned>());
+        return true;
+    }
+    else if (valType==nlohmann::detail::value_t::number_float)
+    {
+        resVal = std::to_string(j.get<float>());
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+}
 
 // enum class value_t : std::uint8_t
 // {
@@ -41,6 +231,7 @@
 
 
 
+//----------------------------------------------------------------------------
 inline
 void parseDocumentMetadata(const AppConfig &appCfg, Document &doc)
 {
@@ -65,9 +256,55 @@ void parseDocumentMetadata(const AppConfig &appCfg, Document &doc)
             {
 	            std::string strKey = el.key();
                 strKey = appCfg.makeCanonicalMetaTag(strKey);
+                std::vector<std::string> &tagValsVec = doc.tagsData[strKey];
 
-	            std::string strVal = el.value();
-                LOG_MSG_OPT << "parseDocumentMetadata: " << strKey << ": " << strVal << "\n";
+                MetaTagType tagType = appCfg.getMetaTagType(strKey);
+
+
+                auto val = el.value();
+                //    std::string valStr = val;
+                // //std::string strVal = el.value();
+                //    LOG_MSG_OPT << "parseDocumentMetadata: " << strKey << ": " << valStr << "\n";
+
+                nlohmann::detail::value_t valType = val.type();
+
+                if ( valType==nlohmann::detail::value_t::object
+                  || valType==nlohmann::detail::value_t::binary
+                  || valType==nlohmann::detail::value_t::discarded
+                   )
+                    continue;
+
+                if (valType==nlohmann::detail::value_t::array)
+                {
+                    if (tagType!=MetaTagType::list && tagType!=MetaTagType::set)
+                        continue;
+
+                    for (auto vel : val.items())
+                    {
+                        auto jVel = vel.value();
+                        std::string strVal;
+                        if (!getJsonNodeTypeValueAsString(jVel, strVal))
+                            continue;
+
+                        tagValsVec.emplace_back(strVal);
+                    }
+
+                    continue;
+                }
+
+                std::string strVal;
+                if (!getJsonNodeTypeValueAsString(val, strVal))
+                    continue;
+
+                if (tagType==MetaTagType::commaList || tagType==MetaTagType::commaSet)
+                {
+                    umba::vectorPushBack(tagValsVec, marty_cpp::splitToLinesSimple(strVal, false, ','));
+                }
+                else
+                {
+                    tagValsVec.emplace_back(strVal);
+                }
+
             }
             catch(...)
             {
@@ -1962,6 +2199,19 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
     }
 
     parseDocumentMetadata(appCfg, doc);
+
+    if (appCfg.testProcessingOption(ProcessingOptions::metaData))
+    {
+        auto metadataText  = generateDocMetadata(appCfg, doc);
+        auto metadataLines = marty_cpp::splitToLinesSimple(metadataText);
+        std::vector<std::string> tmpLines;
+        tmpLines.emplace_back(std::string("---"));
+        umba::vectorPushBack(tmpLines, metadataLines);
+        tmpLines.emplace_back(std::string("---"));
+        umba::vectorPushBack(tmpLines, resLines);
+        std::swap(tmpLines, resLines);
+    }
+    //std::string generateDocMetadata(const AppConfig &appCfg, Document &doc)
 
     return marty_cpp::mergeLines(resLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
 }

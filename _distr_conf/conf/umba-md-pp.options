@@ -39,17 +39,3 @@
 --set-lang-cut-prefix=Squrrel://#!
 --set-lang-listing-tag=Squrrel:lua
 
-meta-tag-replace
-meta-tag-serialize
-
-
-parseDocumentMetadata exception
-parseDocumentMetadata: tags: yaml, markdown, metadata
-parseDocumentMetadata: title: Препроцессор для Markdown
-parseDocumentMetadata exception
-parseDocumentMetadata: kategorii: aaa
-parseDocumentMetadata: kategoriya: aaa
-parseDocumentMetadata: opisanie: aaa
-parseDocumentMetadata: teg: a
-parseDocumentMetadata: tegi: абра, швабра, кадабра
-Writting output to: F:\_github\umba-tools\umba-md-pp\tests\test04.md

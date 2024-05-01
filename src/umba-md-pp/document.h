@@ -19,12 +19,14 @@ struct SectionInfo
 
 struct Document
 {
-    std::vector<std::string>                           collectedMetadataTexts; // from all processed documents, each string is an \n multiline text
+    std::vector<std::string>                                     collectedMetadataTexts; // from all processed documents, each string is an \n multiline text
+    std::unordered_map<std::string, std::vector<std::string> >   tagsData;
 
-    std::vector<std::string>                           lines   ; //!< MD lines
-    std::vector<std::string>                           tocLines; //!< MD lines
+    std::vector<std::string>                                     lines   ; //!< MD lines
+    std::vector<std::string>                                     tocLines; //!< MD lines
 
-    std::map<std::string, std::vector<SectionInfo> >   sectionInfos; //!< Инфа о секциях. OrgTitle->Info. Вектор - потому, что могут быть дубликаты, а мультимап я чёт не любли и не использую
+    std::map<std::string, std::vector<SectionInfo> >             sectionInfos; //!< Инфа о секциях. OrgTitle->Info. Вектор - потому, что могут быть дубликаты, а мультимап я чёт не любли и не использую
+
 
     bool findSectionInfo(const std::string &orgTitle, SectionInfo &secInfo, std::size_t *pNumFoundSections=0) const
     {
