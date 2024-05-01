@@ -30,4 +30,5 @@ git clone %PREFIX%/marty_yaml_toml_json.git    %~dp0\marty_yaml_toml_json
 git clone %PREFIX%/forks-nlohmann-json.git     %~dp0\nlohmann
 git clone %PREFIX%/umba_mm_mod_sfmt.git        %~dp0\sfmt
 git clone %PREFIX%/umba_mm_mod_umba.git        %~dp0\umba
+git clone %PREFIX%/forks-jbeder-yaml-cpp.git   %~dp0\yaml-cpp
 

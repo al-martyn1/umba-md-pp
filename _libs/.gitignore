@@ -4,3 +4,4 @@ marty_yaml_toml_json
 nlohmann
 sfmt
 umba
+yaml-cpp
