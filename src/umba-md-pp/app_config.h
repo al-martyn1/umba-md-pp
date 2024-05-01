@@ -60,10 +60,48 @@ struct AppConfig
 
     std::unordered_map<std::string, std::string>          metaTagReplaceMap;
     std::unordered_map<std::string, std::string>          metaTagSerializeMap;
+    std::unordered_map<std::string, MetaTagType>          metaTagTypeMap;
 
     unsigned                                              numSecMaxLevel = 0;
     unsigned                                              tocMaxLevel = 0;
 
+
+    bool addMetaTagType(const std::string &typeStr, const std::vector<std::string> &tags)
+    {
+        auto type = enum_deserialize(typeStr, MetaTagType::invalid);
+        if (type==MetaTagType::invalid)
+            return false;
+
+        for(auto tag : tags)
+        {
+            tag = makeCanonicalMetaTag(tag);
+            metaTagTypeMap[tag] = type;
+        }
+
+        return true;
+    }
+
+    bool addMetaTagType(const std::string &typeStr, const std::string &tags)
+    {
+        return addMetaTagType(typeStr, marty_cpp::splitToLinesSimple(tags, false, ','));
+    }
+
+    bool addMetaTagType(const std::string &str)
+    {
+        std::string f;
+        std::string s;
+        if (!umba::string_plus::split_to_pair(str, f, s, ':'))
+            return false;
+
+        return addMetaTagType(f, s);
+    }
+
+    MetaTagType getMetaTagType(const std::string &tag) const
+    {
+        std::unordered_map<std::string, MetaTagType>::const_iterator  mit = metaTagTypeMap.find(makeCanonicalMetaTag(tag));
+        return mit!=metaTagTypeMap.end() ? mit->second : MetaTagType::textFirst;
+    }
+    
 
     void setStrictPath(const std::string &p)
     {

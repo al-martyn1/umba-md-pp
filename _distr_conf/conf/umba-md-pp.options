@@ -23,6 +23,12 @@
 --meta-tag-serialize=date:Date
 --meta-tag-serialize=tags:Tags
 
+# Metatag types
+--meta-tag-set-type=comma-set:category,tags
+--meta-tag-set-type=comma-list:author
+--meta-tag-set-type=text-first:title,date
+--meta-tag-set-type=text-merge:disclaimer,description
+
 # Ñ++
 --add-lang-file-extentions=C++:cpp,cxx,c++,cc,h,hpp,h++,ixx,i++,i
 --set-lang-cut-prefix=C++://#!

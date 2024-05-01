@@ -448,6 +448,7 @@ enum class MetaTagType : std::uint32_t
     textFirst     = 0x0000 /*!< Simple text, allowed multiple definitions, but only first value is applied */,
     textReplace   = 0x0001 /*!< Simple text, allowed multiple definitions, but only last value is applied */,
     textLast      = 0x0001 /*!< Simple text, allowed multiple definitions, but only last value is applied */,
+    text          = 0x0002 /*!< Text fragments will be merged to paras */,
     textMerge     = 0x0002 /*!< Text fragments will be merged to paras */,
     list          = 0x0003 /*!< Normal list */,
     commaList     = 0x0004 /*!< List, but can be represented as simple text with comma separated items */,
@@ -464,7 +465,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MetaTagType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::invalid       , "Invalid"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textFirst     , "TextFirst"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textReplace   , "TextReplace" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textMerge     , "TextMerge"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::text          , "Text"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::list          , "List"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::set           , "Set"         );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MetaTagType, std::map, 1 )
@@ -487,9 +488,10 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textReplace   , "textlast"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textReplace   , "textreplace"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textReplace   , "text_last"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textMerge     , "text-merge"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textMerge     , "text_merge"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::textMerge     , "textmerge"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text          , "textmerge"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text          , "text"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text          , "text-merge"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text          , "text_merge"   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::list          , "list"         );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::set           , "set"          );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MetaTagType, std::map, 1 )

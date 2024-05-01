@@ -565,6 +565,26 @@ int operator()( const std::string                               &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("TYPE:TAG[,TAG...]")
+               || opt.isOption("meta-tag-set-type") || opt.isOption("set-meta-tag-type") // || opt.isOption('M')
+               || opt.setDescription("Set meta tag type."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting meta tag type requires argument (--meta-tag-set-type)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.addMetaTagType(optArg))
+            {
+                LOG_ERR_OPT<<"Setting meta tag type failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+            return 0;
+        }
 
 
         else if (opt.setParam("LEVEL", 0, "0/inf/infinite|" 
