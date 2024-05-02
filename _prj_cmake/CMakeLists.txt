@@ -5,7 +5,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Полезные ключики GCC - https://codeforces.com/blog/entry/15547?locale=ru
 
-add_compile_definitions("_WIN32" "WIN32" "_UNICODE" "UNICODE")
+add_compile_definitions("_WIN32" "WIN32" "_UNICODE" "UNICODE" "YAML_CPP_STATIC_DEFINE")
 
 add_link_options("-municode")
 add_link_options("-mconsole")
@@ -65,12 +65,46 @@ include_directories(
   "${LIBS_ROOT}/encoding"
   "${LIBS_ROOT}/sfmt/inc"
   "${LIBS_ROOT}/nlohmann/include"
+  "${LIBS_ROOT}/yaml-cpp/include"
 )
 
 #set (SOURCES
 #	imgui_impl_glfw.h
 #	imgui_impl_opengl2.h
 #    )
+
+set (YAML_CPP_SOURCES
+    "${LIBS_ROOT}/yaml-cpp/src/binary.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/convert.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/depthguard.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/directives.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/emit.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/emitfromevents.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/emitter.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/emitterstate.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/emitterutils.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/exceptions.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/exp.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/memory.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/node.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/node_data.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/nodebuilder.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/nodeevents.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/null.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/ostream_wrapper.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/parse.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/parser.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/regex_yaml.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/scanner.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/scanscalar.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/scantag.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/scantoken.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/simplekey.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/singledocparser.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/stream.cpp"
+    "${LIBS_ROOT}/yaml-cpp/src/tag.cpp"
+    )
+
 
 
 #set_source_files_properties("${LIBS_ROOT}/encoding/compact_enc_det/compact_enc_det.cc"           PROPERTIES LANGUAGE C )
@@ -79,6 +113,7 @@ include_directories(
 #set_source_files_properties("${LIBS_ROOT}/encoding/util/languages/languages.cc"                  PROPERTIES LANGUAGE C )
 
 add_executable(umba-md-pp
+    ${YAML_CPP_SOURCES}
     "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp"
     "${LIBS_ROOT}/sfmt/umba_lout.cpp"
     "${LIBS_ROOT}/encoding/encoding.cpp"
