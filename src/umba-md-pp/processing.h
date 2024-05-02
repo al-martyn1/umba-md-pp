@@ -208,6 +208,13 @@ bool getJsonNodeTypeValueAsString(const JsonNodeType &j, std::string &resVal)
     else if (valType==nlohmann::detail::value_t::number_float)
     {
         resVal = std::to_string(j.template get<float>());
+
+        auto dotPos = resVal.find('.');
+        if (dotPos!=resVal.npos)
+        {
+            umba::string_plus::rtrim(resVal, [](char ch) { return ch=='0'; } );
+        }
+
         return true;
     }
     else
@@ -297,6 +304,8 @@ void parseDocumentMetadata(const AppConfig &appCfg, Document &doc)
                 std::string strVal;
                 if (!getJsonNodeTypeValueAsString(val, strVal))
                     continue;
+
+                //LOG_MSG_OPT << "parseDocumentMetadata: " << strKey << ": " << strVal << "\n";
 
                 if (tagType==MetaTagType::commaList || tagType==MetaTagType::commaSet)
                 {
@@ -1855,6 +1864,24 @@ std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Documen
             return false; // prevent to add this line to result lines
         }
 
+        if (event!=LineHandlerEvent::headerCommand)
+        {
+	        std::string levelStr;
+	        std::string headerText;
+	        
+	        if (!splitHeaderLine(line, levelStr, headerText))
+	            return true;
+	    
+	        if (levelStr.empty())
+	            return true;
+
+            if (!docTo.titleFromText.empty())
+                return true;
+
+            docTo.titleFromText = headerText;
+
+            return true;
+        }
 
         if (event!=LineHandlerEvent::insertCommand)
         {

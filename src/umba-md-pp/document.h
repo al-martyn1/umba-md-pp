@@ -27,6 +27,9 @@ struct Document
 
     std::map<std::string, std::vector<SectionInfo> >             sectionInfos; //!< Инфа о секциях. OrgTitle->Info. Вектор - потому, что могут быть дубликаты, а мультимап я чёт не любли и не использую
 
+    std::string                                                  titleFromText; //!< From document text extracted title
+
+
     std::string getDocumentTitleFromMeta() const
     {
         std::unordered_map<std::string, std::vector<std::string> >::const_iterator tit = tagsData.find("title");
