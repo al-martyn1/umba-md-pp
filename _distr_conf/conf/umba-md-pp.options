@@ -13,6 +13,7 @@
 --meta-tag-replace=otmazka:disclaimer
 --meta-tag-replace=otmazki:disclaimer
 --meta-tag-replace=disclaimers:disclaimer
+--meta-tag-replace=versiya:version
 
 # Metatags serialization
 --meta-tag-serialize=title:Title
@@ -22,6 +23,7 @@
 --meta-tag-serialize=category:Category
 --meta-tag-serialize=date:Date
 --meta-tag-serialize=tags:Tags
+--meta-tag-serialize=version:Version
 
 # Metatag types
 --meta-tag-set-type=comma-set:category,tags
