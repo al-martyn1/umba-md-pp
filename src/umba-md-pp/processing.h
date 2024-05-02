@@ -184,28 +184,30 @@ bool getJsonNodeTypeValueAsString(const JsonNodeType &j, std::string &resVal)
     nlohmann::detail::value_t valType = j.type();
     if (valType==nlohmann::detail::value_t::string)
     {
-        resVal = j.get<std::string>();
+        // https://github.com/nlohmann/json/issues/3827
+        // https://en.cppreference.com/w/cpp/language/dependent_name#template_disambiguator
+        resVal = j.template get<std::string>();
         return true;
     }
     else if (valType==nlohmann::detail::value_t::boolean)
     {
-        auto bv = j.get<bool>();
+        auto bv = j.template get<bool>();
         resVal = bv ? "true" : "false";
         return true;
     }
     else if (valType==nlohmann::detail::value_t::number_integer)
     {
-        resVal = std::to_string(j.get<int>());
+        resVal = std::to_string(j.template get<int>());
         return true;
     }
     else if (valType==nlohmann::detail::value_t::number_unsigned)
     {
-        resVal = std::to_string(j.get<unsigned>());
+        resVal = std::to_string(j.template get<unsigned>());
         return true;
     }
     else if (valType==nlohmann::detail::value_t::number_float)
     {
-        resVal = std::to_string(j.get<float>());
+        resVal = std::to_string(j.template get<float>());
         return true;
     }
     else
@@ -2171,7 +2173,7 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
         generateSecIds = true;
     }
 
-    bool needSpecialIdInSectionHeader = appCfg.targetRenderer==TargetRenderer::doxygen;
+    //bool needSpecialIdInSectionHeader = appCfg.targetRenderer==TargetRenderer::doxygen;
     bool henerateIdWithSectionNumber  = appCfg.targetRenderer==TargetRenderer::github ;
 
 
@@ -2180,7 +2182,7 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
                                    , true // update header
                                    , appCfg.testProcessingOption(ProcessingOptions::numericSections) // нужно или нет реально генерить номера секций
                                    , henerateIdWithSectionNumber
-                                   , needSpecialIdInSectionHeader
+                                   , generateSecIds // needSpecialIdInSectionHeader
                                    );
 
     resLines = updateInDocRefs(appCfg, doc, resLines);
@@ -2202,6 +2204,7 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
 
     if (appCfg.testProcessingOption(ProcessingOptions::metaData))
     {
+        //std::cout << "Write metadata\n";
         auto metadataText  = generateDocMetadata(appCfg, doc);
         auto metadataLines = marty_cpp::splitToLinesSimple(metadataText);
         std::vector<std::string> tmpLines;
@@ -2210,6 +2213,10 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
         tmpLines.emplace_back(std::string("---"));
         umba::vectorPushBack(tmpLines, resLines);
         std::swap(tmpLines, resLines);
+    }
+    else
+    {
+        //std::cout << "Write metadata NOT turned ON\n";
     }
     //std::string generateDocMetadata(const AppConfig &appCfg, Document &doc)
 
