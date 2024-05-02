@@ -1,5 +1,7 @@
 #pragma once
 
+#include "app_config.h"
+//
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -29,6 +31,92 @@ struct Document
 
     std::string                                                  titleFromText; //!< From document text extracted title
 
+    bool getMetaTagValueAsText(const AppConfig &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
+    {
+        tag = appCfg.makeCanonicalMetaTag(tag);
+
+        std::unordered_map<std::string, std::vector<std::string> >::const_iterator tit = tagsData.find(tag);
+        if (tit==tagsData.end())
+            return false;
+
+        const std::vector<std::string> &tagData = tit->second;
+        if (tagData.empty())
+            return false;
+
+        MetaTagType metaTagType = appCfg.getMetaTagType(tag);
+
+        if (metaTagType==MetaTagType::textFirst) /* Simple text, allowed multiple definitions, but only first value is applied */
+        {
+            tagText = tagData.front();
+            return true;
+        }
+        else if (metaTagType==MetaTagType::textReplace) /* Simple text, allowed multiple definitions, but only last value is applied */
+        {
+            tagText = tagData.back();
+            return true;
+        }
+        else if (metaTagType==MetaTagType::textMerge) /* Text fragments will be merged to paras */
+        {
+            tagText = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string(" ") );
+            return true;
+        }
+        else if (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList)
+        {
+            tagText = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), listDelimiter );
+            return true;
+        }
+        else if (metaTagType==MetaTagType::set || metaTagType==MetaTagType::commaSet)
+        {
+            std::set<std::string> s;
+            for(auto tv : tagData)
+            {
+                s.insert(tv);
+            }
+
+            std::vector<std::string> v; v.reserve(s.size());
+            for(auto sv : s)
+            {
+                v.emplace_back(sv);;
+            }
+
+            tagText = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( v.begin(), v.end(), listDelimiter );
+            return true;
+
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    std::string getMetaTagValueAsText(const AppConfig &appCfg, std::string tag, std::string listDelimiter) const
+    {
+        std::string tagText;
+        if (!getMetaTagValueAsText(appCfg, tag, listDelimiter, tagText))
+            return std::string();
+        return tagText;
+    }
+
+    bool getMetaTagValueAsSingleLineText(const AppConfig &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
+    {
+        if (!getMetaTagValueAsText(appCfg, tag, listDelimiter, tagText))
+            return false;
+     
+        std::vector<std::string> lines = marty_cpp::splitToLinesSimple(tagText, false, '\n');
+        tagText = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator>( lines.begin(), lines.end(), ' ' );
+        umba::string_plus::trim(tagText);
+
+        return true;
+    }
+
+    std::string getMetaTagValueAsSingleLineText(const AppConfig &appCfg, std::string tag, std::string listDelimiter) const
+    {
+        std::string tagText;
+        if (!getMetaTagValueAsSingleLineText(appCfg, tag, listDelimiter, tagText))
+            return std::string();
+        return tagText;
+    }
 
     std::string getDocumentTitleFromMeta() const
     {
@@ -41,11 +129,26 @@ struct Document
             return std::string();
 
         std::vector<std::string> titleSplitted = marty_cpp::splitToLinesSimple(allTakenTitles[0], false, '\n');
-        auto returnArg = [](const std::string &str) { return str; };
-        auto res = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator, decltype(returnArg) >( titleSplitted.begin(), titleSplitted.end(), ' ', returnArg );
+        // auto returnArg = [](const std::string &str) { return str; };
+        // auto res = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator, decltype(returnArg) >( titleSplitted.begin(), titleSplitted.end(), ' ', returnArg );
+        // auto returnArg = [](const std::string &str) { return str; };
+        auto res = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator>( titleSplitted.begin(), titleSplitted.end(), ' ' );
         umba::string_plus::trim(res);
 
         return res;
+    }
+
+    std::string getDocumentTitleAny() const
+    {
+        std::string title = getDocumentTitleFromMeta();
+        if (title.empty())
+        {
+            title = titleFromText;
+        }
+
+        umba::string_plus::trim(title);
+
+        return title;
     }
 
     bool findSectionInfo(const std::string &orgTitle, SectionInfo &secInfo, std::size_t *pNumFoundSections=0) const
