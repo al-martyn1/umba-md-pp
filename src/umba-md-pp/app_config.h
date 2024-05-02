@@ -66,6 +66,8 @@ struct AppConfig
     unsigned                                              numSecMaxLevel = 0;
     unsigned                                              tocMaxLevel = 0;
 
+    std::size_t                                           restrictPathRaise = 0;
+
 
     bool setMetaTagSerializeList(std::string str)
     {
@@ -146,6 +148,10 @@ struct AppConfig
     //! Возвращает true, если включение запрещено
     bool checkIsInsertRestricted(const std::string &fName) const
     {
+        std::size_t raiseVal = restrictPathRaise;
+        if (raiseVal>4)
+            raiseVal = 4;
+
         if (strictPath.empty())
         {
             return false; // не запрещено - путь ограничитель не задан
@@ -156,7 +162,13 @@ struct AppConfig
             return false; // не запрещено по опциям
         }
 
-        if (umba::filename::isSubPathName(strictPath, fName))
+        std::string raisedPath = strictPath;
+        for(std::size_t i=0u; i!=raiseVal; ++i)
+        {
+            raisedPath = umba::filename::getPath(raisedPath);
+        }
+
+        if (umba::filename::isSubPathName(raisedPath, fName))
         {
             return false; // не запрещено - файл расположен в пределах разрешенного корня
         }

@@ -55,7 +55,7 @@ int operator()( const std::string                               &a           //!
         std::string strVal;
         //int intVal;
         //unsigned uintVal;
-        //std::size_t szVal;
+        std::size_t szVal;
         bool boolVal;
 
         if (opt.name.empty())
@@ -656,6 +656,22 @@ int operator()( const std::string                               &a           //!
             return 0;
         }
 
+
+        else if ( opt.setParam("RAISE", (size_t )0, (size_t )0, (size_t)4) || opt.setInitial((size_t)0) || opt.isOption("restrict-path-raise") // || opt.isOption('i') 
+               || opt.setDescription("Raise insert restriction path up to 4 levels max"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue( szVal, errMsg ))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.restrictPathRaise = szVal;
+
+            return 0;
+        }
 
         // else if ( opt.isOption("all")
         //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")
