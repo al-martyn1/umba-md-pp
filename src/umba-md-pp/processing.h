@@ -1864,7 +1864,7 @@ std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Documen
             return false; // prevent to add this line to result lines
         }
 
-        if (event!=LineHandlerEvent::headerCommand)
+        if (event==LineHandlerEvent::headerCommand)
         {
 	        std::string levelStr;
 	        std::string headerText;
@@ -1882,6 +1882,19 @@ std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Documen
 
             return true;
         }
+
+        if (event==LineHandlerEvent::normalLine)
+        {
+            if (docTo.titleFromText.empty())
+            {
+                std::string tmpStr = line;
+                umba::string_plus::trim(tmpStr);
+                if (tmpStr.size()>10)
+                    docTo.titleFromText = tmpStr;
+            }
+            
+        }
+
 
         if (event!=LineHandlerEvent::insertCommand)
         {

@@ -59,6 +59,7 @@
 
 
 #include "app_config.h"
+#include "viewer_utils.h"
 
 
 
@@ -208,6 +209,10 @@ int main(int argc, char* argv[])
 
     //unsigned errCount = 0;
 
+    if (!argsParser.quet)
+    {
+        umbaLogStreamMsg << "Processing: "<<inputFilename<<"\n";
+    }
 
     std::string inputFileText;
     //if (!umba::filesys::readFile(inputFilename, inputFileText))
@@ -224,7 +229,6 @@ int main(int argc, char* argv[])
     UMBA_USED(lineNo);
 
     appConfig.setStrictPathFromFilename(inputFilename);
-
 
 
 

@@ -74,3 +74,13 @@
 
 
 
+
+    std::string tempFolder;
+    if (createTempFolder(tempFolder, inputFilename, "umba-md-pp-view"))
+    {
+        std::cout << "Using temp folder: " << tempFolder << "\n";
+    }
+    else
+    {
+        std::cout << "Failed to create temp folder\n";
+    }
