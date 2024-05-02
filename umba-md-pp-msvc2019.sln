@@ -5,6 +5,7 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_all", "_prj_msvc\_all.vcxproj", "{D66975DB-7E59-4BE8-AD8D-C13E9B858F44}"
 	ProjectSection(ProjectDependencies) = postProject
+		{75981B45-54AF-40FC-B310-BE1368943091} = {75981B45-54AF-40FC-B310-BE1368943091}
 		{001634AE-5567-412E-ACEC-6EC488026C66} = {001634AE-5567-412E-ACEC-6EC488026C66}
 		{DB0E26F8-B2E1-48D9-90C8-CC4A96393F1A} = {DB0E26F8-B2E1-48D9-90C8-CC4A96393F1A}
 	EndProjectSection
@@ -15,6 +16,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "umba-md-pp", "_prj_msvc\umb
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "yaml-cpp", "_libs\yaml-cpp\_prj_msvc\yaml-cpp.vcxproj", "{001634AE-5567-412E-ACEC-6EC488026C66}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "umba-md-pp-view", "_prj_msvc\umba-md-pp-view.vcxproj", "{75981B45-54AF-40FC-B310-BE1368943091}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +73,20 @@ Global
 		{001634AE-5567-412E-ACEC-6EC488026C66}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
 		{001634AE-5567-412E-ACEC-6EC488026C66}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
 		{001634AE-5567-412E-ACEC-6EC488026C66}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
+		{75981B45-54AF-40FC-B310-BE1368943091}.Debug|x64.ActiveCfg = Debug|x64
+		{75981B45-54AF-40FC-B310-BE1368943091}.Debug|x64.Build.0 = Debug|x64
+		{75981B45-54AF-40FC-B310-BE1368943091}.Debug|x86.ActiveCfg = Debug|Win32
+		{75981B45-54AF-40FC-B310-BE1368943091}.Debug|x86.Build.0 = Debug|Win32
+		{75981B45-54AF-40FC-B310-BE1368943091}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{75981B45-54AF-40FC-B310-BE1368943091}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{75981B45-54AF-40FC-B310-BE1368943091}.MinSizeRel|x86.ActiveCfg = MinSizeRel|x64
+		{75981B45-54AF-40FC-B310-BE1368943091}.Release|x64.ActiveCfg = Release|x64
+		{75981B45-54AF-40FC-B310-BE1368943091}.Release|x64.Build.0 = Release|x64
+		{75981B45-54AF-40FC-B310-BE1368943091}.Release|x86.ActiveCfg = Release|Win32
+		{75981B45-54AF-40FC-B310-BE1368943091}.Release|x86.Build.0 = Release|Win32
+		{75981B45-54AF-40FC-B310-BE1368943091}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
+		{75981B45-54AF-40FC-B310-BE1368943091}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
+		{75981B45-54AF-40FC-B310-BE1368943091}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
