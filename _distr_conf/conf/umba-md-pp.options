@@ -14,6 +14,9 @@
 --meta-tag-replace=otmazki:disclaimer
 --meta-tag-replace=disclaimers:disclaimer
 --meta-tag-replace=versiya:version
+--meta-tag-replace=yazyk:language
+--meta-tag-replace=yazyk dokumenta:language
+--meta-tag-replace=otkaz ot otvetstvennosti:disclaimer
 
 # Metatags serialization
 --meta-tag-serialize=title:Title
@@ -24,6 +27,7 @@
 --meta-tag-serialize=date:Date
 --meta-tag-serialize=tags:Tags
 --meta-tag-serialize=version:Version
+--meta-tag-serialize=language:Language
 
 # Metatag types
 --meta-tag-set-type=comma-set:category,tags
