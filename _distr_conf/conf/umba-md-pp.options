@@ -29,7 +29,10 @@
 --meta-tag-set-type=text-first:title,date
 --meta-tag-set-type=text-merge:disclaimer,description
 
-# Ñ++
+# Common options
+--processing-options=generate-toc,title
+
+# C++
 --add-lang-file-extentions=C++:cpp,cxx,c++,cc,h,hpp,h++,ixx,i++,i
 --set-lang-cut-prefix=C++://#!
 --set-lang-listing-tag=C++:cpp

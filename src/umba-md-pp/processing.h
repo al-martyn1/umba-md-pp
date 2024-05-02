@@ -2202,6 +2202,23 @@ std::string processMdFile(const AppConfig &appCfg, std::string fileText, const s
 
     parseDocumentMetadata(appCfg, doc);
 
+
+    std::string metaTitle = doc.getDocumentTitleFromMeta();
+    if (appCfg.testProcessingOption(ProcessingOptions::title) && !metaTitle.empty())
+    {
+        std::vector<std::string> tmpLines;
+        if (appCfg.testProcessingOption(ProcessingOptions::metaData))
+        {
+            tmpLines.emplace_back(std::string());
+        }
+
+        tmpLines.emplace_back(std::string("# ") + metaTitle);
+        tmpLines.emplace_back(std::string());
+        umba::vectorPushBack(tmpLines, resLines);
+        std::swap(tmpLines, resLines);
+    }
+
+
     if (appCfg.testProcessingOption(ProcessingOptions::metaData))
     {
         //std::cout << "Write metadata\n";

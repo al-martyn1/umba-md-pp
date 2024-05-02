@@ -9,4 +9,6 @@ noStrictInsert                =0x1040
 strictInsert                  =0x1041
 noMetaData                    =0x1050
 metaData                      =0x1051
+noTitle                       =0x1060 // Don't add title to document
+title                         =0x1061 // Add title to document if it exist in metadata
 

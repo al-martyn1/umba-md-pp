@@ -265,7 +265,9 @@ enum class ProcessingOptions : std::uint32_t
     noStrictInsert        = 0x1040,
     strictInsert          = 0x1041,
     noMetaData            = 0x1050,
-    metaData              = 0x1051
+    metaData              = 0x1051,
+    noTitle               = 0x1060 /*!< Don't add title to document */,
+    title                 = 0x1061 /*!< Add title to document if it exist in metadata */
 
 }; // enum class ProcessingOptions : std::uint32_t
 
@@ -276,6 +278,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::invalid               , "Invalid"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noNumericSections     , "NoNumericSections"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noGenerateToc         , "NoGenerateToc"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTitle               , "NoTitle"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::generateToc           , "GenerateToc"         );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::numericSections       , "NumericSections"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId   , "NoGenerateSectionId" );
@@ -283,6 +286,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::strictInsert          , "StrictInsert"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noMetaData            , "NoMetaData"          );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::metaData              , "MetaData"            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::title                 , "Title"               );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
@@ -297,6 +301,9 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc         , "no-generate-toc"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc         , "no_generate_toc"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc         , "nogeneratetoc"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle               , "no-title"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle               , "no_title"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle               , "notitle"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc           , "generate-toc"           );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc           , "generate_toc"           );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc           , "generatetoc"            );
@@ -318,6 +325,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData              , "meta-data"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData              , "meta_data"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData              , "metadata"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::title                 , "title"                  );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 
