@@ -37,6 +37,8 @@
 
 # Common options
 --processing-options=generate-toc,title
+--set-insert-options=fail,path,filename-line-no
+
 
 # C++
 --add-lang-file-extentions=C++:cpp,cxx,c++,cc,h,hpp,h++,ixx,i++,i
