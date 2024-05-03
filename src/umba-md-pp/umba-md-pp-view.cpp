@@ -38,7 +38,8 @@
 #include "umba/filename.h"
 #include "umba/format_message.h"
 #include "umba/id_gen.h"
-
+#include "umba/utf8.h"
+//
 #include "snippet_options.h"
 
 #include "encoding/encoding.h"
@@ -62,6 +63,8 @@
 #include "viewer_utils.h"
 
 
+// #define TRY_UNICODE_VIEWER
+
 
 
 umba::StdStreamCharWriter coutWriter(std::cout);
@@ -79,16 +82,23 @@ bool bOverwrite         = false;
 
 unsigned jsonIndent     = 2;
 
-std::string               inputFilename;
-std::string               outputFilename;
 
+#ifdef TRY_UNICODE_VIEWER
+    using  FilenameStringType = std::wstring;
+#else
+    using  FilenameStringType = std::string;
+#endif
+
+
+FilenameStringType               inputFilename;
+FilenameStringType               outputFilename;
 
 #include "log.h"
 //
 #include "umba/cmd_line.h"
 //
 
-AppConfig appConfig;
+AppConfig<FilenameStringType> appConfig;
 
 // Конфиг версии
 #include "app_ver_config.h"
@@ -98,19 +108,22 @@ AppConfig appConfig;
 #include "arg_parser.h"
 
 //
-std::string curFile;
+FilenameStringType curFile;
 unsigned lineNo = 0;
 
 #include "processing.h"
 
-
-int main(int argc, char* argv[])
+#ifdef TRY_UNICODE_VIEWER
+int wmain_impl(int argc, wchar_t* argv[])
+#else
+int main_impl(int argc, char* argv[])
+#endif
 {
 
     using namespace umba::omanip;
 
 
-    auto argsParser = umba::command_line::makeArgsParser( ArgParser()
+    auto argsParser = umba::command_line::makeArgsParser( ArgParser<FilenameStringType>()
                                                         , CommandLineOptionCollector()
                                                         , argc, argv
                                                         , umba::program_location::getProgramLocation
@@ -119,41 +132,6 @@ int main(int argc, char* argv[])
                                                             //, "" // overrideExeName
                                                             )
                                                         );
-
-    // Force set CLI arguments while running under debugger
-    if (umba::isDebuggerPresent())
-    {
-        #if (defined(WIN32) || defined(_WIN32))
-
-            #if defined(__GNUC__)
-
-                std::string rootPath = "..\\..\\..\\..\\..\\";
-
-            #else // if
-
-                std::string rootPath = "..\\";
-
-            #endif
-
-        #endif
-
-        argsParser.args.clear();
-
-        argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
-
-        argsParser.args.push_back("--overwrite");
-        argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");
-        argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
-        //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
-        argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
-        argsParser.args.push_back("--processing-options=generate-toc,meta-data");
-        argsParser.args.push_back("--serialize-meta-tags=title,descripion,author");
-        
-
-        // argsParser.args.push_back("");
-        // argsParser.args.push_back("");
-        argsParser.args.push_back(rootPath + "tests\\test04.md_");
-    }
 
     //programLocationInfo = argsParser.programLocationInfo;
 
@@ -190,36 +168,20 @@ int main(int argc, char* argv[])
     // }
 
 
-    umba::cli_tool_helpers::IoFileType outputFileType = umba::cli_tool_helpers::IoFileType::nameEmpty;
-    if (outputFilename.empty())
-    {
-        outputFilename = "STDOUT";
-    }
-
-    outputFileType = umba::cli_tool_helpers::detectFilenameType(outputFilename, false /* !bInput */);
-
-    #if defined(WIN32) || defined(_WIN32)
-    if (outputFileType==umba::cli_tool_helpers::IoFileType::clipboard)
-    {
-        LOG_ERR_OPT << "invalid output file name"
-                    << "\n";
-        return 1;
-    }
-    #endif
 
     //unsigned errCount = 0;
 
-    if (!argsParser.quet)
-    {
-        umbaLogStreamMsg << "Processing: "<<inputFilename<<"\n";
-    }
+    // if (!argsParser.quet)
+    // {
+    //     umbaLogStreamMsg << "Processing: "<<inputFilename<<"\n";
+    // }
 
     std::string inputFileText;
     //if (!umba::filesys::readFile(inputFilename, inputFileText))
-    if (!AppConfig::readInputFile(inputFilename, inputFileText))
+    if (!AppConfig<FilenameStringType>::readInputFile(inputFilename, inputFileText))
     {
         LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
-                                          .arg("fileName",inputFilename)
+                                          .arg("fileName",umba::toUtf8(inputFilename))
                                           .toString()
                     << "\n";
         //errCount++;
@@ -233,13 +195,13 @@ int main(int argc, char* argv[])
 
 
     //std::string 
-    curFile = inputFilename; // = fileName;
+    curFile = umba::toUtf8(inputFilename); // = fileName;
     //unsigned lineNo = 0;
 
 
     appConfig.checkAdjustDocNumericLevels();
 
-    std::string projectOptionsFile;
+    FilenameStringType projectOptionsFile;
     if (findProjectOptionsFile(inputFilename, projectOptionsFile))
     {
         appConfig.setStrictPathFromFilename(projectOptionsFile);
@@ -253,14 +215,16 @@ int main(int argc, char* argv[])
     {
         if (!argsParser.quet)
         {
-            umbaLogStreamMsg << "Writting output to: "<<outputFilename<<"\n";
+            std::string printableOutputFilename;
+            umba::utfToStringTypeHelper(printableOutputFilename, outputFilename);
+            umbaLogStreamMsg << "Writting output to: "<<printableOutputFilename<<"\n";
         }
 
-        umba::cli_tool_helpers::writeOutput( outputFilename, outputFileType
-                                           , encoding::ToUtf8(), encoding::FromUtf8()
-                                           , resText, std::string() // bomData
-                                           , true /* fromFile */, true /* utfSource */ , bOverwrite
-                                           );
+        // umba::cli_tool_helpers::writeOutput( outputFilename, outputFileType
+        //                                    , encoding::ToUtf8(), encoding::FromUtf8()
+        //                                    , resText, std::string() // bomData
+        //                                    , true /* fromFile */, true /* utfSource */ , bOverwrite
+        //                                    );
     } // try
     catch(const std::runtime_error &e)
     {
@@ -274,7 +238,7 @@ int main(int argc, char* argv[])
 }
 
 
-#if (defined(WIN32) || defined(_WIN32)) && defined(__GNUC__)
+//#if (defined(WIN32) || defined(_WIN32)) && defined(__GNUC__)
 
    // Fix for MinGW problem - https://sourceforge.net/p/mingw-w64/bugs/942/
    // https://github.com/brechtsanders/winlibs_mingw/issues/106
@@ -285,7 +249,11 @@ int main(int argc, char* argv[])
    #include <windows.h>
    #include <shellapi.h>
 
+   #ifdef TRY_UNICODE_VIEWER
    int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+   #else
+   int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+   #endif
    {
        UMBA_USED(hInstance);
        UMBA_USED(hPrevInstance);
@@ -298,6 +266,13 @@ int main(int argc, char* argv[])
        {
            return 1;
        }
+
+
+       #ifdef TRY_UNICODE_VIEWER
+
+       return wmain_impl(nArgs, wargv);
+
+       #else
 
        // Count the number of bytes necessary to store the UTF-8 versions of those strings
        int n = 0;
@@ -322,12 +297,14 @@ int main(int argc, char* argv[])
        }
        argv[nArgs] = NULL;
 
-       return main(nArgs, argv);
+       return main_impl(nArgs, argv);
+
+       #endif
 
    }
 
 
 
-#endif
+//#endif
 
 

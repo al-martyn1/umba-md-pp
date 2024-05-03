@@ -10,37 +10,14 @@
 
 
 inline
-bool findProjectOptionsFileImpl(const std::string &mdFile, std::string &foundOptionsFile, const std::vector<std::string> &names)
+bool findProjectOptionsFile(const std::string &mdFile, std::string &foundOptionsFile)
 {
-    std::string optPath = umba::filename::getPath(mdFile);
-
-    while(true)
-    {
-        for(const auto &name : names)
-        {
-            std::string optFile = umba::filename::appendPath(optPath, name);
-            if (umba::filesys::isFileReadable(optFile))
-            {
-                foundOptionsFile = optFile;
-                return true;
-            }
-        }
-
-        umba::filename::stripLastPathSep(optPath);
-        std::string optPathNext = umba::filename::getPath(optPath);
-        if (optPathNext.empty() || optPathNext==optPath)
-        {
-            return false;
-        }
-
-        optPath = optPathNext;
-    }
-
+    return umba::cli_tool_helpers::findProjectOptionsFile(mdFile, foundOptionsFile, std::vector<std::string>{".md-pp.options", ".umba-md-pp.options"});
 }
 
 inline
-bool findProjectOptionsFile(const std::string &mdFile, std::string &foundOptionsFile)
+bool findProjectOptionsFile(const std::wstring &mdFile, std::wstring &foundOptionsFile)
 {
-    return findProjectOptionsFileImpl(mdFile, foundOptionsFile, std::vector<std::string>{".md-pp.options", ".umba-md-pp.options"});
+    return umba::cli_tool_helpers::findProjectOptionsFile(mdFile, foundOptionsFile, std::vector<std::wstring>{L".md-pp.options", L".umba-md-pp.options"});
 }
 

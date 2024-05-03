@@ -88,7 +88,7 @@ std::string               outputFilename;
 #include "umba/cmd_line.h"
 //
 
-AppConfig appConfig;
+AppConfig<std::string> appConfig;
 
 // Конфиг версии
 #include "app_ver_config.h"
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
     using namespace umba::omanip;
 
 
-    auto argsParser = umba::command_line::makeArgsParser( ArgParser()
+    auto argsParser = umba::command_line::makeArgsParser( ArgParser<std::string>()
                                                         , CommandLineOptionCollector()
                                                         , argc, argv
                                                         , umba::program_location::getProgramLocation
@@ -216,7 +216,7 @@ int main(int argc, char* argv[])
 
     std::string inputFileText;
     //if (!umba::filesys::readFile(inputFilename, inputFileText))
-    if (!AppConfig::readInputFile(inputFilename, inputFileText))
+    if (!AppConfig<std::string>::readInputFile(inputFilename, inputFileText))
     {
         LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
                                           .arg("fileName",inputFilename)

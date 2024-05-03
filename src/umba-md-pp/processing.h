@@ -27,8 +27,8 @@
 
 
 //----------------------------------------------------------------------------
-inline
-std::string generateDocMetadata(const AppConfig &appCfg, Document &doc)
+template<typename FilenameStringType> inline
+std::string generateDocMetadata(const AppConfig<FilenameStringType> &appCfg, Document &doc)
 {
     YAML::Emitter emitter;
     emitter << YAML::BeginMap;
@@ -241,8 +241,8 @@ bool getJsonNodeTypeValueAsString(const JsonNodeType &j, std::string &resVal)
 
 
 //----------------------------------------------------------------------------
-inline
-void parseDocumentMetadata(const AppConfig &appCfg, Document &doc)
+template<typename FilenameStringType> inline
+void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document &doc)
 {
     for(const auto &metaText : doc.collectedMetadataTexts)
     {
@@ -781,12 +781,13 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
 }
 
 //----------------------------------------------------------------------------
-std::string processMdFile(const AppConfig &appCfg, std::string fileText, const std::string &curFilename);
+template<typename FilenameStringType>
+std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType&curFilename);
 
 //----------------------------------------------------------------------------
 //! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
-template<typename LineHandler> inline
-std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector<std::string> &lines, LineHandler handler)
+template<typename LineHandler, typename FilenameStringType> inline
+std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, LineHandler handler)
 {
     std::vector<std::string> resLines; resLines.reserve(lines.size());
 
@@ -963,8 +964,8 @@ std::vector<std::string> processLines(const AppConfig &appCfg, const std::vector
 // }
 
 //----------------------------------------------------------------------------
-template<typename HeaderLineHandler> inline
-std::vector<std::string> processHeaderLines(const AppConfig &appCfg, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
+template<typename HeaderLineHandler, typename FilenameStringType> inline
+std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
@@ -1023,8 +1024,8 @@ bool splitHeaderLine(const std::string &line, std::string &levelStr, std::string
 }
 
 //----------------------------------------------------------------------------
-inline
-std::vector<std::string> raiseHeaders(const AppConfig &appCfg, const std::vector<std::string> &lines, int raiseVal)
+template<typename FilenameStringType> inline
+std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, int raiseVal)
 {
     // Ограничиваем изменение разумной величиной
     if (raiseVal>3)
@@ -1136,8 +1137,8 @@ bool isAppendixSectionNumber(const std::string &str)
 }
 
 //----------------------------------------------------------------------------
-inline
-std::string generateSectionIdImpl(const AppConfig &appCfg, std::string secText)
+template<typename FilenameStringType> inline
+std::string generateSectionIdImpl(const AppConfig<FilenameStringType> &appCfg, std::string secText)
 {
     if (appCfg.targetRenderer==TargetRenderer::github)
     {
@@ -1175,8 +1176,8 @@ std::string generateSectionIdImpl(const AppConfig &appCfg, std::string secText)
 }
 
 //----------------------------------------------------------------------------
-inline
-std::string generateSectionId(const AppConfig &appCfg, const std::string secLine, std::size_t *pLevel=0, std::string *pHeaderText=0)
+template<typename FilenameStringType> inline
+std::string generateSectionId(const AppConfig<FilenameStringType> &appCfg, const std::string secLine, std::size_t *pLevel=0, std::string *pHeaderText=0)
 {
     if (pLevel)
     {
@@ -1298,8 +1299,8 @@ std::string generateSectionNumberImpl(std::size_t lvl, const int *sectionCounter
 }
 
 //----------------------------------------------------------------------------
-inline
-std::vector<std::string> generateSecionsExtra( const AppConfig                &appCfg
+template<typename FilenameStringType> inline
+std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringType>                &appCfg
                                              , const std::vector<std::string> &lines
                                              , Document                       &docTo
                                              , bool                           updateDocInfo
@@ -1470,11 +1471,12 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
 #endif
 
 //----------------------------------------------------------------------------
-std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Document &docTo, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs);
+template<typename FilenameStringType> inline
+std::vector<std::string> parseMarkdownFileLines(const AppConfig<FilenameStringType> &appCfg, Document &docTo, const std::vector<std::string> &lines, const FilenameStringType &curFilename, const std::unordered_set<FilenameStringType> &alreadyIncludedDocs);
 
 //----------------------------------------------------------------------------
-inline
-bool insertDoc( const AppConfig          &appCfg
+template<typename FilenameStringType> inline
+bool insertDoc( const AppConfig<FilenameStringType>          &appCfg
               , Document                 &docTo
               , std::vector<std::string> &resLines
               , const std::string        &insertCommandLine
@@ -1537,8 +1539,8 @@ bool insertDoc( const AppConfig          &appCfg
 }
 
 //----------------------------------------------------------------------------
-inline
-std::vector<std::string> prepareSnippetLines( const AppConfig            &appCfg
+template<typename FilenameStringType> inline
+std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType>            &appCfg
                                             , std::vector<std::string>   lines
                                             , std::string                snippetFilename
                                             , std::size_t                firstLineIdx
@@ -1656,8 +1658,8 @@ std::vector<std::string> prepareSnippetLines( const AppConfig            &appCfg
 
 //----------------------------------------------------------------------------
 //! Возвращает true, если всё хорошо и исходную строку не надо вставлять
-inline
-bool insertSnippet( const AppConfig          &appCfg
+template<typename FilenameStringType> inline
+bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
                   , std::vector<std::string> &resLines
                   , const std::string        &insertCommandLine
                   , const std::string        &curFilename
@@ -1827,8 +1829,8 @@ bool insertSnippet( const AppConfig          &appCfg
 //     return resLines;
 // }
 
-inline
-std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Document &docTo, const std::vector<std::string> &lines, const std::string &curFilename, const std::unordered_set<std::string> &alreadyIncludedDocs )
+template<typename FilenameStringType> inline
+std::vector<std::string> parseMarkdownFileLines(const AppConfig<FilenameStringType> &appCfg, Document &docTo, const std::vector<std::string> &lines, const FilenameStringType&curFilename, const std::unordered_set<FilenameStringType> &alreadyIncludedDocs )
 {
     std::vector<std::string> metadataLines;
 
@@ -1985,7 +1987,8 @@ std::vector<std::string> parseMarkdownFileLines(const AppConfig &appCfg, Documen
 // LineHandlerEvent::tocCommand
 
 //----------------------------------------------------------------------------
-std::vector<std::string> processTocCommands(const AppConfig &appCfg, Document &doc, const std::vector<std::string> &lines, bool &tocAdded)
+template<typename FilenameStringType> inline
+std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> &appCfg, Document &doc, const std::vector<std::string> &lines, bool &tocAdded)
 {
     std::size_t numTocFound = 0;
 
@@ -2049,8 +2052,8 @@ std::string::size_type findPairedChar(const std::string &line, std::string::size
 }
 
 //----------------------------------------------------------------------------
-inline
-std::string updateInDocRefs(const AppConfig &appCfg, Document &doc, const std::string &line)
+template<typename FilenameStringType> inline
+std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Document &doc, const std::string &line)
 {
     // Идея по ссылкам на разделы. Указываем в них просто текст заголовка - [Какой-то текст](#Просто полный текст заголовка)
     // Также для каждого заголовка можно задать частично или полностью квалифицированную ссылку. Потом распарсим текст на предмет 
@@ -2172,8 +2175,8 @@ std::string updateInDocRefs(const AppConfig &appCfg, Document &doc, const std::s
 }
 
 //----------------------------------------------------------------------------
-inline
-std::vector<std::string> updateInDocRefs(const AppConfig &appCfg, Document &doc, const std::vector<std::string> &lines)
+template<typename FilenameStringType> inline
+std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Document &doc, const std::vector<std::string> &lines)
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
@@ -2190,14 +2193,14 @@ std::vector<std::string> updateInDocRefs(const AppConfig &appCfg, Document &doc,
 }
 
 //----------------------------------------------------------------------------
-inline
-std::string processMdFile(const AppConfig &appCfg, std::string fileText, const std::string &curFilename)
+template<typename FilenameStringType> inline
+std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType &curFilename)
 {
     //fileText = marty_cpp::normalizeCrLfToLf(fileText);
     std::vector<std::string> lines = marty_cpp::splitToLinesSimple(fileText);
 
     Document doc;
-    auto resLines = parseMarkdownFileLines(appCfg, doc, lines, curFilename, std::unordered_set<std::string>()/*alreadyIncludedDocs*/);
+    std::vector<std::string> resLines = parseMarkdownFileLines(appCfg, doc, lines, curFilename, std::unordered_set<FilenameStringType>()/*alreadyIncludedDocs*/);
 
     // Генерировать идентификаторы секций нужно, если у нас целевой рендерер - доксиген, и явно задано генерировать ID секций, или генерировать "Содержание"
     // Для генерации "Содержания" для гитхаба ID секций генерировать не нужно

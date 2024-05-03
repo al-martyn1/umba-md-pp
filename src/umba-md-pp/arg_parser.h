@@ -12,11 +12,11 @@
 
 // AppConfig    appConfig;
 
-
+template<typename StringType>
 struct ArgParser
 {
 
-std::stack<std::string> optFiles;
+std::stack<StringType> optFiles;
 
 
 std::string makeAbsPath( std::string p )
@@ -37,7 +37,7 @@ std::string makeAbsPath( std::string p )
 
 // 0 - ok, 1 normal stop, -1 - error
 template<typename ArgsParser>
-int operator()( const std::string                               &a           //!< строка - текущий аргумент
+int operator()( const StringType                                &a           //!< строка - текущий аргумент
               , umba::command_line::CommandLineOption           &opt         //!< Объект-опция, содержит разобранный аргумент и умеет отвечать на некоторые вопросы
               , ArgsParser                                      &argsParser  //!< Класс, который нас вызывает, содержит некоторый контекст
               , umba::command_line::ICommandLineOptionCollector *pCol        //!< Коллектор опций - собирает инфу по всем опциям и готов вывести справку
@@ -353,7 +353,8 @@ int operator()( const std::string                               &a           //!
                 return -1;
             }
 
-            auto optArg = opt.optArg;
+            StringType optArg;
+            umba::utfToStringTypeHelper(optArg, opt.optArg);
             if (!appConfig.addSamplesPaths(optArg))
             {
                 LOG_ERR_OPT<<"Adding paths for examples searching failed, invalid argument: '" << optArg << "'\n";
@@ -745,7 +746,7 @@ int operator()( const std::string                               &a           //!
                 if (pCol && pCol->isNormalPrintHelpStyle() && argsParser.argsNeedHelp.empty())
                 {
                     auto helpText = opt.getHelpOptionsString();
-                    std::cout << "Usage: " << argsParser.programLocationInfo.exeName
+                    std::cout << "Usage: " << umba::toUtf8(argsParser.programLocationInfo.exeName)
                               << " [OPTIONS] [output_file]\n"
                               << "  If output_file not taken, STDOUT used\n"
                               << "\nOptions:\n\n"
@@ -774,7 +775,11 @@ int operator()( const std::string                               &a           //!
     } // if (opt.isOption())
     else if (opt.isResponseFile())
     {
-        std::string optFileName = makeAbsPath(opt.name);
+        //std::string
+
+        StringType optName;
+        umba::utfToStringTypeHelper(optName, opt.name);
+        auto optFileName = makeAbsPath(optName);
 
         optFiles.push(optFileName);
 

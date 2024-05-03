@@ -18,15 +18,22 @@ std::string generateTempSubfolderNameByInputFileName(const std::string &name)
 }
 
 inline
-bool createTempFolder(std::string &finalPath, const std::string &inputFileName, const std::string &appName="umba-md-pp-view")
+std::wstring generateTempSubfolderNameByInputFileName(const std::wstring &name)
 {
-    std::string tempRoot = umba::filesys::getTempFolderPath<std::string>();
+    std::size_t h = std::hash<std::wstring>{}(name);
+    return std::to_wstring(h);
+}
+
+template<typename StringType> inline
+bool createTempFolder(StringType &finalPath, const StringType &inputFileName, const StringType &appName=umba::string_plus::make_string<StringType>("umba-md-pp-view"))
+{
+    StringType tempRoot = umba::filesys::getTempFolderPath<StringType>();
     umba::filesys::createDirectory(tempRoot);
 
-    std::string umbaMdPpViewerTempRoot = umba::filename::appendPath(tempRoot, std::string(".") + appName);
+    StringType umbaMdPpViewerTempRoot = umba::filename::appendPath(tempRoot, umba::string_plus::make_string<StringType>(".") + appName);
     umba::filesys::createDirectory(umbaMdPpViewerTempRoot);
 
-    std::string curFileTempRoot = umba::filename::appendPath(umbaMdPpViewerTempRoot, generateTempSubfolderNameByInputFileName(inputFileName));
+    StringType curFileTempRoot = umba::filename::appendPath(umbaMdPpViewerTempRoot, generateTempSubfolderNameByInputFileName(inputFileName));
     umba::filesys::createDirectory(curFileTempRoot);
 
     if (umba::filesys::isPathDirectory(curFileTempRoot))
@@ -82,8 +89,8 @@ IDL_PROPERTY_SUPPORT   = YES
 EXTRACT_ALL            = YES
 
 */
-inline
-std::string generateDoxyfile(const AppConfig &appCfg, const Document &doc)
+template<typename FilenameStringType> inline
+std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const Document &doc)
 {
     std::vector<std::string> lines;
 
@@ -124,8 +131,8 @@ std::string generateDoxyfile(const AppConfig &appCfg, const Document &doc)
     return marty_cpp::mergeLines(lines, getConfigsLinefeed(), true  /* addTrailingNewLine */ );
 }
 
-inline
-std::string generateDoxygenRtfCfg(const AppConfig &appCfg, const Document &doc)
+template<typename FilenameStringType> inline
+std::string generateDoxygenRtfCfg(const AppConfig<FilenameStringType> &appCfg, const Document &doc)
 {
     std::vector<std::string> lines;
 

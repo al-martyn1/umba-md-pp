@@ -31,7 +31,8 @@ struct Document
 
     std::string                                                  titleFromText; //!< From document text extracted title
 
-    bool getMetaTagValueAsText(const AppConfig &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
+    template<typename FilenameStringType>
+    bool getMetaTagValueAsText(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
     {
         tag = appCfg.makeCanonicalMetaTag(tag);
 
@@ -90,7 +91,8 @@ struct Document
 
     }
 
-    std::string getMetaTagValueAsText(const AppConfig &appCfg, std::string tag, std::string listDelimiter) const
+    template<typename FilenameStringType>
+    std::string getMetaTagValueAsText(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter) const
     {
         std::string tagText;
         if (!getMetaTagValueAsText(appCfg, tag, listDelimiter, tagText))
@@ -98,7 +100,8 @@ struct Document
         return tagText;
     }
 
-    bool getMetaTagValueAsSingleLineText(const AppConfig &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
+    template<typename FilenameStringType>
+    bool getMetaTagValueAsSingleLineText(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
     {
         if (!getMetaTagValueAsText(appCfg, tag, listDelimiter, tagText))
             return false;
@@ -110,7 +113,8 @@ struct Document
         return true;
     }
 
-    std::string getMetaTagValueAsSingleLineText(const AppConfig &appCfg, std::string tag, std::string listDelimiter) const
+    template<typename FilenameStringType>
+    std::string getMetaTagValueAsSingleLineText(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter) const
     {
         std::string tagText;
         if (!getMetaTagValueAsSingleLineText(appCfg, tag, listDelimiter, tagText))
