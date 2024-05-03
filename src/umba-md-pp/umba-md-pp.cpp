@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
         argsParser.args.push_back("--processing-options=generate-toc,meta-data");
         argsParser.args.push_back("--serialize-meta-tags=title,descripion,author");
-        
+        argsParser.args.push_back("--target-renderer=doxygen");
 
         // argsParser.args.push_back("");
         // argsParser.args.push_back("");
