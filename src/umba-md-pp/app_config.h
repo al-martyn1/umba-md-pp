@@ -313,10 +313,18 @@ struct AppConfig
 
     // std::unordered_set<SnippetOptions>                    snippetOptions;
 
-    bool addSamplesPaths( const std::vector<FilenameStringType> &pl )
+    bool addSamplesPaths(const std::vector<FilenameStringType> &pl, const FilenameStringType &basePath)
     {
         //std::vector<FilenameStringType> &dirs = m_lookupMap[lvl].lookupDirs;
-        samplesPaths.insert( samplesPaths.end(), pl.begin(), pl.end() );
+
+        std::vector<FilenameStringType> absPaths; absPaths.reserve(pl.size());
+        for(auto p: pl)
+        {
+            p = umba::filename::makeAbsPath(p, basePath);
+            absPaths.emplace_back(umba::filename::makeCanonical(p));
+        }
+        
+        samplesPaths.insert( samplesPaths.end(), absPaths.begin(), absPaths.end() );
         return true;
     }
 
@@ -325,9 +333,9 @@ struct AppConfig
         - Win32 - ';' (точка с запятой, semicolon)
         - Linux - ':' (двоеточие, colon)
      */
-    bool addSamplesPaths( const FilenameStringType &pl )
+    bool addSamplesPaths(const FilenameStringType &pl, const FilenameStringType &basePath)
     {
-        return addSamplesPaths( umba::filename::splitPathList( pl ) );
+        return addSamplesPaths(umba::filename::splitPathList( pl ), basePath);
     }
 
     static

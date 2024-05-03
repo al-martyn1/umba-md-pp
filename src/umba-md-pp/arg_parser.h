@@ -19,18 +19,21 @@ struct ArgParser
 std::stack<StringType> optFiles;
 
 
-std::string makeAbsPath( std::string p )
+StringType getBasePath() const
 {
-    std::string basePath;
-
+    StringType basePath;
     if (optFiles.empty())
-        basePath = umba::filesys::getCurrentDirectory<std::string>();
+        basePath = umba::filesys::getCurrentDirectory<StringType>();
     else
         basePath = umba::filename::getPath(optFiles.top());
 
+    return basePath;
+}
 
-    return umba::filename::makeAbsPath( p, basePath );
 
+StringType makeAbsPath( StringType p )
+{
+    return umba::filename::makeAbsPath( p, getBasePath() );
 }
 
 
@@ -355,7 +358,7 @@ int operator()( const StringType                                &a           //!
 
             StringType optArg;
             umba::utfToStringTypeHelper(optArg, opt.optArg);
-            if (!appConfig.addSamplesPaths(optArg))
+            if (!appConfig.addSamplesPaths(optArg, getBasePath()))
             {
                 LOG_ERR_OPT<<"Adding paths for examples searching failed, invalid argument: '" << optArg << "'\n";
                 return -1;
