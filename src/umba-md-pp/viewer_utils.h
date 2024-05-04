@@ -168,7 +168,7 @@ std::string generateFinalFilenameFromTitle(const std::string &titleStr)
     std::string resFilename; resFilename.reserve(titleStr.size());
     for(auto ch : titleStr)
     {
-        if (ch<' ' || restrictedChars.find(ch)!=restrictedChars.npos)
+        if ((unsigned)(int)ch<(unsigned)' ' || restrictedChars.find(ch)!=restrictedChars.npos)
         {
             ch = '_';
         }
