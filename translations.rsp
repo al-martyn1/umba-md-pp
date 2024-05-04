@@ -1,0 +1,12 @@
+
+#-Y
+--overwrite=Y
+--json-indent=0
+
+#--force
+--include-files=*.json^
+--exclude-files=*\.git\*
+--scan=_libs/marty_tr/_translations
+--scan=src/umba-md-pp/tr
+--exclude-files=*/src/umba-md-pp/tr/translations.json^
+--exclude-files=*/src/umba-md-pp/tr/test-tr.json^
