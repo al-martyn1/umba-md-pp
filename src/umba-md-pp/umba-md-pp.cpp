@@ -44,6 +44,11 @@
 #include "encoding/encoding.h"
 #include "utils.h"
 
+//
+#include "marty_tr/marty_tr.h"
+#include "tr/tr.h"
+//
+
 #include "marty_yaml_toml_json/json_utils.h"
 #include "marty_yaml_toml_json/yaml_json.h"
 #include "marty_yaml_toml_json/yaml_utils.h"
@@ -104,8 +109,44 @@ unsigned lineNo = 0;
 #include "processing.h"
 
 
+static
+auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
+{
+    using umba::lout;
+    using namespace umba::omanip;
+
+    std::cerr << "---\n";
+    std::cerr << "Translation not found(" << marty_tr::to_string(what) << "): [" << langId << ":" << catId << "] - " << msg << "\n";
+    std::cerr << "\n";
+
+}
+);
+
+
 int main(int argc, char* argv[])
 {
+
+    marty_tr::tr_set_err_handler(&trErrHandler);
+    marty_tr::tr_init_all_translations(tr_get_translations_json());
+
+    auto helloWorld = mtr::tr("Hello world!");
+    std::cout << helloWorld << "\n";
+    // std::cout << underwood::tr("Hello non-translated world!") << "\n";
+
+    //mtr::tr_set_def_lang("en-US");
+
+#if 0
+    auto testFindLang = [&](std::string strLang)
+    {
+        std::cout << "Taken lang: " << strLang << ", found id: " << findLangTagByString(strLang) << "\n";
+    };
+
+    testFindLang("en-US");
+    testFindLang("English/United States");
+    testFindLang("Russian/Russia");
+    testFindLang("Русский");
+    testFindLang("Русский/Россия");
+#endif
 
     using namespace umba::omanip;
 
