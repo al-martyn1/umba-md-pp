@@ -1,0 +1,1 @@
+@call test01.bat > test01.log 2>&1
