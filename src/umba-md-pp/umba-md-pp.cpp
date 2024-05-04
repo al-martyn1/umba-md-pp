@@ -135,7 +135,6 @@ int main(int argc, char* argv[])
 
     //mtr::tr_set_def_lang("en-US");
 
-#if 0
     auto testFindLang = [&](std::string strLang)
     {
         std::cout << "Taken lang: " << strLang << ", found id: " << findLangTagByString(strLang) << "\n";
@@ -146,7 +145,6 @@ int main(int argc, char* argv[])
     testFindLang("Russian/Russia");
     testFindLang("Русский");
     testFindLang("Русский/Россия");
-#endif
 
     using namespace umba::omanip;
 
