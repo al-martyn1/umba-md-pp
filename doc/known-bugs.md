@@ -4,7 +4,7 @@
   - [X] по умолчанию в --set-insert-options не стоит опция fail, и проблемы молча съедаются. Может, я давно не обновлял дистр?
   - [X] по умолчанию в --set-insert-options не стоит опция path - неудобно
   - [X] по умолчанию в --set-insert-options не стоит опция filenameLineNo - неудобно
-  - [ ] сделать тип генерируемого конента - --generation-target=rtf, и в этом режиме, если --target-renderer=doxygen, устанавливать
+  - [X] сделать тип генерируемого конента - --target-format=rtf, и в этом режиме, если --target-renderer=doxygen, устанавливать
     опцию ProcessingOptions::parse-github-alerts (но её можно установить и ручками). Данная опция должна делать обычный параграф, и вставлять
     слова Note, Tip, Important, Warning, Caution или их локализованные варианты.
     https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts

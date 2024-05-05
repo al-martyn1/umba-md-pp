@@ -283,6 +283,7 @@ int main(int argc, char* argv[])
 
 
     appConfig.checkAdjustDocNumericLevels();
+    appConfig.checkTargetFormat();
 
     std::string projectOptionsFile;
     if (findProjectOptionsFile(inputFilename, projectOptionsFile))

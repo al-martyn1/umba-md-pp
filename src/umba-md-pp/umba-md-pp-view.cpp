@@ -227,6 +227,7 @@ int main_impl(int argc, char* argv[])
 
 
     appConfig.checkAdjustDocNumericLevels();
+    appConfig.checkTargetFormat();
 
     FilenameStringType projectOptionsFile;
     if (findProjectOptionsFile(inputFilename, projectOptionsFile))

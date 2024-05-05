@@ -1,7 +1,8 @@
 invalid,unknown=-1
 md             =0
 html
-rtf            =0x1000
-pdf            =0x1001
+printable      =0x1000 // common flag
+rtf            =0x1001
+pdf            =0x1002
 
 

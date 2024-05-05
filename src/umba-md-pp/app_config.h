@@ -74,6 +74,18 @@ struct AppConfig
     std::string                                           documentForceLanguage;
 
 
+
+    void checkTargetFormat()
+    {
+        if (targetRenderer!=TargetRenderer::doxygen)
+            return;
+
+        if (((std::uint32_t)targetFormat & (std::uint32_t)TargetFormat::printable)==0)
+            return;
+
+        updateProcessingOptions("parse-github-alerts")
+    }
+
     bool setMetaTagSerializeList(std::string str)
     {
         if (str.empty())

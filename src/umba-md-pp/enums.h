@@ -527,32 +527,35 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MetaTagType, std::map, 1 )
 
 enum class TargetFormat : std::uint32_t
 {
-    invalid   = (std::uint32_t)(-1),
-    unknown   = (std::uint32_t)(-1),
-    md        = 0x0000,
-    html      = 0x0001,
-    rtf       = 0x1000,
-    pdf       = 0x1001
+    invalid     = (std::uint32_t)(-1),
+    unknown     = (std::uint32_t)(-1),
+    md          = 0x0000,
+    html        = 0x0001,
+    printable   = 0x1000 /*!< common flag */,
+    rtf         = 0x1001,
+    pdf         = 0x1002
 
 }; // enum class TargetFormat : std::uint32_t
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(TargetFormat)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( TargetFormat, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::html      , "Html"    );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::invalid   , "Invalid" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::md        , "Md"      );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::rtf       , "Rtf"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::pdf       , "Pdf"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::printable   , "Printable" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::html        , "Html"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::invalid     , "Invalid"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::md          , "Md"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::rtf         , "Rtf"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::pdf         , "Pdf"       );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( TargetFormat, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( TargetFormat, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::html      , "html"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::invalid   , "invalid" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::invalid   , "unknown" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::md        , "md"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::rtf       , "rtf"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::pdf       , "pdf"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::printable   , "printable" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::html        , "html"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::invalid     , "invalid"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::invalid     , "unknown"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::md          , "md"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::rtf         , "rtf"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::pdf         , "pdf"       );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( TargetFormat, std::map, 1 )
 
 
