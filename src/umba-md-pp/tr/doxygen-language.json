@@ -1,0 +1,209 @@
+{
+  "0409": {
+    "doxygen-language": {
+
+      "af": "Afrikaans",
+      "af-ZA": "Afrikaans",
+
+      "ar": "Arabic",
+      "ar-DZ": "Arabic",
+      "ar-BH": "Arabic",
+      "ar-EG": "Arabic",
+      "ar-IQ": "Arabic",
+      "ar-JO": "Arabic",
+      "ar-KW": "Arabic",
+      "ar-LB": "Arabic",
+      "ar-LY": "Arabic",
+      "ar-MA": "Arabic",
+      "ar-OM": "Arabic",
+      "ar-QA": "Arabic",
+      "ar-SA": "Arabic",
+      "ar-SY": "Arabic",
+      "ar-TN": "Arabic",
+      "ar-AE": "Arabic",
+      "ar-YE": "Arabic",
+
+      "hy": "Armenian",
+      "hy-AM": "Armenian",
+
+      "pt": "Portuguese",
+      "pt-BR": "Brazilian",
+      "pt-PT": "Portuguese",
+
+      "ca": "Catalan",
+      "ca-ES": "Catalan",
+
+      "zh": "Chinese",
+      "zh-CN": "Chinese",
+      "zh-SG": "Chinese",
+
+      "zh-Hant": "Chinese-Traditional",
+      "zh-HK": "Chinese-Traditional",
+      "zh-MO": "Chinese-Traditional",
+      "zh-TW": "Chinese-Traditional",
+
+      "hr": "Croatian",
+      "hr-BA": "Croatian",
+      "hr-HR": "Croatian",
+
+      "cs": "Czech",
+      "cs-CZ": "Czech",
+
+      "da": "Danish",
+      "da-DK": "Danish",
+
+      "nl": "Dutch",
+      "nl-BE": "Dutch",
+      "nl-NL": "Dutch",
+
+      "en": "English",
+      "en-AU": "English",
+      "en-BZ": "English",
+      "en-CA": "English",
+      "en-029": "English",
+      "en-HK": "English",
+      "en-IN": "English",
+      "en-IE": "English",
+      "en-JM": "English",
+      "en-MY": "English",
+      "en-NZ": "English",
+      "en-PH": "English",
+      "en-SG": "English",
+      "en-ZA": "English",
+      "en-TT": "English",
+      "en-AE": "English",
+      "en-GB": "English",
+      "en-US": "English (United States)",
+      "en-ZW": "English",
+
+      "fa": "Persian (Farsi)",
+      "fa-IR": "Persian (Farsi)",
+
+      "pl": "Polish",
+      "pl-PL": "Polish",
+
+      "fr": "French",
+      "fr-BE": "French",
+      "fr-CM": "French",
+      "fr-CA": "French",
+      "fr-CD": "French",
+      "fr-CI": "French",
+      "fr-FR": "French",
+      "fr-HT": "French",
+      "fr-LU": "French",
+      "fr-ML": "French",
+      "fr-MA": "French",
+      "fr-MC": "French",
+      "fr-RE": "French",
+      "fr-SN": "French",
+      "fr-CH": "French",
+
+      "fi": "Finnish",
+      "fi-FI": "Finnish",
+
+      "de": "German",
+      "de-AT": "German",
+      "de-DE": "German",
+      "de-LI": "German",
+      "de-LU": "German",
+      "de-CH": "German",
+
+      "el": "Greek",
+      "el-GR": "Greek",
+
+      "hu": "Hungarian",
+      "hu-HU": "Hungarian",
+
+      "id": "Indonesian",
+      "id-ID": "Indonesian",
+
+      "it": "Italian",
+      "it-IT": "Italian",
+      "it-CH": "Italian",
+
+      "ja": "Japanese",
+      "ja-JP": "Japanese",
+
+      "ko": "Korean",
+      "ko-KR": "Korean",
+
+      "lv": "Latvian",
+      "lv-LV": "Latvian",
+
+      "lt": "Lithuanian",
+      "lt-LT": "Lithuanian",
+
+      "mk": "Macedonian",
+      "mk-MK": "Macedonian",
+
+      "nb": "Norwegian",
+      "nb-NO": "Norwegian",
+      "nn": "Norwegian",
+      "nn-NO": "Norwegian",
+
+      "ro": "Romanian",
+      "ro-MD": "Romanian",
+      "ro-RO": "Romanian",
+
+      "ru": "Russian",
+      "ru-MD": "Russian",
+      "ru-RU": "Russian",
+
+      "sr-Cyrl": "Serbian-Cyrillic",
+      "sr-Cyrl-BA": "Serbian-Cyrillic",
+      "sr-Cyrl-ME": "Serbian-Cyrillic",
+      "sr-Cyrl-RS": "Serbian-Cyrillic",
+      "sr-Cyrl-CS": "Serbian-Cyrillic",
+
+      "sr": "Serbian",
+      "sr-Latn-BA": "Serbian",
+      "sr-Latn-ME": "Serbian",
+      "sr-Latn-RS": "Serbian",
+      "sr-Latn-CS": "Serbian",
+
+      "sk": "Slovak",
+      "sk-SK": "Slovak",
+
+      "sl": "Slovene",
+      "sl-SI": "Slovene",
+
+      "es": "Spanish",
+      "es-AR": "Spanish",
+      "es-VE": "Spanish",
+      "es-BO": "Spanish",
+      "es-CL": "Spanish",
+      "es-CO": "Spanish",
+      "es-CR": "Spanish",
+      "es-CU": "Spanish",
+      "es-DO": "Spanish",
+      "es-EC": "Spanish",
+      "es-SV": "Spanish",
+      "es-GT": "Spanish",
+      "es-HN": "Spanish",
+      "es-419": "Spanish",
+      "es-MX": "Spanish",
+      "es-NI": "Spanish",
+      "es-PA": "Spanish",
+      "es-PY": "Spanish",
+      "es-PE": "Spanish",
+      "es-PR": "Spanish",
+      "es-ES": "Spanish",
+      "es-US": "Spanish",
+      "es-UY": "Spanish",
+
+      "sv": "Swedish",
+      "sv-FI": "Swedish",
+      "sv-SE": "Swedish",
+
+      "tr": "Turkish",
+      "tr-TR": "Turkish",
+
+      "uk": "Ukrainian",
+      "uk-UA": "Ukrainian",
+
+      "vi": "Vietnamese",
+      "vi-VN": "Vietnamese"
+
+    }
+  }
+}

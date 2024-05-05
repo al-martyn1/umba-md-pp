@@ -27,6 +27,25 @@ bool findProjectOptionsFile(const std::wstring &mdFile, std::wstring &foundOptio
 
 
 
+inline
+std::string findGoxygenLanguageByLangTag(std::string langTag)
+{
+    auto trNullErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
+	{
+	}
+	);
+  
+    auto autoRestoreTrErrHandler = mtr::AutoRestoreErrReportHandler(mtr::tr_set_err_handler(&trNullErrHandler));
+    auto autoEmptyMsgNotExist    = mtr::AutoEmptyMsgNotExist(mtr::tr_set_empty_msg_not_exist(true));
+
+    if (mtr::tr_has_msg(langTag, "doxygen-language", "en"))
+    {
+        return mtr::tr(langTag, "doxygen-language", "en");
+    }
+
+    return "English";
+
+}
 
 inline
 std::string findLangTagByString(std::string strLang)

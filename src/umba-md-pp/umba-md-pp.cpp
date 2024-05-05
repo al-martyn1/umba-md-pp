@@ -137,20 +137,24 @@ int main(int argc, char* argv[])
 
     //mtr::tr_set_def_lang("en-US");
 
-    auto testFindLang = [&](std::string strLang)
-    {
-        umba::time_service::TimeTick startTick = umba::time_service::getCurTimeMs();
-        std::cout << "Taken lang: " << strLang << ", found id: " << findLangTagByString(strLang) << "\n";
-        umba::time_service::TimeTick tickDelta = umba::time_service::getCurTimeMs()-startTick;
-        std::cout << "Time ellapsed: " << tickDelta << "\n\n";
-
-    };
-
-    testFindLang("Русский/Россия");
-    testFindLang("Русский");
-    testFindLang("en-US");
-    testFindLang("English/United States");
-    testFindLang("Russian/Russia");
+    // auto testFindLang = [&](std::string strLang)
+    // {
+    //     umba::time_service::TimeTick startTick = umba::time_service::getCurTimeMs();
+    //     std::cout << "Taken lang  : " << strLang << ", found id: " << findLangTagByString(strLang) << "\n";
+    //     std::cout << "Doxygen lang: " << findGoxygenLanguageByLangTag(findLangTagByString(strLang)) << "\n";
+    //     umba::time_service::TimeTick tickDelta = umba::time_service::getCurTimeMs()-startTick;
+    //     std::cout << "Time ellapsed: " << tickDelta << "\n\n";
+    //  
+    // };
+    //  
+    // testFindLang("Русский/Россия");
+    // testFindLang("Русский");
+    // testFindLang("en");
+    // testFindLang("en-US");
+    // testFindLang("English");
+    // testFindLang("English/United Kingdom");
+    // testFindLang("English/United States");
+    // testFindLang("Russian/Russia");
 
     using namespace umba::omanip;
 
