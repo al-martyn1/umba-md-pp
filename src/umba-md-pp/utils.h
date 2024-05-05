@@ -4,6 +4,8 @@
 
 #include "umba/filename.h"
 #include "umba/filesys.h"
+#include "umba/string_plus.h"
+#include "umba/transliteration.h"
 #include "tr/tr.h"
 
 //
@@ -27,73 +29,168 @@ bool findProjectOptionsFile(const std::wstring &mdFile, std::wstring &foundOptio
 
 
 inline
-std::string findLangTagByString(std::string strLang)
+std::string findLangTagByString(std::string strLang, bool useTransiteration=true)
 {
 
-	// auto trNullErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
-	// {
-	// }
-	// );
- //  
- //    auto autoRestoreTrErrHandler = mtr::AutoRestoreErrReportHandler(mtr::tr_set_err_handler(&trNullErrHandler));
- //  
- //    std::string langTag = mtr::getLocaleLanguageTag(strLang);
- //  
- //    if (!langTag.empty())
- //    {
- //        return langTag;
- //    }
+	auto trNullErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
+	{
+	}
+	);
+  
+    auto autoRestoreTrErrHandler = mtr::AutoRestoreErrReportHandler(mtr::tr_set_err_handler(&trNullErrHandler));
+    auto autoEmptyMsgNotExist    = mtr::AutoEmptyMsgNotExist(mtr::tr_set_empty_msg_not_exist(true));
+
+    umba::string_plus::trim(strLang);
+  
+    std::string langTag = mtr::getLocaleLanguageTag(strLang);
+  
+    if (!langTag.empty())
+    {
+        return langTag;
+    }
+
+    // Как найти каноничное название языка?
+
+    /*
+      Для каждого известного языка zz-ZZ:
+
+          1) Получить список переводов названий языка в категории "marty-tr/language-name" (при langTag zz-ZZ)
+             пройтись по списку. Если перевод совпадает (а лучше транлитерация и в нижнем регистре), то мы нашли каноническое название языка (на английском)
+          2) Получить список переводов названий стран в категории "marty-tr/language-location" (при langTag zz-ZZ)
+             пройтись по списку. Если перевод совпадает (а лучше транлитерация и в нижнем регистре), то мы нашли каноническое название страны (на английском)
+          3) Пройтись по сету идентификаторов языков, где язык и страна совпадут, то такой и LangTag.
+             Если не нашли, то проходимся также, но без сравнения без страны
+    */
+
+    static const std::string langNameCatId = "marty-tr/language-name";
+    static const std::string langLocCatId  = "marty-tr/language-location";
+
+    std::string langNaturalName    ;
+    std::string locationNaturalName;
+    umba::string_plus::split_to_pair(strLang, langNaturalName, locationNaturalName, '/');
+    umba::string_plus::trim(langNaturalName    );
+    umba::string_plus::trim(locationNaturalName);
+
+    std::string langNaturalNameForCmp     = langNaturalName    ;
+    std::string locationNaturalNameForCmp = locationNaturalName;
+
+    if (useTransiteration)
+    {
+        langNaturalNameForCmp      = umba::transliterate(langNaturalNameForCmp);
+        langNaturalNameForCmp      = marty_cpp::toLower (langNaturalNameForCmp);
+
+        locationNaturalNameForCmp  = umba::transliterate(locationNaturalNameForCmp);
+        locationNaturalNameForCmp  = marty_cpp::toLower (locationNaturalNameForCmp);
+    }
 
 
-    mtr::forEachLocaleInfo( [](const mtr::LocaleInfo li)
-                            {
-                                if (li.lang)
-                                {
-                                    std::cout << li.lang << "    ";
-                                }
-                                if (li.location)
-                                {
-                                    std::cout << li.location << "    ";
-                                }
-                                if (li.ltag)
-                                {
-                                    std::cout << li.ltag << "    ";
-                                }
-                                std::cout << "\n";
-                            }
-                          );
+    std::string foundCanonicalLangNaturalName    ;
+    std::string foundCanonicalLocationNaturalName;
 
 
-// struct LocaleInfo
-// {
-//     const char* const    lang    ;
-//     const char* const    location; // or type
-//     unsigned    const    langId  ; // Windows Language Identifier (Language ID, which is a part of the Windows Language Code Identifier - LCID)
-//     const char* const    ltag    ; // Language tag (locale name), en-US etc...
-// };
-    
+    std::map<std::string, mtr::StringLocaleInfo> locales = mtr::getStringLocaleInfoMap();
 
-// "marty-tr/language-name"
-// "marty-tr/language-location"
+    std::map<std::string, mtr::StringLocaleInfo>::const_iterator lcIt = locales.begin();
+    for(; lcIt!=locales.end(); ++lcIt)
+    {
+        // if (!foundCanonicalLangNaturalName.empty() && !foundCanonicalLocationNaturalName.empty())
+        //     break;
 
-    return strLang;
+        const std::string &langTag = lcIt->first;
 
+        if (foundCanonicalLangNaturalName.empty())
+        {
+	        std::vector<std::string> canonicalLangNameMsgids = mtr::tr_get_msgids(langNameCatId, langTag);
+	
+	        for(const auto &canonicalLangNameMsgid: canonicalLangNameMsgids)
+	        {
+	            if (!mtr::tr_has_msg(canonicalLangNameMsgid, langNameCatId, langTag))
+	            {
+	                continue;
+	            }
+
+                auto valForCompare = mtr::tr(canonicalLangNameMsgid, langNameCatId, langTag);
+			    if (useTransiteration)
+			    {
+			        valForCompare  = umba::transliterate(valForCompare);
+			        valForCompare  = marty_cpp::toLower (valForCompare);
+                }
+
+                if (langNaturalNameForCmp==valForCompare)
+                {
+                    foundCanonicalLangNaturalName = canonicalLangNameMsgid;
+                    break;
+                }
+	        }
+        } // if (foundCanonicalLangNaturalName.empty())
+
+
+        if (foundCanonicalLocationNaturalName.empty())
+        {
+	        std::vector<std::string> canonicalLocationNameMsgids = mtr::tr_get_msgids(langLocCatId, langTag);
+	
+	        for(const auto &canonicalLocationNameMsgid: canonicalLocationNameMsgids)
+	        {
+                if (canonicalLocationNameMsgid=="-" || canonicalLocationNameMsgid=="_")
+                {
+	                continue;
+	            }
+
+	            if (!mtr::tr_has_msg(canonicalLocationNameMsgid, langLocCatId, langTag))
+	            {
+	                continue;
+	            }
+
+                auto valForCompare = mtr::tr(canonicalLocationNameMsgid, langLocCatId, langTag);
+			    if (useTransiteration)
+			    {
+			        valForCompare  = umba::transliterate(valForCompare);
+			        valForCompare  = marty_cpp::toLower (valForCompare);
+                }
+
+                if (locationNaturalNameForCmp==valForCompare)
+                {
+                    foundCanonicalLocationNaturalName = canonicalLocationNameMsgid;
+                    break;
+                }
+	        }
+        } // if (foundCanonicalLocationNaturalName.empty())
+
+        //tr_enumerate_msgids(THandler handler, std::string catId, std::string langId)
+    }
+
+    lcIt = locales.begin();
+    for(; lcIt!=locales.end(); ++lcIt)
+    {
+        const std::string &langTag  = lcIt->first;
+        const std::string &lang     = lcIt->second.lang    ;
+        const std::string &location = lcIt->second.location;
+
+        if (foundCanonicalLangNaturalName==lang && foundCanonicalLocationNaturalName==location && !location.empty())
+        {
+            return langTag;
+        }
+    }
+
+
+    lcIt = locales.begin();
+    for(; lcIt!=locales.end(); ++lcIt)
+    {
+        const std::string &langTag  = lcIt->first;
+        const std::string &lang     = lcIt->second.lang    ;
+        const std::string &location = lcIt->second.location;
+
+        if (foundCanonicalLangNaturalName==lang)
+        {
+            return langTag;
+        }
+    }
+
+
+    return std::string();
 
 }
 
-//std::string getLocaleLanguageTag( std::string langTag, bool neutralAllowed = false )
-
-// const LocaleInfo* getLocaleInfo( std::string langTag, bool neutralAllowed = false )
-
-// std::string getLocaleLanguageTag( std::string langTag, bool neutralAllowed = false )
-
-// template<typename THandler> inline void tr_enumerate_msgids(THandler handler, std::string catId, std::string langId)
-// std::vector<std::string> tr_get_msgids(std::string catId, std::string langId)
-// std::vector<std::string> tr_get_msgids(std::string catId)
-// isNumericLanguageTag(const std::string &langTag)
-
-// template<typename Handler> inline
-// void forEachLocaleInfo(Handler handler)
 
 
 
