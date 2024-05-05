@@ -527,6 +527,31 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("NAME")
+               || opt.isOption("target-format") || opt.isOption('R')
+               || opt.setDescription("Set target format (md/html/rtf/pdf). "))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting target format requires argument (--target-format)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            auto tgFormat = enum_deserialize(optArg, TargetFormat::invalid);
+            if (tgFormat==TargetFormat::invalid)
+            {
+                LOG_ERR_OPT<<"Setting target format failed, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+
+            appConfig.targetFormat = tgFormat;
+
+            return 0;
+        }
+
         else if ( opt.setParam("TAG:REPLACETO")
                || opt.isOption("meta-tag-replace") || opt.isOption('m')
                || opt.setDescription("Add meta tag name replacement."))

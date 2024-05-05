@@ -267,7 +267,9 @@ enum class ProcessingOptions : std::uint32_t
     noMetaData            = 0x1050,
     metaData              = 0x1051,
     noTitle               = 0x1060 /*!< Don't add title to document */,
-    title                 = 0x1061 /*!< Add title to document if it exist in metadata */
+    title                 = 0x1061 /*!< Add title to document if it exist in metadata */,
+    noParseGithubAlerts   = 0x1070,
+    parseGithubAlerts     = 0x1071
 
 }; // enum class ProcessingOptions : std::uint32_t
 
@@ -287,6 +289,8 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noMetaData            , "NoMetaData"          );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::metaData              , "MetaData"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::title                 , "Title"               );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts   , "NoParseGithubAlerts" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts     , "ParseGithubAlerts"   );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
@@ -326,6 +330,12 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData              , "meta_data"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData              , "metadata"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::title                 , "title"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts   , "no-parse-github-alerts" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts   , "no_parse_github_alerts" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts   , "noparsegithubalerts"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts     , "parse-github-alerts"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts     , "parse_github_alerts"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts     , "parsegithubalerts"      );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 
@@ -513,5 +523,36 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::list          , "list"         );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::set           , "set"          );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MetaTagType, std::map, 1 )
+
+
+enum class TargetFormat : std::uint32_t
+{
+    invalid   = (std::uint32_t)(-1),
+    unknown   = (std::uint32_t)(-1),
+    md        = 0x0000,
+    html      = 0x0001,
+    rtf       = 0x1000,
+    pdf       = 0x1001
+
+}; // enum class TargetFormat : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(TargetFormat)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( TargetFormat, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::html      , "Html"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::invalid   , "Invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::md        , "Md"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::rtf       , "Rtf"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetFormat::pdf       , "Pdf"     );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( TargetFormat, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( TargetFormat, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::html      , "html"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::invalid   , "unknown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::md        , "md"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::rtf       , "rtf"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetFormat::pdf       , "pdf"     );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( TargetFormat, std::map, 1 )
 
 

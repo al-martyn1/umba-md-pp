@@ -41,5 +41,6 @@ umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% ^
                                           %UINT32% %HEX4% -E=LineHandlerEvent              -F=@LineHandlerEvent.txt             ^
                                           %UINT32% %HEX4% -E=PreprocessorParsingState      -F=@PreprocessorParsingState.txt     ^
                                           %UINT32% %HEX4% -E=MetaTagType                   -F=@MetaTagType.txt                  ^
+                                          %UINT32% %HEX4% -E=TargetFormat                  -F=@TargetFormat.txt                 ^
 ..\enums.h
 

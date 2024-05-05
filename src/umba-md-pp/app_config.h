@@ -58,6 +58,7 @@ struct AppConfig
     std::unordered_set<ProcessingOptions>                 processingOptions;
 
     TargetRenderer                                        targetRenderer = TargetRenderer::github;
+    TargetFormat                                          targetFormat   = TargetFormat::md;
 
     std::unordered_map<std::string, std::string>          metaTagReplaceMap;
     std::unordered_map<std::string, std::string>          metaTagSerializeMap;
