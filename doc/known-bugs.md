@@ -11,7 +11,7 @@
     https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
   - [X] Уметь парсить обозначения языков, включая их естественные названия (без учета регистра), превращая их в идентификаторы. По этим идентификаторам
     мы и будем вставлять локализованные Note, Tip, Important, Warning, Caution (будет группа github-alerts).
-  - [ ] По этому lang-id также будем задавать язык для доксигена
+  - [X] По этому lang-id также будем задавать язык для доксигена
   - [X] Язык документа можно определять по тэгу Language в документе, или новой опцией --document-language=ru, --lang=ru
   - [X] Принудительно переопределяем язык документа опцией --force-document-language=ru, --force-lang=ru
   - [ ] если не задан выходной файл, проверяем входной файл. Если начинается на точку, то просто убираем лидирующую точку. Если расширение начинается 
