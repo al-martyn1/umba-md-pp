@@ -1,5 +1,3 @@
-# Препроцессор для Markdown
-
 
 # 1 Title
 
@@ -224,17 +222,6 @@ cpp/print_ver.h:7
 #### 1.0.2.1 Other Subtitle
 
 Bla-bla.
-
-  - [1 Title](#user-content-1-title)
-      - [1.0.1 Title](#user-content-101-title)
-        - [1.0.1.1 Subtitle](#user-content-1011-subtitle)
-          - [1.0.1.1.1 Русский заголовок третьего уровня](#user-content-10111-русский-заголовок-третьего-уровня)
-      - [1.0.2 Other Title](#user-content-102-other-title)
-        - [1.0.2.1 Other Subtitle](#user-content-1021-other-subtitle)
-    - [1.1 Subtitle](#user-content-11-subtitle)
-      - [1.1.1 Русский заголовок третьего уровня](#user-content-111-русский-заголовок-третьего-уровня)
-  - [2 Other Title](#user-content-2-other-title)
-    - [2.1 Other Subtitle](#user-content-21-other-subtitle)
 
 
 

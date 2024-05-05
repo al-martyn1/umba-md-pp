@@ -124,10 +124,185 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 );
 
 
+inline
+std::string jsonEscape(const std::string &str)
+{
+    std::string res; res.reserve(str.size());
+
+    for(auto ch: str)
+    {
+        if (ch=='\\')
+        {
+            res.append(2,'\\');
+        }
+        else if (ch=='\"')
+        {
+            res.append(1,'\\');
+            res.append(1,'\"');
+        }
+        else
+        {
+            res.append(1,ch);
+        }
+    }
+
+    return res;
+}
+
+
 int main(int argc, char* argv[])
 {
     marty_tr::tr_set_err_handler(&trErrHandler);
     marty_tr::tr_init_all_translations(tr_get_translations_json());
+
+    auto autoEmptyMsgNotExist    = mtr::AutoEmptyMsgNotExist(mtr::tr_set_empty_msg_not_exist(true));
+
+
+    std::map<std::string, std::string> toCanonicalLangMap;
+    std::map<std::string, std::string> toCanonicalLocationMap;
+    std::map<std::string, std::string> toLangTagMap;
+
+
+
+    static const std::string langNameCatId = "marty-tr/language-name";
+    static const std::string langLocCatId  = "marty-tr/language-location";
+
+    std::map<std::string, mtr::StringLocaleInfo> locales = mtr::getStringLocaleInfoMap();
+
+    // std::cout << "Identifiers to canonical lang/location\n";
+
+
+    std::map<std::string, mtr::StringLocaleInfo>::const_iterator lcIt = locales.begin();
+    for(; lcIt!=locales.end(); ++lcIt)
+    {
+        const std::string &langTag = lcIt->first;
+
+        std::string langLocation = lcIt->second.lang;
+        if (!lcIt->second.location.empty() && lcIt->second.location!="-" && lcIt->second.location!="_")
+        {
+            langLocation.append(1,'/');
+            langLocation.append(lcIt->second.location);
+        }
+
+        //std::cout << langTag << ":   " << langLocation << "\n";
+        if (toLangTagMap.find(langLocation)==toLangTagMap.end())
+        {
+            toLangTagMap[langLocation] = langTag;
+        }
+        
+
+    // std::string          lang    ;
+    // std::string          location; // or type
+    // unsigned             langId  ; // Windows Language Identifier (Language ID, which is a part of the Windows Language Code Identifier - LCID)
+    // std::string          ltag    ; // Language tag (locale name), en-US etc...
+
+
+        std::vector<std::string> canonicalLangNameMsgids = mtr::tr_get_msgids(langNameCatId, langTag);
+
+        for(const auto &canonicalLangNameMsgid: canonicalLangNameMsgids)
+        {
+            if (canonicalLangNameMsgid=="-" || canonicalLangNameMsgid=="_")
+            {
+                continue;
+            }
+
+            if (!mtr::tr_has_msg(canonicalLangNameMsgid, langNameCatId, langTag))
+            {
+                continue;
+            }
+
+            auto valForCompare = mtr::tr(canonicalLangNameMsgid, langNameCatId, langTag);
+            valForCompare  = umba::transliterate(valForCompare);
+            valForCompare  = marty_cpp::toLower (valForCompare);
+
+            if (toCanonicalLangMap.find(valForCompare)==toCanonicalLangMap.end())
+            {
+                toCanonicalLangMap[valForCompare] = canonicalLangNameMsgid;
+            }
+        }
+
+
+	    std::vector<std::string> canonicalLocationNameMsgids = mtr::tr_get_msgids(langLocCatId, langTag);
+	
+	    for(const auto &canonicalLocationNameMsgid: canonicalLocationNameMsgids)
+	    {
+	        if (canonicalLocationNameMsgid=="-" || canonicalLocationNameMsgid=="_")
+	        {
+	            continue;
+	        }
+	
+	        if (!mtr::tr_has_msg(canonicalLocationNameMsgid, langLocCatId, langTag))
+	        {
+	            continue;
+	        }
+	
+	        auto valForCompare = mtr::tr(canonicalLocationNameMsgid, langLocCatId, langTag);
+	        valForCompare  = umba::transliterate(valForCompare);
+	        valForCompare  = marty_cpp::toLower (valForCompare);
+	
+            if (toCanonicalLocationMap.find(valForCompare)==toCanonicalLocationMap.end())
+            {
+                toCanonicalLocationMap[valForCompare] = canonicalLocationNameMsgid;
+            }
+	    }
+
+    }
+
+    std::cout << "{\n\"0409\": {\n\"language-location-to-lang-tag\": {\n";
+
+    bool 
+    bFirst = true;
+    std::map<std::string, std::string>::const_iterator
+    it = toLangTagMap.begin();
+    for(; it!=toLangTagMap.end(); ++it)
+    {
+        if (!bFirst)
+            std::cout << ", ";
+        else
+            std::cout << "  ";
+
+        std::cout << "\"" << jsonEscape(it->first) << "\": \"" << jsonEscape(it->second) << "\"\n";
+
+        bFirst = false;
+    }
+
+    std::cout << "},\n";
+    std::cout << "\"natural-language-to-canonical\": {\n";
+
+    bFirst = true;
+    it = toCanonicalLangMap.begin();
+    for(; it!=toCanonicalLangMap.end(); ++it)
+    {
+        if (!bFirst)
+            std::cout << ", ";
+        else
+            std::cout << "  ";
+
+        std::cout << "\"" << jsonEscape(it->first) << "\": \"" << jsonEscape(it->second) << "\"\n";
+
+        bFirst = false;
+    }
+
+    std::cout << "},\n";
+    std::cout << "\"natural-location-to-canonical\": {\n";
+
+    bFirst = true;
+    it = toCanonicalLocationMap.begin();
+    for(; it!=toCanonicalLocationMap.end(); ++it)
+    {
+        if (!bFirst)
+            std::cout << ", ";
+        else
+            std::cout << "  ";
+
+        std::cout << "\"" << jsonEscape(it->first) << "\": \"" << jsonEscape(it->second) << "\"\n";
+
+        bFirst = false;
+    }
+
+    std::cout << "}\n"; // Конец группы
+    std::cout << "}\n"; // Конец 0409
+    std::cout << "}\n"; // Конец json
 
     return 0;
 }

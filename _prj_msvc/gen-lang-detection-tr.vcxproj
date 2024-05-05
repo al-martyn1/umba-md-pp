@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DB0E26F8-B2E1-48D9-90C8-CC4A96393F1A}</ProjectGuid>
+    <ProjectGuid>{7A9676B9-3D69-4F35-93CF-65AAA41A7207}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <Import Project=".\props\umba_project_configurations.props" />

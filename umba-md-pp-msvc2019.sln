@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "umba-md-pp-view", "_prj_msv
 		{5E9F7FDF-0402-4004-98FD-01852CF7477E} = {5E9F7FDF-0402-4004-98FD-01852CF7477E}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gen-lang-detection-tr", "_prj_msvc\gen-lang-detection-tr.vcxproj", "{7A9676B9-3D69-4F35-93CF-65AAA41A7207}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -90,6 +92,20 @@ Global
 		{75981B45-54AF-40FC-B310-BE1368943091}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
 		{75981B45-54AF-40FC-B310-BE1368943091}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
 		{75981B45-54AF-40FC-B310-BE1368943091}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.Debug|x64.ActiveCfg = Debug|x64
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.Debug|x64.Build.0 = Debug|x64
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.Debug|x86.ActiveCfg = Debug|Win32
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.Debug|x86.Build.0 = Debug|Win32
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.MinSizeRel|x86.ActiveCfg = MinSizeRel|x64
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.Release|x64.ActiveCfg = Release|x64
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.Release|x64.Build.0 = Release|x64
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.Release|x86.ActiveCfg = Release|Win32
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.Release|x86.Build.0 = Release|Win32
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

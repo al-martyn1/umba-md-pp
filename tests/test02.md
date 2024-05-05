@@ -1,11 +1,3 @@
-# Препроцессор для Markdown
-
-  - [1 Title](#user-content-1-title)
-    - [1.1 Subtitle](#user-content-11-subtitle)
-      - [1.1.1 Русский заголовок третьего уровня](#user-content-111-русский-заголовок-третьего-уровня)
-  - [2 Other Title](#user-content-2-other-title)
-    - [2.1 Other Subtitle](#user-content-21-other-subtitle)
-
 
 # 1 Title
 

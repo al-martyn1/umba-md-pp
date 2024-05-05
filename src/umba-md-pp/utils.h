@@ -29,7 +29,7 @@ bool findProjectOptionsFile(const std::wstring &mdFile, std::wstring &foundOptio
 
 
 inline
-std::string findLangTagByString(std::string strLang, bool useTransiteration=true)
+std::string findLangTagByString(std::string strLang)
 {
 
 	auto trNullErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
@@ -48,6 +48,62 @@ std::string findLangTagByString(std::string strLang, bool useTransiteration=true
     {
         return langTag;
     }
+
+    std::string langNaturalName    ;
+    std::string locationNaturalName;
+    umba::string_plus::split_to_pair(strLang, langNaturalName, locationNaturalName, '/');
+    umba::string_plus::trim(langNaturalName    );
+    umba::string_plus::trim(locationNaturalName);
+
+    langNaturalName      = umba::transliterate(langNaturalName);
+    langNaturalName      = marty_cpp::toLower (langNaturalName);
+
+    locationNaturalName  = umba::transliterate(locationNaturalName);
+    locationNaturalName  = marty_cpp::toLower (locationNaturalName);
+
+
+    std::string foundCanonicalLangName    ;
+    std::string foundCanonicalLocationName;
+
+
+    // natural-language-to-canonical
+    // natural-location-to-canonical
+    // language-location-to-lang-tag
+
+
+    if (!mtr::tr_has_msg(langNaturalName, "natural-language-to-canonical", "en"))
+    {
+        return std::string();
+    }
+
+    foundCanonicalLangName = mtr::tr(langNaturalName, "natural-language-to-canonical", "en");
+
+
+    if (mtr::tr_has_msg(locationNaturalName, "natural-location-to-canonical", "en"))
+    {
+        foundCanonicalLocationName = mtr::tr(locationNaturalName, "natural-location-to-canonical", "en");
+    }
+
+    std::string canonicalLangLocation = foundCanonicalLangName;
+    if (!foundCanonicalLocationName.empty())
+    {
+        canonicalLangLocation.append(1,'/');
+        canonicalLangLocation.append(foundCanonicalLocationName);
+    }
+
+    if (mtr::tr_has_msg(canonicalLangLocation, "language-location-to-lang-tag", "en"))
+    {
+        return mtr::tr(canonicalLangLocation, "language-location-to-lang-tag", "en");
+    }
+
+    if (mtr::tr_has_msg(foundCanonicalLangName, "language-location-to-lang-tag", "en"))
+    {
+        return mtr::tr(foundCanonicalLangName, "language-location-to-lang-tag", "en");
+    }
+
+    return std::string();
+
+#if 0
 
     // Как найти каноничное название языка?
 
@@ -188,6 +244,7 @@ std::string findLangTagByString(std::string strLang, bool useTransiteration=true
 
 
     return std::string();
+#endif
 
 }
 
