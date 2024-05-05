@@ -9,11 +9,11 @@
     слова Note, Tip, Important, Warning, Caution или их локализованные варианты.
     https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
     https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
-  - [ ] Уметь парсить обозначения языков, включая их естественные названия (без учета регистра), превращая их в идентификаторы. По этим идентификаторам
+  - [X] Уметь парсить обозначения языков, включая их естественные названия (без учета регистра), превращая их в идентификаторы. По этим идентификаторам
     мы и будем вставлять локализованные Note, Tip, Important, Warning, Caution (будет группа github-alerts).
   - [ ] По этому lang-id также будем задавать язык для доксигена
-  - [ ] Язык документа можно определять по тэгу Language в документе, или новой опцией --document-language=ru, --lang=ru
-  - [ ] Принудительно переопределяем язык документа опцией --force-document-language=ru, --force-lang=ru
+  - [X] Язык документа можно определять по тэгу Language в документе, или новой опцией --document-language=ru, --lang=ru
+  - [X] Принудительно переопределяем язык документа опцией --force-document-language=ru, --force-lang=ru
   - [ ] если не задан выходной файл, проверяем входной файл. Если начинается на точку, то просто убираем лидирующую точку. Если расширение начинается 
     или заканчивается на '_' - убираем этот символ
   - [X] бага в генерации id для секций под доксиген - вместо подчеркивания появляется символ 0x7F

@@ -173,6 +173,28 @@ struct Document
         return true;
     }
 
+    template<typename FilenameStringType>
+    std::string getDocumentLanguage(const AppConfig<FilenameStringType> &appCfg) const
+    {
+        if (!appCfg.documentForceLanguage.empty())
+        {
+            return appCfg.documentForceLanguage;
+        }
+
+        std::string lang;
+        if (getMetaTagValueAsSingleLineText(appCfg, "lanuage", ",", lang))
+        {
+            return lang;
+        }
+
+        if (!appCfg.documentDefaultLanguage.empty())
+        {
+            return appCfg.documentDefaultLanguage;
+        }
+
+        return "en-US";
+
+    }
 
 }; // struct Document
 

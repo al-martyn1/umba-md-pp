@@ -69,6 +69,9 @@ struct AppConfig
 
     std::size_t                                           restrictPathRaise = 0;
 
+    std::string                                           documentDefaultLanguage;
+    std::string                                           documentForceLanguage;
+
 
     bool setMetaTagSerializeList(std::string str)
     {

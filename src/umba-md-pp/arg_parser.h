@@ -677,6 +677,42 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("LANG",true)
+               || opt.isOption("document-language")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Set default document language, which used if no language tag in document meta info."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+         
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.documentDefaultLanguage = umba::toUtf8(strVal);
+            return 0;
+        }
+
+        else if ( opt.setParam("LANG",true)
+               || opt.isOption("force-document-language")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Force set document language, override document meta info."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+         
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.documentForceLanguage = umba::toUtf8(strVal);
+            return 0;
+        }
+
+
+
         // else if ( opt.isOption("all")
         //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")
         //         )
