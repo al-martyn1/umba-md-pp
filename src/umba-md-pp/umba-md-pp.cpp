@@ -12,6 +12,7 @@
 //#+sort
 
 #include "umba/debug_helpers.h"
+#include "umba/time_service.h"
 
 #include <iostream>
 #include <iomanip>
@@ -125,6 +126,7 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 
 int main(int argc, char* argv[])
 {
+    umba::time_service::init();
 
     marty_tr::tr_set_err_handler(&trErrHandler);
     marty_tr::tr_init_all_translations(tr_get_translations_json());
@@ -137,14 +139,18 @@ int main(int argc, char* argv[])
 
     auto testFindLang = [&](std::string strLang)
     {
+        umba::time_service::TimeTick startTick = umba::time_service::getCurTimeMs();
         std::cout << "Taken lang: " << strLang << ", found id: " << findLangTagByString(strLang) << "\n";
+        umba::time_service::TimeTick tickDelta = umba::time_service::getCurTimeMs()-startTick;
+        std::cout << "Time ellapsed: " << tickDelta << "\n\n";
+
     };
 
+    testFindLang("Русский/Россия");
+    testFindLang("Русский");
     testFindLang("en-US");
     testFindLang("English/United States");
     testFindLang("Russian/Russia");
-    testFindLang("Русский");
-    testFindLang("Русский/Россия");
 
     using namespace umba::omanip;
 

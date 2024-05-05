@@ -35,6 +35,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\umba-md-pp\umba-md-pp.cpp" />
     <ClCompile Include="..\_libs\sfmt\umba_lout.cpp" />
+    <ClCompile Include="..\_libs\umba\time_service.cpp" />
     <ClCompile Include="..\_libs\encoding\encoding.cpp" />
     <ClCompile Include="..\_libs\encoding\compact_enc_det\compact_enc_det.cc" />
     <ClCompile Include="..\_libs\encoding\compact_enc_det\compact_enc_det_hint_code.cc" />
