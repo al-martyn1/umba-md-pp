@@ -131,30 +131,8 @@ int main(int argc, char* argv[])
     marty_tr::tr_set_err_handler(&trErrHandler);
     marty_tr::tr_init_all_translations(tr_get_translations_json());
 
-    auto helloWorld = mtr::tr("Hello world!");
-    std::cout << helloWorld << "\n";
-    // std::cout << underwood::tr("Hello non-translated world!") << "\n";
 
-    //mtr::tr_set_def_lang("en-US");
-
-    // auto testFindLang = [&](std::string strLang)
-    // {
-    //     umba::time_service::TimeTick startTick = umba::time_service::getCurTimeMs();
-    //     std::cout << "Taken lang  : " << strLang << ", found id: " << findLangTagByString(strLang) << "\n";
-    //     std::cout << "Doxygen lang: " << findGoxygenLanguageByLangTag(findLangTagByString(strLang)) << "\n";
-    //     umba::time_service::TimeTick tickDelta = umba::time_service::getCurTimeMs()-startTick;
-    //     std::cout << "Time ellapsed: " << tickDelta << "\n\n";
-    //  
-    // };
-    //  
-    // testFindLang("Русский/Россия");
-    // testFindLang("Русский");
-    // testFindLang("en");
-    // testFindLang("en-US");
-    // testFindLang("English");
-    // testFindLang("English/United Kingdom");
-    // testFindLang("English/United States");
-    // testFindLang("Russian/Russia");
+    std::cout << "Doxygen: " << umba::toUtf8(findDoxygenExecutableName()) << "\n";
 
     using namespace umba::omanip;
 

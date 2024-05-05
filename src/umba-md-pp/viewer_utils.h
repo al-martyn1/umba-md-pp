@@ -2,10 +2,15 @@
 
 #include "app_config.h"
 #include "document.h"
+
+//
+#include "umba/umba.h"
 #include "umba/filename.h"
 #include "umba/filesys.h"
 //
 #include <string>
+
+    
 
 
 //std::size_t h1 = std::hash<std::string>{}(s.first_name);
@@ -122,11 +127,11 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
     }
 
     // English/Russian
-    str = doc.getMetaTagValueAsSingleLineText(appCfg, "language", ",");
-    if (!str.empty())
-    {
-        lines.emplace_back("OUTPUT_LANGUAGE        = " + str);
-    }
+    str = doc.getDocumentLanguage(appCfg);
+    if (str.empty())
+        str = "English";
+    lines.emplace_back("OUTPUT_LANGUAGE        = " + str);
+    
 
     return marty_cpp::mergeLines(lines, getConfigsLinefeed(), true  /* addTrailingNewLine */ );
 }
@@ -178,6 +183,139 @@ std::string generateFinalFilenameFromTitle(const std::string &titleStr)
 
     return resFilename;
 }
+
+inline
+bool isWindows32OnWindows64()
+{
+    #if !defined(WIN32) && defined(_WIN32)
+
+        return false; // not a windows at all
+
+    #else
+
+        //#if defined(WIN64) || defined(_WIN64)
+
+        //    return false; // 64хбитное приложение, нет проблем
+
+        //#else
+
+            // https://stackoverflow.com/questions/14184137/how-can-i-determine-whether-a-process-is-32-or-64-bit
+
+            typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+
+            BOOL bIsWow64 = FALSE;
+
+            auto hKernel = GetModuleHandle(TEXT("kernel32"));
+            if (hKernel)
+            {
+	            LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(hKernel,"IsWow64Process");
+                if (fnIsWow64Process)
+                {
+                    if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
+                    {
+                        //handle error
+                    }                
+                }
+            }
+
+            return bIsWow64 ? true : false;
+
+        //#endif
+
+    #endif
+}
+
+
+typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+
+inline
+std::wstring findDoxygenExecutableName()
+{
+    #if !defined(WIN32) && defined(_WIN32)
+
+        return L"doxygen";
+
+    #else
+
+        // https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-functions
+
+        std::wstring doxygen = L"doxygen.exe";
+
+
+        // Doxygen можно поискать тут:
+        // Компьютер\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\doxygen_is1
+        // "Inno Setup: App Path"
+        // "InstallLocation"
+
+        // KEY_WOW64_64KEY
+
+        REGSAM samDesired = KEY_READ;
+        if (isWindows32OnWindows64()) // 32х-битные системы сейчас конечно уже экзотика, но на всякий случай - я же и на XP могу работать
+        {
+            samDesired |= KEY_WOW64_64KEY;
+        }
+
+        HKEY hk = 0;
+        LSTATUS status = RegOpenKeyExW( HKEY_LOCAL_MACHINE
+                                      //, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Conan Package Manager_is1"
+                                      , L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\doxygen_is1"
+                                      //, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"
+                                      //, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion"
+                                      //, L"SOFTWARE\\Microsoft\\Windows"
+                                      //, L"SOFTWARE\\Microsoft"
+                                      //, L"SOFTWARE"
+                                      , 0 // ulOptions
+                                      , samDesired
+                                      , &hk
+                                      );
+        if (status==ERROR_SUCCESS)
+        {
+            wchar_t buf[1024];
+            DWORD type;
+            DWORD cbData = sizeof(buf); // in bytes
+            status = RegQueryValueExW( hk
+                                     , L"InstallLocation"
+                                     , 0 // reserved
+                                     , &type
+                                     , (LPBYTE)&buf[0]
+                                     , &cbData
+                                     );
+
+            if (status==ERROR_SUCCESS && type==REG_SZ)
+            {
+                if (cbData>(sizeof(buf)-1))
+                    cbData = sizeof(buf)-1;
+
+                std::size_t numChars = cbData/sizeof(wchar_t);
+                if (numChars>0)
+                {
+                    if (buf[numChars-1]==0)
+                        --numChars;
+                }
+
+                if (numChars>0)
+                {
+	                doxygen = std::wstring(buf, numChars);
+	                doxygen = umba::filename::appendPath(doxygen, std::wstring(L"doxygen.exe"));
+                }
+
+            }
+        
+            RegCloseKey(hk);
+        }
+
+        return doxygen;
+
+    #endif
+}
+
+
+
+
+
+
+
+
 
 
 /*
