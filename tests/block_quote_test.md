@@ -63,19 +63,22 @@ listing
  - Does
  - list
  - breaks
- - block quote&
+ - block quote
 
 Bla-bla-bla bla-bla-bla bla-bla-bla
 - list 1
 - list 1
 - list 1
 Bla-bla-bla bla-bla-bla bla-bla-bla
- - list 1
- - list 1
- - list 1
+ - list 2
+ - list 2
+ - list 2
 Bla-bla-bla bla-bla-bla bla-bla-bla
 
-- list 1
-- list 1
-- list 1
+- list 3
+- list 3
+- list 3
+
+Bla-bla-bla bla-bla-bla bla-bla-bla
+
 
