@@ -264,15 +264,15 @@ int main(int argc, char* argv[])
     //unsigned lineNo = 0;
 
 
-    appConfig.checkAdjustDocNumericLevels();
-    appConfig.checkTargetFormat();
-
     std::string projectOptionsFile;
     if (findProjectOptionsFile(inputFilename, projectOptionsFile))
     {
         appConfig.setStrictPathFromFilename(projectOptionsFile);
         argsParser.parseOptionsFile(projectOptionsFile);
     }
+
+    appConfig.checkAdjustDocNumericLevels();
+    appConfig.checkTargetFormat();
 
 
     Document doc;

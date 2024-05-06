@@ -283,15 +283,22 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
     //unsigned lineNo = 0;
 
 
-    appConfig.checkAdjustDocNumericLevels();
-    appConfig.checkTargetFormat();
-
     FilenameStringType projectOptionsFile;
     if (findProjectOptionsFile(inputFilename, projectOptionsFile))
     {
         appConfig.setStrictPathFromFilename(projectOptionsFile);
         argsParser.parseOptionsFile(projectOptionsFile);
     }
+
+    // Необходимо для нормальной генерации доксигеном RTF'а
+    appConfig.targetRenderer = TargetRenderer::doxygen;
+    appConfig.targetFormat   = TargetFormat::rtf;
+    appConfig.updateProcessingOptions("title");
+    
+
+    appConfig.checkAdjustDocNumericLevels();
+    appConfig.checkTargetFormat();
+
 
     //std::string docTitle;
     Document doc;

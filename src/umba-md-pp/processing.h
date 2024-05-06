@@ -1167,7 +1167,9 @@ std::string generateSectionIdImpl(const AppConfig<FilenameStringType> &appCfg, s
     }
     else if (appCfg.targetRenderer==TargetRenderer::doxygen)
     {
-        return umba::generateIdFromText_generic(secText, '-');
+        auto res = umba::generateIdFromText_generic(secText, '-');
+        umba::string_plus::trim(res, [](char ch) { return ch=='-'; } );
+        return res;
     }
     else
     {
