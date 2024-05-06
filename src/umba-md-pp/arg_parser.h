@@ -528,7 +528,7 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("NAME")
-               || opt.isOption("target-format") || opt.isOption('R')
+               || opt.isOption("target-format") // || opt.isOption('R')
                || opt.setDescription("Set target format (md/html/rtf/pdf). "))
         {
             if (argsParser.hasHelpOption) return 0;
