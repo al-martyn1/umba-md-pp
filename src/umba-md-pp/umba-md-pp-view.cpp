@@ -151,20 +151,88 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 );
 
 
+/*
+    У нас есть такие ситуации:
+
+    1) У нас неюникодное оконное приложение, собирается под MSVC. Есть 
+       - WinMain
+       - main_impl
+
+    2) У нас юникодное оконное приложение, собирается под MSVC. Есть 
+       - wWinMain
+       - wmain_impl
+
+    3) У нас неюникодное оконное приложение, собирается под GCC. Есть 
+       - WinMain
+       - main_impl
+
+    4) У нас юникодное оконное приложение, собирается под GCC. Есть 
+       - wWinMain
+       - wmain_impl
+
+    5) У нас неюникодное консольное приложение, собирается под MSVC. Есть 
+       - main
+
+    6) У нас юникодное консольное приложение, собирается под MSVC. Есть 
+       - wmain
+
+    7) У нас неюникодное консольное приложение, собирается под GCC. Есть 
+       - WinMain
+       - main_impl
+
+    8) У нас юникодное консольное приложение, собирается под GCC. Есть 
+       - wWinMain
+       - wmain_impl
+
+    Итого:
+
+                        UNICODE             UNICODE             UNICODE             UNICODE
+              Windows   Windows   Windows   Windows   Console   Console   Console   Console
+              MSVC      MSVC      GCC       GCC       MSVC      MSVC      GCC       GCC    
+
+WinMain         +                   +                                       +
+wWinMain                  +                   +                                       +
+main_impl       +                   +                                       +
+wmain_impl                +                   +                                       +
+main                                                    +
+wmain                                                             +
+
+
+main/wmain - нужны только для MSVC/Console
+
+Вопрос: обходной путь через жопу с использованием WinMain/wWinMain нужен только для GCC или для всех, кроме MSVC?
+
+
+ */
+
+
+#if defined(_MSC_VER) && defined(UMBA_MD_PP_VIEW_CONSOLE)
+
+    #define UMBA_MD_PP_VIEW_NEED_MAIN_IMPL
+    #define UMBA_MD_PP_VIEW_NEED_MAIN
+
+#endif
+
+#if defined(__GNUC__) || !defined(UMBA_MD_PP_VIEW_CONSOLE)
+
+    #define UMBA_MD_PP_VIEW_NEED_MAIN_IMPL
+    #define UMBA_MD_PP_VIEW_NEED_WINMAIN
+
+#endif
+
+
+
 //#if defined(UMBA_MD_PP_VIEW_CONSOLE)
-#if !defined(UMBA_MD_PP_VIEW_CONSOLE) || ((defined(WIN32) || defined(_WIN32)) && defined(__GNUC__))
-
-    //#error "111"
-    int main(int argc, char* argv[])
-
-#else
+#if defined(UMBA_MD_PP_VIEW_NEED_MAIN_IMPL)
 
 	#ifdef TRY_UNICODE_VIEWER
-    ///#error "222"
-	int wmain_impl(int argc, wchar_t* argv[])
+
+	    int wmain_impl(int argc, wchar_t* argv[])
+
 	#else
-    ///#error "333"
-	int main_impl(int argc, char* argv[])
+
+	    int main_impl(int argc, char* argv[])
+
 	#endif
 
 #endif
@@ -502,9 +570,30 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 }
 
 
+#if defined(UMBA_MD_PP_VIEW_NEED_MAIN)
+
+    #ifdef TRY_UNICODE_VIEWER
+
+	    int wmain(int argc, wchar_t* argv[])
+        {
+            return wmain_impl(argc, argv);
+        }
+
+	#else
+
+	    int main(int argc, char* argv[])
+        {
+            return main_impl(argc, argv);
+        }
+
+	#endif
+
+#endif
+
+
 //#if (defined(WIN32) || defined(_WIN32)) && defined(__GNUC__)
 //#if defined(UMBA_MD_PP_VIEW_CONSOLE)
-#if !defined(UMBA_MD_PP_VIEW_CONSOLE) || ((defined(WIN32) || defined(_WIN32)) && defined(__GNUC__))
+#if defined(UMBA_MD_PP_VIEW_NEED_WINMAIN)
 
     //#error "444"
 
@@ -565,17 +654,7 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
         }
         argv[nArgs] = NULL;
  
-        #if defined(UMBA_MD_PP_VIEW_CONSOLE)
- 	
-            //#error "555"
-            return main(nArgs, argv);
- 
-        #else
- 
-           //#error "666"
-           return main_impl(nArgs, argv);
- 
-        #endif
+        return main_impl(nArgs, argv);
  
         #endif
  
