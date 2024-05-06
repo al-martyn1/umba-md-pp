@@ -13,4 +13,6 @@ noTitle                       =0x1060 // Don't add title to document
 title                         =0x1061 // Add title to document if it exist in metadata
 noParseGithubAlerts           =0x1070
 parseGithubAlerts             =0x1071
+noTransliterateGeneratedFilenames   =0x1080
+transliterateGeneratedFilenames     =0x1081
 

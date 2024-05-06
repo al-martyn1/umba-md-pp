@@ -167,7 +167,7 @@ std::string generateDoxygenRtfCfg(const AppConfig<FilenameStringType> &appCfg, c
 }
 
 inline
-std::string generateFinalFilenameFromTitle(const std::string &titleStr)
+std::string generateFinalFilenameFromTitle(const std::string &titleStr, bool bTransliterate)
 {
     // https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
 
@@ -185,11 +185,17 @@ std::string generateFinalFilenameFromTitle(const std::string &titleStr)
         resFilename.append(1,ch);
     }
 
+    if (bTransliterate)
+    {
+        resFilename = umba::transliterate(resFilename);
+    }
+
+
     return resFilename;
 }
 
 inline
-std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr)
+std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr, bool bTransliterate)
 {
     // https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
 
@@ -205,6 +211,12 @@ std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr)
         }
 
         resFilename.append(1,ch);
+    }
+
+    if (bTransliterate)
+    {
+        
+        resFilename = umba::fromUtf8(umba::transliterate(umba::toUtf8(resFilename)));
     }
 
     return resFilename;

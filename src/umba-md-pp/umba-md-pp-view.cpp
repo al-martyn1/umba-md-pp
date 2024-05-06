@@ -333,7 +333,7 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 
         std::cout << "Doc Title: " << docTitle << "\n";
 
-        FilenameStringType finalFilename           = generateFinalFilenameFromTitle(docTitle);
+        FilenameStringType finalFilename           = generateFinalFilenameFromTitle(docTitle, appConfig.testProcessingOption(ProcessingOptions::transliterateGeneratedFilenames));
 
         std::cout << "Generated final file name: " << finalFilename << "\n";
 

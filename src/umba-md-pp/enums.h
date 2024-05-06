@@ -254,88 +254,98 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ListingNestedTagsMode, std::map, 1 )
 
 enum class ProcessingOptions : std::uint32_t
 {
-    invalid               = (std::uint32_t)(-1),
-    unknown               = (std::uint32_t)(-1),
-    noNumericSections     = 0x1010,
-    numericSections       = 0x1011,
-    noGenerateSectionId   = 0x1020,
-    generateSectionId     = 0x1021,
-    noGenerateToc         = 0x1030,
-    generateToc           = 0x1031,
-    noStrictInsert        = 0x1040,
-    strictInsert          = 0x1041,
-    noMetaData            = 0x1050,
-    metaData              = 0x1051,
-    noTitle               = 0x1060 /*!< Don't add title to document */,
-    title                 = 0x1061 /*!< Add title to document if it exist in metadata */,
-    noParseGithubAlerts   = 0x1070,
-    parseGithubAlerts     = 0x1071
+    invalid                             = (std::uint32_t)(-1),
+    unknown                             = (std::uint32_t)(-1),
+    noNumericSections                   = 0x1010,
+    numericSections                     = 0x1011,
+    noGenerateSectionId                 = 0x1020,
+    generateSectionId                   = 0x1021,
+    noGenerateToc                       = 0x1030,
+    generateToc                         = 0x1031,
+    noStrictInsert                      = 0x1040,
+    strictInsert                        = 0x1041,
+    noMetaData                          = 0x1050,
+    metaData                            = 0x1051,
+    noTitle                             = 0x1060 /*!< Don't add title to document */,
+    title                               = 0x1061 /*!< Add title to document if it exist in metadata */,
+    noParseGithubAlerts                 = 0x1070,
+    parseGithubAlerts                   = 0x1071,
+    noTransliterateGeneratedFilenames   = 0x1080,
+    transliterateGeneratedFilenames     = 0x1081
 
 }; // enum class ProcessingOptions : std::uint32_t
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(ProcessingOptions)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::generateSectionId     , "GenerateSectionId"   );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::invalid               , "Invalid"             );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noNumericSections     , "NoNumericSections"   );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noGenerateToc         , "NoGenerateToc"       );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTitle               , "NoTitle"             );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::generateToc           , "GenerateToc"         );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::numericSections       , "NumericSections"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId   , "NoGenerateSectionId" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noStrictInsert        , "NoStrictInsert"      );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::strictInsert          , "StrictInsert"        );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noMetaData            , "NoMetaData"          );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::metaData              , "MetaData"            );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::title                 , "Title"               );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts   , "NoParseGithubAlerts" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts     , "ParseGithubAlerts"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::generateSectionId             , "GenerateSectionId"                 );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::invalid                       , "Invalid"                           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noNumericSections             , "NoNumericSections"                 );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "NoGenerateToc"                     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTitle                       , "NoTitle"                           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::generateToc                   , "GenerateToc"                       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::numericSections               , "NumericSections"                   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId           , "NoGenerateSectionId"               );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noStrictInsert                , "NoStrictInsert"                    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::strictInsert                  , "StrictInsert"                      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noMetaData                    , "NoMetaData"                        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::metaData                      , "MetaData"                          );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::title                         , "Title"                             );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "NoParseGithubAlerts"               );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts             , "ParseGithubAlerts"                 );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTransliterateGeneratedFilenames , "NoTransliterateGeneratedFilenames" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "TransliterateGeneratedFilenames"   );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateSectionId     , "generate-section-id"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateSectionId     , "generate_section_id"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateSectionId     , "generatesectionid"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::invalid               , "invalid"                );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::invalid               , "unknown"                );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noNumericSections     , "no-numeric-sections"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noNumericSections     , "no_numeric_sections"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noNumericSections     , "nonumericsections"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc         , "no-generate-toc"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc         , "no_generate_toc"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc         , "nogeneratetoc"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle               , "no-title"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle               , "no_title"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle               , "notitle"                );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc           , "generate-toc"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc           , "generate_toc"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc           , "generatetoc"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::numericSections       , "numeric-sections"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::numericSections       , "numeric_sections"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::numericSections       , "numericsections"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId   , "no-generate-section-id" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId   , "no_generate_section_id" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId   , "nogeneratesectionid"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noStrictInsert        , "no-strict-insert"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noStrictInsert        , "nostrictinsert"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noStrictInsert        , "no_strict_insert"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::strictInsert          , "strict-insert"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::strictInsert          , "strict_insert"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::strictInsert          , "strictinsert"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaData            , "no-meta-data"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaData            , "no_meta_data"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaData            , "nometadata"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData              , "meta-data"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData              , "meta_data"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData              , "metadata"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::title                 , "title"                  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts   , "no-parse-github-alerts" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts   , "no_parse_github_alerts" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts   , "noparsegithubalerts"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts     , "parse-github-alerts"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts     , "parse_github_alerts"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts     , "parsegithubalerts"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateSectionId             , "generate-section-id"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateSectionId             , "generate_section_id"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateSectionId             , "generatesectionid"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::invalid                       , "invalid"                              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::invalid                       , "unknown"                              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noNumericSections             , "no-numeric-sections"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noNumericSections             , "no_numeric_sections"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noNumericSections             , "nonumericsections"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "no-generate-toc"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "no_generate_toc"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "nogeneratetoc"                        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle                       , "no-title"                             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle                       , "no_title"                             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle                       , "notitle"                              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc                   , "generate-toc"                         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc                   , "generate_toc"                         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc                   , "generatetoc"                          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::numericSections               , "numeric-sections"                     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::numericSections               , "numeric_sections"                     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::numericSections               , "numericsections"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId           , "no-generate-section-id"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId           , "no_generate_section_id"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId           , "nogeneratesectionid"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noStrictInsert                , "no-strict-insert"                     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noStrictInsert                , "nostrictinsert"                       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noStrictInsert                , "no_strict_insert"                     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::strictInsert                  , "strict-insert"                        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::strictInsert                  , "strict_insert"                        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::strictInsert                  , "strictinsert"                         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaData                    , "no-meta-data"                         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaData                    , "no_meta_data"                         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaData                    , "nometadata"                           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData                      , "meta-data"                            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData                      , "meta_data"                            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData                      , "metadata"                             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::title                         , "title"                                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "no-parse-github-alerts"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "no_parse_github_alerts"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "noparsegithubalerts"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts             , "parse-github-alerts"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts             , "parse_github_alerts"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts             , "parsegithubalerts"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTransliterateGeneratedFilenames , "no-transliterate-generated-filenames" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTransliterateGeneratedFilenames , "no_transliterate_generated_filenames" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTransliterateGeneratedFilenames , "notransliterategeneratedfilenames"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterate-generated-filenames"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterate_generated_filenames"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterategeneratedfilenames"      );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 
