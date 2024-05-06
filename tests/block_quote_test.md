@@ -50,3 +50,14 @@ listing
 # Header breaks block quote
 
 bla-bla
+
+ > BQ12
+ > BQ12
+ > BQ12
+```
+listing
+```
+ > BQ13
+ > BQ13
+ > BQ13
+
