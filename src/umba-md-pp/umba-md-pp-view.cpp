@@ -364,6 +364,7 @@ main/wmain - нужны только для MSVC/Console
     appConfig.targetRenderer = TargetRenderer::doxygen;
     appConfig.targetFormat   = TargetFormat::rtf;
     appConfig.updateProcessingOptions("title");
+    appConfig.updateProcessingOptions("convert-github-alerts");
     
 
     appConfig.checkAdjustDocNumericLevels();
