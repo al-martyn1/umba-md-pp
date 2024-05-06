@@ -108,5 +108,18 @@ Bla-bla-bla bla-bla-bla bla-bla-bla
 
 Bla-bla-bla bla-bla-bla bla-bla-bla
 
+- list 4
+- list 4
+- list 4
 
 
+- list 5
+- list 5
+- list 5
+
+Bla-bla-bla bla-bla-bla bla-bla-bla
+
+
+
+
+Я понял, как работают списки на гитхабе
