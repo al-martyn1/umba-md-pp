@@ -11,7 +11,9 @@
     https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
   - [ ] Разобраться, что гитхаб считает как block quote, а что - нет. См. block_quote_test.md. Гитхаб [считает ](https://github.com/al-martyn1/umba-md-pp/blob/main/tests/block_quote_test.md)
         BQ1-BQ3 и следующую бла бла за один блок, BQ4/5/6 - отдельные. Доксиген считает, что первая BQ - это BQ3, и вторая это BQ6. То есть, block quote надо в любом случае
-        подшаманивать.
+        подшаманивать. В целом, гитхаб считает, что если строка начинается с символа > - это block quote, даже если нет пробела от предыдущего параграфа. Но от последующего 
+        надо отделять пустой строкой, иначе он считается как продолжение block quote. Уровень block quote считается по первой строке. Пробелы до и после символов > гитхаб 
+        игнорирует, что не скажешь о доксигене
   - [ ] Сделать события на block quote - первая строчка block quote, просто строчка block quote, конец block quote - в последнем случае будет передаваться 
         фейковая строка, которая не будет добавлятся в документ.
   - [ ] На базе событий block quote запилить обработчик github-alerts
