@@ -14,6 +14,12 @@
 
 
 inline
+std::string escapeCommandLineAegument(const std::string &str)
+{
+    std::string res; res.reserve(str.size());
+}
+
+inline
 bool findProjectOptionsFile(const std::string &mdFile, std::string &foundOptionsFile)
 {
     return umba::cli_tool_helpers::findProjectOptionsFile(mdFile, foundOptionsFile, std::vector<std::string>{".md-pp.options", ".umba-md-pp.options"});

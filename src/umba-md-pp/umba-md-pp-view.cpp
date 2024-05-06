@@ -151,15 +151,19 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 );
 
 
-#if defined(UMBA_MD_PP_VIEW_CONSOLE)
+//#if defined(UMBA_MD_PP_VIEW_CONSOLE)
+#if !defined(UMBA_MD_PP_VIEW_CONSOLE) || ((defined(WIN32) || defined(_WIN32)) && defined(__GNUC__))
 
+    //#error "111"
     int main(int argc, char* argv[])
 
 #else
 
 	#ifdef TRY_UNICODE_VIEWER
+    ///#error "222"
 	int wmain_impl(int argc, wchar_t* argv[])
 	#else
+    ///#error "333"
 	int main_impl(int argc, char* argv[])
 	#endif
 
@@ -211,7 +215,7 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 
         argsParser.args.push_back("--overwrite");
         argsParser.args.push_back(rootPath + "tests\\test04.md_");
-        // F:\_github\umba-tools\umba-md-pp\ 
+        // F:\_github\umba-tools\umba-md-pp
     }
 
 
@@ -388,6 +392,12 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
         std::wstring wDoxygenExeName = findDoxygenExecutableName();
         std::string  doxygenExeName  = umba::toUtf8(wDoxygenExeName);
 
+        #if defined(UMBA_MD_PP_VIEW_CONSOLE)
+
+            std::cout << "Found Doxygen: " << doxygenExeName << "\n";
+
+        #endif
+
         auto systemRes = system(doxygenExeName.c_str());
         if (systemRes<0)
         {
@@ -479,72 +489,89 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 
 
 //#if (defined(WIN32) || defined(_WIN32)) && defined(__GNUC__)
-#if !defined(UMBA_MD_PP_VIEW_CONSOLE)
+//#if defined(UMBA_MD_PP_VIEW_CONSOLE)
+#if !defined(UMBA_MD_PP_VIEW_CONSOLE) || ((defined(WIN32) || defined(_WIN32)) && defined(__GNUC__))
 
-   // Fix for MinGW problem - https://sourceforge.net/p/mingw-w64/bugs/942/
-   // https://github.com/brechtsanders/winlibs_mingw/issues/106
-   // https://stackoverflow.com/questions/74999026/is-there-the-commandlinetoargva-function-in-windows-c-c-vs-2022
+    //#error "444"
 
-
-   #include <winsock2.h>
-   #include <windows.h>
-   #include <shellapi.h>
-
-   #ifdef TRY_UNICODE_VIEWER
-   int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-   #else
-   int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-   #endif
-   {
-       UMBA_USED(hInstance);
-       UMBA_USED(hPrevInstance);
-       UMBA_USED(lpCmdLine);
-       UMBA_USED(nCmdShow);
-
-       int nArgs = 0;
-       wchar_t ** wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
-       if (!wargv)
-       {
-           return 1;
-       }
-
-
-       #ifdef TRY_UNICODE_VIEWER
-
-           return wmain_impl(nArgs, wargv);
-
-       #else
-
-       // Count the number of bytes necessary to store the UTF-8 versions of those strings
-       int n = 0;
-       for (int i = 0;  i < nArgs;  i++)
-       {
-         n += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, NULL, 0, NULL, NULL ) + 1;
-       }
-
-       // Allocate the argv[] array + all the UTF-8 strings
-       char **argv = (char**)new char*[( (nArgs + 1) * sizeof(char *) + n )];
-       if (!argv)
-       {
-           return 1;
-       }
-       
-       // Convert all wargv[] --> argv[]
-       char * arg = (char *)&(argv[nArgs + 1]);
-       for (int i = 0;  i < nArgs;  i++)
-       {
-         argv[i] = arg;
-         arg += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, arg, n, NULL, NULL ) + 1;
-       }
-       argv[nArgs] = NULL;
-
-
-       return main_impl(nArgs, argv);
-
-       #endif
-
-   }
+    // Fix for MinGW problem - https://sourceforge.net/p/mingw-w64/bugs/942/
+    // https://github.com/brechtsanders/winlibs_mingw/issues/106
+    // https://stackoverflow.com/questions/74999026/is-there-the-commandlinetoargva-function-in-windows-c-c-vs-2022
+ 
+ 
+    #include <winsock2.h>
+    #include <windows.h>
+    #include <shellapi.h>
+ 
+    #ifdef TRY_UNICODE_VIEWER
+    int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+    #else
+    int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+    #endif
+    {
+        UMBA_USED(hInstance);
+        UMBA_USED(hPrevInstance);
+        UMBA_USED(lpCmdLine);
+        UMBA_USED(nCmdShow);
+ 
+        int nArgs = 0;
+        wchar_t ** wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
+        if (!wargv)
+        {
+            return 1;
+        }
+ 
+ 
+        #ifdef TRY_UNICODE_VIEWER
+ 
+            return wmain_impl(nArgs, wargv);
+ 
+        #else
+ 
+        // Count the number of bytes necessary to store the UTF-8 versions of those strings
+        int n = 0;
+        for (int i = 0;  i < nArgs;  i++)
+        {
+          n += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, NULL, 0, NULL, NULL ) + 1;
+        }
+ 
+        // Allocate the argv[] array + all the UTF-8 strings
+        char **argv = (char**)new char*[( (nArgs + 1) * sizeof(char *) + n )];
+        if (!argv)
+        {
+            return 1;
+        }
+        
+        // Convert all wargv[] --> argv[]
+        char * arg = (char *)&(argv[nArgs + 1]);
+        for (int i = 0;  i < nArgs;  i++)
+        {
+          argv[i] = arg;
+          arg += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, arg, n, NULL, NULL ) + 1;
+        }
+        argv[nArgs] = NULL;
+ 
+        #if defined(UMBA_MD_PP_VIEW_CONSOLE)
+ 	
+            //#error "555"
+            return main(nArgs, argv);
+ 
+        #else
+ 
+           //#error "666"
+           return main_impl(nArgs, argv);
+ 
+        #endif
+ 
+        #endif
+ 
+    }
 
 //#endif
+
+#else
+
+//#error "777"
+
 #endif
 

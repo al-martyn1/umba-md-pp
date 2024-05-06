@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.27.0)
-project(umba-md-pp VERSION 0.1.0 LANGUAGES C CXX)
+project(umba-md-pp-view-console VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
 # Полезные ключики GCC - https://codeforces.com/blog/entry/15547?locale=ru
 
-add_compile_definitions("_WIN32" "WIN32" "_UNICODE" "UNICODE" "YAML_CPP_STATIC_DEFINE")
+#add_compile_definitions("_WIN32" "WIN32" "_UNICODE" "UNICODE" "YAML_CPP_STATIC_DEFINE")
+add_compile_definitions("_WIN32" "WIN32" "YAML_CPP_STATIC_DEFINE")
 
-add_link_options("-municode")
+#add_link_options("-municode")
 add_link_options("-mconsole")
 add_link_options("-Wl,--subsystem,console")
 #add_link_options("--subsystem,console")
@@ -112,9 +113,8 @@ set (YAML_CPP_SOURCES
 #set_source_files_properties("${LIBS_ROOT}/encoding/util/encodings/encodings.cc"                  PROPERTIES LANGUAGE C )
 #set_source_files_properties("${LIBS_ROOT}/encoding/util/languages/languages.cc"                  PROPERTIES LANGUAGE C )
 
-add_executable(umba-md-pp
-    ${YAML_CPP_SOURCES}
-    "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp"
+
+set (UMBA_MD_PP_COMMON_SOURCES
     "${LIBS_ROOT}/sfmt/umba_lout.cpp"
     "${LIBS_ROOT}/encoding/encoding.cpp"
     "${LIBS_ROOT}/encoding/compact_enc_det/compact_enc_det.cc"
@@ -122,11 +122,35 @@ add_executable(umba-md-pp
     "${LIBS_ROOT}/encoding/util/encodings/encodings.cc"
     "${LIBS_ROOT}/encoding/util/languages/languages.cc"
     )
-    #target_compile_options(Framework PUBLIC -Wa,-mbig-obj)
-    #-flto
+
+add_compile_definitions("USE_UMBA_LOUT_COUT")
 
 
-target_link_libraries(${PROJECT_NAME} ws2_32 iphlpapi shell32)
+
+#add_executable(umba-md-pp
+#    ${YAML_CPP_SOURCES}
+#    ${UMBA_MD_PP_COMMON_SOURCES}
+#    "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp"
+#    )
+
+#target_link_libraries(umba-md-pp ws2_32 iphlpapi shell32)
+
+
+add_compile_definitions("UMBA_MD_PP_VIEW_CONSOLE")
+
+add_executable(umba-md-pp-view-console
+    ${YAML_CPP_SOURCES}
+    ${UMBA_MD_PP_COMMON_SOURCES}
+    "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp"
+    )
+
+target_link_libraries(umba-md-pp-view-console ws2_32 iphlpapi shell32)
+
+
+#target_compile_options(Framework PUBLIC -Wa,-mbig-obj)
+#-flto
+
+
 
 
 #include(CPack)

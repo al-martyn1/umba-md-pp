@@ -513,7 +513,9 @@ struct AppConfig
         // if (ext.empty())
         //     continue;
 
-        std::unordered_map<FilenameStringType, std::string>::const_iterator it = extToLang.find(ext);
+        //typename std::unordered_map<typename FilenameStringType, std::string>::const_iterator it = extToLang.find(ext);
+        typedef decltype(extToLang) map_type;
+        typename map_type::const_iterator it = extToLang.find(ext);
         if (it==extToLang.end())
         {
             return std::string();
