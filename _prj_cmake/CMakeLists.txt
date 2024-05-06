@@ -127,24 +127,31 @@ add_compile_definitions("USE_UMBA_LOUT_COUT")
 
 
 
-#add_executable(umba-md-pp
-#    ${YAML_CPP_SOURCES}
-#    ${UMBA_MD_PP_COMMON_SOURCES}
-#    "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp"
-#    )
+add_executable(umba-md-pp
+    ${YAML_CPP_SOURCES}
+    ${UMBA_MD_PP_COMMON_SOURCES}
+    "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp"
+    )
+target_link_libraries(umba-md-pp ws2_32 iphlpapi shell32)
 
-#target_link_libraries(umba-md-pp ws2_32 iphlpapi shell32)
 
+add_executable(umba-md-pp-view
+    ${YAML_CPP_SOURCES}
+    ${UMBA_MD_PP_COMMON_SOURCES}
+    "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp"
+    )
+target_link_libraries(umba-md-pp-view ws2_32 iphlpapi shell32)
+#target_compile_definitions(umba-md-pp-view "UMBA_MD_PP_VIEW_CONSOLE")
 
-add_compile_definitions("UMBA_MD_PP_VIEW_CONSOLE")
 
 add_executable(umba-md-pp-view-console
     ${YAML_CPP_SOURCES}
     ${UMBA_MD_PP_COMMON_SOURCES}
     "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp"
     )
-
 target_link_libraries(umba-md-pp-view-console ws2_32 iphlpapi shell32)
+target_compile_definitions(umba-md-pp-view-console PRIVATE "UMBA_MD_PP_VIEW_CONSOLE")
+#https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements
 
 
 #target_compile_options(Framework PUBLIC -Wa,-mbig-obj)
