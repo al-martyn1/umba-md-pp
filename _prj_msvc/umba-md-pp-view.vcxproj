@@ -43,7 +43,7 @@
     <ClCompile Include="..\_libs\encoding\util\languages\languages.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\src\umba-md-pp\umba-md-pp-view.rc" />
+    <ResourceCompile Include="..\src\umba-md-pp\_umba-md-pp-view.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
