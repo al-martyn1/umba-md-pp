@@ -99,8 +99,8 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
 {
     std::vector<std::string> lines;
 
-    //lines.emplace_back("DOXYFILE_ENCODING      = UTF-8");
-    //lines.emplace_back("INPUT_ENCODING         = UTF-8");
+    lines.emplace_back("DOXYFILE_ENCODING      = UTF-8");
+    lines.emplace_back("INPUT_ENCODING         = UTF-8");
     lines.emplace_back("MARKDOWN_SUPPORT       = YES");
     lines.emplace_back("TAB_SIZE               = 4");
     lines.emplace_back("RECURSIVE              = NO");

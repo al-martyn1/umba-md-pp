@@ -391,14 +391,16 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 
         std::wstring wDoxygenExeName = findDoxygenExecutableName();
         std::string  doxygenExeName  = umba::toUtf8(wDoxygenExeName);
+        std::string  doxygenExeNameEscaped  = escapeCommandLineArgument(doxygenExeName);
 
         #if defined(UMBA_MD_PP_VIEW_CONSOLE)
 
             std::cout << "Found Doxygen: " << doxygenExeName << "\n";
+            std::cout << "Escaped      : " << doxygenExeNameEscaped << "\n";
 
         #endif
 
-        auto systemRes = system(doxygenExeName.c_str());
+        auto systemRes = system(doxygenExeNameEscaped.c_str());
         if (systemRes<0)
         {
             showErrorMessageBox("Failed to execute '" + doxygenExeName + "'");

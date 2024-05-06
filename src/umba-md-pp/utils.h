@@ -13,10 +13,31 @@
 
 
 
+
 inline
-std::string escapeCommandLineAegument(const std::string &str)
+std::string escapeCommandLineArgument(const std::string &str)
 {
+    // http://learn.microsoft.com/en-us/cpp/c-language/parsing-c-command-line-arguments?view=msvc-170
+
+    bool needEscape = false;
+    if (str.find_first_of(" \"")!=str.npos)
+       needEscape = true;
+
+    if (!needEscape)
+        return str;
+
     std::string res; res.reserve(str.size());
+    res.append(1, '\"');
+    for(auto ch : str)
+    {
+        if (ch=='\"')
+            res.append(2, '\"');
+        else
+            res.append(1, ch);
+    }
+    res.append(1, '\"');
+
+    return res;
 }
 
 inline
