@@ -6,6 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_all", "_prj_msvc\_all.vcxproj", "{D66975DB-7E59-4BE8-AD8D-C13E9B858F44}"
 	ProjectSection(ProjectDependencies) = postProject
 		{75981B45-54AF-40FC-B310-BE1368943091} = {75981B45-54AF-40FC-B310-BE1368943091}
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E} = {2C2F2760-C811-45D7-9981-602FC6EDA57E}
+		{7A9676B9-3D69-4F35-93CF-65AAA41A7207} = {7A9676B9-3D69-4F35-93CF-65AAA41A7207}
 		{5E9F7FDF-0402-4004-98FD-01852CF7477E} = {5E9F7FDF-0402-4004-98FD-01852CF7477E}
 		{DB0E26F8-B2E1-48D9-90C8-CC4A96393F1A} = {DB0E26F8-B2E1-48D9-90C8-CC4A96393F1A}
 	EndProjectSection
@@ -23,6 +25,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "umba-md-pp-view", "_prj_msv
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gen-lang-detection-tr", "_prj_msvc\gen-lang-detection-tr.vcxproj", "{7A9676B9-3D69-4F35-93CF-65AAA41A7207}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "umba-md-pp-view-console", "_prj_msvc\umba-md-pp-view-console.vcxproj", "{2C2F2760-C811-45D7-9981-602FC6EDA57E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5E9F7FDF-0402-4004-98FD-01852CF7477E} = {5E9F7FDF-0402-4004-98FD-01852CF7477E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -106,6 +113,20 @@ Global
 		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
 		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
 		{7A9676B9-3D69-4F35-93CF-65AAA41A7207}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.Debug|x64.ActiveCfg = Debug|x64
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.Debug|x64.Build.0 = Debug|x64
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.Debug|x86.ActiveCfg = Debug|Win32
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.Debug|x86.Build.0 = Debug|Win32
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.MinSizeRel|x86.ActiveCfg = MinSizeRel|x64
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.Release|x64.ActiveCfg = Release|x64
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.Release|x64.Build.0 = Release|x64
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.Release|x86.ActiveCfg = Release|Win32
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.Release|x86.Build.0 = Release|Win32
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
+		{2C2F2760-C811-45D7-9981-602FC6EDA57E}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

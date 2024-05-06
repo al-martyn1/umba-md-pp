@@ -67,9 +67,20 @@
 #include "app_config.h"
 #include "viewer_utils.h"
 
+// For 'system' function
+#include <process.h>
+
 
 // #define TRY_UNICODE_VIEWER
 
+
+#if defined(UMBA_MD_PP_VIEW_CONSOLE)
+
+    #if defined(TRY_UNICODE_VIEWER)
+        #undef TRY_UNICODE_VIEWER
+    #endif
+
+#endif
 
 
 umba::StdStreamCharWriter coutWriter(std::cout);
@@ -119,6 +130,13 @@ unsigned lineNo = 0;
 #include "processing.h"
 
 
+
+#ifdef _MSC_VER
+#pragma comment(lib, "yaml-cpp.lib")
+#endif
+
+
+
 static
 auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
 {
@@ -133,10 +151,18 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 );
 
 
-#ifdef TRY_UNICODE_VIEWER
-int wmain_impl(int argc, wchar_t* argv[])
+#if defined(UMBA_MD_PP_VIEW_CONSOLE)
+
+    int main(int argc, char* argv[])
+
 #else
-int main_impl(int argc, char* argv[])
+
+	#ifdef TRY_UNICODE_VIEWER
+	int wmain_impl(int argc, wchar_t* argv[])
+	#else
+	int main_impl(int argc, char* argv[])
+	#endif
+
 #endif
 {
 
@@ -161,6 +187,33 @@ int main_impl(int argc, char* argv[])
                                                         );
 
     //programLocationInfo = argsParser.programLocationInfo;
+
+    // Force set CLI arguments while running under debugger
+    if (umba::isDebuggerPresent())
+    {
+        #if (defined(WIN32) || defined(_WIN32))
+
+            #if defined(__GNUC__)
+
+                std::string rootPath = "..\\..\\..\\..\\..\\";
+
+            #else // if
+
+                std::string rootPath = "..\\";
+
+            #endif
+
+        #endif
+
+        argsParser.args.clear();
+
+        argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
+
+        argsParser.args.push_back("--overwrite");
+        argsParser.args.push_back(rootPath + "tests\\test04.md_");
+        // F:\_github\umba-tools\umba-md-pp\ 
+    }
+
 
     // try
     // {
@@ -236,28 +289,187 @@ int main_impl(int argc, char* argv[])
         argsParser.parseOptionsFile(projectOptionsFile);
     }
 
-
-    std::string resText = processMdFile(appConfig, inputFileText, inputFilename);
+    //std::string docTitle;
+    Document doc;
+    std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
+    std::string docTitle = doc.getDocumentTitleAny();
 
     try
     {
-        if (!argsParser.quet)
-        {
-            std::string printableOutputFilename;
-            umba::utfToStringTypeHelper(printableOutputFilename, outputFilename);
-            umbaLogStreamMsg << "Writting output to: "<<printableOutputFilename<<"\n";
-        }
+        // if (!argsParser.quet)
+        // {
+        //     std::string printableOutputFilename;
+        //     umba::utfToStringTypeHelper(printableOutputFilename, outputFilename);
+        //     umbaLogStreamMsg << "Writting output to: "<<printableOutputFilename<<"\n";
+        // }
 
         // umba::cli_tool_helpers::writeOutput( outputFilename, outputFileType
         //                                    , encoding::ToUtf8(), encoding::FromUtf8()
         //                                    , resText, std::string() // bomData
         //                                    , true /* fromFile */, true /* utfSource */ , bOverwrite
         //                                    );
+
+        FilenameStringType tempPath;
+        if (!createTempFolder(tempPath, inputFileText, umba::string_plus::make_string<FilenameStringType>("umba-md-pp-view")))
+        {
+            showErrorMessageBox("Failed to create temp folder. Can't view MD file.");
+            return 1;
+        }
+
+        FilenameStringType mdTempFile              = umba::filename::appendPath(tempPath, umba::string_plus::make_string<FilenameStringType>("document.md"));
+        FilenameStringType doxygenConfigTempFile   = umba::filename::appendPath(tempPath, umba::string_plus::make_string<FilenameStringType>("Doxyfile"));
+        FilenameStringType doxygenRtfCfgTempFile   = umba::filename::appendPath(tempPath, umba::string_plus::make_string<FilenameStringType>("doxygen_rtf.cfg"));
+
+        FilenameStringType doxygenOutTempFolder    = umba::filename::appendPath(tempPath, umba::string_plus::make_string<FilenameStringType>("doxy"));
+        umba::filesys::createDirectory(doxygenOutTempFolder);
+        FilenameStringType doxygenRtfOutTempFolder = umba::filename::appendPath(doxygenOutTempFolder, umba::string_plus::make_string<FilenameStringType>("rtf"));
+        umba::filesys::createDirectory(doxygenRtfOutTempFolder);
+
+        FilenameStringType generatedRtfFile        = umba::filename::appendPath(doxygenRtfOutTempFolder, umba::string_plus::make_string<FilenameStringType>("refman.rtf"));
+
+        std::cout << "Doc Title: " << docTitle << "\n";
+
+        FilenameStringType finalFilename           = generateFinalFilenameFromTitle(docTitle);
+
+        std::cout << "Generated final file name: " << finalFilename << "\n";
+
+        if (finalFilename.empty())
+            finalFilename = umba::filename::getName(inputFilename);
+        FilenameStringType finalFilenameWithExt    = umba::filename::appendExt(finalFilename, umba::string_plus::make_string<FilenameStringType>("rtf"));
+        FilenameStringType fullFinalFilename       = umba::filename::appendPath(doxygenRtfOutTempFolder, finalFilenameWithExt);
+
+        std::cout << "Generated full final file name: " << fullFinalFilename << "\n";
+
+        // umba::cli_tool_helpers::writeOutput( mdTempFile, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
+        //                                    , encoding::ToUtf8(), encoding::FromUtf8()
+        //                                    , resText, std::string() // bomData
+        //                                    , true /* fromFile */, true /* utfSource */ , true // bOverwrite
+        //                                    );
+        if (!umba::filesys::writeFile(mdTempFile, resText, true /* overwrite */ ))
+        {
+            showErrorMessageBox("Failed to write file MD temp file: " + mdTempFile);
+            return 1;
+        }
+        
+
+        std::string doxyfileData   = generateDoxyfile(appConfig, doc);
+        std::string doxyRtfCfgData = generateDoxygenRtfCfg(appConfig, doc);
+
+        // umba::cli_tool_helpers::writeOutput( doxygenConfigTempFile, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
+        //                                    , encoding::ToUtf8(), encoding::FromUtf8()
+        //                                    , doxyfileData, std::string() // bomData
+        //                                    , true /* fromFile */, true /* utfSource */ , true // bOverwrite
+        //                                    );
+        if (!umba::filesys::writeFile(doxygenConfigTempFile, doxyfileData, true /* overwrite */ ))
+        {
+            showErrorMessageBox("Failed to write Doxyfile temp file: " + doxygenConfigTempFile);
+            return 1;
+        }
+
+
+        // umba::cli_tool_helpers::writeOutput( doxygenRtfCfgTempFile, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
+        //                                    , encoding::ToUtf8(), encoding::FromUtf8()
+        //                                    , doxyRtfCfgData, std::string() // bomData
+        //                                    , true /* fromFile */, true /* utfSource */ , true // bOverwrite
+        //                                    );
+        if (!umba::filesys::writeFile(doxygenRtfCfgTempFile, doxyRtfCfgData, true /* overwrite */ ))
+        {
+            showErrorMessageBox("Failed to write doxygen RTF CFG temp file: " + doxygenRtfCfgTempFile);
+            return 1;
+        }
+
+
+        if (!umba::filesys::setCurrentDirectory(tempPath))
+        {
+            showErrorMessageBox("Failed to change current directory. Can't view MD file.");
+            return 1;
+        }
+
+        std::wstring wDoxygenExeName = findDoxygenExecutableName();
+        std::string  doxygenExeName  = umba::toUtf8(wDoxygenExeName);
+
+        auto systemRes = system(doxygenExeName.c_str());
+        if (systemRes<0)
+        {
+            showErrorMessageBox("Failed to execute '" + doxygenExeName + "'");
+            return 1;
+        }
+
+        if (!umba::filesys::isFileReadable(generatedRtfFile))
+        {
+            showErrorMessageBox("Can't read generated file '" + generatedRtfFile + "'");
+            return 1;
+        }
+
+
+        FilenameStringType generatedRtfFileCanonical  = umba::filename::makeCanonical(generatedRtfFile);
+        FilenameStringType fullFinalFilenameCanonical = umba::filename::makeCanonical(fullFinalFilename);
+
+
+        // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-movefileexa
+
+        if (!MoveFileExA( generatedRtfFileCanonical.c_str(), fullFinalFilenameCanonical.c_str()
+                        , MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH
+                        )
+           )
+        {
+            showErrorMessageBox("Failed to create final file");
+            return 1;
+        }
+
+        ShellExecuteA( 0 // HWND
+                     , "open"
+                     , fullFinalFilenameCanonical.c_str()
+                     , 0 // lpParameters
+                     , 0 // lpDirectory
+                     , SW_NORMAL
+                     );
+
+
+        //bool deleteFile( const StringType &filename )
+
+// template<typename StringType> inline
+// bool deleteFile( const StringType &filename )
+
+
+// BOOL MoveFileExA(
+//   [in]           LPCSTR lpExistingFileName,
+//   [in, optional] LPCSTR lpNewFileName,
+//   [in]           DWORD  dwFlags
+// );
+
+
+// enum class IoFileType
+// {
+//     nameEmpty,
+//     regularFile,
+//     stdinFile,
+//     stdoutFile,
+//     clipboard
+// };
+
+
+
+
+    // lines.emplace_back("EXCLUDE                = doxy");
+    // lines.emplace_back("FILE_PATTERNS          = .md");
+    // lines.emplace_back("RTF_OUTPUT             = rtf");
+    // lines.emplace_back("OUTPUT_DIRECTORY       = doxy");
+    // lines.emplace_back("RTF_EXTENSIONS_FILE    = doxygen_rtf.cfg");
+    // lines.emplace_back("INPUT                  = document.md");
+
+
+
+
     } // try
     catch(const std::runtime_error &e)
     {
-        LOG_ERR_OPT << e.what() << "\n";
+        
+        showErrorMessageBox(e.what());
         return 1;
+        
+        // LOG_ERR_OPT << e.what() << "\n";
+        // return 1;
     }
 
 
@@ -267,6 +479,7 @@ int main_impl(int argc, char* argv[])
 
 
 //#if (defined(WIN32) || defined(_WIN32)) && defined(__GNUC__)
+#if !defined(UMBA_MD_PP_VIEW_CONSOLE)
 
    // Fix for MinGW problem - https://sourceforge.net/p/mingw-w64/bugs/942/
    // https://github.com/brechtsanders/winlibs_mingw/issues/106
@@ -298,7 +511,7 @@ int main_impl(int argc, char* argv[])
 
        #ifdef TRY_UNICODE_VIEWER
 
-       return wmain_impl(nArgs, wargv);
+           return wmain_impl(nArgs, wargv);
 
        #else
 
@@ -325,14 +538,13 @@ int main_impl(int argc, char* argv[])
        }
        argv[nArgs] = NULL;
 
+
        return main_impl(nArgs, argv);
 
        #endif
 
    }
 
-
-
 //#endif
-
+#endif
 

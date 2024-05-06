@@ -275,7 +275,9 @@ int main(int argc, char* argv[])
     }
 
 
-    std::string resText = processMdFile(appConfig, inputFileText, inputFilename);
+    Document doc;
+    std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
+    std::string docTitle = doc.getDocumentTitleAny();
 
     try
     {

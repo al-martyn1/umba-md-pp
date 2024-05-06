@@ -782,7 +782,7 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType>
-std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType&curFilename);
+std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType&curFilename, Document &resDoc);
 
 //----------------------------------------------------------------------------
 //! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
@@ -2194,7 +2194,7 @@ std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &ap
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType &curFilename)
+std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType &curFilename, Document &resDoc)
 {
     //fileText = marty_cpp::normalizeCrLfToLf(fileText);
     std::vector<std::string> lines = marty_cpp::splitToLinesSimple(fileText);
@@ -2279,6 +2279,9 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
         //std::cout << "Write metadata NOT turned ON\n";
     }
     //std::string generateDocMetadata(const AppConfig &appCfg, Document &doc)
+
+    resDoc = doc;
+    resDoc.lines = resLines;
 
     return marty_cpp::mergeLines(resLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
 }

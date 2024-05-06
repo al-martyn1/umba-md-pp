@@ -99,8 +99,8 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
 {
     std::vector<std::string> lines;
 
-    lines.emplace_back("DOXYFILE_ENCODING      = UTF-8");
-    lines.emplace_back("INPUT_ENCODING         = UTF-8");
+    //lines.emplace_back("DOXYFILE_ENCODING      = UTF-8");
+    //lines.emplace_back("INPUT_ENCODING         = UTF-8");
     lines.emplace_back("MARKDOWN_SUPPORT       = YES");
     lines.emplace_back("TAB_SIZE               = 4");
     lines.emplace_back("RECURSIVE              = NO");
@@ -128,6 +128,8 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
 
     // English/Russian
     str = doc.getDocumentLanguage(appCfg);
+    if (!str.empty())
+        str = findGoxygenLanguageByLangTag(str);
     if (str.empty())
         str = "English";
     lines.emplace_back("OUTPUT_LANGUAGE        = " + str);
@@ -173,7 +175,29 @@ std::string generateFinalFilenameFromTitle(const std::string &titleStr)
     std::string resFilename; resFilename.reserve(titleStr.size());
     for(auto ch : titleStr)
     {
-        if ((unsigned)(int)ch<(unsigned)' ' || restrictedChars.find(ch)!=restrictedChars.npos)
+        if ((unsigned)(int)ch<=(unsigned)' ' || restrictedChars.find(ch)!=restrictedChars.npos)
+        {
+            ch = '_';
+        }
+
+        resFilename.append(1,ch);
+    }
+
+    return resFilename;
+}
+
+inline
+std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr)
+{
+    // https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
+
+    static const std::wstring restrictedChars = L"^*\"/\\<>:|?.";
+    // ^ / * " / \ < > : | ?
+
+    std::wstring resFilename; resFilename.reserve(titleStr.size());
+    for(auto ch : titleStr)
+    {
+        if ((unsigned)(int)ch<=(unsigned)' ' || restrictedChars.find(ch)!=restrictedChars.npos)
         {
             ch = '_';
         }
@@ -187,7 +211,7 @@ std::string generateFinalFilenameFromTitle(const std::string &titleStr)
 inline
 bool isWindows32OnWindows64()
 {
-    #if !defined(WIN32) && defined(_WIN32)
+    #if !defined(WIN32) && !defined(_WIN32)
 
         return false; // not a windows at all
 
@@ -231,7 +255,7 @@ typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
 inline
 std::wstring findDoxygenExecutableName()
 {
-    #if !defined(WIN32) && defined(_WIN32)
+    #if !defined(WIN32) && !defined(_WIN32)
 
         return L"doxygen";
 
@@ -296,7 +320,8 @@ std::wstring findDoxygenExecutableName()
                 if (numChars>0)
                 {
 	                doxygen = std::wstring(buf, numChars);
-	                doxygen = umba::filename::appendPath(doxygen, std::wstring(L"doxygen.exe"));
+	                doxygen = umba::filename::appendPath(doxygen, std::wstring(L"bin"));
+                    doxygen = umba::filename::appendPath(doxygen, std::wstring(L"doxygen.exe"));
                 }
 
             }
@@ -310,6 +335,21 @@ std::wstring findDoxygenExecutableName()
 }
 
 
+inline
+void showErrorMessageBox(std::string str)
+{
+
+	#if defined(WIN32) || defined(_WIN32)
+	
+	    MessageBoxA( 0 // hwnd
+                   , str.c_str()
+                   , "Umba Markdown PP Viewer"
+                   , MB_OK | MB_ICONERROR
+                   );
+	
+	#endif
+
+}
 
 
 

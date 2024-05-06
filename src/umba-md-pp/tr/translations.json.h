@@ -4,7 +4,7 @@
 
 /*--------------------------------------------------------*/
 
-static const char translations_json[51830] =
+static const char translations_json[51814] =
     "{\r\n"
     "\"0409\": {\r\n"
     "\"common\": {\r\n"
@@ -60,7 +60,7 @@ static const char translations_json[51830] =
     "\"en-PH\": \"English\",\r\n"
     "\"en-SG\": \"English\",\r\n"
     "\"en-TT\": \"English\",\r\n"
-    "\"en-US\": \"English (United States)\",\r\n"
+    "\"en-US\": \"English\",\r\n"
     "\"en-ZA\": \"English\",\r\n"
     "\"en-ZW\": \"English\",\r\n"
     "\"es\": \"Spanish\",\r\n"
@@ -1772,4 +1772,4 @@ static const char translations_json[51830] =
     "}"
     ;
 
-static const unsigned translations_json_size = 51829; /* Not including terminating zero */
+static const unsigned translations_json_size = 51813; /* Not including terminating zero */
