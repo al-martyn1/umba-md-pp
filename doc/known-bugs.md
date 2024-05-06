@@ -9,6 +9,10 @@
     слова Note, Tip, Important, Warning, Caution или их локализованные варианты.
     https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
     https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
+  - [ ] Разобраться, что гитхаб считает как block quote, а что - нет.
+  - [ ] Сделать события на block quote - первая строчка block quote, просто строчка block quote, конец block quote - в последнем случае будет передаваться 
+        фейковая строка, которая не будет добавлятся в документ.
+  - [ ] На базе событий block quote запилить обработчик github-alerts
   - [X] Уметь парсить обозначения языков, включая их естественные названия (без учета регистра), превращая их в идентификаторы. По этим идентификаторам
     мы и будем вставлять локализованные Note, Tip, Important, Warning, Caution (будет группа github-alerts).
   - [X] По этому lang-id также будем задавать язык для доксигена
