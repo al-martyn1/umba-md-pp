@@ -702,7 +702,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("LANG",true)
+        else if ( opt.setParam("LANG",umba::command_line::OptionType::optString)
                || opt.isOption("document-language")
                // || opt.setParam("VAL",true)
                || opt.setDescription("Set default document language, which used if no language tag in document meta info."))
@@ -718,8 +718,17 @@ int operator()( const StringType                                &a           //!
             appConfig.documentDefaultLanguage = umba::toUtf8(strVal);
             return 0;
         }
+        // else if ( opt.setParam("LINEFEED",umba::command_line::OptionType::optString)
+        //        || opt.isOption("linefeed") || opt.isOption("LF") || opt.isOption('L')
+        //        // || opt.setParam("VAL",true)
+        //        || opt.setDescription("Output linefeed. LINEFEED is one of: CR/LF/CRLF/LFCR/DETECT."))
+        // {
+        //     if (argsParser.hasHelpOption) return 0;
+        //  
+        //     if (!opt.getParamValue(strVal,errMsg))
+        //     {
 
-        else if ( opt.setParam("LANG",true)
+        else if ( opt.setParam("LANG",umba::command_line::OptionType::optString)
                || opt.isOption("force-document-language")
                // || opt.setParam("VAL",true)
                || opt.setDescription("Force set document language, override document meta info."))

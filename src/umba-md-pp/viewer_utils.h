@@ -108,7 +108,7 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
     lines.emplace_back("RTF_HYPERLINKS         = YES");
     
     lines.emplace_back("EXCLUDE                = doxy");
-    lines.emplace_back("FILE_PATTERNS          = .md");
+    lines.emplace_back("FILE_PATTERNS          = *.md");
     lines.emplace_back("RTF_OUTPUT             = rtf");
     lines.emplace_back("OUTPUT_DIRECTORY       = doxy");
     lines.emplace_back("RTF_EXTENSIONS_FILE    = doxygen_rtf.cfg");
@@ -128,6 +128,8 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
 
     // English/Russian
     str = doc.getDocumentLanguage(appCfg);
+    if (!str.empty())
+        str = findLangTagByString(str);
     if (!str.empty())
         str = findGoxygenLanguageByLangTag(str);
     if (str.empty())
