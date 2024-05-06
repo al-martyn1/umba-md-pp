@@ -15,6 +15,7 @@
 
 //std::size_t h1 = std::hash<std::string>{}(s.first_name);
 
+//----------------------------------------------------------------------------
 inline
 std::string generateTempSubfolderNameByInputFileName(const std::string &name)
 {
@@ -22,6 +23,7 @@ std::string generateTempSubfolderNameByInputFileName(const std::string &name)
     return std::to_string(h);
 }
 
+//----------------------------------------------------------------------------
 inline
 std::wstring generateTempSubfolderNameByInputFileName(const std::wstring &name)
 {
@@ -29,6 +31,7 @@ std::wstring generateTempSubfolderNameByInputFileName(const std::wstring &name)
     return std::to_wstring(h);
 }
 
+//----------------------------------------------------------------------------
 template<typename StringType> inline
 bool createTempFolder(StringType &finalPath, const StringType &inputFileName, const StringType &appName=umba::string_plus::make_string<StringType>("umba-md-pp-view"))
 {
@@ -50,6 +53,7 @@ bool createTempFolder(StringType &finalPath, const StringType &inputFileName, co
     return false;
 }
 
+//----------------------------------------------------------------------------
 inline
 marty_cpp::ELinefeedType getConfigsLinefeed()
 {
@@ -60,6 +64,7 @@ marty_cpp::ELinefeedType getConfigsLinefeed()
     #endif
 }
 
+//----------------------------------------------------------------------------
 /*
 PROJECT_BRIEF          = ""
 # OUTPUT_LANGUAGE        = English
@@ -140,6 +145,7 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
     return marty_cpp::mergeLines(lines, getConfigsLinefeed(), true  /* addTrailingNewLine */ );
 }
 
+//----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
 std::string generateDoxygenRtfCfg(const AppConfig<FilenameStringType> &appCfg, const Document &doc)
 {
@@ -166,6 +172,7 @@ std::string generateDoxygenRtfCfg(const AppConfig<FilenameStringType> &appCfg, c
     return marty_cpp::mergeLines(lines, getConfigsLinefeed(), true  /* addTrailingNewLine */ );
 }
 
+//----------------------------------------------------------------------------
 inline
 std::string generateFinalFilenameFromTitle(const std::string &titleStr, bool bTransliterate)
 {
@@ -194,6 +201,7 @@ std::string generateFinalFilenameFromTitle(const std::string &titleStr, bool bTr
     return resFilename;
 }
 
+//----------------------------------------------------------------------------
 inline
 std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr, bool bTransliterate)
 {
@@ -222,6 +230,7 @@ std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr, bool b
     return resFilename;
 }
 
+//----------------------------------------------------------------------------
 inline
 bool isWindows32OnWindows64()
 {
@@ -263,7 +272,7 @@ bool isWindows32OnWindows64()
     #endif
 }
 
-
+//----------------------------------------------------------------------------
 typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
 
 inline
@@ -348,7 +357,7 @@ std::wstring findDoxygenExecutableName()
     #endif
 }
 
-
+//----------------------------------------------------------------------------
 inline
 void showErrorMessageBox(std::string str)
 {
@@ -365,6 +374,7 @@ void showErrorMessageBox(std::string str)
 
 }
 
+//----------------------------------------------------------------------------
 
 
 
