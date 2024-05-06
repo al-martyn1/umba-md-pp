@@ -43,3 +43,10 @@ Bla-bla-bla bla-bla-bla bla-bla-bla
 ```
 listing
 ```
+
+ > BQ11
+ > BQ11
+ > BQ11
+# Header breaks block quote
+
+bla-bla
