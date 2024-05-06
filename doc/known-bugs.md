@@ -9,7 +9,9 @@
     слова Note, Tip, Important, Warning, Caution или их локализованные варианты.
     https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
     https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
-  - [ ] Разобраться, что гитхаб считает как block quote, а что - нет.
+  - [ ] Разобраться, что гитхаб считает как block quote, а что - нет. См. block_quote_test.md. Гитхаб [считает ](https://github.com/al-martyn1/umba-md-pp/blob/main/tests/block_quote_test.md)
+        BQ1-BQ3 и следующую бла бла за один блок, BQ4/5/6 - отдельные. Доксиген считает, что первая BQ - это BQ3, и вторая это BQ6. То есть, block quote надо в любом случае
+        подшаманивать.
   - [ ] Сделать события на block quote - первая строчка block quote, просто строчка block quote, конец block quote - в последнем случае будет передаваться 
         фейковая строка, которая не будет добавлятся в документ.
   - [ ] На базе событий block quote запилить обработчик github-alerts
@@ -28,4 +30,4 @@
   - [ ] Генерация корректного русского документа доксигеном возможна, только если задан язык - русский. Иначе генерит мусор.
         Надо в дефолтные опции добавить опцию --document-language=russian, чтобы по дефолту нормально генерились русские документы (английские это не испортит).
   - [ ] --processing-options=transliterate-generated-filenames надо поместить в дефолтные опции.
-  - [ ]
+  - [ ] Сделать поиск окна ворда с текущим файлов, и закрытие его
