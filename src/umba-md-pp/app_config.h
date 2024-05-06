@@ -74,6 +74,53 @@ struct AppConfig
     std::string                                           documentForceLanguage;
 
 
+    FilenameStringType getSamplesPathsAsMergedString(const FilenameStringType &delim) const
+    {
+        return umba::string_plus::merge< FilenameStringType, typename std::vector<FilenameStringType>::const_iterator >( samplesPaths.begin(), samplesPaths.end(), delim );
+    }
+
+    FilenameStringType getAllLangFileExtentions( const FilenameStringType &extListDelim = umba::string_plus::make_string<FilenameStringType>(", ")
+                                               , const FilenameStringType &langDelim    = umba::string_plus::make_string<FilenameStringType>(": ")
+                                               , const FilenameStringType &topListDelim = umba::string_plus::make_string<FilenameStringType>("; ")
+                                               ) const
+    {
+        typedef std::map<std::string, std::vector<FilenameStringType> > LangToExtListMapType;
+        LangToExtListMapType langToExtList;
+
+        typedef decltype(extToLang) map_type;
+        typename map_type::const_iterator it = extToLang.begin();
+        for(; it!=extToLang.end(); ++it)
+        {
+            langToExtList[it->second].emplace_back(it->first);
+        }
+
+        std::vector<FilenameStringType> topList;
+
+        typename LangToExtListMapType::const_iterator lit = langToExtList.begin();
+        for(; lit!=langToExtList.end(); ++lit)
+        {
+            FilenameStringType strExtList = umba::string_plus::merge< FilenameStringType, typename std::vector<FilenameStringType>::const_iterator >( lit->second.begin(), lit->second.end(), extListDelim );
+            FilenameStringType lang;
+            umba::utfFromTo(lit->first, lang);
+
+            std::vector<FilenameStringType> langWithExtList;
+            langWithExtList.emplace_back(lang);
+            langWithExtList.emplace_back(strExtList);
+
+            topList.emplace_back(umba::string_plus::merge< FilenameStringType, typename std::vector<FilenameStringType>::const_iterator >( langWithExtList.begin(), langWithExtList.end(), langDelim ));
+        }
+
+        return umba::string_plus::merge< FilenameStringType, typename std::vector<FilenameStringType>::const_iterator >( topList.begin(), topList.end(), topListDelim );
+
+    }
+
+    // std::unordered_map<FilenameStringType, std::string>   extToLang  ;
+    // std::unordered_map<std::string, LangOptions>          langOptions;
+
+// template<typename StringTypeFrom, typename StringTypeTo>
+// StringTypeTo utfFromToReturn(const StringTypeFrom &from)
+
+    
 
     void checkTargetFormat()
     {

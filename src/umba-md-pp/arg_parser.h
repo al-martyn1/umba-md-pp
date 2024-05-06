@@ -854,6 +854,11 @@ int operator()( const StringType                                &a           //!
         umba::utfToStringTypeHelper(optName, opt.name);
         auto optFileName = makeAbsPath(optName);
 
+        if (!argsParser.quet)
+        {
+            std::cout << "Processing options file: " << optFileName << "\n";
+        }
+
         optFiles.push(optFileName);
 
         auto parseRes = argsParser.parseOptionsFile( optFileName );

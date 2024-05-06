@@ -1497,7 +1497,7 @@ bool insertDoc( const AppConfig<FilenameStringType>          &appCfg
         if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
         {
             makeShureEmptyLine(resLines);
-            resLines.emplace_back("!!! File not found");
+            resLines.emplace_back("!!! File not found in: " + umba::toUtf8(appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", "))));
             return false; // сфейли
         }
     }
@@ -1690,7 +1690,8 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
         if (!noFail)
         {
             makeShureEmptyLine(resLines);
-            resLines.emplace_back("!!! File not found");
+            //resLines.emplace_back("!!! File not found");
+            resLines.emplace_back("!!! File not found in: " + umba::toUtf8(appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", "))));
         }
         return noFail;
     }
@@ -1764,7 +1765,7 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
     if (snippetTagPrefix.empty()) // Не знаем, как искать тэг - нет информации по тому, какой префикс используется для тэгов сниппетов в данном языке
     {
         makeShureEmptyLine(resLines);
-        resLines.emplace_back("!!! Unknown language, can't looking for tag");
+        resLines.emplace_back("!!! Unknown language, can't looking for tag, langs: " + appCfg.getAllLangFileExtentions());
         return false; // Поэтому просто ошибка, исходная строка будет включена
     }
 

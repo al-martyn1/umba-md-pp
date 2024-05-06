@@ -214,7 +214,9 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
         argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
 
         argsParser.args.push_back("--overwrite");
-        argsParser.args.push_back(rootPath + "tests\\test04.md_");
+        argsParser.args.push_back("--add-examples-path="+rootPath+"/tests/snippets");
+        argsParser.args.push_back("--add-examples-path="+rootPath+"/tests/..");
+        argsParser.args.push_back(rootPath + "tests\\test03.md_");
         // F:\_github\umba-tools\umba-md-pp
     }
 
@@ -338,18 +340,21 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 
         FilenameStringType generatedRtfFile        = umba::filename::appendPath(doxygenRtfOutTempFolder, umba::string_plus::make_string<FilenameStringType>("refman.rtf"));
 
-        std::cout << "Doc Title: " << docTitle << "\n";
-
         FilenameStringType finalFilename           = generateFinalFilenameFromTitle(docTitle, appConfig.testProcessingOption(ProcessingOptions::transliterateGeneratedFilenames));
 
-        std::cout << "Generated final file name: " << finalFilename << "\n";
 
         if (finalFilename.empty())
             finalFilename = umba::filename::getName(inputFilename);
         FilenameStringType finalFilenameWithExt    = umba::filename::appendExt(finalFilename, umba::string_plus::make_string<FilenameStringType>("rtf"));
         FilenameStringType fullFinalFilename       = umba::filename::appendPath(doxygenRtfOutTempFolder, finalFilenameWithExt);
 
-        std::cout << "Generated full final file name: " << fullFinalFilename << "\n";
+        if (!argsParser.quet)
+        {
+            std::cout << "Doc Title: " << docTitle << "\n";
+            std::cout << "Generated final file name: " << finalFilename << "\n";
+            std::cout << "Generated full final file name: " << fullFinalFilename << "\n";
+            std::cout << "Known languages: " << appConfig.getAllLangFileExtentions() << "\n";
+        }
 
         // umba::cli_tool_helpers::writeOutput( mdTempFile, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
         //                                    , encoding::ToUtf8(), encoding::FromUtf8()
