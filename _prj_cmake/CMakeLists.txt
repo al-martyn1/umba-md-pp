@@ -116,6 +116,7 @@ set (YAML_CPP_SOURCES
 
 set (UMBA_MD_PP_COMMON_SOURCES
     "${LIBS_ROOT}/sfmt/umba_lout.cpp"
+    "${LIBS_ROOT}/umba/time_service.cpp"
     "${LIBS_ROOT}/encoding/encoding.cpp"
     "${LIBS_ROOT}/encoding/compact_enc_det/compact_enc_det.cc"
     "${LIBS_ROOT}/encoding/compact_enc_det/compact_enc_det_hint_code.cc"
