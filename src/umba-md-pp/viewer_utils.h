@@ -375,8 +375,192 @@ void showErrorMessageBox(std::string str)
 }
 
 //----------------------------------------------------------------------------
+#if defined(WIN32) || defined(_WIN32)
 
 
+
+//------------------------------
+inline
+HKEY regCreateKeyHelper(HKEY hKeyRoot, const std::wstring &path, REGSAM samDesired)
+{
+    if (isWindows32OnWindows64()) // 32х-битные системы сейчас конечно уже экзотика, но на всякий случай - я же и на XP могу работать
+    {
+        samDesired |= KEY_WOW64_64KEY;
+    }
+    
+    HKEY hKeyRes = 0;
+    DWORD dwDisposition = 0;
+
+    LSTATUS status = RegCreateKeyExW( hKeyRoot
+                                    , path.c_str()
+                                    , 0 // reserved
+                                    , 0 // lpClass - The user-defined class type of this key. This parameter may be ignored. This parameter can be NULL.
+                                    , REG_OPTION_NON_VOLATILE // default, 0
+                                    , samDesired
+                                    , 0 // lpSecurityAttributes
+                                    , &hKeyRes
+                                    , &dwDisposition
+                                    );
+    if (status!=ERROR_SUCCESS)
+    {
+        return 0;
+    }
+
+    return hKeyRes;
+}
+
+//------------------------------
+inline
+bool regSetValue(HKEY hKey, const std::wstring &varName, const std::wstring &value)
+{
+    LSTATUS status = RegSetValueW(hKey, varName.c_str(), REG_SZ, (LPCWSTR)value.c_str(), (DWORD)(value.size()+1)*sizeof(wchar_t));
+    return status==ERROR_SUCCESS;
+}
+
+//------------------------------
+#define UMBA_PP_VIEWER_USE_HKCU
+
+//------------------------------
+inline
+HKEY regGetShellExtentionsRoot()
+{
+    #ifdef UMBA_PP_VIEWER_USE_HKCU
+
+       return HKEY_CURRENT_USER;
+
+    #else
+
+       return HKEY_CLASSES_ROOT;
+
+    #endif
+}
+
+//------------------------------
+inline
+std::wstring regShellExtentionHandlersRootPath()
+{
+    std::wstring regPath;
+
+    #ifdef UMBA_PP_VIEWER_USE_HKCU
+
+       regPath.append(L"Software");
+       regPath.append(L"\\Classes");
+
+    #else
+
+    #endif
+
+    return regPath;
+}
+
+inline
+bool regShellExtentionHandlerApplication(const std::wstring &appNameId, const std::wstring &shellVerb, const std::wstring &appCommand)
+{
+
+    // Компьютер\HKEY_CLASSES_ROOT\md__auto_file
+    //     shell
+    //       open
+    //         command
+    //           default value: "F:\_github\umba-tools\umba-md-pp\.out\msvc2019\x86\Debug\umba-md-pp-view.exe" "%1"
+    //  
+    // HKEY_CLASSES_ROOT\.md_
+    //     default value md__auto_file
+    //  
+    // The nameless key is the default one - https://learn.microsoft.com/en-us/dotnet/api/microsoft.win32.registry.setvalue?view=net-8.0&redirectedfrom=MSDN#overloads
+
+    HKEY hRootKey = regGetShellExtentionsRoot();
+
+    std::wstring regPath = regShellExtentionHandlersRootPath();
+
+    if (!regPath.empty())
+        regPath.append(L"\\");
+
+    regPath.append(appNameId);
+    regPath.append(L"\\shell");
+    regPath.append(L"\\");
+    regPath.append(shellVerb);
+    regPath.append(L"\\command");
+
+    HKEY hKey = regCreateKeyHelper(hRootKey, regPath,  /* KEY_READ| */ KEY_WRITE);
+
+    if (!hKey)
+        return false;
+
+    bool res = regSetValue(hKey, L"" /* varName */ , appCommand);
+
+    RegCloseKey(hKey);
+
+    return res;
+}
+
+//------------------------------
+inline
+bool regShellExtentionHandlerForExt(const std::wstring &appNameId, std::wstring ext)
+{
+
+    // HKEY_CLASSES_ROOT\.md_
+    //     default value md__auto_file
+
+    if (ext.empty())
+        return false;
+
+    if (ext.front()!=L'.')
+    {
+        ext = L"." + ext;
+    }
+
+    HKEY hRootKey = regGetShellExtentionsRoot();
+
+    std::wstring regPath = regShellExtentionHandlersRootPath();
+
+    if (!regPath.empty())
+        regPath.append(L"\\");
+
+    regPath.append(ext);
+
+    HKEY hKey = regCreateKeyHelper(hRootKey, regPath,  /* KEY_READ| */ KEY_WRITE);
+
+    if (!hKey)
+        return false;
+
+    bool res = regSetValue(hKey, L"" /* varName */ , appNameId);
+
+    RegCloseKey(hKey);
+
+    return res;
+}
+
+//------------------------------
+inline
+bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std::vector<std::wstring> &extList)
+{
+    bool res = true;
+
+    for(auto ext: extList)
+    {
+        if (!regShellExtentionHandlerForExt(appNameId, ext))
+            res = false;
+    }
+
+    return res;
+}
+
+//------------------------------
+inline
+bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std::wstring &extCommaList)
+{
+    bool res = true;
+
+    auto extList = marty_cpp::splitToLinesSimple(extCommaList, false, ',');
+    for(auto &ext: extList)
+    {
+        umba::string_plus::trim(ext);
+    }
+
+    return regShellExtentionHandlerForExtList(appNameId, extList);
+}
+
+#endif
 
 
 

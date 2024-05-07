@@ -279,13 +279,16 @@ main/wmain - нужны только для MSVC/Console
 
         argsParser.args.clear();
 
-        argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
+        // argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
+        //  
+        // argsParser.args.push_back("--overwrite");
+        // argsParser.args.push_back("--add-examples-path="+rootPath+"/tests/snippets");
+        // argsParser.args.push_back("--add-examples-path="+rootPath+"/tests/..");
+        // argsParser.args.push_back(rootPath + "tests\\test03.md_");
+        // // F:\_github\umba-tools\umba-md-pp
 
-        argsParser.args.push_back("--overwrite");
-        argsParser.args.push_back("--add-examples-path="+rootPath+"/tests/snippets");
-        argsParser.args.push_back("--add-examples-path="+rootPath+"/tests/..");
-        argsParser.args.push_back(rootPath + "tests\\test03.md_");
-        // F:\_github\umba-tools\umba-md-pp
+        argsParser.args.push_back("--register-view-handler");
+        
     }
 
 
@@ -365,7 +368,13 @@ main/wmain - нужны только для MSVC/Console
     appConfig.targetFormat   = TargetFormat::rtf;
     appConfig.updateProcessingOptions("title");
     appConfig.updateProcessingOptions("convert-github-alerts");
-    
+
+    // bool 
+    // regRes = regShellExtentionHandlerApplication(L"_umba-app", L"open", L"umba %1");
+    // std::cout << "Register res: " << (regRes ? true : false) << "\n";
+    //  
+    // regRes = regShellExtentionHandlerForExt(L"_umba-app", {L"md_", L"md", L"markdown"});
+    // std::cout << "Register res: " << (regRes ? true : false) << "\n";
 
     appConfig.checkAdjustDocNumericLevels();
     appConfig.checkTargetFormat();

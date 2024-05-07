@@ -745,7 +745,59 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        #if defined(UMBA_MD_PP_VIEW)
 
+        else if ( opt.setParam("COMMAEXTLIST", std::string()/* umba::command_line::OptionType::optString */ )
+               || opt.isOption("register-view-handler")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Register this application as view handler in OS."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            auto param = opt.optArg;
+            if (!param.empty())
+            {
+                if (!opt.getParamValue(strVal,errMsg))
+                {
+                    LOG_ERR_OPT<<errMsg<<"\n";
+                    return -1;
+                }
+
+                param = strVal;
+            }
+            else
+            {
+                param = "md,md_,_md,markdown,_markdown,markdown_";
+            }
+
+            auto exeFullName      = argsParser.programLocationInfo.exeFullName;
+            auto exeCanonicalName = umba::filename::makeCanonical(exeFullName);
+            auto appIdName        = umba::filename::getName(exeFullName);
+            auto appIdNameWide    = umba::fromUtf8(appIdName);
+
+            auto exeCanonicalNameWide        = umba::fromUtf8(exeCanonicalName);
+            auto exeCanonicalNameWideEscaped = escapeCommandLineArgument(exeCanonicalNameWide);
+            auto percent1                    = L"\"%1\"";
+
+            if (!regShellExtentionHandlerApplication(appIdNameWide, L"open", exeCanonicalNameWideEscaped + L" " + percent1))
+            {
+                LOG_ERR_OPT<<"Failed to register appid"<<"\n";
+                return -1;
+            }
+
+            auto wParam = umba::fromUtf8(param);
+            if (!regShellExtentionHandlerForExtList(appIdNameWide, wParam))
+            {
+                LOG_ERR_OPT<<"Failed to register appid as handler"<<"\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        #endif
+
+        //LOG_MSG_OPT << argsParser.programLocationInfo.exeFullName << "\n";
 
         // else if ( opt.isOption("all")
         //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")

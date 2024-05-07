@@ -41,6 +41,12 @@ std::string escapeCommandLineArgument(const std::string &str)
 }
 
 inline
+std::wstring escapeCommandLineArgument(const std::wstring &str)
+{
+    return umba::fromUtf8(escapeCommandLineArgument(umba::toUtf8(str)));
+}
+
+inline
 bool findProjectOptionsFile(const std::string &mdFile, std::string &foundOptionsFile)
 {
     return umba::cli_tool_helpers::findProjectOptionsFile(mdFile, foundOptionsFile, std::vector<std::string>{".md-pp.options", ".umba-md-pp.options"});
