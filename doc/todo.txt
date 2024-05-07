@@ -292,5 +292,8 @@ VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
     https://commonmark.org/
     саппорт гитхаба - https://support.github.com/
 
+19) Разное по доксигену
+    Doxygen Awesome is a custom CSS theme for Doxygen HTML documentation with lots of customization parameters - https://jothepro.github.io/doxygen-awesome-css/
+
 
 
