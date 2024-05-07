@@ -549,8 +549,6 @@ bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std
 inline
 bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std::wstring &extCommaList)
 {
-    bool res = true;
-
     auto extList = marty_cpp::splitToLinesSimple(extCommaList, false, ',');
     for(auto &ext: extList)
     {
