@@ -294,6 +294,36 @@ VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
 
 19) Разное по доксигену
     Doxygen Awesome is a custom CSS theme for Doxygen HTML documentation with lots of customization parameters - https://jothepro.github.io/doxygen-awesome-css/
+    Mastering Doxygen - https://exhale.readthedocs.io/en/latest/mastering_doxygen.html
+
+    readthedocs.io - https://about.readthedocs.com/?ref=readthedocs.org
+
+    GitHub Pages - https://docs.github.com/ru/pages/quickstart
+    Управление параметрами GitHub Actions для репозитория - https://docs.github.com/ru/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository
+    Creating a GitHub Pages site with Jekyll - https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll
+    Adding a theme to your GitHub Pages site using Jekyll - https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/adding-a-theme-to-your-github-pages-site-using-jekyll
+    Supported themes - https://pages.github.com/themes/
+      https://pages-themes.github.io/architect/
+      https://pages-themes.github.io/cayman/
+      https://github.com/pages-themes/dinky
+      https://github.com/pages-themes/leap-day
+      https://jekyll.github.io/minima/
+      https://pages-themes.github.io/minimal/
+      https://pages-themes.github.io/modernist/
+      https://github.com/pages-themes/slate
+      https://github.com/pages-themes/tactile
+
+
+    About content in Jekyll sites - https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/adding-content-to-your-github-pages-site-using-jekyll#about-content-in-jekyll-sites
+    About GitHub Pages and Jekyll - https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll
+    Static site generators - https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#static-site-generators
+
+    About large files on GitHub - https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github#file-and-repository-size-limitations
+    Distributing large binaries - https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github#distributing-large-binaries
+    About releases - https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
+    Managing releases in a repository - https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
+
+
 
 20) Про шрифты
     ConEmu при создании шрифта парсит его имя, если находит [RasterFont MxN], то размер берет оттуда, а имя шрифта (FontFace) использует "Terminal".
