@@ -295,5 +295,26 @@ VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
 19) Разное по доксигену
     Doxygen Awesome is a custom CSS theme for Doxygen HTML documentation with lots of customization parameters - https://jothepro.github.io/doxygen-awesome-css/
 
+20) Про шрифты
+    ConEmu при создании шрифта парсит его имя, если находит [RasterFont MxN], то размер берет оттуда, а имя шрифта (FontFace) использует "Terminal".
+    "Terminal". Или, если FF задан "Terminal", и charset OEM, то ConEmu переходит в режим bRasterFont = true;
+    В настройках ConEmu есть шрифт с именем "Terminal". Но в винде такого шрифта нет.
 
+    Сорцы ConEmu - https://github.com/Maximus5/ConEmu/releases
 
+    Установленные шрифты - HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts
+
+    https://www.google.com/search?q=windows+terminal+font
+        Windows Terminal ships Cascadia Code and Cascadia Mono in its package and uses Cascadia Mono by default - https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://learn.microsoft.com/en-us/windows/terminal/cascadia-code&ved=2ahUKEwiKgpbX3_2FAxXnJxAIHaEOBUgQFnoECA0QAw&usg=AOvVaw0pA1bKpMDdSb1doq97TK2V
+        https://github.com/microsoft/cascadia-code
+    https://www.google.com/search?q=windows+font+face+Terminal
+
+    Какие-то BDF шрифты для винды (но винда не открывает их) - https://www.majorgeeks.com/files/details/raster_fonts_for_windows.html
+
+    Тут пишут, как создать растровый шрифт в GDI - https://stackoverflow.com/questions/52573992/how-to-draw-raster-console-fonts-in-gdi
+
+    Google Fonts - https://fonts.google.com/
+
+    Raster, Vector, TrueType, and OpenType Fonts - Win32 apps - https://learn.microsoft.com/en-us/windows/win32/gdi/raster--vector--truetype--and-opentype-fonts
+
+    Why are console windows limited to Lucida Console and raster fonts? - https://devblogs.microsoft.com/oldnewthing/20070516-00/?p=26843
