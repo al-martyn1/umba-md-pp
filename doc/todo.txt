@@ -292,10 +292,6 @@ VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
     https://commonmark.org/
     саппорт гитхаба - https://support.github.com/
 
-19) Разное по доксигену
-    Doxygen Awesome is a custom CSS theme for Doxygen HTML documentation with lots of customization parameters - https://jothepro.github.io/doxygen-awesome-css/
-    Mastering Doxygen - https://exhale.readthedocs.io/en/latest/mastering_doxygen.html
-
     readthedocs.io - https://about.readthedocs.com/?ref=readthedocs.org
 
     GitHub Pages - https://docs.github.com/ru/pages/quickstart
@@ -323,6 +319,12 @@ VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
     About releases - https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
     Managing releases in a repository - https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
 
+
+19) Разное по доксигену
+    Doxygen Awesome is a custom CSS theme for Doxygen HTML documentation with lots of customization parameters - https://jothepro.github.io/doxygen-awesome-css/
+    Mastering Doxygen - https://exhale.readthedocs.io/en/latest/mastering_doxygen.html
+
+    Интересная идея - doxygen'овский XML конвертить в маркдаун, чтобы можно было выкладывать на GitHub Pages.
 
 
 20) Про шрифты
