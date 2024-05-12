@@ -351,6 +351,7 @@ VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
 
     Why are console windows limited to Lucida Console and raster fonts? - https://devblogs.microsoft.com/oldnewthing/20070516-00/?p=26843
 
+
 21) На тему стандарта кодирования
 
     _DECLARE_ _IMPLEMENT_
@@ -381,5 +382,7 @@ VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
     Лютая дичь, трэш и угар - про то, как иногда организованы проекты.
 
 
+22) Разное
 
+    https://github.com/VKCOM/kphp/commits/master/
 
