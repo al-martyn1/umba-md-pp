@@ -347,6 +347,65 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
 
 //----------------------------------------------------------------------------
 inline
+std::size_t geBlockQuoteLevel(const std::string &line)
+{
+    std::size_t bqLevel = 0;
+    for(auto ch: line)
+    {
+        if (ch=='>')
+        {
+            ++bqLevel;
+            continue;
+        }
+        else if (ch==' ')
+        {
+            continue;
+        }
+        else
+        {
+            return bqLevel;
+        }
+
+    }
+
+    return bqLevel;
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isBlockQuoteLine(const std::string &line)
+{
+    return geBlockQuoteLevel(line)>0
+}
+
+//----------------------------------------------------------------------------
+inline
+std::string trimBlockQuote(const std::string &line)
+{
+    auto pos = line.find_first_not_of("> ");
+    if (pos==line.npos)
+        return line;
+    return std::string(line, pos);
+}
+
+//----------------------------------------------------------------------------
+inline
+std::string makeBlockQuotePrefix(std::size_t lvl)
+{
+    std::string res; res.reserve(lvl*2+1);
+    for(std::size_t i=0; i!=lvl; ++i)
+    {
+        res.append(" >");
+    }
+
+    if (lvl)
+        res.append(1u, ' ');
+
+    return res;
+}
+
+//----------------------------------------------------------------------------
+inline
 bool isInsertCommand(std::string line)
 {
     umba::string_plus::trim(line);
