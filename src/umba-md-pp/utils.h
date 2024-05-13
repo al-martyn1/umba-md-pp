@@ -12,7 +12,37 @@
 #include <string>
 
 
+template<typename StringType>
+StringType tryMakeOutputFilenameFromInput(StringType name)
+{
+    name = umba::filename::makeCanonical(name);
 
+    auto path           = umba::filename::getPath(name);
+    auto fileNameNoPath = umba::filename::getFileName(name);
+
+    if (umba::string_plus::starts_with_and_strip(fileNameNoPath, umba::string_plus::make_string<StringType>(".")))
+    {
+        // Если имя файла начинается с точки - убрали точку и зашибись
+        return umba::filename::appendPath(path, fileNameNoPath);
+    }
+
+    auto pathFile = umba::filename::getPathFile(name);
+    auto ext      = umba::filename::getFileExtention(name);
+    if (umba::string_plus::starts_with_and_strip(ext, umba::string_plus::make_string<StringType>("_")))
+    {
+        // Если расширение файла начинается с подчеркивания - убрали его и зашибись
+        return umba::filename::appendExtention(pathFile, ext);
+    }
+
+    if (umba::string_plus::ends_with_and_strip(ext, umba::string_plus::make_string<StringType>("_")))
+    {
+        // Если расширение файла заканчивается с подчеркиванием - убрали его и зашибись
+        return umba::filename::appendExtention(pathFile, ext);
+    }
+
+    return StringType();
+
+}
 
 inline
 std::string escapeCommandLineArgument(const std::string &str)

@@ -220,6 +220,13 @@ int main(int argc, char* argv[])
     umba::cli_tool_helpers::IoFileType outputFileType = umba::cli_tool_helpers::IoFileType::nameEmpty;
     if (outputFilename.empty())
     {
+        //outputFilename = "STDOUT";
+        outputFilename = tryMakeOutputFilenameFromInput(inputFilename);
+        outputFileType = umba::cli_tool_helpers::IoFileType::regularFile;
+    }
+
+    if (outputFilename.empty())
+    {
         outputFilename = "STDOUT";
     }
 

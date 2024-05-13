@@ -20,7 +20,15 @@ inline
 std::string generateTempSubfolderNameByInputFileName(const std::string &name)
 {
     std::size_t h = std::hash<std::string>{}(name);
-    return std::to_string(h);
+
+    std::string nameNoPath = umba::filename::getFileName(name);
+    for(auto &ch: nameNoPath)
+    {
+        if (ch=='.' || ch=='\\' || ch=='/')
+            ch = '_';
+    }
+
+    return std::to_string(h) + "_" + nameNoPath;
 }
 
 //----------------------------------------------------------------------------
@@ -28,7 +36,15 @@ inline
 std::wstring generateTempSubfolderNameByInputFileName(const std::wstring &name)
 {
     std::size_t h = std::hash<std::wstring>{}(name);
-    return std::to_wstring(h);
+
+    std::wstring nameNoPath = umba::filename::getFileName(name);
+    for(auto &ch: nameNoPath)
+    {
+        if (ch==L'.' || ch==L'\\' || ch==L'/')
+            ch = L'_';
+    }
+
+    return std::to_wstring(h) + L"_" + nameNoPath;
 }
 
 //----------------------------------------------------------------------------
