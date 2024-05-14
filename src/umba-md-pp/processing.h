@@ -8,6 +8,7 @@
 #include "umba/transliteration.h"
 #include "umba/id_gen.h"
 #include "umba/container_utility.h"
+#include "umba/parse_utils.h"
 
 #include "marty_yaml_toml_json/json_utils.h"
 #include "marty_yaml_toml_json/yaml_json.h"
@@ -403,6 +404,88 @@ std::string makeBlockQuotePrefix(std::size_t lvl)
 
     return res;
 }
+
+//----------------------------------------------------------------------------
+inline
+char getListMarker(std::string line)
+{
+    umba::string_plus::trim(line);
+
+    if (line.empty()) // вторым должен идти пробел
+        return (char)0;
+
+    char chMarker = line[0];
+
+    if ((chMarker=='-' || chMarker=='+' || chMarker=='*'))
+    {
+        if (line.size()<2)
+            return chMarker; // если нет пробела, и строка закончилась - это тоже элемент списка, но пустой
+        
+        if (line[1]==' ') // есть ещё символ, и это - пробел - это элемент списка
+            return chMarker;
+    }
+
+        
+
+    if (!umba::parse_utils::isDigit(chMarker))
+    {
+        return (char)0;
+    }
+
+    if (line.size()<2) // маркер ненумерованного списка состоит минимум из двух символов - цифра и точка
+        return (char)0;
+    
+    std::size_t pos = 1;
+    for(; pos!=line.size(); ++pos)
+    {
+        if (umba::parse_utils::isDigit(line[pos]))
+        {
+            continue;
+        }
+
+        if (line[pos]!='.') // последовательность цифр в маркере нумерованного списка должна закончится на точку и пробел
+        {
+            return (char)0;
+        }
+
+        ++pos;
+        break;
+    }
+
+    if (pos==line.size()) // после точки строка закончилась?
+        return '1';
+
+    if (line[pos]!='.')
+    {
+        return (char)0;
+    }
+
+    return '1';
+
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isListLine(const std::string &line)
+{
+    return getListMarker(line)!=0;
+}
+
+//----------------------------------------------------------------------------
+inline
+std::size_t getListLevel(const std::string &line)
+{
+    auto pos = line.find_first_not_of(" ");
+    return pos;
+}
+
+//----------------------------------------------------------------------------
+inline
+std::string trimListLine(const std::string &line)
+{
+    //TODO: !!! Доделать
+}
+
 
 //----------------------------------------------------------------------------
 inline
