@@ -386,3 +386,5 @@ VSCode - https://github.com/mjbvz/vscode-github-markdown-preview
 
     https://github.com/VKCOM/kphp/commits/master/
 
+    табы vs пробелы - GCC считает таб за 9 пробелов и выдаёт варнинги - https://stackoverflow.com/questions/50318900/why-is-gcc-warning-me-this-line-is-misleadingly-indented-as-if-it-were-guarded
+
