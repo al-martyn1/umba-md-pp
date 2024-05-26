@@ -12,7 +12,23 @@
 #include <string>
 
 
-template<typename StringType>
+template<typename StringType> inline
+StringType generateOutputFileNameFromInputFileName(StringType name)
+{
+    auto pathFile = umba::filename::getPathFile(name);
+
+    auto ext      = umba::filename::getFileExtention(name);
+
+    ext = umba::string_plus::trim( ext
+                                 , [](auto ch)
+                                   {
+                                       return ch=='_';
+                                   }
+                                 );
+    return umba::filename::appendExt(pathFile, ext);
+}
+
+template<typename StringType> inline
 StringType tryMakeOutputFilenameFromInput(StringType name)
 {
     name = umba::filename::makeCanonical(name);

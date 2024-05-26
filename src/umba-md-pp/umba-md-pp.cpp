@@ -223,6 +223,7 @@ int main(int argc, char* argv[])
         //outputFilename = "STDOUT";
         outputFilename = tryMakeOutputFilenameFromInput(inputFilename);
         outputFileType = umba::cli_tool_helpers::IoFileType::regularFile;
+        //generateOutputFileNameFromInputFileName
     }
 
     if (outputFilename.empty())
