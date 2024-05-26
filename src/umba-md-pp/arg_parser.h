@@ -872,7 +872,7 @@ int operator()( const StringType                                &a           //!
                 {
                     auto helpText = opt.getHelpOptionsString();
                     std::cout << "Usage: " << umba::toUtf8(argsParser.programLocationInfo.exeName)
-                              << " [OPTIONS] [output_file]\n"
+                              << " [OPTIONS] input_file [output_file]\n"
                               << "  If output_file not taken, STDOUT used\n"
                               << "\nOptions:\n\n"
                               << helpText;

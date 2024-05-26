@@ -376,7 +376,7 @@ std::size_t geBlockQuoteLevel(const std::string &line)
 inline
 bool isBlockQuoteLine(const std::string &line)
 {
-    return geBlockQuoteLevel(line)>0
+    return geBlockQuoteLevel(line) > 0;
 }
 
 //----------------------------------------------------------------------------
