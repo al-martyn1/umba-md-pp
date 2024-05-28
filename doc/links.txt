@@ -1,0 +1,7 @@
+Open Modernisms Markdown - https://c-forster.github.io/om-guidelines/modsource-guidelines.html
+atx, the true structured text format - http://www.aaronsw.com/2002/atx/intro
+Docutils: Documentation Utilities - https://docutils.sourceforge.io/
+Is it possible to edit markdown files depending on the output chosen? - https://stackoverflow.com/questions/39989577/is-it-possible-to-edit-markdown-files-depending-on-the-output-chosen
+Blogging in Djot instead of Markdown - https://www.jonashietala.se/blog/2024/02/02/blogging_in_djot_instead_of_markdown/
+Leanpub Flavoured Markdown vs. Markua - https://leanpub.com/lfm/read
+R Markdown: The Definitive Guide - https://bookdown.org/yihui/rmarkdown/
