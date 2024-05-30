@@ -81,7 +81,7 @@ bool createTempFolder(StringType &finalPath, const StringType &inputFileName, co
     StringType curFileTempRoot = umba::filename::appendPath(umbaMdPpViewerTempRoot, generatedSimpleFolderName);
     finalPath = curFileTempRoot;
 
-    if (!umba::filesys::createDirectory(curFileTempRoot))
+    if (!umba::filesys::createDirectory(curFileTempRoot) && !umba::filesys::isLastErrorAlreadyExists())
     {
         return false;
     }
