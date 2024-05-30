@@ -15,16 +15,35 @@
 
 //std::size_t h1 = std::hash<std::string>{}(s.first_name);
 
+template<typename StringType>
+StringType makeFileNameWithReducedPath(const StringType &inputFilename, const std::size_t numPathLevels=2u)
+{
+    StringType tmpInputFileName;
+    tmpInputFileName = umba::filename::getFileName(inputFilename);
+    StringType tmpPath = umba::filename::getPath(inputFilename);
+    for(std::size_t i=0u; i!=numPathLevels; ++i)
+    {
+        auto tmpPathPart = umba::filename::getFileName(tmpPath);
+        if (tmpPathPart.empty() || tmpPathPart==tmpPath)
+            break;
+        tmpPath = umba::filename::getPath(tmpPath);
+        tmpInputFileName = umba::filename::appendPath(tmpPathPart, tmpInputFileName);
+    }
+
+    return tmpInputFileName;
+}
+
 //----------------------------------------------------------------------------
 inline
 std::string generateTempSubfolderNameByInputFileName(const std::string &name)
 {
     std::size_t h = std::hash<std::string>{}(name);
 
-    std::string nameNoPath = umba::filename::getFileName(name);
+    std::string nameNoPath = makeFileNameWithReducedPath(name);
+    //umba::filename::getFileName(name);
     for(auto &ch: nameNoPath)
     {
-        if (ch=='.' || ch=='\\' || ch=='/')
+        if (ch=='.' || ch=='\\' || ch=='/' || (ch>=0 && ch<=' '))
             ch = '_';
     }
 
@@ -37,10 +56,11 @@ std::wstring generateTempSubfolderNameByInputFileName(const std::wstring &name)
 {
     std::size_t h = std::hash<std::wstring>{}(name);
 
-    std::wstring nameNoPath = umba::filename::getFileName(name);
+    std::wstring nameNoPath = makeFileNameWithReducedPath(name);
+    //umba::filename::getFileName(name);
     for(auto &ch: nameNoPath)
     {
-        if (ch==L'.' || ch==L'\\' || ch==L'/')
+        if (ch==L'.' || ch==L'\\' || ch==L'/' || (ch>=0 && ch<=L' '))
             ch = L'_';
     }
 
@@ -57,12 +77,17 @@ bool createTempFolder(StringType &finalPath, const StringType &inputFileName, co
     StringType umbaMdPpViewerTempRoot = umba::filename::appendPath(tempRoot, umba::string_plus::make_string<StringType>(".") + appName);
     umba::filesys::createDirectory(umbaMdPpViewerTempRoot);
 
-    StringType curFileTempRoot = umba::filename::appendPath(umbaMdPpViewerTempRoot, generateTempSubfolderNameByInputFileName(inputFileName));
-    umba::filesys::createDirectory(curFileTempRoot);
+    StringType generatedSimpleFolderName = generateTempSubfolderNameByInputFileName(inputFileName);
+    StringType curFileTempRoot = umba::filename::appendPath(umbaMdPpViewerTempRoot, generatedSimpleFolderName);
+    finalPath = curFileTempRoot;
+
+    if (!umba::filesys::createDirectory(curFileTempRoot))
+    {
+        return false;
+    }
 
     if (umba::filesys::isPathDirectory(curFileTempRoot))
     {
-        finalPath = curFileTempRoot;
         return true;
     }
 
