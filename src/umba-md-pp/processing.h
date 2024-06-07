@@ -484,6 +484,7 @@ inline
 std::string trimListLine(const std::string &line)
 {
     //TODO: !!! Доделать
+    return std::string();
 }
 
 

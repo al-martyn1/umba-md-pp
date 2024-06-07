@@ -16,6 +16,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <sstream>
 // #include <filesystem>
 
 #include "umba/debug_helpers.h"
@@ -287,7 +288,9 @@ main/wmain - нужны только для MSVC/Console
         // argsParser.args.push_back(rootPath + "tests\\test03.md_");
         // // F:\_github\umba-tools\umba-md-pp
 
-        argsParser.args.push_back("--register-view-handler");
+        //argsParser.args.push_back("--register-view-handler");
+
+        argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-roboconf\\README.md_");
         
     }
 
@@ -401,9 +404,15 @@ main/wmain - нужны только для MSVC/Console
         //                                    );
 
         FilenameStringType tempPath;
-        if (!createTempFolder(tempPath, inputFileText, umba::string_plus::make_string<FilenameStringType>("umba-md-pp-view")))
+        if (!createTempFolder(tempPath, inputFilename /* inputFileText */ , umba::string_plus::make_string<FilenameStringType>("umba-md-pp-view")))
         {
-            showErrorMessageBox("Failed to create temp folder. Can't view MD file.");
+            std::ostringstream oss;
+            oss << "Can't view MD file.\n";
+            oss << "Failed to create temp folder: " << tempPath << "\n";
+            #if defined(WIN32) || defined(_WIN32)
+            oss << "Error code: " << (unsigned)GetLastError();
+            #endif
+            showErrorMessageBox(oss.str());
             return 1;
         }
 
