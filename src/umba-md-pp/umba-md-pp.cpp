@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
     marty_tr::tr_init_all_translations(tr_get_translations_json());
 
 
-    std::cout << "Doxygen: " << umba::toUtf8(findDoxygenExecutableName()) << "\n";
+    //std::cout << "Doxygen: " << umba::toUtf8(findDoxygenExecutableName()) << "\n";
 
     using namespace umba::omanip;
 
@@ -215,6 +215,13 @@ int main(int argc, char* argv[])
     //     LOG_ERR_OPT << "command line arguments parsing error" << "\n";
     //     return -1;
     // }
+
+    if (!argsParser.quet  /* && !hasHelpOption */ )
+    {
+        //printNameVersion();
+        //LOG_MSG_OPT<<"\n";
+        umba::cli_tool_helpers::printNameVersion(umbaLogStreamMsg);
+    }
 
 
     umba::cli_tool_helpers::IoFileType outputFileType = umba::cli_tool_helpers::IoFileType::nameEmpty;

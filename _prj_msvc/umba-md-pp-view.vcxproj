@@ -34,14 +34,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\umba-md-pp\umba-md-pp-view.cpp" />
-    <ClCompile Include="..\_libs\sfmt\umba_lout.cpp" />
-    <ClCompile Include="..\_libs\umba\time_service.cpp" />
-    <ClCompile Include="..\_libs\encoding\encoding.cpp" />
-    <ClCompile Include="..\_libs\encoding\compact_enc_det\compact_enc_det.cc" />
-    <ClCompile Include="..\_libs\encoding\compact_enc_det\compact_enc_det_hint_code.cc" />
-    <ClCompile Include="..\_libs\encoding\util\encodings\encodings.cc" />
-    <ClCompile Include="..\_libs\encoding\util\languages\languages.cc" />
   </ItemGroup>
+  <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\umba\.msvc\sources.props" />
+  <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\sfmt\.msvc\sources.props" />
+  <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\encoding\.msvc\sources.props" />
   <ItemGroup>
     <ResourceCompile Include="..\src\umba-md-pp\_umba-md-pp-view.rc" />
   </ItemGroup>
