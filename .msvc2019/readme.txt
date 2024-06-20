@@ -12,3 +12,18 @@
   <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\umba\.msvc\sources.props" />
   <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\sfmt\.msvc\sources.props" />
   <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\encoding\.msvc\sources.props" />
+
+
+Проекты переезжают в .msvcNNNN
+Пропсы переезжают в .msvc
+
+Правим проекты.
+Находим
+<Import Project=".\props\
+заменяем на 
+<Import Project="$(MSBuildThisFileDirectory)\..\.msvc\
+
+Правим sln.
+, "_prj_msvc\
+заменяем на 
+, ".msvc2019\

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2C2F2760-C811-45D7-9981-602FC6EDA57E}</ProjectGuid>
+    <ProjectGuid>{75981B45-54AF-40FC-B310-BE1368943091}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <Import Project=".\props\umba_project_configurations.props" />
-  <Import Project=".\props\umba_msvcver.props" />
-  <Import Project=".\props\umba_target_console.props" />
-  <Import Project=".\props\umba_config_matrix_common.props" />
-  <Import Project=".\props\umba_3dp_nlohman.props" />
+  <Import Project="$(MSBuildThisFileDirectory)\..\.msvc\umba_project_configurations.props" />
+  <Import Project="$(MSBuildThisFileDirectory)\..\.msvc\umba_msvcver.props" />
+  <Import Project="$(MSBuildThisFileDirectory)\..\.msvc\umba_target_windows.props" />
+  <Import Project="$(MSBuildThisFileDirectory)\..\.msvc\umba_config_matrix_common.props" />
+  <Import Project="$(MSBuildThisFileDirectory)\..\.msvc\umba_3dp_nlohman.props" />
   <!--Import Project=".\props\umba_3dp_yaml_cpp.props" /-->
   <!--Import Project=".\umba_config_matrix_qt.props" /-->
   <Import Project=".\umba_prjdirs.props" />
@@ -25,7 +25,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup>
     <ClCompile>
-      <PreprocessorDefinitions>MARTY_TR_FORCE_USE_UNORDERED_MAP;UMBA_MD_PP_VIEW;UMBA_MD_PP_VIEW_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MARTY_TR_FORCE_USE_UNORDERED_MAP;UMBA_MD_PP_VIEW;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -35,11 +35,15 @@
   <ItemGroup>
     <ClCompile Include="..\src\umba-md-pp\umba-md-pp-view.cpp" />
   </ItemGroup>
+  <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\umba\.msvc\headers.props" />
   <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\umba\.msvc\sources.props" />
   <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\sfmt\.msvc\sources.props" />
   <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\encoding\.msvc\sources.props" />
   <ItemGroup>
     <ResourceCompile Include="..\src\umba-md-pp\_umba-md-pp-view.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\_libs\umba\char_writers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
