@@ -96,10 +96,6 @@ std::string               outputFilename;
 
 AppConfig<std::string> appConfig;
 
-// Конфиг версии
-#include "app_ver_config.h"
-// Принтуем версию
-#include "print_ver.h"
 // Парсер параметров командной строки
 #include "arg_parser.h"
 

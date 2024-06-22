@@ -19,7 +19,7 @@
 
 Правим проекты.
 Находим
-<Import Project=".\props\
+<Import Project=".\props\  или  <Import Project="$(ProjectDir)\
 заменяем на 
 <Import Project="$(MSBuildThisFileDirectory)\..\.msvc\
 

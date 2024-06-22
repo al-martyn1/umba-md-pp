@@ -36,6 +36,7 @@
     <ClCompile Include="..\src\umba-md-pp\umba-md-pp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <None Include="..\README.md"/>
   </ItemGroup>
   <Import Project="$(UMBA_LOCAL_LIBS_ROOT)\umba\.msvc\sources.props" />
   <!--Import Project="$(UMBA_LOCAL_LIBS_ROOT)\umba\.msvc\headers.props" /-->

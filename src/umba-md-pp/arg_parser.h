@@ -4,6 +4,8 @@
 
 //#include "app_config.h"
 #include "umba/cmd_line.h"
+#include "umba/cli_tool_helpers.h"
+#include "app_ver_config.h"
 
 
 #if defined(WIN32) || defined(_WIN32)
@@ -100,7 +102,7 @@ int operator()( const StringType                                &a           //!
 
             if (!ignoreInfos)
             {
-                printOnlyVersion();
+                umba::cli_tool_helpers::printOnlyVersion(std::cout);
                 return 1;
             }
         }
@@ -861,9 +863,9 @@ int operator()( const StringType                                &a           //!
                 //printNameVersion();
                 if (!argsParser.quet)
                 {
-                    printNameVersion();
-                    printBuildDateTime();
-                    printCommitHash();
+                    umba::cli_tool_helpers::printNameVersion(std::cout);
+                    //umba::cli_tool_helpers::printBuildDateTime();
+                    umba::cli_tool_helpers::printCommitHash(std::cout);
                     std::cout<<"\n";
                 //printHelp();
                 }
