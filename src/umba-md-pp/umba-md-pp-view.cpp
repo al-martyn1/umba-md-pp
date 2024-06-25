@@ -128,8 +128,8 @@ unsigned lineNo = 0;
 
 
 
-#ifdef _MSC_VER
-#pragma comment(lib, "yaml-cpp.lib")
+#if defined(_MSC_VER) && !(defined(CMAKE_INTDIR) || defined(CMAKE_CFG_INTDIR) || defined(CMAKE_BINARY_DIR))
+    #pragma comment(lib, "yaml-cpp.lib")
 #endif
 
 
