@@ -65,7 +65,6 @@
 		"xmemory0": "cpp"
 	},
 	"C_Cpp.default.compilerPath": "g++.exe",
-	"cmake.sourceDirectory": "${workspaceFolder}/_prj_cmake",
 	"C_Cpp.errorSquiggles": "disabled",
 
 }
