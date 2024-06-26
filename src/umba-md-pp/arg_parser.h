@@ -747,6 +747,24 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("EXT[,EXT...]",umba::command_line::OptionType::optString)
+               || opt.isOption("add-mdpp-extention")
+               || opt.isOption("add-mdpp-extentions")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Add file extentions of the MD-PP files."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+         
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            return appConfig.addMdppExtentions(strVal) ?  0 : -1;
+        }
+
+
         #if defined(UMBA_MD_PP_VIEW)
 
         else if ( opt.setParam("COMMAEXTLIST", std::string()/* umba::command_line::OptionType::optString */ )
@@ -756,20 +774,29 @@ int operator()( const StringType                                &a           //!
         {
             if (argsParser.hasHelpOption) return 0;
 
-            auto param = opt.optArg;
-            if (!param.empty())
-            {
-                if (!opt.getParamValue(strVal,errMsg))
-                {
-                    LOG_ERR_OPT<<errMsg<<"\n";
-                    return -1;
-                }
 
-                param = strVal;
-            }
-            else
+            std::string extListCommaSep = appConfig.getSupportedExtentionsString();
+
+            // auto paramStr = opt.optArg;
+            // if (!param.empty())
+            // {
+            //     if (!opt.getParamValue(strVal,errMsg))
+            //     {
+            //         LOG_ERR_OPT<<errMsg<<"\n";
+            //         return -1;
+            //     }
+            //  
+            //     param = strVal;
+            // }
+            // else
+            // {
+            //     ///param = "md,md_,_md,markdown,_markdown,markdown_";
+            //  
+            // }
+
+            if (!opt.optArg.empty())
             {
-                param = "md,md_,_md,markdown,_markdown,markdown_";
+                extListCommaSep += "," + opt.optArg;
             }
 
             auto exeFullName      = argsParser.programLocationInfo.exeFullName;
@@ -787,8 +814,9 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
-            auto wParam = umba::fromUtf8(param);
-            if (!regShellExtentionHandlerForExtList(appIdNameWide, wParam))
+            //auto wParam = umba::fromUtf8(param);
+            auto extListCommaSepW = umba::fromUtf8(extListCommaSep);
+            if (!regShellExtentionHandlerForExtList(appIdNameWide, extListCommaSepW))
             {
                 LOG_ERR_OPT<<"Failed to register appid as handler"<<"\n";
                 return -1;

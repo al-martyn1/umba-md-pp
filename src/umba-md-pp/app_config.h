@@ -23,6 +23,7 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <algorithm>
 
 
 
@@ -73,6 +74,76 @@ struct AppConfig
     std::string                                           documentDefaultLanguage;
     std::string                                           documentForceLanguage;
 
+    std::vector<std::string>                              mdppExtentions;
+
+
+    std::unordered_set<std::string> getSupportedExtentionsSet() const
+    {
+        std::unordered_set<std::string> extSet;
+
+        for(auto mdppExt : appConfig.mdppExtentions)
+        {
+            extSet.insert(mdppExt);
+            extSet.insert(getTargetFileExtention(mdppExt));
+        }
+
+        return extSet;
+    }
+
+    std::vector<std::string> getSupportedExtentionsVector() const
+    {
+        auto s = getSupportedExtentionsSet();
+        return std::vector<std::string>(s.begin(), s.end());
+    }
+
+    std::string getSupportedExtentionsString() const
+    {
+        auto s = getSupportedExtentionsSet();
+        return umba::string_plus::merge<std::string, std::unordered_set<std::string>::const_iterator>( s.begin(), s.end(), ','/*, [](auto s) { return s; }*/ );
+    }
+
+    static
+    std::string getTargetFileExtention(std::string srcFileExtention)
+    {
+        // source file extentions (default config): _md, .md_, .markdown, ._markdown, .markdown_
+        umba::string_plus::trim(srcFileExtention, umba::string_plus::is_one_of<char>("._"));
+        return srcFileExtention;
+    }
+
+    bool addMdppExtention(std::string ext)
+    {
+        // inplace trim
+        umba::string_plus::trim(ext, umba::string_plus::is_one_of<char>("."));
+
+        if (ext.empty())
+            return false;
+
+        ext = umba::string_plus::tolower_copy(ext);
+
+        std::vector<std::string>::const_iterator it = std::find(mdppExtentions.begin(), mdppExtentions.end(), ext);
+        if (it==mdppExtentions.end())
+        {
+            mdppExtentions.emplace_back(ext);
+        }
+
+        return true;
+    }
+
+    bool addMdppExtentions(const std::vector<std::string> &extList)
+    {
+        for(const auto &ext : extList)
+        {
+            if (!addMdppExtention(ext))
+                return false;
+        }
+
+        return true;
+    }
+
+    bool addMdppExtentions(const std::string &extListStr)
+    {
+        return addMdppExtentions(marty_cpp::splitToLinesSimple(extListStr, false, ','));
+    }
 
     FilenameStringType getSamplesPathsAsMergedString(const FilenameStringType &delim) const
     {

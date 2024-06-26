@@ -286,7 +286,11 @@ main/wmain - нужны только для MSVC/Console
 
         //argsParser.args.push_back("--register-view-handler");
 
-        argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-roboconf\\README.md_");
+        #if defined(UMBA_MD_PP_VIEW)
+            argsParser.args.push_back("--register-view-handler");
+        #else
+            argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-roboconf\\README.md_");
+        #endif
         
     }
 
