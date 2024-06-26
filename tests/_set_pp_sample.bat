@@ -1,5 +1,5 @@
-@set PPPATH=%~dp0\..\.build\GCC-73_32-QT\unknown\Debug\bin
-@set PPPATH=%~dp0\..\.out\msvc2019\x86\Debug
+@set PPPATH=%~dp0\..\.build\GCC-73_64-QT\unknown\Debug\bin
+@set PPPATH=%~dp0\..\.out\msvc2019\x64\Debug
 @set PP=%PPPATH%\umba-md-pp.exe
 @set PPVIEW=%PPPATH%\umba-md-pp-view.exe
 @set PPVIEWCON=%PPPATH%\umba-md-pp-view-console.exe
