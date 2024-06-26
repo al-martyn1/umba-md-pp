@@ -747,6 +747,24 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("PATH",umba::command_line::OptionType::optString)
+               || opt.isOption("batch-output-root")
+               || opt.isOption("batch-output-root-path")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Set output root path for batch mode."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+         
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.batchOutputRoot = strVal;
+            return 0;
+        }
+
         else if ( opt.setParam("EXT[,EXT...]",umba::command_line::OptionType::optString)
                || opt.isOption("add-mdpp-extention")
                || opt.isOption("add-mdpp-extentions")

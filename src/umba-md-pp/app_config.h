@@ -76,6 +76,8 @@ struct AppConfig
 
     std::vector<std::string>                              mdppExtentions;
 
+    std::string                                           batchOutputRoot;
+
 
     std::unordered_set<std::string> getSupportedExtentionsSet() const
     {
