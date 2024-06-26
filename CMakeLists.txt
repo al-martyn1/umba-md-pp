@@ -85,7 +85,6 @@ source_group(TREE "${SRC_ROOT}" PREFIX "Resources" FILES "${umba_md_pp_view_reso
 
 add_executable(gen-lang-detection-tr "${SRC_ROOT}/umba-md-pp/gen-lang-detection-tr.cpp" ${headers})
 umba_add_target_options(gen-lang-detection-tr "CONSOLE" "UTF8")
-target_compile_definitions(gen-lang-detection-tr PRIVATE "_CONSOLE" "CONSOLE")
 target_link_libraries(gen-lang-detection-tr PRIVATE ws2_32 iphlpapi shell32)
 target_link_libraries(gen-lang-detection-tr PRIVATE encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
 #target_link_libraries(gen-lang-detection-tr PRIVATE pugixml::pugixml marty_pugixml::marty_pugixml)
@@ -94,7 +93,6 @@ target_link_libraries(gen-lang-detection-tr PRIVATE nlohmann_json::nlohmann_json
 
 add_executable(umba-md-pp "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp" ${headers})
 umba_add_target_options(umba-md-pp "CONSOLE" "UTF8")
-target_compile_definitions(umba-md-pp PRIVATE "_CONSOLE" "CONSOLE")
 target_link_libraries(umba-md-pp PRIVATE ws2_32 iphlpapi shell32)
 target_link_libraries(umba-md-pp PRIVATE encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
 #target_link_libraries(umba-md-pp PRIVATE pugixml::pugixml marty_pugixml::marty_pugixml)
@@ -103,6 +101,7 @@ target_link_libraries(umba-md-pp PRIVATE nlohmann_json::nlohmann_json yaml-cpp::
 
 add_executable(umba-md-pp-view "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" ${headers} ${umba_md_pp_view_resources})
 umba_add_target_options(umba-md-pp-view "WINDOWS" "UTF8")
+target_compile_definitions(umba-md-pp-view PRIVATE "UMBA_MD_PP_VIEW")
 target_link_libraries(umba-md-pp-view PRIVATE ws2_32 iphlpapi shell32)
 target_link_libraries(umba-md-pp-view PRIVATE encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
 #target_link_libraries(umba-md-pp-view PRIVATE pugixml::pugixml marty_pugixml::marty_pugixml)
@@ -111,6 +110,7 @@ target_link_libraries(umba-md-pp-view PRIVATE nlohmann_json::nlohmann_json yaml-
 
 add_executable(umba-md-pp-view-console "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" ${headers} ${umba_md_pp_view_resources})
 umba_add_target_options(umba-md-pp-view-console "CONSOLE" "UTF8")
+target_compile_definitions(umba-md-pp-view-console PRIVATE "UMBA_MD_PP_VIEW")
 target_compile_definitions(umba-md-pp-view-console PRIVATE "UMBA_MD_PP_VIEW_CONSOLE")
 target_link_libraries(umba-md-pp-view-console PRIVATE ws2_32 iphlpapi shell32)
 target_link_libraries(umba-md-pp-view-console PRIVATE encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
