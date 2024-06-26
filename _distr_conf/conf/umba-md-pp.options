@@ -4,7 +4,22 @@
 --document-language=russian
 
 # Расширения, обрабатываемые (и сканируемые) MDPP
+# старое
 --add-mdpp-extentions=_md,_md_,md_,_markdown,_markdown_,markdown_
+
+# новое
+--add-mdpp-extentions=_md,_md_,md_
+--add-mdpp-extentions=_mkd,_mkd_,mkd_
+--add-mdpp-extentions=_mdwn,_mdwn_,mdwn_
+--add-mdpp-extentions=_mdown,_mdown_,mdown_
+--add-mdpp-extentions=_mdtxt,_mdtxt_,mdtxt_
+--add-mdpp-extentions=_mdtext,_mdtext_,mdtext_
+--add-mdpp-extentions=_markdown,_markdown_,markdown_
+#--add-mdpp-extentions=_text,_text_,text_
+
+
+
+
 
 # При генерации вьювером название файла задается на основании заголовка (из тэгов или первого заголовка, или из первых строк) документа
 # Но мы придерживаемся идеи не использовать русские имена без крайней необходимости
