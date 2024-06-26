@@ -5,3 +5,25 @@ Is it possible to edit markdown files depending on the output chosen? - https://
 Blogging in Djot instead of Markdown - https://www.jonashietala.se/blog/2024/02/02/blogging_in_djot_instead_of_markdown/
 Leanpub Flavoured Markdown vs. Markua - https://leanpub.com/lfm/read
 R Markdown: The Definitive Guide - https://bookdown.org/yihui/rmarkdown/
+
+RFC 7763 introduced MIME type text/markdown - https://datatracker.ietf.org/doc/html/rfc7763
+Guidance on Markdown: Design Philosophies, Stability Strategies, and Select Registrations - https://datatracker.ietf.org/doc/html/rfc7764
+
+Comparison of document markup languages - https://datatracker.ietf.org/doc/html/rfc7764
+Comparison of documentation generators - https://en.wikipedia.org/wiki/Comparison_of_documentation_generators
+Lightweight markup language - https://en.wikipedia.org/wiki/Lightweight_markup_language
+Wiki markup - https://en.wikipedia.org/wiki/Wiki_markup
+
+
+Markdown - https://en.wikipedia.org/wiki/Markdown
+    .md, .markdown
+Pandoc - https://en.wikipedia.org/wiki/Pandoc
+  https://pandoc.org/
+
+MultiMarkdown - https://en.wikipedia.org/wiki/MultiMarkdown
+  https://rawgit.com/fletcher/MultiMarkdown-6-Syntax-Guide/master/index.html
+    .mmd
+
+setext - https://en.wikipedia.org/wiki/Setext
+textile - https://en.wikipedia.org/wiki/Textile_(markup_language)
+reStructuredText - https://en.wikipedia.org/wiki/ReStructuredText
