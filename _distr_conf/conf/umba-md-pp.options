@@ -5,7 +5,7 @@
 
 # Расширения, обрабатываемые (и сканируемые) MDPP
 # старое
---add-mdpp-extentions=_md,_md_,md_,_markdown,_markdown_,markdown_
+#--add-mdpp-extentions=_md,_md_,md_,_markdown,_markdown_,markdown_
 
 # новое
 --add-mdpp-extentions=_md,_md_,md_
@@ -17,7 +17,15 @@
 --add-mdpp-extentions=_markdown,_markdown_,markdown_
 #--add-mdpp-extentions=_text,_text_,text_
 
-
+# Исключаем подкаталоги со следующими именами
+--batch-exclude-dirs=_md,_md_,md_
+--batch-exclude-dirs=_mkd,_mkd_,mkd_
+--batch-exclude-dirs=_mdwn,_mdwn_,mdwn_
+--batch-exclude-dirs=_mdown,_mdown_,mdown_
+--batch-exclude-dirs=_mdtxt,_mdtxt_,mdtxt_
+--batch-exclude-dirs=_mdtext,_mdtext_,mdtext_
+--batch-exclude-dirs=_markdown,_markdown_,markdown_
+#--batch-exclude-dirs=_text,_text_,text_
 
 
 

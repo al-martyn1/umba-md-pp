@@ -38,7 +38,8 @@ function(umba_add_target_options TARGET)
                 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
                     message(NOTICE "Add SRCUTF8 options for Clang")
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-                    target_compile_options(${TARGET} PRIVATE "-finput-charset=UTF-8")
+                    # !!! conversion from UTF-8 to UTF-8 -finput-charset=UTF-8 not supported by iconv
+                    # target_compile_options(${TARGET} PRIVATE "-finput-charset=UTF-8")
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
                     message(NOTICE "Add SRCUTF8 options for Intel")
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
@@ -52,7 +53,8 @@ function(umba_add_target_options TARGET)
                 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
                     message(NOTICE "Add UTF8 options for Clang")
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-                    target_compile_options(${TARGET} PRIVATE "-fexec-charset=UTF-8 -finput-charset=UTF-8")  # https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
+                    # !!! conversion from UTF-8 to UTF-8 -finput-charset=UTF-8 not supported by iconv
+                    # target_compile_options(${TARGET} PRIVATE "-fexec-charset=UTF-8 -finput-charset=UTF-8")  # https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
                     message(NOTICE "Add UTF8 options for Intel")
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")

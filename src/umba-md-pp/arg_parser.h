@@ -298,30 +298,6 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        // else if ( opt.isOption("exclude-files") || opt.isOption('X') || opt.setParam("MASK,...")
-        //        || opt.setDescription("Exclude files from parsing. The 'MASK' parameter is a simple file mask, where '*' "
-        //                              "means any number of any chars, and '?' means exact one of any char. In addition, "
-        //                              "symbol '^' in front and/or back of the mask means that the mask will be bound to beginning/ending "
-        //                              "of the tested file name.\n"
-        //                              "Also, regular expresion syntax allowed in form '" + 
-        //                              umba::regex_helpers::getRawEcmaRegexPrefix<std::string>() + "YOURREGEX'. The regular expresions supports\n"
-        //                              "See also: C++ Modified ECMA Script regular expression grammar - https://en.cppreference.com/w/cpp/regex/ecmascript"
-        //                             )
-        //         )
-        // {
-        //     if (argsParser.hasHelpOption) return 0;
-        //     
-        //     if (!opt.hasArg())
-        //     {
-        //         LOG_ERR_OPT<<"exclude files mask not taken (--exclude-files)\n";
-        //         return -1;
-        //     }
-        //  
-        //     std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
-        //     appConfig.excludeFilesMaskList.insert(appConfig.excludeFilesMaskList.end(), lst.begin(), lst.end());
-        //  
-        //     return 0;
-        // }
         //  
         // else if ( opt.isOption("include-files") || opt.isOption('I') || opt.setParam("MASK,...")
         //        || opt.setDescription("Include C/C++ names for output. Only files which file name matched any of taken masks, will be added to output.\n"
@@ -762,6 +738,73 @@ int operator()( const StringType                                &a           //!
             }
             
             appConfig.batchOutputRoot = strVal;
+            return 0;
+        }
+
+        else if ( opt.isOption("batch-exclude-files") || opt.isOption('X') || opt.setParam("MASK,...")
+               || opt.setDescription("Exclude files from parsing in the batch mode. The 'MASK' parameter is a simple file mask, where '*' "
+                                     "means any number of any chars, and '?' means exact one of any char. In addition, "
+                                     "symbol '^' in front and/or back of the mask means that the mask will be bound to beginning/ending "
+                                     "of the tested file name.\n"
+                                     "Also, regular expresion syntax allowed in form '" + 
+                                     umba::regex_helpers::getRawEcmaRegexPrefix<std::string>() + "YOURREGEX'. The regular expresions supports\n"
+                                     "See also: C++ Modified ECMA Script regular expression grammar - https://en.cppreference.com/w/cpp/regex/ecmascript"
+                                    )
+                )
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"exclude files mask not taken (--exclude-files)\n";
+                return -1;
+            }
+         
+            std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
+            appConfig.batchExcludeFilesMaskList.insert(appConfig.batchExcludeFilesMaskList.end(), lst.begin(), lst.end());
+         
+            return 0;
+        }
+
+        else if ( opt.isOption("batch-exclude-dir") || opt.isOption("batch-exclude-dirs") || opt.setParam("DIRNAME,...")
+               || opt.setDescription("Exclude dirs from scaning in the batch mode. The 'DIRNAME' parameter is a simple directory name, not a mask"
+                                    )
+                )
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"exclude dirs not taken (--atch-exclude-dir)\n";
+                return -1;
+            }
+         
+            std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
+            appConfig.batchExcludeDirs.insert(appConfig.batchExcludeDirs.end(), lst.begin(), lst.end());
+         
+            return 0;
+        }
+
+        else if ( opt.isOption("batch-scan") ||  opt.setParam("DIRNAME,...")
+               || opt.setDescription("Perform batch job on taken directories"
+                                    )
+                )
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"exclude dirs not taken (--atch-exclude-dir)\n";
+                return -1;
+            }
+         
+            std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
+            for(auto &p: lst)
+            {
+                p = makeAbsPath(p);
+            }
+            appConfig.batchScanPaths.insert(appConfig.batchScanPaths.end(), lst.begin(), lst.end());
+         
             return 0;
         }
 

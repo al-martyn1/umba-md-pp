@@ -44,6 +44,7 @@
 
 #include "encoding/encoding.h"
 #include "utils.h"
+#include "batch_utils.h"
 
 //
 #include "marty_tr/marty_tr.h"
@@ -164,18 +165,22 @@ int main(int argc, char* argv[])
 
         argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
 
-        argsParser.args.push_back("--overwrite");
-        argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");
-        argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
-        //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
-        argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
-        argsParser.args.push_back("--processing-options=generate-toc,meta-data");
-        argsParser.args.push_back("--serialize-meta-tags=title,descripion,author");
-        argsParser.args.push_back("--target-renderer=doxygen");
+        // argsParser.args.push_back("--overwrite");
+        // argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");
+        // argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
+        // //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
+        // argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo,fail,snippet-options,trim-arround");
+        // argsParser.args.push_back("--processing-options=generate-toc,meta-data");
+        // argsParser.args.push_back("--serialize-meta-tags=title,descripion,author");
+        // argsParser.args.push_back("--target-renderer=doxygen");
+        //  
+        // // argsParser.args.push_back("");
+        // // argsParser.args.push_back("");
+        // argsParser.args.push_back(rootPath + "tests\\test04.md_");
 
-        // argsParser.args.push_back("");
-        // argsParser.args.push_back("");
-        argsParser.args.push_back(rootPath + "tests\\test04.md_");
+        argsParser.args.push_back("--batch-scan="+rootPath);
+
+
     }
 
     //programLocationInfo = argsParser.programLocationInfo;
@@ -251,6 +256,26 @@ int main(int argc, char* argv[])
     {
         umbaLogStreamMsg << "Processing: "<<inputFilename<<"\n";
     }
+
+    auto &infoLog = argsParser.quet ? umbaLogStreamNul : umbaLogStreamMsg;
+
+
+    if (appConfig.isBatchMode())
+    {
+        std::vector<std::string>  foundFiles;
+        std::vector<std::string>  foundFilesRootFolders;
+
+        batchScanForFiles( appConfig.batchScanPaths
+                         , appConfig.mdppExtentions
+                         , appConfig.batchExcludeDirs
+                         , appConfig.batchExcludeFilesMaskList
+                         , infoLog
+                         , foundFiles
+                         , &foundFilesRootFolders
+                         );
+    
+    }
+
 
     std::string inputFileText;
     //if (!umba::filesys::readFile(inputFilename, inputFileText))

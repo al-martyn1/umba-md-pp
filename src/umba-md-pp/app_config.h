@@ -77,13 +77,21 @@ struct AppConfig
     std::vector<std::string>                              mdppExtentions;
 
     std::string                                           batchOutputRoot;
+    std::vector<std::string>                              batchExcludeDirs;
+    std::vector<std::string>                              batchExcludeFilesMaskList;
+    std::vector<std::string>                              batchScanPaths;
 
+
+    bool isBatchMode() const
+    {
+        return !batchScanPaths.empty();
+    }
 
     std::unordered_set<std::string> getSupportedExtentionsSet() const
     {
         std::unordered_set<std::string> extSet;
 
-        for(auto mdppExt : appConfig.mdppExtentions)
+        for(auto mdppExt : mdppExtentions)
         {
             extSet.insert(mdppExt);
             extSet.insert(getTargetFileExtention(mdppExt));
