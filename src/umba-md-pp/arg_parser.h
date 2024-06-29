@@ -35,6 +35,7 @@ StringType getBasePath() const
 
 StringType makeAbsPath( StringType p )
 {
+    //return umba::filename::makeCanonical(umba::filename::makeAbsPath( p, getBasePath() ));
     return umba::filename::makeAbsPath( p, getBasePath() );
 }
 
@@ -785,7 +786,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.isOption("batch-scan") ||  opt.setParam("DIRNAME,...")
+        else if ( opt.isOption("batch-scan") || opt.setParam("DIRNAME,...")
                || opt.setDescription("Perform batch job on taken directories"
                                     )
                 )
@@ -803,7 +804,32 @@ int operator()( const StringType                                &a           //!
             {
                 p = makeAbsPath(p);
             }
-            appConfig.batchScanPaths.insert(appConfig.batchScanPaths.end(), lst.begin(), lst.end());
+            //appConfig.batchScanPaths.insert(appConfig.batchScanPaths.end(), lst.begin(), lst.end());
+            appConfig.addBatchScanPaths(lst, false); // no recurse
+         
+            return 0;
+        }
+
+        else if ( opt.isOption("batch-scan-recurse") || opt.isOption("batch-rscan") || opt.setParam("DIRNAME,...")
+               || opt.setDescription("Perform batch job on taken directories with recursion scan"
+                                    )
+                )
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"exclude dirs not taken (--atch-exclude-dir)\n";
+                return -1;
+            }
+         
+            std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
+            for(auto &p: lst)
+            {
+                p = makeAbsPath(p);
+            }
+            //appConfig.batchScanPaths.insert(appConfig.batchScanPaths.end(), lst.begin(), lst.end());
+            appConfig.addBatchScanPaths(lst, true); // recurse
          
             return 0;
         }
@@ -999,7 +1025,9 @@ int operator()( const StringType                                &a           //!
 
         if (!argsParser.quet)
         {
+            #if defined(DEBUG) || defined(_DEBUG)
             std::cout << "Processing options file: " << optFileName << "\n";
+            #endif
         }
 
         optFiles.push(optFileName);

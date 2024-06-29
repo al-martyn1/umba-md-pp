@@ -2,6 +2,8 @@
 
 
 #include "umba/filesys_scanners.h"
+//
+#include "app_config.h"
 
 
 // appConfig.mdppExtentions
@@ -12,9 +14,14 @@
     // std::vector<std::string>                              batchExcludeFilesMaskList;
     // std::vector<std::string>                              batchScanPaths;
 
+// struct ScanPathsEntry
+// {
+//     std::string        path;
+//     bool               recurse = false;
+// };
 
 template<typename LogMsgType> inline
-void batchScanForFiles( const std::vector<std::string> &batchScanPaths
+void batchScanForFiles( const std::vector<ScanPathsEntry> &batchScanPaths
                       , const std::vector<std::string> &extList
                       , const std::vector<std::string> &excludeDirs
                       , const std::vector<std::string> &excludeFilesMaskList
@@ -33,25 +40,69 @@ void batchScanForFiles( const std::vector<std::string> &batchScanPaths
     std::vector<std::string> excludeMasks; excludeMasks.reserve(excludeDirs.size() + excludeFilesMaskList.size());
     for(const auto &excludeDir : excludeDirs)
     {
-        includeMasks.emplace_back("*/" + excludeDir + "/*");
+        excludeMasks.emplace_back("*/" + excludeDir + "/*");
     }
 
     excludeMasks.insert(excludeMasks.end(), excludeFilesMaskList.begin(), excludeFilesMaskList.end());
 
-    const std::vector<std::string> &scanPaths = batchScanPaths;
 
     std::vector<std::string> excludedFiles;
     std::set<std::string>    foundExtentions;
-    umba::filesys::scanners::scanFolders( scanPaths
-                                        , includeMasks
-                                        , excludeMasks
-                                        , logMsg
-                                        , foundFiles
-                                        , excludedFiles
-                                        , foundExtentions
-                                        , pFoundFilesRootFolders
-                                        );
-    
+
+    std::vector<std::string> scanPaths;
+    bool bCurRecurse = false;
+    bool bHeaderPrinted = false;
+
+    std::vector<ScanPathsEntry>::const_iterator bit = batchScanPaths.begin();
+    for(; bit!=batchScanPaths.end(); ++bit)
+    {
+        if (bit->recurse!=bCurRecurse)
+        {
+            if (!scanPaths.empty())
+            {
+                umba::filesys::scanners::scanFolders( scanPaths
+                                                    , includeMasks
+                                                    , excludeMasks
+                                                    , logMsg
+                                                    , foundFiles
+                                                    , excludedFiles
+                                                    , foundExtentions
+                                                    , pFoundFilesRootFolders
+                                                    , bCurRecurse
+                                                    , !bHeaderPrinted
+                                                    );
+            }
+
+            bHeaderPrinted = true;
+
+            scanPaths      .clear();
+            excludedFiles  .clear();
+            foundExtentions.clear();
+
+            bCurRecurse = bit->recurse;
+            scanPaths.emplace_back(bit->path);
+        }
+        else
+        {
+            scanPaths.emplace_back(bit->path);
+        }
+    }
+
+    if (!scanPaths.empty())
+    {
+        umba::filesys::scanners::scanFolders( scanPaths
+                                            , includeMasks
+                                            , excludeMasks
+                                            , logMsg
+                                            , foundFiles
+                                            , excludedFiles
+                                            , foundExtentions
+                                            , pFoundFilesRootFolders
+                                            , bCurRecurse
+                                            , !bHeaderPrinted
+                                            );
+    }
+
 }
 
 

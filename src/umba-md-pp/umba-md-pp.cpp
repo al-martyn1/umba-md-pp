@@ -25,7 +25,8 @@
 #include "umba/scope_exec.h"
 #include "umba/macro_helpers.h"
 #include "umba/macros.h"
-
+#include "umba/info_log.h"
+//
 #include "marty_cpp/marty_cpp.h"
 #include "marty_cpp/sort_includes.h"
 #include "marty_cpp/enums.h"
@@ -147,23 +148,28 @@ int main(int argc, char* argv[])
     // Force set CLI arguments while running under debugger
     if (umba::isDebuggerPresent())
     {
+        std::string cwd = umba::filesys::getCurrentDirectory<std::string>();
+        std::cout << "Working Dir: " << cwd << "\n";
+
         #if (defined(WIN32) || defined(_WIN32))
 
             #if defined(__GNUC__)
 
-                std::string rootPath = "..\\..\\..\\..\\..\\";
+                std::string rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
 
             #else // if
 
-                std::string rootPath = "..\\";
+                std::string rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
 
             #endif
+
+            rootPath = umba::filename::appendPathSepCopy(rootPath);
 
         #endif
 
         argsParser.args.clear();
 
-        argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
+        //argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
 
         // argsParser.args.push_back("--overwrite");
         // argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");
@@ -179,6 +185,10 @@ int main(int argc, char* argv[])
         // argsParser.args.push_back(rootPath + "tests\\test04.md_");
 
         argsParser.args.push_back("--batch-scan="+rootPath);
+        argsParser.args.push_back("--batch-scan="+rootPath+"doc");
+        argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
+        // batch-exclude-files
+        // batch-output-root
 
 
     }
@@ -254,7 +264,7 @@ int main(int argc, char* argv[])
 
     if (!argsParser.quet)
     {
-        umbaLogStreamMsg << "Processing: "<<inputFilename<<"\n";
+        umbaLogStreamMsg << ": "<<inputFilename<<"\n";
     }
 
     auto &infoLog = argsParser.quet ? umbaLogStreamNul : umbaLogStreamMsg;
@@ -273,6 +283,19 @@ int main(int argc, char* argv[])
                          , foundFiles
                          , &foundFilesRootFolders
                          );
+
+        if (foundFiles.empty())
+        {
+        
+        }
+        else
+        {
+            umba::info_log::printSectionHeader(infoLog, "Files for processing");
+            for(const auto &foundFile: foundFiles)
+            {
+                infoLog << foundFile << "\n";
+            }
+        }
     
     }
 

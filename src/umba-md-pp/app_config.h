@@ -10,6 +10,7 @@
 #include "umba/flag_helpers.h"
 #include "umba/string_plus.h"
 #include "umba/id_gen.h"
+#include "umba/filename.h"
 //
 //#include "umba/regex_helpers.h"
 //
@@ -36,6 +37,13 @@ struct LangOptions
     std::string listingTag;
     std::string cutPrefix ;
 
+};
+
+
+struct ScanPathsEntry
+{
+    std::string        path;
+    bool               recurse = false;
 };
 
 //----------------------------------------------------------------------------
@@ -79,7 +87,50 @@ struct AppConfig
     std::string                                           batchOutputRoot;
     std::vector<std::string>                              batchExcludeDirs;
     std::vector<std::string>                              batchExcludeFilesMaskList;
-    std::vector<std::string>                              batchScanPaths;
+    //std::vector<std::string>                              batchScanPaths;
+    std::vector<ScanPathsEntry>                           batchScanPaths;
+
+
+    bool addBatchScanPath(const std::string &path, bool bRecurse)
+    {
+        std::vector<ScanPathsEntry>::iterator it = std::find_if( batchScanPaths.begin(), batchScanPaths.end()
+                                                               , [=](const ScanPathsEntry &spe)
+                                                                 {
+                                                                     return umba::filename::makeCanonical(spe.path)==umba::filename::makeCanonical(path);
+                                                                 }
+                                                               );
+        if (it==batchScanPaths.end())
+        {
+            batchScanPaths.emplace_back(ScanPathsEntry{path, bRecurse});
+            return true;
+        }
+
+        // Тут у нас найден путь, но опция рекурсии может быть отличной от новой
+
+        if (it->recurse==bRecurse) // Опция рекурсии та же
+            return true; // всё хорошо, ничего не добавляем
+
+        // Опции рекурсии отличаются, одна из них рекурсивная
+        it->recurse = true; // Рекурсивная бьёт нерекурсивную всегда
+
+        return true;
+    }
+
+    bool addBatchScanPaths(const std::vector<std::string> &paths, bool bRecurse)
+    {
+        for(const auto &p : paths)
+        {
+            if (!addBatchScanPath(p, bRecurse))
+                return false;
+        }
+
+        return true;
+    }
+
+    bool addBatchScanPaths(const std::string &paths, bool bRecurse)
+    {
+        return addBatchScanPaths(marty_cpp::splitToLinesSimple(paths, false, ','), bRecurse);
+    }
 
 
     bool isBatchMode() const
