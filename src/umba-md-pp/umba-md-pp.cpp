@@ -169,9 +169,11 @@ int main(int argc, char* argv[])
 
         argsParser.args.clear();
 
+        argsParser.args.push_back("--overwrite");
+
+        
         //argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
 
-        // argsParser.args.push_back("--overwrite");
         // argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");
         // argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
         // //argsParser.args.push_back("--set-insert-options=lineno,notrim,notag,fail");
@@ -187,6 +189,7 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--batch-scan="+rootPath);
         argsParser.args.push_back("--batch-scan="+rootPath+"doc");
         argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
+        argsParser.args.push_back("--batch-output-root=d:/temp/mdpp-test");
         // batch-exclude-files
         // batch-output-root
 
@@ -235,37 +238,8 @@ int main(int argc, char* argv[])
     }
 
 
-    umba::cli_tool_helpers::IoFileType outputFileType = umba::cli_tool_helpers::IoFileType::nameEmpty;
-    if (outputFilename.empty())
-    {
-        //outputFilename = "STDOUT";
-        outputFilename = tryMakeOutputFilenameFromInput(inputFilename);
-        outputFileType = umba::cli_tool_helpers::IoFileType::regularFile;
-        //generateOutputFileNameFromInputFileName
-    }
-
-    if (outputFilename.empty())
-    {
-        outputFilename = "STDOUT";
-    }
-
-    outputFileType = umba::cli_tool_helpers::detectFilenameType(outputFilename, false /* !bInput */);
-
-    #if defined(WIN32) || defined(_WIN32)
-    if (outputFileType==umba::cli_tool_helpers::IoFileType::clipboard)
-    {
-        LOG_ERR_OPT << "invalid output file name"
-                    << "\n";
-        return 1;
-    }
-    #endif
 
     //unsigned errCount = 0;
-
-    if (!argsParser.quet)
-    {
-        umbaLogStreamMsg << ": "<<inputFilename<<"\n";
-    }
 
     auto &infoLog = argsParser.quet ? umbaLogStreamNul : umbaLogStreamMsg;
 
@@ -286,77 +260,283 @@ int main(int argc, char* argv[])
 
         if (foundFiles.empty())
         {
-        
+            umbaLogStreamMsg << "No files found\n";
+            return 0;
         }
         else
         {
-            umba::info_log::printSectionHeader(infoLog, "Files for processing");
-            for(const auto &foundFile: foundFiles)
+            if (foundFiles.size() != foundFilesRootFolders.size())
             {
-                infoLog << foundFile << "\n";
+                LOG_ERR_OPT << "Missmatch files and folders size, something goes wrong" << "\n";
+                return 1;
             }
+            
+
+            // umba::info_log::printSectionHeader(infoLog, "Files for processing");
+            // for(const auto &foundFile: foundFiles)
+            // {
+            //     infoLog << foundFile << "\n";
+            // }
+
+            umba::info_log::printSectionHeader(infoLog, "Processing found files");
+
+            std::string commonLang        = "English";
+            bool        commonLangChanged = false    ;
+
+            std::vector<std::string>::const_iterator fileIt   = foundFiles.begin();
+            std::vector<std::string>::const_iterator folderIt = foundFilesRootFolders.begin();
+
+            //std::map<std::wstring, std::string> pageIndex;
+            std::vector< std::pair<std::wstring, std::string> > pagesIndex;
+
+            for(; fileIt!=foundFiles.end() && folderIt!=foundFilesRootFolders.end(); ++fileIt, ++folderIt)
+            {
+                auto fileRootPath = *folderIt;
+                auto fileFullName = *fileIt  ;
+                auto fileRelName  = fileFullName;
+                if (!umba::string_plus::starts_with_and_strip(fileRelName, fileRootPath))
+                {
+                    LOG_ERR_OPT << "File '" << fileFullName << "' not in it's root folder '" << fileRootPath << "' - something goes wrong" << "\n";
+                    return 1;
+                }
+
+                umba::filename::stripLastPathSep(fileRootPath);
+                umba::filename::stripFirstPathSep(fileRelName);
+
+                infoLog << "Processing file '" << fileRelName << "' from '" << fileRootPath << "' (" << fileFullName << ")";
+
+                #define UMBA_MD_PP_BATCH_MODE_PROCESSING_LOG_MULTILINE
+                // #if defined(UMBA_MD_PP_BATCH_MODE_PROCESSING_LOG_MULTILINE)
+                //     infoLog << "\n    Target: ";
+                // #else
+                //     infoLog << ", target: ";
+                // #endif
+
+                std::string ext       = umba::filename::getExt(fileFullName);
+                std::string targetExt = appConfig.getTargetFileExtention(ext);
+
+                //std::string outputFileName;
+                if (appConfig.batchOutputRoot.empty())
+                {
+                    // Просто меняем расширение исходного файла
+                    std::string pathFile  = umba::filename::getPathFile(fileFullName);
+                    outputFilename        = umba::filename::appendExt(pathFile, targetExt);
+                }
+                else
+                {
+                    // Присовывем в output
+                    std::string pathFile  = umba::filename::getPathFile(fileRelName);
+                    outputFilename        = umba::filename::appendExt(umba::filename::appendPath(appConfig.batchOutputRoot, pathFile), targetExt);
+                }
+
+                infoLog << "'" << outputFilename << "'" << "\n";
+
+                //infoLog << "Processing file" foundFile << "\n";
+
+                std::string inputFileText;
+                if (!AppConfig<std::string>::readInputFile(*fileIt, inputFileText))
+                {
+                    LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
+                                                      .arg("fileName",*fileIt)
+                                                      .toString()
+                                << "\n";
+                    return 1;
+                }
+
+                appConfig.setStrictPathFromFilename(*fileIt); // Пока так
+
+                curFile = *fileIt;
+
+                std::string projectOptionsFile;
+                if (findProjectOptionsFile(inputFilename, projectOptionsFile))
+                {
+                    appConfig.setStrictPathFromFilename(projectOptionsFile);
+                    argsParser.parseOptionsFile(projectOptionsFile);
+                }
+            
+                appConfig.checkAdjustDocNumericLevels();
+                appConfig.checkTargetFormat();
+
+                Document doc;
+                std::string resText     = processMdFile(appConfig, inputFileText, inputFilename, doc);
+                std::string docTitle    = doc.getDocumentTitleAny();
+                std::string docLanguage = doc.getDocumentLanguage(appConfig);
+
+                if (!commonLangChanged) // Язык меняли?
+                {
+                    if (umba::string_plus::tolower_copy(commonLang)!=umba::string_plus::tolower_copy(docLanguage))
+                    {
+                        // найден язык, не являющийся дефолтным
+                        commonLang = docLanguage; // Используем первое найденное значение, остальные игнорируем
+                        commonLangChanged = true;
+                    }
+                }
+
+                std::wstring pageIndexText = umba::fromUtf8(docTitle);
+                pagesIndex.emplace_back(pageIndexText, fileRelName);
+                // std::map<std::wstring, std::string> pageIndex;
+                // std::vector< std::pair<std::wstring, std::string> > pagesIndex;
+
+
+                try
+                {
+                    if (!argsParser.quet)
+                    {
+                        #if defined(UMBA_MD_PP_BATCH_MODE_PROCESSING_LOG_MULTILINE)
+                            umbaLogStreamMsg << "    Writting output to: ";
+                        #else
+                            umbaLogStreamMsg << " - writting output to: ";
+                        #endif
+                        umbaLogStreamMsg << outputFilename<<"\n";
+                    }
+            
+                    umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
+            
+
+                    umba::cli_tool_helpers::writeOutput( outputFilename, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
+                                                       , encoding::ToUtf8(), encoding::FromUtf8()
+                                                       , resText, std::string() // bomData
+                                                       , true /* fromFile */, true /* utfSource */ , bOverwrite
+                                                       );
+                } // try
+                catch(const std::runtime_error &e)
+                {
+                    LOG_ERR_OPT << e.what() << "\n";
+                    return 1;
+                }
+
+                if (appConfig.batchGeneratePagesIndex)
+                {
+                    std::stable_sort( pagesIndex.begin(), pagesIndex.end()
+                                    , [](const std::pair<std::wstring, std::string> &p1, const std::pair<std::wstring, std::string> &p2)
+                                      {
+                                          return p1.first<p2.first;
+                                      }
+                                    );
+
+                    std::string pagesIndexText;
+                    if (!pagesIndex.empty())
+                    {
+                    
+                    }
+
+                    for(auto it=pagesIndex.begin(); it!=pagesIndex.end(); ++it)
+                    {
+                    
+                    }
+// {
+//   "0409": {
+//     "pages-index": {
+//       "title": "Pages Index"
+
+                    //pagesIndex.emplace_back(pageIndexText, fileRelName);
+                }
+
+            }
+
+            return 0;
         }
     
     }
-
-
-    std::string inputFileText;
-    //if (!umba::filesys::readFile(inputFilename, inputFileText))
-    if (!AppConfig<std::string>::readInputFile(inputFilename, inputFileText))
+    else
     {
-        LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
-                                          .arg("fileName",inputFilename)
-                                          .toString()
-                    << "\n";
-        //errCount++;
-        return 1;
-    }
-
-    UMBA_USED(lineNo);
-
-    appConfig.setStrictPathFromFilename(inputFilename);
-
-
-
-    //std::string 
-    curFile = inputFilename; // = fileName;
-    //unsigned lineNo = 0;
-
-
-    std::string projectOptionsFile;
-    if (findProjectOptionsFile(inputFilename, projectOptionsFile))
-    {
-        appConfig.setStrictPathFromFilename(projectOptionsFile);
-        argsParser.parseOptionsFile(projectOptionsFile);
-    }
-
-    appConfig.checkAdjustDocNumericLevels();
-    appConfig.checkTargetFormat();
-
-
-    Document doc;
-    std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
-    std::string docTitle = doc.getDocumentTitleAny();
-
-    try
-    {
-        if (!argsParser.quet)
+        // Single file mode
+        if (inputFilename.empty())
         {
-            umbaLogStreamMsg << "Writting output to: "<<outputFilename<<"\n";
+            LOG_ERR_OPT << "input file name not taken"
+                        << "\n";
+            return 1;
         }
 
-        umba::cli_tool_helpers::writeOutput( outputFilename, outputFileType
-                                           , encoding::ToUtf8(), encoding::FromUtf8()
-                                           , resText, std::string() // bomData
-                                           , true /* fromFile */, true /* utfSource */ , bOverwrite
-                                           );
-    } // try
-    catch(const std::runtime_error &e)
-    {
-        LOG_ERR_OPT << e.what() << "\n";
-        return 1;
-    }
+        umba::cli_tool_helpers::IoFileType outputFileType = umba::cli_tool_helpers::IoFileType::nameEmpty;
+        if (outputFilename.empty())
+        {
+            //outputFilename = "STDOUT";
+            outputFilename = tryMakeOutputFilenameFromInput(inputFilename);
+            outputFileType = umba::cli_tool_helpers::IoFileType::regularFile;
+            //generateOutputFileNameFromInputFileName
+        }
+    
+        if (outputFilename.empty())
+        {
+            outputFilename = "STDOUT";
+        }
+    
+        outputFileType = umba::cli_tool_helpers::detectFilenameType(outputFilename, false /* !bInput */);
+    
+        #if defined(WIN32) || defined(_WIN32)
+        if (outputFileType==umba::cli_tool_helpers::IoFileType::clipboard)
+        {
+            LOG_ERR_OPT << "invalid output file name"
+                        << "\n";
+            return 1;
+        }
+        #endif
 
+        if (!argsParser.quet)
+        {
+            umbaLogStreamMsg << ": "<<inputFilename<<"\n";
+        }
+    
+        std::string inputFileText;
+        //if (!umba::filesys::readFile(inputFilename, inputFileText))
+        if (!AppConfig<std::string>::readInputFile(inputFilename, inputFileText))
+        {
+            LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
+                                              .arg("fileName",inputFilename)
+                                              .toString()
+                        << "\n";
+            //errCount++;
+            return 1;
+        }
+    
+        UMBA_USED(lineNo);
+    
+        appConfig.setStrictPathFromFilename(inputFilename);
+    
+    
+    
+        //std::string 
+        curFile = inputFilename; // = fileName;
+        //unsigned lineNo = 0;
+    
+    
+        std::string projectOptionsFile;
+        if (findProjectOptionsFile(inputFilename, projectOptionsFile))
+        {
+            appConfig.setStrictPathFromFilename(projectOptionsFile);
+            argsParser.parseOptionsFile(projectOptionsFile);
+        }
+    
+        appConfig.checkAdjustDocNumericLevels();
+        appConfig.checkTargetFormat();
+    
+    
+        Document doc;
+        std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
+        //std::string docTitle = doc.getDocumentTitleAny();
+    
+        try
+        {
+            if (!argsParser.quet)
+            {
+                umbaLogStreamMsg << "Writting output to: "<<outputFilename<<"\n";
+            }
+
+            umba::cli_tool_helpers::writeOutput( outputFilename, outputFileType
+                                               , encoding::ToUtf8(), encoding::FromUtf8()
+                                               , resText, std::string() // bomData
+                                               , true /* fromFile */, true /* utfSource */ , bOverwrite
+                                               );
+        } // try
+        catch(const std::runtime_error &e)
+        {
+            LOG_ERR_OPT << e.what() << "\n";
+            return 1;
+        }
+
+
+    }
 
 
     return 0;

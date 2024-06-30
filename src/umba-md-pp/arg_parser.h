@@ -834,6 +834,23 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("batch-page-index") || opt.isOption("batch-pages-index")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Generate index of processed pages."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.batchGeneratePagesIndex = boolVal;
+            return 0;
+        }
+
         else if ( opt.setParam("EXT[,EXT...]",umba::command_line::OptionType::optString)
                || opt.isOption("add-mdpp-extention")
                || opt.isOption("add-mdpp-extentions")
@@ -951,6 +968,7 @@ int operator()( const StringType                                &a           //!
             //return autocomplete(opt, true);
             return umba::command_line::autocompletionInstaller( pCol, opt, pCol->getPrintHelpStyle(), true, [&]( bool bErr ) -> decltype(auto) { return bErr ? LOG_ERR_OPT : LOG_MSG_OPT; } );
         }
+
         else if ( opt.isOption("autocomplete-uninstall") 
                || opt.setDescription("Remove autocompletion from bash"
                                      #if defined(WIN32) || defined(_WIN32)
@@ -969,6 +987,7 @@ int operator()( const StringType                                &a           //!
         {
             // Job is done in isHelpStyleOption
         }
+
         else if (opt.isHelpOption()) // if (opt.infoIgnore() || opt.isOption("help") || opt.isOption('h') || opt.isOption('?') || opt.setDescription(""))
         {
             if (!ignoreInfos)
@@ -1006,6 +1025,7 @@ int operator()( const StringType                                &a           //!
 
             return 0; // simple skip then parse builtins
         }
+
         else
         {
             LOG_ERR_OPT<<"unknown option: "<<opt.argOrg<<"\n";
@@ -1015,6 +1035,7 @@ int operator()( const StringType                                &a           //!
         return 0;
 
     } // if (opt.isOption())
+
     else if (opt.isResponseFile())
     {
         //std::string

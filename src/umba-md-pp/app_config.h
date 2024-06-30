@@ -90,6 +90,8 @@ struct AppConfig
     //std::vector<std::string>                              batchScanPaths;
     std::vector<ScanPathsEntry>                           batchScanPaths;
 
+    bool                                                  batchGeneratePagesIndex = false;
+
 
     bool addBatchScanPath(const std::string &path, bool bRecurse)
     {
