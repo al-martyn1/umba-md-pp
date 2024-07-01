@@ -1,6 +1,9 @@
-@if exist %~dp0\tests\_setup.bat @call %~dp0\tests\_setup.bat
-@rem set GEN=.out\msvc2019\x64\Debug\gen-lang-detection-tr.exe
-@rem     .out\msvc2019\x64\Debug\gen-lang-detection-tr.exe
-@set GEN=%PPPATH%\gen-lang-detection-tr.exe
-%GEN% >src\umba-md-pp\tr\lang-detection-tr.json
+@call %~dp0\.bat\find-gen-lang-detection-tr.bat
 
+@if %GEN_LANG_DETECTION_TR%=="" goto ERR
+%GEN_LANG_DETECTION_TR% >%~dp0\src\umba-md-pp\tr\lang-detection-tr.json
+
+:ERR
+@exit /B 1
+
+:OK

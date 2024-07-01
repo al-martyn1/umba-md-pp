@@ -159,22 +159,19 @@ int main(int argc, char* argv[])
 
             std::string rootPath;
 
-            if (winhelpers::isProcessHasParentOneOf({"code"}))
-            {
-            //#if defined(__GNUC__)
-
-                // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
-                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
-            }
-            //#else // if
-            else if (winhelpers::isProcessHasParentOneOf({"vs"}))
+            //if (winhelpers::isProcessHasParentOneOf({"devenv"}))
             {
                 rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
             }
-            else
-            {
-                //rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
-            }
+            // else if (winhelpers::isProcessHasParentOneOf({"code"}))
+            // {
+            //     // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
+            //     rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
+            // }
+            // else
+            // {
+            //     //rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
+            // }
 
             //#endif
 
