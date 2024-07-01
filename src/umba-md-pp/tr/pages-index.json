@@ -1,12 +1,14 @@
 {
   "0409": {
     "pages-index": {
-      "title": "Pages Index"
+      "title": "Pages Index",
+      "no-title": "No title"
     }
   },
   "0419": {
     "pages-index": {
-      "title": "Перечень страниц"
+      "title": "Перечень страниц",
+      "no-title": "Без заголовка"
     }
   }
 }

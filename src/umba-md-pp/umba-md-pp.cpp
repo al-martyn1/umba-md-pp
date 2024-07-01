@@ -36,6 +36,10 @@
 #include "marty_cpp/enums.h"
 #include "marty_cpp/src_normalization.h"
 
+//
+#include "marty_utf/utf.h"
+
+//
 #include "encoding/encoding.h"
 #include "umba/cli_tool_helpers.h"
 #include "umba/time_service.h"
@@ -152,6 +156,10 @@ int main(int argc, char* argv[])
     // Force set CLI arguments while running under debugger
     if (umba::isDebuggerPresent())
     {
+        argsParser.args.clear();
+        argsParser.args.push_back("--overwrite");
+
+
         std::string cwd = umba::filesys::getCurrentDirectory<std::string>();
         std::cout << "Working Dir: " << cwd << "\n";
 
@@ -161,7 +169,9 @@ int main(int argc, char* argv[])
 
             //if (winhelpers::isProcessHasParentOneOf({"devenv"}))
             {
+                // По умолчанию студия задаёт текущим каталогом тот
                 rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
+                //argsParser.args.push_back("--batch-output-root=D:/temp/mdpp-test");
             }
             // else if (winhelpers::isProcessHasParentOneOf({"code"}))
             // {
@@ -179,9 +189,6 @@ int main(int argc, char* argv[])
 
         #endif
 
-        argsParser.args.clear();
-
-        argsParser.args.push_back("--overwrite");
 
         
         //argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
@@ -201,7 +208,7 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--batch-scan="+rootPath);
         argsParser.args.push_back("--batch-scan="+rootPath+"doc");
         argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
-        argsParser.args.push_back("--batch-output-root=c:/work/temp/mdpp-test");
+        
         argsParser.args.push_back("--batch-page-index-file=pages.md");
         
         // batch-exclude-files
@@ -343,15 +350,17 @@ int main(int argc, char* argv[])
                 {
                     // Просто меняем расширение исходного файла
                     targetRelName   = umba::filename::appendExt(umba::filename::getPathFile(fileFullName), targetExt);
-                    //std::string calculatedCommonPath = umba::filename::makeCanonical(umba::filename::getPath(foundFiles.front()));
+
                     std::string targetPath = umba::filename::makeCanonical(umba::filename::getPath(targetRelName));
                     std::string::const_iterator pit = targetPath.begin();
                     std::string::iterator       cit = calculatedCommonPath.begin();
-                    for(; *pit==*cit && pit!=targetPath.end() && cit!=calculatedCommonPath.end(); ++pit, ++cit) {}
+                    for(; pit!=targetPath.end() && cit!=calculatedCommonPath.end() && *pit==*cit; ++pit, ++cit) {}
                     if (cit!=calculatedCommonPath.end())
                     {
                         calculatedCommonPath.erase(cit, calculatedCommonPath.end());
                     }
+
+                    outputFilename = targetRelName;
                 }
                 else
                 {
@@ -427,7 +436,7 @@ int main(int argc, char* argv[])
                         #else
                             umbaLogStreamMsg << " - writting output to: ";
                         #endif
-                        umbaLogStreamMsg << outputFilename<<"\n";
+                        umbaLogStreamMsg << outputFilename << "\n";
                     }
             
                     umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
@@ -444,67 +453,103 @@ int main(int argc, char* argv[])
                     return 4;
                 }
 
-                if (!appConfig.batchPageIndexFileName.empty())
+            } // for
+
+
+            std::string langTag = findLangTagByString(commonLang);
+            if (langTag.empty())
+                langTag = "en";
+
+            std::string pageIndexTitle = marty_tr::tr("title"   , "pages-index", langTag);
+            std::string noTitle        = marty_tr::tr("no-title", "pages-index", langTag);
+
+            if (!appConfig.batchPageIndexFileName.empty() && !pagesIndex.empty())
+            {
+                for(auto it=pagesIndex.begin(); it!=pagesIndex.end(); ++it)
                 {
-                    std::stable_sort( pagesIndex.begin(), pagesIndex.end()
-                                    , [](const std::pair<std::wstring, std::string> &p1, const std::pair<std::wstring, std::string> &p2)
-                                      {
-                                          return p1.first<p2.first;
-                                      }
-                                    );
-
-                    std::string pagesIndexText;
-                    if (!pagesIndex.empty())
+                    if (it->first.empty())
                     {
-                        std::string langTag = findLangTagByString(commonLang);
-                        if (langTag.empty())
-                            langTag = "en";
-                        std::string pageIndexTitle = marty_tr::tr("title", "pages-index", langTag);
-
-                        pagesIndexText.append("# ");
-                        pagesIndexText.append(pageIndexTitle);
-                        pagesIndexText.append(1, '\n');
-                        pagesIndexText.append(1, '\n');
-                        //marty_tr::tr(const std::string &msgId, std::string catId, std::string langId)
-
-                        for(auto it=pagesIndex.begin(); it!=pagesIndex.end(); ++it)
-                        {
-                            pagesIndexText.append(" - [");
-                            pagesIndexText.append(umba::toUtf8(it->first));
-                            pagesIndexText.append("](");
-                            pagesIndexText.append(umba::filename::makeCanonical(it->second, '/'));
-                            pagesIndexText.append(")\n");
-                        }
-
-                        auto targetPagesIndexText = marty_cpp::converLfToOutputFormat(pagesIndexText, appConfig.outputLinefeed);
-
-                        std::string pageIndexFileName = appConfig.batchPageIndexFileName;
-                        if (!umba::filename::isAbsPath(pageIndexFileName))
-                        {
-                            if (!appConfig.batchOutputRoot.empty())
-                            {
-                                pageIndexFileName = umba::filename::appendPath(appConfig.batchOutputRoot, pageIndexFileName);
-                            }
-                            else
-                            {
-                                pageIndexFileName = umba::filename::appendPath(calculatedCommonPath, pageIndexFileName);
-                            }
-                        }
-
-                        pageIndexFileName = umba::filename::makeCanonical(pageIndexFileName);
-                        
-                        umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(pageIndexFileName), true /* forceCreatePath */ );
-    
-                        umba::cli_tool_helpers::writeOutput( pageIndexFileName, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
-                                                           , encoding::ToUtf8(), encoding::FromUtf8()
-                                                           , targetPagesIndexText, std::string() // bomData
-                                                           , true /* fromFile */, true /* utfSource */ , bOverwrite
-                                                           );
+                        it->first = umba::fromUtf8(noTitle);
                     }
-
                 }
 
+                std::stable_sort( pagesIndex.begin(), pagesIndex.end()
+                                , [](const std::pair<std::wstring, std::string> &p1, const std::pair<std::wstring, std::string> &p2)
+                                  {
+                                      return p1.first<p2.first;
+                                  }
+                                );
+
+                std::string pagesIndexText;
+                
+                pagesIndexText.append("# ");
+                pagesIndexText.append(pageIndexTitle);
+                //pagesIndexText.append(1, '\n');
+                pagesIndexText.append(1, '\n');
+                //marty_tr::tr(const std::string &msgId, std::string catId, std::string langId)
+
+                std::string firstSectionLetter;
+        //         marty_utf
+        // auto uch = (utf8_char_t)str[curPos];
+        //  
+        // auto symbolNumBytes = getNumberOfBytesUtf8(uch);
+
+
+                for(std::vector< std::pair<std::wstring, std::string> >::iterator it=pagesIndex.begin(); it!=pagesIndex.end(); ++it)
+                {
+                    std::string thisPageTitleUtf = umba::toUtf8(it->first);
+                    if (!thisPageTitleUtf.empty())
+                    {
+                        std::size_t firstCharLen = marty_utf::getNumberOfBytesUtf8(thisPageTitleUtf[0]);
+                        if (firstCharLen<=thisPageTitleUtf.size())
+                        {
+                            std::string titleFirstLetter = std::string(thisPageTitleUtf, 0, firstCharLen);
+                            if (firstSectionLetter!=titleFirstLetter && !titleFirstLetter.empty())
+                            {
+                                firstSectionLetter = titleFirstLetter;
+                                pagesIndexText.append("\n\n");
+                                pagesIndexText.append(" - **");
+                                pagesIndexText.append(firstSectionLetter);
+                                pagesIndexText.append("**\n");
+                            }
+                        }
+                    }
+
+                    pagesIndexText.append(" - [");
+                    pagesIndexText.append(thisPageTitleUtf);
+                    pagesIndexText.append("](");
+                    pagesIndexText.append(umba::filename::makeCanonical(it->second, '/'));
+                    pagesIndexText.append(")\n");
+                }
+
+                auto targetPagesIndexText = marty_cpp::converLfToOutputFormat(pagesIndexText, appConfig.outputLinefeed);
+
+                std::string pageIndexFileName = appConfig.batchPageIndexFileName;
+                if (!umba::filename::isAbsPath(pageIndexFileName))
+                {
+                    if (!appConfig.batchOutputRoot.empty())
+                    {
+                        pageIndexFileName = umba::filename::appendPath(appConfig.batchOutputRoot, pageIndexFileName);
+                    }
+                    else
+                    {
+                        pageIndexFileName = umba::filename::appendPath(calculatedCommonPath, pageIndexFileName);
+                    }
+                }
+
+                pageIndexFileName = umba::filename::makeCanonical(pageIndexFileName);
+                
+                umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(pageIndexFileName), true /* forceCreatePath */ );
+
+                umba::cli_tool_helpers::writeOutput( pageIndexFileName, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
+                                                   , encoding::ToUtf8(), encoding::FromUtf8()
+                                                   , targetPagesIndexText, std::string() // bomData
+                                                   , true /* fromFile */, true /* utfSource */ , bOverwrite
+                                                   );
+                
+
             }
+
 
             return 0;
         }
