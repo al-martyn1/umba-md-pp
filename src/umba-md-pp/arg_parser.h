@@ -834,20 +834,20 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("?MODE",true)
-               || opt.isOption("batch-page-index") || opt.isOption("batch-pages-index")
+        else if ( opt.setParam("MODE",umba::command_line::OptionType::optString)
+               || opt.isOption("batch-page-index-file") || opt.isOption("batch-pages-index-file")
                // || opt.setParam("VAL",true)
                || opt.setDescription("Generate index of processed pages."))
         {
             if (argsParser.hasHelpOption) return 0;
 
-            if (!opt.getParamValue(boolVal,errMsg))
+            if (!opt.getParamValue(strVal,errMsg))
             {
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
             
-            appConfig.batchGeneratePagesIndex = boolVal;
+            appConfig.batchPageIndexFileName =strVal;
             return 0;
         }
 
