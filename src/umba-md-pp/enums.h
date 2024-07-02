@@ -577,3 +577,40 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( TargetFormat, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( TargetFormat, std::map, 1 )
 
 
+enum class BacktickProcessingState : std::uint32_t
+{
+    normal                           = 0x0000,
+    readBacktickEnclosedStart        = 0x0001,
+    readBacktickEnclosed             = 0x0002,
+    readDblBacktickEnclosed          = 0x0003,
+    readDblBacktickEnclosedWaitEnd   = 0x0004
+
+}; // enum class BacktickProcessingState : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(BacktickProcessingState)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( BacktickProcessingState, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( BacktickProcessingState::normal                  , "Normal"                         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( BacktickProcessingState::readBacktickEnclosedStart , "ReadBacktickEnclosedStart"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( BacktickProcessingState::readDblBacktickEnclosed , "ReadDblBacktickEnclosed"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( BacktickProcessingState::readBacktickEnclosed    , "ReadBacktickEnclosed"           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( BacktickProcessingState::readDblBacktickEnclosedWaitEnd , "ReadDblBacktickEnclosedWaitEnd" );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( BacktickProcessingState, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( BacktickProcessingState, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::normal                  , "normal"                              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readBacktickEnclosedStart , "read-backtick-enclosed-start"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readBacktickEnclosedStart , "read_backtick_enclosed_start"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readBacktickEnclosedStart , "readbacktickenclosedstart"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readDblBacktickEnclosed , "read-dbl-backtick-enclosed"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readDblBacktickEnclosed , "read_dbl_backtick_enclosed"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readDblBacktickEnclosed , "readdblbacktickenclosed"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readBacktickEnclosed    , "read-backtick-enclosed"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readBacktickEnclosed    , "read_backtick_enclosed"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readBacktickEnclosed    , "readbacktickenclosed"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readDblBacktickEnclosedWaitEnd , "read-dbl-backtick-enclosed-wait-end" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readDblBacktickEnclosedWaitEnd , "read_dbl_backtick_enclosed_wait_end" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( BacktickProcessingState::readDblBacktickEnclosedWaitEnd , "readdblbacktickenclosedwaitend"      );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( BacktickProcessingState, std::map, 1 )
+
+

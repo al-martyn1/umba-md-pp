@@ -5,6 +5,9 @@
 #include <string>
 #include <iostream>
 
+// 
+#include "enums.h"
+
 //----------------------------------------------------------------------------
 
 
@@ -13,6 +16,9 @@ namespace umba_md {
 //----------------------------------------------------------------------------
 
 
+
+//----------------------------------------------------------------------------
+using BacktickProcessingState = ::BacktickProcessingState;
 
 
 
@@ -23,16 +29,8 @@ template< typename OutputIterator
         > inline
 OutputIterator transformMarkdownText(OutputIterator out, InputIterator itBegin, InputIterator itEnd, SymbolHandler handler)
 {
-    enum State
-    {
-        stNormal                     = 0,
-        stReadBacktickEnclosedStart     ,
-        stReadBacktickEnclosed          ,
-        stReadDblBacktickEnclosed       ,
-        stReadDblBacktickEnclosedWaitEnd,
-    };
 
-    State st = stNormal;
+    BacktickProcessingState st = BacktickProcessingState::normal;
 
     //bool atStart
 
@@ -41,54 +39,54 @@ OutputIterator transformMarkdownText(OutputIterator out, InputIterator itBegin, 
         auto ch = *itBegin;
         switch(st)
         {
-            case stNormal:
+            case BacktickProcessingState::normal:
             {
                 if (ch=='`')
                 {
-                    st = stReadBacktickEnclosedStart;
-                    out = handler(out, itBegin, itEnd, true /*in a backticks*/); // , false /* no a line start */) // а надо вообще про начало строки? Или там само пусть разбирается, а нам тут только энклозинг бэктиками обработать надо?
+                    st = BacktickProcessingState::readBacktickEnclosedStart;
+                    out = handler(out, itBegin, itEnd, st, true /*in a backticks*/); // , false /* no a line start */) // а надо вообще про начало строки? Или там само пусть разбирается, а нам тут только энклозинг бэктиками обработать надо?
                 }
                 else
                 {
-                    out = handler(out, itBegin, itEnd, false /*not in a backticks*/);
+                    out = handler(out, itBegin, itEnd, st, false /*not in a backticks*/);
                 }
             }
             break;
 
-            case stReadBacktickEnclosedStart:
+            case BacktickProcessingState::readBacktickEnclosedStart:
             {
+                out = handler(out, itBegin, itEnd, st, true /*in a backticks*/);
+
                 if (ch=='`')
-                    st = stReadDblBacktickEnclosed;
+                    st = BacktickProcessingState::readDblBacktickEnclosed;
                 else
-                    st = stReadBacktickEnclosed;
-
-                out = handler(out, itBegin, itEnd, true /*in a backticks*/);
+                    st = BacktickProcessingState::readBacktickEnclosed;
             }
             break;
 
-            case stReadBacktickEnclosed:
+            case BacktickProcessingState::readBacktickEnclosed:
             {
+                out = handler(out, itBegin, itEnd, st, true /*in a backticks*/); // Завершающий бэктик всё равно входит в энклозинг
                 if (ch=='`')
-                    st = stNormal;
-                out = handler(out, itBegin, itEnd, true /*in a backticks*/); // Завершающий бэктик всё равно входит в энклозинг
+                    st = BacktickProcessingState::normal;
             }
             break;
 
-            case stReadDblBacktickEnclosed:
+            case BacktickProcessingState::readDblBacktickEnclosed:
             {
+                out = handler(out, itBegin, itEnd, st, true /*in a backticks*/);
                 if (ch=='`')
-                    st = stReadDblBacktickEnclosedWaitEnd;
-                out = handler(out, itBegin, itEnd, true /*in a backticks*/);
+                    st = BacktickProcessingState::readDblBacktickEnclosedWaitEnd;
             }
             break;
 
-            case stReadDblBacktickEnclosedWaitEnd:
+            case BacktickProcessingState::readDblBacktickEnclosedWaitEnd:
             {
+                out = handler(out, itBegin, itEnd, st, true /*in a backticks*/); // Завершающий бэктик всё равно входит в энклозинг
                 if (ch=='`')
-                    st = stNormal;
+                    st = BacktickProcessingState::normal;
                 else
-                    st = stReadDblBacktickEnclosed; // Был одиночный бэктик - откатываемся в нормальное чтение двухтиковой строки
-                out = handler(out, itBegin, itEnd, true /*in a backticks*/); // Завершающий бэктик всё равно входит в энклозинг
+                    st = BacktickProcessingState::readDblBacktickEnclosed; // Был одиночный бэктик - откатываемся в нормальное чтение двухтиковой строки
             }
             break;
 
@@ -97,7 +95,7 @@ OutputIterator transformMarkdownText(OutputIterator out, InputIterator itBegin, 
 
 
     // Финализируем обработку - в обработчике не забываем каждый раз проверять на конец последовательности
-    return handler(out, itBegin, itEnd, st!=stNormal);
+    return handler(out, itBegin, itEnd, st, st!=BacktickProcessingState::normal);
 
 }
 
@@ -107,7 +105,7 @@ void testTransformMarkdownText(const std::string &input)
 {
     std::string res; res.reserve(input.size());
 
-    auto handler = [](auto out, auto b, auto e, bool inBackticks)
+    auto handler = [](auto out, auto b, auto e, BacktickProcessingState st, bool inBackticks)
     {
         if (b!=e)
         {
