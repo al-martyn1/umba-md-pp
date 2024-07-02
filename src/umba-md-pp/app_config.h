@@ -92,6 +92,7 @@ struct AppConfig
 
     //bool                                                  batchGeneratePagesIndex = false;
     std::string                                           batchPageIndexFileName;
+    bool                                                  batchSplitPageIndex = false;
 
 
     bool addBatchScanPath(const std::string &path, bool bRecurse)

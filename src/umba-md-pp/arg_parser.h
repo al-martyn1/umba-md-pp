@@ -834,7 +834,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("MODE",umba::command_line::OptionType::optString)
+        else if ( opt.setParam("FILE",umba::command_line::OptionType::optString)
                || opt.isOption("batch-page-index-file") || opt.isOption("batch-pages-index-file")
                // || opt.setParam("VAL",true)
                || opt.setDescription("Generate index of processed pages."))
@@ -847,7 +847,24 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
             
-            appConfig.batchPageIndexFileName =strVal;
+            appConfig.batchPageIndexFileName = strVal;
+            return 0;
+        }
+
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("batch-split-page-index-file") || opt.isOption("batch-split-pages-index-file")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Generate index of processed pages."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.batchSplitPageIndex = boolVal;
             return 0;
         }
 

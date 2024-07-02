@@ -167,21 +167,23 @@ int main(int argc, char* argv[])
 
             std::string rootPath;
 
-            //if (winhelpers::isProcessHasParentOneOf({"devenv"}))
+            if (winhelpers::isProcessHasParentOneOf({"devenv"}))
             {
-                // По умолчанию студия задаёт текущим каталогом тот
+                // По умолчанию студия задаёт текущим каталогом На  уровень выше от того, где лежит бинарник
                 rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
                 //argsParser.args.push_back("--batch-output-root=D:/temp/mdpp-test");
             }
-            // else if (winhelpers::isProcessHasParentOneOf({"code"}))
-            // {
-            //     // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
-            //     rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
-            // }
-            // else
-            // {
-            //     //rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
-            // }
+            else if (winhelpers::isProcessHasParentOneOf({"code"}))
+            {
+                // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
+                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
+                //argsParser.args.push_back("--batch-output-root=C:/work/temp/mdpp-test");
+                
+            }
+            else
+            {
+                //rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
+            }
 
             //#endif
 
@@ -210,6 +212,7 @@ int main(int argc, char* argv[])
         argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
         
         argsParser.args.push_back("--batch-page-index-file=pages.md");
+        argsParser.args.push_back("--batch-split-page-index-file");
         
         // batch-exclude-files
         // batch-output-root
@@ -507,15 +510,18 @@ int main(int argc, char* argv[])
                             if (firstSectionLetter!=titleFirstLetter && !titleFirstLetter.empty())
                             {
                                 firstSectionLetter = titleFirstLetter;
-                                pagesIndexText.append("\n\n");
-                                pagesIndexText.append(" - **");
-                                pagesIndexText.append(firstSectionLetter);
-                                pagesIndexText.append("**\n");
+                                if (appConfig.batchSplitPageIndex)
+                                {
+                                    pagesIndexText.append("\n\n");
+                                    pagesIndexText.append(" - **");
+                                    pagesIndexText.append(firstSectionLetter);
+                                    pagesIndexText.append("**\n");
+                                }
                             }
                         }
                     }
 
-                    pagesIndexText.append(" - [");
+                    pagesIndexText.append("   - [");
                     pagesIndexText.append(thisPageTitleUtf);
                     pagesIndexText.append("](");
                     pagesIndexText.append(umba::filename::makeCanonical(it->second, '/'));
