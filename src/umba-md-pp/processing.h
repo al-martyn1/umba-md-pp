@@ -15,6 +15,9 @@
 #include "marty_yaml_toml_json/yaml_utils.h"
 
 //
+#include "processing_utils.h"
+
+//
 #include <yaml-cpp/yaml.h>
 //
 #include <stack>
@@ -2198,6 +2201,197 @@ std::string::size_type findPairedChar(const std::string &line, std::string::size
 }
 
 //----------------------------------------------------------------------------
+// https://www.markdownguide.org/basic-syntax/#escaping-characters
+//----------------------------------------------------------------------------
+// Tables
+// https://www.markdownguide.org/hacks/#table-formatting
+// https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables
+
+//----------------------------------------------------------------------------
+// enum class TransformMarkdownNormalTextEvent
+// {
+//  
+// };
+
+//----------------------------------------------------------------------------
+// https://www.markdownguide.org/basic-syntax/#images
+// ![Tux, the Linux mascot](/assets/images/tux.png)
+// https://www.markdownguide.org/basic-syntax/#escaping-backticks
+// https://www.markdownguide.org/basic-syntax/#links
+// https://www.markdownguide.org/basic-syntax/#images-1
+// https://www.markdownguide.org/hacks/#image-captions
+#if 0
+template<typename FilenameStringType> inline
+std::string inDocRefsRenameMdppExtentionsAndStoreImagePaths(const AppConfig<FilenameStringType> &appCfg, Document &doc, const std::string &line, std::vector<std::string> &imagePaths)
+{
+    enum State
+    {
+        stNormal                     = 0,
+        //stBacktick                   = 1,
+        stReadBacktickEnclosedStart     ,
+        stReadBacktickEnclosed          ,
+        stReadDblBacktickEnclosed       ,
+        stReadDblBacktickEnclosedWaitEnd,
+        stImageMarkFound                ,
+        //stReadingLinkText               ,
+        //stWaitLinkText                  ,
+        //stReadingLinkUrl
+        stWaitLinkUrl
+    };
+
+    std::string resLine; resLine.reserve(line.size());
+
+    std::string::size_type linkStartPos = std::string::npos;
+    std::string::size_type linkEndPos   = std::string::npos;
+
+    State st = stNormal;
+    unsigned bracketCount = 0; // also used as readingLink flag 
+    bool readingLinkUrl = false;
+    bool imageLink      = false;
+
+
+    std::string::size_type pos = 0;
+    for(; pos!=line.size(); ++pos)
+    {
+        char ch = line[pos];
+
+        switch(st)
+        {
+            case stNormal:
+            {
+                if (ch=='`')
+                {
+                    st = stReadBacktickEnclosedStart;
+                    resLine.append(1, ch);
+                }
+                else if (ch=='!')
+                {
+                    st = stImageMarkFound;
+                    resLine.append(1, ch);
+                }
+                else if (ch=='[' || ch==']' || ch=='(' || ch==')')
+                {
+                    if (bracketCount==0) // Не производится чтение какой-либо части ссылки
+                    {
+                        if (ch=='[')
+                        {
+                            bracketCount = 1;
+                            readingLinkUrl = false;
+                        }
+                        else if (ch==']')
+                        {
+                            --bracketCount;
+                            if (bracketCount==0) // Закрывающая текст ссылки скобка 
+                            {
+                                st = stWaitLinkUrl;
+                            }
+                        }
+                    }
+                    else // Читаем либо текст ссылки, либо URL-часть
+                    {
+                        if (!readingLinkUrl) // Читаем текст ссылки
+                        {
+                            if (ch=='[')
+                            {
+                                bracketCount = 1;
+                                readingLinkUrl = false;
+                            }
+                            else if (ch==']')
+                            {
+                                --bracketCount;
+                                if (bracketCount==0) // Закрывающая текст ссылки скобка 
+                                {
+                                    st = stWaitLinkUrl;
+                                }
+                            }
+                        }
+                        else // Читаем URL ссылки
+                        {
+                        
+                        }
+                    }
+                    //st = stReadingLinkText;
+                    resLine.append(1, ch);
+                    //bracketCount = 1;
+                }
+                else
+                {
+                    resLine.append(1, ch);
+                }
+            }
+            break;
+
+            case stReadBacktickEnclosedStart:
+            {
+                if (ch=='`')
+                    st = stReadDblBacktickEnclosed;
+                else
+                    st = stReadBacktickEnclosed;
+
+                resLine.append(1, ch);
+            }
+            break;
+
+            case stReadBacktickEnclosed:
+            {
+                if (ch=='`')
+                    st = stNormal;
+                resLine.append(1, ch);
+            }
+            break;
+
+            case stReadDblBacktickEnclosed:
+            {
+                if (ch=='`')
+                    st = stReadDblBacktickEnclosedWaitEnd;
+                resLine.append(1, ch);
+            }
+            break;
+
+            case stReadDblBacktickEnclosedWaitEnd:
+            {
+                if (ch=='`')
+                    st = stNormal;
+                else
+                    st = stReadDblBacktickEnclosed; // Был одиночный бэктик - откатываемся в нормальное чтение двухтиковой строки
+
+                resLine.append(1, ch);
+            
+            }
+            break;
+
+            case stImageMarkFound :
+            {
+            
+            }
+            break;
+
+            case stReadingLinkText:
+            {
+            
+            }
+            break;
+
+            case stWaitLinkText   :
+            {
+            
+            }
+            break;
+
+            case stReadingLinkUrl :
+            {
+            
+            }
+            break;
+
+        }
+
+
+    }
+
+}
+#endif
+//----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
 std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Document &doc, const std::string &line)
 {
@@ -2211,17 +2405,25 @@ std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Documen
 
     std::string resLine; resLine.reserve(line.size());
 
+    bool prevIsImageMark = false;
+
     std::string::size_type pos = 0;
     for(; pos!=line.size(); )
     {
         char ch = line[pos];
 
-        if (ch!='[')
+        if (ch!='[' && !prevIsImageMark)
         {
+            if (ch=='!')
+               prevIsImageMark = true;
+            else
+               prevIsImageMark = false;
             resLine.append(1,ch);
             ++pos;
             continue;
         }
+
+        prevIsImageMark = false;
 
         auto closePos = findPairedChar(line, pos+1, '[', ']');
         if (closePos==line.npos) // ничего не нашли, надо тупо остаток строки вместе с текущим символом '[' перекинуть в результат и вернуть его
