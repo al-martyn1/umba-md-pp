@@ -54,7 +54,7 @@
 #include "encoding/encoding.h"
 #include "utils.h"
 #include "batch_utils.h"
-#include "processing_utils.h"
+#include "umba_md_processing_utils.h"
 
 //
 #include "marty_tr/marty_tr.h"
@@ -143,8 +143,8 @@ int main(int argc, char* argv[])
 
     using namespace umba::omanip;
 
-    umba_md::testTransformMarkdownText("Someting `in back`ticks");
-    umba_md::testTransformMarkdownText("Someting ``in `double back``ticks");
+    umba::md::testTransformMarkdownText("Someting `in back`ticks");
+    umba::md::testTransformMarkdownText("Someting ``in `double back``ticks");
 
 
     auto argsParser = umba::command_line::makeArgsParser( ArgParser<std::string>()
