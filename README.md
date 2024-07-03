@@ -45,6 +45,11 @@
   - умеет в метаданные **Markdown**;
 
 
+[Todo](doc/icons/todo-list-50.png)
+
+[[Todo](doc/icons/todo-list-50.png)](doc/todo.md)
+
+
 
 
 
