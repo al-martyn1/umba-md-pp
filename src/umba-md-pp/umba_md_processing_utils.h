@@ -287,8 +287,78 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
     InputIterator itUrlBegin = itEnd;
     //InputIterator itUrlEnd   = itEnd;
 
+
     auto linkDetector = [&st, &bImageLink, &bracketCount, &itUrlBegin, &callHandler](OutputIterator out, InputIterator b, InputIterator e, BacktickProcessingState bktpsSt, bool inBackticks)
     {
+
+        auto doReadText = [&](bool readImageLink)
+        {
+            auto ch = *b;
+
+            if (!inBackticks)
+            {
+                if (ch==(value_type)'[')
+                {
+                    ++bracketCount;
+                }
+                else if (ch==(value_type)']')
+                {
+                    --bracketCount;
+                    if (bracketCount==0)
+                    {
+                        st = stWaitLink;
+                    }
+                }
+            }
+    
+            *out++ = *b;
+        };
+    
+        auto doWaitLink = [&](bool readImageLink)
+        {
+            auto ch = *b;
+
+            if (ch==(value_type)'(')
+            {
+                bracketCount = 1;
+                st = stReadLink;
+            }
+    
+            *out++ = *b;
+        };
+    
+        auto doReadLink = [&](bool readImageLink)
+        {
+            auto ch = *b;
+            if (itUrlBegin==e) // itEnd
+            {
+                // сохраняем итератор начала 
+                itUrlBegin = b;
+            }
+    
+            if (ch==(value_type)'(')
+            {
+                ++bracketCount;
+            }
+            else if (ch==(value_type)')')
+            {
+                --bracketCount;
+                if (bracketCount==0)
+                {
+                    // call handler here
+                    //out = 
+                    callHandler(out, itUrlBegin, b, readImageLink /* bImageLink */ );
+                    itUrlBegin = e; // itEnd
+                    st = stNormal;
+                    *out++ = *b;
+                }
+            }
+            // Иначе - ничего не делаем
+        };
+
+
+
+
         if (b==e)
         {
             // Flush buffered
@@ -345,70 +415,67 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
             
                 case stReadText:
                 {
-                    if (!inBackticks)
-                    {
-                        if (ch==(value_type)'[')
-                        {
-                            ++bracketCount;
-                        }
-                        else if (ch==(value_type)']')
-                        {
-                            --bracketCount;
-                            if (bracketCount==0)
-                            {
-                                st = stWaitLink;
-                            }
-                        }
-
-                    }
-
-                    *out++ = *b;
+                    doReadText(bImageLink);
+                    // if (!inBackticks)
+                    // {
+                    //     if (ch==(value_type)'[')
+                    //     {
+                    //         ++bracketCount;
+                    //     }
+                    //     else if (ch==(value_type)']')
+                    //     {
+                    //         --bracketCount;
+                    //         if (bracketCount==0)
+                    //         {
+                    //             st = stWaitLink;
+                    //         }
+                    //     }
+                    // }
+                    //  
+                    // *out++ = *b;
                 }
                 break;
             
                 case stWaitLink:
                 {
-                    if (ch==(value_type)'(')
-                    {
-                        bracketCount = 1;
-                        st = stReadLink;
-                    }
-
-                    *out++ = *b;
+                    doWaitLink(bImageLink);
+                    // if (ch==(value_type)'(')
+                    // {
+                    //     bracketCount = 1;
+                    //     st = stReadLink;
+                    // }
+                    //  
+                    // *out++ = *b;
                 }
                 break;
             
                 case stReadLink:
                 {
-                    if (itUrlBegin==e) // itEnd
-                    {
-                        //itUrlEnd = itEnd;
-                        //st = stReadLinkTail;
-
-                        // сохраняем итератор начала 
-                        itUrlBegin = b;
-                    }
-
-                    if (ch==(value_type)'(')
-                    {
-                        ++bracketCount;
-                    }
-                    else if (ch==(value_type)')')
-                    {
-                        --bracketCount;
-                        if (bracketCount==0)
-                        {
-                            // call handler here
-                            //out = 
-                            callHandler(out, itUrlBegin, b, bImageLink);
-                            itUrlBegin = e; // itEnd
-                            st = stNormal;
-                            *out++ = *b;
-                        }
-                    }
-
-                    // Иначе - ничего не делаем
-
+                    doReadLink(bImageLink);
+                    // if (itUrlBegin==e) // itEnd
+                    // {
+                    //     // сохраняем итератор начала 
+                    //     itUrlBegin = b;
+                    // }
+                    //  
+                    // if (ch==(value_type)'(')
+                    // {
+                    //     ++bracketCount;
+                    // }
+                    // else if (ch==(value_type)')')
+                    // {
+                    //     --bracketCount;
+                    //     if (bracketCount==0)
+                    //     {
+                    //         // call handler here
+                    //         //out = 
+                    //         callHandler(out, itUrlBegin, b, bImageLink);
+                    //         itUrlBegin = e; // itEnd
+                    //         st = stNormal;
+                    //         *out++ = *b;
+                    //     }
+                    // }
+                    // // Иначе - ничего не делаем
                 }
                 break;
             
