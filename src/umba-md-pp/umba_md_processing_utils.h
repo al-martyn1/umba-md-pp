@@ -549,6 +549,7 @@ void testTransformMarkdownLinksUrlString(const std::string &input)
 
     auto handler = [](std::string url)
     {
+        std::cout << "URL: " << url << "\n";
         if (isUrlAbsolute(url))
         {
         }
