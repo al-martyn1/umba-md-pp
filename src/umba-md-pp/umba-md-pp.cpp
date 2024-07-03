@@ -143,8 +143,19 @@ int main(int argc, char* argv[])
 
     using namespace umba::omanip;
 
-    umba::md::testTransformMarkdownText("Someting `in back`ticks");
-    umba::md::testTransformMarkdownText("Someting ``in `double back``ticks");
+    // umba::md::testTransformMarkdownText("Someting `in back`ticks");
+    // umba::md::testTransformMarkdownText("Someting ``in `double back``ticks");
+
+    // umba::md::testTransformMarkdownLinksUrlString("[Test1](http://ya.ru\\test\\test.md?a=http://g.com\\some\\path#show)");
+    // umba::md::testTransformMarkdownLinksUrlString("[Te`st`2](http://ya.ru/test/test.md?a=http://g.com/some/path#show)");
+    // umba::md::testTransformMarkdownLinksUrlString("[Test1](  http://ya.ru\\test\\test.md?a=http://g.com#show)");
+    // umba::md::testTransformMarkdownLinksUrlString("[Te`st`2](http://ya.ru/test/test.md?a=http://g.com#show  )");
+    // umba::md::testTransformMarkdownLinksUrlString("[qwqwqw](\\test\\test.md)");
+    // umba::md::testTransformMarkdownLinksUrlString("[dcasc](/test/test.md)");
+    // umba::md::testTransformMarkdownLinksUrlString("[qwqwqw](  \\test\\test.md  )");
+    // umba::md::testTransformMarkdownLinksUrlString("[dcasc](/test/test md)");
+    // umba::md::testTransformMarkdownLinksUrlString("[dsc](test\\test.md)");
+    // umba::md::testTransformMarkdownLinksUrlString("[vfda](test/test.md)");
 
 
     auto argsParser = umba::command_line::makeArgsParser( ArgParser<std::string>()
