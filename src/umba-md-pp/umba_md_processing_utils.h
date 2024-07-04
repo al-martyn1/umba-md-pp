@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <type_traits>
+#include <vector>
+#include <stack>
 
 // 
 #include "enums.h"
@@ -237,6 +239,8 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
 {
     using value_type = typename std::decay<decltype(*itBegin)>::type;
 
+    //#define UMBA_MD_PROCESSING_UTILS_TRANSFORM_MARKDOWN_LINKS_URL_ITERATOR_USE_STACK
+
     auto callHandler = [&handler](OutputIterator out, InputIterator b, InputIterator e, bool bImageLink)
     {
         // в ссылке вида [Some link text]( link_url bla-bla)
@@ -277,19 +281,102 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
         stReadText         , // href text
         stWaitLink         ,
         stWaitLinkLink     ,
+#if !defined(UMBA_MD_PROCESSING_UTILS_TRANSFORM_MARKDOWN_LINKS_URL_ITERATOR_USE_STACK)
         stReadLink
+#else
+        stReadImageText         ,
+        stWaitImageLink         ,
+        stWaitImageLinkLink     ,
+        stReadImageLink
+#endif
     };
 
-    State st = stNormal;
-    bool bImageLink = false;
-    unsigned bracketCount = 0;
 
-    InputIterator itUrlBegin = itEnd;
+    State st = stNormal; // Он всегда нужен, если стек - там предыдущее значение состояния
     //InputIterator itUrlEnd   = itEnd;
 
+#if !defined(UMBA_MD_PROCESSING_UTILS_TRANSFORM_MARKDOWN_LINKS_URL_ITERATOR_USE_STACK)
 
-    auto linkDetector = [&st, &bImageLink, &bracketCount, &itUrlBegin, &callHandler](OutputIterator out, InputIterator b, InputIterator e, BacktickProcessingState bktpsSt, bool inBackticks)
+    unsigned bracketCount = 0;
+    bool bImageLink = false;
+    InputIterator itUrlBegin = itEnd;
+
+#else
+
+    struct ParsingState
     {
+        State         st         = stNormal;
+        bool          bImageLink = false;
+        InputIterator itUrlBegin;
+    };
+
+    std::stack< ParsingState, std::vector<ParsingState> >  stateStack;
+    // stateStack.
+
+/*
+    Было бы удобно сразу хранить на стеке состояние.
+    Но тут проблема - даже если рекурсия не нужна, а это 99.99% случаев, мы будем лазать в кучу.
+
+    std::inplace_vector - это C++26 и то не факт - дата пропозала - 2023-06-16 -  https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p0843r8.html
+    fixed_capacity_vector - дата пропозала - 2017-10-15 - https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0843r0.html
+    boost::container::static_vector - упомянули тут - https://stackoverflow.com/questions/53932651/c-vector-with-fixed-capacity-after-initialization
+
+    Если состояние не хранить на стеке, его надо хранить в переменной. И вот тут можно легко запутаться,
+    когда использоывать состояние на стеке, когда - переменную, когда переменную переустанавливать 
+    значением со стека и тп.
+
+
+
+
+
+
+*/
+
+
+#endif
+
+
+#if !defined(UMBA_MD_PROCESSING_UTILS_TRANSFORM_MARKDOWN_LINKS_URL_ITERATOR_USE_STACK)
+    auto linkDetector = [&st, &bImageLink, &bracketCount, &itUrlBegin, &callHandler](OutputIterator out, InputIterator b, InputIterator e, BacktickProcessingState bktpsSt, bool inBackticks)
+#else
+    auto linkDetector = [&callHandler](OutputIterator out, InputIterator b, InputIterator e, BacktickProcessingState bktpsSt, bool inBackticks)
+#endif
+    {
+        auto doNormal = [&]();
+        {
+            if (inBackticks)
+            {
+                *out++ = *b;
+            }
+            else
+            {
+#if !defined(UMBA_MD_PROCESSING_UTILS_TRANSFORM_MARKDOWN_LINKS_URL_ITERATOR_USE_STACK)
+                if (ch==(value_type)'[')
+                {
+                    bracketCount = 1;
+                    st = stReadText;
+                }
+                else if (ch==(value_type)'!')
+                {
+                    st = stImageWaitText;
+                }
+
+                *out++ = *b;
+#else
+                // if (ch==(value_type)'[')
+                // {
+                //     stateStack
+                //     bracketCount = 1;
+                //     st = stReadText;
+                // }
+                // else if (ch==(value_type)'!')
+                // {
+                //     st = stImageWaitText;
+                // }
+
+#endif
+            }
+        }
 
         auto doReadText = [&](bool readImageLink)
         {
@@ -297,6 +384,7 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
 
             if (!inBackticks)
             {
+#if !defined(UMBA_MD_PROCESSING_UTILS_TRANSFORM_MARKDOWN_LINKS_URL_ITERATOR_USE_STACK)
                 if (ch==(value_type)'[')
                 {
                     ++bracketCount;
@@ -309,6 +397,14 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
                         st = stWaitLink;
                     }
                 }
+#else
+                if (ch==(value_type)'[')
+                {
+
+                    stateStack.push({})
+                }
+#endif
+
             }
     
             *out++ = *b;
@@ -375,24 +471,25 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
             {
                 case stNormal:
                 {
-                    if (inBackticks)
-                    {
-                        *out++ = *b;
-                    }
-                    else
-                    {
-                        if (ch==(value_type)'[')
-                        {
-                            bracketCount = 1;
-                            st = stReadText;
-                        }
-                        else if (ch==(value_type)'!')
-                        {
-                            st = stImageWaitText;
-                        }
-
-                        *out++ = *b;
-                    }
+                    doNormal();
+                    // if (inBackticks)
+                    // {
+                    //     *out++ = *b;
+                    // }
+                    // else
+                    // {
+                    //     if (ch==(value_type)'[')
+                    //     {
+                    //         bracketCount = 1;
+                    //         st = stReadText;
+                    //     }
+                    //     else if (ch==(value_type)'!')
+                    //     {
+                    //         st = stImageWaitText;
+                    //     }
+                    //  
+                    //     *out++ = *b;
+                    // }
                 }
                 break;
             
@@ -416,66 +513,18 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
                 case stReadText:
                 {
                     doReadText(bImageLink);
-                    // if (!inBackticks)
-                    // {
-                    //     if (ch==(value_type)'[')
-                    //     {
-                    //         ++bracketCount;
-                    //     }
-                    //     else if (ch==(value_type)']')
-                    //     {
-                    //         --bracketCount;
-                    //         if (bracketCount==0)
-                    //         {
-                    //             st = stWaitLink;
-                    //         }
-                    //     }
-                    // }
-                    //  
-                    // *out++ = *b;
                 }
                 break;
             
                 case stWaitLink:
                 {
                     doWaitLink(bImageLink);
-                    // if (ch==(value_type)'(')
-                    // {
-                    //     bracketCount = 1;
-                    //     st = stReadLink;
-                    // }
-                    //  
-                    // *out++ = *b;
                 }
                 break;
             
                 case stReadLink:
                 {
                     doReadLink(bImageLink);
-                    // if (itUrlBegin==e) // itEnd
-                    // {
-                    //     // сохраняем итератор начала 
-                    //     itUrlBegin = b;
-                    // }
-                    //  
-                    // if (ch==(value_type)'(')
-                    // {
-                    //     ++bracketCount;
-                    // }
-                    // else if (ch==(value_type)')')
-                    // {
-                    //     --bracketCount;
-                    //     if (bracketCount==0)
-                    //     {
-                    //         // call handler here
-                    //         //out = 
-                    //         callHandler(out, itUrlBegin, b, bImageLink);
-                    //         itUrlBegin = e; // itEnd
-                    //         st = stNormal;
-                    //         *out++ = *b;
-                    //     }
-                    // }
-                    // // Иначе - ничего не делаем
                 }
                 break;
             
