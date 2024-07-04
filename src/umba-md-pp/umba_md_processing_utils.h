@@ -342,8 +342,10 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
     auto linkDetector = [&callHandler](OutputIterator out, InputIterator b, InputIterator e, BacktickProcessingState bktpsSt, bool inBackticks)
 #endif
     {
-        auto doNormal = [&]();
+        auto doNormal = [&]()
         {
+            auto ch = *b;
+
             if (inBackticks)
             {
                 *out++ = *b;
@@ -376,7 +378,7 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
 
 #endif
             }
-        }
+        };
 
         auto doReadText = [&](bool readImageLink)
         {

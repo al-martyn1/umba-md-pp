@@ -1,7 +1,65 @@
 include_guard(GLOBAL)
 
+
+if(STATIC_RUNTIME)
+    # For use as ${STATIC_RUNTIME} when calling umba_add_target_options
+    set(STATIC_RUNTIME "STATIC_RUNTIME")
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+else()
+    message("Default Dynamic runtime used")
+endif()
+
+
+### Boost
+# Defaults for Boost
+set(Boost_USE_STATIC_LIBS OFF) 
+set(Boost_USE_MULTITHREADED ON)  
+set(Boost_USE_STATIC_RUNTIME OFF) 
+
+
+# D:\CMake\share\cmake-3.29\Modules\FindBoost.cmake
+# https://cmake.org/cmake/help/latest/module/FindBoost.html
+# https://stackoverflow.com/questions/6646405/how-do-you-add-boost-libraries-in-cmakelists-txt
+
+# Install
+# https://www.youtube.com/watch?v=D640-ZJmBWM
+# How to link C++ program with Boost using CMake - https://stackoverflow.com/questions/3897839/how-to-link-c-program-with-boost-using-cmake
+# Using Boost with CMake - https://discourse.cmake.org/t/using-boost-with-cmake/6299
+# Работа с Boost и CMake под Windows - https://zhitenev.ru/rabota-s-boost-i-cmake-pod-windows/
+# Boost CMake support infrastructure - https://github.com/boostorg/cmake
+# Building and Installing the Library - https://www.boost.org/doc/libs/1_85_0/libs/regex/doc/html/boost_regex/install.html
+
+
+# STATIC_LIBS
+# MULTITHREADED - no mean, option is set to ON by default
+# SINGLETHREADED - single threaded not supported by MSVC?
+# STATIC_RUNTIME
+function(umba_configure_boost)
+
+    math(EXPR maxArgN "${ARGC} - 1")
+
+    foreach(index RANGE 0 ${maxArgN} 1)
+
+        if(${ARGV${index}} STREQUAL "STATIC_LIBS")
+            set(Boost_USE_STATIC_LIBS ON) 
+        elseif(${ARGV${index}} STREQUAL "MULTITHREADED")
+            # no mean, option is set to ON by default
+        elseif(${ARGV${index}} STREQUAL "SINGLETHREADED")
+            set(Boost_USE_MULTITHREADED OFF)  
+        elseif(${ARGV${index}} STREQUAL "STATIC_RUNTIME")
+            set(Boost_USE_STATIC_RUNTIME ON) 
+        endif()
+
+    endforeach()
+
+endfunction()
+
+
+### Target options
+
 # "UNICODE" "CONSOLE" "WINDOWS" "BIGOBJ" "UTF8"
-# "SRCUTF8"
+# "SRCUTF8"/"UTF8SRC"/"SRC_UTF8"/"UTF8_SRC"
+# "STATIC_RUNTIME"
 function(umba_add_target_options TARGET)
 
     # https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html
@@ -31,9 +89,9 @@ function(umba_add_target_options TARGET)
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
                     #message(NOTICE "Add UNICODE options for MSVC")
                 endif()
-            endif() # UNICODE
+            endif()
 
-        elseif(${ARGV${index}} STREQUAL "SRCUTF8" OR ${ARGV${index}} STREQUAL "UTF8SRC")
+        elseif(${ARGV${index}} STREQUAL "SRCUTF8" OR ${ARGV${index}} STREQUAL "UTF8SRC" OR ${ARGV${index}} STREQUAL "UTF8_SRC" OR ${ARGV${index}} STREQUAL "SRC_UTF8")
             if(WIN32)
                 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
                     message(NOTICE "Add SRCUTF8 options for Clang")
@@ -46,7 +104,7 @@ function(umba_add_target_options TARGET)
                     # /utf-8, that sets both /source-charset:utf-8 and /execution-charset:utf-8.
                     target_compile_options(${TARGET} PRIVATE "/source-charset:utf-8")
                 endif()
-            endif() # CONSOLE
+            endif()
 
         elseif(${ARGV${index}} STREQUAL "UTF8")
             if(WIN32)
@@ -60,7 +118,7 @@ function(umba_add_target_options TARGET)
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
                     target_compile_options(${TARGET} PRIVATE "/utf-8")
                 endif()
-            endif() # CONSOLE
+            endif()
 
         elseif(${ARGV${index}} STREQUAL "CONSOLE")
             if(WIN32)
@@ -78,7 +136,7 @@ function(umba_add_target_options TARGET)
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
                     target_link_options(${TARGET} PRIVATE "/SUBSYSTEM:CONSOLE")
                 endif()
-            endif() # CONSOLE
+            endif()
 
         elseif(${ARGV${index}} STREQUAL "WINDOWS")
             if(WIN32)
@@ -96,7 +154,7 @@ function(umba_add_target_options TARGET)
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
                     target_link_options(${TARGET} PRIVATE "/SUBSYSTEM:WINDOWS")
                 endif()
-            endif() # CONSOLE
+            endif()
 
         elseif(${ARGV${index}} STREQUAL "BIGOBJ")
             if(WIN32)
@@ -109,9 +167,25 @@ function(umba_add_target_options TARGET)
                 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
                     target_compile_options(${TARGET} PRIVATE "/bigobj")
                 endif()
-            endif() # BIGOBJ
+            endif()
 
-        endif()
+        elseif(${ARGV${index}} STREQUAL "STATIC_RUNTIME")
+            if(WIN32)
+                # Под винду разве не все кмпиляторы используют MSVC ABI?
+                set_property(TARGET ${TARGET} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+                #if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+                #    message(NOTICE "Add BIGOBJ options for Clang")
+                #elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+                #    target_compile_options(${TARGET} PRIVATE "-Wa,-mbig-obj")
+                #elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+                #    message(NOTICE "Add BIGOBJ options for Intel")
+                #elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+                #    set_property(TARGET ${TARGET} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+                #endif()
+            endif()
+
+        endif() # if(${ARGV${index}}
 
     endforeach()
 
