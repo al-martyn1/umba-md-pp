@@ -19,6 +19,13 @@ set(STATIC_RUNTIME ON)
 
 include(${PRJ_ROOT}/.cmake/umba.cmake)
 
+message("Compiler version: ${CMAKE_CXX_COMPILER_VERSION}")
+# MinGW GCC 7.3 - Compiler version: 7.3.0
+# MinGW GCC 13.2 - Compiler version: 13.2.0
+
+
+
+
 include_directories(${LIB_ROOT})
 
 add_subdirectory(${LIB_ROOT}/encoding)

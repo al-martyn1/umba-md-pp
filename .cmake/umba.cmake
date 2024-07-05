@@ -27,7 +27,17 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 # Using Boost with CMake - https://discourse.cmake.org/t/using-boost-with-cmake/6299
 # Работа с Boost и CMake под Windows - https://zhitenev.ru/rabota-s-boost-i-cmake-pod-windows/
 # Boost CMake support infrastructure - https://github.com/boostorg/cmake
+#   git clone --recurse-submodules https://github.com/boostorg/boost  
 # Building and Installing the Library - https://www.boost.org/doc/libs/1_85_0/libs/regex/doc/html/boost_regex/install.html
+
+# Cross-compilation - https://www.boost.org/build/doc/html/bbv2/tasks/crosscompile.html
+# Builtin tools - https://www.boost.org/build/doc/html/bbv2/reference/tools.html
+# Or, Build Custom Binaries - https://www.boost.org/doc/libs/1_56_0/more/getting_started/unix-variants.html#or-build-custom-binaries
+
+# How do I use a different compiler - https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#how-do-i-use-a-different-compiler
+# #set(CMAKE_CXX_LINK_EXECUTABLE ${CMAKE_CXX}) # не нужно
+# set(CMAKE_LINKER ${CMAKE_CXX})
+
 
 
 # STATIC_LIBS

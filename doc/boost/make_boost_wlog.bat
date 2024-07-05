@@ -1,0 +1,1 @@
+@call make_boost.bat > make_boost.log 2>&1
