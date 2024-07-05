@@ -57,6 +57,11 @@ endfunction()
 
 ### Target options
 
+# UNICODE/MBCS/DBCS
+# https://learn.microsoft.com/ru-ru/cpp/text/support-for-multibyte-character-sets-mbcss?view=msvc-170
+# https://learn.microsoft.com/ru-ru/cpp/text/mbcs-support-in-visual-cpp?view=msvc-170
+# https://learn.microsoft.com/ru-ru/cpp/text/mbcs-programming-tips?view=msvc-170
+
 # "UNICODE" "CONSOLE" "WINDOWS" "BIGOBJ" "UTF8"
 # "SRCUTF8"/"UTF8SRC"/"SRC_UTF8"/"UTF8_SRC"
 # "STATIC_RUNTIME"
