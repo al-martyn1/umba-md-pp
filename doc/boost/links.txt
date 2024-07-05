@@ -1,0 +1,5 @@
+—борка x64 Boost 1.56 нестандартным компил€тором - https://rsdn.org/forum/cpp.applied/5747511.1
+  https://rsdn.org/forum/cpp.applied/5747780.1
+  https://rsdn.org/forum/cpp.applied/5758446.1
+
+BoostSML_Stm32_hello_world - https://github.com/RafNie/BoostSML_Stm32_hello_world

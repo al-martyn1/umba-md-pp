@@ -1,0 +1,247 @@
+B2 5.2.1 (OS=NT, jobs=20)
+
+General command line usage:
+
+    b2 [options] [properties] [targets]
+
+  Options, properties and targets can be specified in any order.
+      
+Important Options:
+
+  * --clean Remove targets instead of building
+  * -a Rebuild everything
+  * -n Don't execute the commands, only print them
+  * -d+2 Show commands as they are executed
+  * -d0 Suppress all informational messages
+  * -q Stop at first error
+  * --reconfigure Rerun all configuration checks
+  * --durations[=N] Report top N targets by execution time
+  * --debug-configuration Diagnose configuration
+  * --debug-building Report which targets are built with what properties
+  * --debug-generator Diagnose generator search/execution
+
+Further Help:
+
+   The following options can be used to obtain additional documentation.
+
+  * --help-options Print more obscure command line options.
+  * --help-internal B2 implementation details.
+  * --help-doc-options Implementation details doc formatting.
+
+...found 1 target...
+B2 Usage:
+
+   b2 [ options... ] targets...
+
+  * -a; Build all targets, even if they are current.
+  * -fx; Read 'x' as the Jamfile for building instead of searching for the B2
+    system.
+  * -jx; Run up to 'x' commands concurrently.
+  * -n; Do not execute build commands. Instead print out the commands as they
+    would be executed if building.
+  * -ox; Output the used build commands to file 'x'.
+  * -q; Quit as soon as a build failure is encountered. Without this option
+    Boost.Jam will continue building as many targets as it can.
+  * -sx=y; Sets a Jam variable 'x' to the value 'y', overriding any value that
+    variable would have from the environment.
+  * -tx; Rebuild the target 'x', even if it is up-to-date.
+  * -v; Display the version of b2.
+  * --x; Any option not explicitly handled by B2 remains available to build
+    scripts using the 'ARGV' variable.
+  * --abbreviate-paths; Use abbreviated paths for targets.
+  * --hash; Shorten target paths by using an MD5 hash.
+  * -dconsole; Run the interactive debugger. Cannot be used with any other
+    option.
+  * -dn; Enables output of diagnostic messages. The debug level 'n' and all
+    below it are enabled by this option.
+  * -d+n; Enables output of diagnostic messages. Only the output for debug
+    level 'n' is enabled.
+
+Debug Levels:
+
+   Each debug level shows a different set of information. Usually with higher
+  levels producing more verbose information. The following levels are supported:
+
+  * 0; Turn off all diagnostic output. Only errors are reported.
+  * 1; Show the actions taken for building targets, as they are executed.
+  * 2; Show quiet actions and display all action text, as they are executed.
+  * 3; Show dependency analysis, and target/source timestamps/paths.
+  * 4; Show arguments of shell invocations.
+  * 5; Show rule invocations and variable expansions.
+  * 6; Show directory/header file/archive scans, and attempts at binding to
+    targets.
+  * 7; Show variable settings.
+  * 8; Show variable fetches, variable expansions, and evaluation of 'if'
+    expressions.
+  * 9; Show variable manipulation, scanner tokens, and memory usage.
+  * 10; Show execution times for rules.
+  * 11; Show parsing progress of Jamfiles.
+  * 12; Show graph for target dependencies.
+  * 13; Show changes in target status (fate).
+
+...found 1 target...
+Modules:
+
+   These are all the known modules. Use --help <module> to get more detailed
+  information.
+
+  * ac:
+  * acc: B2 V2 toolset for the HP aC++ compiler.
+  * alias:
+  * asciidoctor:
+  * assert:
+  * auto-index:
+  * bison:
+  * boost:
+  * boostbook:
+  * borland: Support for the Borland's command line compiler.
+  * build-request:
+  * build-system:
+  * builtin:
+  * bzip2:
+  * cast:
+  * clang: This is a generic 'clang' toolset.
+  * clang-darwin:
+  * clang-linux:
+  * clang-vxworks:
+  * clang-win:
+  * common:
+  * como: This is a generic 'como' toolset.
+  * como-linux:
+  * como-win: The following #// line will be used by the regression test table
+    generation program as the column heading for HTML tables.
+  * config-cache:
+  * configure:
+  * container:
+  * convert:
+  * cray:
+  * cw: based on the msvc.jam toolset.
+  * cw-config:
+  * cygwin:
+  * darwin:
+  * diab:
+  * dmc: tag::doc[] [[bbv2.reference.tools.compiler.dmc]] = Digital Mars C/C++
+    Compiler The `dmc` module supports the http://www.digitalmars.com/[Digital
+    Mars C++ compiler.] The module is initialized using the following syntax:
+    ---- using dmc : [version] : [c++-compile-command] : [compiler options] ;
+    ---- This statement may be repeated several times, if you want to configure
+    several versions of the compiler.
+  * doc:
+  * docutils:
+  * doxygen:
+  * embarcadero:
+  * emscripten:
+  * feature:
+  * flags:
+  * fop:
+  * fortran:
+  * gcc:
+  * generate:
+  * generators:
+  * gettext:
+  * gfortran:
+  * help:
+  * hp_cxx: HP CXX compiler See
+    http://h30097.www3.hp.com/cplus/?jumpid=reg_R1002_USEN Notes on this toolset:
+    - Because of very subtle issues with the default ansi mode, strict_ansi mode
+    is used for compilation.
+  * hpfortran:
+  * ifort:
+  * indirect:
+  * intel: This is a generic 'intel' toolset.
+  * intel-darwin:
+  * intel-linux:
+  * intel-vxworks:
+  * intel-win:
+  * lex:
+  * libjpeg:
+  * libpng:
+  * libtiff:
+  * link:
+  * lzma:
+  * make:
+  * mc:
+  * message:
+  * midl:
+  * mipspro:
+  * modular:
+  * mpi:
+  * msvc:
+    
+  * notfile:
+  * numbers:
+  * openssl:
+  * option:
+  * order:
+  * os:
+  * package: Example usage: package.install boost : <properties> : <binaries> :
+    <libraries> : <headers> ; This will install binaries, libraries and headers
+    to the 'proper' location, given by command line options --prefix,
+    --exec-prefix, --bindir, --libdir and --includedir.
+  * param:
+  * path:
+  * pathscale:
+  * pch:
+  * pgi:
+  * pkg-config: tag::doc[] == Feature: `pkg-config` Selects one of the
+    initialized `pkg-config` configurations.
+  * print:
+  * project:
+  * property:
+  * property-set:
+  * python-config:
+  * qcc: Configuration checks don't use explicit value of QCC-TARGET-PLATFORM.
+  * qt:
+  * qt3:
+  * qt4:
+  * qt5: The .qrc processing utility supports various command line option (see
+    http://qt-project.org/doc/qt-5.0/rcc.html for a complete list).
+  * quickbook:
+  * quickbook-config:
+  * rc:
+  * sass:
+  * saxonhe:
+  * scanner:
+  * sequence:
+  * stage:
+  * sun:
+  * symlink:
+  * targets:
+  * testing-aux:
+  * tntnet:
+  * toolset:
+  * type:
+  * unix:
+  * utility:
+  * vacpp: B2 V2 toolset for the IBM XL C++ compiler .
+  * version:
+  * virtual-target:
+  * vmsdecc:
+  * whale: This module implements support for Whale/Dolphin/WD parser/lexer
+    tools.
+  * wxFormBuilder:
+    
+  * xlcpp:
+  * xlf:
+  * xsltproc:
+  * xsltproc-config:
+  * zlib:
+  * zstd: Supports the zstd library After 'using zstd', the following targets
+    are available: /zstd//zstd -- The zstd library.
+
+...found 1 target...
+Help Options:
+
+   These are all the options available for enabling or disabling to control the
+  help system in various ways. Options can be enabled or disabled with
+  '--help-enable-<option>', and '--help-disable-<option>' respectively.
+
+  * debug: Generate debug output as the help is generated and modules are
+    parsed. Default is disabled.
+  * detailed: When showing documentation for a module, whether to also generate
+    automatically the detailed docs for each item in the module. Default is
+    disabled.
+  * show-locals: Whether to include local rules in help output. Default is
+    disabled.
+
+...found 1 target...

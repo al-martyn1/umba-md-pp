@@ -1,0 +1,5 @@
+using gcc : 13.2   : C:\\w64devkit\\bin\\g++.exe ;
+using gcc : 7.3-32 : C:\\Qt\\Qt5.12.12\\Tools\\mingw730_32\\bin\\g++.exe ;
+using gcc : 7.3-64 : C:\\Qt\\Qt5.12.12\\Tools\\mingw730_64\\bin\\g++.exe ;
+using gcc_arm      : 13.2 : C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi\\13.2 Rel1\\bin\\arm-none-eabi-g++.exe ;
+
