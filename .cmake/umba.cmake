@@ -1,9 +1,48 @@
 include_guard(GLOBAL)
 
+# set(UMBA_USE_BOOST       ON)
+# set(UMBA_USE_BOOST_FETCH ON)
+# set(UMBA_STATIC_RUNTIME  ON)
 
-if(STATIC_RUNTIME)
-    # For use as ${STATIC_RUNTIME} when calling umba_add_target_options
-    set(STATIC_RUNTIME "STATIC_RUNTIME")
+
+if(UMBA_USE_BOOST)
+
+    if(UMBA_USE_BOOST_FETCH)
+    
+        include(FetchContent)
+        FetchContent_Declare(
+          Boost
+          #URL https://github.com/boostorg/boost/releases/download/boost-1.84.0/boost-1.84.0.tar.xz
+          URL D:/boost-1.84.0.tar.xz
+          #URL_MD5 893b5203b862eb9bbd08553e24ff146a
+          DOWNLOAD_EXTRACT_TIMESTAMP ON
+        )
+        FetchContent_MakeAvailable(Boost)
+    
+    else() # Use local lightweight boost
+    
+        if(NOT Boost_INCLUDE_DIR)
+            if(DEFINED ENV{BOOST_ROOT})
+                set(Boost_INCLUDE_DIR "$ENV{BOOST_ROOT}")
+            endif()
+        endif()
+    
+        if(Boost_INCLUDE_DIR)
+    
+            find_package(Boost)
+            include_directories(${Boost_INCLUDE_DIRS})
+    
+        endif()
+    
+    endif()
+
+endif()
+
+
+if(UMBA_STATIC_RUNTIME)
+    # For use as ${UMBA_STATIC_RUNTIME} when calling umba_add_target_options
+    set(UMBA_STATIC_RUNTIME "UMBA_STATIC_RUNTIME")
+    set(STATIC_RUNTIME      "STATIC_RUNTIME")
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 else()
     message("Default Dynamic runtime used")
@@ -50,13 +89,15 @@ function(umba_configure_boost)
 
     foreach(index RANGE 0 ${maxArgN} 1)
 
-        if(${ARGV${index}} STREQUAL "STATIC_LIBS")
+        if(NOT ${ARGV${index}})
+
+        elseif(${ARGV${index}} STREQUAL "STATIC_LIBS")
             set(Boost_USE_STATIC_LIBS ON) 
         elseif(${ARGV${index}} STREQUAL "MULTITHREADED")
             # no mean, option is set to ON by default
         elseif(${ARGV${index}} STREQUAL "SINGLETHREADED")
             set(Boost_USE_MULTITHREADED OFF)  
-        elseif(${ARGV${index}} STREQUAL "STATIC_RUNTIME")
+        elseif(${ARGV${index}} STREQUAL "STATIC_RUNTIME" OR ${ARGV${index}} STREQUAL "UMBA_STATIC_RUNTIME")
             set(Boost_USE_STATIC_RUNTIME ON) 
         endif()
 
@@ -89,7 +130,9 @@ function(umba_add_target_options TARGET)
 
         #message("  ARGV${index}: ${ARGV${index}}")
 
-        if(${ARGV${index}} STREQUAL "UNICODE")
+        if(NOTICE${ARGV${index}})
+
+        elseif(${ARGV${index}} STREQUAL "UNICODE")
             if(WIN32)
 
                 # Common for all
@@ -184,9 +227,9 @@ function(umba_add_target_options TARGET)
                 endif()
             endif()
 
-        elseif(${ARGV${index}} STREQUAL "STATIC_RUNTIME")
+        elseif(${ARGV${index}} STREQUAL "STATIC_RUNTIME" OR ${ARGV${index}} STREQUAL "UMBA_STATIC_RUNTIME")
             if(WIN32)
-                # Под винду разве не все кмпиляторы используют MSVC ABI?
+                # Под винду разве не все компиляторы используют MSVC ABI?
                 set_property(TARGET ${TARGET} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
                 #if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

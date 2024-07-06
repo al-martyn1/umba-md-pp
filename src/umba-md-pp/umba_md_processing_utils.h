@@ -8,6 +8,9 @@
 #include <vector>
 #include <stack>
 
+//
+#include <boost/container/static_vector.hpp>
+
 // 
 #include "enums.h"
 
