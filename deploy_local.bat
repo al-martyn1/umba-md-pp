@@ -14,8 +14,8 @@
 @if not exist %UMBA_TOOLS%\bin    mkdir %UMBA_TOOLS%\bin
 @if not exist %UMBA_TOOLS%\conf   mkdir %UMBA_TOOLS%\conf
 
-@copy /Y %~dp0\.out\msvc2019\x64\Release\umba-md-pp.exe         %UMBA_TOOLS%\bin\
-@copy /Y %~dp0\.out\msvc2019\x64\Release\umba-md-pp-view.exe    %UMBA_TOOLS%\bin\
+copy /Y %~dp0\.out\msvc2019\x64\Release\umba-md-pp.exe         %UMBA_TOOLS%\bin\
+copy /Y %~dp0\.out\msvc2019\x64\Release\umba-md-pp-view.exe    %UMBA_TOOLS%\bin\
 
 @xcopy /Y /S /E /I /F /R %~dp0\_distr_conf\conf\*               %UMBA_TOOLS%\conf
 
