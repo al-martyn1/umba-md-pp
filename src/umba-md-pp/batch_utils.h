@@ -80,11 +80,11 @@ void batchScanForFiles( const std::vector<ScanPathsEntry> &batchScanPaths
             foundExtentions.clear();
 
             bCurRecurse = bit->recurse;
-            scanPaths.emplace_back(bit->path);
+            scanPaths.emplace_back(umba::filename::makeCanonical(bit->path));
         }
         else
         {
-            scanPaths.emplace_back(bit->path);
+            scanPaths.emplace_back(umba::filename::makeCanonical(bit->path));
         }
     }
 
