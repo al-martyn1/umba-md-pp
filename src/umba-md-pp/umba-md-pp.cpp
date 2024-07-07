@@ -143,20 +143,26 @@ int main(int argc, char* argv[])
 
     using namespace umba::omanip;
 
-    // umba::md::testTransformMarkdownText("Someting `in back`ticks");
-    // umba::md::testTransformMarkdownText("Someting ``in `double back``ticks");
 
-    umba::md::testTransformMarkdownLinksUrlString("[![Todo](doc/icons/todo-list-50.png) TODO](doc/todo.md)");
-    umba::md::testTransformMarkdownLinksUrlString("[Test1](http://ya.ru\\test\\test.md?a=http://g.com\\some\\path#show)");
-    umba::md::testTransformMarkdownLinksUrlString("[Te`st`2](http://ya.ru/test/test.md?a=http://g.com/some/path#show)");
-    umba::md::testTransformMarkdownLinksUrlString("[Test1](  http://ya.ru\\test\\test.md?a=http://g.com#show)");
-    umba::md::testTransformMarkdownLinksUrlString("[Te`st`2](http://ya.ru/test/test.md?a=http://g.com#show  )");
-    umba::md::testTransformMarkdownLinksUrlString("[qwqwqw](\\test\\test.md)");
-    umba::md::testTransformMarkdownLinksUrlString("[dcasc](/test/test.md)");
-    umba::md::testTransformMarkdownLinksUrlString("[qwqwqw](  \\test\\test.md  )");
-    umba::md::testTransformMarkdownLinksUrlString("[dcasc](/test/test md)");
-    umba::md::testTransformMarkdownLinksUrlString("[dsc](test\\test.md)");
-    umba::md::testTransformMarkdownLinksUrlString("[vfda](test/test.md)");
+    if (umba::isDebuggerPresent())
+    {
+    
+        // umba::md::testTransformMarkdownText("Someting `in back`ticks");
+        // umba::md::testTransformMarkdownText("Someting ``in `double back``ticks");
+    
+        umba::md::testTransformMarkdownLinksUrlString("[![Todo](doc/icons/todo-list-50.png) TODO](doc/todo.md)");
+        umba::md::testTransformMarkdownLinksUrlString("[Test1](http://ya.ru\\test\\test.md?a=http://g.com\\some\\path#show)");
+        umba::md::testTransformMarkdownLinksUrlString("[Te`st`2](http://ya.ru/test/test.md?a=http://g.com/some/path#show)");
+        umba::md::testTransformMarkdownLinksUrlString("[Test1](  http://ya.ru\\test\\test.md?a=http://g.com#show)");
+        umba::md::testTransformMarkdownLinksUrlString("[Te`st`2](http://ya.ru/test/test.md?a=http://g.com#show  )");
+        umba::md::testTransformMarkdownLinksUrlString("[qwqwqw](\\test\\test.md)");
+        umba::md::testTransformMarkdownLinksUrlString("[dcasc](/test/test.md)");
+        umba::md::testTransformMarkdownLinksUrlString("[qwqwqw](  \\test\\test.md  )");
+        umba::md::testTransformMarkdownLinksUrlString("[dcasc](/test/test md)");
+        umba::md::testTransformMarkdownLinksUrlString("[dsc](test\\test.md)");
+        umba::md::testTransformMarkdownLinksUrlString("[vfda](test/test.md)");
+
+    }
 
 
     auto argsParser = umba::command_line::makeArgsParser( ArgParser<std::string>()
@@ -223,9 +229,10 @@ int main(int argc, char* argv[])
         // // argsParser.args.push_back("");
         // argsParser.args.push_back(rootPath + "tests\\test04.md_");
 
-        argsParser.args.push_back("--batch-scan="+rootPath);
-        argsParser.args.push_back("--batch-scan="+rootPath+"doc");
-        argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
+        //argsParser.args.push_back("--batch-scan="+rootPath);
+        //argsParser.args.push_back("--batch-scan="+rootPath+"doc");
+        //argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
+        argsParser.args.push_back("--batch-scan-recurse=.");
         
         argsParser.args.push_back("--batch-page-index-file=pages.md");
         argsParser.args.push_back("--batch-split-page-index-file");
@@ -286,6 +293,11 @@ int main(int argc, char* argv[])
 
     if (appConfig.isBatchMode())
     {
+        if (!argsParser.quet  /* && !hasHelpOption */ )
+        {
+            umbaLogStreamMsg << "Batch mode\n";
+        }
+
         std::vector<std::string>  foundFiles;
         std::vector<std::string>  foundFilesRootFolders;
 
@@ -354,15 +366,10 @@ int main(int argc, char* argv[])
                 //     infoLog << ", target: ";
                 // #endif
 
+
                 std::string ext       = umba::filename::getExt(fileFullName);
                 std::string targetExt = appConfig.getTargetFileExtention(ext);
                 std::string targetRelName;
-
-                if (ext==targetExt)
-                {
-                    LOG_WARN_OPT("same-file") << "source file and target file has same extention, skip processing it\n";
-                    continue;
-                }
 
                 //std::string outputFileName;
                 if (appConfig.batchOutputRoot.empty())
@@ -388,9 +395,28 @@ int main(int argc, char* argv[])
                     outputFilename  = umba::filename::appendPath(appConfig.batchOutputRoot, targetRelName);
                 }
 
-                infoLog << "'" << outputFilename << "'" << "\n";
+                // infoLog << "'" << outputFilename << "'" << "\n";
 
                 //infoLog << "Processing file" foundFile << "\n";
+
+                if (!argsParser.quet)
+                {
+                    #if defined(UMBA_MD_PP_BATCH_MODE_PROCESSING_LOG_MULTILINE)
+                        umbaLogStreamMsg << "\n    Writting output to: ";
+                    #else
+                        umbaLogStreamMsg << " - writting output to: ";
+                    #endif
+                    umbaLogStreamMsg << outputFilename << "\n";
+                }
+
+
+                if (ext==targetExt)
+                {
+                    //LOG_WARN_OPT("same-file") << "source file and target file has same extention, skip processing it (output file: '" << outputFilename << "')\n";
+                    LOG_WARN_OPT("same-file") << "source file and target file has same extention, skip processing it\n";
+                    continue;
+                }
+
 
                 std::string inputFileText;
                 if (!AppConfig<std::string>::readInputFile(*fileIt, inputFileText))
@@ -448,15 +474,6 @@ int main(int argc, char* argv[])
 
                 try
                 {
-                    if (!argsParser.quet)
-                    {
-                        #if defined(UMBA_MD_PP_BATCH_MODE_PROCESSING_LOG_MULTILINE)
-                            umbaLogStreamMsg << "    Writting output to: ";
-                        #else
-                            umbaLogStreamMsg << " - writting output to: ";
-                        #endif
-                        umbaLogStreamMsg << outputFilename << "\n";
-                    }
             
                     umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
 
@@ -579,7 +596,11 @@ int main(int argc, char* argv[])
     }
     else
     {
-        // Single file mode
+        if (!argsParser.quet  /* && !hasHelpOption */ )
+        {
+            umbaLogStreamMsg << "Single file mode\n";
+        }
+
         if (inputFilename.empty())
         {
             LOG_ERR_OPT << "input file name not taken"
