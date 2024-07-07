@@ -36,7 +36,7 @@ add_subdirectory(${LIB_ROOT}/marty_cpp)
 add_subdirectory(${LIB_ROOT}/marty_tr)
 add_subdirectory(${LIB_ROOT}/marty_yaml_toml_json)
 add_subdirectory(${LIB_ROOT}/nlohmann)    # https://json.nlohmann.me/integration/cmake/#external
-# add_subdirectory(${LIB_ROOT}/pugixml)
+#add_subdirectory(${LIB_ROOT}/pugixml)
 add_subdirectory(${LIB_ROOT}/sfmt)
 add_subdirectory(${LIB_ROOT}/umba)
 add_subdirectory(${LIB_ROOT}/yaml-cpp)
@@ -104,52 +104,37 @@ endif()
 source_group(TREE "${SRC_ROOT}" PREFIX "Resources" FILES "${umba_md_pp_view_resources}")
 
 
-# https://stackoverflow.com/questions/10113017/setting-the-msvc-runtime-in-cmake
-# https://cmake.org/cmake/help/latest/prop_tgt/MSVC_RUNTIME_LIBRARY.html
-# set_property(TARGET foo PROPERTY
-#  MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-# https://cmake.org/cmake/help/git-stage/variable/CMAKE_MSVC_RUNTIME_LIBRARY.html
-# https://cmake.org/cmake/help/git-stage/manual/cmake-generator-expressions.7.html#manual:cmake-generator-expressions(7)
-# set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-# MultiThreaded$<$<CONFIG:Debug>:Debug>DLL
 
-# linux
-# https://stackoverflow.com/questions/35994339/link-linux-c-application-statically-via-cmake-2-8
+set(PLATFORM_LIBS)
+if(WIN32) # Тут надо помнить, что WIN32 - это хост, для целевого WIN32 я не помню, как оно, надо уточнить, но пока хост и таргет совпадают, так что живём
+    list(APPEND PLATFORM_LIBS ws2_32 iphlpapi shell32)
+endif()
+
+set(COMMON_SRC encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
+#set(PUGIXML_SRC pugixml::pugixml marty_pugixml::marty_pugixml)
+set(JSON_YAML_SRC nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
 
 
 add_executable(gen-lang-detection-tr "${SRC_ROOT}/umba-md-pp/gen-lang-detection-tr.cpp" ${headers})
 umba_add_target_options(gen-lang-detection-tr "BIGOBJ" "CONSOLE" "UTF8" )
-target_link_libraries(gen-lang-detection-tr PRIVATE ws2_32 iphlpapi shell32)
-target_link_libraries(gen-lang-detection-tr PRIVATE encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
-#target_link_libraries(gen-lang-detection-tr PRIVATE pugixml::pugixml marty_pugixml::marty_pugixml)
-target_link_libraries(gen-lang-detection-tr PRIVATE nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
+target_link_libraries(gen-lang-detection-tr PRIVATE ${PLATFORM_LIBS} ${COMMON_SRC} ${JSON_YAML_SRC})
 
 
 add_executable(umba-md-pp "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp" ${headers})
 umba_add_target_options(umba-md-pp "BIGOBJ" "CONSOLE" "UTF8")
-target_link_libraries(umba-md-pp PRIVATE ws2_32 iphlpapi shell32)
-target_link_libraries(umba-md-pp PRIVATE encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
-#target_link_libraries(umba-md-pp PRIVATE pugixml::pugixml marty_pugixml::marty_pugixml)
-target_link_libraries(umba-md-pp PRIVATE nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
+target_link_libraries(umba-md-pp PRIVATE ${PLATFORM_LIBS} ${COMMON_SRC} ${JSON_YAML_SRC} sfmt::sfmt)
 
 
 add_executable(umba-md-pp-view "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" ${headers} ${umba_md_pp_view_resources})
 umba_add_target_options(umba-md-pp-view "BIGOBJ" "WINDOWS" "UTF8")
 target_compile_definitions(umba-md-pp-view PRIVATE "UMBA_MD_PP_VIEW")
-target_link_libraries(umba-md-pp-view PRIVATE ws2_32 iphlpapi shell32)
-target_link_libraries(umba-md-pp-view PRIVATE encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
-#target_link_libraries(umba-md-pp-view PRIVATE pugixml::pugixml marty_pugixml::marty_pugixml)
-target_link_libraries(umba-md-pp-view PRIVATE nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
+target_link_libraries(umba-md-pp-view PRIVATE ${PLATFORM_LIBS} ${COMMON_SRC} ${JSON_YAML_SRC})
 
 
 add_executable(umba-md-pp-view-console "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" ${headers} ${umba_md_pp_view_resources})
 umba_add_target_options(umba-md-pp-view-console "BIGOBJ" "CONSOLE" "UTF8")
-target_compile_definitions(umba-md-pp-view-console PRIVATE "UMBA_MD_PP_VIEW")
-target_compile_definitions(umba-md-pp-view-console PRIVATE "UMBA_MD_PP_VIEW_CONSOLE")
-target_link_libraries(umba-md-pp-view-console PRIVATE ws2_32 iphlpapi shell32)
-target_link_libraries(umba-md-pp-view-console PRIVATE encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
-#target_link_libraries(umba-md-pp-view-console PRIVATE pugixml::pugixml marty_pugixml::marty_pugixml)
-target_link_libraries(umba-md-pp-view-console PRIVATE nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
+target_compile_definitions(umba-md-pp-view-console PRIVATE "UMBA_MD_PP_VIEW" "UMBA_MD_PP_VIEW_CONSOLE")
+target_link_libraries(umba-md-pp-view-console PRIVATE ${PLATFORM_LIBS} ${COMMON_SRC} ${JSON_YAML_SRC})
 
 
 
