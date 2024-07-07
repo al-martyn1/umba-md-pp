@@ -11,19 +11,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 
-set(PRJ_ROOT "${CMAKE_CURRENT_LIST_DIR}")
-set(SRC_ROOT "${PRJ_ROOT}/src")
-set(LIB_ROOT "${PRJ_ROOT}/_libs")
-
 set(UMBA_STATIC_RUNTIME ON)
 set(UMBA_USE_BOOST      ON)
 
-include(${PRJ_ROOT}/.cmake/umba.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/.cmake/umba.cmake)
 
 
 
-message("BOOST_ROOT: ${BOOST_ROOT}")
-message("Compiler: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+# message("BOOST_ROOT: ${BOOST_ROOT}")
+# message("Compiler: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 # MinGW GCC 7.3 - Compiler version: 7.3.0
 # MinGW GCC 13.2 - Compiler version: 13.2.0
 
@@ -43,17 +39,6 @@ add_subdirectory(${LIB_ROOT}/yaml-cpp)
 
 
 umba_configure_boost("STATIC_LIBS" "MULTITHREADED" "${STATIC_RUNTIME}")
-# set(Boost_USE_STATIC_LIBS ON) 
-# set(Boost_USE_MULTITHREADED ON)  
-# if(STATIC_RUNTIME)
-#     set(Boost_USE_STATIC_RUNTIME ON) 
-# endif()
-
-# https://cmake.org/cmake/help/latest/command/find_package.html
-# find_package(Boost 1.75 REQUIRED [COMPONENTS <components>...])
-# find_package(Boost 1.75 REQUIRED)
-# find_package(Boost REQUIRED)
-
 
 
 #-O0 
@@ -91,22 +76,15 @@ endif()
 add_compile_definitions("YAML_CPP_STATIC_DEFINE")
 add_compile_definitions("USE_UMBA_LOUT_COUT")
 
-file(GLOB_RECURSE sources "${SRC_ROOT}/*.cpp")
-source_group(TREE "${SRC_ROOT}" PREFIX "Sources" FILES "${sources}")
 
-file(GLOB_RECURSE headers "${SRC_ROOT}/*.h")
-source_group(TREE "${SRC_ROOT}" PREFIX "Headers" FILES "${headers}")
-
-set(umba_md_pp_view_resources)
-if(WIN32)
-    set(umba_md_pp_view_resources ${umba_md_pp_view_resources} "${SRC_ROOT}/umba-md-pp/_umba-md-pp-view.rc")
-endif()
-source_group(TREE "${SRC_ROOT}" PREFIX "Resources" FILES "${umba_md_pp_view_resources}")
-
+file(GLOB_RECURSE sources   "${SRC_ROOT}/*.cpp")
+file(GLOB_RECURSE headers   "${SRC_ROOT}/*.h")
+file(GLOB_RECURSE resources "${SRC_ROOT}/*.rc")
+umba_make_sources_tree("${SRC_ROOT}" "${sources}" "${headers}" "${resources}")
 
 
 set(PLATFORM_LIBS)
-if(WIN32) # Тут надо помнить, что WIN32 - это хост, для целевого WIN32 я не помню, как оно, надо уточнить, но пока хост и таргет совпадают, так что живём
+if(WIN32) # Всё нормально, это про таргет
     list(APPEND PLATFORM_LIBS ws2_32 iphlpapi shell32)
 endif()
 
@@ -115,26 +93,26 @@ set(COMMON_SRC encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
 set(JSON_YAML_SRC nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
 
 
-add_executable(gen-lang-detection-tr "${SRC_ROOT}/umba-md-pp/gen-lang-detection-tr.cpp" ${headers})
-umba_add_target_options(gen-lang-detection-tr "BIGOBJ" "CONSOLE" "UTF8" )
-target_link_libraries(gen-lang-detection-tr PRIVATE ${PLATFORM_LIBS} ${COMMON_SRC} ${JSON_YAML_SRC})
+add_executable(gen-lang-detection-tr "${SRC_ROOT}/umba-md-pp/gen-lang-detection-tr.cpp" "${headers}")
+umba_add_target_options(gen-lang-detection-tr "${UNDEFINED_VAR}" "BIGOBJ" "CONSOLE" "UTF8" )
+target_link_libraries(gen-lang-detection-tr PRIVATE "${PLATFORM_LIBS}" "${COMMON_SRC}" "${JSON_YAML_SRC}")
 
 
-add_executable(umba-md-pp "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp" ${headers})
+add_executable(umba-md-pp "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp" "${headers}")
 umba_add_target_options(umba-md-pp "BIGOBJ" "CONSOLE" "UTF8")
-target_link_libraries(umba-md-pp PRIVATE ${PLATFORM_LIBS} ${COMMON_SRC} ${JSON_YAML_SRC} sfmt::sfmt)
+target_link_libraries(umba-md-pp PRIVATE "${PLATFORM_LIBS}" "${COMMON_SRC}" "${JSON_YAML_SRC}")
 
 
-add_executable(umba-md-pp-view "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" ${headers} ${umba_md_pp_view_resources})
+add_executable(umba-md-pp-view "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" "${SRC_ROOT}/umba-md-pp/_umba-md-pp-view.rc" "${headers}")
 umba_add_target_options(umba-md-pp-view "BIGOBJ" "WINDOWS" "UTF8")
 target_compile_definitions(umba-md-pp-view PRIVATE "UMBA_MD_PP_VIEW")
-target_link_libraries(umba-md-pp-view PRIVATE ${PLATFORM_LIBS} ${COMMON_SRC} ${JSON_YAML_SRC})
+target_link_libraries(umba-md-pp-view PRIVATE "${PLATFORM_LIBS}" "${COMMON_SRC}" "${JSON_YAML_SRC}")
 
 
-add_executable(umba-md-pp-view-console "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" ${headers} ${umba_md_pp_view_resources})
+add_executable(umba-md-pp-view-console "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" "${SRC_ROOT}/umba-md-pp/_umba-md-pp-view.rc" "${headers}")
 umba_add_target_options(umba-md-pp-view-console "BIGOBJ" "CONSOLE" "UTF8")
 target_compile_definitions(umba-md-pp-view-console PRIVATE "UMBA_MD_PP_VIEW" "UMBA_MD_PP_VIEW_CONSOLE")
-target_link_libraries(umba-md-pp-view-console PRIVATE ${PLATFORM_LIBS} ${COMMON_SRC} ${JSON_YAML_SRC})
+target_link_libraries(umba-md-pp-view-console PRIVATE "${PLATFORM_LIBS}" "${COMMON_SRC}" "${JSON_YAML_SRC}")
 
 
 
