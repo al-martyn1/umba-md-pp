@@ -776,7 +776,7 @@ int operator()( const StringType                                &a           //!
             
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"exclude dirs not taken (--atch-exclude-dir)\n";
+                LOG_ERR_OPT<<"exclude dirs not taken (--batch-exclude-dir)\n";
                 return -1;
             }
          
@@ -795,7 +795,7 @@ int operator()( const StringType                                &a           //!
             
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"exclude dirs not taken (--atch-exclude-dir)\n";
+                LOG_ERR_OPT<<"scan dirs not taken (--batch-scan)\n";
                 return -1;
             }
          
@@ -819,7 +819,7 @@ int operator()( const StringType                                &a           //!
             
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"exclude dirs not taken (--atch-exclude-dir)\n";
+                LOG_ERR_OPT<<"scan dirs not taken (--batch-scan-recurse)\n";
                 return -1;
             }
          
