@@ -1,0 +1,1 @@
+umba-md-pp --overwrite --batch-scan-recurse=.   >gen-doc.log
