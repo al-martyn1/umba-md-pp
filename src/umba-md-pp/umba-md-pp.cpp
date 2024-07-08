@@ -86,7 +86,7 @@ umba::StdStreamCharWriter cerrWriter(std::cerr);
 umba::NulCharWriter       nulWriter;
 
 umba::SimpleFormatter umbaLogStreamErr(&cerrWriter);
-umba::SimpleFormatter umbaLogStreamMsg(&cerrWriter);
+umba::SimpleFormatter umbaLogStreamMsg(&coutWriter);
 umba::SimpleFormatter umbaLogStreamNul(&nulWriter);
 
 bool umbaLogGccFormat   = false; // true;
