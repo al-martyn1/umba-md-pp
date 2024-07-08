@@ -9,7 +9,9 @@
 #include <stack>
 
 //
-#include <boost/container/static_vector.hpp>
+// #include <boost/container/static_vector.hpp>
+
+#include "umba/container.h"
 
 // 
 #include "enums.h"
@@ -297,6 +299,9 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
 
     State st = stNormal; // Он всегда нужен, если стек - там предыдущее значение состояния
     //InputIterator itUrlEnd   = itEnd;
+
+    typedef boost::container::small_vector_options< boost::container::growth_factor<boost::container::growth_factor_50> >::type growth_50_option_t;
+    umba::container::small_vector<int, 5, void, void> testSmallVector;
 
 #if !defined(UMBA_MD_PROCESSING_UTILS_TRANSFORM_MARKDOWN_LINKS_URL_ITERATOR_USE_STACK)
 
