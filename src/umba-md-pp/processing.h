@@ -2425,6 +2425,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
 
     parseDocumentMetadata(appCfg, doc);
 
+    std::vector<std::string> metaDescriptionLines = doc.getMetaTagValueAsTextLines(appCfg, "description", std::string() /* listDelimiter */);
 
     std::string metaTitle = doc.getDocumentTitleFromMeta();
     if (appCfg.testProcessingOption(ProcessingOptions::title) && !metaTitle.empty())
@@ -2437,6 +2438,12 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
 
         tmpLines.emplace_back(std::string("# ") + metaTitle);
         tmpLines.emplace_back(std::string());
+        if (!metaDescriptionLines.empty())
+        {
+            umba::vectorPushBack(tmpLines, metaDescriptionLines);
+            tmpLines.emplace_back(std::string());
+        }
+
         umba::vectorPushBack(tmpLines, resLines);
         std::swap(tmpLines, resLines);
     }

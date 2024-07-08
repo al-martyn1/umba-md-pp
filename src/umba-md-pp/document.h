@@ -58,7 +58,8 @@ struct Document
         }
         else if (metaTagType==MetaTagType::textMerge) /* Text fragments will be merged to paras */
         {
-            tagText = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string(" ") );
+            //tagText = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string(" ") );
+            tagText = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string("\n\n") );
             return true;
         }
         else if (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList)
@@ -98,6 +99,25 @@ struct Document
         if (!getMetaTagValueAsText(appCfg, tag, listDelimiter, tagText))
             return std::string();
         return tagText;
+    }
+
+    template<typename FilenameStringType>
+    bool getMetaTagValueAsTextLines(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter, std::vector<std::string> &tagTextLines) const
+    {
+        std::string tagText;
+        if (!getMetaTagValueAsText(appCfg, tag, listDelimiter, tagText))
+            return false;
+        tagTextLines = marty_cpp::splitToLinesSimple(tagText, false, '\n');
+        return true;
+    }
+
+    template<typename FilenameStringType>
+    std::vector<std::string> getMetaTagValueAsTextLines(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter) const
+    {
+        std::vector<std::string> tagTextLines;
+        if (!getMetaTagValueAsTextLines(appCfg, tag, listDelimiter, tagTextLines))
+            return std::vector<std::string>();
+        return tagTextLines;
     }
 
     template<typename FilenameStringType>
