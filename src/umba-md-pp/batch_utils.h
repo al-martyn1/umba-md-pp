@@ -25,9 +25,9 @@ void batchScanForFiles( const std::vector<ScanPathsEntry> &batchScanPaths
                       , const std::vector<std::string> &extList
                       , const std::vector<std::string> &excludeDirs
                       , const std::vector<std::string> &excludeFilesMaskList
-                      , LogMsgType               &logMsg           // logMsg or logNul
-                      , std::vector<std::string>  &foundFiles
-                      , std::vector<std::string>  *pFoundFilesRootFolders = 0
+                      , LogMsgType                     &logMsg           // logMsg or logNul
+                      , std::vector<std::string>       &foundFiles
+                      , std::vector<std::string>       *pFoundFilesRootFolders = 0
                       )
 {
     std::vector<std::string> includeMasks; includeMasks.reserve(extList.size());
@@ -37,13 +37,14 @@ void batchScanForFiles( const std::vector<ScanPathsEntry> &batchScanPaths
         includeMasks.emplace_back("*." + ext + "^");
     }
 
-    std::vector<std::string> excludeMasks; excludeMasks.reserve(excludeDirs.size() + excludeFilesMaskList.size());
-    for(const auto &excludeDir : excludeDirs)
-    {
-        excludeMasks.emplace_back("*/" + excludeDir + "/*");
-    }
-
-    excludeMasks.insert(excludeMasks.end(), excludeFilesMaskList.begin(), excludeFilesMaskList.end());
+    std::vector<std::string> excludeMasks = excludeFilesMaskList;
+    // std::vector<std::string> excludeMasks; excludeMasks.reserve( /* excludeDirs.size() + */  excludeFilesMaskList.size());
+    // // for(const auto &excludeDir : excludeDirs)
+    // // {
+    // //     excludeMasks.emplace_back("*/" + excludeDir + "/*");
+    // // }
+    //  
+    // excludeMasks.insert(excludeMasks.end(), excludeFilesMaskList.begin(), excludeFilesMaskList.end());
 
 
     std::vector<std::string> excludedFiles;
@@ -68,6 +69,7 @@ void batchScanForFiles( const std::vector<ScanPathsEntry> &batchScanPaths
                                                     , excludedFiles
                                                     , foundExtentions
                                                     , pFoundFilesRootFolders
+                                                    , excludeDirs
                                                     , bCurRecurse
                                                     , !bHeaderPrinted
                                                     );
@@ -98,6 +100,7 @@ void batchScanForFiles( const std::vector<ScanPathsEntry> &batchScanPaths
                                             , excludedFiles
                                             , foundExtentions
                                             , pFoundFilesRootFolders
+                                            , excludeDirs
                                             , bCurRecurse
                                             , !bHeaderPrinted
                                             );

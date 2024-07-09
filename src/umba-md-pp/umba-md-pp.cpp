@@ -233,6 +233,7 @@ int main(int argc, char* argv[])
         //argsParser.args.push_back("--batch-scan="+rootPath+"doc");
         //argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
         argsParser.args.push_back("--batch-scan-recurse="+rootPath+".");
+        argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test");
         
         argsParser.args.push_back("--batch-page-index-file=pages.md");
         argsParser.args.push_back("--batch-split-page-index-file");
