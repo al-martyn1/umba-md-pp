@@ -1,5 +1,3 @@
 --document-language=russian
 --processing-options=no-meta-data
 --processing-options=transliterate-generated-filenames
---batch-exclude-dir=.cmake
---batch-exclude-dir=_libs,libs,_lib,lib,tests,test
