@@ -237,6 +237,8 @@ int main(int argc, char* argv[])
         
         argsParser.args.push_back("--batch-page-index-file=pages.md");
         argsParser.args.push_back("--batch-split-page-index-file");
+
+        argsParser.args.push_back("-q");
         
         // batch-exclude-files
         // batch-output-root
@@ -463,16 +465,6 @@ int main(int argc, char* argv[])
                 // std::map<std::wstring, std::string> pageIndex;
                 // std::vector< std::pair<std::wstring, std::string> > pagesIndex;
 
-                if (appConfig.batchOutputRoot.empty())
-                {
-                    for(auto &pi : pagesIndex)
-                    {
-                        pi.second.erase(0, calculatedCommonPath.size());
-                        umba::filename::stripFirstPathSep(pi.second);
-                    }
-                    umba::filename::stripLastPathSep(calculatedCommonPath);
-                }
-
                 try
                 {
             
@@ -490,8 +482,18 @@ int main(int argc, char* argv[])
                     return 4;
                 }
 
-            } // for
+            } // for(; fileIt!=foundFiles.end() && folderIt!=foundFilesRootFolders.end(); ++fileIt, ++folderIt)
 
+
+            if (appConfig.batchOutputRoot.empty())
+            {
+                umba::filename::stripLastPathSep(calculatedCommonPath);
+                for(auto &pi : pagesIndex)
+                {
+                    pi.second.erase(0, calculatedCommonPath.size());
+                    umba::filename::stripFirstPathSep(pi.second);
+                }
+            }
 
             std::string langTag = findLangTagByString(commonLang);
             if (langTag.empty())
