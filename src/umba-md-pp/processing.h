@@ -16,7 +16,12 @@
 
 //
 #include "umba_md_processing_utils.h"
+//
+#include "processing_code_utils.h"
+//
+#include "processing_section_utils.h"
 
+#include "processing_utils.h"
 //
 #include <yaml-cpp/yaml.h>
 //
@@ -25,906 +30,16 @@
 #include <utility>
 #include <sstream>
 
-//----------------------------------------------------------------------------
 
+//
+#include "yaml_json_document_helpers.h"
 
-
-
-//----------------------------------------------------------------------------
-template<typename FilenameStringType> inline
-std::string generateDocMetadata(const AppConfig<FilenameStringType> &appCfg, Document &doc)
-{
-    YAML::Emitter emitter;
-    emitter << YAML::BeginMap;
-
-    // emitter << YAML::Key << "var1" << YAML::Value << "value1";
-
-    std::vector<std::string>::const_iterator mtIt = appCfg.metaTagsSerializeList.begin();
-    for(; mtIt!=appCfg.metaTagsSerializeList.end(); ++mtIt)
-    {
-        std::string tagSerializedName = appCfg.serializeMetaTag(*mtIt);
-        if (tagSerializedName.empty())
-            continue;
-
-        std::unordered_map<std::string, std::vector<std::string> >::const_iterator tit = doc.tagsData.find(appCfg.makeCanonicalMetaTag(*mtIt));
-        if (tit==doc.tagsData.end())
-            continue;
-
-        if (tit->second.empty())
-            continue;
-
-        const std::vector<std::string> &tagData = tit->second;
-
-        // Имя тэга не пустое, вектор со значениями также не пуст, надо что-то выдать
-
-        emitter << YAML::Key << tagSerializedName;
-
-        MetaTagType metaTagType = appCfg.getMetaTagType(*mtIt);
-
-        if (metaTagType==MetaTagType::textFirst) /* Simple text, allowed multiple definitions, but only first value is applied */
-        {
-            emitter << YAML::Value << tagData.front();
-        }
-        else if (metaTagType==MetaTagType::textReplace) /* Simple text, allowed multiple definitions, but only last value is applied */
-        {
-            emitter << YAML::Value << tagData.back();
-        }
-        else if (metaTagType==MetaTagType::textMerge) /* Text fragments will be merged to paras */
-        {
-            auto text = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string("\n\n") );
-            emitter << YAML::Value << text;
-        }
-        else if (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList)
-        {
-            emitter << YAML::BeginSeq;
-            for(auto tv : tagData)
-            {
-                emitter << tv;
-            }
-            emitter << YAML::EndSeq;
-        }
-        else if (metaTagType==MetaTagType::set || metaTagType==MetaTagType::commaSet)
-        {
-            std::set<std::string> s;
-            for(auto tv : tagData)
-            {
-                s.insert(tv);
-            }
-
-            emitter << YAML::BeginSeq;
-            for(auto sv : s)
-            {
-                emitter << sv;
-            }
-            emitter << YAML::EndSeq;
-
-        }
-        else
-        {
-            emitter << std::string();
-        }
-
-        //    emitter << YAML::EndSeq;
-
-    }
-
-// enum EMITTER_MANIP {
-//   // general manipulators
-//   Auto,
-//   TagByKind,
-//   Newline,
-//  
-//   // output character set
-//   EmitNonAscii,
-//   EscapeNonAscii,
-//   EscapeAsJson,
-//  
-//   // string manipulators
-//   // Auto, // duplicate
-//   SingleQuoted,
-//   DoubleQuoted,
-//   Literal,
-//  
-//   // null manipulators
-//   LowerNull,
-//   UpperNull,
-//   CamelNull,
-//   TildeNull,
-//  
-//   // bool manipulators
-//   YesNoBool,      // yes, no
-//   TrueFalseBool,  // true, false
-//   OnOffBool,      // on, off
-//   UpperCase,      // TRUE, N
-//   LowerCase,      // f, yes
-//   CamelCase,      // No, Off
-//   LongBool,       // yes, On
-//   ShortBool,      // y, t
-//  
-//   // int manipulators
-//   Dec,
-//   Hex,
-//   Oct,
-//  
-//   // document manipulators
-//   BeginDoc,
-//   EndDoc,
-//  
-//   // sequence manipulators
-//   BeginSeq,
-//   EndSeq,
-//   Flow,
-//   Block,
-//  
-//   // map manipulators
-//   BeginMap,
-//   EndMap,
-//   Key,
-//   Value,
-//   // Flow, // duplicate
-//   // Block, // duplicate
-//   // Auto, // duplicate
-//   LongKey
-// };
-
-    emitter << YAML::EndMap;
-
-    // std::ofstream ofout(file);
-    // ofout << emitter.c_str();
-
-    std::ostringstream oss;
-
-    oss << emitter.c_str();
-
-    return oss.str();
-
-}
-
-//----------------------------------------------------------------------------
-
-template<typename JsonNodeType>
-bool getJsonNodeTypeValueAsString(const JsonNodeType &j, std::string &resVal)
-{
-    nlohmann::detail::value_t valType = j.type();
-    if (valType==nlohmann::detail::value_t::string)
-    {
-        // https://github.com/nlohmann/json/issues/3827
-        // https://en.cppreference.com/w/cpp/language/dependent_name#template_disambiguator
-        resVal = j.template get<std::string>();
-        return true;
-    }
-    else if (valType==nlohmann::detail::value_t::boolean)
-    {
-        auto bv = j.template get<bool>();
-        resVal = bv ? "true" : "false";
-        return true;
-    }
-    else if (valType==nlohmann::detail::value_t::number_integer)
-    {
-        resVal = std::to_string(j.template get<int>());
-        return true;
-    }
-    else if (valType==nlohmann::detail::value_t::number_unsigned)
-    {
-        resVal = std::to_string(j.template get<unsigned>());
-        return true;
-    }
-    else if (valType==nlohmann::detail::value_t::number_float)
-    {
-        resVal = std::to_string(j.template get<float>());
-
-        auto dotPos = resVal.find('.');
-        if (dotPos!=resVal.npos)
-        {
-            umba::string_plus::rtrim(resVal, [](char ch) { return ch=='0'; } );
-        }
-
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-
-}
-
-// enum class value_t : std::uint8_t
-// {
-//     null,             ///< null value
-//     object,           ///< object (unordered set of name/value pairs)
-//     array,            ///< array (ordered collection of values)
-//     string,           ///< string value
-//     boolean,          ///< boolean value
-//     number_integer,   ///< number value (signed integer)
-//     number_unsigned,  ///< number value (unsigned integer)
-//     number_float,     ///< number value (floating-point)
-//     binary,           ///< binary array (ordered collection of bytes)
-//     discarded         ///< discarded by the parser callback function
-// };
-
+//
+#include "config.h"
 
 
 //----------------------------------------------------------------------------
-template<typename FilenameStringType> inline
-void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document &doc)
-{
-    for(const auto &metaText : doc.collectedMetadataTexts)
-    {
-        std::string errMsg;
-        std::string tmpJson;
-        marty::json_utils::FileFormat detectedFormat = marty::json_utils::FileFormat::unknown;
-        nlohmann::json j = marty::json_utils::parseJsonOrYaml( metaText, true /* allowComments */ , &errMsg, &tmpJson, &detectedFormat );
-         
-        if (detectedFormat==marty::json_utils::FileFormat::unknown)
-            continue;
 
-        nlohmann::detail::value_t jType = j.type();
-        if (jType!=nlohmann::detail::value_t::object)
-            continue;
-
-
-        for (auto el : j.items())
-        {
-            try
-            {
-	            std::string strKey = el.key();
-                strKey = appCfg.makeCanonicalMetaTag(strKey);
-                std::vector<std::string> &tagValsVec = doc.tagsData[strKey];
-
-                MetaTagType tagType = appCfg.getMetaTagType(strKey);
-
-
-                auto val = el.value();
-                //    std::string valStr = val;
-                // //std::string strVal = el.value();
-                //    LOG_MSG_OPT << "parseDocumentMetadata: " << strKey << ": " << valStr << "\n";
-
-                nlohmann::detail::value_t valType = val.type();
-
-                if ( valType==nlohmann::detail::value_t::object
-                  || valType==nlohmann::detail::value_t::binary
-                  || valType==nlohmann::detail::value_t::discarded
-                   )
-                    continue;
-
-                if (valType==nlohmann::detail::value_t::array)
-                {
-                    if (tagType!=MetaTagType::list && tagType!=MetaTagType::set)
-                        continue;
-
-                    for (auto vel : val.items())
-                    {
-                        auto jVel = vel.value();
-                        std::string strVal;
-                        if (!getJsonNodeTypeValueAsString(jVel, strVal))
-                            continue;
-
-                        tagValsVec.emplace_back(strVal);
-                    }
-
-                    continue;
-                }
-
-                std::string strVal;
-                if (!getJsonNodeTypeValueAsString(val, strVal))
-                    continue;
-
-                //LOG_MSG_OPT << "parseDocumentMetadata: " << strKey << ": " << strVal << "\n";
-
-                if (tagType==MetaTagType::commaList || tagType==MetaTagType::commaSet)
-                {
-                    umba::vectorPushBack(tagValsVec, marty_cpp::splitToLinesSimple(strVal, false, ','));
-                }
-                else
-                {
-                    tagValsVec.emplace_back(strVal);
-                }
-
-            }
-            catch(...)
-            {
-                LOG_MSG_OPT << "parseDocumentMetadata exception\n";
-            }
-
-        }
-    
-    }
-
-
-}
-    // std::string errMsg;
-    // std::string tmpJson;
-    // marty::json_utils::FileFormat detectedFormat = marty::json_utils::FileFormat::unknown;
-    // nlohmann::json j = marty::json_utils::parseJsonOrYaml( in, true /* allowComments */ , &errMsg, &tmpJson, &detectedFormat );
-    //  
-    // if (detectedFormat==marty::json_utils::FileFormat::unknown)
-    // {
-    //     std::cerr << testInputFileName << ": error: " << errMsg << std::endl;
-    //     if (!tmpJson.empty())
-    //     {
-    //         std::cerr << "JSON:" << std::endl;
-    //         std::cerr << tmpJson << std::endl;
-    //     }
-    //     
-    //     return 1;
-    // }
-
-//----------------------------------------------------------------------------
-inline
-std::size_t geBlockQuoteLevel(const std::string &line)
-{
-    std::size_t bqLevel = 0;
-    for(auto ch: line)
-    {
-        if (ch=='>')
-        {
-            ++bqLevel;
-            continue;
-        }
-        else if (ch==' ')
-        {
-            continue;
-        }
-        else
-        {
-            return bqLevel;
-        }
-
-    }
-
-    return bqLevel;
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isBlockQuoteLine(const std::string &line)
-{
-    return geBlockQuoteLevel(line) > 0;
-}
-
-//----------------------------------------------------------------------------
-inline
-std::string trimBlockQuote(const std::string &line)
-{
-    auto pos = line.find_first_not_of("> ");
-    if (pos==line.npos)
-        return line;
-    return std::string(line, pos);
-}
-
-//----------------------------------------------------------------------------
-inline
-std::string makeBlockQuotePrefix(std::size_t lvl)
-{
-    std::string res; res.reserve(lvl*2+1);
-    for(std::size_t i=0; i!=lvl; ++i)
-    {
-        res.append(" >");
-    }
-
-    if (lvl)
-        res.append(1u, ' ');
-
-    return res;
-}
-
-//----------------------------------------------------------------------------
-inline
-char getListMarker(std::string line)
-{
-    umba::string_plus::trim(line);
-
-    if (line.empty()) // вторым должен идти пробел
-        return (char)0;
-
-    char chMarker = line[0];
-
-    if ((chMarker=='-' || chMarker=='+' || chMarker=='*'))
-    {
-        if (line.size()<2)
-            return chMarker; // если нет пробела, и строка закончилась - это тоже элемент списка, но пустой
-        
-        if (line[1]==' ') // есть ещё символ, и это - пробел - это элемент списка
-            return chMarker;
-    }
-
-        
-
-    if (!umba::parse_utils::isDigit(chMarker))
-    {
-        return (char)0;
-    }
-
-    if (line.size()<2) // маркер ненумерованного списка состоит минимум из двух символов - цифра и точка
-        return (char)0;
-    
-    std::size_t pos = 1;
-    for(; pos!=line.size(); ++pos)
-    {
-        if (umba::parse_utils::isDigit(line[pos]))
-        {
-            continue;
-        }
-
-        if (line[pos]!='.') // последовательность цифр в маркере нумерованного списка должна закончится на точку и пробел
-        {
-            return (char)0;
-        }
-
-        ++pos;
-        break;
-    }
-
-    if (pos==line.size()) // после точки строка закончилась?
-        return '1';
-
-    if (line[pos]!='.')
-    {
-        return (char)0;
-    }
-
-    return '1';
-
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isListLine(const std::string &line)
-{
-    return getListMarker(line)!=0;
-}
-
-//----------------------------------------------------------------------------
-inline
-std::size_t getListLevel(const std::string &line)
-{
-    auto pos = line.find_first_not_of(" ");
-    return pos;
-}
-
-//----------------------------------------------------------------------------
-inline
-std::string trimListLine(const std::string &line)
-{
-    //TODO: !!! Доделать
-    return std::string();
-}
-
-
-//----------------------------------------------------------------------------
-inline
-bool isInsertCommand(std::string line)
-{
-    umba::string_plus::trim(line);
-    return (umba::string_plus::starts_with(line, ("#!insert")) || umba::string_plus::starts_with(line, ("#$insert")));
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isTocCommand(std::string line)
-{
-    umba::string_plus::trim(line);
-    return (umba::string_plus::starts_with(line, ("#!toc")) || umba::string_plus::starts_with(line, ("#$toc")));
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isSingleLineComment(std::string line)
-{
-    umba::string_plus::trim(line);
-    return umba::string_plus::starts_with(line, ("#//"));
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isMultiLineCommentStart(std::string line)
-{
-    umba::string_plus::trim(line);
-    return umba::string_plus::starts_with(line, ("#/*"));
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isMultiLineCommentEnd(std::string line)
-{
-    umba::string_plus::trim(line);
-    return umba::string_plus::ends_with(line, ("#*/"));
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isListingCommand(std::string line)
-{
-    umba::string_plus::trim(line);
-    return umba::string_plus::starts_with(line, ("```")) || umba::string_plus::starts_with(line, ("~~~"));
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isMetaStartCommand(std::string line)
-{
-    umba::string_plus::trim(line);
-    return umba::string_plus::starts_with(line, ("---"));
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isMetaEndCommand(std::string line)
-{
-    umba::string_plus::trim(line);
-    return umba::string_plus::starts_with(line, ("---")) || umba::string_plus::starts_with(line, ("..."));
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isHeaderCommand(std::string line)
-{
-    umba::string_plus::trim(line);
-
-    std::size_t idx = 0u;
-
-    while(idx!=line.size() && line[idx]=='#') { ++idx; }
-
-    return idx>0;
-}
-
-//----------------------------------------------------------------------------
-inline
-std::vector<std::string> trimLeadingSpaces(std::vector<std::string> lines, bool bTrim)
-{
-    std::size_t minLeadingSpaces = 4096u;
-    for(auto &l : lines)
-    {
-        umba::string_plus::rtrim(l); // убираем конечные пробелы
-        if (l.empty())
-        {
-            continue; // на пустых строках нет смысла париться
-        }
-
-        std::size_t i = 0u;
-        for(; i!=l.size(); ++i)
-        {
-            if (l[i]!=' ')
-                break;
-        }
-
-        // либо брякнулись, либо дошли до конца
-
-        minLeadingSpaces = std::min(minLeadingSpaces, i);
-    }
-
-    if (!bTrim)
-    {
-        return lines;
-    }
-
-    if (!minLeadingSpaces)
-    {
-        return lines;
-    }
-
-    for(auto &l : lines)
-    {
-        if (l.empty())
-        {
-            continue; // на пустых строках нет смысла париться
-        }
-
-        if (l.size()<minLeadingSpaces)
-        {
-            continue;
-        }
-
-        l.erase(0, minLeadingSpaces);
-    }
-
-    return lines;
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isCodeTagLinesRange(const std::string &fragmentTag, std::size_t &startLineNo, std::size_t &endLineNo /* last line number +1 */ )
-{
-    std::size_t dCnt = 0; // считаем дефисы
-
-    for(auto ch: fragmentTag)
-    {
-        if (ch=='-')
-        {
-            ++dCnt;
-            continue;
-        }
-
-        if (ch<'0' || ch>'9')
-            return false; // какой-то левый символ
-    }
-
-    if (dCnt!=1)
-    {
-        return false; // неверное количество дефисов
-    }
-
-    auto numbersVec = marty_cpp::simple_string_split(fragmentTag, "-"); // делим по дефису
-
-    if (numbersVec.size()!=2)
-    {
-        return false; // что-то пошло не так
-    }
-
-    std::size_t lFirst = 0;
-    std::size_t lLast  = 0;
-
-    try
-    {
-        lFirst = std::stoul(numbersVec[0]);
-        lLast  = std::stoul(numbersVec[1]);
-    }
-    catch(...)
-    {
-        return false; // что-то пошло не так
-    }
-
-    if (lFirst>lLast)
-    {
-        std::swap(lFirst,lLast);
-    }
-
-    if (lFirst==0 || lLast==0)
-    {
-        return false; // нумерация строк человеческая - с единицы, если нет, то ошибка
-    }
-
-    // Уменьшаем до машинной нумерации
-    --lFirst;
-    --lLast;
-
-    startLineNo = lFirst;
-    endLineNo   = lLast+1;
-
-    return true;
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isCodeTagLine(std::string line, const std::string &tagPrefix)
-{
-    umba::string_plus::trim(line);
-
-    return umba::string_plus::starts_with(line, tagPrefix);
-}
-
-//----------------------------------------------------------------------------
-inline
-bool hasIdentifierChars(const std::string str)
-{
-    for(char ch: str)
-    {
-        if (ch>='a' && ch<='z')
-            return true;
-        if (ch>='A' && ch<='Z')
-            return true;
-        if (ch>='0' && ch<='9')
-            return true;
-        if (ch=='_')
-            return true;
-    }
-
-    return false;
-}
-
-//----------------------------------------------------------------------------
-inline
-bool extractCodeTagFromLine(std::string &line, const std::string &tagPrefix)
-{
-    auto lineCopy = line;
-    umba::string_plus::trim(lineCopy);
-
-    if (!umba::string_plus::starts_with_and_strip(lineCopy, tagPrefix))
-        return false;
-
-    umba::string_plus::trim(lineCopy);
-
-    auto spacePos = lineCopy.find(' ');
-    if (spacePos!=lineCopy.npos)
-    {
-        lineCopy.erase(spacePos, lineCopy.npos);
-    }
-
-    line = lineCopy;
-
-    if (!hasIdentifierChars(line))
-        line.clear();
-
-    return true;
-}
-
-//----------------------------------------------------------------------------
-inline
-bool extractCodeTagFromLine(std::string line, const std::string &tagPrefix, std::string &targetTag)
-{
-    if (!extractCodeTagFromLine(line, tagPrefix))
-        return false;
-
-    targetTag = line;
-
-    return true;
-}
-
-//----------------------------------------------------------------------------
-inline
-void makeShureEmptyLine(std::vector<std::string> &lines)
-{
-    if (lines.empty())
-    {
-        lines.emplace_back(std::string());
-    }
-    else
-    {
-        std::string lastLine = lines.back();
-        umba::string_plus::trim(lastLine);
-        if (!lastLine.empty())
-        {
-            lines.emplace_back(std::string());
-        }
-    }
-}
-
-//----------------------------------------------------------------------------
-inline
-std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
-                                            , std::size_t                 &firstFoundLineIdx
-                                            , const std::string           &targetFragmentTag
-                                            , const std::string           &tagPrefix
-                                            , ListingNestedTagsMode       listingNestedTagsMode
-                                            , std::size_t                 tabSize=4u
-                                            //, bool                        trimLeadingSpaces_a = true
-                                            )
-{
-    marty_cpp::expandTabsToSpaces(lines, tabSize);
-
-    if (targetFragmentTag.empty() || lines.empty())
-    {
-        firstFoundLineIdx = 0;
-        return lines;
-    }
-
-    std::vector<std::string> fragmentLines; fragmentLines.reserve(lines.size());
-
-
-    auto addTagLine = [&](const std::string &line)
-    {
-        switch(listingNestedTagsMode)
-        {
-            case ListingNestedTagsMode::keep  :
-                 fragmentLines.emplace_back(line);
-                 break;
-         
-            case ListingNestedTagsMode::remove:
-                 break;
-         
-            case ListingNestedTagsMode::empty :
-                 fragmentLines.emplace_back(std::string());
-                 break;
-
-            case ListingNestedTagsMode::invalid :
-                 break;
-        }
-    };
-
-    //std::stack<std::string>  openedTags;
-    std::vector<std::string> openedTags;
-
-    auto isClosingTag = [&](std::string tagName)
-    {
-        if (openedTags.empty())
-            return false;
-
-        if (tagName.empty())
-            return true; // разрешаем закрывающим тэгам не иметь имени
-
-        if (openedTags.back()==tagName)
-            return true; // текущий тэг закрывает того, что на стеке - имя одно
-    
-        return false;
-    };
-
-    auto openCodeFragment = [&](std::string tagName)
-    {
-        openedTags.emplace_back(tagName);
-    };
-
-    auto closeCurTag = [&]()
-    {
-        if (openedTags.empty())
-            return;
-        openedTags.pop_back();
-    };
-
-    auto isTargetFragmentTagOpened = [&]()
-    {
-        for(const auto &openedTag: openedTags)
-        {
-            if (openedTag==targetFragmentTag)
-                return true;
-        }
-
-        return false;
-    };
-
-    auto isTargetFragmentTagOnTop = [&]()
-    {
-        if (openedTags.empty())
-            return false;
-
-        if (openedTags.back()==targetFragmentTag)
-            return true; // искомый тэг на вершине
-    
-        return false;
-    };
-
-
-    std::size_t lineIdx = 0;
-
-    for(; lineIdx!=lines.size(); ++lineIdx)
-    {
-        auto l = lines[lineIdx]; 
-
-        if (!isCodeTagLine(l, tagPrefix))
-        {
-            // Строка обычная, не тэговая
-            if (isTargetFragmentTagOpened())
-            {
-                fragmentLines.emplace_back(l);
-            }
-
-            continue;
-        }
-
-        // Строка - тэговая
-        std::string curTag;
-        extractCodeTagFromLine(l, tagPrefix, curTag);
-
-        if (isClosingTag(curTag))
-        {
-            if (isTargetFragmentTagOnTop())
-            {
-                // Закрываем целевой тэг
-                closeCurTag(); // на самом деле - насрать, всё равно из цикла выходим
-                break;
-            }
-            else
-            {
-                // закрываем какой-то левый тэг
-                closeCurTag();
-                addTagLine(l);
-                continue;
-            }
-        }
-
-        // Если тэг не закрывающий, то он - открывающий
-        // Или он может быть пустым при пустом стеке
-        if (curTag.empty())
-        {
-            continue; // Игнорим закрывающие тэги, когда не было открывающих
-        }
-
-        if (curTag==targetFragmentTag)
-        {
-            firstFoundLineIdx = lineIdx+1; // начали со строки, которая следует за открывающим тэгом
-        }
-
-        // Если наш целевой тэг открыт, то надо добавить строчку, а тут идёт обработка вложенных тэгов
-        if (isTargetFragmentTagOpened())
-        {
-            //fragmentLines.emplace_back(l);
-            addTagLine(l);
-        }
-
-        openCodeFragment(curTag);
-    }
-
-    return fragmentLines;
-}
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType>
@@ -1134,42 +249,6 @@ std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> 
 }
 
 //----------------------------------------------------------------------------
-inline
-bool splitHeaderLine(const std::string &line, std::string &levelStr, std::string &headerText)
-{
-    std::size_t hashPos = 0;
-    while(hashPos!=line.size() && line[hashPos]!='#' )
-    {
-        ++hashPos;
-    }
-
-    if (hashPos==line.size())
-        return false;
-
-    std::size_t nextPos = hashPos;
-    while(nextPos!=line.size() && line[nextPos]=='#' )
-    {
-        ++nextPos;
-    }
-
-    levelStr.assign(line, hashPos, nextPos-hashPos);
-
-    while(nextPos!=line.size() && line[nextPos]==' ' )
-    {
-        ++nextPos;
-    }
-
-    headerText.assign(line, nextPos, line.npos);
-
-    umba::string_plus::rtrim(headerText, [](char ch) { return ch=='#'; } );
-    umba::string_plus::rtrim(headerText);
-
-    umba::string_plus::rtrim(levelStr);
-
-    return true;
-}
-
-//----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
 std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, int raiseVal)
 {
@@ -1222,164 +301,6 @@ std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCf
     return processHeaderLines(appCfg, lines, raiseHeader);
 }
 
-//----------------------------------------------------------------------------
-inline
-bool isSectionNumberChar(char ch)
-{
-    if (ch>='0' && ch<='9')
-        return true;
-
-    if (ch=='.')
-        return true;
-
-    return false;
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isSectionNumberStringHelper(const std::string &str)
-{
-    for(auto ch: str)
-    {
-        if (isSectionNumberChar(ch))
-           continue;
-
-        return false;
-    }
-
-    return true;
-}
-//----------------------------------------------------------------------------
-inline
-bool isSectionNumber(const std::string &str, bool allowAppendixStyleNumbers=false)
-{
-    if (str.empty())
-       return false;
-
-    // Первый символ может быть латинской буквой
-    if (allowAppendixStyleNumbers)
-    {
-        if (str[0]>='A' && str[0]<='Z' && isSectionNumberStringHelper(std::string(str, 1, std::string::npos)))
-            return true;
-    }
-
-    if (isSectionNumberStringHelper(str))
-        return true;
-
-    return false;
-}
-
-//----------------------------------------------------------------------------
-inline
-bool isAppendixSectionNumber(const std::string &str)
-{
-    if (str.empty())
-       return false;
-
-    if (str[0]>='A' && str[0]<='Z')
-        return true;
-
-    return false;
-}
-
-//----------------------------------------------------------------------------
-template<typename FilenameStringType> inline
-std::string generateSectionIdImpl(const AppConfig<FilenameStringType> &appCfg, std::string secText)
-{
-    if (appCfg.targetRenderer==TargetRenderer::github)
-    {
-    }
-    else if (appCfg.targetRenderer==TargetRenderer::doxygen)
-    {
-        // Для доксигена зачем-то делаю исключение и чекаю-удаляю номер раздела
-        // auto spacePos = secText.find(' ');
-        // if (spacePos!=secText.npos)
-        // {
-        //     if (isSectionNumber(std::string(secText, 0, spacePos)))
-        //     {
-        //         secText.erase(0, spacePos+1);
-        //     }
-        // }
-    }
-    else
-    {
-    }
-
-    umba::string_plus::rtrim(secText);
-
-    if (appCfg.targetRenderer==TargetRenderer::github)
-    {
-        return umba::generateIdFromText_forGitHub(secText);
-    }
-    else if (appCfg.targetRenderer==TargetRenderer::doxygen)
-    {
-        auto res = umba::generateIdFromText_generic(secText, '-');
-        umba::string_plus::trim(res, [](char ch) { return ch=='-'; } );
-        return res;
-    }
-    else
-    {
-        return std::string();
-    }
-}
-
-//----------------------------------------------------------------------------
-template<typename FilenameStringType> inline
-std::string generateSectionId(const AppConfig<FilenameStringType> &appCfg, const std::string secLine, std::size_t *pLevel=0, std::string *pHeaderText=0)
-{
-    if (pLevel)
-    {
-        *pLevel = 0;
-    }
-
-    std::string levelStr;
-    std::string headerText;
-
-    if (!splitHeaderLine(secLine, levelStr, headerText))
-        return std::string();
-
-    if (pHeaderText)
-    {
-        *pHeaderText = headerText;
-    }
-
-    if (headerText.empty())
-        return std::string();
-
-    // Доксигеновская тема, не завязываемся на неё
-    // if (headerText.back()=='}') // already has id?
-    //     return std::string();
-
-    // if (appCfg.targetRenderer!=TargetRenderer::doxygen)
-    //     return std::string(); // Нужно только для доксигена
-
-    if (pLevel)
-    {
-        *pLevel = levelStr.size();
-    }
-
-    // Не делаем никаких исключений для 
-
-    // if (headerText.back()==']' && appCfg.targetRenderer==TargetRenderer::doxygen)
-    // {
-    //     // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря (только doxygen)
-    //     std::size_t idx = headerText.size();
-    //     for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
-    //  
-    //     if (idx==0)
-    //     {
-    //         return generateSectionIdImpl(appCfg, headerText);
-    //     }
-    //  
-    //     std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
-    //     return generateSectionIdImpl(appCfg, takenId);
-    // }
-    // else
-    {
-        return generateSectionIdImpl(appCfg, headerText);
-    }
-
-}
 //----------------------------------------------------------------------------
 #if 0
 inline
@@ -1618,6 +539,57 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
 }
 #endif
 
+
+// //! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+// template<typename LineHandler, typename FilenameStringType> inline
+// std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, LineHandler handler)
+// {
+
+//----------------------------------------------------------------------------
+// For substitutions|data collection on text lines
+template<typename LineHandler, typename FilenameStringType> inline
+std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, LineHandler simpleHandler)
+{
+    auto processLinesHandler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+    {
+        switch(event)
+        {
+            case LineHandlerEvent::normalLine:    line = simpleHandler(line);
+                                                  return true;
+
+            case LineHandlerEvent::documentEnd:   return true;
+            case LineHandlerEvent::listingLine:   return true;
+            case LineHandlerEvent::listingStart:  return true;
+            case LineHandlerEvent::listingEnd:    return true;
+            case LineHandlerEvent::insertCommand: return true;
+            case LineHandlerEvent::tocCommand:    return true;
+            case LineHandlerEvent::headerCommand: return true;
+            case LineHandlerEvent::metaLine:      return true;
+            case LineHandlerEvent::metaStart:     return true;
+            case LineHandlerEvent::metaEnd:       return true;
+            //case LineHandlerEvent:::
+        }
+        return true;
+    };
+
+    return processLines(appCfg, lines, processLinesHandler);
+}
+
+//----------------------------------------------------------------------------
+struct CoutPrinter
+{
+    std::string    indent;
+
+    std::string operator()(const std::string &str) const
+    {
+        std::cout << indent << str << "\n";
+    }
+
+}; // struct CoutPrinter
+
+//----------------------------------------------------------------------------
+
+
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
 std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringType> &appCfg
@@ -1649,8 +621,10 @@ bool insertDoc( const AppConfig<FilenameStringType>          &appCfg
         {
             makeShureEmptyLine(resLines);
             resLines.emplace_back("!!! File not found in: " + umba::toUtf8(appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", "))));
-            return false; // сфейли
+            return false; // сфейлили
         }
+
+        return true; // делаем вид, что всё хорошо
     }
 
     // файл может включаться под разными именами, через всякие .. или ., слэши опять же разные
@@ -1674,14 +648,23 @@ bool insertDoc( const AppConfig<FilenameStringType>          &appCfg
                                                                        , umba::updatedSet(alreadyIncludedDocs
                                                                        , foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */
                                                                        );
+
     
-    //TODO: !!! extract meta info here
 
     std::unordered_map<SnippetOptions, int>::const_iterator raiseOptIt = intOptions.find(SnippetOptions::raise);
     if (raiseOptIt!=intOptions.end() && raiseOptIt->second!=0)
     {
         processedDocLines = raiseHeaders(appCfg, processedDocLines, raiseOptIt->second);
     }
+
+    #if defined(LOG_DOC_INSERTIONS_AND_REFS)
+
+    std::cout << "Document: " << curFilename << ", inserting: " << docFile << ", found: " << foundFullFilename << "\n";
+    //CoutPrinter
+    processedDocLines = processTextLinesSimple(appCfg, processedDocLines, CoutPrinter{"    "});
+
+    #endif
+
     
     makeShureEmptyLine(resLines);
     //resLines.insert(resLines.end(), processedDocLines.begin(), processedDocLines.end());
@@ -1985,9 +968,9 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
 
 template<typename FilenameStringType> inline
 std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringType> &appCfg
-                                               , Document &docTo
-                                               , const std::vector<std::string> &lines
-                                               , const FilenameStringType&curFilename
+                                               , Document                            &docTo
+                                               , const std::vector<std::string>      &lines
+                                               , const FilenameStringType            &curFilename
                                                , const std::unordered_set<FilenameStringType> &alreadyIncludedDocs
                                                )
 {
