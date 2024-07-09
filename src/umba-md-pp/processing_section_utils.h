@@ -1,5 +1,5 @@
 /*! \file
-    \brief Помогалки для processing.h
+    \brief РџРѕРјРѕРіР°Р»РєРё РґР»СЏ processing.h
  */
 #pragma once
 
@@ -74,7 +74,7 @@ bool isSectionNumber(const std::string &str, bool allowAppendixStyleNumbers=fals
     if (str.empty())
        return false;
 
-    // Первый символ может быть латинской буквой
+    // РџРµСЂРІС‹Р№ СЃРёРјРІРѕР» РјРѕР¶РµС‚ Р±С‹С‚СЊ Р»Р°С‚РёРЅСЃРєРѕР№ Р±СѓРєРІРѕР№
     if (allowAppendixStyleNumbers)
     {
         if (str[0]>='A' && str[0]<='Z' && isSectionNumberStringHelper(std::string(str, 1, std::string::npos)))
@@ -109,7 +109,7 @@ std::string generateSectionIdImpl(const AppConfig<FilenameStringType> &appCfg, s
     }
     else if (appCfg.targetRenderer==TargetRenderer::doxygen)
     {
-        // Для доксигена зачем-то делаю исключение и чекаю-удаляю номер раздела
+        // Р”Р»СЏ РґРѕРєСЃРёРіРµРЅР° Р·Р°С‡РµРј-С‚Рѕ РґРµР»Р°СЋ РёСЃРєР»СЋС‡РµРЅРёРµ Рё С‡РµРєР°СЋ-СѓРґР°Р»СЏСЋ РЅРѕРјРµСЂ СЂР°Р·РґРµР»Р°
         // auto spacePos = secText.find(' ');
         // if (spacePos!=secText.npos)
         // {
@@ -164,23 +164,23 @@ std::string generateSectionId(const AppConfig<FilenameStringType> &appCfg, const
     if (headerText.empty())
         return std::string();
 
-    // Доксигеновская тема, не завязываемся на неё
+    // Р”РѕРєСЃРёРіРµРЅРѕРІСЃРєР°СЏ С‚РµРјР°, РЅРµ Р·Р°РІСЏР·С‹РІР°РµРјСЃСЏ РЅР° РЅРµС‘
     // if (headerText.back()=='}') // already has id?
     //     return std::string();
 
     // if (appCfg.targetRenderer!=TargetRenderer::doxygen)
-    //     return std::string(); // Нужно только для доксигена
+    //     return std::string(); // РќСѓР¶РЅРѕ С‚РѕР»СЊРєРѕ РґР»СЏ РґРѕРєСЃРёРіРµРЅР°
 
     if (pLevel)
     {
         *pLevel = levelStr.size();
     }
 
-    // Не делаем никаких исключений для 
+    // РќРµ РґРµР»Р°РµРј РЅРёРєР°РєРёС… РёСЃРєР»СЋС‡РµРЅРёР№ РґР»СЏ 
 
     // if (headerText.back()==']' && appCfg.targetRenderer==TargetRenderer::doxygen)
     // {
-    //     // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря (только doxygen)
+    //     // РЈ РЅР°СЃ РµСЃС‚СЊ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РІ РєРІР°РґСЂР°С‚РЅС‹С… СЃРєРѕР±РєР°С…, РїРѕ РЅРёРј РјС‹ РіРµРЅРµСЂРёРј СЏРєРѕСЂСЏ (С‚РѕР»СЊРєРѕ doxygen)
     //     std::size_t idx = headerText.size();
     //     for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
     //  

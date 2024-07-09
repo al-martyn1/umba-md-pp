@@ -4,10 +4,21 @@
 
 #pragma once
 
+#define UMBA_MD_PP_DEBUG
 
-#if !defined(NDEBUG)
+// Если релиз (NDEBUG), то сбрасываем UMBA_MD_PP_DEBUG, но можно закоментить строчку, и тогда будет и релизе наш отладочный режим
+#if defined(NDEBUG)
+    // #undef UMBA_MD_PP_DEBUG
+#endif
+
+
+#if defined(UMBA_MD_PP_DEBUG)
+
+    // Тут включаем/выключаем опции отладки
 
     #define LOG_DOC_INSERTIONS_AND_REFS
 
 #endif
+
+
 

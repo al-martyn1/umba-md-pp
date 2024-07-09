@@ -583,11 +583,88 @@ struct CoutPrinter
     std::string operator()(const std::string &str) const
     {
         std::cout << indent << str << "\n";
+
+        return str;
     }
 
 }; // struct CoutPrinter
 
 //----------------------------------------------------------------------------
+
+
+
+
+//----------------------------------------------------------------------------
+struct UmbaMdLinksUrlCoutPrinter
+{
+    std::string    indent;
+
+    std::string operator()(const std::string &line) const
+    {
+        std::string res; res.reserve(line.size());
+     
+        auto urlHandler = [&](std::string url)
+        {
+            if (umba::md::isUrlAbsolute(url))
+            {
+            }
+            else if (umba::md::isUrlAbsoluteHostPath(url))
+            {
+            }
+            else // path reletive to current document
+            {
+                //url = "../../" + url; // Для теста добавляем два уровня вверх
+            }
+     
+            std::cout << indent << url << "\n";
+            //return umba::md::makeUrlPathCanonical(url);
+
+            return url;
+        };
+
+        //std::cout << indent << str << "\n";
+
+        umba::md::transformMarkdownLinksUrlString(std::back_inserter(res), line.begin(), line.end(), urlHandler);
+        return res;
+
+    }
+
+}; // struct UmbaMdLinksUrlCoutPrinter
+
+
+// inline
+// void testTransformMarkdownLinksUrlString(const std::string &input)
+// {
+//     std::string res; res.reserve(input.size());
+//  
+//     auto handler = [](std::string url)
+//     {
+//         std::cout << "URL: " << url << "\n";
+//         if (isUrlAbsolute(url))
+//         {
+//         }
+//         else if (isUrlAbsoluteHostPath(url))
+//         {
+//         }
+//         else // path reletive to current document
+//         {
+//             url = "../../" + url; // Для теста добавляем два уровня вверх
+//         }
+//  
+//         return makeUrlPathCanonical(url);
+//     };
+//  
+//  
+//     transformMarkdownLinksUrlString(std::back_inserter(res), input.begin(), input.end(), handler);
+//     
+//     //std::cout << "testTransformMarkdownText:";
+//     std::cout << "In : " << input << "\n";
+//     std::cout << "Out: " << res << "\n";
+//     std::cout << "\n";
+// }
+
+
+
 
 
 //----------------------------------------------------------------------------
@@ -657,13 +734,12 @@ bool insertDoc( const AppConfig<FilenameStringType>          &appCfg
         processedDocLines = raiseHeaders(appCfg, processedDocLines, raiseOptIt->second);
     }
 
-    #if defined(LOG_DOC_INSERTIONS_AND_REFS)
-
+#if defined(LOG_DOC_INSERTIONS_AND_REFS)
     std::cout << "Document: " << curFilename << ", inserting: " << docFile << ", found: " << foundFullFilename << "\n";
     //CoutPrinter
-    processedDocLines = processTextLinesSimple(appCfg, processedDocLines, CoutPrinter{"    "});
-
-    #endif
+    //processedDocLines = processTextLinesSimple(appCfg, processedDocLines, CoutPrinter{"    "});
+    processedDocLines = processTextLinesSimple(appCfg, processedDocLines, UmbaMdLinksUrlCoutPrinter{"    "});
+#endif
 
     
     makeShureEmptyLine(resLines);

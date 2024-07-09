@@ -436,7 +436,7 @@ int main(int argc, char* argv[])
                 curFile = *fileIt;
 
                 std::string projectOptionsFile;
-                if (findProjectOptionsFile(inputFilename, projectOptionsFile))
+                if (findProjectOptionsFile(curFile, projectOptionsFile))
                 {
                     appConfig.setStrictPathFromFilename(projectOptionsFile);
                     argsParser.parseOptionsFile(projectOptionsFile);
@@ -446,7 +446,7 @@ int main(int argc, char* argv[])
                 appConfig.checkTargetFormat();
 
                 Document doc;
-                std::string resText     = processMdFile(appConfig, inputFileText, inputFilename, doc);
+                std::string resText     = processMdFile(appConfig, inputFileText, curFile, doc);
                 std::string docTitle    = doc.getDocumentTitleAny();
                 std::string docLanguage = doc.getDocumentLanguage(appConfig);
 
