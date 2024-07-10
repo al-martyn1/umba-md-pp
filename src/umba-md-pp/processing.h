@@ -29,6 +29,8 @@
 #include <string>
 #include <utility>
 #include <sstream>
+#include <utility>
+#include <algorithm>
 
 
 //
@@ -597,6 +599,9 @@ struct CoutPrinter
 //----------------------------------------------------------------------------
 struct UmbaMdLinksUrlCoutPrinter
 {
+
+    std::string    &filePathIncludedFrom;
+    std::string    &filePathIncluded    ;
     std::string    indent;
 
     std::string operator()(const std::string &line) const
@@ -605,19 +610,41 @@ struct UmbaMdLinksUrlCoutPrinter
      
         auto urlHandler = [&](std::string url)
         {
-            if (umba::md::isUrlAbsolute(url))
+            std::string includedFullname = url;
+
+            std::cout << indent << url;
+
+            if (!umba::md::isUrlAbsolute(url) && !umba::md::isUrlAbsoluteHostPath(url))
             {
-            }
-            else if (umba::md::isUrlAbsoluteHostPath(url))
-            {
-            }
-            else // path reletive to current document
-            {
-                //url = "../../" + url; // Для теста добавляем два уровня вверх
+                // Тут надо процессить имя файла - оно относительное
+                includedFullname = umba::filename::makeCanonical(umba::filename::appendPath(filePathIncluded, url));
+
+                std::string newRelName = url;
+    
+                if (umba::filename::isSubPathName(filePathIncludedFrom, includedFullname, &newRelName))
+                {
+                    newRelName = umba::filename::makeCanonical(newRelName, '/', std::string("."), std::string(".."), true /* keepLeadingParents */ );
+                }
+                else if (umba::filename::isSubPathName(filePathIncluded, filePathIncludedFrom, &newRelName))
+                {
+                    newRelName = umba::filename::normalizePathSeparators(newRelName, '/');
+                    std::vector<std::string> parts = umba::string_plus::split(newRelName, '/', true /* skipEmpty */ );
+    
+                    //newRelName = umba::string_plus::merge(std::vector<std::string>(parts.size(), ".."), '/');
+                    newRelName = umba::filename::appendPath(umba::string_plus::merge(std::vector<std::string>(parts.size(), ".."), '/'), umba::filename::getFileName(url));
+                }
+
+                std::swap(newRelName, url);
             }
      
-            std::cout << indent << url << "\n";
-            //return umba::md::makeUrlPathCanonical(url);
+            if (includedFullname!=url)
+            {
+                std::cout << " (" << includedFullname << ")";
+            }
+            
+            // std::cout << "\n";
+            //std::cout << indent << "New link/img filename: " << url << "\n";
+            std::cout << ", New link/img filename: " << url << "\n";
 
             return url;
         };
@@ -736,9 +763,14 @@ bool insertDoc( const AppConfig<FilenameStringType>          &appCfg
 
 #if defined(LOG_DOC_INSERTIONS_AND_REFS)
     std::cout << "Document: " << curFilename << ", inserting: " << docFile << ", found: " << foundFullFilename << "\n";
-    //CoutPrinter
-    //processedDocLines = processTextLinesSimple(appCfg, processedDocLines, CoutPrinter{"    "});
-    processedDocLines = processTextLinesSimple(appCfg, processedDocLines, UmbaMdLinksUrlCoutPrinter{"    "});
+
+    auto curFilePath      = umba::filename::getPath(curFilename);
+    auto includedFilePath = umba::filename::getPath(foundFullFilename);
+
+    std::cout << "Current file path : " << curFilePath << "\n";
+    std::cout << "Included file path: " << includedFilePath << "\n";
+
+    processedDocLines = processTextLinesSimple(appCfg, processedDocLines, UmbaMdLinksUrlCoutPrinter{curFilePath, includedFilePath, "    "});
 #endif
 
     

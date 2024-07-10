@@ -146,7 +146,13 @@ int main(int argc, char* argv[])
 
     if (umba::isDebuggerPresent())
     {
-    
+        auto nonCanonicalName = std::string("../../some_file.txt");
+        auto canonicalName1 = umba::filename::makeCanonical(nonCanonicalName, '/', std::string("."), std::string(".."), false);
+        auto canonicalName2 = umba::filename::makeCanonical(nonCanonicalName, '/', std::string("."), std::string(".."), true );
+        std::cout << nonCanonicalName << "\n";
+        std::cout << canonicalName1 << "\n";
+        std::cout << canonicalName2 << "\n";
+
         // umba::md::testTransformMarkdownText("Someting `in back`ticks");
         // umba::md::testTransformMarkdownText("Someting ``in `double back``ticks");
     
@@ -237,6 +243,8 @@ int main(int argc, char* argv[])
         
         argsParser.args.push_back("--batch-page-index-file=pages.md");
         argsParser.args.push_back("--batch-split-page-index-file");
+        argsParser.args.push_back("--batch-exclude-files=*upper_inc.md*");
+        
 
         argsParser.args.push_back("-q");
         

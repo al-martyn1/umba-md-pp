@@ -58,6 +58,8 @@ Language   : Russian
 
 # 3 Подключенные для примера результаты тестов
 
+
+#!insert{no-fail,doc,raise=-1} ../upper_inc.md_
 #!insert{no-fail,doc,raise=-1} tests/test01.md_
 #//!insert{no-fail,doc,raise=-1} tests/test04.md_
 #//!insert{no-fail,doc,raise=-1} tests/test05.md_

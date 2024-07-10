@@ -55,6 +55,13 @@ Test number one
 ## Title
 
 Test01
+Link to [test02.md](test02.md_)
+Image - [Image](img/filled-96.png)
+
+Link to document which is out of the hierarchy [upper_inc.md_](../../upper_inc.md_)
+Image from out of the  hierarchy- [Image](../../filled-96.png)
+
+
 
 // Print lines, noKeepCutTags #print-ver-all
 

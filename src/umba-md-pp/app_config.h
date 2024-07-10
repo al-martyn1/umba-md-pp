@@ -100,7 +100,7 @@ struct AppConfig
         std::vector<ScanPathsEntry>::iterator it = std::find_if( batchScanPaths.begin(), batchScanPaths.end()
                                                                , [=](const ScanPathsEntry &spe)
                                                                  {
-                                                                     return umba::filename::makeCanonical(spe.path)==umba::filename::makeCanonical(path);
+                                                                     return umba::filename::makeCanonicalForCompare(spe.path)==umba::filename::makeCanonicalForCompare(path);
                                                                  }
                                                                );
         if (it==batchScanPaths.end())
@@ -584,11 +584,15 @@ struct AppConfig
     static
     bool findSamplesFileImpl(const std::vector<FilenameStringType> &samplesPathsVec, FilenameStringType lookFor, FilenameStringType &foundFullFilename, std::string &foundFileText)
     {
-         lookFor = umba::filename::makeCanonical(lookFor);
+         lookFor = umba::filename::makeCanonical( lookFor, (typename FilenameStringType::value_type)'/'
+                                                , umba::string_plus::make_string<FilenameStringType>(".")
+                                                , umba::string_plus::make_string<FilenameStringType>("..")
+                                                , true // keepLeadingParents
+                                                );
 
          for(auto path: samplesPathsVec)
          {
-             auto fullName = umba::filename::appendPath(path, lookFor);
+             auto fullName = umba::filename::makeCanonical(umba::filename::appendPath(path, lookFor));
              if (readInputFile(fullName, foundFileText))
              {
                   foundFullFilename = fullName;
