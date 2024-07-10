@@ -27,7 +27,7 @@
 --batch-exclude-dirs=_markdown,_markdown_,markdown_
 #--batch-exclude-dirs=_text,_text_,text_
 
---batch-exclude-dir=.git,.out,.bat,.cmake,.msvc,.vscode
+--batch-exclude-dir=.out,.build,.git,.bat,.cmake,.msvc,.vscode
 
 
 # При генерации вьювером название файла задается на основании заголовка (из тэгов или первого заголовка, или из первых строк) документа

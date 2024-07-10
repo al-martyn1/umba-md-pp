@@ -16,7 +16,8 @@
 
     // Тут включаем/выключаем опции отладки
 
-    #define LOG_DOC_INSERTIONS_AND_REFS
+    // Вроде отладили, выключаем
+    //#define LOG_DOC_INSERTIONS_AND_REFS
 
 #endif
 

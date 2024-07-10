@@ -359,6 +359,7 @@ int main(int argc, char* argv[])
                 auto fileFullName = *fileIt  ;
                 auto fileRelName  = fileFullName;
                 
+                // Доп. проверка, если не совпало, то что-то очень пошло не так
                 if (!umba::string_plus::starts_with_and_strip(fileRelName, fileRootPath))
                 {
                     LOG_ERR_OPT << "File '" << fileFullName << "' not in it's root folder '" << fileRootPath << "' - something goes wrong" << "\n";

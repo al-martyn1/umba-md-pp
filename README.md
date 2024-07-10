@@ -52,14 +52,21 @@ Test number one
 # 3 Подключенные для примера результаты тестов
 
 
+Скопировать данный файл на уровень выше.
+
+tests/img/filled-96.png на уровень выше.
+
+Картинко - [Картинко](../filled-96.png)
+
+
 ## Title
 
 Test01
-Link to [test02.md](test02.md_)
-Image - [Image](img/filled-96.png)
+Link to [test02.md](tests/test02.md)
+Image - [Image](tests/img/filled-96.png)
 
-Link to document which is out of the hierarchy [upper_inc.md_](../../upper_inc.md_)
-Image from out of the  hierarchy- [Image](../../filled-96.png)
+Link to document which is out of the hierarchy [upper_inc.md_](../upper_inc.md)
+Image from out of the  hierarchy- [Image](../filled-96.png)
 
 
 

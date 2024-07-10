@@ -167,6 +167,22 @@ struct AppConfig
         return umba::string_plus::merge<std::string, std::unordered_set<std::string>::const_iterator>( s.begin(), s.end(), ','/*, [](auto s) { return s; }*/ );
     }
 
+    bool isSupportedExtention(std::string e) const
+    {
+        e = umba::string_plus::tolower_copy(e);
+        auto supportedSet = getSupportedExtentionsSet();
+        if (supportedSet.find(e)==supportedSet.end())
+            return false;
+        return true;
+    }
+
+    bool isSupportedSourceExtention(std::string e) const
+    {
+        e = umba::string_plus::tolower_copy(e);
+        auto itFound = std::find(mdppExtentions.begin(), mdppExtentions.end(), e);
+        return itFound!=mdppExtentions.end();
+    }
+
     static
     std::string getTargetFileExtention(std::string srcFileExtention)
     {
