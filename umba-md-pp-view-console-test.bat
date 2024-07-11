@@ -1,0 +1,1 @@
+.out\msvc2019\x64\Debug\umba-md-pp-view-console.exe README.md_ >umba-md-pp-view-console-test.log 2>&1
