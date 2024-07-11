@@ -141,7 +141,7 @@ EXTRACT_ALL            = YES
 
 */
 template<typename FilenameStringType> inline
-std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const Document &doc)
+std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const Document &doc, const std::string &documentPath)
 {
     std::vector<std::string> lines;
 
@@ -159,6 +159,8 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
     lines.emplace_back("OUTPUT_DIRECTORY       = doxy");
     lines.emplace_back("RTF_EXTENSIONS_FILE    = doxygen_rtf.cfg");
     lines.emplace_back("INPUT                  = document.md");
+    lines.emplace_back("IMAGE_PATH             = " + umba::filename::getPath(documentPath));
+    
 
     std::string str = doc.getDocumentTitleAny();
     if (!str.empty())

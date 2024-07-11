@@ -260,19 +260,38 @@ main/wmain - нужны только для MSVC/Console
     // Force set CLI arguments while running under debugger
     if (umba::isDebuggerPresent())
     {
+
+        std::string cwd = umba::filesys::getCurrentDirectory<std::string>();
+        std::cout << "Working Dir: " << cwd << "\n";
+
         #if (defined(WIN32) || defined(_WIN32))
 
-            #if defined(__GNUC__)
+            std::string rootPath;
 
-                std::string rootPath = "..\\..\\..\\..\\..\\";
+            if (winhelpers::isProcessHasParentOneOf({"devenv"}))
+            {
+                // По умолчанию студия задаёт текущим каталогом На  уровень выше от того, где лежит бинарник
+                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
+                //argsParser.args.push_back("--batch-output-root=D:/temp/mdpp-test");
+            }
+            else if (winhelpers::isProcessHasParentOneOf({"code"}))
+            {
+                // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
+                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
+                //argsParser.args.push_back("--batch-output-root=C:/work/temp/mdpp-test");
+                
+            }
+            else
+            {
+                //rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
+            }
 
-            #else // if
+            //#endif
 
-                std::string rootPath = "..\\";
-
-            #endif
+            rootPath = umba::filename::appendPathSepCopy(rootPath);
 
         #endif
+
 
         argsParser.args.clear();
 
@@ -287,10 +306,12 @@ main/wmain - нужны только для MSVC/Console
         //argsParser.args.push_back("--register-view-handler");
 
         #if defined(UMBA_MD_PP_VIEW)
-            argsParser.args.push_back("--register-view-handler");
+            // argsParser.args.push_back("--register-view-handler");
         #else
-            argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-roboconf\\README.md_");
+            
         #endif
+
+        argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
         
     }
 
@@ -455,12 +476,13 @@ main/wmain - нужны только для MSVC/Console
         }
         
         
+        auto &infoLog = argsParser.quet ? umbaLogStreamNul : umbaLogStreamMsg;
         std::map<std::string, ImageFileForCopyInfo> imagesToCopy;
         addImageFilesForCopying( imagesToCopy, inputFilename, mdTempFile, doc.imageFiles);
         copyDocumentImageFiles(infoLog, imagesToCopy, bOverwrite);
 
 
-        std::string doxyfileData   = generateDoxyfile(appConfig, doc);
+        std::string doxyfileData   = generateDoxyfile(appConfig, doc, mdTempFile);
         std::string doxyRtfCfgData = generateDoxygenRtfCfg(appConfig, doc);
 
         // umba::cli_tool_helpers::writeOutput( doxygenConfigTempFile, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
