@@ -41,9 +41,11 @@ Language   : Russian
   - умеет в метаданные **Markdown**;
 
 
-![Todo](doc/icons/todo-list-50.png)
+Пытаемся в картинки
 
-[![Todo](doc/icons/todo-list-50.png) TODO](doc/todo.md)
+![Todo 1](doc/icons/todo-list-50.png)
+
+[![Todo 2](doc/icons/todo-list-50.png) TODO](doc/todo.md)
 
 
 #//  - правда, строки должны начинаться с него, и нельзя закоментировать 'хвост' строки;

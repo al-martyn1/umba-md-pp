@@ -258,6 +258,7 @@ main/wmain - нужны только для MSVC/Console
     //programLocationInfo = argsParser.programLocationInfo;
 
     // Force set CLI arguments while running under debugger
+
     if (umba::isDebuggerPresent())
     {
 
@@ -392,6 +393,7 @@ main/wmain - нужны только для MSVC/Console
     appConfig.targetFormat   = TargetFormat::rtf;
     appConfig.updateProcessingOptions("title");
     appConfig.updateProcessingOptions("convert-github-alerts");
+    bOverwrite = true;
 
     // bool 
     // regRes = regShellExtentionHandlerApplication(L"_umba-app", L"open", L"umba %1");

@@ -89,7 +89,7 @@ public:
         return targetFilenameForCompare;
     }
 
-    std::string setImageLink(const std::string &f)
+    void setImageLink(const std::string &f)
     {
         imageLink = f;
     }
@@ -99,7 +99,7 @@ public:
         return imageLink;
     }
 
-    std::string setDocumentFilename(const std::string &f)
+    void setDocumentFilename(const std::string &f)
     {
         documentFilename = f;
     }

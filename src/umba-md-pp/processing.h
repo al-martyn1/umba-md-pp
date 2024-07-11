@@ -31,6 +31,7 @@
 #include <sstream>
 #include <utility>
 #include <algorithm>
+#include <iomanip>
 
 
 //
@@ -548,6 +549,22 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
 // {
 
 //----------------------------------------------------------------------------
+inline
+void checkPrintLineIfContainsPngExt(LineHandlerEvent event, const std::string &line)
+{
+    UMBA_USED(event);
+    UMBA_USED(line);
+    // std::string::size_type pos = line.find(".png");
+    // if (pos!=line.npos)
+    // {
+    //     // std::cout << "Found PNG in line: " << line << "; line type: " << enum_serialize(event) << "\n";
+    // }
+}
+
+
+
+
+//----------------------------------------------------------------------------
 // For substitutions|data collection on text lines
 template<typename LineHandler, typename FilenameStringType> inline
 std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, LineHandler simpleHandler)
@@ -556,19 +573,20 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
     {
         switch(event)
         {
-            case LineHandlerEvent::normalLine:    line = simpleHandler(line);
+            case LineHandlerEvent::normalLine:    checkPrintLineIfContainsPngExt(event, line);
+                                                  line = simpleHandler(line);
                                                   return true;
 
-            case LineHandlerEvent::documentEnd:   return true;
-            case LineHandlerEvent::listingLine:   return true;
-            case LineHandlerEvent::listingStart:  return true;
-            case LineHandlerEvent::listingEnd:    return true;
-            case LineHandlerEvent::insertCommand: return true;
-            case LineHandlerEvent::tocCommand:    return true;
-            case LineHandlerEvent::headerCommand: return true;
-            case LineHandlerEvent::metaLine:      return true;
-            case LineHandlerEvent::metaStart:     return true;
-            case LineHandlerEvent::metaEnd:       return true;
+            case LineHandlerEvent::documentEnd:   checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::listingLine:   checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::listingStart:  checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::listingEnd:    checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::insertCommand: checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::tocCommand:    checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::headerCommand: checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::metaLine:      checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::metaStart:     checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::metaEnd:       checkPrintLineIfContainsPngExt(event, line); return true;
             //case LineHandlerEvent:::
         }
         return true;
@@ -648,7 +666,7 @@ struct UmbaMdLinksUrlCoutPrinter
             std::string includedFullname = url;
             std::string urlOrg = url;
 
-            std::cout << indent << url;
+            std::cout << indent << (bImage?"!":" ") << url;
 
             if (!umba::md::isUrlAbsolute(url) && !umba::md::isUrlAbsoluteHostPath(url))
             {
@@ -868,8 +886,17 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
     processedDocLines = processTextLinesSimple( appCfg, processedDocLines
                                               , [&](const std::string &line)
                                                 {
+                                                    #if defined(LOG_PROCESSING_TRANSFORM_BEFORE_AFTER)
+                                                    std::cout << "Transform, before: " << line << "\n"; // << std::flush;
+                                                    #endif
+
                                                     std::string res;
                                                     umba::md::transformMarkdownLinksUrlString(std::back_inserter(res), line.begin(), line.end(), urlRebaseHandler);
+
+                                                    #if defined(LOG_PROCESSING_TRANSFORM_BEFORE_AFTER)
+                                                    std::cout << "Transform, after : " << res << "\n";
+                                                    #endif
+
                                                     return res;
                                                 }
                                               );
@@ -1426,6 +1453,10 @@ std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Documen
     // только номер заголовка, если есть нумерация, или его текст, если нумерации нет, [#$] - номер и текст заголовка, если есть нумерация,
     // или только текст, если нумерации нет.
 
+    #if defined(LOG_PROCESSING_UPDINDOCREFS_BEFORE_AFTER)
+    std::cout << "UpdInDocRefs before: " << line << "\n";
+    #endif
+
     std::string resLine; resLine.reserve(line.size());
 
     bool prevIsImageMark = false;
@@ -1541,6 +1572,10 @@ std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Documen
         resLine.append(1,')');
 
     }
+
+    #if defined(LOG_PROCESSING_UPDINDOCREFS_BEFORE_AFTER)
+    std::cout << "UpdInDocRefs after: " << resLine << "\n";
+    #endif
 
     return resLine;
 }
