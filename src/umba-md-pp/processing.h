@@ -578,6 +578,41 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
 }
 
 //----------------------------------------------------------------------------
+template<typename FilenameStringType> inline
+bool extactImageLinks( const AppConfig<FilenameStringType>           &appCfg
+                   , Document                                      &docTo
+                     , const std::vector<std::string>                &lines
+                   , const std::string                             &curFilename         // currently processed file
+                   )
+{
+    auto urlHandler = [&](std::string url, bool bImage)
+    {
+        if (bImage && !umba::md::isUrlAbsolute(url) && !umba::md::isUrlAbsoluteHostPath(url))
+        {
+            docTo.imageFiles.insert( umba::filename::makeCanonicalForCompare(url, '/', std::string("."), std::string(".."), true  /* keepLeadingParents */ ) );
+        }
+
+        return url;
+    };
+
+    processTextLinesSimple( appCfg, lines
+                          , [&](const std::string &line)
+                            {
+                                //TODO: !!! Надо бы сделать какой-то null_insert_iterator и null_inserter
+                                std::string res;
+                                umba::md::transformMarkdownLinksUrlString(std::back_inserter(res), line.begin(), line.end(), urlHandler);
+                                return line;
+                            }
+                          );
+
+    return true;
+}
+
+//----------------------------------------------------------------------------
+
+
+
+//----------------------------------------------------------------------------
 struct CoutPrinter
 {
     std::string    indent;
@@ -608,7 +643,7 @@ struct UmbaMdLinksUrlCoutPrinter
     {
         std::string res; res.reserve(line.size());
      
-        auto urlHandler = [&](std::string url)
+        auto urlHandler = [&](std::string url, bool bImage)
         {
             std::string includedFullname = url;
             std::string urlOrg = url;
@@ -797,7 +832,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
 #endif
 
 
-    auto urlRebaseHandler = [&](std::string url)
+    auto urlRebaseHandler = [&](std::string url, bool bImage)
     {
         if (!umba::md::isUrlAbsolute(url) && !umba::md::isUrlAbsoluteHostPath(url))
         {
@@ -813,7 +848,11 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
                                        , true // keepLeadingParents
                                        , true // tryReverseRelPath
                                        );
-            // Замена поддерживаемых input расширений на целевые
+        }
+
+        // Замена поддерживаемых input расширений на целевые (для любых ссылок, даже для абсолютных)
+        if (!bImage)
+        {
             std::string ext       = umba::filename::getExt(url);
             if (appCfg.isSupportedSourceExtention(ext))
             {
@@ -1561,6 +1600,8 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
                                    );
 
     resLines = updateInDocRefs(appCfg, doc, resLines);
+
+    extactImageLinks(appCfg, doc, resLines, curFilename );
 
 
     bool tocAdded = false;

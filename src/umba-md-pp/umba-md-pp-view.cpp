@@ -454,6 +454,11 @@ main/wmain - нужны только для MSVC/Console
             return 1;
         }
         
+        
+        std::map<std::string, ImageFileForCopyInfo> imagesToCopy;
+        addImageFilesForCopying( imagesToCopy, inputFilename, mdTempFile, doc.imageFiles);
+        copyDocumentImageFiles(infoLog, imagesToCopy, bOverwrite);
+
 
         std::string doxyfileData   = generateDoxyfile(appConfig, doc);
         std::string doxyRtfCfgData = generateDoxygenRtfCfg(appConfig, doc);

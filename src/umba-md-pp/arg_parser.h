@@ -726,7 +726,7 @@ int operator()( const StringType                                &a           //!
 
         else if ( opt.setParam("PATH",umba::command_line::OptionType::optString)
                || opt.isOption("batch-output-root")
-               || opt.isOption("batch-output-root-path")
+               || opt.isOption("batch-output-path")
                // || opt.setParam("VAL",true)
                || opt.setDescription("Set output root path for batch mode."))
         {
@@ -865,6 +865,23 @@ int operator()( const StringType                                &a           //!
             }
             
             appConfig.batchSplitPageIndex = boolVal;
+            return 0;
+        }
+
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("copy-images") || opt.isOption("copy-image-files")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Copy image files to output folder, if it taken. No effect if output path not taken (see --batch-output-root) nor single file output path folder not equal to source path."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.copyImageFiles = boolVal;
             return 0;
         }
 

@@ -31,6 +31,9 @@ struct Document
 
     std::string                                                  titleFromText; //!< From document text extracted title
 
+    std::set<std::string>                                        imageFiles;
+
+
     template<typename FilenameStringType>
     bool getMetaTagValueAsText(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
     {

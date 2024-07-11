@@ -573,7 +573,7 @@ public:
     {
         using value_type = typename std::decay<decltype(*itUrlBegin)>::type;
 
-        auto handlerRes = m_handler(std::basic_string<value_type>(itUrlBegin, itUrlEnd)); // Получаем обработанный URL, также строка
+        auto handlerRes = m_handler(std::basic_string<value_type>(itUrlBegin, itUrlEnd), bImageLink); // Получаем обработанный URL, также строка
         for(auto resIt=handlerRes.begin(); resIt!=handlerRes.end(); ++resIt)
         {
             *out++ = *resIt;
@@ -606,7 +606,7 @@ void testTransformMarkdownLinksUrlString(const std::string &input)
 {
     std::string res; res.reserve(input.size());
 
-    auto handler = [](std::string url)
+    auto handler = [](std::string url, bool bImage)
     {
         std::cout << "URL: " << url << "\n";
         if (isUrlAbsolute(url))
