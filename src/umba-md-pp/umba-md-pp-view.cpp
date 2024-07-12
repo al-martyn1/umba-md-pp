@@ -312,7 +312,10 @@ main/wmain - нужны только для MSVC/Console
             
         #endif
 
-        argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
+        //argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
+
+        argsParser.args.push_back(rootPath + "/README.md_");
+        
         
     }
 
@@ -367,7 +370,7 @@ main/wmain - нужны только для MSVC/Console
                                           .toString()
                     << "\n";
         //errCount++;
-        return 1;
+        return 2;
     }
 
     UMBA_USED(lineNo);
@@ -395,6 +398,8 @@ main/wmain - нужны только для MSVC/Console
     appConfig.updateProcessingOptions("convert-github-alerts");
     appConfig.copyImageFiles    = true;
     appConfig.flattenImageLinks = true;
+
+    appConfig.singleModeInOutPathsDifferent = true; // Без проверок говорим, что входной и выходной файл - в разных каталогах (выходной в сгенерённом TEMP'е - так что ок)
 
     bOverwrite = true;
 
@@ -440,7 +445,7 @@ main/wmain - нужны только для MSVC/Console
             oss << "Error code: " << (unsigned)GetLastError();
             #endif
             showErrorMessageBox(oss.str());
-            return 1;
+            return 3;
         }
 
         FilenameStringType mdTempFile              = umba::filename::appendPath(tempPath, umba::string_plus::make_string<FilenameStringType>("document.md"));
@@ -478,7 +483,7 @@ main/wmain - нужны только для MSVC/Console
         if (!umba::filesys::writeFile(mdTempFile, resText, true /* overwrite */ ))
         {
             showErrorMessageBox("Failed to write file MD temp file: " + mdTempFile);
-            return 1;
+            return 4;
         }
         
         
@@ -499,7 +504,7 @@ main/wmain - нужны только для MSVC/Console
         if (!umba::filesys::writeFile(doxygenConfigTempFile, doxyfileData, true /* overwrite */ ))
         {
             showErrorMessageBox("Failed to write Doxyfile temp file: " + doxygenConfigTempFile);
-            return 1;
+            return 5;
         }
 
 
@@ -511,14 +516,14 @@ main/wmain - нужны только для MSVC/Console
         if (!umba::filesys::writeFile(doxygenRtfCfgTempFile, doxyRtfCfgData, true /* overwrite */ ))
         {
             showErrorMessageBox("Failed to write doxygen RTF CFG temp file: " + doxygenRtfCfgTempFile);
-            return 1;
+            return 6;
         }
 
 
         if (!umba::filesys::setCurrentDirectory(tempPath))
         {
             showErrorMessageBox("Failed to change current directory. Can't view MD file.");
-            return 1;
+            return 7;
         }
 
         std::wstring wDoxygenExeName = findDoxygenExecutableName();
@@ -536,13 +541,13 @@ main/wmain - нужны только для MSVC/Console
         if (systemRes<0)
         {
             showErrorMessageBox("Failed to execute '" + doxygenExeName + "'");
-            return 1;
+            return 8;
         }
 
         if (!umba::filesys::isFileReadable(generatedRtfFile))
         {
             showErrorMessageBox("Can't read generated file '" + generatedRtfFile + "'");
-            return 1;
+            return 9;
         }
 
 
@@ -557,8 +562,8 @@ main/wmain - нужны только для MSVC/Console
                         )
            )
         {
-            showErrorMessageBox("Failed to create final file");
-            return 1;
+            showErrorMessageBox("Failed to create final file"); // !!! Это вылезает, если предыдущая версия файла уже открыта в ворде
+            return 10;
         }
 
         ShellExecuteA( 0 // HWND
@@ -610,7 +615,7 @@ main/wmain - нужны только для MSVC/Console
     {
         
         showErrorMessageBox(e.what());
-        return 1;
+        return 11;
         
         // LOG_ERR_OPT << e.what() << "\n";
         // return 1;
