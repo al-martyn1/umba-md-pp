@@ -304,6 +304,30 @@ struct AppConfig
     bool                                                  batchSplitPageIndex = false;
     bool                                                  copyImageFiles      = false;
     bool                                                  flattenImageLinks   = false;
+    bool                                                  singleModeInOutPathsDifferent = false;
+
+
+    bool getEffectiveFlattenImageLinksOption() const
+    {
+        if (!isBatchMode())
+        {
+            if (!singleModeInOutPathsDifferent) // выходной путь - тот же, нет копирования, нет коррекции
+                return false;
+
+        }
+        else // batch mode
+        {
+            if (batchOutputRoot.empty()) // выходной путь - тот же, нет копирования, нет коррекции
+                return false;
+        }
+
+        if (!copyImageFiles)
+            return false;
+
+        return flattenImageLinks;
+    }
+
+    // bool isBatchMode() const
 
 
     bool addBatchScanPath(const std::string &path, bool bRecurse)

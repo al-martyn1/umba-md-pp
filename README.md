@@ -41,7 +41,7 @@ Test number one
 
 Пытаемся в картинки
 
-![Todo 1](doc_icons_todo-list-50.png)
+![Todo 1](doc/icons/todo-list-50.png)
 
 [![Todo 2](doc/icons/todo-list-50.png) TODO](doc/todo.md)
 
@@ -58,17 +58,17 @@ Test number one
 
 tests/img/filled-96.png на уровень выше.
 
-Картинко - ![Картинко from upper level](___upper-level-filled-96.png)
+Картинко - ![Картинко from upper level](../upper-level-filled-96.png)
 
 
 ## Title
 
 Test01
 Link to [test02.md](tests/test02.md)
-Image - ![Image](tests_img_filled-96.png)
+Image - ![Image](tests/img/filled-96.png)
 
 Link to document which is out of the hierarchy [upper_inc.md_](../upper_inc.md)
-Image from out of the  hierarchy- ![Image](___upper-level-filled-96.png)
+Image from out of the  hierarchy- ![Image](../upper-level-filled-96.png)
 
 
 

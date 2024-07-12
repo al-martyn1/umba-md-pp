@@ -729,6 +729,9 @@ int safe_main(int argc, char* argv[])
         appConfig.checkAdjustDocNumericLevels();
         appConfig.checkTargetFormat();
     
+        bool differentOutputPath = umba::filename::makeCanonicalForCompare(umba::filename::getPath(outputFilename)) != umba::filename::makeCanonicalForCompare(umba::filename::getPath(inputFilename));
+        appConfig.singleModeInOutPathsDifferent = differentOutputPath;
+
     
         Document doc;
         std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
@@ -747,7 +750,6 @@ int safe_main(int argc, char* argv[])
                                                , true /* fromFile */, true /* utfSource */ , bOverwrite
                                                );
 
-            bool differentOutputPath = umba::filename::makeCanonicalForCompare(umba::filename::getPath(outputFilename)) != umba::filename::makeCanonicalForCompare(umba::filename::getPath(inputFilename));
 
             if (!appConfig.copyImageFiles)
             {

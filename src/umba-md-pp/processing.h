@@ -622,7 +622,7 @@ std::vector<std::string> extractImageLinks( const AppConfig<FilenameStringType> 
     #endif
 
     //TODO: !!! Надо бы ещё принудительно флэттенизировать урлы, которые выходят за пределы каталога с документом
-    const bool flattenImageLinks = appConfig.flattenImageLinks && appConfig.copyImageFiles;
+    const bool flattenImageLinks = appConfig.getEffectiveFlattenImageLinksOption(); // flattenImageLinks && appConfig.copyImageFiles;
     //UMBA_USED(flattenImageLinks);
 
     auto urlHandler = [&](std::string url, bool bImage)
