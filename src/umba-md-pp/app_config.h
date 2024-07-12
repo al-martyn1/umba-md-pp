@@ -46,6 +46,7 @@ protected:
     std::string    targetFilenameForCompare;
 
     std::string    imageLink        ; // Оригинальный линк
+    std::string    imageLinkTarget  ; // Модифицированный (возможно) линк
     std::string    documentFilename ; // Файл документа, в котором  используется линк
 
 
@@ -99,6 +100,16 @@ public:
         return imageLink;
     }
 
+    void setImageLinkTarget(const std::string &f)
+    {
+        imageLinkTarget = f;
+    }
+
+    std::string getImageLinkTarget() const
+    {
+        return imageLinkTarget;
+    }
+
     void setDocumentFilename(const std::string &f)
     {
         documentFilename = f;
@@ -127,12 +138,11 @@ public:
 
 
 //----------------------------------------------------------------------------
-template<typename Container>
 inline
-bool addImageFilesForCopying( std::map<std::string, ImageFileForCopyInfo> &imagesToCopy
-                           , const std::string &sourceDocumentFilename
-                           , const std::string &targetDocumentFilename
-                           , const Container &imagLinks
+bool addImageFilesForCopying( std::map<std::string, ImageFileForCopyInfo>       &imagesToCopy
+                           , const std::string                                  &sourceDocumentFilename
+                           , const std::string                                  &targetDocumentFilename
+                           , const std::unordered_map<std::string, std::string> &imagLinks // src -> dst
                            )
 {
     std::string inputPath  = umba::filename::getPath(sourceDocumentFilename);
@@ -140,12 +150,16 @@ bool addImageFilesForCopying( std::map<std::string, ImageFileForCopyInfo> &image
 
     bool res = true;
 
-    for(const auto &imgFile : imagLinks)
+    for(const auto &imgFilePair : imagLinks)
     {
+        const auto &imgSrcLink = imgFilePair.first ;
+        const auto &imgTgtLink = imgFilePair.second;
+
         ImageFileForCopyInfo imgInfo;
-        imgInfo.setSourceFilename(umba::filename::makeCanonical(umba::filename::appendPath(inputPath , imgFile)));
-        imgInfo.setTargetFilename(umba::filename::makeCanonical(umba::filename::appendPath(outputPath, imgFile)));
-        imgInfo.setImageLink(imgFile);
+        imgInfo.setSourceFilename(umba::filename::makeCanonical(umba::filename::appendPath(inputPath , imgSrcLink)));
+        imgInfo.setTargetFilename(umba::filename::makeCanonical(umba::filename::appendPath(outputPath, imgTgtLink)));
+        imgInfo.setImageLink(imgSrcLink);
+        imgInfo.setImageLinkTarget(imgTgtLink);
         imgInfo.setDocumentFilename(sourceDocumentFilename);
     
     
@@ -177,6 +191,15 @@ template<typename LogStreamType>
 inline
 bool copyDocumentImageFiles(LogStreamType & logStream, const std::map<std::string, ImageFileForCopyInfo> &imagesToCopy, bool bOverwrite)
 {
+    if (!imagesToCopy.empty())
+    {
+        logStream << "Copying image files\n";
+    }
+    else
+    {
+        logStream << "Copying image files: nothing to copy\n";
+    }
+
     bool res = true;
     std::map<std::string, ImageFileForCopyInfo>::const_iterator it = imagesToCopy.begin();
     for(; it!=imagesToCopy.end(); ++it)
@@ -187,7 +210,7 @@ bool copyDocumentImageFiles(LogStreamType & logStream, const std::map<std::strin
 
         umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(tgtFile), true /* forceCreatePath */ );
 
-        logStream << "Copying image file '" << srcFile << "' to '" << tgtFile << "'\n";
+        logStream << "    Copying image file '" << srcFile << "' to '" << tgtFile << "'\n";
 
         if (!CopyFileA(srcFile.c_str(), tgtFile.c_str(), bOverwrite ? FALSE : TRUE)) // ошибка, если существует и не режим overwrite
         {
@@ -279,7 +302,8 @@ struct AppConfig
     //bool                                                  batchGeneratePagesIndex = false;
     std::string                                           batchPageIndexFileName;
     bool                                                  batchSplitPageIndex = false;
-    bool                                                  copyImageFiles = false;
+    bool                                                  copyImageFiles      = false;
+    bool                                                  flattenImageLinks   = false;
 
 
     bool addBatchScanPath(const std::string &path, bool bRecurse)

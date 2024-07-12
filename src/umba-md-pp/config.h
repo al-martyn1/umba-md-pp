@@ -17,9 +17,12 @@
     // Тут включаем/выключаем опции отладки
 
     // Вроде отладили, выключаем
-    #define LOG_DOC_INSERTIONS_AND_REFS
-    //#define LOG_PROCESSING_TRANSFORM_BEFORE_AFTER
+    //#define LOG_DOC_INSERTIONS_AND_REFS
     //#define LOG_PROCESSING_UPDINDOCREFS_BEFORE_AFTER
+    //#define LOG_PROCESSING_TRANSFORM_BEFORE_AFTER
+    
+    //#define LOG_PROCESSING_PROCESS_TEXT_LINES_SIMPLE_PRINT_PNG_LINES
+    //#define LOG_PROCESSING_EXTRACT_IMAGE_LINKS
 
 #endif
 

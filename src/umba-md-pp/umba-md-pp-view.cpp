@@ -393,7 +393,11 @@ main/wmain - нужны только для MSVC/Console
     appConfig.targetFormat   = TargetFormat::rtf;
     appConfig.updateProcessingOptions("title");
     appConfig.updateProcessingOptions("convert-github-alerts");
+    appConfig.copyImageFiles    = true;
+    appConfig.flattenImageLinks = true;
+
     bOverwrite = true;
+
 
     // bool 
     // regRes = regShellExtentionHandlerApplication(L"_umba-app", L"open", L"umba %1");

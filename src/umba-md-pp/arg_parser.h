@@ -885,6 +885,25 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("flatten-image-links") // || opt.isOption("copy-image-files")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Flatten image links: 'some/path/to/image.png' becomes to 'some_path_to_image.png'. No effect if output path not taken (see --batch-output-root) nor single file output path folder not equal to source path."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.flattenImageLinks = boolVal;
+            return 0;
+        }
+
+
+
         else if ( opt.setParam("EXT[,EXT...]",umba::command_line::OptionType::optString)
                || opt.isOption("add-mdpp-extention")
                || opt.isOption("add-mdpp-extentions")

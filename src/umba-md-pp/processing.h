@@ -9,6 +9,7 @@
 #include "umba/id_gen.h"
 #include "umba/container_utility.h"
 #include "umba/parse_utils.h"
+#include "umba/null_inserter.h"
 
 #include "marty_yaml_toml_json/json_utils.h"
 #include "marty_yaml_toml_json/yaml_json.h"
@@ -554,11 +555,14 @@ void checkPrintLineIfContainsPngExt(LineHandlerEvent event, const std::string &l
 {
     UMBA_USED(event);
     UMBA_USED(line);
-    // std::string::size_type pos = line.find(".png");
-    // if (pos!=line.npos)
-    // {
-    //     // std::cout << "Found PNG in line: " << line << "; line type: " << enum_serialize(event) << "\n";
-    // }
+
+    #if defined(LOG_PROCESSING_PROCESS_TEXT_LINES_SIMPLE_PRINT_PNG_LINES)
+    std::string::size_type pos = line.find(".png");
+    if (pos!=line.npos)
+    {
+        std::cout << "Found PNG in line: " << line << "; line type: " << enum_serialize(event) << "\n";
+    }
+    #endif
 }
 
 
@@ -577,16 +581,26 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
                                                   line = simpleHandler(line);
                                                   return true;
 
-            case LineHandlerEvent::documentEnd:   checkPrintLineIfContainsPngExt(event, line); return true;
-            case LineHandlerEvent::listingLine:   checkPrintLineIfContainsPngExt(event, line); return true;
-            case LineHandlerEvent::listingStart:  checkPrintLineIfContainsPngExt(event, line); return true;
-            case LineHandlerEvent::listingEnd:    checkPrintLineIfContainsPngExt(event, line); return true;
-            case LineHandlerEvent::insertCommand: checkPrintLineIfContainsPngExt(event, line); return true;
-            case LineHandlerEvent::tocCommand:    checkPrintLineIfContainsPngExt(event, line); return true;
-            case LineHandlerEvent::headerCommand: checkPrintLineIfContainsPngExt(event, line); return true;
-            case LineHandlerEvent::metaLine:      checkPrintLineIfContainsPngExt(event, line); return true;
-            case LineHandlerEvent::metaStart:     checkPrintLineIfContainsPngExt(event, line); return true;
-            case LineHandlerEvent::metaEnd:       checkPrintLineIfContainsPngExt(event, line); return true;
+            case LineHandlerEvent::documentEnd:   checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::listingLine:   checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::listingStart:  checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::listingEnd:    checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::insertCommand: checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::tocCommand:    checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::headerCommand: checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::metaLine:      checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::metaStart:     checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::metaEnd:       checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
             //case LineHandlerEvent:::
         }
         return true;
@@ -597,33 +611,66 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-bool extactImageLinks( const AppConfig<FilenameStringType>           &appCfg
-                   , Document                                      &docTo
-                     , const std::vector<std::string>                &lines
-                   , const std::string                             &curFilename         // currently processed file
-                   )
+std::vector<std::string> extractImageLinks( const AppConfig<FilenameStringType>           &appCfg
+                                         , Document                                      &docTo
+                                         , const std::vector<std::string>                &lines
+                                         , const std::string                             &curFilename         // currently processed file
+                                         )
 {
+    #if defined(LOG_PROCESSING_PROCESS_TEXT_LINES_SIMPLE_PRINT_PNG_LINES)
+    std::cout << "--- extractImageLinks\n";
+    #endif
+
+    //TODO: !!! Надо бы ещё принудительно флэттенизировать урлы, которые выходят за пределы каталога с документом
+    const bool flattenImageLinks = appConfig.flattenImageLinks && appConfig.copyImageFiles;
+    //UMBA_USED(flattenImageLinks);
+
     auto urlHandler = [&](std::string url, bool bImage)
     {
         if (bImage && !umba::md::isUrlAbsolute(url) && !umba::md::isUrlAbsoluteHostPath(url))
         {
-            docTo.imageFiles.insert( umba::filename::makeCanonicalForCompare(url, '/', std::string("."), std::string(".."), true  /* keepLeadingParents */ ) );
+            #if defined(LOG_PROCESSING_EXTRACT_IMAGE_LINKS)
+            std::cout << "Extracted link: " << url << "\n";
+            #endif
+            //docTo.imageFiles.insert( umba::filename::makeCanonicalForCompare(url, '/', std::string("."), std::string(".."), true  /* keepLeadingParents */ ) );
+            auto srcUrl = umba::filename::makeCanonical(url, '/', std::string("."), std::string(".."), true  /* keepLeadingParents */ );
+
+            if (flattenImageLinks)
+                url = umba::filename::flattenPath(srcUrl);
+
+            docTo.imageFiles[srcUrl] = url;
         }
 
         return url;
     };
 
+    return
     processTextLinesSimple( appCfg, lines
                           , [&](const std::string &line)
                             {
                                 //TODO: !!! Надо бы сделать какой-то null_insert_iterator и null_inserter
-                                std::string res;
-                                umba::md::transformMarkdownLinksUrlString(std::back_inserter(res), line.begin(), line.end(), urlHandler);
-                                return line;
+
+                                #if defined(LOG_PROCESSING_PROCESS_TEXT_LINES_SIMPLE_PRINT_PNG_LINES)
+                                std::string::size_type pos = line.find(".png");
+                                if (pos!=line.npos)
+                                {
+                                    std::cout << ""; // "Found PNG in line: " << line << "; line type: " << enum_serialize(event) << "\n";
+                                }
+                                #endif
+
+                                if (flattenImageLinks)
+                                {
+                                    std::string res;
+                                    umba::md::transformMarkdownLinksUrlString(std::back_inserter(res), line.begin(), line.end(), urlHandler);
+                                    return res;
+                                }
+                                else
+                                {
+                                    umba::md::transformMarkdownLinksUrlString(umba::null_inserter(), line.begin(), line.end(), urlHandler);
+                                    return line;
+                                }
                             }
                           );
-
-    return true;
 }
 
 //----------------------------------------------------------------------------
@@ -882,6 +929,9 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
         return url;
     };
 
+    #if defined(LOG_PROCESSING_TRANSFORM_BEFORE_AFTER)
+    std::cout << "--- Transform\n";
+    #endif
 
     processedDocLines = processTextLinesSimple( appCfg, processedDocLines
                                               , [&](const std::string &line)
@@ -1636,7 +1686,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
 
     resLines = updateInDocRefs(appCfg, doc, resLines);
 
-    extactImageLinks(appCfg, doc, resLines, curFilename );
+    resLines = extractImageLinks(appCfg, doc, resLines, curFilename );
 
 
     bool tocAdded = false;

@@ -2,3 +2,4 @@
 --processing-options=no-meta-data
 --processing-options=transliterate-generated-filenames
 --copy-images
+--flatten-image-links

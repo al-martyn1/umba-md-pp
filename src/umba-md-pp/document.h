@@ -31,7 +31,7 @@ struct Document
 
     std::string                                                  titleFromText; //!< From document text extracted title
 
-    std::set<std::string>                                        imageFiles;
+    std::unordered_map<std::string, std::string>                 imageFiles; // src -> dst
 
 
     template<typename FilenameStringType>

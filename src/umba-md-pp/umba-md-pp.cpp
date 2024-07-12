@@ -130,8 +130,27 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 }
 );
 
+int safe_main(int argc, char* argv[]);
 
 int main(int argc, char* argv[])
+{
+    try
+    {
+        return safe_main(argc, argv);
+    }
+    catch(const std::exception &e)
+    {
+        LOG_ERR_OPT << "Exception found: " << e.what() << "\n";
+    }
+    catch(...)
+    {
+        LOG_ERR_OPT << "Exception found: " << "unknown exception" << "\n";
+    }
+
+    return 66;
+}
+
+int safe_main(int argc, char* argv[])
 {
     umba::time_service::init();
 
@@ -604,6 +623,8 @@ int main(int argc, char* argv[])
 
             pageIndexFileName = umba::filename::makeCanonical(pageIndexFileName);
             
+            infoLog << "Writting page index file: " << pageIndexFileName << "\n";
+
             umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(pageIndexFileName), true /* forceCreatePath */ );
 
             umba::cli_tool_helpers::writeOutput( pageIndexFileName, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
@@ -611,12 +632,22 @@ int main(int argc, char* argv[])
                                                , targetPagesIndexText, std::string() // bomData
                                                , true /* fromFile */, true /* utfSource */ , bOverwrite
                                                );
-            
-            if (!appConfig.batchOutputRoot.empty() && appConfig.copyImageFiles)
-            {
-                copyDocumentImageFiles(infoLog, imagesToCopy, bOverwrite);
-            }
+
+        } // if (!appConfig.batchPageIndexFileName.empty() && !pagesIndex.empty())
+
+        if (!appConfig.copyImageFiles)
+        {
+           infoLog << "Copying image files not allowed. Use --copy-image-files/--copy-images option\n";
         }
+        else if (appConfig.batchOutputRoot.empty())
+        {
+           infoLog << "Copying image files not allowed, target path is the same as source path. Use --batch-output-root\n";
+        }
+        else // if (!appConfig.batchOutputRoot.empty() && appConfig.copyImageFiles)
+        {
+            copyDocumentImageFiles(infoLog, imagesToCopy, bOverwrite);
+        }
+
 
         return 0;
     
@@ -717,7 +748,16 @@ int main(int argc, char* argv[])
                                                );
 
             bool differentOutputPath = umba::filename::makeCanonicalForCompare(umba::filename::getPath(outputFilename)) != umba::filename::makeCanonicalForCompare(umba::filename::getPath(inputFilename));
-            if (appConfig.copyImageFiles && differentOutputPath)
+
+            if (!appConfig.copyImageFiles)
+            {
+               infoLog << "Copying image files not allowed. Use --copy-image-files/--copy-images option\n";
+            }
+            else if (!differentOutputPath)
+            {
+               infoLog << "Copying image files not allowed, target path is the same as source path.\n";
+            }
+            else // if (appConfig.copyImageFiles && differentOutputPath)
             {
                 addImageFilesForCopying( imagesToCopy, inputFilename, outputFilename, doc.imageFiles);
                 copyDocumentImageFiles(infoLog, imagesToCopy, bOverwrite);
