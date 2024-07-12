@@ -11,6 +11,8 @@
 #include "umba/string_plus.h"
 #include "umba/id_gen.h"
 #include "umba/filename.h"
+#include "umba/macros.h"
+#include "umba/macro_helpers.h"
 //
 //#include "umba/regex_helpers.h"
 //
@@ -271,7 +273,7 @@ struct AppConfig
     std::unordered_map<FilenameStringType, std::string>   extToLang  ;
     std::unordered_map<std::string, LangOptions>          langOptions;
     std::unordered_set<SnippetOptions>                    snippetOptions;
-    std::unordered_map<std::string, std::string>          conditionVars;
+    umba::macros::StringStringMap<std::string>            conditionVars;     // Изначально предназначалось для проверки условий, но теперь и для макроподстановок
 
     std::unordered_set<ProcessingOptions>                 processingOptions;
 

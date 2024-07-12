@@ -10,7 +10,9 @@
 #include "umba/container_utility.h"
 #include "umba/parse_utils.h"
 #include "umba/null_inserter.h"
-
+#include "umba/macros.h"
+#include "umba/macro_helpers.h"
+//
 #include "marty_yaml_toml_json/json_utils.h"
 #include "marty_yaml_toml_json/yaml_json.h"
 #include "marty_yaml_toml_json/yaml_utils.h"
@@ -1356,6 +1358,15 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
             resLines.emplace_back(serializeSnippetOptions(snippetFlagsOptions, intOptions));
         }
 
+        //snippetFile
+        {
+            using namespace umba::macros;
+            snippetFile = substMacros( snippetFile
+                                     , MacroTextFromMapOrEnvRef(appCfg.conditionVars, true /* envAllowed */ )
+                                     , smf_KeepUnknownVars // | smf_uppercaseNames // !!! Надо заморачиваться с регистром? Если надо, то тогда при добавлении всё в upper case и кондишены надо подправить
+                                     );
+        }
+
         if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::doc))
         {
             // если фейл, и insertDoc возвращает false, то возвращаем true для вставки текущей строки, пусть автор документа разбирается,
@@ -1365,7 +1376,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
             // Но если мы хотим тихо ничего не делать при обломе поиска подключаемого файла, то надо явно указать no-fail
             return !insertDoc( appCfg, docTo, resLines, line // insertCommandLine
                              , curFilename
-                             , snippetFile // docFile
+                             , snippetFile // file to insert
                              , snippetFlagsOptions
                              , intOptions
                              , alreadyIncludedDocs
@@ -1375,7 +1386,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
         {
             return !insertSnippet( appCfg, resLines, line // insertCommandLine
                                  , curFilename
-                                 , snippetFile
+                                 , snippetFile            // file from wich code fragment will be cutted
                                  , snippetTag
                                  , snippetFlagsOptions
                                  , intOptions

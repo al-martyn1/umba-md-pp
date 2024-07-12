@@ -460,8 +460,8 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("VAR:VAL")
-               || opt.isOption("set-condition-var") || opt.isOption('C')
-               || opt.setDescription("Set condition variable"))
+               || opt.isOption("set-var") || opt.isOption("set-condition-var") || opt.isOption('C')
+               || opt.setDescription("Set variable valie for conditions and substitutions"))
         {
             if (argsParser.hasHelpOption) return 0;
             
