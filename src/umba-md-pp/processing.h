@@ -39,7 +39,7 @@
 
 //
 #include "yaml_json_document_helpers.h"
-
+#include "md-pp-macro_helpers.h"
 //
 #include "config.h"
 
@@ -1362,7 +1362,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
         {
             using namespace umba::macros;
             snippetFile = substMacros( snippetFile
-                                     , MacroTextFromMapOrEnvRef(appCfg.conditionVars, true /* envAllowed */ )
+                                     , umba::md::MacroTextFromMapOrEnvRef(appCfg.conditionVars, true /* envAllowed */ )
                                      , smf_KeepUnknownVars // | smf_uppercaseNames // !!! Надо заморачиваться с регистром? Если надо, то тогда при добавлении всё в upper case и кондишены надо подправить
                                      );
         }

@@ -711,7 +711,16 @@ struct AppConfig
         if (name.empty())
             return false;
 
-        conditionVars[name] = value;
+        if (umba::string_plus::starts_with_and_strip(name, "^"))
+        {
+            conditionVars[name]                                 = value;
+            conditionVars["^"+umba::string_plus::toupper_copy(name)] = value;
+        }
+        else
+        {
+            conditionVars[name] = value;
+        }
+
         return true;
     }
 

@@ -4,4 +4,7 @@
 --copy-images
 # --flatten-image-links
 --viewer-copy-render-to-source-location
---viewer-render-copy-use-doc-title
+#--viewer-render-copy-use-doc-title
+#--set-var=INSERT_DOC_FILENAME_MACRO_TEST:by_macro2
+--set-var=^insert_doc_filename_macro_test:by_macro2
+
