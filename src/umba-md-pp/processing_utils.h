@@ -4,18 +4,121 @@
 #pragma once
 
 //----------------------------------------------------------------------------
-
+#include "enums.h"
+//
+#include <unordered_map>
 
 
 //----------------------------------------------------------------------------
 // Misc "is a..." functions
+
+
+
+//----------------------------------------------------------------------------
+//! Line must be trimmed
+inline
+bool isPreprocessorDirectiveBase(const std::string &line)
+{
+    if (line.size()<2)
+        return false;
+
+    if (line[0]!='#')
+        return false;
+
+    if (line[1]!='!' && line[1]!='$')
+        return false;
+
+    return true;
+}
+
+//----------------------------------------------------------------------------
+
+
+
+//----------------------------------------------------------------------------
+inline
+std::unordered_map<std::string, PreprocessorDirective> makePreprocessorDirectivesMap()
+{
+    // enum class PreprocessorDirective
+    std::unordered_map<std::string, PreprocessorDirective> m;
+
+    m["#!insert"] = PreprocessorDirective::insert;
+    m["#$insert"] = PreprocessorDirective::insert;
+
+    m["#!toc"] = PreprocessorDirective::toc;
+    m["#$toc"] = PreprocessorDirective::toc;
+
+    m["#!if"] = PreprocessorDirective::condIf;
+    m["#$if"] = PreprocessorDirective::condIf;
+
+    m["#!else"] = PreprocessorDirective::condElse;
+    m["#$else"] = PreprocessorDirective::condElse;
+
+    m["#!elseif"] = PreprocessorDirective::condElif;
+    m["#$elseif"] = PreprocessorDirective::condElif;
+
+    m["#!elif"] = PreprocessorDirective::condElif;
+    m["#$elif"] = PreprocessorDirective::condElif;
+
+    m["#!endif"] = PreprocessorDirective::condEndif;
+    m["#$endif"] = PreprocessorDirective::condEndif;
+
+    return m;
+}
+
+//----------------------------------------------------------------------------
+inline
+const std::unordered_map<std::string, PreprocessorDirective>& getPreprocessorDirectivesMap()
+{
+    static auto m = makePreprocessorDirectivesMap();
+    return m;
+}
+
+//----------------------------------------------------------------------------
+//! Line must be trimmed
+inline
+PreprocessorDirective testLineForPreprocessorDirectiveImplHelper(std::string line, std::size_t *pNumCharsStrip=0)
+{
+    if (!isPreprocessorDirectiveBase(line))
+        return PreprocessorDirective::unknown;
+
+    umba::string_plus::tolower(line);
+
+    auto m = getPreprocessorDirectivesMap();
+
+    for(const auto &kvp : m)
+    {
+        if (umba::string_plus::starts_with(line, kvp.first))
+        {
+            if (pNumCharsStrip)
+            {
+                *pNumCharsStrip = kvp.first.size();
+            }
+            return kvp.second;
+        }
+    }
+
+    return PreprocessorDirective::unknown;
+}
+
+//----------------------------------------------------------------------------
+inline
+bool testLineForPreprocessorDirective(const std::string &line, PreprocessorDirective d, std::size_t *pNumCharsStrip=0)
+{
+    PreprocessorDirective pd = testLineForPreprocessorDirectiveImplHelper(line, pNumCharsStrip);
+    return pd==d;
+}
+
+//----------------------------------------------------------------------------
+// strip version nned to be here
 
 //----------------------------------------------------------------------------
 inline
 bool isInsertCommand(std::string line)
 {
     umba::string_plus::trim(line);
-    return (umba::string_plus::starts_with(line, ("#!insert")) || umba::string_plus::starts_with(line, ("#$insert")));
+    // return (umba::string_plus::starts_with(line, ("#!insert")) || umba::string_plus::starts_with(line, ("#$insert")));
+    return testLineForPreprocessorDirective(line, PreprocessorDirective::insert);
 }
 
 //----------------------------------------------------------------------------
@@ -23,7 +126,8 @@ inline
 bool isTocCommand(std::string line)
 {
     umba::string_plus::trim(line);
-    return (umba::string_plus::starts_with(line, ("#!toc")) || umba::string_plus::starts_with(line, ("#$toc")));
+    //return (umba::string_plus::starts_with(line, ("#!toc")) || umba::string_plus::starts_with(line, ("#$toc")));
+    return testLineForPreprocessorDirective(line, PreprocessorDirective::toc);
 }
 
 //----------------------------------------------------------------------------
