@@ -2,4 +2,6 @@
 --processing-options=no-meta-data
 --processing-options=transliterate-generated-filenames
 --copy-images
---flatten-image-links
+# --flatten-image-links
+--viewer-copy-render-to-source-location
+--viewer-render-copy-use-doc-title

@@ -308,6 +308,9 @@ struct AppConfig
     bool                                                  flattenImageLinks   = false;
     bool                                                  singleModeInOutPathsDifferent = false;
 
+    bool                                                  viewerCopyToSourceLocation = false;
+    bool                                                  viewerCopyFilenameDocTitle = false;
+
 
     bool getEffectiveFlattenImageLinksOption() const
     {

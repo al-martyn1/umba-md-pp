@@ -902,7 +902,39 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("viewer-copy-render-to-source-location") || opt.isOption("viewer-copy-to-source")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Copy generated (rendered) file to source file location."))
+        {
+            if (argsParser.hasHelpOption) return 0;
 
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.viewerCopyToSourceLocation = boolVal;
+            return 0;
+        }
+
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("viewer-render-copy-use-doc-title") || opt.isOption("viewer-copy-use-title")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Copy generated (rendered) file to source file location with file name obtained from the document title."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.viewerCopyFilenameDocTitle = boolVal;
+            return 0;
+        }
 
         else if ( opt.setParam("EXT[,EXT...]",umba::command_line::OptionType::optString)
                || opt.isOption("add-mdpp-extention")

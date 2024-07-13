@@ -554,8 +554,21 @@ main/wmain - нужны только для MSVC/Console
         FilenameStringType generatedRtfFileCanonical  = umba::filename::makeCanonical(generatedRtfFile);
         FilenameStringType fullFinalFilenameCanonical = umba::filename::makeCanonical(fullFinalFilename);
 
-
         // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-movefileexa
+
+        if (appConfig.viewerCopyToSourceLocation)
+        {
+            std::string targetPath = umba::filename::getPath(inputFilename);
+            std::string targetName = umba::filename::getName(inputFilename);
+            std::string targetExt  = umba::filename::getExt(generatedRtfFile);
+
+            if (appConfig.viewerCopyFilenameDocTitle)
+            {
+                targetName = finalFilename;
+            }
+
+            fullFinalFilenameCanonical = umba::filename::makeCanonical(umba::filename::appendPath(targetPath, umba::filename::appendExt(targetName, targetExt)));
+        }
 
         if (!MoveFileExA( generatedRtfFileCanonical.c_str(), fullFinalFilenameCanonical.c_str()
                         , MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH
@@ -573,42 +586,6 @@ main/wmain - нужны только для MSVC/Console
                      , 0 // lpDirectory
                      , SW_NORMAL
                      );
-
-
-        //bool deleteFile( const StringType &filename )
-
-// template<typename StringType> inline
-// bool deleteFile( const StringType &filename )
-
-
-// BOOL MoveFileExA(
-//   [in]           LPCSTR lpExistingFileName,
-//   [in, optional] LPCSTR lpNewFileName,
-//   [in]           DWORD  dwFlags
-// );
-
-
-// enum class IoFileType
-// {
-//     nameEmpty,
-//     regularFile,
-//     stdinFile,
-//     stdoutFile,
-//     clipboard
-// };
-
-
-
-
-    // lines.emplace_back("EXCLUDE                = doxy");
-    // lines.emplace_back("FILE_PATTERNS          = .md");
-    // lines.emplace_back("RTF_OUTPUT             = rtf");
-    // lines.emplace_back("OUTPUT_DIRECTORY       = doxy");
-    // lines.emplace_back("RTF_EXTENSIONS_FILE    = doxygen_rtf.cfg");
-    // lines.emplace_back("INPUT                  = document.md");
-
-
-
 
     } // try
     catch(const std::runtime_error &e)

@@ -3,6 +3,9 @@
 #include "enums.h"
 #include "umba/string_plus.h"
 //
+#include "umba/macros.h"
+#include "umba/macro_helpers.h"
+//
 #include <exception>
 #include <stdexcept>
 #include <unordered_set>
@@ -96,7 +99,7 @@ bool isConditionVar(std::string &condVal)
 
 //----------------------------------------------------------------------------
 inline
-bool isConditionTrue(const std::unordered_map<std::string, std::string> &condVars, std::string condStr)
+bool isConditionTrue(const umba::macros::StringStringMap<std::string> &condVars, std::string condStr)
 {
     umba::string_plus::trim(condStr);
 
@@ -125,14 +128,14 @@ bool isConditionTrue(const std::unordered_map<std::string, std::string> &condVar
 
         if (isConditionVar(left))
         {
-            std::unordered_map<std::string, std::string>::const_iterator it = condVars.find(left);
+            umba::macros::StringStringMap<std::string>::const_iterator it = condVars.find(left);
             if (it==condVars.end())
                 return false;
         }
 
         if (isConditionVar(right))
         {
-            std::unordered_map<std::string, std::string>::const_iterator it = condVars.find(right);
+            umba::macros::StringStringMap<std::string>::const_iterator it = condVars.find(right);
             if (it==condVars.end())
                 return false;
         }
@@ -205,7 +208,7 @@ std::string serializeSnippetOptions(std::unordered_set<SnippetOptions> flagOptio
 
 //----------------------------------------------------------------------------
 inline
-SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optListStr, std::unordered_set<SnippetOptions> *pFlagOptions, std::unordered_map<SnippetOptions, int> *pIntOptions=0, const std::unordered_map<std::string, std::string> *pCondVars=0)
+SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optListStr, std::unordered_set<SnippetOptions> *pFlagOptions, std::unordered_map<SnippetOptions, int> *pIntOptions=0, const umba::macros::StringStringMap<std::string> *pCondVars=0)
 {
     std::vector<std::string> optList = marty_cpp::splitToLinesSimple(optListStr, false, ',');
 
@@ -224,7 +227,7 @@ SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optList
         {
             if (pCondVars)
             {
-                const std::unordered_map<std::string, std::string> &condVars = *pCondVars;
+                const umba::macros::StringStringMap<std::string> &condVars = *pCondVars;
                 if (optName=="ifdef")
                 {
                     return condVars.find(optVal)==condVars.end() ? SnippetOptionsParsingResult::okButCondition : SnippetOptionsParsingResult::ok;
@@ -378,10 +381,11 @@ bool testFlagSnippetOption(const std::unordered_set<SnippetOptions> &flagOptions
 
 //----------------------------------------------------------------------------
 inline
-SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set<SnippetOptions>       &snippetFlagsOptions
-                                                            , std::unordered_map<SnippetOptions, int>  &snippetIntOptions
-                                                            , const std::unordered_map<std::string, std::string> &condVars
-                                                            , std::string line, std::string &snippetFile, std::string &snippetTag
+SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set<SnippetOptions>               &snippetFlagsOptions
+                                                            , std::unordered_map<SnippetOptions, int>          &snippetIntOptions
+                                                            , const umba::macros::StringStringMap<std::string> &condVars
+                                                            , std::string line
+                                                            , std::string &snippetFile, std::string &snippetTag
                                                             )
 {
     umba::string_plus::trim(line);
