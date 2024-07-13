@@ -1,0 +1,3 @@
+Comma-separated values - https://en.wikipedia.org/wiki/Comma-separated_values
+CSV - https://ru.wikipedia.org/wiki/CSV
+RFC4180 - https://datatracker.ietf.org/doc/html/rfc4180

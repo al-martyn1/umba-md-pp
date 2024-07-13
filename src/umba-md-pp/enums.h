@@ -614,3 +614,52 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( BacktickProcessingState, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( BacktickProcessingState, std::map, 1 )
 
 
+enum class PreprocessorDirective : std::uint32_t
+{
+    invalid      = (std::uint32_t)(-1),
+    unknown      = (std::uint32_t)(-1),
+    insert       = 0x0000,
+    toc          = 0x0001,
+    condIf       = 0x0002,
+    condElse     = 0x0003,
+    condElif     = 0x0004,
+    condElseif   = 0x0004,
+    condEndif    = 0x0005
+
+}; // enum class PreprocessorDirective : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(PreprocessorDirective)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condElse    , "CondElse"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::insert      , "Insert"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::invalid     , "Invalid"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condEndif   , "CondEndif" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::toc         , "Toc"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condIf      , "CondIf"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condElif    , "CondElif"  );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( PreprocessorDirective, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElse    , "cond-else"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElse    , "cond_else"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElse    , "condelse"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::insert      , "insert"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::invalid     , "invalid"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::invalid     , "unknown"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif   , "cond-endif"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif   , "cond_endif"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif   , "condendif"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::toc         , "toc"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condIf      , "cond-if"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condIf      , "cond_if"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condIf      , "condif"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElif    , "cond-elseif" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElif    , "cond-elif"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElif    , "cond_elif"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElif    , "condelif"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElif    , "cond_elseif" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElif    , "condelseif"  );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PreprocessorDirective, std::map, 1 )
+
+
