@@ -362,7 +362,8 @@ enum class TargetRenderer : std::uint32_t
     invalid   = (std::uint32_t)(-1),
     unknown   = (std::uint32_t)(-1),
     github    = 0x0000,
-    doxygen   = 0x0001
+    doxygen   = 0x0001,
+    gitlab    = 0x0002
 
 }; // enum class TargetRenderer : std::uint32_t
 
@@ -370,6 +371,7 @@ MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(TargetRenderer)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( TargetRenderer, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetRenderer::invalid   , "Invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetRenderer::gitlab    , "Gitlab"  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetRenderer::github    , "Github"  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TargetRenderer::doxygen   , "Doxygen" );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( TargetRenderer, std::map, 1 )
@@ -377,6 +379,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_END( TargetRenderer, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( TargetRenderer, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetRenderer::invalid   , "invalid" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetRenderer::invalid   , "unknown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetRenderer::gitlab    , "gitlab"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetRenderer::github    , "github"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TargetRenderer::doxygen   , "doxygen" );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( TargetRenderer, std::map, 1 )

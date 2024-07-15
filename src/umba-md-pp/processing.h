@@ -1738,14 +1738,15 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
     }
 
     //bool needSpecialIdInSectionHeader = appCfg.targetRenderer==TargetRenderer::doxygen;
-    bool henerateIdWithSectionNumber  = appCfg.targetRenderer==TargetRenderer::github ;
-
+    bool generateIdWithSectionNumber  = appCfg.targetRenderer==TargetRenderer::github
+                                     || appCfg.targetRenderer==TargetRenderer::gitlab
+                                      ;
 
     resLines = generateSecionsExtra( appCfg, resLines, doc
                                    , true // update doc info
                                    , true // update header
                                    , appCfg.testProcessingOption(ProcessingOptions::numericSections) // нужно или нет реально генерить номера секций
-                                   , henerateIdWithSectionNumber
+                                   , generateIdWithSectionNumber
                                    , generateSecIds // needSpecialIdInSectionHeader
                                    );
 

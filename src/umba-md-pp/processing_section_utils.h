@@ -127,6 +127,10 @@ std::string generateSectionIdImpl(const AppConfig<FilenameStringType> &appCfg, s
 
     if (appCfg.targetRenderer==TargetRenderer::github)
     {
+        return umba::generateIdFromText_forGitHub(secText, "user-content-");
+    }
+    else if (appCfg.targetRenderer==TargetRenderer::gitlab)
+    {
         return umba::generateIdFromText_forGitHub(secText);
     }
     else if (appCfg.targetRenderer==TargetRenderer::doxygen)
