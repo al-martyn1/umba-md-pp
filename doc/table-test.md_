@@ -1,0 +1,12 @@
+
+#!insert{no-fail,doc,raise=-1} table-test/table-test-01.txt
+#!insert{no-fail}              table-test/table-test-01.txt
+
+#!insert{no-fail,doc,raise=-1} table-test/table-test-02.txt
+#!insert{no-fail}              table-test/table-test-02.txt
+
+#!insert{no-fail,doc,raise=-1} table-test/table-test-03.txt
+#!insert{no-fail}              table-test/table-test-03.txt
+
+#!insert{no-fail,doc,raise=-1} table-test/table-test-04.txt
+#!insert{no-fail}              table-test/table-test-04.txt
