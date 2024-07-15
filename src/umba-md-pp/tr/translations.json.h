@@ -4,7 +4,7 @@
 
 /*--------------------------------------------------------*/
 
-static const char translations_json[51993] =
+static const char translations_json[52014] =
     "{\r\n"
     "\"0409\": {\r\n"
     "\"common\": {\r\n"
@@ -1452,7 +1452,7 @@ static const char translations_json[51993] =
     "},\r\n"
     "\"pages-index\": {\r\n"
     "\"no-title\": \"No title\",\r\n"
-    "\"title\": \"Pages Index\"\r\n"
+    "\"title\": \"Documentation  Index\"\r\n"
     "}\r\n"
     "},\r\n"
     "\"0419\": {\r\n"
@@ -1774,10 +1774,10 @@ static const char translations_json[51993] =
     "},\r\n"
     "\"pages-index\": {\r\n"
     "\"no-title\": \"Без заголовка\",\r\n"
-    "\"title\": \"Перечень страниц\"\r\n"
+    "\"title\": \"Указатель документации\"\r\n"
     "}\r\n"
     "}\r\n"
     "}"
     ;
 
-static const unsigned translations_json_size = 51992; /* Not including terminating zero */
+static const unsigned translations_json_size = 52013; /* Not including terminating zero */
