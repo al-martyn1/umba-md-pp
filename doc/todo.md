@@ -127,8 +127,8 @@
           * Таблицы отделяем пустой строкой от остального;
           * Заголовок отделяется строкой, содержащей ячейки '---';
           * Выравнивание - ':';
-          * Проверить - row span - крышка ('^');
-          * Проверить - col span - пустой текст.
+          * Проверить - row span - крышка ('^') - не работает - https://stackoverflow.com/questions/23571724/github-markdown-colspan;
+          * Проверить - col span - пустой текст - не работает - https://stackoverflow.com/questions/23571724/github-markdown-colspan.
 
 
   - **Поддержка фич GitHub flavored markdown для доксигена (и не только)**

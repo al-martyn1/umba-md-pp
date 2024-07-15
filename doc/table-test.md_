@@ -1,16 +1,30 @@
 
-#!insert{fail,doc,raise=-1} table-test/table-test-01.txt
+# Table test 01
+
 #!insert{fail}              table-test/table-test-01.txt
+#!insert{fail,doc,raise=-1} table-test/table-test-01.txt
 
-#!insert{fail,doc,raise=-1} table-test/table-test-02.txt
+
+# Table test 02
+
 #!insert{fail}              table-test/table-test-02.txt
+#!insert{fail,doc,raise=-1} table-test/table-test-02.txt
 
-#!insert{fail,doc,raise=-1} table-test/table-test-03.txt
+
+# Table test 03
+
 #!insert{fail}              table-test/table-test-03.txt
+#!insert{fail,doc,raise=-1} table-test/table-test-03.txt
 
-#!insert{fail,doc,raise=-1} table-test/table-test-04.txt
+
+# Table test 04
+
 #!insert{fail}              table-test/table-test-04.txt
+#!insert{fail,doc,raise=-1} table-test/table-test-04.txt
 
-#!insert{fail,doc,raise=-1} table-test/table-test-05.txt
+
+# Table test 05
+
 #!insert{fail}              table-test/table-test-05.txt
+#!insert{fail,doc,raise=-1} table-test/table-test-05.txt
 
