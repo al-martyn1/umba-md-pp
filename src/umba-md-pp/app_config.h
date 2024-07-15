@@ -191,7 +191,7 @@ bool addImageFilesForCopying( std::map<std::string, ImageFileForCopyInfo>       
 //----------------------------------------------------------------------------
 template<typename LogStreamType>
 inline
-bool copyDocumentImageFiles(LogStreamType & logStream, const std::map<std::string, ImageFileForCopyInfo> &imagesToCopy, bool bOverwrite)
+bool copyDocumentImageFiles(LogStreamType & logStream, const std::map<std::string, ImageFileForCopyInfo> &imagesToCopy, bool bOverwrite, std::vector<std::string> *pGitAddFiles=0)
 {
     if (!imagesToCopy.empty())
     {
@@ -231,6 +231,11 @@ bool copyDocumentImageFiles(LogStreamType & logStream, const std::map<std::strin
             }
 
             res = false;
+        }
+        else
+        {
+            if (pGitAddFiles)
+                pGitAddFiles->emplace_back(tgtFile);
         }
 
     }
@@ -311,6 +316,17 @@ struct AppConfig
     bool                                                  viewerCopyToSourceLocation = false;
     bool                                                  viewerCopyFilenameDocTitle = false;
 
+    std::string                                           gitAddBatchFileName;
+
+    bool isGitAddBatchFileNameIsBatFile() const
+    {
+        if (gitAddBatchFileName.empty())
+            return false;
+        auto ext = umba::string_plus::tolower_copy(umba::filename::getExt(gitAddBatchFileName));
+        if (ext=="bat" || ext=="cmd")
+            return true;
+        return false;
+    }
 
     bool getEffectiveFlattenImageLinksOption() const
     {

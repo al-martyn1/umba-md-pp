@@ -377,6 +377,9 @@ int safe_main(int argc, char* argv[])
         std::vector< std::pair<std::wstring, std::string> > pagesIndex;
         std::string calculatedCommonPath = umba::filename::makeCanonical(umba::filename::getPath(foundFiles.front()));
 
+        std::vector<std::string> gitAddFiles; //gitAddBatchFileName
+        bool useBatSyntax = appConfig.isGitAddBatchFileNameIsBatFile();
+
 
         for(; fileIt!=foundFiles.end() && folderIt!=foundFilesRootFolders.end(); ++fileIt, ++folderIt)
         {
@@ -484,7 +487,6 @@ int safe_main(int argc, char* argv[])
             std::string docTitle    = doc.getDocumentTitleAny();
             std::string docLanguage = doc.getDocumentLanguage(appConfig);
 
-            
 
             if (!appConfig.batchOutputRoot.empty() && appConfig.copyImageFiles)
             {
@@ -552,6 +554,9 @@ int safe_main(int argc, char* argv[])
                 {
                     it->first = umba::fromUtf8(noTitle);
                 }
+
+                if (!appConfig.gitAddBatchFileName.empty())
+                    gitAddFiles.emplace_back(it->second);
             }
 
             std::stable_sort( pagesIndex.begin(), pagesIndex.end()
@@ -633,6 +638,9 @@ int safe_main(int argc, char* argv[])
                                                , true /* fromFile */, true /* utfSource */ , bOverwrite
                                                );
 
+            if (!appConfig.gitAddBatchFileName.empty())
+                gitAddFiles.emplace_back(pageIndexFileName);
+
         } // if (!appConfig.batchPageIndexFileName.empty() && !pagesIndex.empty())
 
         if (!appConfig.copyImageFiles)
@@ -645,9 +653,44 @@ int safe_main(int argc, char* argv[])
         }
         else // if (!appConfig.batchOutputRoot.empty() && appConfig.copyImageFiles)
         {
-            copyDocumentImageFiles(infoLog, imagesToCopy, bOverwrite);
+            copyDocumentImageFiles(infoLog, imagesToCopy, bOverwrite, &gitAddFiles);
         }
 
+        std::string gitAddText;
+        for(const auto addFile : gitAddFiles)
+        {
+            gitAddText.append("git add \"");
+            gitAddText.append(umba::filename::makeCanonical(addFile, useBatSyntax?'\\':'/'));
+            gitAddText.append("\"\n");
+        }
+
+
+        std::string gitAddBatchFileName = appConfig.gitAddBatchFileName;
+        if (!umba::filename::isAbsPath(gitAddBatchFileName))
+        {
+            if (!appConfig.batchOutputRoot.empty())
+            {
+                gitAddBatchFileName = umba::filename::appendPath(appConfig.batchOutputRoot, gitAddBatchFileName);
+            }
+            else
+            {
+                gitAddBatchFileName = umba::filename::appendPath(calculatedCommonPath, gitAddBatchFileName);
+            }
+        }
+        gitAddBatchFileName = umba::filename::makeCanonical(gitAddBatchFileName);
+
+
+        gitAddText = marty_cpp::converLfToOutputFormat(gitAddText, appConfig.outputLinefeed);
+        
+        infoLog << "Writting 'git add' file: " << gitAddText << "\n";
+
+        umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(gitAddText), true /* forceCreatePath */ );
+
+        umba::cli_tool_helpers::writeOutput( gitAddBatchFileName, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
+                                           , encoding::ToUtf8(), encoding::FromUtf8()
+                                           , gitAddText, std::string() // bomData
+                                           , true /* fromFile */, true /* utfSource */ , bOverwrite
+                                           );
 
         return 0;
     

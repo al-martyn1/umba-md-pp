@@ -851,6 +851,23 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("FILE",umba::command_line::OptionType::optString)
+               || opt.isOption("batch-git-add-file") || opt.isOption("batch-generate-git-add-file")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Generate bat/shell script with git add commands for all generated files."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+            
+            appConfig.gitAddBatchFileName = strVal;
+            return 0;
+        }
+
         else if ( opt.setParam("?MODE",true)
                || opt.isOption("batch-split-page-index-file") || opt.isOption("batch-split-pages-index-file")
                // || opt.setParam("VAL",true)
