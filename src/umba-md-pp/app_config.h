@@ -308,9 +308,10 @@ struct AppConfig
 
     //bool                                                  batchGeneratePagesIndex = false;
     std::string                                           batchPageIndexFileName;
-    bool                                                  batchSplitPageIndex = false;
-    bool                                                  copyImageFiles      = false;
-    bool                                                  flattenImageLinks   = false;
+    bool                                                  batchSplitPageIndex           = false;
+    bool                                                  copyImageFiles                = false;
+    bool                                                  stripExtentions               = false;
+    bool                                                  flattenImageLinks             = false;
     bool                                                  singleModeInOutPathsDifferent = false;
 
     bool                                                  viewerCopyToSourceLocation = false;

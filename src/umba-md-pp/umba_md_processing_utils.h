@@ -102,6 +102,41 @@ StringType makeUrlPathCanonical(StringType urlPath)
 }
 
 //----------------------------------------------------------------------------
+template<typename StringType>
+bool splitUrlToPathAndTag(const StringType &url, StringType &urlPath, StringType &urlTag)
+{
+    using CharType = typename StringType::value_type;
+    typename StringType::size_type pos = url.find((CharType)'#', 0u);
+
+    if (pos==url.npos)
+    {
+        urlPath = url;
+        urlTag.clear();
+        return false;
+    }
+
+    urlPath = StringType(url, 0, pos);
+    urlTag  = StringType(url, pos+1, url.npos);
+
+    return true;
+}
+
+//----------------------------------------------------------------------------
+template<typename StringType>
+StringType mergeUrlFromPathAndTag(StringType urlPath, const StringType &urlTag)
+{
+    using CharType = typename StringType::value_type;
+
+    if (!urlTag.empty())
+    {
+        urlPath.append(1, (CharType)'#');
+        urlPath.append(urlTag);
+    }
+
+    return urlPath;
+}
+
+//----------------------------------------------------------------------------
 using BacktickProcessingState = ::BacktickProcessingState;
 
 

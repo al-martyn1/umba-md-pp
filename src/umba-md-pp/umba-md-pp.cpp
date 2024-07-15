@@ -682,7 +682,7 @@ int safe_main(int argc, char* argv[])
 
         gitAddText = marty_cpp::converLfToOutputFormat(gitAddText, appConfig.outputLinefeed);
         
-        infoLog << "Writting 'git add' file: " << gitAddText << "\n";
+        infoLog << "Writting 'git add' file: " << gitAddBatchFileName << "\n";
 
         umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(gitAddText), true /* forceCreatePath */ );
 

@@ -676,6 +676,48 @@ std::vector<std::string> extractImageLinks( const AppConfig<FilenameStringType> 
 }
 
 //----------------------------------------------------------------------------
+template<typename FilenameStringType> inline
+std::vector<std::string> stripLocalLinksExtentions( const AppConfig<FilenameStringType>           &appCfg
+                                                  , Document                                      &docTo
+                                                  , const std::vector<std::string>                &lines
+                                                  , const std::string                             &curFilename         // currently processed file
+                                                  )
+{
+    if (!appConfig.stripExtentions)
+        return lines;
+
+    const bool stripExtentions = appConfig.stripExtentions;
+    //UMBA_USED(flattenImageLinks);
+
+    auto urlHandler = [&](std::string url, bool bImage)
+    {
+        if (bImage || umba::md::isUrlAbsolute(url))
+            return url;
+
+        std::string urlPath;
+        std::string urlTag ;
+        umba::md::splitUrlToPathAndTag(url, urlPath, urlTag);
+
+        if (stripExtentions)
+        {
+            urlPath = umba::filename::getPathFile(urlPath);
+        }
+
+        return umba::md::mergeUrlFromPathAndTag(urlPath, urlTag);
+    };
+
+    return
+    processTextLinesSimple( appCfg, lines
+                          , [&](const std::string &line)
+                            {
+                                std::string res;
+                                umba::md::transformMarkdownLinksUrlString(std::back_inserter(res), line.begin(), line.end(), urlHandler);
+                                return res;
+                            }
+                          );
+}
+
+//----------------------------------------------------------------------------
 
 
 
@@ -901,12 +943,17 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
 
     auto urlRebaseHandler = [&](std::string url, bool bImage)
     {
-        if (!umba::md::isUrlAbsolute(url) && !umba::md::isUrlAbsoluteHostPath(url))
+        std::string urlPath;
+        std::string urlTag ;
+        umba::md::splitUrlToPathAndTag(url, urlPath, urlTag);
+
+
+        if (!umba::md::isUrlAbsolute(urlPath) && !umba::md::isUrlAbsoluteHostPath(urlPath))
         {
             // если URL ссылки относительный (относительно включаемого файла),
             // то его надо переделать на относительный относительно того файла, куда включаем
 
-            umba::filename::makeRelPath( url
+            umba::filename::makeRelPath( urlPath
                                        , curFilePath
                                        , umba::filename::appendPath( includedFilePath, url, '/')
                                        , '/'
@@ -920,15 +967,22 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
         // Замена поддерживаемых input расширений на целевые (для любых ссылок, даже для абсолютных)
         if (!bImage)
         {
-            std::string ext       = umba::filename::getExt(url);
+            std::string ext = umba::filename::getExt(urlPath);
             if (appCfg.isSupportedSourceExtention(ext))
             {
-                std::string targetExt = appConfig.getTargetFileExtention(ext);
-                url                   = umba::filename::appendExt(umba::filename::getPathFile(url), targetExt);
+                // if (appConfig.stripExtentions)
+                // {
+                //     urlPath = umba::filename::getPathFile(urlPath);
+                // }
+                // else
+                {
+                    std::string targetExt = appConfig.getTargetFileExtention(ext);
+                    urlPath               = umba::filename::appendExt(umba::filename::getPathFile(urlPath), targetExt);
+                }
             }
         }
  
-        return url;
+        return umba::md::mergeUrlFromPathAndTag(urlPath, urlTag);
     };
 
     #if defined(LOG_PROCESSING_TRANSFORM_BEFORE_AFTER)
@@ -1698,6 +1752,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
     resLines = updateInDocRefs(appCfg, doc, resLines);
 
     resLines = extractImageLinks(appCfg, doc, resLines, curFilename );
+    resLines = stripLocalLinksExtentions(appCfg, doc, resLines, curFilename );
 
 
     bool tocAdded = false;
@@ -1740,7 +1795,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
 
     if (appCfg.testProcessingOption(ProcessingOptions::metaData))
     {
-        //std::cout << "Write metadata\n";
+        // std::cout << "Write metadata\n";
         auto metadataText  = generateDocMetadata(appCfg, doc);
         auto metadataLines = marty_cpp::splitToLinesSimple(metadataText);
         std::vector<std::string> tmpLines;
