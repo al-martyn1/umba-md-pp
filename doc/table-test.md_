@@ -10,3 +10,7 @@
 
 #!insert{fail,doc,raise=-1} table-test/table-test-04.txt
 #!insert{fail}              table-test/table-test-04.txt
+
+#!insert{fail,doc,raise=-1} table-test/table-test-05.txt
+#!insert{fail}              table-test/table-test-05.txt
+
