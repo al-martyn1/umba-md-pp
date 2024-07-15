@@ -79,31 +79,31 @@ Image from out of the  hierarchy- ![Image](../upper-level-filled-96.png)
 
 // Print lines, noKeepCutTags #print-ver-all
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
 
 // Print lines, keepCutTags   #print-ver-all
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
 
 // No lines, keepCutTags   #print-ver-all
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
 
 // printCommitHash
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno} cpp/print_ver.h#printCommitHash
 
 
 // printOnlyVersion
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno} cpp/print_ver.h#printOnlyVersion
 
 
@@ -120,13 +120,20 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-!!! File not found in: 
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno} cpp/print_ver.h#print-ver-all
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno} cpp/print_ver.h#printOnlyVersion
 
 ## Other Title
@@ -162,7 +169,7 @@ Test01
 
 !!! File not found
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
 
@@ -170,7 +177,7 @@ Test01
 
 !!! File not found
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
 
@@ -178,7 +185,7 @@ Test01
 
 !!! File not found
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
 
@@ -186,7 +193,7 @@ Test01
 
 !!! File not found
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno} cpp/print_ver.h#printCommitHash
 
 
@@ -194,7 +201,7 @@ Test01
 
 !!! File not found
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno} cpp/print_ver.h#printOnlyVersion
 
 
@@ -213,17 +220,24 @@ todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-starte
 
 !!! File not found
 
-!!! File not found in: 
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
 !!! File not found
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno} cpp/print_ver.h#print-ver-all
 
 !!! File not found
 
-!!! File not found in: 
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
 #!insert{lineno} cpp/print_ver.h#printOnlyVersion
 
 ## 3.2 Other Title
