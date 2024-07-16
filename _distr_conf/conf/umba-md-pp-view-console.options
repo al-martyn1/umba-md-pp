@@ -78,17 +78,30 @@
 
 # C++
 --add-lang-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
---set-lang-cut-prefix=C++://#!
+--add-lang-cut-prefix=C++://#!
+--add-lang-cut-prefix=C++://#$
+--add-lang-cut-prefix=C++:/*#!
+--add-lang-cut-prefix=C++:/*#$
+--set-lang-listing-tag=C++:cpp
+
+# C
+--add-lang-file-extentions=C:.c
+--add-lang-cut-prefix=C++://#!
+--add-lang-cut-prefix=C++://#$
+--add-lang-cut-prefix=C++:/*#!
+--add-lang-cut-prefix=C++:/*#$
 --set-lang-listing-tag=C++:cpp
 
 # Squrrel
 --add-lang-file-extentions=Squrrel:.nut,.nuts
---set-lang-cut-prefix=Squrrel://#!
+--add-lang-cut-prefix=Squrrel://#!
+--add-lang-cut-prefix=Squrrel://#$
 --set-lang-listing-tag=Squrrel:lua
 
 # CMake
 --add-lang-file-extentions=CMake:CMakeLists.txt,.cmake
---set-lang-cut-prefix=CMake:#//!
+--add-lang-cut-prefix=CMake:#//!
+--add-lang-cut-prefix=CMake:#//$
 --set-lang-listing-tag=CMake:cmake
 
 

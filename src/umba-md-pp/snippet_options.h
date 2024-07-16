@@ -13,16 +13,24 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <iterator>
 	
 //
 #include "umba/container.h"
 
+//----------------------------------------------------------------------------
 
+
+
+//----------------------------------------------------------------------------
 
 // umba::md::
 namespace umba {
 namespace md {
 
+
+
+//----------------------------------------------------------------------------
 
 /*
 
@@ -43,25 +51,78 @@ namespace md {
 
 */
 
+//----------------------------------------------------------------------------
 
+
+
+//----------------------------------------------------------------------------
+inline
+std::string normalizeSignature(const std::string &str)
+{
+    std::string res; res.reserve();
+
+    for(auto ch : str)
+    {
+        std::uint8_t uch = (std::uint8_t)ch;
+        if (uch>' ' && uch!=0x7Fu)
+            res.append(1, ch);
+    }
+
+    return res;
+}
+
+//----------------------------------------------------------------------------
+
+
+
+//----------------------------------------------------------------------------
 struct TextSignature
 {
-
     using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
-
     //using signature_lines_vector_type = umba::container::small_vector<std::string, 4, void, umba::container::small_vector_option_inplace_alignment_16_t, umba::container::small_vector_option_growth_50_t >;
     using signature_lines_vector_type = umba::container::small_vector<std::string, 4, void, options_type >;
 
-    signature_lines_vector_type    signatureLinesVector;
+
+    signature_lines_vector_type    signatureLinesVector; // normalized or original?
     std::string                    normalizedSignature ;
+
+    TextSignature() = default;
+    TextSignature(const TextSignature &) = default;
+    TextSignature& operator=(const TextSignature &) = default;
+    TextSignature(TextSignature &&) = default;
+    TextSignature& operator=(TextSignature &&) = default;
+
+    explicit TextSignature(const std::string &signature)
+        : signatureLinesVector()
+        , normalizedSignature(normalizeSignature(signature))
+    {
+        umba::string_plus::simple_string_split(std::back_inserter(signatureLinesVector), signature, std::string("\n") /* , nSplits = -1 */ );
+    }
+
+    template<typename IteratorType>
+    explicit TextSignature(IteratorType b, IteratorType e)
+        : signatureLinesVector()
+        , normalizedSignature(normalizeSignature(std::string(b,e)))
+    {
+        umba::string_plus::simple_string_split(std::back_inserter(signatureLinesVector), std::string(b,e), std::string("\n") /* , nSplits = -1 */ );
+    }
+
+    void clear()
+    {
+        signatureLinesVector.clear();
+        normalizedSignature .clear();
+    }
 
 }; // struct TextSignature
 
+//----------------------------------------------------------------------------
 
+
+
+//----------------------------------------------------------------------------
 struct SnippetTagInfo
 {
     using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
-
     using text_signature_vector = umba::container::small_vector<TextSignature, 4, void, options_type >;
 
     SnippetTagType             startType               = SnippetTagType::invalid;
@@ -73,6 +134,430 @@ struct SnippetTagInfo
     TextSignature              endSignature            ;    // paths not supported here
 
 }; // struct SnippetTagInfo
+
+//----------------------------------------------------------------------------
+
+
+
+//----------------------------------------------------------------------------
+template<typename Iterator> inline
+Iterator parseSnippetTagFirstPart(Iterator b, Iterator e, SnippetTagInfo &parseToSnippetTagInfo)
+{
+    enum State
+    {
+        stParseStart    ,
+        stParseNumber   ,
+        stParseTag      ,
+        stParseSignature,
+        stParseSignatureWaitNext
+    };
+
+    State st = stParseStart;
+
+    parseToSnippetTagInfo.startType    = SnippetTagType::invalid;
+    parseToSnippetTagInfo.startNumber  = (std::size_t)-1 ;
+    parseToSnippetTagInfo.startTagOrSignaturePath.clear();
+
+    Iterator textStartIt = e;
+
+    auto finalizeSignaturePath = [&]()
+    {
+        if (parseToSnippetTagInfo.startTagOrSignaturePath.empty())
+        {
+            if (parseToSnippetTagInfo.startNumber==(std::size_t)-1)
+            {
+                parseToSnippetTagInfo.startType = SnippetTagType::invalid;
+            }
+            else
+            {
+                parseToSnippetTagInfo.startType = SnippetTagType::lineNumber;
+            }
+        }
+    
+    };
+
+    // NNN`inline\nvoid\ndoSomething`/`inline\nvoid\ndoSomeOther`-
+    // NNNtag-
+    // NNN-
+
+    for(; b!=e; ++b)
+    {
+        switch(st)
+        {
+            case stParseStart    :
+            {
+                if (*b>='0' && *b<='9')
+                {
+                    parseToSnippetTagInfo.startNumber = (std::size_t)((*b)-'0');
+                    st = stParseNumber;
+                    parseToSnippetTagInfo.startType = SnippetTagType::lineNumber;
+                }
+                else if (*b=='-' || *b==' ' || *b=='\t')
+                {
+                    return b;
+                }
+                else if (*b=='`')
+                {
+                    st = stParseSignature;
+                    textStartIt = b;
+                    ++textStartIt;
+                }
+                else
+                {
+                    parseToSnippetTagInfo.startType = SnippetTagType::normalTag;
+                    st = stParseTag;
+                    textStartIt = b;
+                }
+            }
+            break;
+
+            case stParseNumber   :
+            {
+                if (*b>='0' && *b<='9')
+                {
+                    parseToSnippetTagInfo.startNumber *= (std::size_t)10u;
+                    parseToSnippetTagInfo.startNumber += (std::size_t)((*b)-'0');
+                }
+                else if (*b=='-' || *b==' ' || *b=='\t')
+                {
+                    return b;
+                }
+                else if (*b=='`')
+                {
+                    st = stParseSignature;
+                    textStartIt = b;
+                    ++textStartIt;
+                }
+                else
+                {
+                    parseToSnippetTagInfo.startType = SnippetTagType::normalTag;
+                    st = stParseTag;
+                    textStartIt = b;
+                }
+            }
+            break;
+
+            case stParseTag      :
+            {
+                if (*b=='-' || *b==' ' || *b=='\t')
+                {
+                    parseToSnippetTagInfo.startTagOrSignaturePath.emplace_back(TextSignature(textStartIt, b));
+                    return b;
+                }
+                else if (*b=='`')
+                {
+                    parseToSnippetTagInfo.startType = SnippetTagType::invalid;
+                    return b;
+                }
+                else
+                {
+                    // simple continue
+                }
+            }
+            break;
+
+            case stParseSignature:
+            {
+                parseToSnippetTagInfo.startType = SnippetTagType::textSignature;
+
+                if (*b=='`')
+                {
+                    if (textStartIt!=b)
+                    {
+                        parseToSnippetTagInfo.startTagOrSignaturePath.emplace_back(textStartIt, b);
+                    }
+
+                    st = stParseSignatureWaitNext;
+                }
+            }
+            break;
+
+            case stParseSignatureWaitNext:
+            {
+                if (*b=='-' || *b==' ' || *b=='\t')
+                {
+                    if (textStartIt!=b)
+                    {
+                        parseToSnippetTagInfo.startTagOrSignaturePath.emplace_back(textStartIt, b);
+                    }
+
+                    finalizeSignaturePath();
+                    return b;
+                }
+                else if (*b=='/')
+                {
+                    // simple continue
+                }
+                else if (*b=='`')
+                {
+                    st = stParseSignature;
+                    textStartIt = b;
+                    ++textStartIt;
+                }
+                else
+                {
+                    parseToSnippetTagInfo.startType = SnippetTagType::invalid;
+                    return b;
+                }
+            }
+            break;
+
+        } // switch(st)
+    
+    } // for(; b!=e; ++b)
+
+
+    switch(st)
+    {
+        case stParseStart    :  break;
+        case stParseNumber   :  break;
+        case stParseTag      :  break;
+
+        case stParseSignature:
+        finalizeSignaturePath();
+        break;
+
+        case stParseSignatureWaitNext:
+        finalizeSignaturePath();
+        break;
+
+    } // switch(st)
+
+    return b;
+}
+
+//----------------------------------------------------------------------------
+template<typename Iterator> inline
+Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parseToSnippetTagInfo)
+{
+    enum State
+    {
+        stParseStart          ,
+        stParseNumber         , // NNN
+        stParseBrace          , // {}
+        stParseStopWait       , // (-/N)
+        // stParseStopMarker     , // (----)
+        stParseStopLinesNumber, // (NNN)
+        stParseSignature
+    };
+
+    State st = stParseStart;
+
+    parseToSnippetTagInfo.endType      = SnippetTagType::invalid;
+    parseToSnippetTagInfo.endNumber    = (std::size_t)-1 ;
+    parseToSnippetTagInfo.endSignature.clear();
+
+    Iterator textStartIt = e;
+
+    // NNN
+    // {}
+    // (-)
+    // (N)
+    // `inline\nvoid\ndoAnotherSomething`
+
+    for(; b!=e; ++b)
+    {
+        switch(st)
+        {
+            case stParseStart          :
+            {
+                if (*b>='0' && *b<='9')
+                {
+                    parseToSnippetTagInfo.endNumber = (std::size_t)((*b)-'0');
+                    st = stParseNumber;
+                    parseToSnippetTagInfo.endType = SnippetTagType::lineNumber;
+                }
+                // else if (*b=='-' || *b==' ' || *b=='\t')
+                // {
+                //     return b;
+                // }
+                else if (*b=='{')
+                {
+                    parseToSnippetTagInfo.endType = SnippetTagType::block;
+                    st = stParseBrace;
+                }
+                else if (*b=='(')
+                {
+                    st = stParseStopWait;
+                }
+                else if (*b=='`')
+                {
+                    st = stParseSignature;
+                    textStartIt = b;
+                    ++textStartIt;
+                }
+                else
+                {
+                    return b;
+                }
+            }
+            break;
+
+            case stParseNumber         :
+            {
+                if (*b>='0' && *b<='9')
+                {
+                    parseToSnippetTagInfo.startNumber *= (std::size_t)10u;
+                    parseToSnippetTagInfo.startNumber += (std::size_t)((*b)-'0');
+                }
+                else
+                {
+                    return b;
+                }
+            }
+            break;
+
+            case stParseBrace          :
+            {
+                return b;
+            }
+            break;
+
+            case stParseStopWait       :
+            {
+                if (*b>='0' && *b<='9')
+                {
+                    parseToSnippetTagInfo.endNumber = (std::size_t)((*b)-'0');
+                    st = stParseStopLinesNumber;
+                    parseToSnippetTagInfo.endType = SnippetTagType::stopOnEmptyLines;
+                }
+                else 
+                {
+                    parseToSnippetTagInfo.endType = SnippetTagType::genericStopMarker;
+                    return b;
+                }
+            }
+            break;
+
+            // case stParseStopMarker     :
+            // {
+            // }
+            // break;
+
+            case stParseStopLinesNumber:
+            {
+                if (*b>='0' && *b<='9')
+                {
+                    parseToSnippetTagInfo.startNumber *= (std::size_t)10u;
+                    parseToSnippetTagInfo.startNumber += (std::size_t)((*b)-'0');
+                }
+                else 
+                {
+                    return b;
+                }
+            }
+            break;
+
+            case stParseSignature      :
+            {
+                if (*b=='`')
+                {
+                    if (textStartIt!=b)
+                    {
+                        parseToSnippetTagInfo.endSignature = TextSignature(std::string(textStartIt, b));
+                    }
+
+                    return b;
+                }
+            }
+            break;
+
+        } // switch(st)
+
+    } // for(; b!=e; ++b)
+
+    switch(st)
+    {
+        case stParseStart          :        break;
+        case stParseNumber         :        break;
+        case stParseBrace          :        break;
+
+        case stParseStopWait       :
+        {
+            parseToSnippetTagInfo.endType = SnippetTagType::genericStopMarker;
+        }
+        break;
+
+        case stParseStopLinesNumber:        break;
+
+        case stParseSignature      :
+        {
+            if (textStartIt!=b)
+            {
+                parseToSnippetTagInfo.endSignature = TextSignature(std::string(textStartIt, b));
+            }
+        }
+        break;
+
+    } // switch(st)
+
+    return b;
+
+}
+
+//----------------------------------------------------------------------------
+inline
+SnippetTagInfo parseSnippetTag(const std::string &tagStr)
+{
+    SnippetTagInfo snippetTagInfo;
+
+    auto b = tagStr.begin();
+    auto e = tagStr.end  ();
+
+    if (b==e)
+        return snippetTagInfo;
+
+    auto b2 = parseSnippetTagFirstPart(b, e, snippetTagInfo);
+    if (b2==e)
+        return snippetTagInfo;
+
+    if (*b2!='-')
+        return snippetTagInfo;
+
+    ++b2;
+    parseSnippetTagSecondPart(b2, e, snippetTagInfo);
+
+    return snippetTagInfo;
+}
+
+//----------------------------------------------------------------------------
+template<typename StreamType> inline
+void testParseSnippetTag(StreamType &s, const std::string &tag)
+{
+    s << "Tag: " << tag << "\n";
+
+    SnippetTagInfo snippetTagInfo = parseSnippetTag(tag);
+
+    s << "\n";
+
+    s << "Start type: " << enum_serialize(snippetTagInfo.startType) << "\n";
+    if (snippetTagInfo.startNumber!=(std::size_t)-1)
+    {
+        s << "Start line: " << snippetTagInfo.startNumber << "\n";
+    }
+
+    s << "\n";
+    s << "End type  : " << enum_serialize(snippetTagInfo.endType)
+
+}
+
+//----------------------------------------------------------------------------
+
+// struct SnippetTagInfo
+// {
+//     using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
+//     using text_signature_vector = umba::container::small_vector<TextSignature, 4, void, options_type >;
+//  
+//     SnippetTagType             startType               = SnippetTagType::invalid;
+//     std::size_t                startNumber             = 0; // line number
+//     text_signature_vector      startTagOrSignaturePath ; // start tag or text signatures path. For start tag only one element of the  vector used
+//  
+//     SnippetTagType             endType                 = SnippetTagType::invalid;
+//     std::size_t                endNumber               = 0; // end line number or number of empty lines to stop
+//     TextSignature              endSignature            ;    // paths not supported here
+//  
+// }; // struct SnippetTagInfo
+
 
 
 
@@ -88,6 +573,8 @@ struct SnippetTagInfo
 //     stopOnEmptyLines    = 0x0005 /*!< Allowed for end only */
 //  
 // }; // enum class SnippetTagType : std::uint32_t
+
+
 
 
 

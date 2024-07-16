@@ -77,11 +77,13 @@ public:
     bool addCutPrefix(const std::string &p)
     {
         m_cutPrefixes.insert(p);
+        return true;
     }
 
     bool addGenericCutStopPrefix(const std::string &p)
     {
         m_genericCutStopPrefixes.insert(p);
+        return true;
     }
 
     bool isCodeTagLine(std::string line, std::string *pFoundTagPrefix=0) const
@@ -190,16 +192,19 @@ public:
     bool addCutPrefix(const std::string &lang, const std::string &p)
     {
         m_languageOptions[lang].addCutPrefix(p);
+        return true;
     }
 
     bool addGenericCutStopPrefix(const std::string &lang, const std::string &p)
     {
         m_languageOptions[lang].addGenericCutStopPrefix(p);
+        return true;
     }
 
     bool setListingTagForBackendGenerator(const std::string &lang, const std::string &tag, const std::string &backend=std::string())
     {
         m_languageOptions[lang].setListingTagForBackendGenerator(tag, backend);
+        return true;
     }
 
     std::string getListingTagForBackendGenerator(const std::string &lang, const std::string &backend=std::string()) const

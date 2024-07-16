@@ -371,22 +371,22 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("LANG:PREFIX")
-               || opt.isOption("set-lang-cut-prefix")
+               || opt.isOption("add-lang-cut-prefix")
                || opt.isOption('P')
-               || opt.setDescription("Set prefix for the cut labels in the lang files"))
+               || opt.setDescription("Add prefix for the cut labels in the lang files"))
         {
             if (argsParser.hasHelpOption) return 0;
             
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting lang cut prefix requires argument (--set-lang-cut-prefix)\n";
+                LOG_ERR_OPT<<"Adding lang cut prefix requires argument (--add-lang-cut-prefix)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addCutPrefix(optArg))
             {
-                LOG_ERR_OPT<<"Setting lang cut prefix failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR_OPT<<"Addng lang cut prefix failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -438,7 +438,7 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("OPTS")
-               || opt.isOption("processing-options") // || opt.isOption('P') // conflict with set-lang-cut-prefix option
+               || opt.isOption("processing-options")
                || opt.setDescription("Set processing (output generation) options"))
         {
             if (argsParser.hasHelpOption) return 0;
