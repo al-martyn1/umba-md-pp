@@ -265,7 +265,17 @@ int safe_main(int argc, char* argv[])
         argsParser.args.push_back("--batch-exclude-files=*upper_inc.md*");
 
         argsParser.args.push_back("--batch-output-path=C:\\work\\temp\\mdpp-test");
+
+        argsParser.args.push_back("--overwrite");
         argsParser.args.push_back("--copy-images");
+        argsParser.args.push_back("--add-examples-path="+rootPath+".\\doc");
+        argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test,rc,_generators,_distr_conf,src,.msvc2019,boost,icons");
+        argsParser.args.push_back("--batch-exclude-files=*upper_inc.md*");
+        argsParser.args.push_back("--batch-scan-recurse="+rootPath);
+        //argsParser.args.push_back("");
+
+
+        
         
 
         //argsParser.args.push_back("-q");
@@ -665,33 +675,35 @@ int safe_main(int argc, char* argv[])
         }
 
 
-        std::string gitAddBatchFileName = appConfig.gitAddBatchFileName;
-        if (!umba::filename::isAbsPath(gitAddBatchFileName))
+        if (!appConfig.gitAddBatchFileName.empty())
         {
-            if (!appConfig.batchOutputRoot.empty())
+            std::string gitAddBatchFileName = appConfig.gitAddBatchFileName;
+            if (!umba::filename::isAbsPath(gitAddBatchFileName))
             {
-                gitAddBatchFileName = umba::filename::appendPath(appConfig.batchOutputRoot, gitAddBatchFileName);
+                if (!appConfig.batchOutputRoot.empty())
+                {
+                    gitAddBatchFileName = umba::filename::appendPath(appConfig.batchOutputRoot, gitAddBatchFileName);
+                }
+                else
+                {
+                    gitAddBatchFileName = umba::filename::appendPath(calculatedCommonPath, gitAddBatchFileName);
+                }
             }
-            else
-            {
-                gitAddBatchFileName = umba::filename::appendPath(calculatedCommonPath, gitAddBatchFileName);
-            }
+            gitAddBatchFileName = umba::filename::makeCanonical(gitAddBatchFileName);
+    
+    
+            gitAddText = marty_cpp::converLfToOutputFormat(gitAddText, appConfig.outputLinefeed);
+            
+            infoLog << "Writting 'git add' file: " << gitAddBatchFileName << "\n";
+    
+            umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(gitAddText), true /* forceCreatePath */ );
+    
+            umba::cli_tool_helpers::writeOutput( gitAddBatchFileName, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
+                                               , encoding::ToUtf8(), encoding::FromUtf8()
+                                               , gitAddText, std::string() // bomData
+                                               , true /* fromFile */, true /* utfSource */ , bOverwrite
+                                               );
         }
-        gitAddBatchFileName = umba::filename::makeCanonical(gitAddBatchFileName);
-
-
-        gitAddText = marty_cpp::converLfToOutputFormat(gitAddText, appConfig.outputLinefeed);
-        
-        infoLog << "Writting 'git add' file: " << gitAddBatchFileName << "\n";
-
-        umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(gitAddText), true /* forceCreatePath */ );
-
-        umba::cli_tool_helpers::writeOutput( gitAddBatchFileName, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
-                                           , encoding::ToUtf8(), encoding::FromUtf8()
-                                           , gitAddText, std::string() // bomData
-                                           , true /* fromFile */, true /* utfSource */ , bOverwrite
-                                           );
-
         return 0;
     
     }

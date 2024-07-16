@@ -2,7 +2,7 @@
                                                             // 2
 // https://stackoverflow.com/questions/11697820/how-to-use-date-and-time-predefined-macros-in-as-two-integers-then-stri
                                                             // 4
-//#!print-ver-all
+//#!print_ver_all
 //#!printOnlyVersion
 void printOnlyVersion()                                     // 7
 {                                                           // 8

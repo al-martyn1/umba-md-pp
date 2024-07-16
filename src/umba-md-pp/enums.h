@@ -666,3 +666,50 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PreprocessorDirective, std::map, 1 )
 
 
+enum class SnippetTagType : std::uint32_t
+{
+    invalid             = (std::uint32_t)(-1),
+    unknown             = (std::uint32_t)(-1),
+    normalTag           = 0x0000 /*!< Allowed for start/end */,
+    lineNumber          = 0x0001 /*!< Allowed for start/end */,
+    textSignature       = 0x0002 /*!< Allowed for start/end - end signature not included to code snippet */,
+    block               = 0x0003 /*!< Allowed for end only - signals that we need to cat code block in block symbols */,
+    genericStopMarker   = 0x0004 /*!< Allowed for end only */,
+    stopOnEmptyLines    = 0x0005 /*!< Allowed for end only */
+
+}; // enum class SnippetTagType : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(SnippetTagType)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetTagType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines    , "StopOnEmptyLines"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::genericStopMarker   , "GenericStopMarker" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::invalid             , "Invalid"           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::block               , "Block"             );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::normalTag           , "NormalTag"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::lineNumber          , "LineNumber"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::textSignature       , "TextSignature"     );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( SnippetTagType, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetTagType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines    , "stop-on-empty-lines" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines    , "stop_on_empty_lines" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines    , "stoponemptylines"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::genericStopMarker   , "generic-stop-marker" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::genericStopMarker   , "generic_stop_marker" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::genericStopMarker   , "genericstopmarker"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::invalid             , "invalid"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::invalid             , "unknown"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::block               , "block"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::normalTag           , "normal-tag"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::normalTag           , "normal_tag"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::normalTag           , "normaltag"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::lineNumber          , "line-number"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::lineNumber          , "line_number"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::lineNumber          , "linenumber"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::textSignature       , "text-signature"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::textSignature       , "text_signature"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::textSignature       , "textsignature"       );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetTagType, std::map, 1 )
+
+

@@ -887,7 +887,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
     auto findRes = appCfg.findDocFileByIncludedFromFilename(docFile, foundFullFilename, foundFileText, curFilename);
     if (!findRes) // document not found
     {
-        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
+        if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
         {
             makeShureEmptyLine(resLines);
             resLines.emplace_back("!!! File not found in: " + umba::toUtf8(appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", "))));
@@ -1147,12 +1147,12 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
                   )
 {
     // bool fTrimLeading = testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimLeft);
-    bool fTrimLeft              = testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimLeft)      ;
-    bool fTrimArround           = testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimArround)   ;
-    bool fAddLineNumbers        = testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo)        ;
-    bool fAddFilename           = testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filename)      ;
-    bool fAddFilenameOnly       = !testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::path)         ;
-    bool fAddFilenameLineNumber = testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filenameLineNo);
+    bool fTrimLeft              =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimLeft)      ;
+    bool fTrimArround           =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimArround)   ;
+    bool fAddLineNumbers        =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo)        ;
+    bool fAddFilename           =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filename)      ;
+    bool fAddFilenameOnly       = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::path)         ;
+    bool fAddFilenameLineNumber =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filenameLineNo);
 
 
     std::string foundFullFilename;
@@ -1160,7 +1160,7 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
     auto findRes = appCfg.findSamplesFile(snippetFile, foundFullFilename, foundFileText /* , curFilename */ );
     if (!findRes)
     {
-        bool noFail = !testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
+        bool noFail = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
         // если noFail, возвращаем true, что не включит оригинальную строку в результат для сигнализации автору об ошибке
         if (!noFail)
         {
@@ -1227,35 +1227,36 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
                                           , fAddFilenameLineNumber
                                           );
         makeShureEmptyLine(resLines);
-        umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
+        umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформление сделал
         return true; // всё хорошо, не включит исходную строку
     }
 
-    std::string snippetTagPrefix;
-    if (!lang.empty())
-    {
-        snippetTagPrefix = appCfg.getLangCutPrefix(lang);
-    }
+    // std::string snippetTagPrefix;
+    // if (!lang.empty())
+    // {
+    //     snippetTagPrefix = appCfg.getLangCutPrefix(lang);
+    // }
+    //  
+    // if (snippetTagPrefix.empty()) // Не знаем, как искать тэг - нет информации по тому, какой префикс используется для тэгов сниппетов в данном языке
+    // {
+    //     makeShureEmptyLine(resLines);
+    //     resLines.emplace_back("!!! Unknown language, can't looking for tag, langs: " + appCfg.getAllLangFileExtentions());
+    //     return false; // Поэтому просто ошибка, исходная строка будет включена
+    // }
 
-    if (snippetTagPrefix.empty()) // Не знаем, как искать тэг - нет информации по тому, какой префикс используется для тэгов сниппетов в данном языке
-    {
-        makeShureEmptyLine(resLines);
-        resLines.emplace_back("!!! Unknown language, can't looking for tag, langs: " + appCfg.getAllLangFileExtentions());
-        return false; // Поэтому просто ошибка, исходная строка будет включена
-    }
 
     ListingNestedTagsMode listingNestedTagsMode = ListingNestedTagsMode::remove;
 
-    if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::keepCutTags))
+    if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::keepCutTags))
     {
         listingNestedTagsMode = ListingNestedTagsMode::keep;
     }
-    else if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo))
+    else if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo))
     {
         listingNestedTagsMode = ListingNestedTagsMode::emptyLine;
     }
 
-    std::vector<std::string> insertSnippetLines = extractCodeFragment(snippetsFileLines, firstLineIdx, snippetTag, snippetTagPrefix, listingNestedTagsMode, 4u /* tabSize */ );
+    std::vector<std::string> insertSnippetLines = extractCodeFragmentBySnippetTag(appCfg.languageOptionsDatabase, lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 4u /* tabSize */ );
 
     std::vector<std::string>
     listingLines = prepareSnippetLines( appCfg, insertSnippetLines
@@ -1390,9 +1391,9 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
         std::unordered_map<SnippetOptions, int> intOptions;
         std::string snippetFile;
         std::string snippetTag ;
-        SnippetOptionsParsingResult parseRes = parseSnippetInsertionCommandLine( snippetFlagsOptions, intOptions, appCfg.conditionVars
-                                                                               , line, snippetFile, snippetTag
-                                                                               );
+        SnippetOptionsParsingResult parseRes = umba::md::parseSnippetInsertionCommandLine( snippetFlagsOptions, intOptions, appCfg.conditionVars
+                                                                                         , line, snippetFile, snippetTag
+                                                                                         );
         if (parseRes==SnippetOptionsParsingResult::okButCondition)
             return false; // prevent insertion
 
@@ -1401,15 +1402,15 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
             makeShureEmptyLine(resLines);
             resLines.emplace_back("!!! Options parsing error");
             makeShureEmptyLine(resLines);
-            resLines.emplace_back(serializeSnippetOptions(snippetFlagsOptions, intOptions));
+            resLines.emplace_back(umba::md::serializeSnippetOptions(snippetFlagsOptions, intOptions));
             return true; // insert source line when fail
         }
         // SnippetOptionsParsingResult::ok
 
-        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::snippetOptions))
+        if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::snippetOptions))
         {
             makeShureEmptyLine(resLines);
-            resLines.emplace_back(serializeSnippetOptions(snippetFlagsOptions, intOptions));
+            resLines.emplace_back(umba::md::serializeSnippetOptions(snippetFlagsOptions, intOptions));
         }
 
         //snippetFile
@@ -1421,7 +1422,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
                                      );
         }
 
-        if (testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::doc))
+        if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::doc))
         {
             // если фейл, и insertDoc возвращает false, то возвращаем true для вставки текущей строки, пусть автор документа разбирается,
             // в чем он накосячил, увидев такой выхлоп в виде заголовка с '!'

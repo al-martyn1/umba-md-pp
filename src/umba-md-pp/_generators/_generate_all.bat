@@ -44,5 +44,6 @@ umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% ^
                                           %UINT32% %HEX4% -E=TargetFormat                  -F=@TargetFormat.txt                 ^
                                           %UINT32% %HEX4% -E=BacktickProcessingState       -F=@BacktickProcessingState.txt      ^
                                           %UINT32% %HEX4% -E=PreprocessorDirective         -F=@PreprocessorDirective.txt        ^
+                                          %UINT32% %HEX4% -E=SnippetTagType                -F=@SnippetTagType.txt               ^
 ..\enums.h
 

@@ -384,7 +384,7 @@ int operator()( const StringType                                &a           //!
             }
 
             auto optArg = opt.optArg;
-            if (!appConfig.setLangCutPrefix(optArg))
+            if (!appConfig.addCutPrefix(optArg))
             {
                 LOG_ERR_OPT<<"Setting lang cut prefix failed, invalid argument: '" << optArg << "'\n";
                 return -1;

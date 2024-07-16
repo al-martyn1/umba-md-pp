@@ -1,0 +1,7 @@
+invalid,unknown=-1
+normalTag         = 0 // Allowed for start/end
+lineNumber            // Allowed for start/end
+textSignature         // Allowed for start/end - end signature not included to code snippet
+block                 // Allowed for end only - signals that we need to cat code block in block symbols
+genericStopMarker     // Allowed for end only
+stopOnEmptyLines      // Allowed for end only

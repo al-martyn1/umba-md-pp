@@ -73,22 +73,22 @@ Language   : Russian
 
 Test01
 
-// Print lines, noKeepCutTags #print-ver-all
+// Print lines, noKeepCutTags #print_ver_all
 
 !!! File not found
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
 
 
-// Print lines, keepCutTags   #print-ver-all
-
-!!! File not found
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
-
-
-// No lines, keepCutTags   #print-ver-all
+// Print lines, keepCutTags   #print_ver_all
 
 !!! File not found
-#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+
+
+// No lines, keepCutTags   #print_ver_all
+
+!!! File not found
+#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
 
 
 // printCommitHash
@@ -120,7 +120,7 @@ todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-starte
 #!insert{lineno} ..\src\umba-md-pp\log.h#6-12
 
 !!! File not found
-#!insert{lineno} cpp/print_ver.h#print-ver-all
+#!insert{lineno} cpp/print_ver.h#print_ver_all
 
 !!! File not found
 #!insert{lineno} cpp/print_ver.h#printOnlyVersion

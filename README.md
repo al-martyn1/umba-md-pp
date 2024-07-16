@@ -79,32 +79,136 @@ Image from out of the  hierarchy- ![Image](../upper-level-filled-96.png)
 
 // Print lines, noKeepCutTags #print-ver-all
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+```cpp
+ 6: 
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+11: 
+12:                                                             // 12
+13: 
+14: void printNameVersion( const std::string &indent = "" )     // 14
+15: {                                                           // 15
+16:     std::cout<<indent << appFullName << " version ";        // 16
+17:     printOnlyVersion();                                     // 17
+18:     //<<rdlcVersion<<"\n";                                  // 18
+19: }                                                           // 19
+20: 
+21:                                                             // 21
+22: 
+23: void printCommitHash( const std::string &indent = "" )      // 23
+24: {                                                           // 24
+25:     if (appCommitHash.empty())                              // 25
+26:         return;                                             // 26
+27:     std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+28: }                                                           // 28
+29: 
+30:                                                             // 30
+31: 
+32: void printBuildDateTime( const std::string &indent = "" )   // 32
+33: {                                                           // 33
+34:     std::cout<<indent<<"Built at "<<appBuildDate<<" "<<appBuildTime<<"\n";
+35: }                                                           // 35
+36: 
+37: 
+38: 
+```
 
 
 // Print lines, keepCutTags   #print-ver-all
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+```cpp
+ 6: 
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+11: 
+12:                                                             // 12
+13: 
+14: void printNameVersion( const std::string &indent = "" )     // 14
+15: {                                                           // 15
+16:     std::cout<<indent << appFullName << " version ";        // 16
+17:     printOnlyVersion();                                     // 17
+18:     //<<rdlcVersion<<"\n";                                  // 18
+19: }                                                           // 19
+20: 
+21:                                                             // 21
+22: 
+23: void printCommitHash( const std::string &indent = "" )      // 23
+24: {                                                           // 24
+25:     if (appCommitHash.empty())                              // 25
+26:         return;                                             // 26
+27:     std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+28: }                                                           // 28
+29: 
+30:                                                             // 30
+31: 
+32: void printBuildDateTime( const std::string &indent = "" )   // 32
+33: {                                                           // 33
+34:     std::cout<<indent<<"Built at "<<appBuildDate<<" "<<appBuildTime<<"\n";
+35: }                                                           // 35
+36: 
+37: 
+38: 
+```
 
 
 // No lines, keepCutTags   #print-ver-all
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+```cpp
+void printOnlyVersion()                                     // 7
+{                                                           // 8
+    std::cout<<appVersion<<"\n";                            // 9
+}                                                           // 10
+                                                            // 12
+void printNameVersion( const std::string &indent = "" )     // 14
+{                                                           // 15
+    std::cout<<indent << appFullName << " version ";        // 16
+    printOnlyVersion();                                     // 17
+    //<<rdlcVersion<<"\n";                                  // 18
+}                                                           // 19
+                                                            // 21
+void printCommitHash( const std::string &indent = "" )      // 23
+{                                                           // 24
+    if (appCommitHash.empty())                              // 25
+        return;                                             // 26
+    std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+}                                                           // 28
+                                                            // 30
+void printBuildDateTime( const std::string &indent = "" )   // 32
+{                                                           // 33
+    std::cout<<indent<<"Built at "<<appBuildDate<<" "<<appBuildTime<<"\n";
+}                                                           // 35
+
+
+
+```
 
 
 // printCommitHash
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno} cpp/print_ver.h#printCommitHash
+```cpp
+23: 
+24: 
+25: void printCommitHash( const std::string &indent = "" )      // 23
+26: {                                                           // 24
+27:     if (appCommitHash.empty())                              // 25
+28:         return;                                             // 26
+29:     std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+30: }                                                           // 28
+```
 
 
 // printOnlyVersion
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+```
 
 
 ### Subtitle
@@ -130,11 +234,48 @@ todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-starte
 12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
 ```
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno} cpp/print_ver.h#print-ver-all
+```cpp
+ 6: 
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+11: 
+12:                                                             // 12
+13: 
+14: void printNameVersion( const std::string &indent = "" )     // 14
+15: {                                                           // 15
+16:     std::cout<<indent << appFullName << " version ";        // 16
+17:     printOnlyVersion();                                     // 17
+18:     //<<rdlcVersion<<"\n";                                  // 18
+19: }                                                           // 19
+20: 
+21:                                                             // 21
+22: 
+23: void printCommitHash( const std::string &indent = "" )      // 23
+24: {                                                           // 24
+25:     if (appCommitHash.empty())                              // 25
+26:         return;                                             // 26
+27:     std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+28: }                                                           // 28
+29: 
+30:                                                             // 30
+31: 
+32: void printBuildDateTime( const std::string &indent = "" )   // 32
+33: {                                                           // 33
+34:     std::cout<<indent<<"Built at "<<appBuildDate<<" "<<appBuildTime<<"\n";
+35: }                                                           // 35
+36: 
+37: 
+38: 
+```
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+```
 
 ## Other Title
 
@@ -169,40 +310,144 @@ Test01
 
 !!! File not found
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+```cpp
+ 6: 
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+11: 
+12:                                                             // 12
+13: 
+14: void printNameVersion( const std::string &indent = "" )     // 14
+15: {                                                           // 15
+16:     std::cout<<indent << appFullName << " version ";        // 16
+17:     printOnlyVersion();                                     // 17
+18:     //<<rdlcVersion<<"\n";                                  // 18
+19: }                                                           // 19
+20: 
+21:                                                             // 21
+22: 
+23: void printCommitHash( const std::string &indent = "" )      // 23
+24: {                                                           // 24
+25:     if (appCommitHash.empty())                              // 25
+26:         return;                                             // 26
+27:     std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+28: }                                                           // 28
+29: 
+30:                                                             // 30
+31: 
+32: void printBuildDateTime( const std::string &indent = "" )   // 32
+33: {                                                           // 33
+34:     std::cout<<indent<<"Built at "<<appBuildDate<<" "<<appBuildTime<<"\n";
+35: }                                                           // 35
+36: 
+37: 
+38: 
+```
 
 
 // Print lines, keepCutTags   #print-ver-all
 
 !!! File not found
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+```cpp
+ 6: 
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+11: 
+12:                                                             // 12
+13: 
+14: void printNameVersion( const std::string &indent = "" )     // 14
+15: {                                                           // 15
+16:     std::cout<<indent << appFullName << " version ";        // 16
+17:     printOnlyVersion();                                     // 17
+18:     //<<rdlcVersion<<"\n";                                  // 18
+19: }                                                           // 19
+20: 
+21:                                                             // 21
+22: 
+23: void printCommitHash( const std::string &indent = "" )      // 23
+24: {                                                           // 24
+25:     if (appCommitHash.empty())                              // 25
+26:         return;                                             // 26
+27:     std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+28: }                                                           // 28
+29: 
+30:                                                             // 30
+31: 
+32: void printBuildDateTime( const std::string &indent = "" )   // 32
+33: {                                                           // 33
+34:     std::cout<<indent<<"Built at "<<appBuildDate<<" "<<appBuildTime<<"\n";
+35: }                                                           // 35
+36: 
+37: 
+38: 
+```
 
 
 // No lines, keepCutTags   #print-ver-all
 
 !!! File not found
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+```cpp
+void printOnlyVersion()                                     // 7
+{                                                           // 8
+    std::cout<<appVersion<<"\n";                            // 9
+}                                                           // 10
+                                                            // 12
+void printNameVersion( const std::string &indent = "" )     // 14
+{                                                           // 15
+    std::cout<<indent << appFullName << " version ";        // 16
+    printOnlyVersion();                                     // 17
+    //<<rdlcVersion<<"\n";                                  // 18
+}                                                           // 19
+                                                            // 21
+void printCommitHash( const std::string &indent = "" )      // 23
+{                                                           // 24
+    if (appCommitHash.empty())                              // 25
+        return;                                             // 26
+    std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+}                                                           // 28
+                                                            // 30
+void printBuildDateTime( const std::string &indent = "" )   // 32
+{                                                           // 33
+    std::cout<<indent<<"Built at "<<appBuildDate<<" "<<appBuildTime<<"\n";
+}                                                           // 35
+
+
+
+```
 
 
 // printCommitHash
 
 !!! File not found
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno} cpp/print_ver.h#printCommitHash
+```cpp
+23: 
+24: 
+25: void printCommitHash( const std::string &indent = "" )      // 23
+26: {                                                           // 24
+27:     if (appCommitHash.empty())                              // 25
+28:         return;                                             // 26
+29:     std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+30: }                                                           // 28
+```
 
 
 // printOnlyVersion
 
 !!! File not found
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+```
 
 
 ### 3.1.1 Subtitle
@@ -232,13 +477,50 @@ todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-starte
 
 !!! File not found
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno} cpp/print_ver.h#print-ver-all
+```cpp
+ 6: 
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+11: 
+12:                                                             // 12
+13: 
+14: void printNameVersion( const std::string &indent = "" )     // 14
+15: {                                                           // 15
+16:     std::cout<<indent << appFullName << " version ";        // 16
+17:     printOnlyVersion();                                     // 17
+18:     //<<rdlcVersion<<"\n";                                  // 18
+19: }                                                           // 19
+20: 
+21:                                                             // 21
+22: 
+23: void printCommitHash( const std::string &indent = "" )      // 23
+24: {                                                           // 24
+25:     if (appCommitHash.empty())                              // 25
+26:         return;                                             // 26
+27:     std::cout<<indent<<"#"<<appCommitHash<<"\n";            // 27
+28: }                                                           // 28
+29: 
+30:                                                             // 30
+31: 
+32: void printBuildDateTime( const std::string &indent = "" )   // 32
+33: {                                                           // 33
+34:     std::cout<<indent<<"Built at "<<appBuildDate<<" "<<appBuildTime<<"\n";
+35: }                                                           // 35
+36: 
+37: 
+38: 
+```
 
 !!! File not found
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+ 7: void printOnlyVersion()                                     // 7
+ 8: {                                                           // 8
+ 9:     std::cout<<appVersion<<"\n";                            // 9
+10: }                                                           // 10
+```
 
 ## 3.2 Other Title
 

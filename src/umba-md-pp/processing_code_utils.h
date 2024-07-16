@@ -3,6 +3,9 @@
  */
 #pragma once
 
+#include "language-options-database.h"
+
+
 
 //----------------------------------------------------------------------------
 inline
@@ -135,14 +138,15 @@ bool extractCodeTagFromLine(std::string line, const std::string &tagPrefix, std:
 
 //----------------------------------------------------------------------------
 inline
-std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
-                                            , std::size_t                 &firstFoundLineIdx
-                                            , const std::string           &targetFragmentTag
-                                            , const std::string           &tagPrefix
-                                            , ListingNestedTagsMode       listingNestedTagsMode
-                                            , std::size_t                 tabSize=4u
-                                            //, bool                        trimLeadingSpaces_a = true
-                                            )
+std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::LanguageOptionsDatabase &languageOptionsDatabase
+                                                        , const std::string                       &lang
+                                                        , std::vector<std::string>                lines
+                                                        , std::size_t                             &firstFoundLineIdx
+                                                        , const std::string                       &targetFragmentTag
+                                                        , ListingNestedTagsMode                   listingNestedTagsMode
+                                                        , std::size_t                             tabSize=4u
+                                                        //, bool                        trimLeadingSpaces_a = true
+                                                        )
 {
     marty_cpp::expandTabsToSpaces(lines, tabSize);
 
@@ -151,6 +155,10 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
         firstFoundLineIdx = 0;
         return lines;
     }
+
+    const auto &langOpts = languageOptionsDatabase.getLanguageOptions(lang);
+    //return langOpts.isCodeTagLine(line, pTagPrefix);
+
 
     std::vector<std::string> fragmentLines; fragmentLines.reserve(lines.size());
 
@@ -228,12 +236,14 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
 
 
     std::size_t lineIdx = 0;
+    std::string foundTagPrefix;
 
     for(; lineIdx!=lines.size(); ++lineIdx)
     {
         auto l = lines[lineIdx]; 
 
-        if (!isCodeTagLine(l, tagPrefix))
+        //bool isCodeTagLine(std::string line, std::string *pFoundTagPrefix=0) const
+        if (!langOpts.isCodeTagLine(l, &foundTagPrefix))
         {
             // Строка обычная, не тэговая
             if (isTargetFragmentTagOpened())
@@ -246,7 +256,7 @@ std::vector<std::string> extractCodeFragment( std::vector<std::string>    lines
 
         // Строка - тэговая
         std::string curTag;
-        extractCodeTagFromLine(l, tagPrefix, curTag);
+        extractCodeTagFromLine(l, foundTagPrefix, curTag);
 
         if (isClosingTag(curTag))
         {

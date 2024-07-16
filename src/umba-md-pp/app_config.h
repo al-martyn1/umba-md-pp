@@ -14,6 +14,8 @@
 #include "umba/macros.h"
 #include "umba/macro_helpers.h"
 //
+#include "language-options-database.h"
+//
 //#include "umba/regex_helpers.h"
 //
 #include "umba/filename.h"
@@ -248,12 +250,12 @@ bool copyDocumentImageFiles(LogStreamType & logStream, const std::map<std::strin
 
 
 //----------------------------------------------------------------------------
-struct LangOptions
-{
-    std::string listingTag;
-    std::string cutPrefix ;
-
-};
+// struct LangOptions
+// {
+//     std::string listingTag;
+//     std::string cutPrefix ;
+//  
+// };
 
 
 struct ScanPathsEntry
@@ -275,8 +277,11 @@ struct AppConfig
 
     std::vector<FilenameStringType>                       samplesPaths;
     FilenameStringType                                    strictPath ;
-    std::unordered_map<FilenameStringType, std::string>   extToLang  ;
-    std::unordered_map<std::string, LangOptions>          langOptions;
+
+    umba::md::LanguageOptionsDatabase                     languageOptionsDatabase;
+
+    //std::unordered_map<FilenameStringType, std::string>   extToLang  ;
+    //std::unordered_map<std::string, LangOptions>          langOptions;
     std::unordered_set<SnippetOptions>                    snippetOptions;
     umba::macros::StringStringMap<std::string>            conditionVars;     // Изначально предназначалось для проверки условий, но теперь и для макроподстановок
 
@@ -493,6 +498,25 @@ struct AppConfig
                                                , const FilenameStringType &topListDelim = umba::string_plus::make_string<FilenameStringType>("; ")
                                                ) const
     {
+        std::vector<FilenameStringType> topList;
+
+        std::set<std::string> langs = languageOptionsDatabase.getLanguages();
+
+        for(const auto l: langs)
+        {
+            std::vector<std::string> langExtsPair;
+            langExtsPair.emplace_back(l);
+
+            umba::md::LanguageOptions langOpt = languageOptionsDatabase.getLanguageOptions(l);
+            const auto &extsSet = langOpt.getLanguageExtentions();
+            langExtsPair.emplace_back(umba::string_plus::merge< std::string, typename std::set<std::string>::const_iterator >( extsSet.begin(), extsSet.end(), umba::string_plus::make_string<std::string>(extListDelim) ));
+            topList.emplace_back(umba::string_plus::make_string<FilenameStringType>(umba::string_plus::merge< std::string, typename std::vector<std::string>::const_iterator >( langExtsPair.begin(), langExtsPair.end(), umba::string_plus::make_string<std::string>(langDelim) )));
+        }
+
+        return umba::string_plus::merge< FilenameStringType, typename std::vector<FilenameStringType>::const_iterator >( topList.begin(), topList.end(), topListDelim);
+
+
+        /*
         typedef std::map<std::string, std::vector<FilenameStringType> > LangToExtListMapType;
         LangToExtListMapType langToExtList;
 
@@ -520,6 +544,7 @@ struct AppConfig
         }
 
         return umba::string_plus::merge< FilenameStringType, typename std::vector<FilenameStringType>::const_iterator >( topList.begin(), topList.end(), topListDelim );
+        */
 
     }
 
@@ -756,7 +781,7 @@ struct AppConfig
 
     bool updateInsertOptions(const std::string &opts)
     {
-        if (deserializeSnippetOptions(opts, &snippetOptions)!=SnippetOptionsParsingResult::ok)
+        if (umba::md::deserializeSnippetOptions(opts, &snippetOptions)!=SnippetOptionsParsingResult::ok)
         {
             return false;
         }
@@ -768,7 +793,7 @@ struct AppConfig
 
     bool updateProcessingOptions(const std::string &opts)
     {
-        if (deserializeProcessingOptions(opts, processingOptions)!=SnippetOptionsParsingResult::ok)
+        if (umba::md::deserializeProcessingOptions(opts, processingOptions)!=SnippetOptionsParsingResult::ok)
         {
             return false;
         }
@@ -924,6 +949,7 @@ struct AppConfig
         return findDocFileByPath(lookFor, foundFullFilename, foundFileText, umba::filename::getPath(includedFromFile));
     }
 
+    /*
     static
     FilenameStringType normalizeExt(FilenameStringType ext)
     {
@@ -934,7 +960,7 @@ struct AppConfig
 
         return marty_cpp::toLower(ext);
     }
-    
+    */
 
     //----------------------------------------------------------------------------
     // Option helpers for --add-lang-file-extention=cpp:cpp,cxx,c++,cc,h,hpp,h++
@@ -949,11 +975,13 @@ struct AppConfig
         std::size_t cnt = 0;
         for(auto ext: extList)
         {
-            ext = normalizeExt(ext);
+            //ext = normalizeExt(ext);
             if (ext.empty())
                 continue;
 
-            extToLang[ext] = lang;
+            //extToLang[ext] = lang;
+
+            languageOptionsDatabase.addLanguageExtention(lang, ext);
 
             ++cnt;
         }
@@ -975,8 +1003,9 @@ struct AppConfig
         return addLangExtentions(langExtsPair[0], langExtsPair[1]);
     }
 
-    std::string getLangByExt(FilenameStringType ext) const
+    std::string getLangByFilename(const FilenameStringType &fileName) const
     {
+        /*
         ext = normalizeExt(ext);
 
         // if (ext.empty())
@@ -991,25 +1020,28 @@ struct AppConfig
         }
 
         return it->second;
+        */
+        return languageOptionsDatabase.findLanguageByFilename(umba::string_plus::make_string<std::string>(fileName));
     }
 
-    std::string getLangByFilename(const FilenameStringType &name) const
-    {
-        return getLangByExt(umba::filename::getFileExtention(name));
-    }
+    // std::string getLangByFilename(const FilenameStringType &name) const
+    // {
+    //     return getLangByExt(umba::filename::getFileExtention(name));
+    // }
 
     //----------------------------------------------------------------------------
 
 
     //----------------------------------------------------------------------------
     // --set-lang-cut-prefix=nut,//!#
-    bool setLangCutPrefix(const std::string &lang, const std::string &cutPrefix)
+    bool addCutPrefix(const std::string &lang, const std::string &cutPrefix)
     {
-        langOptions[lang].cutPrefix = cutPrefix;
+        //langOptions[lang].cutPrefix = cutPrefix;
+        languageOptionsDatabase.addCutPrefix(lang, cutPrefix);
         return true;
     }
 
-    bool setLangCutPrefix(const std::string &langPrefixPair)
+    bool addCutPrefix(const std::string &langPrefixPair)
     {   
         std::string lang, cutPrefix;
         if (!umba::string_plus::split_to_pair(langPrefixPair, lang, cutPrefix, ':'))
@@ -1017,25 +1049,26 @@ struct AppConfig
             return false;
         }
 
-        return setLangCutPrefix(lang, cutPrefix);
+        return addCutPrefix(lang, cutPrefix);
     }
 
-    std::string getLangCutPrefix(const std::string &lang) const
-    {
-        std::unordered_map<std::string, LangOptions>::const_iterator it = langOptions.find(lang);
-        if (it==langOptions.end())
-        {
-            return std::string();
-        }
-        return it->second.cutPrefix;
-    }
+    // std::string getLangCutPrefix(const std::string &lang) const
+    // {
+    //     std::unordered_map<std::string, LangOptions>::const_iterator it = langOptions.find(lang);
+    //     if (it==langOptions.end())
+    //     {
+    //         return std::string();
+    //     }
+    //     return it->second.cutPrefix;
+    // }
 
 
     //----------------------------------------------------------------------------
     // --set-lang-listing-tag=nut,sq
-    bool setLangListingTag(const std::string &lang, const std::string &listingTag)
+    bool setLangListingTag(const std::string &lang, const std::string &listingTag, const std::string &backend=std::string())
     {
-        langOptions[lang].listingTag = listingTag;
+        languageOptionsDatabase.setListingTagForBackendGenerator(lang, listingTag, backend);
+        //langOptions[lang].listingTag = listingTag;
         return true;
     }
 
@@ -1050,14 +1083,16 @@ struct AppConfig
         return setLangListingTag(lang, listingTag);
     }
 
-    std::string getLangListingTag(const std::string &lang) const
+    std::string getLangListingTag(const std::string &lang, const std::string &backend=std::string()) const
     {
-        std::unordered_map<std::string, LangOptions>::const_iterator it = langOptions.find(lang);
-        if (it==langOptions.end())
-        {
-            return std::string();
-        }
-        return it->second.listingTag;
+        // std::unordered_map<std::string, LangOptions>::const_iterator it = langOptions.find(lang);
+        // if (it==langOptions.end())
+        // {
+        //     return std::string();
+        // }
+        // return it->second.listingTag;
+
+        return languageOptionsDatabase.getListingTagForBackendGenerator(lang, backend);
     }
 
 

@@ -14,6 +14,88 @@
 #include <vector>
 #include <utility>
 	
+//
+#include "umba/container.h"
+
+
+
+// umba::md::
+namespace umba {
+namespace md {
+
+
+/*
+
+ 1) Запретить в метках/тэгах выкусывания фрагментов кода символ '-' - он только для разделения частей тэга
+ 2) Конечного тэга нет - ориентируемся по скобкам: "#start_tag-{}" - при этом скобки реально используются те, которые в конфиге для языка заданы, а не именно что фигурные
+ 3) Конечного номера строки нет - ориентируемся по скобкам: "#NNN-{}" - при этом скобки реально используются те, которые в конфиге для языка заданы, а не именно что фигурные
+ 4) У нас нет тэга, мы хотим выцепить по сигнатуре текста, возможно, многострочного: "#`inline\nvoid\ndoSomething()`-{}". 
+    Сигнатуру можно искать только после определённого номера строки: "#NNN`inline\nvoid\ndoSomething()`-{}".
+ 5) Когда ищем скобки - строковые литералы не сканируем - слишком геморно пока, да и для разных языков оно разное, таким образом, может получится косяк распознования блока.
+ 6) Хотим закончить по generic stop маркеру: "#start_tag-(-)"/"#NNN-(-)"
+ 7) Хотим закончить по N пустых строк: "#start_tag-(N)"/"#NNN-(N)"
+
+ Алгоритм работы текстовой сигнатуры.
+ 1) Парсим с учётом escape-последовательности
+ 2) Разбиваем на строки по переводу строки
+ 3) Каждую строку "нормализуем" - удаляем все пробелы
+ 4) Строки текстовой сигнатуры не обязательно будут встречаться на разных строках - их могут переформатировать туда-обратно. Надо просекать такой вариант, и на каждом шаге склеивать нужное количество строк перед проверкой
+
+*/
+
+
+struct TextSignature
+{
+
+    using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
+
+    //using signature_lines_vector_type = umba::container::small_vector<std::string, 4, void, umba::container::small_vector_option_inplace_alignment_16_t, umba::container::small_vector_option_growth_50_t >;
+    using signature_lines_vector_type = umba::container::small_vector<std::string, 4, void, options_type >;
+
+    signature_lines_vector_type    signatureLinesVector;
+    std::string                    normalizedSignature ;
+
+}; // struct TextSignature
+
+
+struct SnippetTagInfo
+{
+    using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
+
+    using text_signature_vector = umba::container::small_vector<TextSignature, 4, void, options_type >;
+
+    SnippetTagType             startType               = SnippetTagType::invalid;
+    std::size_t                startNumber             = 0; // line number
+    text_signature_vector      startTagOrSignaturePath ; // start tag or text signatures path. For start tag only one element of the  vector used
+
+    SnippetTagType             endType                 = SnippetTagType::invalid;
+    std::size_t                endNumber               = 0; // end line number or number of empty lines to stop
+    TextSignature              endSignature            ;    // paths not supported here
+
+}; // struct SnippetTagInfo
+
+
+
+// enum class SnippetTagType : std::uint32_t
+// {
+//     invalid             = (std::uint32_t)(-1),
+//     unknown             = (std::uint32_t)(-1),
+//     normalTag           = 0x0000 /*!< Allowed for start/end */,
+//     lineNumber          = 0x0001 /*!< Allowed for start/end */,
+//     textSignature       = 0x0002 /*!< Allowed for start/end - end signature not included to code snippet */,
+//     block               = 0x0003 /*!< Allowed for end only - signals that we need to cat code block in block symbols */,
+//     genericStopMarker   = 0x0004 /*!< Allowed for end only */,
+//     stopOnEmptyLines    = 0x0005 /*!< Allowed for end only */
+//  
+// }; // enum class SnippetTagType : std::uint32_t
+
+
+
+
+
+
+
+
 
 
 // Опция "делать-что-то" - включает
@@ -431,5 +513,13 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
 
     return SnippetOptionsParsingResult::ok;
 }
+
+
+//----------------------------------------------------------------------------
+
+} // namespace md
+} // namespace umba
+
+
 
 
