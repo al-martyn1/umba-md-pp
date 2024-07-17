@@ -163,7 +163,7 @@ int safe_main(int argc, char* argv[])
     using namespace umba::omanip;
 
 
-    //if (umba::isDebuggerPresent())
+    if (umba::isDebuggerPresent())
     {
         #if 0
         auto nonCanonicalName = std::string("../../some_file.txt");
@@ -205,7 +205,7 @@ int safe_main(int argc, char* argv[])
         // `inline\nvoid\ndoAnotherSomething`
 
 
-        #if 1
+        #if 0
         umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`");
         umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther");
         umba::md::testParseSnippetTag(std::cout, "125tag");
@@ -330,7 +330,11 @@ int safe_main(int argc, char* argv[])
 
         argsParser.args.push_back("--overwrite");
         argsParser.args.push_back("--copy-images");
+
         argsParser.args.push_back("--add-examples-path="+rootPath+".\\doc");
+        argsParser.args.push_back("--add-examples-path="+rootPath+".\\src");
+        argsParser.args.push_back("--add-examples-path="+rootPath+".\\tests\\snippets");
+
         argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test,rc,_generators,_distr_conf,src,.msvc2019,boost,icons");
         argsParser.args.push_back("--batch-exclude-files=*upper_inc.md*");
         argsParser.args.push_back("--batch-scan-recurse="+rootPath);

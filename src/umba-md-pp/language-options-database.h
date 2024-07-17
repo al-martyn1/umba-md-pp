@@ -49,6 +49,10 @@ public:
     LanguageOptions(LanguageOptions &&) = default;
     LanguageOptions& operator=(LanguageOptions &&) = default;
 
+    const std::unordered_set<std::string>& getGenericCutStopPrefixes() const
+    {
+        return m_genericCutStopPrefixes;
+    }
 
     bool setListingTagForBackendGenerator(const std::string &tag, const std::string &backend)
     {

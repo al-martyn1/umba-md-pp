@@ -437,9 +437,6 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-
-
-
         else if ( opt.setParam("LANG:TAG")
                || opt.isOption("set-lang-listing-tag") || opt.isOption('T')
                || opt.setDescription("Set target markdown tag for the code section"))

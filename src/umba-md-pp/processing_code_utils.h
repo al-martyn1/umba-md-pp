@@ -8,6 +8,7 @@
 
 
 //----------------------------------------------------------------------------
+#if 0
 inline
 bool isCodeTagLinesRange(const std::string &fragmentTag, std::size_t &startLineNo, std::size_t &endLineNo /* last line number +1 */ )
 {
@@ -69,7 +70,7 @@ bool isCodeTagLinesRange(const std::string &fragmentTag, std::size_t &startLineN
 
     return true;
 }
-
+#endif
 //----------------------------------------------------------------------------
 #if 0
 inline

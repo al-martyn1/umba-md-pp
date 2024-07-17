@@ -3,6 +3,11 @@
 # Задание языка необходимо для доксигена, если по дефолту задать не русский, или не задавать язык, доксиген кракозяблы генерит
 --document-language=russian
 
+# Common options
+--processing-options=generate-toc,title
+--set-insert-options=fail,path,filename-line-no,trim-arround
+
+
 # Расширения, обрабатываемые (и сканируемые) MDPP
 # старое
 #--add-mdpp-extentions=_md,_md_,md_,_markdown,_markdown_,markdown_
@@ -71,10 +76,6 @@
 --meta-tag-set-type=text-first:title,date
 --meta-tag-set-type=text-merge:disclaimer,description
 
-# Common options
---processing-options=generate-toc,title
---set-insert-options=fail,path,filename-line-no
-
 
 # C++
 --add-lang-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
@@ -82,26 +83,37 @@
 --add-lang-cut-prefix=C++://#$
 --add-lang-cut-prefix=C++:/*#!
 --add-lang-cut-prefix=C++:/*#$
+--add-lang-separator-prefix=C++://---
+--add-lang-separator-prefix=C++:/***
+--set-lang-block-chars=C++:{}
 --set-lang-listing-tag=C++:cpp
 
 # C
 --add-lang-file-extentions=C:.c
---add-lang-cut-prefix=C++://#!
---add-lang-cut-prefix=C++://#$
---add-lang-cut-prefix=C++:/*#!
---add-lang-cut-prefix=C++:/*#$
---set-lang-listing-tag=C++:cpp
+--add-lang-cut-prefix=C://#!
+--add-lang-cut-prefix=C://#$
+--add-lang-cut-prefix=C:/*#!
+--add-lang-cut-prefix=C:/*#$
+--add-lang-separator-prefix=C://---
+--add-lang-separator-prefix=C:/***
+--set-lang-block-chars=C:{}
+--set-lang-listing-tag=C:cpp
 
 # Squrrel
 --add-lang-file-extentions=Squrrel:.nut,.nuts
 --add-lang-cut-prefix=Squrrel://#!
 --add-lang-cut-prefix=Squrrel://#$
+--add-lang-separator-prefix=Squrrel://---
+--set-lang-block-chars=Squrrel:{}
 --set-lang-listing-tag=Squrrel:lua
 
 # CMake
 --add-lang-file-extentions=CMake:CMakeLists.txt,.cmake
 --add-lang-cut-prefix=CMake:#//!
 --add-lang-cut-prefix=CMake:#//$
+--add-lang-separator-prefix=C++:###
+--add-lang-separator-prefix=C++:#---
+# No blocks support in CMake
 --set-lang-listing-tag=CMake:cmake
 
 

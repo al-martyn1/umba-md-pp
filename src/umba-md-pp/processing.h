@@ -1154,13 +1154,13 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
     bool fAddFilenameOnly       = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::path)         ;
     bool fAddFilenameLineNumber =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filenameLineNo);
 
+    bool noFail = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
 
     std::string foundFullFilename;
     std::string foundFileText;
     auto findRes = appCfg.findSamplesFile(snippetFile, foundFullFilename, foundFileText /* , curFilename */ );
     if (!findRes)
     {
-        bool noFail = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
         // если noFail, возвращаем true, что не включит оригинальную строку в результат для сигнализации автору об ошибке
         if (!noFail)
         {
@@ -1203,6 +1203,15 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
         return true; // всё хорошо, не включит исходную строку
     }
 
+
+    umba::md::SnippetTagInfo snippetTagInfo = umba::md::parseSnippetTag(snippetTag);
+    if (snippetTagInfo.isValid())
+    {
+        resLines.emplace_back("!!! Invalid tag string: '" + snippetTag + "'");
+        return false;
+    }
+
+    #if 0
     std::size_t startLineNo = 0;
     std::size_t endLineNo   = 0;
     if (isCodeTagLinesRange(snippetTag, startLineNo, endLineNo))
@@ -1230,6 +1239,7 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
         umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформление сделал
         return true; // всё хорошо, не включит исходную строку
     }
+    #endif
 
     // std::string snippetTagPrefix;
     // if (!lang.empty())
@@ -1256,8 +1266,16 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
         listingNestedTagsMode = ListingNestedTagsMode::emptyLine;
     }
 
-    std::vector<std::string> snippetLines = extractCodeFragmentBySnippetTag(appCfg.languageOptionsDatabase.getLanguageOptions(lang), lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 0, 4u /* tabSize */ );
-
+    //std::vector<std::string> snippetLines = extractCodeFragmentBySnippetTag(appCfg.languageOptionsDatabase.getLanguageOptions(lang), lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 0, 4u /* tabSize */ );
+    std::vector<std::string> snippetLines = umba::md::extractCodeFragmentBySnippetTagInfo( appCfg.languageOptionsDatabase.getLanguageOptions(lang)
+                                                                                         , lang
+                                                                                         , snippetsFileLines
+                                                                                         , snippetTagInfo
+                                                                                         , firstLineIdx
+                                                                                         , listingNestedTagsMode
+                                                                                         , 4u // tabSize
+                                                                                         );
+    // Если snippetLines пуст и firstLineIdx==-1, то это ошибка
     std::vector<std::string>
     listingLines = prepareSnippetLines( appCfg, snippetLines
                                       , snippetFile, firstLineIdx
@@ -1269,7 +1287,7 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
                                       , fAddFilenameLineNumber
                                       );
     makeShureEmptyLine(resLines);
-    umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
+    umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформление сделал
     return true; // всё хорошо, не включит исходную строку
 }
 

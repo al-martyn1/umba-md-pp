@@ -21,6 +21,8 @@
 #include "umba/container.h"
 //
 #include "marty_cpp/marty_cpp.h"
+//
+#include "language-options-database.h"
 
 //----------------------------------------------------------------------------
 
@@ -98,17 +100,21 @@ struct TextSignature
 
     explicit TextSignature(const std::string &signature)
         : signatureLinesVector()
-        , normalizedSignature(normalizeSignatureLine(signature))
+        , normalizedSignature()
     {
-        umba::string_plus::simple_string_split(std::back_inserter(signatureLinesVector), marty_cpp::cUnescapeString(signature), std::string("\n") /* , nSplits = -1 */ );
+        auto unescaped      = marty_cpp::cUnescapeString(signature);
+        normalizedSignature = normalizeSignatureLine(unescaped);
+        umba::string_plus::simple_string_split(std::back_inserter(signatureLinesVector), unescaped, std::string("\n") /* , nSplits = -1 */ );
     }
 
     template<typename IteratorType>
     explicit TextSignature(IteratorType b, IteratorType e)
         : signatureLinesVector()
-        , normalizedSignature(normalizeSignatureLine(std::string(b,e)))
+        , normalizedSignature()
     {
-        umba::string_plus::simple_string_split(std::back_inserter(signatureLinesVector), marty_cpp::cUnescapeString(std::string(b,e)), std::string("\n") /* , nSplits = -1 */ );
+        auto unescaped      = marty_cpp::cUnescapeString(std::string(b,e));
+        normalizedSignature = normalizeSignatureLine(unescaped);
+        umba::string_plus::simple_string_split(std::back_inserter(signatureLinesVector), unescaped, std::string("\n") /* , nSplits = -1 */ );
     }
 
     void clear()
@@ -185,15 +191,18 @@ std::size_t findTextSignatureInLines(const std::vector<std::string> &lines, cons
 template<typename VectorType> inline
 std::size_t findTextSignatureInLines(const std::vector<std::string> &lines, const VectorType &signaturesVec, std::size_t startLine=(std::size_t)-1)
 {
+    std::size_t lastSignatueLinesNumber = 0;
     for(const auto &signature : signaturesVec)
     {
         startLine = findTextSignatureInLines(lines, signature, startLine);
         if (startLine==(std::size_t)-1)
             return startLine;
-        startLine += signature.signatureLinesVector.size(); // Пропускаем найденную сигнатуру целиком
+
+        lastSignatueLinesNumber = signature.signatureLinesVector.size();
+        startLine += lastSignatueLinesNumber; // Пропускаем найденную сигнатуру целиком
     }
 
-    return startLine;
+    return startLine-lastSignatueLinesNumber; // Делаем откат на размер последней сигнатуры в строках
 }
 
 //----------------------------------------------------------------------------
@@ -296,6 +305,10 @@ std::size_t findEmptyLinesStopInLines(const std::vector<std::string> &lines, std
                     return 0;
                 return curLineIdx - numEmptyLines;
             }
+        }
+        else
+        {
+            emptyLineCount = 0; // при непустой строке счётчик пустых сбрасываем
         }
     }
 
@@ -660,7 +673,7 @@ inline
 std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::LanguageOptions         &langOpts
                                                             , const std::string                       &lang
                                                             , std::vector<std::string>                lines
-                                                            , const SnippetTagInfo                    &tagInfo
+                                                            , SnippetTagInfo                          tagInfo
                                                             , std::size_t                             &firstFoundLineIdx
                                                             //, const std::string                       &targetFragmentTag
                                                             , ListingNestedTagsMode                   listingNestedTagsMode
@@ -700,7 +713,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
     }
     else if (tagInfo.startType==SnippetTagType::textSignature)
     {
-        firstFoundLineIdx  = findTextSignatureInLines(lines, startTagOrSignaturePath, startLineIdx);
+        firstFoundLineIdx  = findTextSignatureInLines(lines, tagInfo.startTagOrSignaturePath, startLineIdx);
         if (firstFoundLineIdx!=(std::size_t)-1)
             nextLookupStartIdx = firstFoundLineIdx + tagInfo.getLastStartSignatureLinesNumber();
     }
@@ -727,7 +740,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
     }
 
     // Если у нас задан блок, но для языка блоки не заданы - ищем окончание блока как пустую строку
-    if (tagInfo.endType==SnippetTagType::block && chBlockOpen==0)
+    if ((tagInfo.endType==SnippetTagType::block && chBlockOpen==0) || tagInfo.endType==SnippetTagType::invalid)
     {
         tagInfo.endType   = SnippetTagType::stopOnEmptyLines;
         tagInfo.endNumber = 1;
@@ -739,28 +752,49 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
     if (tagInfo.endType==SnippetTagType::textSignature)
     {
         // Окончание ищем по сигнатуре следующего фрагмента, и номер строки тут игнорируем
-        foundLastFragmentLineIdx = findTextSignatureInLines(lines, endSignature, nextLookupStartIdx);
-        if (lastFragmentLineIdx!=(std::size_t)-1)
+        foundLastFragmentLineIdx = findTextSignatureInLines(lines, tagInfo.endSignature, nextLookupStartIdx);
+        if (foundLastFragmentLineIdx!=(std::size_t)-1)
         {
             --foundLastFragmentLineIdx; // У нас начало следующего фрагмента, сдвигаем, чтобы указывало на конец предыдущего
         }
     }
     else if (tagInfo.endType==SnippetTagType::lineNumber)
     {
-        if (tagInfo.endNumber==(std::size_t)-1)
-        {
-            lastFragmentLineIdx = tagInfo.endNumber;
-        }
-        else
-        {
-            lastFragmentLineIdx = tagInfo.endNumber-1; // Человечий номер (с 1) превращаем в машинный (с 0)
-        }
+        foundLastFragmentLineIdx = endLineIdx;
+    }
+    else if (tagInfo.endType==SnippetTagType::block)
+    {
+        foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, nextLookupStartIdx);
+    }
+    else if (tagInfo.endType==SnippetTagType::genericStopMarker)
+    {
+        foundLastFragmentLineIdx = findStopPrefixInLines(lines, langOpts.getGenericCutStopPrefixes(), nextLookupStartIdx);
+    }
+    else
+    {
+        std::size_t numLines = tagInfo.endNumber;
+        if (numLines==(std::size_t)-1 || numLines<1)
+            numLines = 1;
+
+        foundLastFragmentLineIdx = findEmptyLinesStopInLines(lines, numLines, nextLookupStartIdx);
     }
 
-//     block               = 0x0003 /*!< Allowed for end only - signals that we need to cat code block in block symbols */,
-//     genericStopMarker   = 0x0004 /*!< Allowed for end only */,
-//     stopOnEmptyLines    = 0x0005 /*!< Allowed for end only */
+    if (foundLastFragmentLineIdx==(std::size_t)-1)
+    {
+        foundLastFragmentLineIdx = lines.size()-1;
+    }
 
+    if (firstFoundLineIdx>foundLastFragmentLineIdx)
+        return std::vector<std::string>();
+
+    for(; firstFoundLineIdx!=foundLastFragmentLineIdx; ++firstFoundLineIdx)
+    {
+        if (umba::string_plus::trim_copy(lines[firstFoundLineIdx]).empty())
+            continue;
+        break;
+    }
+
+    return std::vector<std::string>(lines.begin()+firstFoundLineIdx, lines.begin()+(foundLastFragmentLineIdx+1u));
 }
 
 
@@ -1131,9 +1165,10 @@ Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parse
 
             case stParseSignature      :
             {
+                parseToSnippetTagInfo.endType = SnippetTagType::textSignature;
                 if (*b=='`')
                 {
-                    if (textStartIt!=b)
+                    if (textStartIt!=e && textStartIt!=b)
                     {
                         parseToSnippetTagInfo.endSignature = TextSignature(std::string(textStartIt, b));
                     }

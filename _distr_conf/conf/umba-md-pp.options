@@ -3,6 +3,11 @@
 # Задание языка необходимо для доксигена, если по дефолту задать не русский, или не задавать язык, доксиген кракозяблы генерит
 --document-language=russian
 
+# Common options
+--processing-options=generate-toc,title
+--set-insert-options=fail,path,filename-line-no,trim-arround
+
+
 # Расширения, обрабатываемые (и сканируемые) MDPP
 # старое
 #--add-mdpp-extentions=_md,_md_,md_,_markdown,_markdown_,markdown_
@@ -70,10 +75,6 @@
 --meta-tag-set-type=comma-list:author
 --meta-tag-set-type=text-first:title,date
 --meta-tag-set-type=text-merge:disclaimer,description
-
-# Common options
---processing-options=generate-toc,title
---set-insert-options=fail,path,filename-line-no
 
 
 # C++

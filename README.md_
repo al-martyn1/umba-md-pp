@@ -54,6 +54,25 @@ Language   : Russian
 #// - правда, многострочный коментарий должен начинаться в начале строки, и заканчиваться в конце строки;
 #// - правда, они должны начинаться в первой строке файла, иначе ;
 
+Включаем по сигнатуре, от одной сигнатуры до другой
+#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleDoNothing`-`inline\nvoid simpleDoNothing`
+
+Включаем по сигнатуре, блок, шаблонная функция
+#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-{}
+
+Включаем по сигнатуре, блок, нешаблонная функция, первая версия (без использования сигнатурного пути)
+#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleDoNothing`-{}
+
+Включаем по сигнатуре, блок, нешаблонная функция, вторая версия (с использованием сигнатурного пути)
+#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`/`inline\nvoid simpleDoNothing`-{}
+
+Включаем по сигнатуре, шаблонная функция, до разделителя
+#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-(-)
+
+Включаем по сигнатуре, шаблонная функция, до двух пустых строк
+#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-(2)
+
+
 
 #// Справочник по аргументам командной строки
 
