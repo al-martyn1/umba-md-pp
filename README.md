@@ -77,7 +77,7 @@ Image from out of the  hierarchy- ![Image](../upper-level-filled-96.png)
 
 
 
-// Print lines, noKeepCutTags #print-ver-all
+// Print lines, noKeepCutTags #print_ver_all
 
 ```cpp
  6: 
@@ -116,7 +116,7 @@ Image from out of the  hierarchy- ![Image](../upper-level-filled-96.png)
 ```
 
 
-// Print lines, keepCutTags   #print-ver-all
+// Print lines, keepCutTags   #print_ver_all
 
 ```cpp
  6: 
@@ -155,7 +155,7 @@ Image from out of the  hierarchy- ![Image](../upper-level-filled-96.png)
 ```
 
 
-// No lines, keepCutTags   #print-ver-all
+// No lines, keepCutTags   #print_ver_all
 
 ```cpp
 void printOnlyVersion()                                     // 7
@@ -306,7 +306,7 @@ Bla-bla.
 
 Test01
 
-// Print lines, noKeepCutTags #print-ver-all
+// Print lines, noKeepCutTags #print_ver_all
 
 !!! File not found
 
@@ -347,7 +347,7 @@ Test01
 ```
 
 
-// Print lines, keepCutTags   #print-ver-all
+// Print lines, keepCutTags   #print_ver_all
 
 !!! File not found
 
@@ -388,7 +388,7 @@ Test01
 ```
 
 
-// No lines, keepCutTags   #print-ver-all
+// No lines, keepCutTags   #print_ver_all
 
 !!! File not found
 

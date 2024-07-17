@@ -163,18 +163,24 @@ int safe_main(int argc, char* argv[])
     using namespace umba::omanip;
 
 
-    if (umba::isDebuggerPresent())
+    //if (umba::isDebuggerPresent())
     {
+        #if 0
         auto nonCanonicalName = std::string("../../some_file.txt");
         auto canonicalName1 = umba::filename::makeCanonical(nonCanonicalName, '/', std::string("."), std::string(".."), false);
         auto canonicalName2 = umba::filename::makeCanonical(nonCanonicalName, '/', std::string("."), std::string(".."), true );
         std::cout << nonCanonicalName << "\n";
         std::cout << canonicalName1 << "\n";
         std::cout << canonicalName2 << "\n";
+        #endif
 
-        // umba::md::testTransformMarkdownText("Someting `in back`ticks");
-        // umba::md::testTransformMarkdownText("Someting ``in `double back``ticks");
+
+        #if 0
+        umba::md::testTransformMarkdownText("Someting `in back`ticks");
+        umba::md::testTransformMarkdownText("Someting ``in `double back``ticks");
+        #endif
     
+        #if 0
         umba::md::testTransformMarkdownLinksUrlString("[![Todo](doc/icons/todo-list-50.png) TODO](doc/todo.md)");
         umba::md::testTransformMarkdownLinksUrlString("[Test1](http://ya.ru\\test\\test.md?a=http://g.com\\some\\path#show)");
         umba::md::testTransformMarkdownLinksUrlString("[Te`st`2](http://ya.ru/test/test.md?a=http://g.com/some/path#show)");
@@ -186,6 +192,62 @@ int safe_main(int argc, char* argv[])
         umba::md::testTransformMarkdownLinksUrlString("[dcasc](/test/test md)");
         umba::md::testTransformMarkdownLinksUrlString("[dsc](test\\test.md)");
         umba::md::testTransformMarkdownLinksUrlString("[vfda](test/test.md)");
+        #endif
+
+        // NNN`inline\nvoid\ndoSomething`/`inline\nvoid\ndoSomeOther`-
+        // NNNtag-
+        // NNN-
+
+        // NNN
+        // {}
+        // (-)
+        // (N)
+        // `inline\nvoid\ndoAnotherSomething`
+
+
+        #if 1
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`");
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther");
+        umba::md::testParseSnippetTag(std::cout, "125tag");
+        umba::md::testParseSnippetTag(std::cout, "125");
+
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`-125");
+        umba::md::testParseSnippetTag(std::cout, "125tag-125");
+        umba::md::testParseSnippetTag(std::cout, "125-125");
+
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`-{}");
+        umba::md::testParseSnippetTag(std::cout, "125tag-{}");
+        umba::md::testParseSnippetTag(std::cout, "125-{}");
+
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`-{");
+        umba::md::testParseSnippetTag(std::cout, "125tag-{");
+        umba::md::testParseSnippetTag(std::cout, "125-{");
+
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`-(-)");
+        umba::md::testParseSnippetTag(std::cout, "125tag-(-)");
+        umba::md::testParseSnippetTag(std::cout, "125-(-)");
+
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`-(-");
+        umba::md::testParseSnippetTag(std::cout, "125tag-(-");
+        umba::md::testParseSnippetTag(std::cout, "125-(-");
+
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`-(");
+        umba::md::testParseSnippetTag(std::cout, "125tag-(");
+        umba::md::testParseSnippetTag(std::cout, "125-(");
+
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`-(3)");
+        umba::md::testParseSnippetTag(std::cout, "125tag-(3)");
+        umba::md::testParseSnippetTag(std::cout, "125-(3)");
+
+        umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`-(3");
+        umba::md::testParseSnippetTag(std::cout, "125tag-(3");
+        umba::md::testParseSnippetTag(std::cout, "125-(3");
+
+        // umba::md::testParseSnippetTag(std::cout, "125`inline\\nvoid\\ndoSomething`/`inline\\nvoid\\ndoSomeOther`-");
+        // umba::md::testParseSnippetTag(std::cout, "125tag-");
+        // umba::md::testParseSnippetTag(std::cout, "125-");
+
+        #endif
 
     }
 

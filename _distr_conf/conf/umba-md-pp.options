@@ -82,26 +82,37 @@
 --add-lang-cut-prefix=C++://#$
 --add-lang-cut-prefix=C++:/*#!
 --add-lang-cut-prefix=C++:/*#$
+--add-lang-separator-prefix=C++://---
+--add-lang-separator-prefix=C++:/***
+--set-lang-block-chars=C++:{}
 --set-lang-listing-tag=C++:cpp
 
 # C
 --add-lang-file-extentions=C:.c
---add-lang-cut-prefix=C++://#!
---add-lang-cut-prefix=C++://#$
---add-lang-cut-prefix=C++:/*#!
---add-lang-cut-prefix=C++:/*#$
---set-lang-listing-tag=C++:cpp
+--add-lang-cut-prefix=C://#!
+--add-lang-cut-prefix=C://#$
+--add-lang-cut-prefix=C:/*#!
+--add-lang-cut-prefix=C:/*#$
+--add-lang-separator-prefix=C://---
+--add-lang-separator-prefix=C:/***
+--set-lang-block-chars=C:{}
+--set-lang-listing-tag=C:cpp
 
 # Squrrel
 --add-lang-file-extentions=Squrrel:.nut,.nuts
 --add-lang-cut-prefix=Squrrel://#!
 --add-lang-cut-prefix=Squrrel://#$
+--add-lang-separator-prefix=Squrrel://---
+--set-lang-block-chars=Squrrel:{}
 --set-lang-listing-tag=Squrrel:lua
 
 # CMake
 --add-lang-file-extentions=CMake:CMakeLists.txt,.cmake
 --add-lang-cut-prefix=CMake:#//!
 --add-lang-cut-prefix=CMake:#//$
+--add-lang-separator-prefix=C++:###
+--add-lang-separator-prefix=C++:#---
+# No blocks support in CMake
 --set-lang-listing-tag=CMake:cmake
 
 

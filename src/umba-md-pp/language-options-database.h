@@ -38,6 +38,8 @@ protected:
     std::unordered_set<std::string>                                    m_cutPrefixes           ; // 
     std::unordered_set<std::string>                                    m_genericCutStopPrefixes; // For C++ it can be "//---", for plain C: /*** - separator line, or both of them
 
+    std::string                                                        m_blockPair;
+
 
 public:
 
@@ -73,6 +75,19 @@ public:
         return true;
     }
     
+    bool setBlockCharacters(const std::string &blockPair)
+    {
+        if (blockPair.size()!=2)
+            return false;
+        m_blockPair = blockPair;
+        
+        return true;
+    }
+
+    std::string getBlockCharacters() const
+    {
+        return m_blockPair;
+    }
 
     bool addCutPrefix(const std::string &p)
     {
@@ -199,6 +214,16 @@ public:
     {
         m_languageOptions[lang].addGenericCutStopPrefix(p);
         return true;
+    }
+
+    bool setBlockCharacters(const std::string &lang, const std::string &blockPair)
+    {
+        return m_languageOptions[lang].setBlockCharacters(blockPair);
+    }
+
+    std::string getBlockCharacters(const std::string &lang)
+    {
+        return m_languageOptions[lang].getBlockCharacters();
     }
 
     bool setListingTagForBackendGenerator(const std::string &lang, const std::string &tag, const std::string &backend=std::string())

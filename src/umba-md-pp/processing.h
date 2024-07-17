@@ -1256,10 +1256,10 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
         listingNestedTagsMode = ListingNestedTagsMode::emptyLine;
     }
 
-    std::vector<std::string> insertSnippetLines = extractCodeFragmentBySnippetTag(appCfg.languageOptionsDatabase, lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 4u /* tabSize */ );
+    std::vector<std::string> snippetLines = extractCodeFragmentBySnippetTag(appCfg.languageOptionsDatabase.getLanguageOptions(lang), lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 0, 4u /* tabSize */ );
 
     std::vector<std::string>
-    listingLines = prepareSnippetLines( appCfg, insertSnippetLines
+    listingLines = prepareSnippetLines( appCfg, snippetLines
                                       , snippetFile, firstLineIdx
                                       , fTrimLeft
                                       , fTrimArround

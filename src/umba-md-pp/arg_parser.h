@@ -393,6 +393,53 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("LANG:PREFIX")
+               || opt.isOption("add-lang-separator-prefix")
+               || opt.setDescription("Add lang prefix for the separator line"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Adding lang prefix for the separator line (--add-lang-separator-prefix)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.addSeparatorLinePrefix(optArg))
+            {
+                LOG_ERR_OPT<<"Addng lang prefix for the separator line, invalid argument: '" << optArg << "'\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("LANG:{}")
+               || opt.isOption("set-lang-block-chars")
+               || opt.setDescription("Set lang block open and close characters, like \"{}\" for C/C++"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+            
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting lang block open and close characters (--set-lang-block-chars)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.setBlockCharacters(optArg))
+            {
+                LOG_ERR_OPT<<"Setting lang block open and close characters, invalid argument: '" << optArg << "'. Argument must be exact the pair of single open and close block characters\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+
+
+
         else if ( opt.setParam("LANG:TAG")
                || opt.isOption("set-lang-listing-tag") || opt.isOption('T')
                || opt.setDescription("Set target markdown tag for the code section"))

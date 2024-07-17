@@ -1052,6 +1052,42 @@ struct AppConfig
         return addCutPrefix(lang, cutPrefix);
     }
 
+    bool addSeparatorLinePrefix(const std::string &lang, const std::string &sepPrefix)
+    {
+        //langOptions[lang].cutPrefix = cutPrefix;
+        languageOptionsDatabase.addGenericCutStopPrefix(lang, sepPrefix);
+        return true;
+    }
+
+    bool addSeparatorLinePrefix(const std::string &langPrefixPair)
+    {   
+        std::string lang, sepPrefix;
+        if (!umba::string_plus::split_to_pair(langPrefixPair, lang, sepPrefix, ':'))
+        {
+            return false;
+        }
+
+        return addSeparatorLinePrefix(lang, sepPrefix);
+    }
+
+    bool setBlockCharacters(const std::string &lang, const std::string &blockPair)
+    {
+        //langOptions[lang].cutPrefix = cutPrefix;
+        return languageOptionsDatabase.setBlockCharacters(lang, blockPair);
+    }
+
+    bool setBlockCharacters(const std::string &langBlockPair)
+    {   
+        std::string lang, blockPair;
+        if (!umba::string_plus::split_to_pair(langBlockPair, lang, blockPair, ':'))
+        {
+            return false;
+        }
+
+        return setBlockCharacters(lang, blockPair);
+    }
+
+
     // std::string getLangCutPrefix(const std::string &lang) const
     // {
     //     std::unordered_map<std::string, LangOptions>::const_iterator it = langOptions.find(lang);
