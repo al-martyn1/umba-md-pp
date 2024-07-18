@@ -57,6 +57,12 @@ Language   : Russian
 Включаем по сигнатуре, от одной сигнатуры до другой
 #!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleDoNothing`-`inline\nvoid simpleDoNothing`
 
+Включаем по сигнатуре, блок, но сигнатура в одну строку при ссылке
+#!insert{lineno} cpp\signature_test.cpp#`inline void simpleDoNothing`-{}
+
+Включаем по сигнатуре, блок, но сигнатура в одну строку в файле
+#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleNothing2`-{}
+
 Включаем по сигнатуре, блок, шаблонная функция
 #!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-{}
 
