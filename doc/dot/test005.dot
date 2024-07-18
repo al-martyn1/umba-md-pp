@@ -1,0 +1,442 @@
+digraph graphname {
+ rankdir=LR;
+ ranksep=0.5;
+ splines=ortho
+ IF_OFF[shape="point"][color=darkgreen]
+ VBUS[shape="point"]
+ USB2[shape="point"]
+ USB3[shape="point"]
+ RESET[shape="point"]
+ VDD_nRF_SENSE[shape="point"]
+ TRACE[shape="point"]
+ VDD_nRF_DASH[shape="point"]
+ I2C[shape="point"]
+ SWD[shape="point"][color=blue]
+ IMCU_RESET[shape="point"]
+ SWD0[shape="point"][color=blue]
+ SWD3[shape="point"][color=blue]
+ UART_1[shape="point"][color=magenta]
+ UART_2[shape="point"][color=magenta]
+ VBOOST_SRC[shape="point"]
+ GND[shape="point"]
+ VREG[shape="point"]
+ BOOT_RESET[shape="point"]
+ VREG_EN_INV[shape="point"]
+ VEXT_EN[shape="point"]
+ VSENSE_SW_OUT[shape="point"]
+ VSUPPLY[shape="point"]
+ VEXT_EN_INV[shape="point"]
+VBOOST_SRC_DASH[shape="point"]
+ VBUS_IMCU[shape="point"]
+V5V[shape="point"]
+VDD[shape="point"][fillcolor=grey, style=red]
+ J1[shape="box",label="J1 ANT 1pin "] 
+ 
+ U1[shape="box"][label="U1 MCU"][fillcolor=grey, style=filled][height=8] [width=3]
+ U2[shape="box"][fillcolor=grey, style=filled][height=4][width=3][label="U2 If MCU"]
+J2[shape="box",label="J2 5pin"][height=2][width=1]
+J3[shape="box",label="J3 USB 5pin"][height=2][width=1]
+J4[shape="box",label="J4 10pin"][height=3][width=1]
+J5[shape="box",label="J5 NFC 5pin"][height=2][width=1]
+J6[shape="box",label="J6 Li-Po 2pin"][height=1][width=1]
+P1[shape="box",label="P1 8pin"][height=2][width=1]
+P2[shape="box",label="P2 6pin"][height=1.5][width=1]
+P3[shape="box",label="P3 8pin"][height=2][width=1]
+P4[shape="box",label="P4 10pin"][height=3][width=1]
+P5[shape="box",label="P5 6pin"][height=1.5][width=1]
+P6[shape="box",label="P6 8pin"][height=2][width=1]
+P7[shape="box",label="P7 16pin"][height=4] [width=1]
+P8[shape="box",label="P8 12pin"][height=3][width=1]
+P9[shape="box",label="P9 DebugOut 8pin"][height=2]
+P10[shape="box",label="P10 20pin"][height=5][width=1]
+P11[shape="box",label="P11 6pin"][height=2] [width=1]
+P12[shape="box",label="P12 16pin"][height=4] [width=1]
+P13[shape="box",label="P13 16pin"][height=4] [width=1]
+P14[shape="box",label="P14 12pin"][height=3] [width=1]
+P15[shape="box",label="P15 16pin"] [height=4] [width=1]
+P16[shape="box",label="P16 20pin"][height=5][width=1]
+P17[shape="box",label="P17 16pin"][height=4] [width=1]
+P18[shape="box",label="P18 DebugIN 10pin"][height=3][width=1]
+P19[shape="box",label="P19 DebugOUT 10pin"][height=3][width=1]
+P20[shape="box",label="P20 13pin"][height=3.25][width=1]
+P21[shape="box",label="P21 2pin"][height=1][width=1]
+P22[shape="box",label="P22 current 2pin"] [width=1]
+P23[shape="box",label="P23 2pin"][height=1][width=1]
+P24[shape="box",label="P24 20pin"][height=5][width=1]
+P25[shape="box",label="P25 Trace 20pin"][height=5][width=1]
+P26[shape="box",label="P26 13pin"][height=3.25][width=1]
+P27[shape="box",label="P27 Li-Po 2pin"][height=1][width=1]
+ D7[shape="triangle"]
+ U25_12[shape="box"][fillcolor=grey, style=filled]
+ U11[shape="box"][fillcolor=grey, style=filled]
+ U3_34[shape="box"][fillcolor=grey, style=filled]
+ Q10B[shape="box"]
+ U18[shape="box",label="U18 AND" ][fillcolor=grey, style=filled]
+P28[shape="box",label="P28 Op-amp 3pin"][height=0.75][width=1]
+ U10[shape="box"][fillcolor=grey, style=filled]
+ U21[shape="box"][fillcolor=grey, style=filled]
+ U24[shape="box"][fillcolor=grey, style=filled]
+  U4[label="U4 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U12[label="U12 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U13[label="U13 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U14[label="U14 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U15[label="U15 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U17[label="U17 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U20[label="U20 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U19[label="U19 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U22[label="U22 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U23[label="U23 4pin"][shape="box"][fillcolor=darkslategray1, style=filled]
+ U16[shape="box"][fillcolor=grey, style=filled]
+ U5[shape="box"][fillcolor=grey, style=filled]
+ SW7A[shape="box"][fillcolor=bisque, style=filled]
+ SW7B[shape="box"][fillcolor=bisque, style=filled]
+ 
+ D3[shape="triangle"]
+ D5[shape="triangle"]
+ D6[shape="triangle"]
+ U7[shape="box",label="U7 Flash"][fillcolor=grey, style=filled]
+ SW1[shape="box"][fillcolor=bisque, style=filled];
+ SW2[shape="box"][fillcolor=bisque, style=filled];
+ SW3[shape="box"][fillcolor=bisque, style=filled];
+ SW4[shape="box"][fillcolor=bisque, style=filled];
+ SW5[shape="box"][fillcolor=bisque, style=filled]
+ LED1[shape="box"];
+ LED2[shape="box"];
+ LED3[shape="box"];
+ 
+ Q10A[shape="box"];
+ Q10B[shape="box"];
+ LED4[shape="box"];
+ 
+ U19->U2[label="VDD_IMCU"]
+ SW1->U1[label="P0.23"] 
+ SW2->U1[label="P0.24"] 
+ SW3->U1[label="P0.08"] 
+ IMCU_RESET->U2[label="IMCU_RESET"] 
+ SW4->U1[label="P0.09"] 
+ U2->U25_34->U1;
+ U2->U3_12->U1;
+ U7->U1[label="QSPI"] 
+ U6_12->RESET
+ U1->P18
+ RESET->U1[label="RESET"]
+ RESET->P18[label="RESET"] 
+ RESET->P19[label="RESET"] 
+ RESET->P20[label="RESET"] 
+ RESET->U1[label="RESET"] 
+ RESET->P25[label="RESET"] 
+ U2->U5->U1
+ U1->P2
+ U1->P8
+ U1->P14
+ SW5->BOOT_RESET
+ P8->P2->P14
+ VBUS_IMCU->U2 [label="VBUS_IMCU"] 
+ Bat1->U17[label="VBAT"] 
+ U17->Q10B
+ Q5B->SW6A[label="USB_DETECT"] 
+ GND->SW6A
+ U1->P4
+ U1->P16
+ P4->P10->P16
+ U22->VBUS_IMCU
+ U1->P6
+ P12->P6->P17
+ U1->P3
+ U1->P9
+ U1->P12
+ P9->P3->P15
+ U2->SWD3->U5 [label="SWD3"] [color=blue]
+ U5->SWD [label="SWD"] [color=blue]
+ X3->U2[label="32MHz"] 
+ U25_34->UART_1->U1[label="UART_1"][color=magenta]
+ U2->U25_34[label="VCOM_0"]
+ U1->P10
+ P7->P1->P13
+ U3_34->UART_2->U1[label="UART_2"][color=magenta]
+ IF_OFF->U3_34[label="IF_OFF"][color=darkgreen]
+ U2->U3_34[label="VCOM_2"]
+ J4->U2
+ U2->Q1
+ Q1->LED5
+ U2->U3_34->U1
+ VREG_EN_INV->U21[label="VREG_EN_INV"] 
+ VEXT_EN_INV->U21[label="VEXT_EN_INV"] 
+ Q10A->Q10B[label="Gate"] 
+ VSUPPLY->U21[label="VSUPPLY"][color=pink] 
+ U21->Q10A[label="Gate"]
+ SWD->U1[label="SWD"] [color=blue]
+ P18->SWD [label="SWD"] [color=blue]
+ J3->USB3->U1[label="USB"] 
+ P19->SWD0->U2[label="SWD0"] [color=blue]
+ UART_1->P3[label="UART_1"] [color=magenta]
+ UART_2->P24[label="UART_2"] [color=magenta]
+ P1->RESET[label="RESET"] 
+ J4->IMCU_RESET[label="IMCU_RESET"]
+ P11->P5
+ U1->P11
+ U1->P5
+ V5V->P13[label="V5V"][color=orange] 
+ U1->P24
+ U1->P17
+ U1->P14
+ U1->P12
+ U1->P15
+ U1->I2C
+ I2C->P16 [label="I2C"] 
+ J2->U22->U2
+ J2->Q5A
+ BOOT_RESET->U6_12[label="BOOT/RESET"]
+
+
+ U2->U6_12[label="IMCU_BOOT"] 
+ SW8A->U6_34 [label="SHIELD_DETECT"]
+ I2C->U6_34 [label="I2C"]
+ SW8A->VDD[label="VDD"][color=red]
+ VDD->U6_34[label="VDD"][color=red]
+  Q5A[shape="box"]
+ Q5B[shape="box"]
+ //subgraph clusterQ5 { Q5A  Q5B }
+ X1->U1[label="32MHz"] 
+ X2->U1[label="32kHz"] 
+ U10->V5V
+ U1->J5[label="NFC"] 
+ SW7A->U3_12[label="UART2_FC_OFF"] [color=green]
+ GND->SW7A
+ IF_OFF->SW7A[label="IF_OFF"][color=darkgreen][fontcolor=darkgreen]
+ SW7B->U25_12[label="UART1_FC_OFF"] [color=green]
+ GND->SW7B
+ IF_OFF->SW7B[label="IF_OFF"][color=darkgreen][fontcolor=darkgreen]
+ IF_OFF->U22[label="IF_OFF"][color=darkgreen][fontcolor=darkgreen]
+ VBUS_IMCU->LED5[label="VBUS_IMCU"]
+ J4->VBUS->U22 [label="VBUS"][color=gold]
+ J2->VBUS->U22 [label="VBUS"][color=gold]
+ J2->USB2->U2[label="USB"]
+ GND->SW6B
+ SW9B->VDD->SW6B [label="VDD"][color=red]
+ 
+ //SW9B->Q10B[label="VDD"][color=red] 
+ VDD->Q10B[label="VDD"][color=red] 
+ U12->VSENSE_SW_OUT
+ U14->VSENSE_SW_OUT
+ Q10B->VSUPPLY
+ VSENSE_SW_OUT->SW8A[label="VSENSE_SW_OUT"]
+ U18->U17 [label="VBAT_EN"] 
+ VSUPPLY->U14[label="VSUPPLY"][color=pink]
+ U13->VSUPPLY[label="VSUPPLY"][color=pink] 
+ V5V->U12[label="V5V"][color=orange] 
+ V5V->U11 [label="V5V"][color=orange] 
+ U11->VREG[label="VREG"] 
+ VREG->U13 [label="VREG"] 
+ X1[fillcolor=yellow, style=filled]
+ X2[fillcolor=yellow, style=filled]
+ X3[fillcolor=yellow, style=filled]
+ LED1[fillcolor=green, style=filled]
+ LED2[fillcolor=green, style=filled]
+ LED3[fillcolor=green, style=filled]
+ LED4[fillcolor=green, style=filled]
+ LED5[fillcolor=green, style=filled]
+ U1->LED1[label="P0.28/AIN7"]
+ U1->LED2[label="P0.29"]
+ U1->LED3[label="P0.30"]
+ U1->LED4[label="P0.31"]
+ IF_OFF->U5[label="IF_OFF"][color=darkgreen][fontcolor=darkgreen]
+ IF_OFF->U3_34[label="IF_OFF"][color=darkgreen][fontcolor=darkgreen]
+ IF_OFF->U6_12[label="IF_OFF"][color=darkgreen][fontcolor=darkgreen]
+ SW8A->U6_34[label="SHIELD_DETECT/VDD"]
+ IF_OFF->U25_34[label="IF_OFF"][color=darkgreen][fontcolor=darkgreen]
+ U23->SW10B [label="VEXT"]
+ VSUPPLY->U23[label="VSUPPLY"][color=pink]
+ SW10B->P21
+ SW9A->SW10A[label="VSRC_NRF"]
+ U1->J1
+
+         U25_34[shape="box"][fillcolor=grey, style=filled]
+ 
+ U2->U25_12[label="VCOM0_CRTL"]
+ U25_12->U1[label="UART_1_CRTL"][color=magenta]
+ 
+ U2->U3_12[label="VCOM2_CRTL"]
+ U3_12->U1[label="UART_2_CRTL"][color=magenta]
+ SW8B->VBOOST_SRC
+ 
+  U9A[shape="box"][fillcolor=grey, style=filled]
+ U9B[shape="box"][fillcolor=grey, style=filled]
+ SW10A[shape="box"][fillcolor=bisque, style=filled];
+ SW10B[shape="box"][fillcolor=bisque, style=filled];
+// subgraph clusterSW10 { SW10A SW10B }
+ VolDiv [label="1/2.74"] [shape="box"] 
+    Bat1[label="Bat1 2pin"][shape="box"]
+  Q8A[shape="box"];
+ Q8B[shape="box"];
+ SW8A[shape="box"][fillcolor=bisque, style=filled];
+ SW8B[shape="box"][fillcolor=bisque, style=filled];
+ SW9A[shape="box"][fillcolor=bisque, style=filled];
+ SW9B[shape="box"][fillcolor=bisque, style=filled];
+     SW8B->Q6[label="Gate"] 
+     U16->U13 [label="CTRL"] 
+ SW6A[shape="box"][fillcolor=bisque, style=filled];
+ SW6B[shape="box"][fillcolor=bisque, style=filled];
+ VBOOST_SRC->U10
+ SW9B->U15[label="out"]
+ VDD->U15[label="VDD"][color=red]
+ VSUPPLY->U16[label="VSUPPLY"][color=pink]
+ VolDiv->U16[label="VREG_EN"]
+ U17->VSUPPLY->U18[label="VSUPPLY"][color=pink]
+ Q8A->VREG_EN_INV
+ VREG_EN_INV->U18[label="VREG_EN_INV"]
+ U24->VEXT_EN
+ VEXT_EN->Q8B [label="VEXT_EN"] 
+ VEXT_EN->U23 [label="VEXT_EN"] 
+ GND->Q5A
+ 
+ VDD_nRF_DASH->P20[label="VDD_nRF'"]
+ VDD_nRF_DASH->P26[label="VDD_nRF'"]
+ VDD_nRF_DASH->P22[label="VDD_nRF'"]
+ SW9A->VDD_nRF_DASH[label="VDD_nRF'"]
+ SW9A->VDD_nRF_SENSE[label="VDD_nRF_SENSE"] 
+ VREG_EN_INV->U24[label="VREG_EN_INV"] 
+ 
+ Q8B->VEXT_EN_INV
+ VEXT_EN_INV->U18[label="VEXT_EN_INV"]
+ SW6A->IF_OFF[color=darkgreen][fontcolor=darkgreen]
+ IF_OFF->U19[label="IF_OFF"][color=darkgreen][fontcolor=darkgreen]
+ VDD->U19[label="VDD"][color=red]
+ 
+ U15->P23[label="VDD_HV'"]
+ VDD_nRF_SENSE->Q9[label="VDD_nRF_SENSE(Gate)"]
+ Q9->U16[label="VSUPPLY_EN"]
+ 
+ V5V->VolDiv [label="V5V"][color=orange]
+ VolDiv -> Q8A [label="VREG_EN"] 
+ D3->VBOOST_SRC_DASH[label="VBOOST_SRC'"] [color=turquoise1][fontcolor=turquoise1]
+ D5->VBOOST_SRC_DASH[label="VBOOST_SRC'"] [color=turquoise1][fontcolor=turquoise1]
+ D6->VBOOST_SRC_DASH[label="VBOOST_SRC'"] [color=turquoise1][fontcolor=turquoise1]
+ D7->VBOOST_SRC_DASH[label="VBOOST_SRC'"] [color=turquoise1][fontcolor=turquoise1]
+ VBOOST_SRC_DASH->SW8B[label="VBOOST_SRC'"] [color=turquoise1][fontcolor=turquoise1]
+ J3->D5
+ V5V->VolDiv
+ 
+ Q5A->Q5B[label="Gate"]
+ J2->VBUS->Q5A [label="VBUS"][color=gold]
+ U19->J4[label="VDD_IMCU"]
+
+ D3->VBOOST_SRC_DASH[label="VBOOST_SRC'"] [color=turquoise1][fontcolor=turquoise1]
+ D5->VBOOST_SRC_DASH[label="VBOOST_SRC'"] [color=turquoise1][fontcolor=turquoise1]
+ D6->VBOOST_SRC_DASH[label="VBOOST_SRC'"] [color=turquoise1][fontcolor=turquoise1]
+ D7->VBOOST_SRC_DASH[label="VBOOST_SRC'"] [color=turquoise1][fontcolor=turquoise1]
+ 
+ U20->U1[label="VBUS_nRF"] 
+ J4->VBUS->D3[label="VBUS"][color=gold] 
+ J2->VBUS->D3[label="VBUS"][color=gold] 
+ J3->U20[label="VBUS_nRF'"] 
+ 
+ VDD->SW10A
+ VDD->U20[label="VDD"][color=red] 
+ VDD->U20[label="VDD"][color=red] 
+ 
+ 
+ J3->D5[label="VBUS_nRF'"] 
+ D6->SW9B[label="VLi-Ion"] 
+ J3->SW9B[label="VBUS_nRF'"] 
+ P22->SW9B[label="VDD_nRF"] 
+ //P27->D6[label="VLi-Ion"] 
+ J6->D6[label="VLi-Ion"] 
+ P20->D7[label="VIN3-5V"] 
+ P26->D7[label="VIN3-5V"] 
+ P25->SWD[label="SWD"] [color=blue]
+ P25->TRACE->U1[label="TRACE"] 
+ VDD->U3_34[label="VDD"][color=red] 
+ VDD->U25_34[label="VDD"][color=red] 
+ VDD->U5[label="VDD"][color=red] 
+ VDD->U6_12[label="VDD"][color=red]
+ VDD->U6_34[label="VDD"][color=red]
+ VDD->U4[label="VDD"][color=red] 
+ SW6B->U4 [label="nRF_ONLY"]
+ U4->LED1
+ U4->LED2
+ U4->LED3
+ U4->LED4
+ J6->P27[label="VLi-Ion"]
+ VDD->SW6B[label="VDD"][color=red] 
+ VDD->Q5B[label="VDD"][color=red] 
+ VDD_nRF_SENSE->U12[label="VDD_nRF_SENSE"] 
+ Q7->U12
+ U9A->Q7[label="Gate"] 
+ VDD_nRF_SENSE->U9A[label="VDD_nRF_SENSE"] 
+ V5V->P11[label="V5V"][color=orange] 
+ P28->U9B
+ U9B->P28
+
+
+
+ // { rank=same;U3_34 U25 U25_34 U5 U6 U6_12 U6_34}
+
+          U3_12[shape="box"][fillcolor=grey, style=filled];
+         U3_34[shape="box"][fillcolor=grey, style=filled];
+                  U6_12[shape="box"][fillcolor=grey, style=filled]
+         U6_34[shape="box"][fillcolor=grey, style=filled]
+         SW10A->P21
+         V5V->Q6 [label="V5V"][color=orange] 
+         
+
+  //{ rank=same; U7 U1 }
+ subgraph clusterDIR {
+     
+     color=transparent
+     subgraph clusterPower {
+         color=transparent
+         subgraph clusterP7_1_13 { color=transparent P7 P1 P13  }
+         subgraph clusterRect { P20 P26 color=transparent} 
+         VSENSE_SW_OUT SW8A Bat1 VBOOST_SRC U10 U11 U15 Q7 Q9   P28 U12  J6 P27 P22 P23 VREG U13 U14 U16 U17 U19 VREG_EN_INV U18 U20 U21 VEXT_EN U23 VSUPPLY Q6 P21  VBOOST_SRC_DASH V5V VDD U24 SW10A VolDiv  SW8B Q8A Q8B Q10A Q10B U9A  U9B VDD_nRF_SENSE  SW9A VDD_nRF_DASH D3 D5 D6 D7
+         subgraph clusterP21_SW10_B { P21  SW10B }
+         //{ rank=same; U12 U14 } 
+        // { rank=same; U10 U20 U15}
+        // { rank=same; D3 D5 D6 D7 }
+        // { rank=same; U18 U21 U24}
+       //  { rank=same; J6 P22 P23   }
+         //{ rank=same; U23 Q10B U13 }
+        // { rank=same; VolDiv U24 }
+          subgraph clusterJ6_P27 { J6  P27 }
+        
+     }
+     subgraph clusterSystem {
+         SW5 Q5A Q5B  RESET GND 
+         color=transparent
+         //subgraph clusterQ5 { Q5A Q5B  }
+         subgraph clusterProg { VBUS IMCU_RESET U2 X3 J2 USB2 J4 LED5 Q1 P19 U22 VBUS_IMCU SWD3 SWD0}
+         subgraph clusterMUX_GL {
+             color=transparent
+             SW7B SW7A  SW6A SW6B IF_OFF
+             subgraph clusterMUX {
+                 color=transparent
+                 U5  U3_12    U3_34 U25_12 U25_34 BOOT_RESET U6_12 U6_34 
+                 //subgraph clusterU3 {  U3_12    U3_34 }
+                 //subgraph clusterU25 {  U25_12 U25_34 }
+                 //subgraph clusterU6 {  U6_12 U6_34 }
+                   
+             }
+         }
+         subgraph clusterMCU {
+             color=transparent
+             subgraph clusterP11_5 { P11 P5  }
+             subgraph clusterP12_6_17 { P12 P6 P17  }
+             subgraph clusterP8_2_14 { P8 P2 P14  }
+             subgraph clusterP9_3_15 { P9 P3 P15  }
+             subgraph clusterP10_4_16 { P10 P4 P16  }
+             J1  U4 J3 USB3 P6 P3 P4 P2 P1 P24 J5  UART_1 UART_2 I2C SWD TRACE
+             subgraph clusterArduino { P1 P2  P3 P4 }
+             subgraph clusterLED { LED1 LED2 LED3 LED4 }
+             subgraph clusterSW { SW1 SW2 SW3 SW4 }
+             subgraph clusterMem {color=transparent U1 U7 
+             //{ rank=same; U7 U1 }
+             }
+             subgraph clusterClc {color=transparent X1 X2   }
+             //subgraph clusterNFC { U1 J5   }
+             subgraph clusterSWDMCU {color=transparent P18 P25   }
+             //{ rank=same; LED1 LED2 LED3 LED4 J1}
+         }
+     }
+ }
+ //{ rank=same;    VBOOST_SRC_DASH  SW8B    }
+}

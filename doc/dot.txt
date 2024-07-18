@@ -7,3 +7,18 @@ graph G {
   graph [ dpi = 300 ]; 
   /* The rest of your graph here. */ 
 }
+
+Использование Graphviz для построения блок-схем - https://habr.com/ru/articles/337078/
+Graphviz - Быстрый старт - http://lib.custis.ru/Graphviz
+Вики про DOT, немного примеров - https://ru.wikipedia.org/wiki/DOT_(%D1%8F%D0%B7%D1%8B%D0%BA)
+Язык Graphviz для Автогенерации Блок-Схем Сложных Электронных Цепей (и большой-большой dot-пример) - https://habr.com/ru/articles/682346/
+Graphviz — рисуем графы - https://tushavin.ru/graphviz/
+Введение в GraphViz - https://linuxshare.ru/docs/misc/graphviz.html
+Визуализация графов GraphFrames с помощью Graphviz - https://spark-school.ru/blog/graphframes-visualization-with-graphviz/
+Node Shapes - https://www.graphviz.org/doc/info/shapes.html
+GraphViz - Полезные ссылки - https://kodomo.fbb.msu.ru/wiki/2009/5/Unix/12
+Gallery - https://graphviz.org/gallery/
+GraphViz: примеры создания графов и взаимосвязей - http://mydebianblog.blogspot.com/2010/01/graphviz.html
+Какая-то методичка - https://studfile.net/preview/9980755/page:5/
+Чутка про фильтры - https://eax.me/graphviz/
+Пара примеров - http://wikikurgan.ru/index.php/%D0%9B%D0%B5%D0%BA%D1%86%D0%B8%D1%8F_1.6._%D0%93%D1%80%D0%B0%D1%84%D0%B2%D0%B8%D0%B7
