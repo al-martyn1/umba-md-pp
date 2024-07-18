@@ -1,1 +1,9 @@
 https://graphviz.org/doc/info/lang.html
+
+Attributes - https://graphviz.org/doc/info/attrs.html
+
+DPI (и использование атрибутов графа) - https://stackoverflow.com/questions/1286813/how-do-i-set-the-resolution-when-converting-dot-files-graphviz-to-images
+graph G { 
+  graph [ dpi = 300 ]; 
+  /* The rest of your graph here. */ 
+}
