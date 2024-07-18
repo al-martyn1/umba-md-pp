@@ -1,0 +1,8 @@
+Операторы ?., ?: и !! языка Kotlin - https://younglinux.info/kotlin/null-operators
+Ключевые слова и операторы - https://kotlinlang.ru/docs/keyword-reference.html
+===, !==
+.. - диапазон
+
+<=>
+<<=
+>>=
