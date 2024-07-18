@@ -746,7 +746,7 @@ struct SnippetTagInfo
         }
         else if (startType==SnippetTagType::textSignature)
         {
-            if (isStartSignatureValid())
+            if (!isStartSignatureValid())
                 return false;
         }
         else
@@ -761,13 +761,13 @@ struct SnippetTagInfo
             if (endNumber==(std::size_t)-1)
                 return false;
         }
-        else if (startType==SnippetTagType::normalTag)
+        else if (endType==SnippetTagType::normalTag)
         {
             return false; // Конечный тэг не задаётся
         }
-        else if (startType==SnippetTagType::textSignature)
+        else if (endType==SnippetTagType::textSignature)
         {
-            if (isEndSignatureValid())
+            if (!isEndSignatureValid())
                 return false;
         }
 

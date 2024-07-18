@@ -52,44 +52,6 @@ Test number one
 
 
 
-Включаем по сигнатуре, от одной сигнатуры до другой
-
-```cpp
- 2: inline
- 3: void simpleDoNothing( int v1)
- 4: {
- 5:     // Первая версия, до isUrlAbsolute
- 6: }
- 7: 
- 8: //----------------------------------------------------------------------------
- 9: template<typename StringType>
-10: bool isUrlAbsolute(const StringType &strUrl)
-11: {
-12:     using CharType = typename StringType::value_type;
-13: 
-14:     // looking for scheme: "protocol://..."
-15:     // "://..." - is invalid, missing protocol
-16: 
-17: 
-18:     auto colonPos = strUrl.find((CharType)':');
-19: 
-20:     if (colonPos==strUrl.npos)
-21:         return false;
-22: 
-23:     if (colonPos==0)
-24:         return false;
-25: 
-26:     if ((colonPos+1u)>=strUrl.size() || (colonPos+2u)>=strUrl.size())
-27:         return false;
-28: 
-29:     if (strUrl[colonPos+1u]==(CharType)'/' && strUrl[colonPos+2u]==(CharType)'/')
-30:         return true;
-31: 
-32:     return false;
-33: }
-34: 
-35: //----------------------------------------------------------------------------
-```
 
 Включаем по сигнатуре, блок, но сигнатура в одну строку при ссылке
 
@@ -202,6 +164,56 @@ Test number one
 15:     // "://..." - is invalid, missing protocol
 ```
 
+Включаем по сигнатуре, от одной сигнатуры до другой
+
+```cpp
+ 2: inline
+ 3: void simpleDoNothing( int v1)
+ 4: {
+ 5:     // Первая версия, до isUrlAbsolute
+ 6: }
+ 7: 
+ 8: //----------------------------------------------------------------------------
+ 9: template<typename StringType>
+10: bool isUrlAbsolute(const StringType &strUrl)
+11: {
+12:     using CharType = typename StringType::value_type;
+13: 
+14:     // looking for scheme: "protocol://..."
+15:     // "://..." - is invalid, missing protocol
+16: 
+17: 
+18:     auto colonPos = strUrl.find((CharType)':');
+19: 
+20:     if (colonPos==strUrl.npos)
+21:         return false;
+22: 
+23:     if (colonPos==0)
+24:         return false;
+25: 
+26:     if ((colonPos+1u)>=strUrl.size() || (colonPos+2u)>=strUrl.size())
+27:         return false;
+28: 
+29:     if (strUrl[colonPos+1u]==(CharType)'/' && strUrl[colonPos+2u]==(CharType)'/')
+30:         return true;
+31: 
+32:     return false;
+33: }
+34: 
+35: //----------------------------------------------------------------------------
+```
+
+Включаем по номерам строк
+
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
 
 
@@ -271,8 +283,15 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-!!! Invalid tag string: '6-12'
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
 ```cpp
 ```
@@ -362,9 +381,6 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-!!! File not found
-!!! Invalid tag string: '6-12'
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
 
 !!! File not found
 

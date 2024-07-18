@@ -54,8 +54,6 @@ Language   : Russian
 #// - правда, многострочный коментарий должен начинаться в начале строки, и заканчиваться в конце строки;
 #// - правда, они должны начинаться в первой строке файла, иначе ;
 
-Включаем по сигнатуре, от одной сигнатуры до другой
-#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleDoNothing`-`inline\nvoid simpleDoNothing`
 
 Включаем по сигнатуре, блок, но сигнатура в одну строку при ссылке
 #!insert{lineno} cpp\signature_test.cpp#`inline void simpleDoNothing`-{}
@@ -78,6 +76,11 @@ Language   : Russian
 Включаем по сигнатуре, шаблонная функция, до двух пустых строк
 #!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-(2)
 
+Включаем по сигнатуре, от одной сигнатуры до другой
+#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleDoNothing`-`inline\nvoid simpleDoNothing`
+
+Включаем по номерам строк
+#!insert{lineno} umba-md-pp\log.h#6-12
 
 
 #// Справочник по аргументам командной строки
@@ -141,8 +144,6 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-!!! File not found
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
 
 !!! File not found
 #!insert{lineno} cpp/print_ver.h#print_ver_all

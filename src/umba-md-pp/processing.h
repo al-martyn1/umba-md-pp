@@ -1205,55 +1205,11 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
 
 
     umba::md::SnippetTagInfo snippetTagInfo = umba::md::parseSnippetTag(snippetTag);
-    if (snippetTagInfo.isValid())
+    if (!snippetTagInfo.isValid())
     {
         resLines.emplace_back("!!! Invalid tag string: '" + snippetTag + "'");
         return false;
     }
-
-    #if 0
-    std::size_t startLineNo = 0;
-    std::size_t endLineNo   = 0;
-    if (isCodeTagLinesRange(snippetTag, startLineNo, endLineNo))
-    {
-        std::vector<std::string> insertSnippetLines;
-        firstLineIdx = startLineNo;
-        for(std::size_t idx=startLineNo; idx!=endLineNo; ++idx)
-        {
-            if (idx>=snippetsFileLines.size())
-                break;
-            insertSnippetLines.emplace_back(snippetsFileLines[idx]);
-        }
-
-        std::vector<std::string>
-        listingLines = prepareSnippetLines( appCfg, insertSnippetLines
-                                          , snippetFile, firstLineIdx
-                                          , fTrimLeft
-                                          , fTrimArround
-                                          , fAddLineNumbers
-                                          , fAddFilename
-                                          , fAddFilenameOnly
-                                          , fAddFilenameLineNumber
-                                          );
-        makeShureEmptyLine(resLines);
-        umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформление сделал
-        return true; // всё хорошо, не включит исходную строку
-    }
-    #endif
-
-    // std::string snippetTagPrefix;
-    // if (!lang.empty())
-    // {
-    //     snippetTagPrefix = appCfg.getLangCutPrefix(lang);
-    // }
-    //  
-    // if (snippetTagPrefix.empty()) // Не знаем, как искать тэг - нет информации по тому, какой префикс используется для тэгов сниппетов в данном языке
-    // {
-    //     makeShureEmptyLine(resLines);
-    //     resLines.emplace_back("!!! Unknown language, can't looking for tag, langs: " + appCfg.getAllLangFileExtentions());
-    //     return false; // Поэтому просто ошибка, исходная строка будет включена
-    // }
-
 
     ListingNestedTagsMode listingNestedTagsMode = ListingNestedTagsMode::remove;
 
