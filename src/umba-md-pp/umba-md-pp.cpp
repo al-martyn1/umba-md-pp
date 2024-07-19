@@ -55,6 +55,7 @@
 #include "utils.h"
 #include "batch_utils.h"
 #include "umba_md_processing_utils.h"
+#include "umba_md_html_utils.h"
 
 //
 #include "marty_tr/marty_tr.h"
@@ -165,6 +166,22 @@ int safe_main(int argc, char* argv[])
 
     if (umba::isDebuggerPresent())
     {
+        #if 1
+        umba::md::testParseSingleTag(std::cout, "</tag/>", '/');
+        umba::md::testParseSingleTag(std::cout, "<tag <", '<');
+        umba::md::testParseSingleTag(std::cout, "<tag attr<", '<');
+        umba::md::testParseSingleTag(std::cout, "<tag attr=<", '<');
+        umba::md::testParseSingleTag(std::cout, "<tag attr=val<", '<');
+        umba::md::testParseSingleTag(std::cout, "<", 'E');
+        umba::md::testParseSingleTag(std::cout, "<tag>", '>');
+        umba::md::testParseSingleTag(std::cout, "<tag attr=val />", '>');
+        umba::md::testParseSingleTag(std::cout, "</tag>", '>');
+        umba::md::testParseSingleTag(std::cout, "<tag attr />", '/');
+        umba::md::testParseSingleTag(std::cout, "<tag attr= />", '/');
+        umba::md::testParseSingleTag(std::cout, "<tag attr=val />", '/');
+        #endif
+
+
         #if 0
         auto nonCanonicalName = std::string("../../some_file.txt");
         auto canonicalName1 = umba::filename::makeCanonical(nonCanonicalName, '/', std::string("."), std::string(".."), false);
