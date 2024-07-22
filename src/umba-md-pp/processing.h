@@ -26,7 +26,10 @@
 
 #include "processing_utils.h"
 //
-#include <yaml-cpp/yaml.h>
+#include "yaml-cpp/yaml.h"
+//
+#include "md_pp_html_csv.h"
+#include "md_pp_html_graph.h"
 //
 #include <stack>
 #include <string>
@@ -35,6 +38,8 @@
 #include <utility>
 #include <algorithm>
 #include <iomanip>
+#include <unordered_map>
+#include <functional>
 
 
 //
@@ -45,16 +50,93 @@
 
 
 //----------------------------------------------------------------------------
+template<typename FilenameStringType>
+using TagLineExtraParser = std::function<std::string::const_iterator (const AppConfig<FilenameStringType>&, umba::html::HtmlTag&, MdPpTag, std::string::const_iterator, std::string::const_iterator)>;
+
+template<typename FilenameStringType>
+using TagLineExtraParsersMap = std::unordered_map<MdPpTag, TagLineExtraParser<FilenameStringType> >;
+
+template<typename FilenameStringType>
+TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
+{
+    //TODO: !!! Набить парсеры для graph/csv
+    TagLineExtraParsersMap<FilenameStringType> m;
+
+    m[MdPpTag::graph] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parsePossibleFilenameToGraphTag(mdHtmlTag, b, e);
+                        };
+
+    return m;
+}
+
+template<typename FilenameStringType>
+const TagLineExtraParsersMap<FilenameStringType>& getTagLineExtraParsersMap()
+{
+    static auto m = makeTagLineExtraParsersMap<FilenameStringType>();
+    return m;
+}
+
+template<typename FilenameStringType>
+std::string::const_iterator tagLineExtraParse(const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+{
+    auto &m = const_cast< TagLineExtraParsersMap<FilenameStringType>& >(getTagLineExtraParsersMap<FilenameStringType>());
+    auto it = m.find(tagType);
+    if (it==m.end())
+        return e;
+
+    return it->second(appCfg, mdHtmlTag, tagType, b, e);
+}
+
+//----------------------------------------------------------------------------
+template<typename FilenameStringType>
+using TagLinesProcessor = std::function<void (const AppConfig<FilenameStringType>&, umba::html::HtmlTag&, MdPpTag, const FilenameStringType&, const std::vector<std::string>&, std::vector<std::string>&)>;
+
+template<typename FilenameStringType>
+using TagLinesProcessorsMap = std::unordered_map<MdPpTag, TagLinesProcessor<FilenameStringType> >;
+
+template<typename FilenameStringType>
+TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
+{
+    //TODO: !!! Набить процессоры для graph/csv
+    return TagLinesProcessorsMap<FilenameStringType>();
+}
+
+template<typename FilenameStringType>
+const TagLinesProcessorsMap<FilenameStringType>& getTagLinesProcessorsMap()
+{
+    static auto m = makeTagLinesProcessorsMap<FilenameStringType>();
+    return m;
+}
+
+template<typename FilenameStringType>
+void tagLinesProcess(const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+{
+    auto &m = const_cast< TagLinesProcessorsMap<FilenameStringType>& >(getTagLinesProcessorsMap<FilenameStringType>());
+    auto it = m.find(tagType);
+    if (it==m.end())
+        return;
+
+    it->second(appCfg, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+}
+
+
+//----------------------------------------------------------------------------
+
+
+//MdPpTag foundTagType = MdPpTag::invalid;
 
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType>
-std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType&curFilename, Document &resDoc);
+std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType &curFilename, Document &resDoc);
 
 //----------------------------------------------------------------------------
 //! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
 template<typename LineHandler, typename FilenameStringType> inline
-std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, LineHandler handler)
+std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, const std::vector<std::string> &lines, LineHandler handler)
 {
     std::vector<std::string> resLines; resLines.reserve(lines.size());
 
@@ -69,6 +151,7 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
     for(std::size_t idx=0u; idx!=lines.size(); ++idx)
     {
         std::string line = lines[idx];
+
 
         if (state==PreprocessorParsingState::listing) // listing mode
         {
@@ -88,6 +171,7 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
                 }
             }
         }
+
 
         else if (state==PreprocessorParsingState::meta) // meta mode
         {
@@ -130,6 +214,52 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
                 state = PreprocessorParsingState::comment;
                 continue;
             }
+
+            umba::html::HtmlTag mdHtmlTag;
+            MdPpTag foundTagType = MdPpTag::invalid;
+            auto it = umba::md::tryParseLineToHtmlTag(mdHtmlTag, line.begin(), line.end(), foundTagType);
+            if (foundTagType!=MdPpTag::invalid && !mdHtmlTag.isCloseTag())
+            {
+                tagLineExtraParse(appCfg, mdHtmlTag, foundTagType, it, line.end());
+
+                std::vector<std::string> tagLines;
+
+                if (mdHtmlTag.hasAttr("file"))
+                {
+                    // read file here
+                    std::string foundFullFilename;
+                    std::string foundFileText;
+                    auto findRes = appCfg.findDocFileByIncludedFromFilename(mdHtmlTag.getAttrValue("file"), foundFullFilename, foundFileText, curFilename);
+                    if (!findRes) // document not found
+                    {
+                    }
+                    else
+                    {
+                        tagLines = marty_cpp::splitToLinesSimple(foundFileText);
+                    }
+                }
+                else
+                {
+                    // collect lines here
+                    for(++idx; idx!=lines.size(); ++idx)
+                    {
+                        umba::html::HtmlTag mdHtmlTagEnd;
+                        MdPpTag foundEndTagType = MdPpTag::invalid;
+                        auto it2 = umba::md::tryParseLineToHtmlTag(mdHtmlTagEnd, lines[idx].begin(), lines[idx].end(), foundEndTagType);
+                        if (foundTagType==foundEndTagType && mdHtmlTag.isCloseTag())
+                            break;
+                        tagLines.emplace_back(lines[idx]);
+                    }
+
+                    if (idx==lines.size())
+                        --idx;
+                }
+
+                tagLinesProcess(appCfg, mdHtmlTag, foundTagType, curFilename, tagLines, resLines);
+
+                continue;
+            }
+            
 
             if (isListingCommand(line))
             {
@@ -232,7 +362,7 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
 
 //----------------------------------------------------------------------------
 template<typename HeaderLineHandler, typename FilenameStringType> inline
-std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
+std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
@@ -250,13 +380,13 @@ std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> 
         return false;
     };
 
-    return processLines(appCfg, lines, handler);
+    return processLines(appCfg, curFilename, lines, handler);
 
 }
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, int raiseVal)
+std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, const std::vector<std::string> &lines, int raiseVal)
 {
     // Ограничиваем изменение разумной величиной
     if (raiseVal>3)
@@ -304,7 +434,7 @@ std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCf
         return true;
     };
 
-    return processHeaderLines(appCfg, lines, raiseHeader);
+    return processHeaderLines(appCfg, curFilename, lines, raiseHeader);
 }
 
 //----------------------------------------------------------------------------
@@ -375,14 +505,15 @@ std::string generateSectionNumberImpl(std::size_t lvl, const int *sectionCounter
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringType>                &appCfg
-                                             , const std::vector<std::string> &lines
-                                             , Document                       &docTo
-                                             , bool                           updateDocInfo
-                                             , bool                           updateHeader
-                                             , bool                           numerateSections
-                                             , bool                           idWithSecNumber
-                                             , bool                           addIdToHeader
+std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringType> &appCfg
+                                             , const FilenameStringType            &curFilename
+                                             , const std::vector<std::string>      &lines
+                                             , Document                            &docTo
+                                             , bool                                updateDocInfo
+                                             , bool                                updateHeader
+                                             , bool                                numerateSections
+                                             , bool                                idWithSecNumber
+                                             , bool                                addIdToHeader
                                              )
 {
     
@@ -481,7 +612,7 @@ std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringTyp
         return true;
     };
 
-    return processHeaderLines(appCfg, lines, processSectionNumber);
+    return processHeaderLines(appCfg, curFilename, lines, processSectionNumber);
 }
 
 
@@ -573,7 +704,7 @@ void checkPrintLineIfContainsPngExt(LineHandlerEvent event, const std::string &l
 //----------------------------------------------------------------------------
 // For substitutions|data collection on text lines
 template<typename LineHandler, typename FilenameStringType> inline
-std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, LineHandler simpleHandler)
+std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, const std::vector<std::string> &lines, LineHandler simpleHandler)
 {
     auto processLinesHandler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
@@ -608,15 +739,15 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
         return true;
     };
 
-    return processLines(appCfg, lines, processLinesHandler);
+    return processLines(appCfg, curFilename, lines, processLinesHandler);
 }
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> extractImageLinks( const AppConfig<FilenameStringType>           &appCfg
-                                         , Document                                      &docTo
-                                         , const std::vector<std::string>                &lines
-                                         , const std::string                             &curFilename         // currently processed file
+std::vector<std::string> extractImageLinks( const AppConfig<FilenameStringType>  &appCfg
+                                         , Document                              &docTo
+                                         , const std::vector<std::string>        &lines
+                                         , const std::string                     &curFilename         // currently processed file
                                          )
 {
     #if defined(LOG_PROCESSING_PROCESS_TEXT_LINES_SIMPLE_PRINT_PNG_LINES)
@@ -647,7 +778,7 @@ std::vector<std::string> extractImageLinks( const AppConfig<FilenameStringType> 
     };
 
     return
-    processTextLinesSimple( appCfg, lines
+    processTextLinesSimple( appCfg, curFilename, lines
                           , [&](const std::string &line)
                             {
                                 //TODO: !!! Надо бы сделать какой-то null_insert_iterator и null_inserter
@@ -707,7 +838,7 @@ std::vector<std::string> stripLocalLinksExtentions( const AppConfig<FilenameStri
     };
 
     return
-    processTextLinesSimple( appCfg, lines
+    processTextLinesSimple( appCfg, curFilename, lines
                           , [&](const std::string &line)
                             {
                                 std::string res;
@@ -924,7 +1055,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
     std::unordered_map<SnippetOptions, int>::const_iterator raiseOptIt = intOptions.find(SnippetOptions::raise);
     if (raiseOptIt!=intOptions.end() && raiseOptIt->second!=0)
     {
-        processedDocLines = raiseHeaders(appCfg, processedDocLines, raiseOptIt->second);
+        processedDocLines = raiseHeaders(appCfg, curFilename, processedDocLines, raiseOptIt->second);
     }
 
     auto curFilePath      = umba::filename::getPath(curFilename);
@@ -989,7 +1120,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
     std::cout << "--- Transform\n";
     #endif
 
-    processedDocLines = processTextLinesSimple( appCfg, processedDocLines
+    processedDocLines = processTextLinesSimple( appCfg, curFilename, processedDocLines
                                               , [&](const std::string &line)
                                                 {
                                                     #if defined(LOG_PROCESSING_TRANSFORM_BEFORE_AFTER)
@@ -1424,7 +1555,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
 
     };
  
-    return processLines(appCfg, lines, handler);
+    return processLines(appCfg, curFilename, lines, handler);
 }
 
 // //----------------------------------------------------------------------------
@@ -1455,7 +1586,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> &appCfg, Document &doc, const std::vector<std::string> &lines, bool &tocAdded)
+std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, Document &doc, const std::vector<std::string> &lines, bool &tocAdded)
 {
     std::size_t numTocFound = 0;
 
@@ -1484,7 +1615,7 @@ std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> 
         return false;
     };
 
-    return processLines(appCfg, lines, handler);
+    return processLines(appCfg, curFilename, lines, handler);
 }
 
 //----------------------------------------------------------------------------
@@ -1533,7 +1664,7 @@ std::string::size_type findPairedChar(const std::string &line, std::string::size
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Document &doc, const std::string &line)
+std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, Document &doc, const std::string &line)
 {
     // Идея по ссылкам на разделы. Указываем в них просто текст заголовка - [Какой-то текст](#Просто полный текст заголовка)
     // Также для каждого заголовка можно задать частично или полностью квалифицированную ссылку. Потом распарсим текст на предмет 
@@ -1672,7 +1803,7 @@ std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Documen
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Document &doc, const std::vector<std::string> &lines)
+std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, Document &doc, const std::vector<std::string> &lines)
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
@@ -1681,11 +1812,11 @@ std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &ap
             return true;
         }
 
-        line = updateInDocRefs(appCfg, doc, line);
+        line = updateInDocRefs(appCfg, curFilename, doc, line);
         return true;
     };
 
-    return processLines(appCfg, lines, handler);
+    return processLines(appCfg, curFilename, lines, handler);
 }
 
 //----------------------------------------------------------------------------
@@ -1717,7 +1848,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
                                      || appCfg.targetRenderer==TargetRenderer::gitlab
                                       ;
 
-    resLines = generateSecionsExtra( appCfg, resLines, doc
+    resLines = generateSecionsExtra( appCfg, curFilename, resLines, doc
                                    , true // update doc info
                                    , true // update header
                                    , appCfg.testProcessingOption(ProcessingOptions::numericSections) // нужно или нет реально генерить номера секций
@@ -1725,14 +1856,14 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
                                    , generateSecIds // needSpecialIdInSectionHeader
                                    );
 
-    resLines = updateInDocRefs(appCfg, doc, resLines);
+    resLines = updateInDocRefs(appCfg, curFilename, doc, resLines);
 
     resLines = extractImageLinks(appCfg, doc, resLines, curFilename );
     resLines = stripLocalLinksExtentions(appCfg, doc, resLines, curFilename );
 
 
     bool tocAdded = false;
-    resLines = processTocCommands(appCfg, doc, resLines, tocAdded);
+    resLines = processTocCommands(appCfg, curFilename, doc, resLines, tocAdded);
 
     if (!tocAdded && appCfg.testProcessingOption(ProcessingOptions::generateToc))
     {

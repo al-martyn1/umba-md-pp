@@ -30,10 +30,10 @@ IteratorType tryParseLineToHtmlTag(umba::html::HtmlTag &parseTo, IteratorType b,
     if (b==e)
         return b;
 
-    if (b!='<')
+    if (*b!='<')
         return e; // Не является открывающим тэгом
 
-    return parseSingleTag<'<', '>'>(parsedTo, b, e);
+    return parseSingleTag<'<', '>'>(parseTo, b, e);
 
 }
 
@@ -51,7 +51,7 @@ IteratorType tryParseLineToHtmlTag(umba::html::HtmlTag &parseTo, IteratorType b,
     if (*itRes!='>')
         return e;
 
-    if (!parseTo.isValid())
+    if (!parseTo.isTag())
         return e;
 
     typedef typename std::underlying_type<MdPpTag>::type  EnumUnderlyingType;

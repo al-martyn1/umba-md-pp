@@ -7,7 +7,11 @@
 #include "umba/umba.h"
 #include "umba/filename.h"
 #include "umba/filesys.h"
-//
+
+#if defined(WIN32) || defined(_WIN32)
+    #include "umba/win32_utils.h"
+#endif
+
 #include <string>
 
     
@@ -275,50 +279,6 @@ std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr, bool b
 
 //----------------------------------------------------------------------------
 inline
-bool isWindows32OnWindows64()
-{
-    #if !defined(WIN32) && !defined(_WIN32)
-
-        return false; // not a windows at all
-
-    #else
-
-        //#if defined(WIN64) || defined(_WIN64)
-
-        //    return false; // 64хбитное приложение, нет проблем
-
-        //#else
-
-            // https://stackoverflow.com/questions/14184137/how-can-i-determine-whether-a-process-is-32-or-64-bit
-
-            typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
-
-            BOOL bIsWow64 = FALSE;
-
-            auto hKernel = GetModuleHandle(TEXT("kernel32"));
-            if (hKernel)
-            {
-	            LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(hKernel,"IsWow64Process");
-                if (fnIsWow64Process)
-                {
-                    if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
-                    {
-                        //handle error
-                    }                
-                }
-            }
-
-            return bIsWow64 ? true : false;
-
-        //#endif
-
-    #endif
-}
-
-//----------------------------------------------------------------------------
-typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
-
-inline
 std::wstring findDoxygenExecutableName()
 {
     #if !defined(WIN32) && !defined(_WIN32)
@@ -327,6 +287,14 @@ std::wstring findDoxygenExecutableName()
 
     #else
 
+        std::wstring doxygenInstallPath;
+        if (umba::win32_utils::regQueryAppInstallLocationBin(std::wstring(L"doxygen_is1"), doxygenInstallPath))
+        {
+        }
+
+        return umba::filename::appendPath(doxygenInstallPath, std::wstring(L"doxygen.exe"));
+
+        #if 0
         // https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-functions
 
         std::wstring doxygen = L"doxygen.exe";
@@ -396,6 +364,7 @@ std::wstring findDoxygenExecutableName()
         }
 
         return doxygen;
+        #endif
 
     #endif
 }
@@ -426,6 +395,8 @@ void showErrorMessageBox(std::string str)
 inline
 HKEY regCreateKeyHelper(HKEY hKeyRoot, const std::wstring &path, REGSAM samDesired)
 {
+    return umba::win32_utils::regCreateKey(hKeyRoot, path, samDesired);
+#if 0
     if (isWindows32OnWindows64()) // 32х-битные системы сейчас конечно уже экзотика, но на всякий случай - я же и на XP могу работать
     {
         samDesired |= KEY_WOW64_64KEY;
@@ -450,6 +421,7 @@ HKEY regCreateKeyHelper(HKEY hKeyRoot, const std::wstring &path, REGSAM samDesir
     }
 
     return hKeyRes;
+#endif
 }
 
 //------------------------------

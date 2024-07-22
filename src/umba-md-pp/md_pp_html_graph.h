@@ -1,5 +1,7 @@
 #pragma once
 
+#include "md_pp_html.h"
+
 // umba::md::
 namespace umba {
 namespace md {
@@ -10,7 +12,8 @@ namespace md {
 
 //----------------------------------------------------------------------------
 //! Мы уже распарсили стартовый тэг <graph>, за ним может быть имя файла
-IteratorType parseLineToGraphTag(umba::html::HtmlTag &parseTo, IteratorType b, IteratorType e)
+template<typename IteratorType>
+IteratorType parsePossibleFilenameToGraphTag(umba::html::HtmlTag &parseTo, IteratorType b, IteratorType e)
 {
     if (b==e)
         return b;
@@ -45,7 +48,14 @@ IteratorType parseLineToGraphTag(umba::html::HtmlTag &parseTo, IteratorType b, I
     return b;
 }
 
+//----------------------------------------------------------------------------
+template<typename FilenameStringType>
+void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType
+                      , const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines
+                      )
+{
 
+}
 //----------------------------------------------------------------------------
 
 } // namespace md

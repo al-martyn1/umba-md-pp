@@ -57,6 +57,8 @@
 #include "batch_utils.h"
 #include "umba_md_processing_utils.h"
 #include "umba_md_html_utils.h"
+#include "viewer_utils.h"
+//findDoxygenExecutableName()
 
 //
 #include "marty_tr/marty_tr.h"
@@ -169,7 +171,17 @@ int safe_main(int argc, char* argv[])
     {
         #if 1
 
-        std::cout << (umba::CharClassFlagUnderlyingType)(umba::CharClassFlag::nonprintable | umba::CharClassFlag::punctuation) << "\n";
+        // std::cout << (umba::CharClassUnderlyingType)(umba::CharClass::nonprintable | umba::CharClass::punctuation) << "\n";
+
+        std::string doxygenExe = umba::toUtf8(findDoxygenExecutableName());
+        std::cout << "Doxygen: " << doxygenExe << "\n";
+
+        std::wstring graphvizBinPath;
+        if (umba::win32_utils::regQueryAppInstallLocationBin(std::wstring(L"Graphviz"), graphvizBinPath))
+        {
+        }
+        std::cout << "Graphviz bin path: " << umba::toUtf8(graphvizBinPath) << "\n";
+
 
         #endif
 
