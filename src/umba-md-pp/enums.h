@@ -713,3 +713,33 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetTagType, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetTagType, std::map, 1 )
 
 
+enum class MdPpTag : std::uint32_t
+{
+    invalid   = (std::uint32_t)(-1),
+    unknown   = (std::uint32_t)(-1),
+    graph     = 0x0000,
+    begin     = 0x0000,
+    csv       = 0x0001,
+    end       = 0x0002
+
+}; // enum class MdPpTag : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(MdPpTag)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::invalid   , "Invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csv       , "Csv"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::graph     , "Graph"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::end       , "End"     );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MdPpTag, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "unknown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csv       , "csv"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "graph"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "begin"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::end       , "end"     );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MdPpTag, std::map, 1 )
+
+

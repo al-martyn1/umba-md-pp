@@ -48,6 +48,7 @@
 #include "umba/filename.h"
 #include "umba/format_message.h"
 #include "umba/id_gen.h"
+#include "umba/char_class.h"
 
 #include "snippet_options.h"
 
@@ -167,6 +168,12 @@ int safe_main(int argc, char* argv[])
     if (umba::isDebuggerPresent())
     {
         #if 1
+
+        std::cout << (umba::CharClassFlagUnderlyingType)(umba::CharClassFlag::nonprintable | umba::CharClassFlag::punctuation) << "\n";
+
+        #endif
+
+        #if 0
         umba::md::testParseSingleTag(std::cout, "</tag/>", '/');
         umba::md::testParseSingleTag(std::cout, "<tag <", '<');
         umba::md::testParseSingleTag(std::cout, "<tag attr<", '<');
