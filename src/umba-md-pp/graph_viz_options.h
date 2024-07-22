@@ -27,6 +27,19 @@ struct GraphVizOptions
 
     std::string              savePath;
 
+
+    std::string getSavePath() const
+    {
+        if (savePath.empty())
+            return umba::filesys::getCurrentDirectory<std::string>();
+
+        if (!umba::filename::isAbsPath(savePath))
+            return umba::filename::appendPath(umba::filesys::getCurrentDirectory<std::string>(), savePath);
+
+        return savePath;
+    }
+    
+
     std::string generateOutputFilename() const
     {
         std::string name;
@@ -46,7 +59,7 @@ struct GraphVizOptions
         name.append("_");
         name.append(std::to_string(getScaledDpi()));
 
-        return umba::filename::appendPath(savePath, umba::filename::appendExt(name, enum_serialize(targetFormat)));
+        return umba::filename::appendPath(getSavePath(), umba::filename::appendExt(name, enum_serialize(targetFormat)));
     }
 
     void setSaveFileName(const std::string &name)
