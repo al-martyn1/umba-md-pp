@@ -337,7 +337,7 @@ int operator()( const StringType                                &a           //!
 
             StringType optArg;
             umba::utfToStringTypeHelper(optArg, opt.optArg);
-            if (!appConfig.addSamplesPaths(optArg, getBasePath()))
+            if (!appConfig.addSamplesPaths(optArg, makeAbsPath(optArg)))
             {
                 LOG_ERR_OPT<<"Adding paths for examples searching failed, invalid argument: '" << optArg << "'\n";
                 return -1;
@@ -1013,6 +1013,76 @@ int operator()( const StringType                                &a           //!
             appConfig.stripExtentions = boolVal;
             return 0;
         }
+
+        else if ( opt.setParam("DPI",umba::command_line::OptionType::optString)
+               || opt.isOption("gviz-dpi")
+               || opt.isOption("graphviz-dpi")
+               || opt.setDescription("Set DPI for Graphviz tools output."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+         
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.graphVizOptions.setDpi(strVal))
+            {
+                LOG_ERR_OPT<<"Setting DPI for Graphviz tools output failed, invalid argument: '" << strVal << "' (--graphviz-dpi)\n";
+                return -1;
+            }
+            return 0;
+        }
+
+        else if ( opt.setParam("DPI",umba::command_line::OptionType::optString)
+               || opt.isOption("gviz-output-format")
+               || opt.isOption("graphviz-output-format")
+               || opt.setDescription("Set Graphviz tools output format (SVG/PNG/BMP)."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+         
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.graphVizOptions.setTargetFormat(strVal))
+            {
+                LOG_ERR_OPT<<"Setting Graphviz tools output format failed, invalid argument: '" << strVal << "' (--graphviz-output-format)\n";
+                return -1;
+            }
+            return 0;
+        }
+
+        else if ( opt.setParam("DPI",umba::command_line::OptionType::optString)
+               || opt.isOption("gviz-output-path")
+               || opt.isOption("graphviz-output-path")
+               || opt.isOption("gviz-output-root")
+               || opt.isOption("graphviz-output-root")
+               || opt.setDescription("Set Graphviz tools output root path."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+         
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.graphVizOptions.savePath = makeAbsPath(strVal);
+
+            // if (!appConfig.graphVizOptions.setTargetFormat(optArg))
+            // {
+            //     LOG_ERR_OPT<<"Setting Graphviz tools output format failed, invalid argument: '" << optArg << "' (--graphviz-output-path)\n";
+            //     return -1;
+            // }
+
+            return 0;
+        }
+
+
 
         else if ( opt.setParam("EXT[,EXT...]",umba::command_line::OptionType::optString)
                || opt.isOption("add-mdpp-extention")

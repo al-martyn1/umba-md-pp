@@ -22,6 +22,8 @@
 #include "umba/filesys.h"
 //
 #include "marty_cpp/src_normalization.h"
+//
+#include "graph_viz_options.h"
 
 //
 #include <string>
@@ -279,6 +281,8 @@ struct AppConfig
     FilenameStringType                                    strictPath ;
 
     umba::md::LanguageOptionsDatabase                     languageOptionsDatabase;
+
+    GraphVizOptions                                       graphVizOptions;
 
     //std::unordered_map<FilenameStringType, std::string>   extToLang  ;
     //std::unordered_map<std::string, LangOptions>          langOptions;
