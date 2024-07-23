@@ -2,6 +2,9 @@
     \brief Разные утилитки
  */
 
+#pragma once
+
+
 #include "umba/filename.h"
 #include "umba/filesys.h"
 #include "umba/string_plus.h"

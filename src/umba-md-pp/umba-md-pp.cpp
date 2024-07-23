@@ -169,7 +169,7 @@ int safe_main(int argc, char* argv[])
 
     if (umba::isDebuggerPresent())
     {
-        #if 1
+        #if 0
 
         // std::cout << (umba::CharClassUnderlyingType)(umba::CharClass::nonprintable | umba::CharClass::punctuation) << "\n";
 
@@ -374,6 +374,11 @@ int safe_main(int argc, char* argv[])
         argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test,rc,_generators,_distr_conf,src,.msvc2019,boost,icons");
         argsParser.args.push_back("--batch-exclude-files=*upper_inc.md*");
         argsParser.args.push_back("--batch-scan-recurse="+rootPath);
+
+        argsParser.args.push_back("--graphviz-output-path="+rootPath+"\\doc\\generated_images");
+        //argsParser.args.push_back("--graphviz-output-format=svg");
+        
+        
         //argsParser.args.push_back("");
 
 

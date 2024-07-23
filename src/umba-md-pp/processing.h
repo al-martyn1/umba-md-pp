@@ -28,6 +28,8 @@
 //
 #include "yaml-cpp/yaml.h"
 //
+#include "enum_hash.h"
+//
 #include "md_pp_html_csv.h"
 #include "md_pp_html_graph.h"
 //
@@ -54,7 +56,7 @@ template<typename FilenameStringType>
 using TagLineExtraParser = std::function<std::string::const_iterator (const AppConfig<FilenameStringType>&, umba::html::HtmlTag&, MdPpTag, std::string::const_iterator, std::string::const_iterator)>;
 
 template<typename FilenameStringType>
-using TagLineExtraParsersMap = std::unordered_map<MdPpTag, TagLineExtraParser<FilenameStringType> >;
+using TagLineExtraParsersMap = std::unordered_map<MdPpTag, TagLineExtraParser<FilenameStringType>, EnumClassHash >;
 
 template<typename FilenameStringType>
 TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
@@ -95,13 +97,19 @@ template<typename FilenameStringType>
 using TagLinesProcessor = std::function<void (const AppConfig<FilenameStringType>&, umba::html::HtmlTag&, MdPpTag, const FilenameStringType&, const std::vector<std::string>&, std::vector<std::string>&)>;
 
 template<typename FilenameStringType>
-using TagLinesProcessorsMap = std::unordered_map<MdPpTag, TagLinesProcessor<FilenameStringType> >;
+using TagLinesProcessorsMap = std::unordered_map<MdPpTag, TagLinesProcessor<FilenameStringType>, EnumClassHash >;
 
 template<typename FilenameStringType>
 TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
 {
     //TODO: !!! Набить процессоры для graph/csv
-    return TagLinesProcessorsMap<FilenameStringType>();
+    TagLinesProcessorsMap<FilenameStringType> m;
+
+    m[MdPpTag::graph] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processGraphLines(appCfg, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+    return m;
 }
 
 template<typename FilenameStringType>

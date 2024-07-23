@@ -727,10 +727,10 @@ enum class MdPpTag : std::uint32_t
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(MdPpTag)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::invalid   , "Invalid" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csv       , "Csv"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::graph     , "Graph"   );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::end       , "End"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csv       , "csv"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::graph     , "graph"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::end       , "end"     );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MdPpTag, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
@@ -756,10 +756,10 @@ enum class GraphVizTargetFormat : std::uint32_t
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(GraphVizTargetFormat)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( GraphVizTargetFormat, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::bmp       , "Bmp"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::invalid   , "Invalid" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::svg       , "Svg"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::png       , "Png"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::bmp       , "bmp"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::svg       , "svg"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::png       , "png"     );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( GraphVizTargetFormat, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( GraphVizTargetFormat, std::map, 1 )
@@ -782,8 +782,8 @@ enum class GraphType : std::uint32_t
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(GraphType)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( GraphType, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::dot       , "Dot"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::invalid   , "Invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::dot       , "dot"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::invalid   , "invalid" );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( GraphType, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( GraphType, std::map, 1 )

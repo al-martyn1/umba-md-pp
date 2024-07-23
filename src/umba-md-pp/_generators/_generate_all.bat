@@ -26,6 +26,8 @@
 @set SERIALIZE_CAMEL=--serialize-style=CamelStyle
 @set VALUES_PASCAL=--enum-values-style=PascalStyle
 @set SERIALIZE_PASCAL=--serialize-style=PascalStyle
+@set SERIALIZE_HYPHEN=--serialize-style=HyphenStyle
+
 
 @set SNIPPETOPTIONS_GEN_FLAGS=--enum-flags=0 --enum-flags=type-decl,serialize,deserialize,lowercase,enum-class,fmt-hex %VALUES_CAMEL% %SERIALIZE_PASCAL% --enum-serialize-style=All
 
@@ -45,6 +47,7 @@ umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% ^
                                           %UINT32% %HEX4% -E=BacktickProcessingState       -F=@BacktickProcessingState.txt      ^
                                           %UINT32% %HEX4% -E=PreprocessorDirective         -F=@PreprocessorDirective.txt        ^
                                           %UINT32% %HEX4% -E=SnippetTagType                -F=@SnippetTagType.txt               ^
+                                          %SERIALIZE_HYPHEN%                                                                    ^
                                           %UINT32% %HEX4% -E=MdPpTag                       -F=@MdPpTag.txt                      ^
                                           %UINT32% %HEX4% -E=GraphVizTargetFormat          -F=@GraphVizTargetFormat.txt         ^
                                           %UINT32% %HEX4% -E=GraphType                     -F=@GraphType.txt                    ^

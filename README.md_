@@ -43,6 +43,10 @@ Language   : Russian
   - умеет в метаданные **Markdown**;
 
 
+Пытаемся в графы
+<graph> doc\dot\test001.dot
+<graph> doc\dot\test004.dot
+
 Пытаемся в картинки
 
 ![Todo 1](doc/icons/todo-list-50.png)
