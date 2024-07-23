@@ -45,8 +45,8 @@ Test number one
 
 
 Пытаемся в графы
-![Graph](doc/generated_images/doc/dot/test001_96.svg)
-![Graph](doc/generated_images/doc/dot/test004_96.svg)
+![Graph](doc/generated_images/doc/dot/test001.svg)
+![Graph](doc/generated_images/doc/dot/test004.svg)
 
 Пытаемся в картинки
 
