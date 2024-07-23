@@ -46,7 +46,7 @@ struct GraphVizOptions
             // dot -Tsvg -s72 -o test001_72.svg test001.dot
             tool = "dot";
             args  = makeDotTargetFormatCliArgument();
-            args += " " + makeDotDpiCliArgument();
+            //args += " " + makeDotDpiCliArgument();
             args += " -o " + escapeCommandLineArgument(outputImageFile);
             args += " " + escapeCommandLineArgument(inputDotFile);
             return true;

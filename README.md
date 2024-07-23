@@ -48,7 +48,6 @@ Test number one
 
 ![Graph](doc/generated_images/doc/dot/test001.svg)
 
-# Failed to copy temp file 'C:\work\github\umba-tools\umba-md-pp\.\doc\generated_images\$temp$.svg' to target file 'C:\work\github\umba-tools\umba-md-pp\.\doc\generated_images\doc\dot\test004.svg', error: 2
 ![Graph](doc/generated_images/doc/dot/test004.svg)
 
 ![Graph](doc/generated_images/life.svg)
@@ -196,7 +195,6 @@ Bla-bla.
   - [Важные ссылки](#user-content-важные-ссылки)
     - [Тест макроподстановки в именах включаемых файлов](#user-content-тест-макроподстановки-в-именах-включаемых-файлов)
   - [Основные возможности](#user-content-основные-возможности)
-  - [Failed to copy temp file 'C:\work\github\umba-tools\umba-md-pp\.\doc\generated_images\$temp$.svg' to target file 'C:\work\github\umba-tools\umba-md-pp\.\doc\generated_images\doc\dot\test004.svg', error: 2](#user-content-failed-to-copy-temp-file-cworkgithubumba-toolsumba-md-ppdocgenerated_imagestempsvg-to-target-file-cworkgithubumba-toolsumba-md-ppdocgenerated_imagesdocdottest004svg-error-2)
   - [3 Подключенные для примера результаты тестов](#user-content-3-подключенные-для-примера-результаты-тестов)
     - [Title](#user-content-title)
       - [Subtitle](#user-content-subtitle)

@@ -286,7 +286,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
     }
 
 
-    if (errMsg.empty())
+    if (needDotProcessing && errMsg.empty())
     {
         umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
         if (!MoveFileExA( tempTargetFile.c_str(), outputFilename.c_str()
