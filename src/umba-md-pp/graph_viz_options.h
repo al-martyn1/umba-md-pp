@@ -84,8 +84,12 @@ struct GraphVizOptions
             name = saveFilename;
         }
 
-        name.append("_");
-        name.append(std::to_string(getScaledDpi()));
+        // SVG не масштабируем при помощи DPI, выходит лажа - размер вроде тот же, а картинка больше, в итоге часть обрезается. SVG и так норм отображается
+        if (targetFormat!=GraphVizTargetFormat::svg)
+        {
+            name.append("_");
+            name.append(std::to_string(getScaledDpi()));
+        }
 
         return umba::filename::appendPath(getSavePath(), umba::filename::appendExt(name, enum_serialize(targetFormat)));
     }
@@ -113,6 +117,9 @@ struct GraphVizOptions
 
     unsigned long getScaledDpi() const
     {
+        // SVG не масштабируем при помощи DPI, выходит лажа - размер вроде тот же, а картинка больше, в итоге часть обрезается. SVG и так норм отображается
+        if (targetFormat==GraphVizTargetFormat::svg)
+            return 96;
         return dpi*scale / 100ul;
     }
 

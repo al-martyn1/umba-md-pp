@@ -197,7 +197,10 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
                 if (hashStr==dotHashStr) // Хэш - такой же
                 {
                     needWriteHashLines = false; // Обновлять не надо
-                    needDotProcessing  = false; // Ничего генерить не надо, граф не поменялся
+                    if (umba::filesys::isPathExist(filenameStr) && umba::filesys::isPathFile(filenameStr))
+                    {
+                        needDotProcessing  = false; // Ничего генерить не надо, граф не поменялся, файл на месте
+                    }
                     break; // выходим из цикла, потому как newHashFileLines не надо больше обновлять
                 }
                 else // хэш не сошелся, надо перегенерить картинку и обновить строчку хэша в файле
@@ -301,8 +304,12 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
         resLines.emplace_back("# " + errMsg);
     }
     
-    umba::filesys::deleteFile(tempDotFile);
-    umba::filesys::deleteFile(tempTargetFile);
+    if (errMsg.empty())
+    {
+        umba::filesys::deleteFile(tempDotFile);
+        umba::filesys::deleteFile(tempTargetFile);
+    }
+
 
     std::string imgLink;
     

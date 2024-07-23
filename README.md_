@@ -44,8 +44,32 @@ Language   : Russian
 
 
 Пытаемся в графы
+
 <graph> doc\dot\test001.dot
+
 <graph> doc\dot\test004.dot
+
+<graph save-as=life>
+ digraph G{ 
+  Рождение->Юность->Зрелость->Старость->Смерть;
+  Юность->Смерть;
+  Зрелость->Смерть;
+ }
+</graph>
+
+<graph save-as=left-to-right>
+digraph G{
+ rankdir=LR;
+ node[color="red",fontsize=14];
+ edge[color="darkgreen",fontcolor="blue",fontsize=12];
+ OPEN[shape="rectangle",style="filled",fillcolor="lightgrey"];
+ CLOSED[shape="octagon",label="Финиш"];
+ VERIFIED[shape="rectangle",style="rounded"];
+ OPEN->RESOLVED->VERIFIED->CLOSED;
+ OPEN->CLOSED[style="bold"];
+ VERIFIED->OPEN[label="обнаружены ошибки",style="dashed",arrowhead="dot"];
+}
+</graph>
 
 Пытаемся в картинки
 

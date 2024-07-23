@@ -2,6 +2,8 @@
     \brief Утилита umba-md-pp - препроцессор для маркдауна
  */
 
+// C:\Users\mag\AppData\Local\Temp\.umba-md-pp-view\
+
 // Должна быть первой
 #include "umba/umba.h"
 //---
