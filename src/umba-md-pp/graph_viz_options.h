@@ -38,7 +38,7 @@ struct GraphVizOptions
 
         return savePath;
     }
-    
+
 
     std::string generateOutputFilename() const
     {
@@ -134,7 +134,7 @@ struct GraphVizOptions
 
     // --dot-output-root/--dot-output-path
     // dot -Tsvg -Gdpi=300 -s96 -o test001_96.svg test001.dot
-    
+
 
 
 };

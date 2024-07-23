@@ -180,19 +180,19 @@ std::string generateSectionId(const AppConfig<FilenameStringType> &appCfg, const
         *pLevel = levelStr.size();
     }
 
-    // Не делаем никаких исключений для 
+    // Не делаем никаких исключений для
 
     // if (headerText.back()==']' && appCfg.targetRenderer==TargetRenderer::doxygen)
     // {
     //     // У нас есть идентификаторы в квадратных скобках, по ним мы генерим якоря (только doxygen)
     //     std::size_t idx = headerText.size();
     //     for(; idx!=0 && headerText[idx-1]!='['; --idx) {}
-    //  
+    //
     //     if (idx==0)
     //     {
     //         return generateSectionIdImpl(appCfg, headerText);
     //     }
-    //  
+    //
     //     std::string takenId = std::string(headerText, idx, headerText.size()-idx-1);
     //     return generateSectionIdImpl(appCfg, takenId);
     // }

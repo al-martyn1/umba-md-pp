@@ -16,7 +16,7 @@
 #include <iterator>
 #include <deque>
 #include <queue>
-	
+
 //
 #include "umba/container.h"
 //
@@ -43,7 +43,7 @@ namespace md {
  1) Запретить в метках/тэгах выкусывания фрагментов кода символ '-' - он только для разделения частей тэга
  2) Конечного тэга нет - ориентируемся по скобкам: "#start_tag-{}" - при этом скобки реально используются те, которые в конфиге для языка заданы, а не именно что фигурные
  3) Конечного номера строки нет - ориентируемся по скобкам: "#NNN-{}" - при этом скобки реально используются те, которые в конфиге для языка заданы, а не именно что фигурные
- 4) У нас нет тэга, мы хотим выцепить по сигнатуре текста, возможно, многострочного: "#`inline\nvoid\ndoSomething()`-{}". 
+ 4) У нас нет тэга, мы хотим выцепить по сигнатуре текста, возможно, многострочного: "#`inline\nvoid\ndoSomething()`-{}".
     Сигнатуру можно искать только после определённого номера строки: "#NNN`inline\nvoid\ndoSomething()`-{}".
  5) Когда ищем скобки - строковые литералы не сканируем - слишком геморно пока, да и для разных языков оно разное, таким образом, может получится косяк распознования блока.
  6) Хотим закончить по generic stop маркеру: "#start_tag-(-)"/"#NNN-(-)"
@@ -87,8 +87,8 @@ struct TextSignature
     // using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
     // //using signature_lines_vector_type = umba::container::small_vector<std::string, 4, void, umba::container::small_vector_option_inplace_alignment_16_t, umba::container::small_vector_option_growth_50_t >;
     // using signature_lines_vector_type = umba::container::small_vector<std::string, 4, void, options_type >;
-    //  
-    //  
+    //
+    //
     // signature_lines_vector_type    signatureLinesVector; // normalized or original? Чтобы при отладке знать, какой был оригинал, и заодно имеем тут число строк в искомой сигнатуре
     std::string                    normalizedSignature ;
 
@@ -134,7 +134,7 @@ struct TextSignature
     Нужен новый алгоритм.
 
     Сигнатура, которую мы ищем, всегда задаётся в одну строку.
-    
+
     Итак.
     1) Очередь пуста. Тупо кладём элемент
     2) Сигнатурная строка, сформированная из очереди, короче искомой - значит, она не может начинаться с искомой - тупо добавляем туда очередную строку (п.1 является частным случаем п.2)
@@ -338,11 +338,11 @@ std::size_t findBlockInLines(const std::vector<std::string> &lines, char blockCh
         {
             if (ch==blockCharOpen)
             {
-                ++openCount; 
+                ++openCount;
             }
             else if (ch==blockCharClose)
             {
-                --openCount; 
+                --openCount;
                 if (openCount==0)
                 {
                     return curLineIdx;
@@ -403,7 +403,7 @@ std::size_t findEmptyLinesStopInLines(const std::vector<std::string> &lines, std
 
     if (numEmptyLines<1u)
         numEmptyLines = 1;
-    
+
 
     std::size_t emptyLineCount = 0;
     std::size_t curLineIdx = startLine;
@@ -467,10 +467,10 @@ bool extractCodeTagFromLine(std::string &line, const std::string &tagPrefix)
     umba::string_plus::trim(lineCopy);
 
     // Тэг не должен содержать пробелов
-    // Но у нас может быть ситуация, когда в языке не поддерживаются однострочные коментарии, 
+    // Но у нас может быть ситуация, когда в языке не поддерживаются однострочные коментарии,
     // и тогда мы в строке после тэга дописываем после пробела завершающую последовательность
     // По пробелу мы её находим и удаляем
-    auto spacePos = lineCopy.find(' '); 
+    auto spacePos = lineCopy.find(' ');
     if (spacePos!=lineCopy.npos)
     {
         lineCopy.erase(spacePos, lineCopy.npos);
@@ -538,10 +538,10 @@ std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::Langua
             case ListingNestedTagsMode::keep  :
                  fragmentLines.emplace_back(line);
                  break;
-         
+
             case ListingNestedTagsMode::remove:
                  break;
-         
+
             case ListingNestedTagsMode::empty :
                  fragmentLines.emplace_back(std::string());
                  break;
@@ -564,7 +564,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::Langua
 
         if (openedTags.back()==tagName)
             return true; // текущий тэг закрывает того, что на стеке - имя одно
-    
+
         return false;
     };
 
@@ -598,7 +598,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::Langua
 
         if (openedTags.back()==targetFragmentTag)
             return true; // искомый тэг на вершине
-    
+
         return false;
     };
 
@@ -607,7 +607,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::Langua
 
     for(; lineIdx!=lines.size(); ++lineIdx)
     {
-        auto l = lines[lineIdx]; 
+        auto l = lines[lineIdx];
 
         //bool isCodeTagLine(std::string line, std::string *pFoundTagPrefix=0) const
         if (!langOpts.isCodeTagLine(l, &foundTagPrefix))
@@ -706,7 +706,7 @@ struct SnippetTagInfo
     // {
     //     if (startTagOrSignaturePath.empty())
     //         return 0;
-    //  
+    //
     //     return startTagOrSignaturePath[startTagOrSignaturePath.size()-1].signatureLinesVector.size();
     // }
 
@@ -822,7 +822,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
 
     if (tagInfo.startType==SnippetTagType::normalTag)
     {
-        std::string targetFragmentTag; // Хз, зачем нам это раньше понадобилось снаружи 
+        std::string targetFragmentTag; // Хз, зачем нам это раньше понадобилось снаружи
         return extractCodeFragmentBySnippetTag( langOpts, lang, lines, firstFoundLineIdx, targetFragmentTag, listingNestedTagsMode, startLineIdx, tabSize);
     }
     else if (tagInfo.startType==SnippetTagType::textSignature)
@@ -944,7 +944,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
     // SnippetTagType             startType               = SnippetTagType::invalid;
     // std::size_t                startNumber             = 0; // line number
     // text_signature_vector      startTagOrSignaturePath ; // start tag or text signatures path. For start tag only one element of the  vector used
-    //  
+    //
     // SnippetTagType             endType                 = SnippetTagType::invalid;
     // std::size_t                endNumber               = 0; // end line number or number of empty lines to stop
     // TextSignature              endSignature            ;    // paths not supported here
@@ -961,9 +961,9 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
 //     block               = 0x0003 /*!< Allowed for end only - signals that we need to cat code block in block symbols */,
 //     genericStopMarker   = 0x0004 /*!< Allowed for end only */,
 //     stopOnEmptyLines    = 0x0005 /*!< Allowed for end only */
-//  
+//
 // }; // enum class SnippetTagType : std::uint32_t
-    
+
 
 
 //----------------------------------------------------------------------------
@@ -1004,7 +1004,7 @@ Iterator parseSnippetTagFirstPart(Iterator b, Iterator e, SnippetTagInfo &parseT
                 parseToSnippetTagInfo.startType = SnippetTagType::lineNumber;
             }
         }
-    
+
     };
 
     // NNN`inline\nvoid\ndoSomething`/`inline\nvoid\ndoSomeOther`-
@@ -1140,7 +1140,7 @@ Iterator parseSnippetTagFirstPart(Iterator b, Iterator e, SnippetTagInfo &parseT
             break;
 
         } // switch(st)
-    
+
     } // for(; b!=e; ++b)
 
 
@@ -1262,7 +1262,7 @@ Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parse
                     st = stParseStopLinesNumber;
                     parseToSnippetTagInfo.endType = SnippetTagType::stopOnEmptyLines;
                 }
-                else 
+                else
                 {
                     parseToSnippetTagInfo.endType = SnippetTagType::genericStopMarker;
                     return b;
@@ -1282,7 +1282,7 @@ Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parse
                     parseToSnippetTagInfo.endNumber *= (std::size_t)10u;
                     parseToSnippetTagInfo.endNumber += (std::size_t)((*b)-'0');
                 }
-                else 
+                else
                 {
                     return b;
                 }
@@ -1466,15 +1466,15 @@ void testParseSnippetTag(StreamType &s, const std::string &tag)
 // {
 //     using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
 //     using text_signature_vector = umba::container::small_vector<TextSignature, 4, void, options_type >;
-//  
+//
 //     SnippetTagType             startType               = SnippetTagType::invalid;
 //     std::size_t                startNumber             = 0; // line number
 //     text_signature_vector      startTagOrSignaturePath ; // start tag or text signatures path. For start tag only one element of the  vector used
-//  
+//
 //     SnippetTagType             endType                 = SnippetTagType::invalid;
 //     std::size_t                endNumber               = 0; // end line number or number of empty lines to stop
 //     TextSignature              endSignature            ;    // paths not supported here
-//  
+//
 // }; // struct SnippetTagInfo
 
 
@@ -1490,7 +1490,7 @@ void testParseSnippetTag(StreamType &s, const std::string &tag)
 //     block               = 0x0003 /*!< Allowed for end only - signals that we need to cat code block in block symbols */,
 //     genericStopMarker   = 0x0004 /*!< Allowed for end only */,
 //     stopOnEmptyLines    = 0x0005 /*!< Allowed for end only */
-//  
+//
 // }; // enum class SnippetTagType : std::uint32_t
 
 
@@ -1744,19 +1744,19 @@ SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optList
             {
                 umba::string_plus::trim(optName);
                 umba::string_plus::trim(optVal);
-    
+
                 auto optId = enum_deserialize(optName, SnippetOptions::invalid);
                 if (optId==SnippetOptions::invalid)
                 {
                     return SnippetOptionsParsingResult::fail;
                 }
-    
+
                 if ((((std::uint32_t)optId)&0xF000u)!=0x2000u)
                 {
                     // Not a numeric option
                     return SnippetOptionsParsingResult::fail;
                 }
-    
+
                 try
                 {
                     int iVal = std::stoi(optVal);
@@ -1780,21 +1780,21 @@ SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optList
                 {
                     return SnippetOptionsParsingResult::fail;
                 }
-    
+
                 if ((((std::uint32_t)optId)&0xF000u)!=0x1000u)
                 {
                     // Not a flag option
                     return SnippetOptionsParsingResult::fail;
                 }
-    
+
                 bool isOff = false;
                 if ((((std::uint32_t)optId)&0x0001u)==0x0000u)
                 {
                     isOff = true;
                 }
-    
+
                 auto baseOpt = (SnippetOptions)(((std::uint32_t)optId)|0x0001u);
-    
+
                 if (isOff)
                 {
                     flagOptions.erase(baseOpt);
@@ -1825,21 +1825,21 @@ SnippetOptionsParsingResult deserializeProcessingOptions(const std::string &optL
         {
             return SnippetOptionsParsingResult::fail;
         }
-    
+
         if ((((std::uint32_t)optId)&0xF000u)!=0x1000u)
         {
             // Not a flag option
             return SnippetOptionsParsingResult::fail;
         }
-    
+
         bool isOff = false;
         if ((((std::uint32_t)optId)&0x0001u)==0x0000u)
         {
             isOff = true;
         }
-    
+
         auto baseOpt = (ProcessingOptions)(((std::uint32_t)optId)|0x0001u);
-    
+
         if (isOff)
         {
             flagOptions.erase(baseOpt);
@@ -1848,8 +1848,8 @@ SnippetOptionsParsingResult deserializeProcessingOptions(const std::string &optL
         {
             flagOptions.insert(baseOpt);
         }
-        
-        
+
+
     }
 
     return SnippetOptionsParsingResult::ok;

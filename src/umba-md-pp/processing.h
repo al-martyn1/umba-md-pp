@@ -198,8 +198,8 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
             if (isMultiLineCommentEnd(line))
                 state = PreprocessorParsingState::normal; // Больше ничего не делаем, строка всё ещё от комента
         }
-        
-        
+
+
         else if (state==PreprocessorParsingState::normal) // normal mode
         {
             if (isSingleLineComment(line))
@@ -259,7 +259,7 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
 
                 continue;
             }
-            
+
 
             if (isListingCommand(line))
             {
@@ -345,18 +345,18 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
 //             return true; // allow line to be added to output
 //         }
 //     };
-//  
+//
 //     return processLines(appCfg, lines, handler);
 // }
-//  
+//
 // //----------------------------------------------------------------------------
 // std::vector<std::string> collectMetadataToText(const AppConfig &appCfg, const std::vector<std::string> &lines, std::string &metadataText)
 // {
 //     std::vector<std::string> metadataLines;
 //     std::vector<std::string> resLines = collectMetadataLines(appCfg, lines, metadataLines);
-//  
+//
 //     metadataText = marty_cpp::mergeLines(resLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
-//  
+//
 //     return resLines;
 // }
 
@@ -401,7 +401,7 @@ std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCf
     {
         std::string levelStr;
         std::string headerText;
-        
+
         if (!splitHeaderLine(line, levelStr, headerText))
             return true;
 
@@ -516,7 +516,7 @@ std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringTyp
                                              , bool                                addIdToHeader
                                              )
 {
-    
+
     int sectionCounters[maxSectionLevelsTotal] = { 0 }; // Не более maxSectionLevelsTotal уровней секций
     std::unordered_map<std::string, std::size_t> usedIds;
 
@@ -524,13 +524,13 @@ std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringTyp
 
     auto processSectionNumber = [&](std::string &line) -> bool
     {
-        
+
         std::string levelStr;
         std::string headerText;
-        
+
         if (!splitHeaderLine(line, levelStr, headerText))
             return true;
-    
+
         if (levelStr.empty())
             return true;
 
@@ -569,7 +569,7 @@ std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringTyp
             id.append(1,'-');
             id.append(std::to_string(n-1));
         }
-        
+
         secInfo.sectionTargetId = id;
 
         std::string newTitleStr = levelStr + std::string(1u,' ') + secInfo.fullTitle;
@@ -608,7 +608,7 @@ std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringTyp
         {
             sectionCounters[curSectionLevel] = 0;
         }
-        
+
         return true;
     };
 
@@ -630,7 +630,7 @@ std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::ve
     {
         std::string levelStr;
         std::string headerText;
-    
+
         if (!splitHeaderLine(line, levelStr, headerText))
             return false;
 
@@ -882,7 +882,7 @@ struct UmbaMdLinksUrlCoutPrinter
     std::string operator()(const std::string &line) const
     {
         std::string res; res.reserve(line.size());
-     
+
         auto urlHandler = [&](std::string url, bool bImage)
         {
             std::string includedFullname = url;
@@ -895,9 +895,9 @@ struct UmbaMdLinksUrlCoutPrinter
 
                 // // Тут надо процессить имя файла - оно относительное
                 // includedFullname = umba::filename::makeCanonical(umba::filename::appendPath(filePathIncluded, url));
-                //  
+                //
                 // std::string newRelName = url;
-                //  
+                //
                 // if (umba::filename::isSubPathName(filePathIncludedFrom, includedFullname, &newRelName))
                 // {
                 //     newRelName = umba::filename::makeCanonical(newRelName, '/', std::string("."), std::string(".."), true /* keepLeadingParents */ );
@@ -906,11 +906,11 @@ struct UmbaMdLinksUrlCoutPrinter
                 // {
                 //     newRelName = umba::filename::normalizePathSeparators(newRelName, '/');
                 //     std::vector<std::string> parts = umba::string_plus::split(newRelName, '/', true /* skipEmpty */ );
-                //  
+                //
                 //     //newRelName = umba::string_plus::merge(std::vector<std::string>(parts.size(), ".."), '/');
                 //     newRelName = umba::filename::appendPath(umba::string_plus::merge(std::vector<std::string>(parts.size(), ".."), '/'), umba::filename::getFileName(url));
                 // }
-                //  
+                //
                 // std::swap(newRelName, url);
 
                 //std::string relName = url;
@@ -933,12 +933,12 @@ struct UmbaMdLinksUrlCoutPrinter
                                            , true // tryReverseRelPath
                                            );
             }
-     
+
             if (includedFullname!=url)
             {
                 std::cout << " (" << includedFullname << ")";
             }
-            
+
             // std::cout << "\n";
             //std::cout << indent << "New link/img filename: " << url << "\n";
             std::cout << ", New link/img filename: " << url << "\n";
@@ -960,7 +960,7 @@ struct UmbaMdLinksUrlCoutPrinter
 // void testTransformMarkdownLinksUrlString(const std::string &input)
 // {
 //     std::string res; res.reserve(input.size());
-//  
+//
 //     auto handler = [](std::string url)
 //     {
 //         std::cout << "URL: " << url << "\n";
@@ -974,13 +974,13 @@ struct UmbaMdLinksUrlCoutPrinter
 //         {
 //             url = "../../" + url; // Для теста добавляем два уровня вверх
 //         }
-//  
+//
 //         return makeUrlPathCanonical(url);
 //     };
-//  
-//  
+//
+//
 //     transformMarkdownLinksUrlString(std::back_inserter(res), input.begin(), input.end(), handler);
-//     
+//
 //     //std::cout << "testTransformMarkdownText:";
 //     std::cout << "In : " << input << "\n";
 //     std::cout << "Out: " << res << "\n";
@@ -1043,14 +1043,14 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
         return false; // сфейли
     }
     //bool checkIsInsertRestricted(const std::string &fName) const
-    
+
     std::vector<std::string> docLines = marty_cpp::splitToLinesSimple(foundFileText);
     std::vector<std::string> processedDocLines = parseMarkdownFileLines( appCfg, docTo, docLines, foundFullFilename
                                                                        , umba::updatedSet(alreadyIncludedDocs
                                                                        , foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */
                                                                        );
 
-    
+
 
     std::unordered_map<SnippetOptions, int>::const_iterator raiseOptIt = intOptions.find(SnippetOptions::raise);
     if (raiseOptIt!=intOptions.end() && raiseOptIt->second!=0)
@@ -1112,7 +1112,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
                 }
             }
         }
- 
+
         return umba::md::mergeUrlFromPathAndTag(urlPath, urlTag);
     };
 
@@ -1137,13 +1137,13 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
                                                     return res;
                                                 }
                                               );
-    
+
     makeShureEmptyLine(resLines);
     //resLines.insert(resLines.end(), processedDocLines.begin(), processedDocLines.end());
     umba::vectorPushBack(resLines, processedDocLines);
-    
+
     return true; // всё хорошо
-    
+
 }
 
 //----------------------------------------------------------------------------
@@ -1175,11 +1175,11 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
             if (!l.empty())
                 break;
         }
-    
+
         // Удаляем пустые строки в начале блока
         lines.erase(lines.begin(), itNonEmptyFirst);
-    
-    
+
+
         std::vector<std::string>::const_iterator itNonEmptyLast = lines.begin();
         for(std::vector<std::string>::const_iterator it=itNonEmptyLast; it!=lines.end(); ++it)
         {
@@ -1190,7 +1190,7 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
                 itNonEmptyLast = it;
             }
         }
-    
+
         if (itNonEmptyLast!=lines.end())
         {
             ++itNonEmptyLast;
@@ -1204,7 +1204,7 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
     {
         std::size_t lastLineIdx = firstLineIdx + lines.size();
         ++firstLineIdx;
-    
+
         std::size_t numDigits = 0;
         std::size_t lastLineIdxRest = lastLineIdx;
         while(lastLineIdxRest>0)
@@ -1212,7 +1212,7 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
             ++numDigits;
             lastLineIdxRest /= 10u;
         }
-    
+
         for( auto &l : lines)
         {
             std::string lineNoStr = std::to_string(firstLineIdx++);
@@ -1249,18 +1249,18 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
     {
         listingLangTag = appCfg.getLangListingTag(lang);
     }
-    
+
     std::string lstStart = std::string(3u,'`');
     std::string lstEnd   = lstStart;
     if (!listingLangTag.empty())
     {
         lstStart.append(listingLangTag); //TODO: !!! Нужно добавить обрамление
     }
-    
+
     resLines.emplace_back(lstStart);
     umba::vectorPushBack(resLines, lines);
     resLines.emplace_back(lstEnd);
-    
+
     return resLines;
 }
 
@@ -1314,7 +1314,7 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
     std::vector<std::string> snippetsFileLines = marty_cpp::splitToLinesSimple(foundFileText);
     std::vector<std::string> insertLines; insertLines.reserve(snippetsFileLines.size());
     std::size_t firstLineIdx = 0;
-    
+
     std::string lang = appCfg.getLangByFilename(foundFullFilename);
 
     if (snippetTag.empty()) // Вставляем файл целиком
@@ -1398,18 +1398,18 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
 //             return true; // allow line to be added to output
 //         }
 //     };
-//  
+//
 //     return processLines(appCfg, lines, handler);
 // }
-//  
+//
 // //----------------------------------------------------------------------------
 // std::vector<std::string> collectMetadataToText(const AppConfig &appCfg, const std::vector<std::string> &lines, std::string &metadataText)
 // {
 //     std::vector<std::string> metadataLines;
 //     std::vector<std::string> resLines = collectMetadataLines(appCfg, lines, metadataLines);
-//  
+//
 //     metadataText = marty_cpp::mergeLines(resLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
-//  
+//
 //     return resLines;
 // }
 
@@ -1430,8 +1430,8 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
             if (!metadataLines.empty())
             {
                 std::string metadataText = marty_cpp::mergeLines(metadataLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
-	            docTo.collectedMetadataTexts.emplace_back(metadataText);
-	            metadataLines.clear();
+                docTo.collectedMetadataTexts.emplace_back(metadataText);
+                metadataLines.clear();
             }
         }
 
@@ -1444,8 +1444,8 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
             if (!metadataLines.empty())
             {
                 std::string metadataText = marty_cpp::mergeLines(metadataLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
-	            docTo.collectedMetadataTexts.emplace_back(metadataText);
-	            metadataLines.clear();
+                docTo.collectedMetadataTexts.emplace_back(metadataText);
+                metadataLines.clear();
             }
             return false; // prevent to add this line to result lines
         }
@@ -1457,14 +1457,14 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
 
         if (event==LineHandlerEvent::headerCommand)
         {
-	        std::string levelStr;
-	        std::string headerText;
-	        
-	        if (!splitHeaderLine(line, levelStr, headerText))
-	            return true;
-	    
-	        if (levelStr.empty())
-	            return true;
+            std::string levelStr;
+            std::string headerText;
+
+            if (!splitHeaderLine(line, levelStr, headerText))
+                return true;
+
+            if (levelStr.empty())
+                return true;
 
             if (!docTo.titleFromText.empty())
                 return true;
@@ -1483,7 +1483,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
                 if (tmpStr.size()>10)
                     docTo.titleFromText = tmpStr;
             }
-            
+
         }
 
 
@@ -1491,7 +1491,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
         {
             return true;
         }
- 
+
         auto snippetFlagsOptions = appCfg.snippetOptions;
         std::unordered_map<SnippetOptions, int> intOptions;
         std::string snippetFile;
@@ -1554,7 +1554,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
         }
 
     };
- 
+
     return processLines(appCfg, curFilename, lines, handler);
 }
 
@@ -1568,18 +1568,18 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
 //         {
 //             return true;
 //         }
-//  
+//
 //         if (headerHandler(line))
 //         {
 //             //resLines.emplace_back(line);
 //             return true;
 //         }
-//  
+//
 //         return false;
 //     };
-//  
+//
 //     return processLines(appCfg, lines, handler);
-//  
+//
 // }
 
 // LineHandlerEvent::tocCommand
@@ -1659,7 +1659,7 @@ std::string::size_type findPairedChar(const std::string &line, std::string::size
 //----------------------------------------------------------------------------
 // enum class TransformMarkdownNormalTextEvent
 // {
-//  
+//
 // };
 
 //----------------------------------------------------------------------------
@@ -1667,10 +1667,10 @@ template<typename FilenameStringType> inline
 std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, Document &doc, const std::string &line)
 {
     // Идея по ссылкам на разделы. Указываем в них просто текст заголовка - [Какой-то текст](#Просто полный текст заголовка)
-    // Также для каждого заголовка можно задать частично или полностью квалифицированную ссылку. Потом распарсим текст на предмет 
+    // Также для каждого заголовка можно задать частично или полностью квалифицированную ссылку. Потом распарсим текст на предмет
     // ссылок и сделаем замену.
-    //  
-    // В теле текста линка можно задать просто [$] - тогда будет вставлен текст заголовка, если задать [#] - тогда будет вставлен 
+    //
+    // В теле текста линка можно задать просто [$] - тогда будет вставлен текст заголовка, если задать [#] - тогда будет вставлен
     // только номер заголовка, если есть нумерация, или его текст, если нумерации нет, [#$] - номер и текст заголовка, если есть нумерация,
     // или только текст, если нумерации нет.
 
@@ -1715,10 +1715,10 @@ std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, const F
             resLine.append(1,'[');
             resLine.append(linkText);
             resLine.append(1,']');
-	        if (pos==line.size())
-	            return resLine;
-	        else
-	            continue;
+            if (pos==line.size())
+                return resLine;
+            else
+                continue;
         }
 
 
@@ -1834,7 +1834,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
 
     // Или, если целевой рендерер доксиген - нам всегда нужны идентификатры секций, чтобы на них ссылаться.
     bool generateSecIds = false;
-    if ( appCfg.targetRenderer==TargetRenderer::doxygen 
+    if ( appCfg.targetRenderer==TargetRenderer::doxygen
       // && ( appCfg.testProcessingOption(ProcessingOptions::generateToc)
       //   || appCfg.testProcessingOption(ProcessingOptions::generateSectionId)
       //    )

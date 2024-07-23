@@ -185,7 +185,7 @@ int main(int argc, char* argv[])
         {
             toLangTagMap[langLocation] = langTag;
         }
-        
+
 
     // std::string          lang    ;
     // std::string          location; // or type
@@ -218,35 +218,35 @@ int main(int argc, char* argv[])
         }
 
 
-	    std::vector<std::string> canonicalLocationNameMsgids = mtr::tr_get_msgids(langLocCatId, langTag);
-	
-	    for(const auto &canonicalLocationNameMsgid: canonicalLocationNameMsgids)
-	    {
-	        if (canonicalLocationNameMsgid=="-" || canonicalLocationNameMsgid=="_")
-	        {
-	            continue;
-	        }
-	
-	        if (!mtr::tr_has_msg(canonicalLocationNameMsgid, langLocCatId, langTag))
-	        {
-	            continue;
-	        }
-	
-	        auto valForCompare = mtr::tr(canonicalLocationNameMsgid, langLocCatId, langTag);
-	        valForCompare  = umba::transliterate(valForCompare);
-	        valForCompare  = marty_cpp::toLower (valForCompare);
-	
+        std::vector<std::string> canonicalLocationNameMsgids = mtr::tr_get_msgids(langLocCatId, langTag);
+
+        for(const auto &canonicalLocationNameMsgid: canonicalLocationNameMsgids)
+        {
+            if (canonicalLocationNameMsgid=="-" || canonicalLocationNameMsgid=="_")
+            {
+                continue;
+            }
+
+            if (!mtr::tr_has_msg(canonicalLocationNameMsgid, langLocCatId, langTag))
+            {
+                continue;
+            }
+
+            auto valForCompare = mtr::tr(canonicalLocationNameMsgid, langLocCatId, langTag);
+            valForCompare  = umba::transliterate(valForCompare);
+            valForCompare  = marty_cpp::toLower (valForCompare);
+
             if (toCanonicalLocationMap.find(valForCompare)==toCanonicalLocationMap.end())
             {
                 toCanonicalLocationMap[valForCompare] = canonicalLocationNameMsgid;
             }
-	    }
+        }
 
     }
 
     std::cout << "{\n\"0409\": {\n\"language-location-to-lang-tag\": {\n";
 
-    bool 
+    bool
     bFirst = true;
     std::map<std::string, std::string>::const_iterator
     it = toLangTagMap.begin();
@@ -342,7 +342,7 @@ int main(int argc, char* argv[])
        {
            return 1;
        }
-       
+
        // Convert all wargv[] --> argv[]
        char * arg = (char *)&(argv[nArgs + 1]);
        for (int i = 0;  i < nArgs;  i++)

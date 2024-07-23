@@ -215,7 +215,7 @@ int safe_main(int argc, char* argv[])
         umba::md::testTransformMarkdownText("Someting `in back`ticks");
         umba::md::testTransformMarkdownText("Someting ``in `double back``ticks");
         #endif
-    
+
         #if 0
         umba::md::testTransformMarkdownLinksUrlString("[![Todo](doc/icons/todo-list-50.png) TODO](doc/todo.md)");
         umba::md::testTransformMarkdownLinksUrlString("[Test1](http://ya.ru\\test\\test.md?a=http://g.com\\some\\path#show)");
@@ -323,7 +323,7 @@ int safe_main(int argc, char* argv[])
                 // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
                 rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
                 //argsParser.args.push_back("--batch-output-root=C:/work/temp/mdpp-test");
-                
+
             }
             else
             {
@@ -337,7 +337,7 @@ int safe_main(int argc, char* argv[])
         #endif
 
 
-        
+
         //argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
 
         // argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");
@@ -347,7 +347,7 @@ int safe_main(int argc, char* argv[])
         // argsParser.args.push_back("--processing-options=generate-toc,meta-data");
         // argsParser.args.push_back("--serialize-meta-tags=title,descripion,author");
         // argsParser.args.push_back("--target-renderer=doxygen");
-        //  
+        //
         // // argsParser.args.push_back("");
         // // argsParser.args.push_back("");
         // argsParser.args.push_back(rootPath + "tests\\test04.md_");
@@ -357,7 +357,7 @@ int safe_main(int argc, char* argv[])
         //argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
         argsParser.args.push_back("--batch-scan-recurse="+rootPath+".");
         argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test");
-        
+
         argsParser.args.push_back("--batch-page-index-file=pages.md");
         argsParser.args.push_back("--batch-split-page-index-file");
         argsParser.args.push_back("--batch-exclude-files=*upper_inc.md*");
@@ -377,11 +377,11 @@ int safe_main(int argc, char* argv[])
         //argsParser.args.push_back("");
 
 
-        
-        
+
+
 
         //argsParser.args.push_back("-q");
-        
+
         // batch-exclude-files
         // batch-output-root
 
@@ -395,17 +395,17 @@ int safe_main(int argc, char* argv[])
         // Job completed - may be, --where option found
         if (argsParser.mustExit)
             return 0;
-       
+
         // if (!argsParser.quet)
         // {
         //     printNameVersion();
         // }
-       
+
         if (!argsParser.parseStdBuiltins())
             return 1;
         if (argsParser.mustExit)
             return 0;
-       
+
         if (!argsParser.parse())
             return 1;
         if (argsParser.mustExit)
@@ -463,13 +463,13 @@ int safe_main(int argc, char* argv[])
         }
 
 
-        
+
         if (foundFiles.size() != foundFilesRootFolders.size())
         {
             LOG_ERR_OPT << "Missmatch files and folders size, something goes wrong" << "\n";
             return 1;
         }
-        
+
 
         // umba::info_log::printSectionHeader(infoLog, "Files for processing");
         // for(const auto &foundFile: foundFiles)
@@ -498,7 +498,7 @@ int safe_main(int argc, char* argv[])
             auto fileRootPath = *folderIt;
             auto fileFullName = *fileIt  ;
             auto fileRelName  = fileFullName;
-            
+
             // Доп. проверка, если не совпало, то что-то очень пошло не так
             if (!umba::string_plus::starts_with_and_strip(fileRelName, fileRootPath))
             {
@@ -590,7 +590,7 @@ int safe_main(int argc, char* argv[])
                 appConfig.setStrictPathFromFilename(projectOptionsFile);
                 argsParser.parseOptionsFile(projectOptionsFile);
             }
-        
+
             appConfig.checkAdjustDocNumericLevels();
             appConfig.checkTargetFormat();
 
@@ -623,7 +623,7 @@ int safe_main(int argc, char* argv[])
 
             try
             {
-        
+
                 umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
 
                 umba::cli_tool_helpers::writeOutput( outputFilename, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
@@ -679,7 +679,7 @@ int safe_main(int argc, char* argv[])
                             );
 
             std::string pagesIndexText;
-            
+
             pagesIndexText.append("# ");
             pagesIndexText.append(pageIndexTitle);
             //pagesIndexText.append(1, '\n');
@@ -689,7 +689,7 @@ int safe_main(int argc, char* argv[])
             std::string firstSectionLetter;
             //         marty_utf
             // auto uch = (utf8_char_t)str[curPos];
-            //  
+            //
             // auto symbolNumBytes = getNumberOfBytesUtf8(uch);
 
 
@@ -739,7 +739,7 @@ int safe_main(int argc, char* argv[])
             }
 
             pageIndexFileName = umba::filename::makeCanonical(pageIndexFileName);
-            
+
             infoLog << "Writting page index file: " << pageIndexFileName << "\n";
 
             umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(pageIndexFileName), true /* forceCreatePath */ );
@@ -792,14 +792,14 @@ int safe_main(int argc, char* argv[])
                 }
             }
             gitAddBatchFileName = umba::filename::makeCanonical(gitAddBatchFileName);
-    
-    
+
+
             gitAddText = marty_cpp::converLfToOutputFormat(gitAddText, appConfig.outputLinefeed);
-            
+
             infoLog << "Writting 'git add' file: " << gitAddBatchFileName << "\n";
-    
+
             umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(gitAddText), true /* forceCreatePath */ );
-    
+
             umba::cli_tool_helpers::writeOutput( gitAddBatchFileName, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
                                                , encoding::ToUtf8(), encoding::FromUtf8()
                                                , gitAddText, std::string() // bomData
@@ -807,7 +807,7 @@ int safe_main(int argc, char* argv[])
                                                );
         }
         return 0;
-    
+
     }
     else
     {
@@ -831,14 +831,14 @@ int safe_main(int argc, char* argv[])
             outputFileType = umba::cli_tool_helpers::IoFileType::regularFile;
             //generateOutputFileNameFromInputFileName
         }
-    
+
         if (outputFilename.empty())
         {
             outputFilename = "STDOUT";
         }
-    
+
         outputFileType = umba::cli_tool_helpers::detectFilenameType(outputFilename, false /* !bInput */);
-    
+
         #if defined(WIN32) || defined(_WIN32)
         if (outputFileType==umba::cli_tool_helpers::IoFileType::clipboard)
         {
@@ -852,7 +852,7 @@ int safe_main(int argc, char* argv[])
         {
             umbaLogStreamMsg << ": "<<inputFilename<<"\n";
         }
-    
+
         std::string inputFileText;
         //if (!umba::filesys::readFile(inputFilename, inputFileText))
         if (!AppConfig<std::string>::readInputFile(inputFilename, inputFileText))
@@ -864,36 +864,36 @@ int safe_main(int argc, char* argv[])
             //errCount++;
             return 7;
         }
-    
+
         UMBA_USED(lineNo);
-    
+
         appConfig.setStrictPathFromFilename(inputFilename);
-    
-    
-    
-        //std::string 
+
+
+
+        //std::string
         curFile = inputFilename; // = fileName;
         //unsigned lineNo = 0;
-    
-    
+
+
         std::string projectOptionsFile;
         if (findProjectOptionsFile(inputFilename, projectOptionsFile))
         {
             appConfig.setStrictPathFromFilename(projectOptionsFile);
             argsParser.parseOptionsFile(projectOptionsFile);
         }
-    
+
         appConfig.checkAdjustDocNumericLevels();
         appConfig.checkTargetFormat();
-    
+
         bool differentOutputPath = umba::filename::makeCanonicalForCompare(umba::filename::getPath(outputFilename)) != umba::filename::makeCanonicalForCompare(umba::filename::getPath(inputFilename));
         appConfig.singleModeInOutPathsDifferent = differentOutputPath;
 
-    
+
         Document doc;
         std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
         //std::string docTitle = doc.getDocumentTitleAny();
-    
+
         try
         {
             if (!argsParser.quet)
@@ -975,7 +975,7 @@ int safe_main(int argc, char* argv[])
        {
            return 1;
        }
-       
+
        // Convert all wargv[] --> argv[]
        char * arg = (char *)&(argv[nArgs + 1]);
        for (int i = 0;  i < nArgs;  i++)

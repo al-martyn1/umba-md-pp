@@ -13,10 +13,10 @@
 
 #include "umba/container.h"
 
-// 
+//
 #include "enums.h"
 
-// 
+//
 #include "umba/filename.h"
 
 //----------------------------------------------------------------------------
@@ -89,7 +89,7 @@ StringType makeUrlPathCanonical(StringType urlPath)
             break;
         }
     }
-    
+
     for(; pos!=urlPath.size(); ++pos)
     {
         if (urlPath[pos]==(CharType)'\\')
@@ -165,12 +165,12 @@ OutputIterator transformMarkdownText(OutputIterator out, InputIterator itBegin, 
                 if (ch==(value_type)'`')
                 {
                     st = BacktickProcessingState::readBacktickEnclosedStart;
-                    //out = 
+                    //out =
                     handler(out, itBegin, itEnd, st, true /*in a backticks*/); // , false /* no a line start */) // а надо вообще про начало строки? Или там само пусть разбирается, а нам тут только энклозинг бэктиками обработать надо?
                 }
                 else
                 {
-                    //out = 
+                    //out =
                     handler(out, itBegin, itEnd, st, false /*not in a backticks*/);
                 }
             }
@@ -178,7 +178,7 @@ OutputIterator transformMarkdownText(OutputIterator out, InputIterator itBegin, 
 
             case BacktickProcessingState::readBacktickEnclosedStart:
             {
-                //out = 
+                //out =
                 handler(out, itBegin, itEnd, st, true /*in a backticks*/);
 
                 if (ch==(value_type)'`')
@@ -190,7 +190,7 @@ OutputIterator transformMarkdownText(OutputIterator out, InputIterator itBegin, 
 
             case BacktickProcessingState::readBacktickEnclosed:
             {
-                //out = 
+                //out =
                 handler(out, itBegin, itEnd, st, true /*in a backticks*/); // Завершающий бэктик всё равно входит в энклозинг
                 if (ch==(value_type)'`')
                     st = BacktickProcessingState::normal;
@@ -199,7 +199,7 @@ OutputIterator transformMarkdownText(OutputIterator out, InputIterator itBegin, 
 
             case BacktickProcessingState::readDblBacktickEnclosed:
             {
-                //out = 
+                //out =
                 handler(out, itBegin, itEnd, st, true /*in a backticks*/);
                 if (ch==(value_type)'`')
                     st = BacktickProcessingState::readDblBacktickEnclosedWaitEnd;
@@ -208,7 +208,7 @@ OutputIterator transformMarkdownText(OutputIterator out, InputIterator itBegin, 
 
             case BacktickProcessingState::readDblBacktickEnclosedWaitEnd:
             {
-                //out = 
+                //out =
                 handler(out, itBegin, itEnd, st, true /*in a backticks*/); // Завершающий бэктик всё равно входит в энклозинг
                 if (ch==(value_type)'`')
                     st = BacktickProcessingState::normal;
@@ -251,7 +251,7 @@ void testTransformMarkdownText(const std::string &input)
 
 
     transformMarkdownText(std::back_inserter(res), input.begin(), input.end(), handler);
-    
+
     //std::cout << "testTransformMarkdownText:";
     std::cout << "In : " << input << "\n";
     std::cout << "Out: " << res << "\n";
@@ -365,7 +365,7 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
     boost::container::static_vector - упомянули тут - https://stackoverflow.com/questions/53932651/c-vector-with-fixed-capacity-after-initialization
 
     Если состояние не хранить на стеке, его надо хранить в переменной. И вот тут можно легко запутаться,
-    когда использоывать состояние на стеке, когда - переменную, когда переменную переустанавливать 
+    когда использоывать состояние на стеке, когда - переменную, когда переменную переустанавливать
     значением со стека и тп.
 
 
@@ -451,10 +451,10 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
 #endif
 
             }
-    
+
             *out++ = *b;
         };
-    
+
         auto doWaitLink = [&](bool readImageLink)
         {
             auto ch = *b;
@@ -464,19 +464,19 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
                 bracketCount = 1;
                 st = stReadLink;
             }
-    
+
             *out++ = *b;
         };
-    
+
         auto doReadLink = [&](bool readImageLink)
         {
             auto ch = *b;
             if (itUrlBegin==e) // itEnd
             {
-                // сохраняем итератор начала 
+                // сохраняем итератор начала
                 itUrlBegin = b;
             }
-    
+
             if (ch==(value_type)'(')
             {
                 ++bracketCount;
@@ -487,7 +487,7 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
                 if (bracketCount==0)
                 {
                     // call handler here
-                    //out = 
+                    //out =
                     callHandler(out, itUrlBegin, b, readImageLink /* bImageLink */ );
                     itUrlBegin = e; // itEnd
                     st = stNormal;
@@ -532,12 +532,12 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
                     //     {
                     //         st = stImageWaitText;
                     //     }
-                    //  
+                    //
                     //     *out++ = *b;
                     // }
                 }
                 break;
-            
+
                 case stImageWaitText:
                 {
                     if (ch==(value_type)'[')
@@ -554,25 +554,25 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
                     *out++ = *b;
                 }
                 break;
-            
+
                 case stReadText:
                 {
                     doReadText(bImageLink);
                 }
                 break;
-            
+
                 case stWaitLink:
                 {
                     doWaitLink(bImageLink);
                 }
                 break;
-            
+
                 case stReadLink:
                 {
                     doReadLink(bImageLink);
                 }
                 break;
-            
+
             }
         }
 
@@ -660,7 +660,7 @@ void testTransformMarkdownLinksUrlString(const std::string &input)
 
 
     transformMarkdownLinksUrlString(std::back_inserter(res), input.begin(), input.end(), handler);
-    
+
     //std::cout << "testTransformMarkdownText:";
     std::cout << "In : " << input << "\n";
     std::cout << "Out: " << res << "\n";
@@ -677,7 +677,7 @@ std::string inDocRefsRenameMdppExtentionsAndStoreImagePaths(const AppConfig<File
     std::string::size_type linkEndPos   = std::string::npos;
 
     State st = stNormal;
-    unsigned bracketCount = 0; // also used as readingLink flag 
+    unsigned bracketCount = 0; // also used as readingLink flag
     bool readingLinkUrl = false;
     bool imageLink      = false;
 
@@ -713,7 +713,7 @@ std::string inDocRefsRenameMdppExtentionsAndStoreImagePaths(const AppConfig<File
                         else if (ch==']')
                         {
                             --bracketCount;
-                            if (bracketCount==0) // Закрывающая текст ссылки скобка 
+                            if (bracketCount==0) // Закрывающая текст ссылки скобка
                             {
                                 st = stWaitLinkUrl;
                             }
@@ -731,7 +731,7 @@ std::string inDocRefsRenameMdppExtentionsAndStoreImagePaths(const AppConfig<File
                             else if (ch==']')
                             {
                                 --bracketCount;
-                                if (bracketCount==0) // Закрывающая текст ссылки скобка 
+                                if (bracketCount==0) // Закрывающая текст ссылки скобка
                                 {
                                     st = stWaitLinkUrl;
                                 }
@@ -739,7 +739,7 @@ std::string inDocRefsRenameMdppExtentionsAndStoreImagePaths(const AppConfig<File
                         }
                         else // Читаем URL ссылки
                         {
-                        
+
                         }
                     }
                     //st = stReadingLinkText;
@@ -788,31 +788,31 @@ std::string inDocRefsRenameMdppExtentionsAndStoreImagePaths(const AppConfig<File
                     st = stReadDblBacktickEnclosed; // Был одиночный бэктик - откатываемся в нормальное чтение двухтиковой строки
 
                 resLine.append(1, ch);
-            
+
             }
             break;
 
             case stImageMarkFound :
             {
-            
+
             }
             break;
 
             case stReadingLinkText:
             {
-            
+
             }
             break;
 
             case stWaitLinkText   :
             {
-            
+
             }
             break;
 
             case stReadingLinkUrl :
             {
-            
+
             }
             break;
 

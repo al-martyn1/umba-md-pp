@@ -151,33 +151,33 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 /*
     У нас есть такие ситуации:
 
-    1) У нас неюникодное оконное приложение, собирается под MSVC. Есть 
+    1) У нас неюникодное оконное приложение, собирается под MSVC. Есть
        - WinMain
        - main_impl
 
-    2) У нас юникодное оконное приложение, собирается под MSVC. Есть 
+    2) У нас юникодное оконное приложение, собирается под MSVC. Есть
        - wWinMain
        - wmain_impl
 
-    3) У нас неюникодное оконное приложение, собирается под GCC. Есть 
+    3) У нас неюникодное оконное приложение, собирается под GCC. Есть
        - WinMain
        - main_impl
 
-    4) У нас юникодное оконное приложение, собирается под GCC. Есть 
+    4) У нас юникодное оконное приложение, собирается под GCC. Есть
        - wWinMain
        - wmain_impl
 
-    5) У нас неюникодное консольное приложение, собирается под MSVC. Есть 
+    5) У нас неюникодное консольное приложение, собирается под MSVC. Есть
        - main
 
-    6) У нас юникодное консольное приложение, собирается под MSVC. Есть 
+    6) У нас юникодное консольное приложение, собирается под MSVC. Есть
        - wmain
 
-    7) У нас неюникодное консольное приложение, собирается под GCC. Есть 
+    7) У нас неюникодное консольное приложение, собирается под GCC. Есть
        - WinMain
        - main_impl
 
-    8) У нас юникодное консольное приложение, собирается под GCC. Есть 
+    8) У нас юникодное консольное приложение, собирается под GCC. Есть
        - wWinMain
        - wmain_impl
 
@@ -185,7 +185,7 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 
                         UNICODE             UNICODE             UNICODE             UNICODE
               Windows   Windows   Windows   Windows   Console   Console   Console   Console
-              MSVC      MSVC      GCC       GCC       MSVC      MSVC      GCC       GCC    
+              MSVC      MSVC      GCC       GCC       MSVC      MSVC      GCC       GCC
 
 WinMain         +                   +                                       +
 wWinMain                  +                   +                                       +
@@ -222,15 +222,15 @@ main/wmain - нужны только для MSVC/Console
 //#if defined(UMBA_MD_PP_VIEW_CONSOLE)
 #if defined(UMBA_MD_PP_VIEW_NEED_MAIN_IMPL)
 
-	#ifdef TRY_UNICODE_VIEWER
+    #ifdef TRY_UNICODE_VIEWER
 
-	    int wmain_impl(int argc, wchar_t* argv[])
+        int wmain_impl(int argc, wchar_t* argv[])
 
-	#else
+    #else
 
-	    int main_impl(int argc, char* argv[])
+        int main_impl(int argc, char* argv[])
 
-	#endif
+    #endif
 
 #endif
 {
@@ -280,7 +280,7 @@ main/wmain - нужны только для MSVC/Console
                 // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
                 rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
                 //argsParser.args.push_back("--batch-output-root=C:/work/temp/mdpp-test");
-                
+
             }
             else
             {
@@ -297,7 +297,7 @@ main/wmain - нужны только для MSVC/Console
         argsParser.args.clear();
 
         // argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
-        //  
+        //
         // argsParser.args.push_back("--overwrite");
         // argsParser.args.push_back("--add-examples-path="+rootPath+"/tests/snippets");
         // argsParser.args.push_back("--add-examples-path="+rootPath+"/tests/..");
@@ -309,14 +309,14 @@ main/wmain - нужны только для MSVC/Console
         #if defined(UMBA_MD_PP_VIEW)
             // argsParser.args.push_back("--register-view-handler");
         #else
-            
+
         #endif
 
         //argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
 
         argsParser.args.push_back(rootPath + "/README.md_");
-        
-        
+
+
     }
 
 
@@ -325,17 +325,17 @@ main/wmain - нужны только для MSVC/Console
         // Job completed - may be, --where option found
         if (argsParser.mustExit)
             return 0;
-       
+
         // if (!argsParser.quet)
         // {
         //     printNameVersion();
         // }
-       
+
         if (!argsParser.parseStdBuiltins())
             return 1;
         if (argsParser.mustExit)
             return 0;
-       
+
         if (!argsParser.parse())
             return 1;
         if (argsParser.mustExit)
@@ -379,7 +379,7 @@ main/wmain - нужны только для MSVC/Console
 
 
 
-    //std::string 
+    //std::string
     curFile = umba::toUtf8(inputFilename); // = fileName;
     //unsigned lineNo = 0;
 
@@ -404,10 +404,10 @@ main/wmain - нужны только для MSVC/Console
     bOverwrite = true;
 
 
-    // bool 
+    // bool
     // regRes = regShellExtentionHandlerApplication(L"_umba-app", L"open", L"umba %1");
     // std::cout << "Register res: " << (regRes ? true : false) << "\n";
-    //  
+    //
     // regRes = regShellExtentionHandlerForExt(L"_umba-app", {L"md_", L"md", L"markdown"});
     // std::cout << "Register res: " << (regRes ? true : false) << "\n";
 
@@ -485,8 +485,8 @@ main/wmain - нужны только для MSVC/Console
             showErrorMessageBox("Failed to write file MD temp file: " + mdTempFile);
             return 4;
         }
-        
-        
+
+
         auto &infoLog = argsParser.quet ? umbaLogStreamNul : umbaLogStreamMsg;
         std::map<std::string, ImageFileForCopyInfo> imagesToCopy;
         addImageFilesForCopying( imagesToCopy, inputFilename, mdTempFile, doc.imageFiles);
@@ -590,10 +590,10 @@ main/wmain - нужны только для MSVC/Console
     } // try
     catch(const std::runtime_error &e)
     {
-        
+
         showErrorMessageBox(e.what());
         return 11;
-        
+
         // LOG_ERR_OPT << e.what() << "\n";
         // return 1;
     }
@@ -608,19 +608,19 @@ main/wmain - нужны только для MSVC/Console
 
     #ifdef TRY_UNICODE_VIEWER
 
-	    int wmain(int argc, wchar_t* argv[])
+        int wmain(int argc, wchar_t* argv[])
         {
             return wmain_impl(argc, argv);
         }
 
-	#else
+    #else
 
-	    int main(int argc, char* argv[])
+        int main(int argc, char* argv[])
         {
             return main_impl(argc, argv);
         }
 
-	#endif
+    #endif
 
 #endif
 
@@ -634,12 +634,12 @@ main/wmain - нужны только для MSVC/Console
     // Fix for MinGW problem - https://sourceforge.net/p/mingw-w64/bugs/942/
     // https://github.com/brechtsanders/winlibs_mingw/issues/106
     // https://stackoverflow.com/questions/74999026/is-there-the-commandlinetoargva-function-in-windows-c-c-vs-2022
- 
- 
+
+
     #include <winsock2.h>
     #include <windows.h>
     #include <shellapi.h>
- 
+
     #ifdef TRY_UNICODE_VIEWER
     int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
     #else
@@ -650,35 +650,35 @@ main/wmain - нужны только для MSVC/Console
         UMBA_USED(hPrevInstance);
         UMBA_USED(lpCmdLine);
         UMBA_USED(nCmdShow);
- 
+
         int nArgs = 0;
         wchar_t ** wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
         if (!wargv)
         {
             return 1;
         }
- 
- 
+
+
         #ifdef TRY_UNICODE_VIEWER
- 
+
             return wmain_impl(nArgs, wargv);
- 
+
         #else
- 
+
         // Count the number of bytes necessary to store the UTF-8 versions of those strings
         int n = 0;
         for (int i = 0;  i < nArgs;  i++)
         {
           n += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, NULL, 0, NULL, NULL ) + 1;
         }
- 
+
         // Allocate the argv[] array + all the UTF-8 strings
         char **argv = (char**)new char*[( (nArgs + 1) * sizeof(char *) + n )];
         if (!argv)
         {
             return 1;
         }
-        
+
         // Convert all wargv[] --> argv[]
         char * arg = (char *)&(argv[nArgs + 1]);
         for (int i = 0;  i < nArgs;  i++)
@@ -687,11 +687,11 @@ main/wmain - нужны только для MSVC/Console
           arg += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, arg, n, NULL, NULL ) + 1;
         }
         argv[nArgs] = NULL;
- 
+
         return main_impl(nArgs, argv);
- 
+
         #endif
- 
+
     }
 
 //#endif

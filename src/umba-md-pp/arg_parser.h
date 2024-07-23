@@ -85,15 +85,15 @@ int operator()( const StringType                                &a           //!
         }
         #endif
 
-        else if ( opt.isBuiltinsDisableOptionMain  () 
+        else if ( opt.isBuiltinsDisableOptionMain  ()
                || opt.setDescription( dppof + "main distribution options file '" + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::appGlobal   ) + "'"))
         { } // simple skip - обработка уже сделана
 
-        else if ( opt.isBuiltinsDisableOptionCustom() 
+        else if ( opt.isBuiltinsDisableOptionCustom()
                || opt.setDescription( dppof + "custom global options file '"     + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::customGlobal) + "'"))
         { } // simple skip - обработка уже сделана
 
-        else if ( opt.isBuiltinsDisableOptionUser  () 
+        else if ( opt.isBuiltinsDisableOptionUser  ()
                || opt.setDescription( dppof + "user local options file '"        + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::userLocal   ) + "'"))
         { } // simple skip - обработка уже сделана
 
@@ -116,13 +116,13 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if (opt.setParam("CLR", 0, "no/none/file|" 
-                                        "ansi/term|" 
+        else if (opt.setParam("CLR", 0, "no/none/file|"
+                                        "ansi/term|"
                                         #if defined(WIN32) || defined(_WIN32)
                                         "win32/win/windows/cmd/console"
                                         #endif
                              )
-              || opt.setInitial(-1) || opt.isOption("color") 
+              || opt.setInitial(-1) || opt.isOption("color")
               || opt.setDescription("Force set console output coloring")
               /* ", can be:\nno, none, file - disable coloring\nansi, term - set ansi terminal coloring\nwin32, win, windows, cmd, console - windows console specific coloring method" */
               )
@@ -153,24 +153,24 @@ int operator()( const StringType                                &a           //!
         }
 
         // else if ( opt.setParam("CATID",true)
-        //        || opt.isOption("subst-category") || opt.isOption('S') 
+        //        || opt.isOption("subst-category") || opt.isOption('S')
         //        // || opt.setParam("VAL",true)
         //        || opt.setDescription("Subst category CATID with file relative path. By default, category with empty ID will be renamed."))
         // {
         //     if (argsParser.hasHelpOption) return 0;
-        //  
+        //
         //     if (!opt.getParamValue(strVal,errMsg))
         //     {
         //         LOG_ERR_OPT<<errMsg<<"\n";
         //         return -1;
         //     }
-        //     
+        //
         //     substCategoryName = strVal;
         //     return 0;
         // }
 
         // else if ( opt.setParam("LANGTAGFORMAT",true)
-        //        || opt.isOption("lang-tag-format") || opt.isOption('T') 
+        //        || opt.isOption("lang-tag-format") || opt.isOption('T')
         //        // || opt.setParam("VAL",true)
         //        || opt.setDescription( "Set language tag format for output. LANGTAGFORMAT can be one of:\n"
         //                               "LangTag - en-US\n"
@@ -182,13 +182,13 @@ int operator()( const StringType                                &a           //!
         //         )
         // {
         //     if (argsParser.hasHelpOption) return 0;
-        //  
+        //
         //     if (!opt.getParamValue(strVal,errMsg))
         //     {
         //         LOG_ERR_OPT<<errMsg<<"\n";
         //         return -1;
         //     }
-        //     
+        //
         //     marty_tr::ELangTagFormat tmp = marty_tr::enum_deserialize(strVal, marty_tr::ELangTagFormat::invalid);
         //     switch(tmp)
         //     {
@@ -204,9 +204,9 @@ int operator()( const StringType                                &a           //!
         //             LOG_ERR_OPT<<"invalid LANGTAGFORMAT value: '"<<strVal<<"'"<<"\n";
         //             return -1;
         //     }
-        //  
+        //
         //     langTagFormat = tmp;
-        //  
+        //
         //     return 0;
         // }
 
@@ -216,25 +216,25 @@ int operator()( const StringType                                &a           //!
         //        || opt.setDescription("Set indent for nesting levels in final JSON."))
         // {
         //     if (argsParser.hasHelpOption) return 0;
-        //  
+        //
         //     if (!opt.getParamValue(intVal,errMsg))
         //     {
         //         LOG_ERR_OPT<<errMsg<<"\n";
         //         return -1;
         //     }
-        //  
+        //
         //     if (intVal<0)
         //     {
         //         LOG_ERR_OPT<<"invalid option value (--json-indent)"<<"\n";
         //         return -1;
         //     }
-        //     
+        //
         //     jsonIndent = (unsigned)intVal;
         //     return 0;
         // }
 
         else if ( opt.setParam("?MODE",true)
-               || opt.isOption("overwrite") || opt.isOption('Y') 
+               || opt.isOption("overwrite") || opt.isOption('Y')
                // || opt.setParam("VAL",true)
                || opt.setDescription("Allow overwrite existing file."))
         {
@@ -245,24 +245,24 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             bOverwrite = boolVal;
             return 0;
         }
 
         // else if ( opt.setParam("?MODE",true)
-        //        || opt.isOption("force-generate") || opt.isOption("force") || opt.isOption('F') 
+        //        || opt.isOption("force-generate") || opt.isOption("force") || opt.isOption('F')
         //        // || opt.setParam("VAL",true)
         //        || opt.setDescription("Force generate output ignoring all input errors."))
         // {
         //     if (argsParser.hasHelpOption) return 0;
-        //  
+        //
         //     if (!opt.getParamValue(boolVal,errMsg))
         //     {
         //         LOG_ERR_OPT<<errMsg<<"\n";
         //         return -1;
         //     }
-        //     
+        //
         //     bForce = boolVal;
         //     return 0;
         // }
@@ -286,7 +286,7 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             marty_cpp::ELinefeedType tmp = marty_cpp::enum_deserialize( strVal, marty_cpp::ELinefeedType::invalid );
             if (tmp== marty_cpp::ELinefeedType::invalid)
             {
@@ -299,7 +299,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        //  
+        //
         // else if ( opt.isOption("include-files") || opt.isOption('I') || opt.setParam("MASK,...")
         //        || opt.setDescription("Include C/C++ names for output. Only files which file name matched any of taken masks, will be added to output.\n"
         //                              "Note: exclude masks also performed on included names\n"
@@ -310,16 +310,16 @@ int operator()( const StringType                                &a           //!
         //         )
         // {
         //     if (argsParser.hasHelpOption) return 0;
-        //     
+        //
         //     if (!opt.hasArg())
         //     {
         //         LOG_ERR_OPT<<"include names mask not taken (--include-names)\n";
         //         return -1;
         //     }
-        //  
+        //
         //     std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
         //     appConfig.includeFilesMaskList.insert(appConfig.includeFilesMaskList.end(), lst.begin(), lst.end());
-        //  
+        //
         //     return 0;
         // }
 
@@ -328,7 +328,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Add paths list for examples searching"))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Adding paths for examples searching requires argument (--add-examples-path)\n";
@@ -353,7 +353,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Add file extention for the lang for lang detection"))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Adding lang file extention requires argument (--add-lang-file-extention)\n";
@@ -376,7 +376,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Add prefix for the cut labels in the lang files"))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Adding lang cut prefix requires argument (--add-lang-cut-prefix)\n";
@@ -398,7 +398,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Add lang prefix for the separator line"))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Adding lang prefix for the separator line (--add-lang-separator-prefix)\n";
@@ -420,7 +420,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set lang block open and close characters, like \"{}\" for C/C++"))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Setting lang block open and close characters (--set-lang-block-chars)\n";
@@ -442,7 +442,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set target markdown tag for the code section"))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Setting target markdown tag for the code section requires argument (--set-lang-listing-tag)\n";
@@ -464,7 +464,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set default insert options"))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Setting default insert options requires argument (--set-insert-options)\n";
@@ -486,7 +486,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set processing (output generation) options"))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Setting processing options requires argument (--processing-options)\n";
@@ -508,7 +508,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set variable valie for conditions and substitutions"))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Setting condition variable requires argument (--set-condition-var)\n";
@@ -530,7 +530,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set target renderer (github/doxygen). "))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Setting target renderer requires argument (--target-renderer)\n";
@@ -555,7 +555,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set target format (md/html/rtf/pdf). "))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Setting target format requires argument (--target-format)\n";
@@ -580,7 +580,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Add meta tag name replacement."))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Adding meta tag name replacement requires argument (--meta-tag-replace)\n";
@@ -601,7 +601,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Add meta tag name for serialization."))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Adding meta tag name for serialization requires argument (--meta-tag-serialize)\n";
@@ -622,7 +622,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set meta tag type."))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Setting meta tag type requires argument (--meta-tag-set-type)\n";
@@ -643,7 +643,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set/append meta tag serialize list."))
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"Setting meta tag serialize list requires argument (--meta-tag-serialize)\n";
@@ -660,10 +660,10 @@ int operator()( const StringType                                &a           //!
         }
 
 
-        else if (opt.setParam("LEVEL", 0, "0/inf/infinite|" 
-                                        "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16" 
+        else if (opt.setParam("LEVEL", 0, "0/inf/infinite|"
+                                        "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16"
                              )
-              || opt.setInitial(0) || opt.isOption("numeric-sections-max-level") 
+              || opt.setInitial(0) || opt.isOption("numeric-sections-max-level")
               || opt.setDescription("Set max level for numeration")
               )
         {
@@ -684,10 +684,10 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if (opt.setParam("LEVEL", 0, "0/inf/infinite|" 
-                                        "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16" 
+        else if (opt.setParam("LEVEL", 0, "0/inf/infinite|"
+                                        "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16"
                              )
-              || opt.setInitial(0) || opt.isOption("toc-max-level") 
+              || opt.setInitial(0) || opt.isOption("toc-max-level")
               || opt.setDescription("Set max level for table of contents (TOC)")
               )
         {
@@ -709,7 +709,7 @@ int operator()( const StringType                                &a           //!
         }
 
 
-        else if ( opt.setParam("RAISE", (size_t )0, (size_t )0, (size_t)4) || opt.setInitial((size_t)0) || opt.isOption("restrict-path-raise") // || opt.isOption('i') 
+        else if ( opt.setParam("RAISE", (size_t )0, (size_t )0, (size_t)4) || opt.setInitial((size_t)0) || opt.isOption("restrict-path-raise") // || opt.isOption('i')
                || opt.setDescription("Raise insert restriction path up to 4 levels max"))
         {
             if (argsParser.hasHelpOption) return 0;
@@ -731,13 +731,13 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set default document language, which used if no language tag in document meta info."))
         {
             if (argsParser.hasHelpOption) return 0;
-         
+
             if (!opt.getParamValue(strVal,errMsg))
             {
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.documentDefaultLanguage = umba::toUtf8(strVal);
             return 0;
         }
@@ -747,7 +747,7 @@ int operator()( const StringType                                &a           //!
         //        || opt.setDescription("Output linefeed. LINEFEED is one of: CR/LF/CRLF/LFCR/DETECT."))
         // {
         //     if (argsParser.hasHelpOption) return 0;
-        //  
+        //
         //     if (!opt.getParamValue(strVal,errMsg))
         //     {
 
@@ -757,13 +757,13 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Force set document language, override document meta info."))
         {
             if (argsParser.hasHelpOption) return 0;
-         
+
             if (!opt.getParamValue(strVal,errMsg))
             {
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.documentForceLanguage = umba::toUtf8(strVal);
             return 0;
         }
@@ -775,13 +775,13 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set output root path for batch mode."))
         {
             if (argsParser.hasHelpOption) return 0;
-         
+
             if (!opt.getParamValue(strVal,errMsg))
             {
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.batchOutputRoot = strVal;
             return 0;
         }
@@ -791,23 +791,23 @@ int operator()( const StringType                                &a           //!
                                      "means any number of any chars, and '?' means exact one of any char. In addition, "
                                      "symbol '^' in front and/or back of the mask means that the mask will be bound to beginning/ending "
                                      "of the tested file name.\n"
-                                     "Also, regular expresion syntax allowed in form '" + 
+                                     "Also, regular expresion syntax allowed in form '" +
                                      umba::regex_helpers::getRawEcmaRegexPrefix<std::string>() + "YOURREGEX'. The regular expresions supports\n"
                                      "See also: C++ Modified ECMA Script regular expression grammar - https://en.cppreference.com/w/cpp/regex/ecmascript"
                                     )
                 )
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"exclude files mask not taken (--exclude-files)\n";
                 return -1;
             }
-         
+
             std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
             appConfig.batchExcludeFilesMaskList.insert(appConfig.batchExcludeFilesMaskList.end(), lst.begin(), lst.end());
-         
+
             return 0;
         }
 
@@ -817,16 +817,16 @@ int operator()( const StringType                                &a           //!
                 )
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"exclude dirs not taken (--batch-exclude-dir)\n";
                 return -1;
             }
-         
+
             std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
             appConfig.batchExcludeDirs.insert(appConfig.batchExcludeDirs.end(), lst.begin(), lst.end());
-         
+
             return 0;
         }
 
@@ -836,13 +836,13 @@ int operator()( const StringType                                &a           //!
                 )
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"scan dirs not taken (--batch-scan)\n";
                 return -1;
             }
-         
+
             std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
             for(auto &p: lst)
             {
@@ -850,7 +850,7 @@ int operator()( const StringType                                &a           //!
             }
             //appConfig.batchScanPaths.insert(appConfig.batchScanPaths.end(), lst.begin(), lst.end());
             appConfig.addBatchScanPaths(lst, false); // no recurse
-         
+
             return 0;
         }
 
@@ -860,13 +860,13 @@ int operator()( const StringType                                &a           //!
                 )
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             if (!opt.hasArg())
             {
                 LOG_ERR_OPT<<"scan dirs not taken (--batch-scan-recurse)\n";
                 return -1;
             }
-         
+
             std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
             for(auto &p: lst)
             {
@@ -874,7 +874,7 @@ int operator()( const StringType                                &a           //!
             }
             //appConfig.batchScanPaths.insert(appConfig.batchScanPaths.end(), lst.begin(), lst.end());
             appConfig.addBatchScanPaths(lst, true); // recurse
-         
+
             return 0;
         }
 
@@ -890,7 +890,7 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.batchPageIndexFileName = strVal;
             return 0;
         }
@@ -907,7 +907,7 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.gitAddBatchFileName = strVal;
             return 0;
         }
@@ -924,7 +924,7 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.batchSplitPageIndex = boolVal;
             return 0;
         }
@@ -941,7 +941,7 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.copyImageFiles = boolVal;
             return 0;
         }
@@ -958,7 +958,7 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.flattenImageLinks = boolVal;
             return 0;
         }
@@ -975,7 +975,7 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.viewerCopyToSourceLocation = boolVal;
             return 0;
         }
@@ -992,7 +992,7 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.viewerCopyFilenameDocTitle = boolVal;
             return 0;
         }
@@ -1009,7 +1009,7 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             appConfig.stripExtentions = boolVal;
             return 0;
         }
@@ -1020,7 +1020,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set DPI for Graphviz tools output."))
         {
             if (argsParser.hasHelpOption) return 0;
-         
+
             if (!opt.getParamValue(strVal,errMsg))
             {
                 LOG_ERR_OPT<<errMsg<<"\n";
@@ -1041,7 +1041,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set Graphviz tools output format (SVG/PNG/BMP)."))
         {
             if (argsParser.hasHelpOption) return 0;
-         
+
             if (!opt.getParamValue(strVal,errMsg))
             {
                 LOG_ERR_OPT<<errMsg<<"\n";
@@ -1064,7 +1064,7 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Set Graphviz tools output root path."))
         {
             if (argsParser.hasHelpOption) return 0;
-         
+
             if (!opt.getParamValue(strVal,errMsg))
             {
                 LOG_ERR_OPT<<errMsg<<"\n";
@@ -1091,13 +1091,13 @@ int operator()( const StringType                                &a           //!
                || opt.setDescription("Add file extentions of the MD-PP files."))
         {
             if (argsParser.hasHelpOption) return 0;
-         
+
             if (!opt.getParamValue(strVal,errMsg))
             {
                 LOG_ERR_OPT<<errMsg<<"\n";
                 return -1;
             }
-            
+
             return appConfig.addMdppExtentions(strVal) ?  0 : -1;
         }
 
@@ -1122,13 +1122,13 @@ int operator()( const StringType                                &a           //!
             //         LOG_ERR_OPT<<errMsg<<"\n";
             //         return -1;
             //     }
-            //  
+            //
             //     param = strVal;
             // }
             // else
             // {
             //     ///param = "md,md_,_md,markdown,_markdown,markdown_";
-            //  
+            //
             // }
 
             if (!opt.optArg.empty())
@@ -1171,24 +1171,24 @@ int operator()( const StringType                                &a           //!
         //         )
         // {
         //     if (argsParser.hasHelpOption) return 0;
-        //     
+        //
         //     appConfig.allFiles = true;
-        //  
+        //
         //     return 0;
         // }
-        //  
+        //
         else if ( opt.isOption("gcc")
                || opt.setDescription("GCC messages format instead of MSVC format")
                 )
         {
             if (argsParser.hasHelpOption) return 0;
-            
+
             umbaLogGccFormat = true;
 
             return 0;
         }
 
-        else if ( opt.isOption("autocomplete-install") 
+        else if ( opt.isOption("autocomplete-install")
                || opt.setDescription("Install autocompletion to bash"
                                      #if defined(WIN32) || defined(_WIN32)
                                          "/clink(cmd)"
@@ -1202,7 +1202,7 @@ int operator()( const StringType                                &a           //!
             return umba::command_line::autocompletionInstaller( pCol, opt, pCol->getPrintHelpStyle(), true, [&]( bool bErr ) -> decltype(auto) { return bErr ? LOG_ERR_OPT : LOG_MSG_OPT; } );
         }
 
-        else if ( opt.isOption("autocomplete-uninstall") 
+        else if ( opt.isOption("autocomplete-uninstall")
                || opt.setDescription("Remove autocompletion from bash"
                                      #if defined(WIN32) || defined(_WIN32)
                                          "/clink(cmd)"
@@ -1248,7 +1248,7 @@ int operator()( const StringType                                &a           //!
                               //<< " [OPTIONS] input_file [output_file]\n\nOptions:\n\n"<<helpText;
 
                 }
-                
+
                 if (pCol) // argsNeedHelp
                     std::cout<<pCol->makeText( 78, &argsParser.argsNeedHelp );
 
@@ -1297,7 +1297,7 @@ int operator()( const StringType                                &a           //!
             return 1;
 
         return 0;
-    
+
     }
 
     if (inputFilename.empty())
@@ -1308,7 +1308,7 @@ int operator()( const StringType                                &a           //!
     {
         outputFilename = makeAbsPath(a);
     }
-    
+
 
     return 0;
 

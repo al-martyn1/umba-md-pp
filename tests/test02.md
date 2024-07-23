@@ -11,30 +11,30 @@
 
 Test02
 
-!!! File not found in: 
+!!! File not found in:
 #!insert{lineno} ..\src\umba-md-pp\log.h#6-12
 
-!!! File not found in: 
+!!! File not found in:
 #!insert{lineno} src\umba-md-pp\log.h#6-12
 
 
 // Print lines, noKeepCutTags #print-ver-all
 
-!!! File not found in: 
+!!! File not found in:
 #!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
 
 // Print lines, keepCutTags   #print-ver-all
 
-!!! File not found in: 
+!!! File not found in:
 #!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
 
 
-!!! File not found in: 
+!!! File not found in:
 #!insert{lineno} cpp/print_ver.h#printCommitHash
 
 
-!!! File not found in: 
+!!! File not found in:
 #!insert{lineno} cpp/print_ver.h#printOnlyVersion
 
 ## Subtitle
@@ -50,13 +50,13 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-!!! File not found in: 
+!!! File not found in:
 #!insert{lineno} ..\src\umba-md-pp\log.h#6-12
 
-!!! File not found in: 
+!!! File not found in:
 #!insert{lineno} cpp/print_ver.h#print-ver-all
 
-!!! File not found in: 
+!!! File not found in:
 #!insert{lineno} cpp/print_ver.h#printOnlyVersion
 
 # Other Title

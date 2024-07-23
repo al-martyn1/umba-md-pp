@@ -87,24 +87,24 @@ std::string generateDocMetadata(const AppConfig<FilenameStringType> &appCfg, Doc
 //   Auto,
 //   TagByKind,
 //   Newline,
-//  
+//
 //   // output character set
 //   EmitNonAscii,
 //   EscapeNonAscii,
 //   EscapeAsJson,
-//  
+//
 //   // string manipulators
 //   // Auto, // duplicate
 //   SingleQuoted,
 //   DoubleQuoted,
 //   Literal,
-//  
+//
 //   // null manipulators
 //   LowerNull,
 //   UpperNull,
 //   CamelNull,
 //   TildeNull,
-//  
+//
 //   // bool manipulators
 //   YesNoBool,      // yes, no
 //   TrueFalseBool,  // true, false
@@ -114,22 +114,22 @@ std::string generateDocMetadata(const AppConfig<FilenameStringType> &appCfg, Doc
 //   CamelCase,      // No, Off
 //   LongBool,       // yes, On
 //   ShortBool,      // y, t
-//  
+//
 //   // int manipulators
 //   Dec,
 //   Hex,
 //   Oct,
-//  
+//
 //   // document manipulators
 //   BeginDoc,
 //   EndDoc,
-//  
+//
 //   // sequence manipulators
 //   BeginSeq,
 //   EndSeq,
 //   Flow,
 //   Block,
-//  
+//
 //   // map manipulators
 //   BeginMap,
 //   EndMap,
@@ -228,7 +228,7 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
         std::string tmpJson;
         marty::json_utils::FileFormat detectedFormat = marty::json_utils::FileFormat::unknown;
         nlohmann::json j = marty::json_utils::parseJsonOrYaml( metaText, true /* allowComments */ , &errMsg, &tmpJson, &detectedFormat );
-         
+
         if (detectedFormat==marty::json_utils::FileFormat::unknown)
             continue;
 
@@ -241,7 +241,7 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
         {
             try
             {
-	            std::string strKey = el.key();
+                std::string strKey = el.key();
                 strKey = appCfg.makeCanonicalMetaTag(strKey);
                 std::vector<std::string> &tagValsVec = doc.tagsData[strKey];
 
@@ -301,7 +301,7 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
             }
 
         }
-    
+
     }
 
 }

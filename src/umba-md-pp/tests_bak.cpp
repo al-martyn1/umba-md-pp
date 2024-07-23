@@ -23,7 +23,7 @@
             std::cout << " - unexpected error\n";
         }
     };
-    
+
     appConfig.addConditionVar("A", "A");
     appConfig.addConditionVar("B", "B");
     appConfig.addConditionVar("C:C");
@@ -40,7 +40,7 @@
     {
         std::cout << s << ": [" << umba::generateIdFromText_forGitHub(s) << "]\n";
     };
-     
+
     testGhIdGen("Воскл-бакс! \"#$");
     testGhIdGen("Прцнт-апоз%&'");
     testGhIdGen("Опнскб-плюс()*+");
@@ -102,9 +102,9 @@
     //     std::cout << "Doxygen lang: " << findGoxygenLanguageByLangTag(findLangTagByString(strLang)) << "\n";
     //     umba::time_service::TimeTick tickDelta = umba::time_service::getCurTimeMs()-startTick;
     //     std::cout << "Time ellapsed: " << tickDelta << "\n\n";
-    //  
+    //
     // };
-    //  
+    //
     // testFindLang("Русский/Россия");
     // testFindLang("Русский");
     // testFindLang("en");

@@ -59,7 +59,7 @@ void updateGraphVizOptions(const umba::html::HtmlTag &mdHtmlTag, GraphVizOptions
 {
     // Атрибуты:
     //   file      - имя входного файла
-    //   save-as   - имя файла для сохранения (без расширения) 
+    //   save-as   - имя файла для сохранения (без расширения)
     //   scale     - масштаб
     //   type      - тип графа
 

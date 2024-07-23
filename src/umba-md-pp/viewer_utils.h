@@ -14,7 +14,7 @@
 
 #include <string>
 
-    
+
 
 
 //std::size_t h1 = std::hash<std::string>{}(s.first_name);
@@ -156,7 +156,7 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
     lines.emplace_back("RECURSIVE              = NO");
     lines.emplace_back("GENERATE_RTF           = YES");
     lines.emplace_back("RTF_HYPERLINKS         = YES");
-    
+
     lines.emplace_back("EXCLUDE                = doxy");
     lines.emplace_back("FILE_PATTERNS          = *.md");
     lines.emplace_back("RTF_OUTPUT             = rtf");
@@ -164,7 +164,7 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
     lines.emplace_back("RTF_EXTENSIONS_FILE    = doxygen_rtf.cfg");
     lines.emplace_back("INPUT                  = document.md");
     lines.emplace_back("IMAGE_PATH             = " + umba::filename::getPath(documentPath));
-    
+
 
     std::string str = doc.getDocumentTitleAny();
     if (!str.empty())
@@ -187,7 +187,7 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
     if (str.empty())
         str = "English";
     lines.emplace_back("OUTPUT_LANGUAGE        = " + str);
-    
+
 
     return marty_cpp::mergeLines(lines, getConfigsLinefeed(), true  /* addTrailingNewLine */ );
 }
@@ -270,7 +270,7 @@ std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr, bool b
 
     if (bTransliterate)
     {
-        
+
         resFilename = umba::fromUtf8(umba::transliterate(umba::toUtf8(resFilename)));
     }
 
@@ -353,13 +353,13 @@ std::wstring findDoxygenExecutableName()
 
                 if (numChars>0)
                 {
-	                doxygen = std::wstring(buf, numChars);
-	                doxygen = umba::filename::appendPath(doxygen, std::wstring(L"bin"));
+                    doxygen = std::wstring(buf, numChars);
+                    doxygen = umba::filename::appendPath(doxygen, std::wstring(L"bin"));
                     doxygen = umba::filename::appendPath(doxygen, std::wstring(L"doxygen.exe"));
                 }
 
             }
-        
+
             RegCloseKey(hk);
         }
 
@@ -374,15 +374,15 @@ inline
 void showErrorMessageBox(std::string str)
 {
 
-	#if defined(WIN32) || defined(_WIN32)
-	
-	    MessageBoxA( 0 // hwnd
+    #if defined(WIN32) || defined(_WIN32)
+
+        MessageBoxA( 0 // hwnd
                    , str.c_str()
                    , "Umba Markdown PP Viewer"
                    , MB_OK | MB_ICONERROR
                    );
-	
-	#endif
+
+    #endif
 
 }
 
@@ -401,7 +401,7 @@ HKEY regCreateKeyHelper(HKEY hKeyRoot, const std::wstring &path, REGSAM samDesir
     {
         samDesired |= KEY_WOW64_64KEY;
     }
-    
+
     HKEY hKeyRes = 0;
     DWORD dwDisposition = 0;
 
@@ -477,10 +477,10 @@ bool regShellExtentionHandlerApplication(const std::wstring &appNameId, const st
     //       open
     //         command
     //           default value: "F:\_github\umba-tools\umba-md-pp\.out\msvc2019\x86\Debug\umba-md-pp-view.exe" "%1"
-    //  
+    //
     // HKEY_CLASSES_ROOT\.md_
     //     default value md__auto_file
-    //  
+    //
     // The nameless key is the default one - https://learn.microsoft.com/en-us/dotnet/api/microsoft.win32.registry.setvalue?view=net-8.0&redirectedfrom=MSDN#overloads
 
     HKEY hRootKey = regGetShellExtentionsRoot();
@@ -582,7 +582,7 @@ bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std
 /*
 RTF Ext
 
-Title           = 
+Title           =
 Author
 Version
 

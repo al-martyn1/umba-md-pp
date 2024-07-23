@@ -167,8 +167,8 @@ bool addImageFilesForCopying( std::map<std::string, ImageFileForCopyInfo>       
         imgInfo.setImageLink(imgSrcLink);
         imgInfo.setImageLinkTarget(imgTgtLink);
         imgInfo.setDocumentFilename(sourceDocumentFilename);
-    
-    
+
+
         std::map<std::string, ImageFileForCopyInfo>::const_iterator imgIt = imagesToCopy.find(imgInfo.getTargetFilenameForCompare());
         if (imgIt==imagesToCopy.end())
         {
@@ -256,7 +256,7 @@ bool copyDocumentImageFiles(LogStreamType & logStream, const std::map<std::strin
 // {
 //     std::string listingTag;
 //     std::string cutPrefix ;
-//  
+//
 // };
 
 
@@ -558,7 +558,7 @@ struct AppConfig
 // template<typename StringTypeFrom, typename StringTypeTo>
 // StringTypeTo utfFromToReturn(const StringTypeFrom &from)
 
-    
+
 
     void checkTargetFormat()
     {
@@ -633,9 +633,9 @@ struct AppConfig
 
     // std::string getMetaTagText(const std::string &tag) const
     // {
-    //  
+    //
     // }
-    
+
 
     void setStrictPath(const FilenameStringType &p)
     {
@@ -681,14 +681,14 @@ struct AppConfig
 
     void checkAdjustDocNumericLevels()
     {
-		// Всё, что попадает в содержание, должно иметь номера
-		// numSecMaxLevel - то, что нумеруется
-		// tocMaxLevel    - то, что попадает в содержание
+        // Всё, что попадает в содержание, должно иметь номера
+        // numSecMaxLevel - то, что нумеруется
+        // tocMaxLevel    - то, что попадает в содержание
 
         if ( numSecMaxLevel // Лимит уровня для нумерации установлен
           && tocMaxLevel    // Лимит того, что попадает в содержание - тоже установлен
-           ) 
-		{
+           )
+        {
             if (numSecMaxLevel<tocMaxLevel)
                 numSecMaxLevel = tocMaxLevel;
         }
@@ -773,7 +773,7 @@ struct AppConfig
     bool addConditionVar(std::string nameValue)
     {
         umba::string_plus::trim(nameValue);
-        
+
         std::vector<std::string> nameValuePair = marty_cpp::splitToLinesSimple(nameValue, false, ':');
         if (nameValuePair.empty())
             return false;
@@ -808,10 +808,10 @@ struct AppConfig
     bool testProcessingOption(ProcessingOptions opt) const
     {
         auto baseOpt = (ProcessingOptions)(((std::uint32_t)opt)|0x0001u);
-    
+
         if (processingOptions.find(baseOpt)!=processingOptions.end())
             return true;
-    
+
         return false;
     }
 
@@ -833,7 +833,7 @@ struct AppConfig
             p = umba::filename::makeAbsPath(p, basePath);
             absPaths.emplace_back(umba::filename::makeCanonical(p));
         }
-        
+
         samplesPaths.insert( samplesPaths.end(), absPaths.begin(), absPaths.end() );
         return true;
     }
@@ -852,7 +852,7 @@ struct AppConfig
     std::string autoEncodeToUtf(const std::string &text)
     {
         size_t bomSize = 0;
-        //const charDataPtr = 
+        //const charDataPtr =
         encoding::EncodingsApi* pEncodingsApi = encoding::getEncodingsApi();
         std::string detectRes = pEncodingsApi->detect( text.data(), text.size(), bomSize );
         auto cpId = pEncodingsApi->getCodePageByName(detectRes);
@@ -1046,7 +1046,7 @@ struct AppConfig
     }
 
     bool addCutPrefix(const std::string &langPrefixPair)
-    {   
+    {
         std::string lang, cutPrefix;
         if (!umba::string_plus::split_to_pair(langPrefixPair, lang, cutPrefix, ':'))
         {
@@ -1064,7 +1064,7 @@ struct AppConfig
     }
 
     bool addSeparatorLinePrefix(const std::string &langPrefixPair)
-    {   
+    {
         std::string lang, sepPrefix;
         if (!umba::string_plus::split_to_pair(langPrefixPair, lang, sepPrefix, ':'))
         {
@@ -1081,7 +1081,7 @@ struct AppConfig
     }
 
     bool setBlockCharacters(const std::string &langBlockPair)
-    {   
+    {
         std::string lang, blockPair;
         if (!umba::string_plus::split_to_pair(langBlockPair, lang, blockPair, ':'))
         {
@@ -1113,7 +1113,7 @@ struct AppConfig
     }
 
     bool setLangListingTag(const std::string &langTagPair)
-    {   
+    {
         std::string lang, listingTag;
         if (!umba::string_plus::split_to_pair(langTagPair, lang, listingTag, ':'))
         {
@@ -1143,7 +1143,7 @@ struct AppConfig
 // {
 //     std::string listingTag;
 //     std::string cutPrefix ;
-//  
+//
 // };
 
 //std::vector<StringType> splitToLinesSimple(const StringType &str, bool addEmptyLineAfterLastLf = true, typename StringType::value_type lfChar=(typename StringType::value_type)'\n')
@@ -1153,7 +1153,7 @@ struct AppConfig
 
 // inline char    toLower( char ch )     { return isUpper(ch) ? ch-'A'+'a' : ch; }
 // inline char    toUpper( char ch )     { return isLower(ch) ? ch-'a'+'A' : ch; }
-//  
+//
 // inline wchar_t toLower( wchar_t ch )  { return (wchar_t)(isUpper(ch) ? ch-L'A'+L'a' : ch); }
 // inline wchar_t toUpper( wchar_t ch )  { return (wchar_t)(isLower(ch) ? ch-L'a'+L'A' : ch); }
 

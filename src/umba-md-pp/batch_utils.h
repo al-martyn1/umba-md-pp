@@ -8,7 +8,7 @@
 
 // appConfig.mdppExtentions
     // std::vector<std::string>                              mdppExtentions;
-    //  
+    //
     // std::string                                           batchOutputRoot;
     // std::vector<std::string>                              batchExcludeDirs;
     // std::vector<std::string>                              batchExcludeFilesMaskList;
@@ -43,7 +43,7 @@ void batchScanForFiles( const std::vector<ScanPathsEntry> &batchScanPaths
     // // {
     // //     excludeMasks.emplace_back("*/" + excludeDir + "/*");
     // // }
-    //  
+    //
     // excludeMasks.insert(excludeMasks.end(), excludeFilesMaskList.begin(), excludeFilesMaskList.end());
 
 

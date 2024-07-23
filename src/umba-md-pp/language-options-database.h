@@ -35,7 +35,7 @@ protected:
 
     std::set<std::string>                                              m_languageFilenameExtentions;
 
-    std::unordered_set<std::string>                                    m_cutPrefixes           ; // 
+    std::unordered_set<std::string>                                    m_cutPrefixes           ; //
     std::unordered_set<std::string>                                    m_genericCutStopPrefixes; // For C++ it can be "//---", for plain C: /*** - separator line, or both of them
 
     std::string                                                        m_blockPair;
@@ -78,13 +78,13 @@ public:
         options = it->second;
         return true;
     }
-    
+
     bool setBlockCharacters(const std::string &blockPair)
     {
         if (blockPair.size()!=2)
             return false;
         m_blockPair = blockPair;
-        
+
         return true;
     }
 
@@ -145,7 +145,7 @@ public:
     {
         return m_languageFilenameExtentions;
     }
-    
+
 
 
 }; // class LanguageOptions

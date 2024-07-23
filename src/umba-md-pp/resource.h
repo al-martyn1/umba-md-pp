@@ -9,7 +9,7 @@
 // #define IDD_PROP_PAGE2                  203
 // #define IDD_PROP_PAGE3                  204
 // #define IDD_APPSELECTOR_DLG             205
-//  
+//
 // #define IDC_LIST                        1000
 // #define IDC_TYPE                        1001
 // #define IDC_WIDTH                       1002
@@ -22,10 +22,10 @@
 // #define IDC_FILESIZE                    1010
 // #define IDC_FILEDATE                    1011
 // #define IDC_FILEATTRIB                  1012
-//  
+//
 // #define ID_RECENT_BTN                   32777
 // #define ID_VIEW_PROPERTIES              32778
-//  
+//
 // // Next default values for new objects
 // //
 // #ifdef APSTUDIO_INVOKED

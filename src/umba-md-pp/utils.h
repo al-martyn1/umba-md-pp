@@ -110,10 +110,10 @@ inline
 std::string findGoxygenLanguageByLangTag(std::string langTag)
 {
     auto trNullErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
-	{
-	}
-	);
-  
+    {
+    }
+    );
+
     auto autoRestoreTrErrHandler = mtr::AutoRestoreErrReportHandler(mtr::tr_set_err_handler(&trNullErrHandler));
     auto autoEmptyMsgNotExist    = mtr::AutoEmptyMsgNotExist(mtr::tr_set_empty_msg_not_exist(true));
 
@@ -130,18 +130,18 @@ inline
 std::string findLangTagByString(std::string strLang)
 {
 
-	auto trNullErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
-	{
-	}
-	);
-  
+    auto trNullErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
+    {
+    }
+    );
+
     auto autoRestoreTrErrHandler = mtr::AutoRestoreErrReportHandler(mtr::tr_set_err_handler(&trNullErrHandler));
     auto autoEmptyMsgNotExist    = mtr::AutoEmptyMsgNotExist(mtr::tr_set_empty_msg_not_exist(true));
 
     umba::string_plus::trim(strLang);
-  
+
     std::string langTag = mtr::getLocaleLanguageTag(strLang);
-  
+
     if (!langTag.empty())
     {
         return langTag;
@@ -254,20 +254,20 @@ std::string findLangTagByString(std::string strLang)
 
         if (foundCanonicalLangNaturalName.empty())
         {
-	        std::vector<std::string> canonicalLangNameMsgids = mtr::tr_get_msgids(langNameCatId, langTag);
-	
-	        for(const auto &canonicalLangNameMsgid: canonicalLangNameMsgids)
-	        {
-	            if (!mtr::tr_has_msg(canonicalLangNameMsgid, langNameCatId, langTag))
-	            {
-	                continue;
-	            }
+            std::vector<std::string> canonicalLangNameMsgids = mtr::tr_get_msgids(langNameCatId, langTag);
+
+            for(const auto &canonicalLangNameMsgid: canonicalLangNameMsgids)
+            {
+                if (!mtr::tr_has_msg(canonicalLangNameMsgid, langNameCatId, langTag))
+                {
+                    continue;
+                }
 
                 auto valForCompare = mtr::tr(canonicalLangNameMsgid, langNameCatId, langTag);
-			    if (useTransiteration)
-			    {
-			        valForCompare  = umba::transliterate(valForCompare);
-			        valForCompare  = marty_cpp::toLower (valForCompare);
+                if (useTransiteration)
+                {
+                    valForCompare  = umba::transliterate(valForCompare);
+                    valForCompare  = marty_cpp::toLower (valForCompare);
                 }
 
                 if (langNaturalNameForCmp==valForCompare)
@@ -275,31 +275,31 @@ std::string findLangTagByString(std::string strLang)
                     foundCanonicalLangNaturalName = canonicalLangNameMsgid;
                     break;
                 }
-	        }
+            }
         } // if (foundCanonicalLangNaturalName.empty())
 
 
         if (foundCanonicalLocationNaturalName.empty())
         {
-	        std::vector<std::string> canonicalLocationNameMsgids = mtr::tr_get_msgids(langLocCatId, langTag);
-	
-	        for(const auto &canonicalLocationNameMsgid: canonicalLocationNameMsgids)
-	        {
+            std::vector<std::string> canonicalLocationNameMsgids = mtr::tr_get_msgids(langLocCatId, langTag);
+
+            for(const auto &canonicalLocationNameMsgid: canonicalLocationNameMsgids)
+            {
                 if (canonicalLocationNameMsgid=="-" || canonicalLocationNameMsgid=="_")
                 {
-	                continue;
-	            }
+                    continue;
+                }
 
-	            if (!mtr::tr_has_msg(canonicalLocationNameMsgid, langLocCatId, langTag))
-	            {
-	                continue;
-	            }
+                if (!mtr::tr_has_msg(canonicalLocationNameMsgid, langLocCatId, langTag))
+                {
+                    continue;
+                }
 
                 auto valForCompare = mtr::tr(canonicalLocationNameMsgid, langLocCatId, langTag);
-			    if (useTransiteration)
-			    {
-			        valForCompare  = umba::transliterate(valForCompare);
-			        valForCompare  = marty_cpp::toLower (valForCompare);
+                if (useTransiteration)
+                {
+                    valForCompare  = umba::transliterate(valForCompare);
+                    valForCompare  = marty_cpp::toLower (valForCompare);
                 }
 
                 if (locationNaturalNameForCmp==valForCompare)
@@ -307,7 +307,7 @@ std::string findLangTagByString(std::string strLang)
                     foundCanonicalLocationNaturalName = canonicalLocationNameMsgid;
                     break;
                 }
-	        }
+            }
         } // if (foundCanonicalLocationNaturalName.empty())
 
         //tr_enumerate_msgids(THandler handler, std::string catId, std::string langId)

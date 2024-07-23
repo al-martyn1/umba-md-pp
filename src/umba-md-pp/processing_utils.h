@@ -279,11 +279,11 @@ char getListMarker(std::string line)
     {
         if (line.size()<2)
             return chMarker; // если нет пробела, и строка закончилась - это тоже элемент списка, но пустой
-        
+
         if (line[1]==' ') // есть ещё символ, и это - пробел - это элемент списка
             return chMarker;
     }
-        
+
 
     if (!umba::parse_utils::isDigit(chMarker))
     {
@@ -292,7 +292,7 @@ char getListMarker(std::string line)
 
     if (line.size()<2) // маркер ненумерованного списка состоит минимум из двух символов - цифра и точка
         return (char)0;
-    
+
     std::size_t pos = 1;
     for(; pos!=line.size(); ++pos)
     {
