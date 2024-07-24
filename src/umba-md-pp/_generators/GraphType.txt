@@ -1,2 +1,18 @@
 invalid,unknown=-1
 dot
+acyclic    // Make directed graphs acyclic. 
+bcomps     // Biconnected components filter for graphs.
+ccomps     // Connected components filter for graphs. 
+cluster    // Find clusters in a graph and augment the graph with this information. 
+# diffimg   // Calculates intersection between two images. 
+dijkstra   // Single-source distance filter. 
+# edgepaint  // Edge coloring to disambiguate crossing edges. 
+gvmap      // Find clusters and create a geographical map highlighting clusters. 
+gvpack     // Merge and pack disjoint graphs. 
+mingle     // Fast edge bundling. 
+sccmap     // Extract strongly connected components of directed graphs. 
+neato     // 
+fdp
+twopi
+circo
+# unflatten.exe

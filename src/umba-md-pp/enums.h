@@ -784,23 +784,62 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( GraphVizTargetFormat, std::map, 1 )
 
 enum class GraphType : std::uint32_t
 {
-    invalid   = (std::uint32_t)(-1),
-    unknown   = (std::uint32_t)(-1),
-    dot       = 0x0000
+    invalid    = (std::uint32_t)(-1),
+    unknown    = (std::uint32_t)(-1),
+    dot        = 0x0000,
+    acyclic    = 0x0001 /*!< Make directed graphs acyclic. */,
+    bcomps     = 0x0002 /*!< Biconnected components filter for graphs. */,
+    ccomps     = 0x0003 /*!< Connected components filter for graphs. */,
+    cluster    = 0x0004 /*!< Find clusters in a graph and augment the graph with this information. */,
+    dijkstra   = 0x0005 /*!< Single-source distance filter. */,
+    gvmap      = 0x0006 /*!< Find clusters and create a geographical map highlighting clusters. */,
+    gvpack     = 0x0007 /*!< Merge and pack disjoint graphs. */,
+    mingle     = 0x0008 /*!< Fast edge bundling. */,
+    sccmap     = 0x0009 /*!< Extract strongly connected components of directed graphs. */,
+    neato      = 0x000A,
+    fdp        = 0x000B,
+    twopi      = 0x000C,
+    circo      = 0x000D
 
 }; // enum class GraphType : std::uint32_t
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(GraphType)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( GraphType, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::dot       , "dot"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::dot        , "dot"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::invalid    , "invalid"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::acyclic    , "acyclic"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::circo      , "circo"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::mingle     , "mingle"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::dijkstra   , "dijkstra" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::bcomps     , "bcomps"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::sccmap     , "sccmap"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::gvmap      , "gvmap"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::twopi      , "twopi"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::ccomps     , "ccomps"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::cluster    , "cluster"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::gvpack     , "gvpack"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::neato      , "neato"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::fdp        , "fdp"      );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( GraphType, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( GraphType, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::dot       , "dot"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::invalid   , "invalid" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::invalid   , "unknown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::dot        , "dot"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::invalid    , "invalid"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::invalid    , "unknown"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::acyclic    , "acyclic"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::circo      , "circo"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::mingle     , "mingle"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::dijkstra   , "dijkstra" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::bcomps     , "bcomps"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::sccmap     , "sccmap"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::gvmap      , "gvmap"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::twopi      , "twopi"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::ccomps     , "ccomps"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::cluster    , "cluster"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::gvpack     , "gvpack"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::neato      , "neato"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::fdp        , "fdp"      );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( GraphType, std::map, 1 )
 
 

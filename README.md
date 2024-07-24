@@ -54,6 +54,13 @@ Test number one
 
 ![Graph](doc/generated_images/left-to-right.svg)
 
+![Graph](doc/generated_images/like-table.svg)
+
+![Graph](doc/generated_images/xhtml-genealogy.svg)
+
+![Graph](doc/generated_images/subgraph(cluster)-sample.svg)
+
+
 Пытаемся в картинки
 
 ![Todo 1](doc/icons/todo-list-50.png)
