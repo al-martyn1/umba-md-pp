@@ -3,6 +3,10 @@
 # Задание языка необходимо для доксигена, если по дефолту задать не русский, или не задавать язык, доксиген кракозяблы генерит
 --document-language=russian
 
+# External programs lookup
+--dont-lookup-for-doxygen
+--dont-lookup-for-graphviz
+
 # Common options
 --processing-options=generate-toc,title
 --set-insert-options=fail,path,filename-line-no,trim-arround

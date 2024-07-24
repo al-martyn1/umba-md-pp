@@ -70,6 +70,7 @@
 
 #include "app_config.h"
 #include "viewer_utils.h"
+#include "extern_tools.h"
 
 // For 'system' function
 #include <process.h>
@@ -534,7 +535,7 @@ main/wmain - нужны только для MSVC/Console
             return 7;
         }
 
-        std::wstring wDoxygenExeName = findDoxygenExecutableName();
+        std::wstring wDoxygenExeName = findDoxygenExecutableName<std::wstring>(appConfig.dontLookupForDoxygen);
         std::string  doxygenExeName  = umba::toUtf8(wDoxygenExeName);
         std::string  doxygenExeNameEscaped  = escapeCommandLineArgument(doxygenExeName);
 

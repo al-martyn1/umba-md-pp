@@ -1101,6 +1101,38 @@ int operator()( const StringType                                &a           //!
             return appConfig.addMdppExtentions(strVal) ?  0 : -1;
         }
 
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("dont-lookup-for-doxygen")
+               || opt.setDescription("Do not lookup for Doxygen (in registry)."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                return -1;
+            }
+
+            appConfig.dontLookupForDoxygen = boolVal;
+
+            return 0;
+        }
+
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("dont-lookup-for-graphviz")
+               || opt.setDescription("Do not lookup for Graphviz (in registry)."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                return -1;
+            }
+
+            appConfig.dontLookupForGraphviz = boolVal;
+
+            return 0;
+        }
+
 
         #if defined(UMBA_MD_PP_VIEW)
 
@@ -1120,9 +1152,6 @@ int operator()( const StringType                                &a           //!
 
             return 0;
         }
-
-
-        //clearTempFolder(StringType &finalPath
 
         else if ( opt.setParam("COMMAEXTLIST", std::string()/* umba::command_line::OptionType::optString */ )
                || opt.isOption("register-view-handler")

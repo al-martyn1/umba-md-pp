@@ -328,6 +328,11 @@ struct AppConfig
 
     std::string                                           gitAddBatchFileName;
 
+
+    bool                                                  dontLookupForDoxygen  = false;
+    bool                                                  dontLookupForGraphviz = false;
+
+
     bool isGitAddBatchFileNameIsBatFile() const
     {
         if (gitAddBatchFileName.empty())

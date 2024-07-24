@@ -11,6 +11,7 @@
     #include "umba/win32_utils.h"
 #endif
 
+#include "extern_tools.h"
 
 // For 'system' function
 #include <process.h>
@@ -146,15 +147,15 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
     std::vector<std::string> dotLines;
 
-    std::string tool, args;
-    if (!graphVizOptions.generateCommandLine(tool, args, tempDotFile, tempTargetFile))
+    std::string graphvizTool, graphvizToolArgs;
+    if (!graphVizOptions.generateCommandLine(graphvizTool, graphvizToolArgs, tempDotFile, tempTargetFile))
     {
         resLines.emplace_back("# Failed to generate DOT command line: possible unknown graph type?");
         return;
     }
 
 
-    dotLines.emplace_back("// " + tool + " " + args);
+    dotLines.emplace_back("// " + graphvizTool + " " + graphvizToolArgs);
     dotLines.emplace_back(std::string());
 
     for(auto tagLine : tagLines)
@@ -282,28 +283,20 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
         else
         {
             // // Записать DOT файл смогли, теперь надо вызвать генерацию
-            // std::string tool, args;
-            // if (!graphVizOptions.generateCommandLine(tool, args, tempDotFile, tempTargetFile))
+            // std::string graphvizTool, graphvizToolArgs;
+            // if (!graphVizOptions.generateCommandLine(graphvizTool, graphvizToolArgs, tempDotFile, tempTargetFile))
             // {
             //     errMsg = "Failed to generate DOT command line: possible unknown graph type?";
             // }
             // else
             {
-                std::string toolExeName = tool;
-                #if defined(WIN32) || defined(_WIN32)
-                std::string graphvizBinPath;
-                if (!umba::win32_utils::regQueryAppInstallLocationBin(std::string("Graphviz"), graphvizBinPath))
-                {
-                }
-                toolExeName = escapeCommandLineArgument(umba::filename::appendPath(graphvizBinPath, umba::filename::appendExt(tool, std::string("exe"))));
-                #endif
-
-                std::string toolCommandLine = toolExeName + " " + args;
+                std::string toolExeName     = findGraphvizToolExecutableName<std::string>(appCfg.dontLookupForGraphviz, graphvizTool);
+                std::string toolCommandLine = toolExeName + " " + graphvizToolArgs;
             
                 int resCode = system(toolCommandLine.c_str());
                 if (resCode!=0)
                 {
-                    errMsg = "Failed to calling '" + tool + "', result code: " + std::to_string(resCode) + ", command line: " + toolCommandLine;
+                    errMsg = "Failed to calling '" + graphvizTool + "', result code: " + std::to_string(resCode) + ", command line: " + toolCommandLine;
                 }
             }
         }
