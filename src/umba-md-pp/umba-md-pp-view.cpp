@@ -401,7 +401,9 @@ main/wmain - нужны только для MSVC/Console
     appConfig.updateProcessingOptions("convert-github-alerts");
     appConfig.copyImageFiles    = true;
     appConfig.flattenImageLinks = true;
+    appConfig.graphVizOptions.dpi = 240;
     appConfig.graphVizOptions.targetFormat = GraphVizTargetFormat::png;
+    //appConfig.graphVizOptions.targetFormat = GraphVizTargetFormat::emf;
 
     appConfig.singleModeInOutPathsDifferent = true; // Без проверок говорим, что входной и выходной файл - в разных каталогах (выходной в сгенерённом TEMP'е - так что ок)
 
@@ -418,11 +420,6 @@ main/wmain - нужны только для MSVC/Console
     appConfig.checkAdjustDocNumericLevels();
     appConfig.checkTargetFormat();
 
-
-    //std::string docTitle;
-    Document doc;
-    std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
-    std::string docTitle = doc.getDocumentTitleAny();
 
     try
     {
@@ -461,7 +458,14 @@ main/wmain - нужны только для MSVC/Console
         FilenameStringType doxygenRtfOutTempFolder = umba::filename::appendPath(doxygenOutTempFolder, umba::string_plus::make_string<FilenameStringType>("rtf"));
         umba::filesys::createDirectory(doxygenRtfOutTempFolder);
 
+        appConfig.graphVizOptions.savePath         = umba::string_plus::make_string<std::string>(tempPath);
+
         FilenameStringType generatedRtfFile        = umba::filename::appendPath(doxygenRtfOutTempFolder, umba::string_plus::make_string<FilenameStringType>("refman.rtf"));
+
+
+        Document doc;
+        std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
+        std::string docTitle = doc.getDocumentTitleAny();
 
         FilenameStringType finalFilename           = generateFinalFilenameFromTitle(docTitle, appConfig.testProcessingOption(ProcessingOptions::transliterateGeneratedFilenames));
 
@@ -554,6 +558,7 @@ main/wmain - нужны только для MSVC/Console
             return 9;
         }
 
+        //!!! Fix RTF here
         if (!rtfEmbedImagesWorkaround(generatedRtfFile))
         {
             showErrorMessageBox("Failed to embed images");

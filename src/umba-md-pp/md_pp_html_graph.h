@@ -63,8 +63,8 @@ IteratorType parsePossibleFilenameToGraphTag(umba::html::HtmlTag &parseTo, Itera
 }
 
 //----------------------------------------------------------------------------
-inline
-void updateGraphVizOptions(const umba::html::HtmlTag &mdHtmlTag, GraphVizOptions &graphVizOptions)
+template<typename FilenameStringType>
+void updateGraphVizOptions(const AppConfig<FilenameStringType> &appCfg, const umba::html::HtmlTag &mdHtmlTag, GraphVizOptions &graphVizOptions)
 {
     // Атрибуты:
     //   file      - имя входного файла
@@ -96,6 +96,18 @@ void updateGraphVizOptions(const umba::html::HtmlTag &mdHtmlTag, GraphVizOptions
         graphVizOptions.setGraphType(mdHtmlTag.getAttrValue("type", std::string()));
     }
 
+    if (appCfg.targetRenderer==TargetRenderer::doxygen)
+    {
+        if (mdHtmlTag.hasAttr("rtf-dpi"))
+        {
+            graphVizOptions.setDpi(mdHtmlTag.getAttrValue("rtf-dpi", std::string()));
+        }
+        if (mdHtmlTag.hasAttr("rtf-target-format"))
+        {
+            graphVizOptions.setTargetFormat(mdHtmlTag.getAttrValue("rtf-target-format", std::string()));
+        }
+    }
+
 }
 
 //----------------------------------------------------------------------------
@@ -122,9 +134,9 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
     // dot -Tsvg -s72 -o test001_72.svg test001.dot
 
     auto graphVizOptions = appCfg.graphVizOptions;
-    updateGraphVizOptions(mdHtmlTag, graphVizOptions);
+    updateGraphVizOptions(appCfg, mdHtmlTag, graphVizOptions);
 
-    auto outputFilename = graphVizOptions.generateOutputFilename();
+    auto outputFilename = graphVizOptions.generateOutputFilename(appCfg.flattenImageLinks);
     auto tempDotFile    = graphVizOptions.generateInputDotTempFilename();
     auto tempTargetFile = graphVizOptions.generateOutputTempFilename();
     auto hashFile       = graphVizOptions.generateHashFilename();
@@ -133,6 +145,18 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
 
     std::vector<std::string> dotLines;
+
+    std::string tool, args;
+    if (!graphVizOptions.generateCommandLine(tool, args, tempDotFile, tempTargetFile))
+    {
+        resLines.emplace_back("# Failed to generate DOT command line: possible unknown graph type?");
+        return;
+    }
+
+
+    dotLines.emplace_back("// " + tool + " " + args);
+    dotLines.emplace_back(std::string());
+
     for(auto tagLine : tagLines)
     {
         umba::string_plus::rtrim(tagLine);
@@ -257,13 +281,13 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
         }
         else
         {
-            // Записать DOT файл смогли, теперь надо вызвать генерацию
-            std::string tool, args;
-            if (!graphVizOptions.generateCommandLine(tool, args, tempDotFile, tempTargetFile))
-            {
-                errMsg = "Failed to generate DOT command line: possible unknown graph type?";
-            }
-            else
+            // // Записать DOT файл смогли, теперь надо вызвать генерацию
+            // std::string tool, args;
+            // if (!graphVizOptions.generateCommandLine(tool, args, tempDotFile, tempTargetFile))
+            // {
+            //     errMsg = "Failed to generate DOT command line: possible unknown graph type?";
+            // }
+            // else
             {
                 std::string toolExeName = tool;
                 #if defined(WIN32) || defined(_WIN32)
@@ -322,6 +346,11 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
                                , true // keepLeadingParents
                                , true // tryReverseRelPath
                                );
+
+    if (imgLink.empty())
+    {
+        imgLink = umba::filename::getFileName(outputFilename);
+    }
 
     resLines.emplace_back("![Graph](" + umba::filename::makeCanonical(imgLink, '/') + ")");
 

@@ -68,7 +68,7 @@ struct GraphVizOptions
     }
 
 
-    std::string generateOutputFilename() const
+    std::string generateOutputFilename(bool flattenImageLinks) const
     {
         std::string name;
 
@@ -91,7 +91,13 @@ struct GraphVizOptions
             name.append(std::to_string(getScaledDpi()));
         }
 
-        return umba::filename::appendPath(getSavePath(), umba::filename::appendExt(name, enum_serialize(targetFormat)));
+        name = umba::filename::appendExt(name, enum_serialize(targetFormat));
+        if (flattenImageLinks)
+        {
+            name = umba::filename::flattenPath(name);
+        }
+
+        return umba::filename::appendPath(getSavePath(), name);
     }
 
     std::string generateOutputTempFilename() const

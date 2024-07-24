@@ -43,12 +43,12 @@ Language   : Russian
   - умеет в метаданные **Markdown**;
 
 
-#/*
+#// /*
 Пытаемся в графы
 
-<graph> doc\dot\test001.dot
+<graph rtf-target-format=emf> doc\dot\test001.dot
 
-<graph> doc\dot\test004.dot
+<graph scale=0.5> doc\dot\test004.dot
 
 <graph save-as=life>
  digraph G{ 
@@ -71,7 +71,33 @@ digraph G{
  VERIFIED->OPEN[label="обнаружены ошибки",style="dashed",arrowhead="dot"];
 }
 </graph>
-#*/
+
+<graph save-as=like-table rtf-target-format=emf>
+digraph structs {
+  rankdir=HR;
+  first [shape=record,label="  x1\n all | { x21 | <f0> x22| x23} | x3" ];
+  second [shape=record,label=" x22_1 | x22_2 | x22_3"];
+  first:<f0> -> second;
+}
+</graph>
+
+<graph save-as=xhtml-genealogy>
+ digraph G {
+     rankdir=LR;
+            SGML [URL="SGML"];
+            HTML [URL="HTML"];
+            XML [URL="XML"];
+            XHTML [URL="http://www.w3schools.com/xhtml/"];
+    SGML->HTML;
+    SGML->XML;
+    HTML->XHTML;
+    XML->XHTML;
+    SGML->XHTML[color="red",fontcolor="blue",label="ссылка на Google",URL="http://www.google.com"];
+}
+</graph>
+
+
+#// */
 Пытаемся в картинки
 
 ![Todo 1](doc/icons/todo-list-50.png)

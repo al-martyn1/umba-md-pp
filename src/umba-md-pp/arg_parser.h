@@ -1104,6 +1104,26 @@ int operator()( const StringType                                &a           //!
 
         #if defined(UMBA_MD_PP_VIEW)
 
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("remove-temp")
+               || opt.setDescription("Remove application temp folder with all content."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                return 0;
+            }
+
+            std::string tempFolder;
+            removeTempFolder(tempFolder);
+
+            return 0;
+        }
+
+
+        //clearTempFolder(StringType &finalPath
+
         else if ( opt.setParam("COMMAEXTLIST", std::string()/* umba::command_line::OptionType::optString */ )
                || opt.isOption("register-view-handler")
                // || opt.setParam("VAL",true)

@@ -4,6 +4,9 @@
 #include "umba/filename.h"
 #include "umba/filesys.h"
 
+//
+#include "enums.h"
+
 
 //----------------------------------------------------------------------------
 inline
@@ -41,36 +44,29 @@ bool rtfReadBinaryFileToHexString(const std::string &imgFilename, std::string &h
 inline
 std::string rtfMakePictRtf(const std::string &hexData, GraphVizTargetFormat fmt)
 {
-    std::string rtfData;
-    rtfData += "{\\*\\shppict ";
-    rtfData += "{\\pict \\picscalex100\\picscaley100\\piccropl0\\piccropr0\\piccropt0\\piccropb0";
-
-    rtfData += " ";
-
+    std::string pictRtfData;
+    pictRtfData += "{\\pict ";
     if (fmt==GraphVizTargetFormat::emf)
-        rtfData += "\\emfblip";
+        pictRtfData += "\\emfblip";
     else if (fmt==GraphVizTargetFormat::png)
-        rtfData += "\\pngblip";
+        pictRtfData += "\\pngblip";
     else if (fmt==GraphVizTargetFormat::jpg)
-        rtfData += "\\jpegblip";
+        pictRtfData += "\\jpegblip";
     else if (fmt==GraphVizTargetFormat::bmp)
-        rtfData += "\\dibitmap";
+        pictRtfData += "\\dibitmap";
     else return std::string(); // Ошибка
 
-    rtfData += "\\bliptag-1233012596{\\*\\blipuid b681b88c12fe00e28259b078ae901c0a}";
-    //rtfData += " ";
-    rtfData += hexData;
-    rtfData += "}";
-    rtfData += "}";
+    pictRtfData += " ";
+    pictRtfData += hexData;
+    pictRtfData += "}"; // close \pict
+
+
+    // {\*\shppict {\pict \emfblip ..... }}{\nonshppict {\pict ....}}
+    std::string rtfData;
+    rtfData += "{\\*\\shppict " + pictRtfData + "}";
+    rtfData += "{\\nonshppict " + pictRtfData + "}";
 
     return rtfData;
-
-    // png       = 0x0001,
-    // bmp       = 0x0002,
-    // emf       = 0x0003,
-    // jpg       = 0x0004,
-    // jpeg      = 0x0004,
-    // gif       = 0x0005
 
 }
 
@@ -111,6 +107,29 @@ bool rtfEmbedImagesWorkaround(const std::string &rtfFilename)
 
     while(findPos!=rtfData.npos)
     {
+        
+        std::size_t fieldPos = findPos;
+        #ifndef NDEBUG
+        const char *rtfDataFieldPtr = &rtfData[fieldPos];
+        #endif
+
+        if (fieldPos>0)
+        {
+            --fieldPos;
+            #ifndef NDEBUG
+            --rtfDataFieldPtr;
+            #endif
+        }
+
+        while(fieldPos!=0 && rtfData[fieldPos]!='{')
+        {
+            --fieldPos;
+            #ifndef NDEBUG
+            --rtfDataFieldPtr;
+            #endif
+        }
+
+
         std::size_t fnamePos = findPos+textToFind.size();
         char charToStop = ' ';
 
@@ -125,19 +144,51 @@ bool rtfEmbedImagesWorkaround(const std::string &rtfFilename)
 
         auto imgFilename = std::string(rtfData, fnamePos, fnameEndPos-fnamePos);
 
+
         while(fnameEndPos!=rtfData.size() && rtfData[fnameEndPos]!='}') ++fnameEndPos;
         if(fnameEndPos!=rtfData.size())
            ++fnameEndPos; // skip closing '}'
 
+
+        std::size_t fieldEndPos = fnameEndPos;
+        #ifndef NDEBUG
+        const char *rtfDataFieldEndPtr = &rtfData[fieldEndPos];
+        #endif
+
+        while(fieldEndPos!=rtfData.size() && rtfData[fieldEndPos]!='}')
+        {
+            ++fieldEndPos;
+            #ifndef NDEBUG
+            ++rtfDataFieldEndPtr;
+            #endif
+        }
+
+        if(fieldEndPos!=rtfData.size() && rtfData[fieldEndPos]=='}')
+        {
+            ++fieldEndPos;
+            #ifndef NDEBUG
+            ++rtfDataFieldEndPtr;
+            #endif
+        }
+
+        if(fieldEndPos!=rtfData.size())
+        {
+            ++fieldEndPos;
+            #ifndef NDEBUG
+            ++rtfDataFieldEndPtr;
+            #endif
+        }
+
+
         std::string rtfForReplace = rtfReadAndGenerateEmbedRtfWithImage(rtfPath, imgFilename);
         if (rtfForReplace.empty())
         {
-            findPos = rtfData.find(textToFind, fnameEndPos);
+            findPos = rtfData.find(textToFind, fieldEndPos);
         }
         else
         {
             //rtfData.erase(findPos, fnameEndPos-findPos);
-            rtfData.replace(findPos, fnameEndPos-findPos, rtfForReplace);
+            rtfData.replace(fieldPos, fieldEndPos-fieldPos, rtfForReplace);
             findPos = rtfData.find(textToFind, findPos+rtfForReplace.size());
         }
 

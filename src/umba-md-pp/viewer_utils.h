@@ -10,6 +10,7 @@
 
 #if defined(WIN32) || defined(_WIN32)
     #include "umba/win32_utils.h"
+    #include <shellapi.h>
 #endif
 
 #include <string>
@@ -96,6 +97,48 @@ bool createTempFolder(StringType &finalPath, const StringType &inputFileName, co
     }
 
     return false;
+}
+
+//----------------------------------------------------------------------------
+template<typename StringType> inline
+bool removeTempFolder(StringType &finalPath, const StringType &appName=umba::string_plus::make_string<StringType>("umba-md-pp-view"))
+{
+    StringType tempRoot = umba::filesys::getTempFolderPath<StringType>();
+    //umba::filesys::createDirectory(tempRoot);
+
+    StringType umbaMdPpViewerTempRoot = umba::filename::appendPath(tempRoot, umba::string_plus::make_string<StringType>(".") + appName);
+    //umba::filesys::createDirectory(umbaMdPpViewerTempRoot);
+
+    finalPath = umbaMdPpViewerTempRoot;
+
+    #if defined(WIN32) || defined(_WIN32)
+    if constexpr (sizeof(typename StringType::value_type)==sizeof(char))
+    {
+        SHFILEOPSTRUCTA  shFileOpStruct = { 0 };
+        umbaMdPpViewerTempRoot.append(1, 0);
+        shFileOpStruct.wFunc  = FO_DELETE;
+        shFileOpStruct.pFrom  = (PCZZSTR)umbaMdPpViewerTempRoot.c_str();
+        shFileOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR;  // FOF_NOERRORUI - FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR
+
+        return SHFileOperationA(&shFileOpStruct)==0 ? true : false;
+    }
+    else
+    {
+        SHFILEOPSTRUCTW  shFileOpStruct = { 0 };
+        umbaMdPpViewerTempRoot.append(1, 0);
+        shFileOpStruct.wFunc  = FO_DELETE;
+        shFileOpStruct.pFrom  = (PCZZSTR)umbaMdPpViewerTempRoot.c_str();
+        shFileOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR;  // FOF_NOERRORUI - FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR
+
+        return SHFileOperationW(&shFileOpStruct)==0 ? true : false;
+    }
+
+    #else
+        return false;
+    #endif
+
+    //return false;
+
 }
 
 //----------------------------------------------------------------------------
