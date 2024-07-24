@@ -1,0 +1,74 @@
+%if !defined(RTFTAB_UDH)
+%define RTFTAB_UDH 1
+
+%if !defined(__RTF_RTFSTYLE_UDH__)
+    %include <rtf/rtfstyle.udh>
+%endif __RTF_RTFSTYLE_UDH__
+
+
+%<
+@newcommand[table_hor_cell_space][@evar[__table_hor_cell_space][@eval[#1*1440/254]]]
+@evar[__table_hor_cell_space][0]
+
+@newcommand[table_row_autofit][@table_row_autofit_#1]
+@newcommand[table_row_autofit_on][@evar[__tr_autofit][1]]
+@newcommand[table_row_autofit_off][@evar[__tr_autofit][0]]
+@evar[__tr_autofit][1]
+
+
+@newcounter[rtf_intbl][0]
+@newcommand[rtf_intbl][@ifthen[@getcounter[rtf_intbl]>0][@_bsl[]intbl@_bsl[]itap@getcounter[rtf_intbl]]]
+
+% @newcommand
+
+
+
+
+@newcommand[rtf_begin_row][\
+@evar[rtf_in_cell][0]\
+@_bsl[]trowd @_bsl[]trgaph@evar[__table_hor_cell_space]\
+@_bsl[]trautofit@evar[__tr_autofit]\
+% Centers a table row with respect to its containing column
+@_bsl[]trqc\
+% Height of a table row in twips
+@_bsl[]trrh0
+% 1Auto, ignores \clwWidthBN if present; \clwWidthBN will generally not be written.
+@_bsl[]trftsWidthA0
+]
+@newcommand[rtf_end_row][\
+@ifthen[@evar[rtf_in_cell]>0][@rtf_end_cell[]]\
+@_bsl[]row\
+]
+@newenvironment[rtf_row][@rtf_begin_row[]][@rtf_end_row[]]
+
+% @_try_close_cur[para]
+@newcommand[rtf_begin_cell][@begin_rtf_para]
+@newcommand[rtf_end_cell][@_bsl[]cell]
+@newenvironment[rtf_cell][@rtf_begin_cell[]][@rtf_end_cell[]]
+
+@newcommand[cell][\
+@ifthen[@evar[rtf_in_cell]>0][@rtf_end_cell[]]\
+@evar[rtf_in_cell][1]\
+@rtf_begin_cell[]
+]
+
+@newenvironment[table]\
+[\
+@addcounter[rtf_intbl][1]\
+][\
+@addcounter[rtf_intbl][-1]\
+]
+
+%>
+
+%ignore true
+@newenvironment[para]\
+[@var[_para_style][#1]@begin[rtf_para][#1]]\
+[@end[rtf_para]][normal1]
+@newcommand[para]\
+[@_try_close[para]@begin[para][#1]][normal1]
+@newcommand[endpara]\
+[@_try_close[para]]
+%ignore false
+
+%endif RTFTAB_UDH

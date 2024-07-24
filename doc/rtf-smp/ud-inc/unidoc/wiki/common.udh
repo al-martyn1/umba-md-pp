@@ -1,0 +1,43 @@
+%if !defined(__WIKI_COMMON_UDH__)
+%define __WIKI_COMMON_UDH__
+
+%<
+@newcommand[_beginwikibox][<box #1>]
+@newcommand[_beginexpwikibox][<box @_xmlattr[expanded][false] #1>]
+@newcommand[_endwikibox][</box>]
+%>
+
+@newcommand[note][@begin[em]@textbf[#1]. #2@end[em]][@note_text[]]
+@newenvironment[note]\
+[@begin[em]@textbf[#1]. ]\
+[@end[em]]\
+[@note_text[]]
+
+@newcommand[attention][@begin[em]@textbf[#1]. #2@end[em]][@attention_text[]]
+@newenvironment[attention]\
+[@begin[em]@textbf[#1]. ]\
+[@end[em]]\
+[@attention_text[]]
+
+
+@newcommand[warning][@begin[em]@textbf[#1]. #2@end[em]][@warning_text[]]
+@newenvironment[warning]\
+[@begin[em]@textbf[#1]. ]\
+[@end[em]]\
+[@warning_text[]]
+
+
+@newcommand[seepara][\
+%if defined(HELP)
+% @para[#1]\
+%endif
+][normalleft1]
+@newenvironment[seealso][\
+@newcommand[seeentry][@ref[##1]@br[]]\
+#1:@br[]\
+][\
+][@seealso_text[]]
+
+
+%endif __WIKI_COMMON_UDH__
+

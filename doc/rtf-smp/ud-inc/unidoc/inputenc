@@ -1,0 +1,11 @@
+%if !defined (__INPUTENC__)
+%define __INPUTENC__
+
+%if !defined(QUET)
+ % message Inputenc definitions
+%endif
+%if !defined(__INPUTENC_UDH__)
+    %include <inputenc.udh>
+%endif __INPUTENC_UDH__
+
+%endif __INPUTENC__

@@ -1,0 +1,10 @@
+%if !defined(__ARRAY_UDH__)
+%define __ARRAY_UDH__ 1
+
+% name, size
+% @newcounter
+% @newcommand[newarray][]
+%
+% @newarray[]
+
+%endif __ARRAY_UDH__

@@ -1,0 +1,190 @@
+%if !defined(__RTF_RTFLANG_UDH__)
+%define __RTF_RTFLANG_UDH__
+
+% rtf Language ID 
+
+@newcommand[lang_Afrikaans][1078]
+@newcommand[lang_Albanian][1052]
+@newcommand[lang_Arabic][1025]
+@newcommand[lang_Arabic_Algeria][5121]
+@newcommand[lang_Arabic_Bahrain][15361]
+@newcommand[lang_Arabic_Egypt][3073]
+@newcommand[lang_Arabic_General][1]
+@newcommand[lang_Arabic_Iraq][2049]
+@newcommand[lang_Arabic Jordan][11265]
+@newcommand[lang_Arabic_Kuwait][13313]
+@newcommand[lang_Arabic_Lebanon][12289]
+@newcommand[lang_Arabic_Libya][4097]
+@newcommand[lang_Arabic_Morocco][6145]
+@newcommand[lang_Arabic_Oman][8193]
+@newcommand[lang_Arabic_Qatar][16385]
+@newcommand[lang_Arabic_Syria][10241]
+@newcommand[lang_Arabic_Tunisia][7169]
+@newcommand[lang_Arabic_UAE][14337]
+@newcommand[lang_Arabic_Yemen][9217]
+@newcommand[lang_Armenian][1067]
+@newcommand[lang_Assamese][1101]
+@newcommand[lang_Azeri_Cyrillic][2092]
+@newcommand[lang_Azeri_Latin][1068]
+@newcommand[lang_Basque][1069]
+@newcommand[lang_Bengali][1093]
+@newcommand[lang_Bosnia_Herzegovina][4122]
+@newcommand[lang_Bulgarian][1026]
+@newcommand[lang_Burmese][1109]
+@newcommand[lang_Byelorussian][1059]
+% @newcommand[lang_Catalan 0x0403 1027
+% @newcommand[lang_Chinese China 0x0804 2052
+% @newcommand[lang_Chinese General 0x0004 4
+% @newcommand[lang_Chinese (Hong Kong SAR) 0x0c04 3076
+% @newcommand[lang_Chinese Macau SAR 0x0c04 3076
+% @newcommand[lang_Chinese Singapore 0x1004 4100
+% @newcommand[lang_Chinese Taiwan 0x0404 1028
+% @newcommand[lang_Croatian 0x041a 1050
+% @newcommand[lang_Czech 0x0405 1029
+% @newcommand[lang_Danish 0x0406 1030
+% @newcommand[lang_Dutch Belgium 0x0813 2067
+% @newcommand[lang_Dutch Standard 0x0413 1043
+@newcommand[lang_Eng_Australia][3081]
+@newcommand[lang_Eng_Belize][10249]
+@newcommand[lang_Eng_British][2057]
+@newcommand[lang_Eng_Canada][4105]
+@newcommand[lang_Eng_Caribbean][9225]
+@newcommand[lang_Eng_General][9]
+@newcommand[lang_Eng_Ireland][6153]
+@newcommand[lang_Eng_Jamaica][8201]
+@newcommand[lang_Eng_New Zealand][5129]
+@newcommand[lang_Eng_Philippines][13321]
+@newcommand[lang_Eng_South Africa][7177]
+@newcommand[lang_Eng_Trinidad][11273]
+@newcommand[lang_Eng_US][1033]
+@newcommand[lang_Eng_Zimbabwe][1033]
+% @newcommand[lang_Estonian 0x0425 1061
+% @newcommand[lang_Faerose 0x0438 1080
+% @newcommand[lang_Farsi 0x0429 1065
+% @newcommand[lang_Finnish 0x040b 1035
+% lang_French
+% @newcommand[lang_Fr 0x040c 1036
+% @newcommand[lang_Fr Belgium 0x080c 2060
+% @newcommand[lang_Fr Cameroon 0x2c0c 11276
+% @newcommand[lang_Fr Canada 0x0c0c 3084
+% @newcommand[lang_Fr Cote d'Ivoire 0x300c 12300
+% @newcommand[lang_Fr Democratic Republic of the Congo 0x240c 9228
+% @newcommand[lang_Fr Luxembourg 0x140c 5132
+% @newcommand[lang_Fr Mali 0x340c 13324
+% @newcommand[lang_Fr Monaco 0x180c 6156
+% @newcommand[lang_Fr Reunion 0x200c 8204
+% @newcommand[lang_Fr Senegal 0x280c 10252 
+% @newcommand[lang_Fr Swiss 0x100c 4108 
+% @newcommand[lang_Fr West Indies 0x1c0c 7180 
+% @newcommand[lang_Frisian 0x0462 1122 
+% @newcommand[lang_Gaelic 0x043c 1084 
+% @newcommand[lang_Gaelic Ireland 0x083c 2108 
+% @newcommand[lang_Galician 0x0456 1110 
+% @newcommand[lang_Georgian 0x0437 1079 
+% German
+% @newcommand[lang_Ger 0x0407 1031 
+% @newcommand[lang_Ger Austrian 0x0c07 3079 
+% @newcommand[lang_Ger Liechtenstein 0x1407 5127 
+% @newcommand[lang_Ger Luxembourg 0x1007 4103 
+% @newcommand[lang_Ger Switzerland 0x0807 2055 
+% @newcommand[lang_Greek 0x0408 1032 
+% @newcommand[lang_Gujarati 0x0447 1095 
+% @newcommand[lang_Hebrew 0x040d 1037 
+% @newcommand[lang_Hindi 0x0439 1081 
+% @newcommand[lang_Hungarian 0x040e 1038 
+% @newcommand[lang_Icelandic 0x040f 1039 
+% @newcommand[lang_Indonesian 0x0421 1057 
+% @newcommand[lang_Ital 0x0410 1040 
+% @newcommand[lang_Ital Switzerland 0x0810 2064 
+% @newcommand[lang_Japanese 0x0411 1041 
+% @newcommand[lang_Kannada 0x044b 1099 
+% Kashmiri
+% @newcommand[lang_Kash 0x0460 1120 
+% @newcommand[lang_Kash India 0x0860 2144 
+% @newcommand[lang_Kazakh 0x043f 1087 
+% @newcommand[lang_Khmer 0x0453 1107 
+% @newcommand[lang_Kirghiz 0x0440 1088 
+% @newcommand[lang_Konkani 0x0457 1111 
+% @newcommand[lang_Korean 0x0412 1042 
+% @newcommand[lang_Korean Johab 0x0812 2066 
+% @newcommand[lang_Lao 0x0454 1108 
+% @newcommand[lang_Latvian 0x0426 1062 
+% @newcommand[lang_Lithuanian 0x0427 1063 
+% @newcommand[lang_Lithuanian Classic 0x0827 2087 
+% @newcommand[lang_FYRO Macedonian 0x043e 1086 
+% @newcommand[lang_Malay 0x043e 1086 
+% @newcommand[lang_Malay Brunei Darussalam 0x083e 2110 
+% @newcommand[lang_Malayalam 0x044c 1100 
+% @newcommand[lang_Maltese 0x043a 1082 
+% @newcommand[lang_Manipuri 0x0458 1112 
+% @newcommand[lang_Marathi 0x044e 1102 
+% @newcommand[lang_Mongolian 0x0450 1104 
+% @newcommand[lang_Nepali 0x0461 1121 
+% @newcommand[lang_Nepali India 0x0861 2145 
+% @newcommand[lang_Norwegian Bokmal 0x0414 1044 
+% @newcommand[lang_Norwegian Nynorsk 0x0814 2068 
+% @newcommand[lang_Oriya 0x0448 1096 
+% @newcommand[lang_Polish 0x0415 1045 
+% @newcommand[lang_Portuguese Brazil 0x0416 1046 
+% @newcommand[lang_Portuguese Iberian 0x0816 2070 
+% @newcommand[lang_Punjabi 0x0446 1094 
+% @newcommand[lang_Rhaeto-Romanic 0x0417 1047 
+% @newcommand[lang_Romanian 0x0418 1048 
+% @newcommand[lang_Romanian_Moldova][2072]
+@newcommand[lang_Rus][1049]
+@newcommand[lang_Rus_Moldova][2073]
+% @newcommand[lang_Sami Lappish 0x043b 1083 
+% @newcommand[lang_Sanskrit 0x044f 1103 
+% @newcommand[lang_Serbian Cyrillic 0x0c1a 3098 
+% @newcommand[lang_Serbian Latin 0x081a 2074 
+% @newcommand[lang_Sindhi 0x0459 1113 
+% @newcommand[lang_Slovak 0x041b 1051 
+% @newcommand[lang_Slovenian 0x0424 1060 
+% @newcommand[lang_Sorbian 0x042e 1070 
+% Spanish
+% @newcommand[lang_Span Argentina 0x2c0a 11274 
+% @newcommand[lang_Span Bolivia 0x400a 16394 
+% @newcommand[lang_Span Chile 0x340a 13322 
+% @newcommand[lang_Span Colombia 0x240a 9226 
+% @newcommand[lang_Span Costa Rica 0x140a 5130 
+% @newcommand[lang_Span Dominican Republic 0x1c0a 7178 
+% @newcommand[lang_Span Ecuador 0x300a 12298 
+% @newcommand[lang_Span El Salvador 0x440a 17418 
+% @newcommand[lang_Span Guatemala 0x100a 4106 
+% @newcommand[lang_Span Honduras 0x480a 18442 
+% @newcommand[lang_Span Mexico 0x080a 2058 
+% @newcommand[lang_Span Modern 0x0c0a 3082 
+% @newcommand[lang_Span Nicaragua 0x4c0a 19466 
+% @newcommand[lang_Span Panama 0x180a 6154 
+% @newcommand[lang_Span Paraguay 0x3c0a 15370 
+% @newcommand[lang_Span Peru 0x280a 10250 
+% @newcommand[lang_Span Puerto Rico 0x500a 20490 
+% @newcommand[lang_Span Traditional 0x040a 1034 
+% @newcommand[lang_Span Uruguay 0x380a 14346 
+% @newcommand[lang_Span Venezuela 0x200a 8202 
+% @newcommand[lang_Sutu 0x0430 1072 
+% @newcommand[lang_Swahili 0x0441 1089 
+% @newcommand[lang_Swedish 0x041d 1053 
+% @newcommand[lang_Swedish Finland 0x081d 2077 
+% @newcommand[lang_Tajik 0x0428 1064 
+% @newcommand[lang_Tamil 0x0449 1097 
+% @newcommand[lang_Tatar 0x0444 1092 
+% @newcommand[lang_Telugu 0x044a 1098 
+% @newcommand[lang_Thai 0x041e 1054 
+% @newcommand[lang_Tibetan 0x0451 1105 
+% @newcommand[lang_Tsonga 0x0431 1073 
+% @newcommand[lang_Tswana 0x0432 1074 
+% @newcommand[lang_Turkish 0x041f 1055 
+% @newcommand[lang_Turkmen 0x0442 1090 
+@newcommand[lang_Ukranian][1058]
+% @newcommand[lang_Urdu 0x0420 1056 
+% @newcommand[lang_Urdu India 0x0820 2080 
+% @newcommand[lang_Uzbek Cyrillic 0x0843 2115 
+% @newcommand[lang_Uzbek Latin 0x0443 1091 
+% @newcommand[lang_Venda 0x0433 1075 
+% @newcommand[lang_Vietnamese 0x042a 1066 
+% @newcommand[lang_Welsh 0x0452 1106 
+% @newcommand[lang_Xhosa 0x0434 1076 
+% @newcommand[lang_Yiddish 0x043d 1085 
+% @newcommand[lang_Zulu 0x0435 1077 
+%endif __RTF_RTFLANG_UDH__

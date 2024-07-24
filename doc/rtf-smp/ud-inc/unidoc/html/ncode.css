@@ -1,0 +1,99 @@
+<STYLE type="text/css">
+
+PRE.CODE
+{
+    BACKGROUND-COLOR:rgb(242,248,254);
+    COLOR: rgb(0,32,128);
+}
+
+
+PRE SPAN.KWD
+{       
+    FONT-WEIGHT:bold;
+    /*COLOR: rgb(0,0,128);*/
+}
+
+PRE SPAN.TP
+{
+    FONT-WEIGHT:bold;
+}
+
+PRE SPAN.UKWD
+{       
+    FONT-WEIGHT:bold;
+    COLOR: rgb(32,32,140);
+}
+
+PRE SPAN.UTP
+{
+    FONT-WEIGHT:bold;
+    COLOR: rgb(32,32,140);
+}
+
+PRE SPAN.CMT
+{       
+    FONT-STYLE: italic;
+    COLOR: rgb(64,96,128);
+}
+
+PRE SPAN.PP
+{       
+    /*FONT-WEIGHT:bold;*/
+    COLOR: rgb(0,128,0);
+}
+
+PRE SPAN.PKWD
+{       
+    FONT-WEIGHT:bold;
+    /*COLOR: rgb(0,128,0);*/
+}
+
+PRE SPAN.STR
+{       
+    COLOR: rgb(255,0,0);
+}
+
+
+PRE SPAN.NUM
+{       
+    COLOR: rgb(0,0,255);
+}
+
+PRE SPAN.SM
+{
+    COLOR: rgb(0,64,160);
+}
+
+A.TPLNK
+{ 
+    TEXT-DECORATION:none;
+}
+
+A:LINK.TPLNK
+{
+    FONT-WEIGHT:bold;
+    COLOR: rgb(32,32,140);
+}
+
+A:ACTIVE.TPLNK
+{
+    FONT-WEIGHT:bold;
+    COLOR: rgb(32,32,140);
+}
+
+A:VISITED.TPLNK
+{
+    FONT-WEIGHT:bold;
+    COLOR: rgb(32,32,140);
+}
+
+A:HOVER.TPLNK
+{
+    CURSOR:HAND;
+    FONT-WEIGHT:bold;
+    COLOR: rgb(32,32,140);
+}
+
+
+</STYLE>
+

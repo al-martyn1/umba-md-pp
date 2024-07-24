@@ -1,0 +1,8 @@
+%if !defined (__PFORMAT__)
+%define __PFORMAT__
+
+%if !defined(__PFORMAT_UDH__)
+    %include <pformat.udh>
+%endif __PFORMAT_UDH__
+
+%endif __PFORMAT__

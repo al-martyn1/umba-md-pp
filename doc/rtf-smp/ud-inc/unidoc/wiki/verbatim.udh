@@ -1,0 +1,7 @@
+%if !defined(__WIKI_VERBATIM_UDH__)
+%define __WIKI_VERBATIM_UDH__
+
+% TODO: define verbatim environment
+@newenvironment[verbatim][][]
+
+%endif __WIKI_VERBATIM_UDH__

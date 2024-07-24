@@ -1,0 +1,8 @@
+%if !defined (__NAVIS__)
+%define __NAVIS__
+
+%if !defined(__NAVIS_UDH__)
+    %include <navis.udh>
+%endif __NAVIS_UDH__
+
+%endif __NAVIS__

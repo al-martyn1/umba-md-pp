@@ -1,0 +1,121 @@
+%if !defined(__RTF_FILEFORM_UDH__)
+%define __RTF_FILEFORM_UDH__
+
+%if !defined(__RTF_RTFFSIZE_UDH__)
+    %include <rtf\rtffsize.udh>
+%endif __RTF_RTFFSIZE_UDH__
+
+%if !defined(__RTF_RTFCOLOR_UDH__)
+    %include <rtf\rtfcolor.udh>
+%endif __RTF_RTFCOLOR_UDH__
+
+% rtf font table environment
+%if defined(HELP)
+@newenvironment[cnt_file][\
+%include <rtf\cyr1251.udh>
+%include <rtf/plainbas.udh>
+% @ifthenelse[@iscommand[ident]][@message[ident is a commannd]][@message[ident is not a commannd]]
+@ifthen[@iscommand[ident]][@renewcommand[ident][##1]]
+% @ifthen[@iscommand[ident]][message[renw ident]@renewcommand[ident][#1]]
+@appendfile[#1]\
+][@closefile[]]
+@newcommand[writecnt][@begin[cnt_file][#1]#2@end[cnt_file]]
+%endif
+@newenvironment[rtf_font_table][@_lb@_bsl[]fonttbl][@_rb]
+% command for difining rtf font table entry
+% args are: number, family, charset, pitch, name
+% family: 
+% nil - Unknown or default fonts (the default)
+% roman - Roman, proportionally spaced serif fonts  (Times New Roman, Palatino)
+% swiss - Swiss, proportionally spaced sans serif fonts (Arial)
+% modern - Fixed-pitch serif and sans serif fonts (Courier New, Pica)
+% script - Script fonts (Cursive)
+% decor - Decorative fonts (Old English, ITC Zapf Chancery)
+% tech - Technical, symbol, and mathematical fonts (Symbol)
+% bidi - Arabic, Hebrew, or other bidirectional font (Miriam)
+% itch: default - 0, fixed - 1, variable - 2 
+@newcommand[rtf_fonttbl_entry][@_lb@_bsl[]f#1@_bsl[]f#2@_bsl[]fcharset#3@_bsl[]fprq#4#6 #5;@_rb]
+% rtf_fonttbl_entry exit code samples
+% {\f0\froman\fcharset204\fprq2{\*\panose 02020603050405020304}Times New Roman;}
+% {\f46\froman\fcharset0\fprq2 Times New Roman;}
+% 204 Russian charset
+@newcommand[make_rtf_font_table][\
+@begin[rtf_font_table]%
+% @rtf_fonttbl_entry[0][roman][204][2][Times New Roman][@_lb@_bsl[]*@_bsl[]panose 02020603050405020304@_rb[]]
+@rtf_fonttbl_entry[0][roman][204][2][Times New Roman Cyr]%
+@rtf_fonttbl_entry[1][roman][0][2][Times New Roman]%
+% @rtf_fonttbl_entry[2][swiss][204][2][Arial][@_lb@_bsl[]*@_bsl[]panose 020b0604020202020204@_rb[]]
+@rtf_fonttbl_entry[2][swiss][204][2][Arial Cyr]%
+@rtf_fonttbl_entry[3][swiss][0][2][Arial]%
+% @rtf_fonttbl_entry[4][swiss][204][2][Microsoft Sans Serif][@_lb@_bsl[]*@_bsl[]panose 020b0604020202020204@_rb[]]
+@rtf_fonttbl_entry[4][swiss][204][2][Microsoft Sans Serif]%
+@rtf_fonttbl_entry[5][swiss][0][2][Microsoft Sans Serif]%
+% @rtf_fonttbl_entry[6][modern][204][1][Courier New][@_lb@_bsl[]*@_bsl[]panose 02070309020205020404@_rb[]]
+@rtf_fonttbl_entry[6][modern][204][1][Courier New Cyr]%
+@rtf_fonttbl_entry[7][modern][0][1][Courier New]%
+% @rtf_fonttbl_entry[8][modern][204][1][Courier][@_lb@_bsl[]*@_bsl[]panose 00000000000000000000@_rb[]]
+@rtf_fonttbl_entry[8][modern][204][1][Courier]%
+@rtf_fonttbl_entry[9][modern][0][1][Courier]\
+%
+@rtf_fonttbl_entry[10][tech][2][1][Symbol]\
+@end[rtf_font_table]%
+]
+
+
+
+%if defined(PRINTABLE)
+@newcommand[deffont][f0]
+%else
+@newcommand[deffont][f2]
+%endif
+@compilecommand[deffont]
+@compilecommand[deffontsize]
+
+%if !defined(__RTF_RTFSTYLE_UDH__)
+    %include <rtf\rtfstyle.udh>
+%endif __RTF_RTFSTYLE_UDH__
+
+@newcommand[file_begin][\
+@_lb@_bsl[]rtf1@_bsl[]ansi\
+@_bsl[]def@deffont[]\
+@_bsl[]deffs@eval[@deffontsize[]*2]\
+@_bsl[]deflang@lang_Eng_US\
+@_bsl[]deflangfe@lang_Rus\
+@_bsl[]horzdoc\
+@_bsl[]viewkind1\
+@_bsl[]viewscale100\
+@_bsl[]ltrdoc\
+@make_rtf_font_table\
+@make_color_table\
+@make_text_style_sheet\
+]
+@newcommand[file_end][@_rb]
+% header begin, end
+@newcommand[file_header_begin][@_lb@_bsl[]info ]
+@newcommand[file_header_end][@_rb]
+% tail begin, end. 
+@newcommand[file_footer_begin][]
+@newcommand[file_footer_end][]
+% document title. Not all doc types have this part
+@newcommand[file_title][@_lb@_bsl[]title #1@_rb]
+% document body
+@newcommand[file_body_begin][]
+@newcommand[file_body_end][]
+%ignore true
+@newcommand[section][\
+@_lb@_bsl[]b@_bsl[]kerning28@_bsl[]f2\
+% @_bsl[]lang@lang_Eng_US\
+% @_bsl[]langfe@lang_Rus \
+#1\
+@_bsl[]b@_rb@_bsl[]par]
+%ignore false
+% @newenvironment[para][@_lb@_bsl[]f0][@_rb@_bsl[]par]
+@newenvironment[doc_file][@openfile[]@file_begin[]\
+@file_header_begin[]\
+@file_title[@var[_title]]\
+@file_header_end\
+@file_body_begin][\
+@file_body_end[]\
+@file_end[]\
+@closefile]\
+%endif __RTF_FILEFORM_UDH__

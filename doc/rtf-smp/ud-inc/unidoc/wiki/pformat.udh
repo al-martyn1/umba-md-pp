@@ -1,0 +1,21 @@
+%if !defined(__WIKI_PFORMAT_UDH__)
+%define __WIKI_PFORMAT_UDH__
+
+% stubs
+@newcommand[__paper_format][]
+
+@newcommand[margin_left][]
+@newcommand[margin_top][]
+@newcommand[margin_right][]
+@newcommand[margin_bottom][]
+@newcommand[gutter][]
+@newcommand[header_size][]
+@newcommand[footer_size][]
+@newcommand[header_margin_left][]
+@newcommand[header_margin_right][]
+
+@newcommand[paper_format][]
+@paper_format[A4]
+
+
+%endif __WIKI_PFORMAT_UDH__

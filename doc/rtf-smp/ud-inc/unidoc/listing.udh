@@ -1,0 +1,76 @@
+%if !defined(__LISTING_UDH__)
+%define __LISTING_UDH__
+
+@newcounter[listing]
+@newcounter[listing_line]
+@newcommand[listingfixed][@listing_text[]]
+% @newcommand[thelisting][@thechapter[].@arabic[@getcounter[listing]]]
+
+@newcommand[thelisting][\
+@ifthenelse[@isinenv[book]][\
+@thechapter[]\
+][\
+@ifthenelse[@isinenv[article] || @isinenv[techtask]][\
+@thesection[]\
+][\
+]\
+]\
+.@arabic[@getcounter[listing]]]
+
+
+
+%if defined(HTML)
+    %include <html\htmlst.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_RTFLST_UDH__)
+        %include <rtf\rtflst.udh>
+    %endif __RTF_RTFLST_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    % include <tex\texlst.udh>
+%elseif defined(WIKI) || defined(KBWIKI)
+    % include <wiki\listing.udh>
+%endif
+
+% if !defined (__COMMAND_LISTING_IDENT_DEFINED__)
+% define __COMMAND_LISTING_IDENT_DEFINED__
+@newcommand[ident][@textbf[#1]]
+% else
+% @renewcommand[ident][@textbf[#1]]
+% endif __COMMAND_LISTING_IDENT_DEFINED__
+
+@newcommand[in][@lsb[]IN@rsb[]]
+@newcommand[out][@lsb[]OUT@rsb[]]
+@newcommand[inout][@lsb[]IN@rsb[]@lsb[]OUT@rsb[]]
+
+
+@newcommand[fnpar][@textbf[@fnparams_text[]]\
+@var[_fnpar_param_count][#1]\
+@var[_fnpar_param_used][1]\
+@ifthen[#1==0][@para[]]\
+][1]
+
+@newcommand[fnret][\
+@ifthen[@var[_fnpar_param_count]][@para[]]\
+@ifthen[@var[_fnpar_param_used]][@para[]]\
+@textbf[@fnreturn_text[]]@para[]\
+@var[_fnpar_param_count][0]\
+@var[_fnpar_param_used][0]]
+
+@newcommand[fnrem][@para[]@textbf[@fnremarks_text[]]@para[]]
+
+@newenvironment[fnargsinfo]\
+[\
+@newcommand[fnarg][@entryitem[@thecursecid[]_arg_##1][##1]]\
+%if defined(RTF)
+@_bsl[]par@begin_rtf_para[]
+%endif
+@fnpar[]\
+@begin[entry]\
+][\
+@end[entry]\
+]
+
+@newcommand[fnapopref][@popref[#1_arg_#2][#3]]
+
+
+%endif __LISTING_UDH__

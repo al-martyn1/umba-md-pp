@@ -1,0 +1,551 @@
+%if !defined(__RTF_RTFTAB_UDH__)
+%define __RTF_RTFTAB_UDH__
+
+% if !defined(___SECT_UDH__)
+    % include <_sect.udh>
+% endif ___SECT_UDH__
+
+% if !defined(__RTF_RTFGOST_UDH__)
+    % include <rtfgost.udh>
+% endif __RTF_RTFGOST_UDH__
+
+
+%if !defined(__TABULAR_UDH__)
+    %include <tabular.udh>
+%endif __TABULAR_UDH__
+
+%if !defined(__RTF_RTFSTYLE_UDH__)
+    %include <rtf/rtfstyle.udh>
+%endif __RTF_RTFSTYLE_UDH__
+
+%if !defined(__RTF_BRDRSTY_UDH__)
+    %include <rtf/brdrsty.udh>
+%endif __RTF_BRDRSTY_UDH__
+
+%if !defined(__RTF_TWIPS_UDH__)
+    %include <rtf/twips.udh>
+%endif __RTF_TWIPS_UDH__
+
+
+@newcommand[_set_cell_N_xsize][@evar[_cell_@getcounter[rtf_intbl]#1_xsize][#2]]
+@newcommand[_get_cell_N_xsize][@var[_cell_@getcounter[rtf_intbl]#1_xsize]]
+@newcommand[_get_cur_cell_xsize][@get_cell_N_xsize[[@eval[@_rtf_getcellcounter[]]]]]
+@newcommand[set_cell_N_xsize][@_set_cell_N_xsize[#1][#2]]
+@newcommand[get_cell_N_xsize][@_get_cell_N_xsize[#1]]
+@newcommand[get_cur_cell_xsize][@_get_cur_cell_xsize[]]
+
+@newcommand[_rtf_tbl_is_header][0]
+
+@newcounter[rtf_intbl][0]
+@newcommand[rtf_intbl][@ifthen[@getcounter[rtf_intbl]>0][@_bsl[]intbl@_bsl[]itap@getcounter[rtf_intbl]]]
+
+% RTF Table cell border color
+@newcommand[_rtf_tbl_border_color][@_bsl[]brdrcf#1]
+
+@newcommand[tbl_header_cell_shading][2500]
+
+
+% RTF Table bidirectional support
+@newcommand[_rtf_tbl_rtl_row][@_bsl[]rtlrow]
+@newcommand[_rtf_tbl_ltr_row][@_bsl[]ltrrow]
+
+@newcommand[_rtf_tbl_bidictrl_row][@_rtf_tbl_ltr_row[]]
+
+% Table cell spacing
+@newcommand[_rtf_tbl_cell_spacing][@var[_rtf_tbl_cell_space][[@_rtf_twips[#1]]]][200]
+@newcommand[_rtf_tbl_push_cell_spacing][@push[_rtf_tbl_cell_space]]
+@newcommand[_rtf_tbl_pop_cell_spacing][@pop[_rtf_tbl_cell_space]]
+@newcommand[_rtf_tbl_get_cell_spacing][@evar[_rtf_tbl_cell_space]]
+
+@_rtf_tbl_cell_spacing[200mmh]
+
+% table counters                       
+@newcommand[_rtf_newrowcounter]\
+[@ifthenelse[@iscounter[[rowcnt@getcounter[rtf_intbl]]]]\
+[@setcounter[[rowcnt@getcounter[rtf_intbl]]][0]]\
+[@newcounter[[rowcnt@getcounter[rtf_intbl]]][0]]\
+]
+
+@newcommand[_rtf_getrowcounter]\
+[@getcounter[[rowcnt@getcounter[rtf_intbl]]]]
+
+@newcommand[_rtf_incrowcounter]\
+[@addcounter[[rowcnt@getcounter[rtf_intbl]]][1]]
+
+@newcommand[_rtf_decrowcounter]\
+[@addcounter[[rowcnt@getcounter[rtf_intbl]]][-1]]
+
+@newcommand[_rtf_gettblrowstr][@getcounter[rtf_intbl]@_rtf_getrowcounter[]]
+
+
+@newcommand[_rtf_newcellxposcounter]\
+[@ifthenelse[@iscounter[[cellxposcnt@_rtf_gettblrowstr[]]]]\
+[@setcounter[[cellxposcnt@_rtf_gettblrowstr[]]][0]]\
+[@newcounter[[cellxposcnt@_rtf_gettblrowstr[]]][0]]\
+]
+
+@newcommand[_rtf_getcellxposcounter]\
+[@getcounter[[cellxposcnt@_rtf_gettblrowstr[]]]]
+
+@newcommand[_rtf_addcellxposcounter]\
+[@addcounter[[cellxposcnt@_rtf_gettblrowstr[]]][#1]]
+
+@newcommand[_rtf_gettblcellstr][@getcounter[rtf_intbl]@_rtf_getrowcounter[]]
+
+
+
+
+@newcommand[_rtf_newcellcounter]\
+[@ifthenelse[@iscounter[[cellcnt@_rtf_gettblrowstr[]]]]\
+[@setcounter[[cellcnt@_rtf_gettblrowstr[]]][0]]\
+[@newcounter[[cellcnt@_rtf_gettblrowstr[]]][0]]\
+]
+
+@newcommand[_rtf_getcellcounter]\
+[@getcounter[[cellcnt@_rtf_gettblrowstr[]]]]
+
+@newcommand[_rtf_inccounter]\
+[@addcounter[[cellcnt@_rtf_gettblrowstr[]]][1]]
+
+
+@newcommand[_rtf_getcellrowstr][@getcounter[rtf_intbl]@_rtf_getrowcounter[]@_rtf_getcellcounter[]]
+
+
+
+
+% table aux files
+
+@newcommand[_rtf_create_row_file][\
+@openfile[@thebasefile[]_@_rtf_gettblrowstr[]_row.tmp]\
+]
+
+@newcommand[_rtf_append_row_file][\
+@appendfile[@thebasefile[]_@_rtf_gettblrowstr[]_row.tmp]\
+]
+
+@newcommand[_rtf_insert_row_file][\
+@insertfile[@thebasefile[]_@_rtf_gettblrowstr[]_row.tmp]\
+]
+
+@newcommand[_rtf_close_row_file][\
+@closefile[]\
+]
+
+@newcommand[_rtf_unlink_row_file][\
+@rmfile[@thebasefile[]_@_rtf_gettblrowstr[]_row.tmp]\
+]
+
+@newcommand[_rtf_create_cells_file][\
+@openfile[@thebasefile[]_@_rtf_gettblrowstr[]_cells.tmp]\
+]
+
+@newcommand[_rtf_append_cells_file][\
+@appendfile[@thebasefile[]_@_rtf_gettblrowstr[]_cells.tmp]\
+]
+
+@newcommand[_rtf_insert_cells_file][\
+@insertfile[@thebasefile[]_@_rtf_gettblrowstr[]_cells.tmp]\
+]
+
+@newcommand[_rtf_close_cells_file][\
+@closefile[]\
+]
+
+@newcommand[_rtf_unlink_cells_file][\
+@rmfile[@thebasefile[]_@_rtf_gettblrowstr[]_cells.tmp]\
+]
+
+
+% Table row alignment
+@newcommand[_rtf_tral_left][trql]
+@newcommand[_rtf_tral_right][trqr]
+@newcommand[_rtf_tral_center][trqc]
+@newcommand[_rtf_tral][@_bsl@_rtf_tral_#1[]]
+
+% Cell vertical alignment
+@newcommand[_rtf_cval_top][clvertalt]
+@newcommand[_rtf_cval_bottom][clvertalb]
+@newcommand[_rtf_cval_center][clvertalc]
+@newcommand[_rtf_cval][@_bsl@_rtf_cval_#1[]]
+
+
+% table row border - internal command
+% args - 
+% 1 - type - left, top, right, bottom
+% 2 - style, see rtf/brdrsty.udh
+% 3 - Width in 100th of mm, <=133 (1.33mm)
+% 4 - color N - N color index in color table
+@newcommand[__rtf_tbl_row_brdr__][\
+@ifthen[@_rtf_twips[#3]>0][\
+% type
+@_bsl[]trbrdr@___rtf_brdr_type_#1[]\
+% style
+@_rtf_trbrdr_style[#2]\
+% width
+@_bsl[]brdrw@ifthenelse[@_rtf_twips[#3]>2880][2880][@_rtf_twips[#3]]\
+% color
+@_rtf_tbl_border_color[[@_#4]]%
+]\
+]
+
+% 1 - type
+% 2 - width,style,color
+@newcommand[_rtf_tbl_row_brdr][\
+@__rtf_tbl_row_brdr__[#1]\
+[[@split[#2][,][2][single]]]\
+[[@split[#2][,][1][2mmt]]]\
+[[@split[#2][,][3][black]]]\
+]
+
+
+
+% Table row borders
+% args
+%  - width  in 100th of mm
+% border style
+% left
+% top
+% right
+% bottom
+% horizontal
+% vertical
+@newcommand[_rtf_tbl_row_borders][\
+@_rtf_tbl_row_brdr[top][#2]\
+@_rtf_tbl_row_brdr[left][#1]\
+@_rtf_tbl_row_brdr[bottom][#4]\
+@_rtf_tbl_row_brdr[right][#3]\
+@_rtf_tbl_row_brdr[hor][#5]\
+@_rtf_tbl_row_brdr[vert][#6]\
+][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]
+
+
+@newcommand[___rtf_tbl_row_begin]\
+[@_bsl[]trowd @_bsl[]trgaph@_rtf_tbl_get_cell_spacing\
+@_bsl[]trleft-@_rtf_tbl_get_cell_spacing[]\
+@_bsl[]trpaddl@_rtf_tbl_get_cell_spacing[]\
+@_bsl[]trpaddr@_rtf_tbl_get_cell_spacing[]\
+@_bsl[]trpaddfl3@_bsl[]trpaddfr3%
+@_rtf_tbl_bidictrl_row[]@_rtf_tral[#1]%
+@_rtf_tbl_row_borders[#2][#3][#4][#5][#6][#7]]\
+[2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]
+
+@newcommand[_rtf_tbl_row_begin][\
+@_rtf_newcellxposcounter[]\
+@_rtf_create_cells_file[]@_rtf_close_cells_file[]\
+@_rtf_create_row_file[]\
+@___rtf_tbl_row_begin[#1][#2][#3][#4][#5][#6][#7]\
+@_rtf_close_row_file[]\
+][left][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]
+
+@newcommand[_rtf_tbl_header_begin][\
+@renewcommand[cell_shading][@tbl_header_cell_shading[]]\
+@_rtf_newcellxposcounter[]\
+@_rtf_create_cells_file[]@_rtf_close_cells_file[]\
+@_rtf_create_row_file[]\
+@___rtf_tbl_row_begin[#1][#2][#3][#4][#5][#6][#7]@_bsl[]trhdr%
+@_rtf_close_row_file[]\
+][left][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]
+
+% @newcommand[_rtf_tbl_row_end][@_rtf_tbl_row_borders[#1][#2][#3][#4][#5][#6]@_bsl[]row
+% ][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]
+@newcommand[_rtf_tbl_row_end][\
+@_rtf_insert_row_file[]\
+@_rtf_insert_cells_file[]\
+%if !defined(HELP)
+@_rtf_insert_row_file[]\
+%endif HELP
+@_rtf_unlink_row_file[]\
+@_rtf_unlink_cells_file[]\
+@_bsl[]row%
+]
+
+
+
+% table cell border - internal command
+% args - 
+% 1 - type - left, top, right, bottom
+% 2 - style, see rtf/brdrsty.udh
+% 3 - Width in 100th of mm, <=133 (1.33mm)
+@newcommand[__rtf_tbl_cell_brdr__][\
+@ifthen[@_rtf_twips[#3]>0][\
+% type
+@_bsl[]clbrdr@___rtf_brdr_type_#1[]\
+% style
+@_rtf_clbrdr_style[#2]\
+% width
+@_bsl[]brdrw@ifthenelse[@_rtf_twips[#3]>2880][2880][@_rtf_twips[#3]]\
+% color
+@_rtf_tbl_border_color[[@_#4]]%
+]\
+]
+
+% 1 - type
+% 2 - width,style,color
+@newcommand[_rtf_tbl_cell_brdr][\
+%if !defined(HELP)
+@__rtf_tbl_cell_brdr__[#1]\
+[[@split[#2][,][2][single]]]\
+[[@split[#2][,][1][2mmt]]]\
+[[@split[#2][,][3][black]]]\
+%endif HELP
+]
+
+
+% Table cell borders
+% args
+%  - width  in 100th of mm
+% border style
+% 1 left
+% 2 top
+% 3 right
+% 4 bottom
+@newcommand[_rtf_tbl_cell_borders][\
+@_rtf_tbl_cell_brdr[top][#2]\
+@_rtf_tbl_cell_brdr[left][#1]\
+@_rtf_tbl_cell_brdr[bottom][#4]\
+@_rtf_tbl_cell_brdr[right][#3]\
+][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]
+
+
+% args
+% 1 - SizeX
+% 2 - shade
+% 3 - vertical alignment - top, center, bottom
+% 4 - colspan
+% 5 - cell paragraph style
+% 6 - border left
+% 7 - border top
+% 8 - border right
+% 9 - border bottom
+@newcommand[_rtf_tbl_cell_begin][\
+@_rtf_addcellxposcounter[[@_rtf_twips[[#1]]]]\
+@_rtf_append_row_file[]\
+@_rtf_cval[[#3]]
+@_rtf_tbl_cell_borders[[#6]][[#7]][[#8]][[#9]]\
+@ifthen[#2>0][@_bsl[]clshdng#2]\
+@_bsl[]cellx@_rtf_getcellxposcounter[]%
+@_rtf_close_row_file[]\
+@_rtf_append_cells_file[]\
+% @renewcommand[para][@_bsl[]par@_bsl[]pard@rtf_intbl[]@_bsl[]plain@sty_##1%
+% @renewcommand[para][@_bsl[]pard@rtf_intbl[]@_bsl[]plain@_bsl[]cgrid@sty_##1%
+@newcommand[rtf_intbl_para][@_bsl[]pard@rtf_intbl[]@_bsl[]plain@_bsl[]cgrid@sty_##1][left]\
+@renewcommand[para][@rtf_intbl_para[##1]][left]\
+@para[#5]\
+@renewcommand[rtf_intbl_para][@_bsl[]par@_bsl[]pard@rtf_intbl[]@_bsl[]plain@_bsl[]cgrid@sty_##1][left]\
+% @_lb[]\
+][50mm][@cell_shading[@_rtf_getrowcounter[]][@_rtf_getcellcounter[]]]\
+[center][1][normal1]\
+[@cell_left_brdr_style[]]\
+[@cell_top_brdr_style[]]\
+[@cell_right_brdr_style[]]\
+[@cell_bottom_brdr_style[]]
+
+
+@newcommand[_rtf_tbl_cell_end][\
+% @_bsl[]cell@_rb[]\
+@_bsl[]cell\
+@_rtf_close_cells_file[]\
+]
+
+
+
+@newcommand[default_table_alignment][left]
+%if defined(GOST)
+@renewcommand[default_table_alignment][center]
+%endif
+
+% args
+% 1 - table alignment
+% 2 - border width
+% 3 - border style
+% 4 - cell para style
+% 5 - cell vert align
+% 6 - borders color
+@newenvironment[tabular][\
+@push[_rtf_tbl_row_alignment]@var[_rtf_tbl_row_alignment][#1]\
+@addcounter[rtf_intbl][1]\
+@_rtf_newrowcounter[]\
+@ifthen[!@isinenv[table]][@_bsl[]par]\
+@renewcommand[cell_left_brdr_style][#2,#3,#6]\
+@renewcommand[cell_top_brdr_style][#2,#3,#6]\
+@renewcommand[cell_right_brdr_style][#2,#3,#6]\
+@renewcommand[cell_bottom_brdr_style][#2,#3,#6]\
+@renewcommand[header_cell_left_brdr_style][@eval[2*@nump[#2][0]]@symp[#2][mmt],#3,#6]\
+@renewcommand[header_cell_top_brdr_style][@eval[2*@nump[#2][0]]@symp[#2][mmt],#3,#6]\
+@renewcommand[header_cell_right_brdr_style][@eval[2*@nump[#2][0]]@symp[#2][mmt],#3,#6]\
+@renewcommand[header_cell_bottom_brdr_style][@eval[2*@nump[#2][0]]@symp[#2][mmt],#3,#6]\
+@renewcommand[cell_para_style][#4]\
+@renewcommand[cell_vert_alignment][#5]\
+]\
+[@_bsl[]pard\
+@addcounter[rtf_intbl][-1]\
+@pop[_rtf_tbl_row_alignment]]\
+[@default_table_alignment[]]\
+[2mmt][single][normal1][center][black]
+
+
+@newenvironment[tbl_cell][][]
+% @newenvironment[auto_tbl_cell][][]
+
+
+
+@newenvironment[tbl_header]\
+[\
+@_rtf_incrowcounter[]\
+@_rtf_newcellcounter[]\
+@renewenvironment[tbl_cell]\
+[@_rtf_inccounter[]@set_cell_N_xsize[[@_rtf_getcellcounter[]]][##1]\
+@_rtf_tbl_cell_begin[[##1]][[##2]][[##3]][[##4]][[##5]][[##6]][[##7]][[##8]][[##9]]]\
+[@_rtf_tbl_cell_end[]]\
+[50mm][@cell_shading[@_rtf_getrowcounter[]][@_rtf_getcellcounter[]]][@cell_vert_alignment][1][@cell_para_style][@cell_left_brdr_style[]][@cell_top_brdr_style[]][@cell_right_brdr_style[]][@cell_bottom_brdr_style[]]\
+@newcommand[tbl_cell][@begin[tbl_cell][##1][][##4][##5][##3]##2@end[tbl_cell]]\
+[50mm][][@cell_para_style][@cell_vert_alignment][1]\
+@renewcommand[_rtf_tbl_is_header][1]
+@_rtf_tbl_header_begin[[@var[_rtf_tbl_row_alignment]]][#1][#2][#3][#4][#5][#6]\
+@renewcommand[cell_left_brdr_style][@header_cell_left_brdr_style]\
+@renewcommand[cell_top_brdr_style][@header_cell_top_brdr_style]\
+@renewcommand[cell_right_brdr_style][@header_cell_right_brdr_style]\
+@renewcommand[cell_bottom_brdr_style][@header_cell_bottom_brdr_style]\
+]\
+[@_rtf_tbl_row_end[]]\
+[4mmt,single][4mmt,single][4mmt,single][4mmt,single][4mmt,single][4mmt,single]\
+
+
+
+
+@newenvironment[tbl_row]\
+[\
+@_rtf_incrowcounter[]\
+@_rtf_newcellcounter[]\
+@renewenvironment[tbl_cell]\
+[@_rtf_inccounter[]\
+@_rtf_tbl_cell_begin[[##1]][[##2]][[##3]][[##4]][[##5]][[##6]][[##7]][[##8]][[##9]]]\
+[@_rtf_tbl_cell_end[]]\
+[@get_cur_cell_xsize[]][@cell_shading[@_rtf_getrowcounter[]][@_rtf_getcellcounter[]]]\
+[@cell_vert_alignment][1][@cell_para_style]\
+[@cell_left_brdr_style[]]\
+[@cell_top_brdr_style[]]\
+[@cell_right_brdr_style[]]\
+[@cell_bottom_brdr_style[]]
+@newcommand[tbl_cell][@begin[tbl_cell][##1][][##4][##5][##3]##2@end[tbl_cell]]\
+[@get_cur_cell_xsize[]][][@cell_para_style][@cell_vert_alignment][1]\
+@_rtf_tbl_row_begin[[@var[_rtf_tbl_row_alignment]]][#1][#2][#3][#4][#5][#6]]\
+[@_rtf_tbl_row_end[]]\
+[2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]\
+
+@newenvironment[auto_tbl_header][@begin[tbl_header][4mmt,single][4mmt,single][4mmt,single][4mmt,single][4mmt,single][4mmt,single]][@end[tbl_header]]\
+@newenvironment[auto_tbl_subheader][@begin[tbl_header][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]@renewcommand[cell_shading][1000]][@end[tbl_header]]\
+@newenvironment[auto_tbl_row][@begin[tbl_row][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]][@end[tbl_row]]\
+
+@newenvironment[auto_tbl_cell][@begin[tbl_cell][#2]][@end[tbl_cell]]
+
+
+% args
+% 1 - SizeX
+% 2 - shading
+% 3 - vert alignment
+% 4 - border left
+% 5 - border top
+% 6 - border right
+% 7 - border bottom
+%<
+@newenvironment[tbl_header_cell]\
+[@_rtf_inccounter[]\
+@_rtf_tbl_cell_begin[[#1]][[#2]][[#3]][[#4]][[#5]][[#6]][[#7]][[#8]][[#9]]]\
+[@_rtf_tbl_cell_end[]]\
+[50mm][@cell_shading[@_rtf_getrowcounter[]][@_rtf_getcellcounter[]]]\
+[@cell_vert_alignment][1][@cell_para_style]\
+[@cell_left_brdr_style[]]\
+[@cell_top_brdr_style[]]\
+[@cell_right_brdr_style[]]\
+[@cell_bottom_brdr_style[]]
+
+@newenvironment[auto_tbl_header_cell][@begin[tbl_header_cell][#2]][@end[tbl_header_cell]]
+
+
+@newenvironment[tbl_cell]\
+[@_rtf_inccounter[]\
+@_rtf_tbl_cell_begin[[#1]][[#2]][[#3]][[#4]][[#5]][[#6]][[#7]][[#8]][[#9]]]\
+[@_rtf_tbl_cell_end[]]\
+[50mm][@cell_shading[@_rtf_getrowcounter[]][@_rtf_getcellcounter[]]]\
+[@cell_vert_alignment][1][@cell_para_style]\
+[@cell_left_brdr_style[]]\
+[@cell_top_brdr_style[]]\
+[@cell_right_brdr_style[]]\
+[@cell_bottom_brdr_style[]]
+%>
+
+% args
+% 1 - SizeX
+% 2 - cell text
+% 3 - para style
+% 4 - vertical align
+% 5 - colspan
+% @newcommand[tbl_cell][@begin[tbl_cell][#1][][#4][#5][#3]#2@end[tbl_cell]]\
+% [50mm][][@cell_para_style][@cell_vert_alignment][1]
+
+
+
+@newcommand[__rtf_table_cnt_item][\
+@renewcommand[quot]['']\
+@renewcommand[lquot][']\
+@renewcommand[rquot][']\
+@renewcommand[ldquot]['']\
+@renewcommand[rdquot]['']\
+@renewcommand[quoted]['##1']
+@renewcommand[dquoted][''##1'']
+% if depth <= tocdepth
+@_lb[]@_bsl[]tc @_lb[]@_bsl[]v #1 #2@_rb[]@_lb[]@_bsl[]tcf84 @_bsl[]tcl1 @_rb[]@_rb[]\
+]
+
+
+% args: id, string, parastyle
+@newenvironment[table]\
+[\
+% table begin 
+% @_rtf_newrowcounter[]\
+@addcounter[table][1]\
+@evar[_#1_NUMBER][@thetable[]]\
+@evar[_#1_LABEL][#1]\
+@evar[_#1_CAPTION][@dquoted[#2]]\
+@push[_parafi]@evar[_parafi][@var[_parali]]\
+@push[_parasa]@push[_parasb]\
+@parasb[3]@parasa[1]\
+%if defined(PRINTABLE)
+% if defined(GOST)
+@_bsl[]par@begin_rtf_para[#3][@_bsl[]keepn]@textbf[@tablefixed[] @thetable[].] #2\
+% [@_bsl[]keepn]\
+@_bsl[]keepn\
+% endif
+%else
+@_bsl[]par@begin_rtf_para[#3]\
+@rtf_footnote[@_hash][#1]
+@textbf[@tablefixed[] @thetable[].] #2\
+%endif
+@pushcommands[]\
+@__rtf_table_cnt_item[@thetable[]][#2]\
+@popcommands[]\
+@_bsl[]par@begin_rtf_para[normalleft1]\
+% if defined(GOST)
+% [@_bsl[]keepn]\
+% endif
+]\
+% table end
+[
+% if defined(GOST)
+% @_bsl[]par
+% @begin_rtf_para[#3][@_bsl[]keepn]@textbf[@tablefixed[] @thetable[].] #2\
+% endif
+@pop[_parasb]@pop[_parasa]\
+@_bsl[]par\
+@pop[_parafi]\
+@begin_rtf_para[[@var[_para_style]]]\
+]\
+[][][normalleft1][normalleft1]
+
+
+@newcommand[tbl_row_number][@_rtf_getrowcounter[]]
+@newcommand[tbl_cell_number][@_rtf_getcellcounter[]]
+
+
+%endif __RTF_RTFTAB_UDH__

@@ -1,0 +1,224 @@
+%if !defined(__RTF_RTFLST_UDH__)
+%define __RTF_RTFLST_UDH__
+
+%if !defined(__RTF_RTFSTYLE_UDH__)
+    %include <rtf/rtfstyle.udh>
+%endif __RTF_RTFSTYLE_UDH__
+
+%if !defined(__RTF_RTFTOC_UDH__)
+    %include <rtf/rtftoc.udh>
+%endif __RTF_RTFTOC_UDH__
+
+%if !defined(__RTF_RTFSECT_UDH__)
+    %include <rtf/rtfsect.udh>
+%endif __RTF_RTFSECT_UDH__
+
+% args: number, text
+
+% common commands
+@newcommand[lbr][@br[]]\
+%
+% commands for C/C++ listings
+@newcommand[c_preprocessor][@color[cpreprocessorcolor][#1]]\
+@newcommand[cpp_keyword][@textbf[#1]]\
+@newcommand[c_comment][@textit[@color[ccommentcolor][#1]]]\
+@newcommand[c_string][@color[cstringcolor][#1]]\
+@newcommand[c_number][@color[cnumbercolor][#1]]\
+% @newcommand[c_operator][@color[][#1]]
+@newcommand[c_semicolon][@textbf[@color[csemicoloncolor][#1]]]\
+@newcommand[c_keyword][@textbf[#1]]\
+@newcommand[c_user_keyword][@textbf[@color[cuserkwdcolor][#1]]]\
+@newcommand[c_type][@textbf[#1]]\
+@newcommand[c_user_type][@textbf[@color[cusertypecolor][#1]]]\
+
+@newcommand[asm_instruction][@textbf[@color[darkmediumblue][#1]]]\
+@newcommand[asm_label][@textbf[#1]]\
+@newcommand[asm_keyword][@textbf[@color[cpreprocessorcolor][#1]]]\
+@newcommand[asm_comment][@textit[@color[ccommentcolor][#1]]]\
+@newcommand[asm_preprocessor][@textbf[@color[cpreprocessorcolor][#1]]]\
+@newcommand[asm_number][@color[cnumbercolor][#1]]\
+
+% @newcommand[vhdl_instruction][@textbf[@color[darkmediumblue][#1]]]\
+@newcommand[vhdl_keyword][@textbf[@color[blue][#1]]]\
+@newcommand[vhdl_comment][@textit[@color[ccommentcolor][#1]]]\
+@newcommand[vhdl_number][@color[magenta][#1]]\
+@newcommand[vhdl_string][@color[cstringcolor][#1]]\
+@newcommand[vhdl_type][@textbf[#1]]\
+
+@newcommand[sql_keyword][@c_keyword[#1]]
+@newcommand[sql_comment][@c_comment[#1]]
+
+
+%
+% commands for XML/HTML listings
+%if defined(IE_STYLE_XML_LISTING)
+@newcommand[xml_char][@textbf[@color[xmlcolor1][#1]]]\
+@newcommand[xml_tagname][@textbf[@color[xmltagcolor1][#1]]]\
+@newcommand[xml_attrname][@textbf[@color[xmlattrcolor1][#1]]]\
+@newcommand[xml_attrval][@textbf[@color[xmlattrvalcolor1][#1]]]\
+@newcommand[xml_text][@textbf[@color[xmltextcolor1][#1]]]\
+@newcommand[begin_xml_text][@begin[bfseries]@begin[color][xmltextcolor1]]
+@newcommand[end_xml_text][@end[color]@end[bfseries]]
+@newcommand[xml_cdatatext][@textmd[@color[xmlcdatacolor1][#1]]]\
+@newcommand[xml_comment][@textmd[@color[xmlcommentcolor1][#1]]]\
+%else
+@newcommand[xml_char][@textbf[@color[xmlcolor2][#1]]]\
+@newcommand[xml_tagname][@textbf[@color[xmltagcolor2][#1]]]\
+@newcommand[xml_attrname][@textbf[@color[xmlattrcolor2][#1]]]\
+@newcommand[xml_attrval][@textbf[@color[xmlattrvalcolor2][#1]]]\
+@newcommand[xml_text][@textbf[@color[xmltextcolor2][#1]]]\
+@newcommand[begin_xml_text][@begin[bfseries]@begin[color][xmltextcolor2]]
+@newcommand[end_xml_text][@end[color]@end[bfseries]]
+@newcommand[xml_cdatatext][@textmd[@color[xmlcdatacolor2][#1]]]\
+@newcommand[xml_comment][@textmd[@color[xmlcommentcolor2][#1]]]\
+%endif
+
+@newcommand[__rtf_lst_cnt_item][\
+@renewcommand[quot]['']\
+@renewcommand[lquot][']\
+@renewcommand[rquot][']\
+@renewcommand[ldquot]['']\
+@renewcommand[rdquot]['']\
+@renewcommand[quoted]['##1']
+@renewcommand[dquoted][''##1'']
+% if depth <= tocdepth
+@_lb[]@_bsl[]tc @_lb[]@_bsl[]v #1 #2@_rb[]@_lb[]@_bsl[]tcf76 @_bsl[]tcl1 @_rb[]@_rb[]\
+]
+
+                 
+% args: id, string, parastyle
+@newenvironment[listing]\
+[\
+% listing begin 
+@addcounter[listing][1]\
+@evar[_#1_NUMBER][@thelisting[]]\
+@evar[_#1_LABEL][#1]\
+@evar[_#1_CAPTION][@dquoted[#2]]\
+%if defined(PRINTABLE)
+@_bsl[]par@begin_rtf_para[#3][@_bsl[]keepn]@textbf[@listingfixed[] @thelisting[].] #2\
+%else
+@_bsl[]par@begin_rtf_para[#3]\
+@rtf_footnote[@_hash][#1]
+@textbf[@listingfixed[] @thelisting[].] @rtf_footnote[@_usd][#2]#2\
+%endif
+% [@_bsl[]par@begin_rtf_para[#2]@textbf[@listingfixed[] @thelisting[].] #1\
+@pushcommands[]\
+@__rtf_lst_cnt_item[@thelisting[]][#2]\
+@popcommands[]\
+@push[_parafi]@evar[_parafi][@var[_parali]]\
+@_bsl[]par@begin_rtf_para[listinparastyle]\
+@para_border[t][s][80]\
+@para_border[b][s][80]\
+@para_border[l][s][80]\
+@para_border[r][s][80]\
+\
+% @newcommand[xml_][@color[][##1]]\
+]\
+% listing end
+[@_bsl[]par@pop[_parafi]@begin_rtf_para[[@var[_para_style]]]\
+]\
+[][][normalleft1]
+
+
+
+% args: id, string, parastyle
+@newenvironment[listing**]\
+[\
+% listing begin 
+%if defined(PRINTABLE)
+@_bsl[]par@begin_rtf_para[#2][@_bsl[]keepn]#1\
+%else
+@_bsl[]par@begin_rtf_para[#2]#1\
+%endif
+% [@_bsl[]par@begin_rtf_para[#2]@textbf[@listingfixed[] @thelisting[].] #1\
+@push[_parafi]@evar[_parafi][@var[_parali]]\
+@_bsl[]par@begin_rtf_para[listinparastyle]\
+@para_border[t][s][80][lightgray]\
+@para_border[b][s][80][lightgray]\
+@para_border[l][s][80][lightgray]\
+@para_border[r][s][80][lightgray]\
+\
+% @newcommand[xml_][@color[][##1]]\
+]\
+% listing end
+[@_bsl[]par@pop[_parafi]@begin_rtf_para[[@var[_para_style]]]\
+]\
+[][normalleft1]
+
+
+
+% args: id, string, parastyle
+@newenvironment[listingn]\
+[\
+% listing begin 
+@addcounter[listing][1]\
+@setcounter[listing_line][1]\
+@evar[_#1_NUMBER][@thelisting[]]\
+@evar[_#1_LABEL][#1]\
+@evar[_#1_CAPTION][@dquoted[#2]]\
+%if defined(PRINTABLE)
+@_bsl[]par@begin_rtf_para[#3][@_bsl[]keepn]@textbf[@listingfixed[] @thelisting[].] #2\
+%else
+@_bsl[]par@begin_rtf_para[#3]\
+@rtf_footnote[@_hash][#1]
+@textbf[@listingfixed[] @thelisting[].] @rtf_footnote[@_usd][#2]#2\
+%endif
+% [@_bsl[]par@begin_rtf_para[#2]@textbf[@listingfixed[] @thelisting[].] #1\
+@pushcommands[]\
+@__rtf_lst_cnt_item[@thelisting[]][#2]\
+@popcommands[]\
+@push[_parafi]@evar[_parafi][@var[_parali]]\
+@_bsl[]par@begin_rtf_para[listinparastyle]\
+@para_border[t][s][80]\
+@para_border[b][s][80]\
+@para_border[l][s][80]\
+@para_border[r][s][80]\
+@renewcommand[lbr][@br[]@addcounter[listing_line][1]@getcounter[listing_line]: ]\
+@getcounter[listing_line]: ]\
+% listing end
+[@_bsl[]par@pop[_parafi]@begin_rtf_para[[@var[_para_style]]]\
+]\
+[][][normalleft1]
+
+
+
+% args: id, string, parastyle
+% no frame, no caption, not inserted to listing contents, and no label
+@newenvironment[listing*]\
+[\
+% [@_bsl[]par@begin_rtf_para[#2]@textbf[@listingfixed[] @thelisting[].] #1\
+@push[_parafi]@evar[_parafi][@var[_parali]]\
+@_bsl[]par@begin_rtf_para[listinparastyle]\
+% @newcommand[lbr][@br[]]\
+]\
+% listing end
+[@_bsl[]par@pop[_parafi]@begin_rtf_para[[@var[_para_style]]]\
+]
+
+
+@newcommand[makelistings][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+@_try_close[_chapter]\
+@_try_close[_part]\
+@para[#2]%
+#1
+@rtf_cnt_item[][#1][@_chapter_numdepth][true][false]\
+@para[#3]%
+% content item
+@_lb@_bsl[]field@_bsl[]fldedit@_lb@_bsl[]*@_bsl[]fldinst @_lb \
+TOC \
+@bsl[]f L @bsl[]h @bsl[]* MERGEFORMAT @_rb@_rb@_rb[]\
+@br[]\
+% @rtf_page_break[]\
+]\
+[@listing_index_text[]\
+]\
+[[@listings_capstyle]]\
+%endif
+[normalleft1]
+%endif __RTF_RTFLST_UDH__

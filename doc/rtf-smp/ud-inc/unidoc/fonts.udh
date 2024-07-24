@@ -1,0 +1,27 @@
+%if !defined(__FONTS_UDH__)
+%define __FONTS_UDH__ 1
+
+%if defined(HTML)
+    %if !defined(QUET)
+        % message Use fonts definitions for HTML
+    %endif
+    %if !defined(__HTML_FONTS_UDH__)
+        %include <html\fonts.udh>
+    %endif __HTML_FONTS_UDH__
+%elseif defined(RTF)
+    %if !defined(QUET)
+        % message Use fonts definitions for RTF
+    %endif
+    %if !defined(__RTF_FONTS_UDH__)
+        %include <rtf\fonts.udh>
+    %endif __RTF_FONTS_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %if !defined(QUET)
+       % message Use fonts definitions for TeX/LaTeX
+    %endif
+    %include <tex\fonts.udh>
+%elseif defined(WIKI) || defined(KBWIKI)
+    %include <wiki\fonts.udh>
+%endif
+
+%endif __FONTS_UDH__

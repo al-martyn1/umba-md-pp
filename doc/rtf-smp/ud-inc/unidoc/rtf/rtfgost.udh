@@ -1,0 +1,83 @@
+%if !defined(__RTF_RTFGOST_UDH__)
+%define __RTF_RTFGOST_UDH__
+
+%if !defined(__RTF_RTFSTYLE_UDH__)
+    %include <rtf/rtfstyle.udh>
+%endif __RTF_RTFSTYLE_UDH__
+
+%if !defined(__RTF_RTFIMG_UDH__)
+    %include <rtf/rtfimg.udh>
+%endif __RTF_RTFIMG_UDH__
+
+%if !defined(__RTF_RTFSHAPE_UDH__)
+    %include <rtf/rtfshape.udh>
+%endif __RTF_RTFSHAPE_UDH__
+
+%if !defined(__RTF_RTFPF_UDH__)
+    %include <rtf/rtfpf.udh>
+%endif __RTF_RTFPF_UDH__
+
+%if !defined(__RTF_RTFSECT_UDH__)
+    %include <rtf/rtfsect.udh>
+%endif __RTF_RTFSECT_UDH__
+
+%if defined(HELP) || defined(WINHELP)
+    %if defined(GOST)  
+        %undef GOST
+    %endif GOST
+%endif HELP WINHELP
+
+%if defined(HELP)
+@newcommand[rtf_gost_frame][]
+%else
+% @margin_left[250]
+% @margin_top[250]
+% @margin_right[100]
+% @margin_bottom[150]
+% @header_margin_left[250]
+% @header_margin_right[100]
+% @footer_size[100]
+@margin_left[250]
+@margin_top[200]
+@margin_right[130]
+@margin_bottom[150]
+@header_margin_left[250]
+@header_margin_right[100]
+@footer_size[100]
+
+@newcommand[rtf_gost_frame][\
+@__rtf_header[#1][\
+@ifthen[@strlen[@var[__header_margin_left]]][@_bsl[]margl@var[__header_margin_left]]\
+@ifthen[@strlen[@var[__header_margin_right]]][@_bsl[]margr@var[__header_margin_right]]\
+@_rtf_img_shape[1][1][0][0][11980][16660][3][\
+@_rtf_shprop[ShapeType][75]
+@_rtf_shprop[fFlipH][0]
+@_rtf_shprop[fFlipV][0]
+@_rtf_shprop[fLayoutInCell][1]
+][#2]
+% @_rtf_insert_emf[#2]\
+]]
+%endif 
+
+@renewcommand[thepart_capstyle][tdck_header1]\
+@renewcommand[thechapter_capstyle][tdck_header2]\
+@renewcommand[thesection_capstyle][tdck_header3]\
+@renewcommand[thesubsection_capstyle][tdck_header4]\
+@renewcommand[thesubsubsection_capstyle][tdck_header5]\
+@renewcommand[theparagraph_capstyle][tdck_header6]\
+@renewcommand[thesubparagraph_capstyle][tdck_header6]\
+% 
+@renewcommand[thetopcolontitle_style][tdck_title_center_normalsize]
+@renewcommand[thebottomcolontitle_style][tdck_title_center_normalsize]
+@renewcommand[thetitle_style][tdck_title_center_large]
+@renewcommand[thesubtitle_style][tdck_title_center_large]
+@renewcommand[thesubsubtitle_style][tdck_title_center_normalsize]
+
+@renewcommand[listings_capstyle][tdck_title_center_normalsize_bold]
+@renewcommand[pictures_capstyle][tdck_title_center_normalsize_bold]
+@renewcommand[contents_capstyle][tdck_title_center_normalsize_bold]
+@renewcommand[tables_capstyle][tdck_title_center_normalsize_bold]
+@renewcommand[index_capstyle][tdck_title_center_normalsize_bold]
+@renewcommand[bibliography_capstyle][tdck_title_center_normalsize_bold]
+   
+%endif __RTF_RTFGOST_UDH__

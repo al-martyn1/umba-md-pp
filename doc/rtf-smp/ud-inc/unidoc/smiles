@@ -1,0 +1,8 @@
+%if !defined (__SMILES__)
+%define __SMILES__
+
+%if !defined(__SMILES_UDH__)
+    %include <smiles.udh>
+%endif __SMILES_UDH__
+
+%endif __SMILES__

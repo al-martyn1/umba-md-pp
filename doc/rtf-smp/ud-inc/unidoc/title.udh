@@ -1,0 +1,45 @@
+%if !defined(__TITLE_UDH__)
+%define __TITLE_UDH__ 1
+
+@newcounter[maketitle_linecount][0]
+
+
+%if !defined(GOST)
+@newcounter[lines_before_title][45]
+@newcounter[lines_after_title][2]
+@newcounter[lines_before_subtitle][1]
+@newcounter[lines_after_subtitle][2]
+@newcounter[lines_before_subsubtitle][1]
+@newcounter[lines_after_subsubtitle][2]
+@newcounter[lines_before_author][1]
+@newcounter[lines_after_author][2]
+%else
+@newcounter[lines_before_title][40]
+@newcounter[lines_after_title][0]
+@newcounter[lines_before_subtitle][1]
+@newcounter[lines_after_subtitle][0]
+@newcounter[lines_before_subsubtitle][1]
+@newcounter[lines_after_subsubtitle][0]
+@newcounter[lines_before_author][1]
+@newcounter[lines_after_author][0]
+%endif
+
+
+@newcommand[maketitle_make_blanklines][\
+@setcounter[maketitle_linecount][0]\
+@whiledo[@getcounter[maketitle_linecount]<#1][\
+@addcounter[maketitle_linecount][1]@br[]\
+]\
+]
+
+%if defined(HTML)
+    %include <html\htmtitle.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_RTFTITLE_UDH__)
+        %include <rtf\rtftitle.udh>
+    %endif __RTF_RTFTITLE_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\textitle.udh>
+%endif
+
+%endif __TITLE_UDH__

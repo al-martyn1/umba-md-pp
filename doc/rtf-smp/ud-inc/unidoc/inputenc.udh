@@ -1,0 +1,34 @@
+%if !defined(__INPUTENC_UDH__)
+%define __INPUTENC_UDH__ 1
+%if !defined(TEST)
+@newcommand[inputenc][@inputencmap[common\#1.usm]]
+%else
+@newcommand[inputenc][]
+%endif
+
+%if defined(HTML)
+    %if !defined(QUET)
+        % message Use inputenc definitions for HTML
+    %endif
+    %if !defined(__HTML_CYR_UDH__)
+        %include <html\cyr.udh>
+    %endif __HTML_CYR_UDH__
+%elseif defined(RTF)
+    %if !defined(QUET)
+        % message Use inputenc definitions for RTF
+    %endif
+    %if !defined(__RTF_CYR_UDH__)
+        %include <rtf\cyr.udh>
+    %endif __RTF_CYR_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %if !defined(QUET)
+        % message Use inputenc definitions for TeX/LaTeX
+    %endif
+    %include <tex\cyr.udh>
+%elseif defined(WIKI) || defined(KBWIKI)
+    %include <wiki\cyr.udh>
+%endif
+
+%include <compcyr.udh>
+
+%endif __INPUTENC_UDH__

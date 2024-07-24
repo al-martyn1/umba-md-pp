@@ -1,0 +1,310 @@
+%if !defined(___SECT_UDH__)
+%define ___SECT_UDH__ 1
+% Команды секционирования (внутренние)
+% 
+% part
+%  chapter
+%   section
+%    subsection
+%     subsubsection
+%      paragraph
+%       subparagraph
+%
+%
+% @newcounter[hlpnumdep][1]
+%
+%
+
+@var[_chapter_page_break][true]
+@newcommand[chapter_page_break][@var[_chapter_page_break][#1]]
+@newcommand[disable_chapter_page_break][@var[_chapter_page_break][false]]
+@newcommand[enable_chapter_page_break][@var[_chapter_page_break][true]]
+
+@newcommand[_try_close][\
+@ifthenelse[@isinenv[#1]]\
+[@end[#1]]\
+]
+@newcommand[_try_close_cur][\
+@ifthenelse[@iscurenv[#1]]\
+[@end[#1]]\
+]
+% Команды определения команд секционирования
+%
+@newcommand[definesect_part][\
+% part
+@newcommand[part][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+@_try_close[_chapter]\
+@_try_close[_part]\
+@begin[_part][true][##1][##2][##3][##4][##5][##6][##7][##8]\
+]
+% part*
+@newcommand[part*][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+@_try_close[_chapter]\
+@_try_close[_part]\
+@begin[_part][false][##1][##2][##3][##4][##5][##6][##7][##8]\
+]\
+]
+%
+%
+@newcommand[definesect_chapter][\
+% chapter
+@newcommand[chapter][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+@_try_close[_chapter]\
+@begin[_chapter][true][##1][##2][##3][##4][##5][##6][##7][##8]\
+]\
+% chapter
+@newcommand[chapter*][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+@_try_close[_chapter]\
+@begin[_chapter][false][##1][##2][##3][##4][##5][##6][##7][##8]\
+]\
+]
+%
+%
+@newcommand[definesect_section][\
+% section
+@newcommand[section][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+@begin[_section][true][##1][##2][##3][##4][##5][##6][##7][##8]\
+]
+% section*
+@newcommand[section*][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+@begin[_section][false][##1][##2][##3][##4][##5][##6][##7][##8]\
+]\
+]
+%
+%
+@newcommand[definesect_subsection][\
+% subsection
+@newcommand[subsection][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@begin[_subsection][true][##1][##2][##3][##4][##5][##6][##7][##8]\
+]
+% subsection*
+@newcommand[subsection*][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@begin[_subsection][false][##1][##2][##3][##4][##5][##6][##7][##8]\
+]\
+]
+%
+%
+@newcommand[definesect_subsubsection][\
+% subsubsection
+@newcommand[subsubsection][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@begin[_subsubsection][true][##1][##2][##3][##4][##5][##6][##7][##8]\
+]
+% subsubsection*
+@newcommand[subsubsection*][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@begin[_subsubsection][false][##1][##2][##3][##4][##5][##6][##7][##8]\
+]\
+]
+%
+%
+@newcommand[definesect_paragraph][\
+% paragraph
+@newcommand[paragraph][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@begin[_paragraph][true][##1][##2][##3][##4][##5][##6][##7][##8]\
+]
+% paragraph*
+@newcommand[paragraph*][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@begin[_paragraph][false][##1][##2][##3][##4][##5][##6][##7][##8]\
+]\
+]
+%
+%
+@newcommand[definesect_subparagraph][\
+% subparagraph
+@newcommand[subparagraph][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@begin[_subparagraph][true][##1][##2][##3][##4][##5][##6][##7][##8]\
+]
+% subparagraph*
+@newcommand[subparagraph*][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@begin[_subparagraph][false][##1][##2][##3][##4][##5][##6][##7][##8]\
+]\
+]
+%
+%
+% @newcommand[define_section][@message[definesect #1]@definesect_#1[]@message[defineenv #1]@defineenv_#1[]@message[define_section end #1]]
+@newcommand[define_section][@definesect_#1[]@defineenv_#1[]]
+
+@newcommand[thepart][@part_text[] @Roman[@getcounter[part]].]
+% [@Roman[@getcounter[part]]]
+@newcommand[thechapter][@arabic[@getcounter[chapter]]]
+@newcommand[thesection][@thechapter[].@arabic[@getcounter[section]]]
+@newcommand[theapxchapter][@Alpha[@getcounter[chapter]]]
+@newcommand[theapxsection][@thechapter[].@Alpha[@getcounter[section]]]
+@newcommand[thesubsection][@thesection[].@arabic[@getcounter[subsection]]]
+@newcommand[thesubsubsection][@thesubsection[].@arabic[@getcounter[subsubsection]]]
+@newcommand[theparagraph][@thesubsubsection[].@arabic[@getcounter[paragraph]]]
+@newcommand[thesubparagraph][@theparagraph[].@arabic[@getcounter[subparagraph]]]
+
+@newcommand[thecurrentsection][\
+@ifthenelse[@isenvironment[_subparagraph]&&@isinenv[_subparagraph]][@thesubparagraph[]][\
+@ifthenelse[@isenvironment[_paragraph]&&@isinenv[_paragraph]][@theparagraph[]][\
+@ifthenelse[@isenvironment[_subsubsection]&&@isinenv[_subsubsection]][@thesubsubsection[]][\
+@ifthenelse[@isenvironment[_subsection]&&@isinenv[_subsection]][@thesubsection[]][\
+@ifthenelse[@isenvironment[_section]&&@isinenv[_section]][@thesection[]][\
+@ifthen[@isenvironment[_chapter]&&@isinenv[_chapter]][@thechapter[]]\
+]]]]]\
+]
+
+@newcommand[_getcursecid][@var[_cur#1id]]
+
+@newcommand[thecursecid][\
+@ifthenelse[@isenvironment[_subparagraph]&&@isinenv[_subparagraph]][@_getcursecid[subparagraph]][\
+@ifthenelse[@isenvironment[_paragraph]&&@isinenv[_paragraph]][@_getcursecid[paragraph]][\
+@ifthenelse[@isenvironment[_subsubsection]&&@isinenv[_subsubsection]][@_getcursecid[subsubsection]][\
+@ifthenelse[@isenvironment[_subsection]&&@isinenv[_subsection]][@_getcursecid[subsection]][\
+@ifthenelse[@isenvironment[_section]&&@isinenv[_section]][@_getcursecid[section]][\
+@ifthen[@isenvironment[_chapter]&&@isinenv[_chapter]][@_getcursecid[chapter]]\
+]]]]]\
+]
+
+
+
+@margin_left[260]
+@margin_top[260]
+@margin_right[160]
+@margin_bottom[160]
+@header_margin_left[250]
+@header_margin_right[100]
+@footer_size[100]
+
+
+
+@newcommand[theparttext][]
+@newcommand[thechaptertext][]
+@newcommand[thesectiontext][]
+@newcommand[theapxchaptertext][]
+@newcommand[theapxsectiontext][]
+@newcommand[thesubsectiontext][]
+@newcommand[thesubsubsectiontext][]
+@newcommand[theparagraphtext][]
+@newcommand[thesubparagraphtext][]
+
+@newcommand[thepart_capstyle][header1]
+@newcommand[thechapter_capstyle][header2]
+@newcommand[thesection_capstyle][header3]
+@newcommand[thesubsection_capstyle][header4]
+@newcommand[thesubsubsection_capstyle][header5]
+@newcommand[theparagraph_capstyle][header6]
+@newcommand[thesubparagraph_capstyle][header6]
+
+@newcommand[thetopcolontitle_style][title_center_large]
+@newcommand[thebottomcolontitle_style][title_center_large]
+@newcommand[thetitle_style][title_center_HUGE_bold]
+@newcommand[thesubtitle_style][title_center_huge]
+@newcommand[thesubsubtitle_style][title_center_Large]
+
+@newcommand[listings_capstyle][title_center_LARGE_bold]
+@newcommand[pictures_capstyle][title_center_LARGE_bold]
+@newcommand[contents_capstyle][title_center_LARGE_bold]
+@newcommand[tables_capstyle][title_center_LARGE_bold]
+@newcommand[index_capstyle][title_center_LARGE_bold]
+@newcommand[bibliography_capstyle][title_center_LARGE_bold]
+
+
+
+
+
+% @newcommand[point][@addcounter[point][1]@para[]@thesection[].@getcounter[point] ]
+@newcommand[point][@addcounter[point][1]@para[]@ifthen[#0>0][@begin[bfseries]]@ifthenelse[@thesection[]==0][@getcounter[point]][@thesection[].@getcounter[point]]@ifthen[#0>0][@end[bfseries]] @ifthen[#0>0][@textbf[[#1]]]]
+
+%if defined(GOST)
+@newcommand[gostpoint][@point[]]
+%else
+@newcommand[gostpoint][@para[#1]][normal1]
+%endif GOST
+
+
+@newcounter[secnotext][0]
+@newcommand[secnotext][@setcounter[secnotext][1]]
+
+
+@newcommand[_part_numdepth][1]
+@newcommand[_chapter_numdepth][2]
+@newcommand[_section_numdepth][3]
+@newcommand[_subsection_numdepth][4]
+@newcommand[_subsubsection_numdepth][5]
+@newcommand[_paragraph_numdepth][6]
+@newcommand[_subparagraph_numdepth][7]
+@compilecommand[_part_numdepth]
+@compilecommand[_chapter_numdepth]
+@compilecommand[_section_numdepth]
+@compilecommand[_subsection_numdepth]
+@compilecommand[_subsubsection_numdepth]
+@compilecommand[_paragraph_numdepth]
+@compilecommand[_subparagraph_numdepth]
+
+@newcommand[_seccntformat][@ifthenelse[@strlen[#1text]][#1text[] #1[].][#1] ]
+
+@newcounter[secnumdepth][5]
+@newcounter[tocdepth][5]
+% args - type, condition, text
+@newcommand[make_caption][@ifthenelse[@getcounter[secnumdepth]>=@_#1_numdepth[] && #2]\
+[@_seccntformat[@the#1]#3]\
+[#3]\
+]
+
+
+%endif ___SECT_UDH__

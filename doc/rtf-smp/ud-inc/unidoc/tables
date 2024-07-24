@@ -1,0 +1,8 @@
+%if !defined (__TABLES__)
+%define __TABLES__
+
+%if !defined(__TABLES_UDH__)
+    %include <tables.udh>
+%endif __TABLES_UDH__
+
+%endif __TABLES__

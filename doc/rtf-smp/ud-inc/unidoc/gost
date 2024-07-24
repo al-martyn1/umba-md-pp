@@ -1,0 +1,8 @@
+%if !defined (__GOST__)
+%define __GOST__
+
+%if !defined(__GOST_UDH__)
+    %include <gost.udh>
+%endif __GOST_UDH__
+
+%endif __GOST__

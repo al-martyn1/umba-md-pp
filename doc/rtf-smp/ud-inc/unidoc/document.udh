@@ -1,0 +1,29 @@
+%if !defined(__DOCUMENT_UDH__)
+%define __DOCUMENT_UDH__
+@newcommand[author][@var[_author][#1]]
+@newcommand[student][@var[_student][#1]]
+@newcommand[students][@var[_students][#1]]
+@newcommand[teacher][@var[_teacher][#1]]
+@newcommand[title][@var[_title][#1]]
+@newcommand[subtitle][@var[_subtitle][#1]]
+@newcommand[subsubtitle][@var[_subsubtitle][#1]]
+@newcommand[year][@var[_year][#1]]
+@newcommand[organization][@var[_organization][#1]]
+@newcommand[authorized][\
+@var[_authorized_by_name][#1]\
+@var[_authorized_by_post][#2]\
+@var[_authorized_by_organization][#3]\
+]
+@newcommand[coordinated][\
+@var[_coordinated_by_name][#1]\
+@var[_coordinated_by_post][#2]\
+@var[_coordinated_by_organization][#3]\
+]
+
+
+
+
+
+
+
+%endif __DOCUMENT_UDH__

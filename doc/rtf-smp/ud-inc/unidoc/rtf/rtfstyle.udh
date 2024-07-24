@@ -1,0 +1,145 @@
+%if !defined(__RTF_RTFSTYLE_UDH__)
+%define __RTF_RTFSTYLE_UDH__
+% @make_rtf_font_table\
+
+%if !defined(__RTF_RTFTAB_UDH__)
+    %include <rtf/rtftab.udh>
+%endif __RTF_RTFTAB_UDH__
+
+@newcommand[_begin_text_style_sheet][\
+@ifthenelse[@iscounter[_rtf_style_index]]\
+[@resetcounter[_rtf_style_index]]\
+[@newcounter[_rtf_style_index]]\
+@_lb@_bsl[]stylesheet\
+]
+@newcommand[_end_text_style_sheet][@_rb]
+
+@newcommand[_al_left][@_bsl[]ql]
+@newcommand[_al_right][@_bsl[]qr]
+@newcommand[_al_center][@_bsl[]qc]
+@newcommand[_al_justify][@_bsl[]qj]
+
+@newcommand[ffroman][0]
+@newcommand[ffserif][2]
+@newcommand[ffteletype][6]
+
+@newcommand[_wbold][1]
+@newcommand[_wnormal][0]
+@newcommand[_shitalic][1]
+@newcommand[_shnormal][0]
+
+% text style 
+% font family, size, width, shape, align, color, name
+% family - roman, serif, teletype
+% size - Huge, huge, LARGE, Large, large, normalsize, 
+%        small, footnotesize, scriptsize, tiny
+% width - bold, normal
+% shape - italic, normal
+% align - left, right, center, justify
+% color
+% additional styles
+@newcommand[_define_text_style][\
+@addcounter[_rtf_style_index][1]\
+@_lb\
+@_bsl[]s@getcounter[_rtf_style_index]\
+% @_bsl[]additive\
+@_al_#5 \
+@_bsl[]f@ff#1[]\
+@_bsl[]fs@eval[@_s#2[]*2]\
+@_bsl[]b@_w#3\
+@_bsl[]i@_sh#4\
+@_color[#6]\
+ #7;@_rb\
+@newcommand[sty_#7][\
+@_bsl[]s@getcounter[_rtf_style_index]\
+@_al_#5 \
+@_bsl[]f@ff#1[]\
+@_bsl[]fs@eval[@_s#2[]*2]\
+@_bsl[]b@_w#3\
+@_bsl[]i@_sh#4\
+@_color[#6]\
+]\
+@compilecommand[sty_#7]\
+]
+
+%if !defined(___STYLE_UDH__)
+    %include <_style.udh>
+%endif ___STYLE_UDH__
+
+%if !defined(NDEBUG)
+% @newcommand[rtf_header][\
+% @_lb@_bsl[]header#1 @para[#2]#3@_rb[]\
+% ]
+% @newcommand[rtf_footer][\
+% @_lb@_bsl[]footer#1 @para[#2]#3@_rb[]\
+% ]
+@newcommand[__rtf_header][@_lb@_bsl[]header#1 #2@_rb[]]
+@newcommand[__rtf_footer][@_lb@_bsl[]footer#1 #2@_rb[]]
+%
+@newcommand[rtf_header][@__rtf_header[#1][@para[#2]#3]]
+@newcommand[rtf_footer][@__rtf_footer[#1][@para[#2]#3]]
+%
+@newenvironment[rtf_caption]\
+% [@_lb@_bsl[]pard@_bsl[]plain@sty_#1@_bsl[]keepn%
+[@_bsl[]pard@_bsl[]plain@sty_#1@_bsl[]sb@eval[@var[_capsb#2]*56]\
+@_bsl[]sa@eval[@var[_capsa#2]*56]@_bsl[]li@eval[@var[_capli#2]*56]\
+@_bsl[]ri@eval[@var[_capri#2]*56]@_bsl[]keepn%
+]\
+% [@_rb@_bsl[]par]
+[@_bsl[]par]
+@newcommand[begin_rtf_para]\
+[@_bsl[]pard@rtf_intbl[]\
+@_bsl[]plain@sty_#1@_bsl[]fi@eval[@var[_parafi]*56]\
+@_bsl[]sb@eval[@var[_parasb]*56]@_bsl[]sa@eval[@var[_parasa]*56]\
+@_bsl[]li@eval[@var[_parali]*56]@_bsl[]ri@eval[@var[_parari]*56]#2%
+][normal1]
+@newenvironment[rtf_para]\
+% [@_lb@_bsl[]pard@_bsl[]plain@sty_#1@_bsl[]fi150%
+% ][@_rb@_bsl[]par]
+[@_bsl[]pard@rtf_intbl[]\
+@_bsl[]plain@sty_#1@_bsl[]fi@eval[@var[_parafi]*56]\
+@_bsl[]sb@eval[@var[_parasb]*56]@_bsl[]sa@eval[@var[_parasa]*56]\
+@_bsl[]li@eval[@var[_parali]*56]@_bsl[]ri@eval[@var[_parari]*56]%
+][@_bsl[]par][normal1]
+
+%else
+@newcommand[__rtf_header][@_lb@_bsl[]header#1 #2@_rb[]]
+@newcommand[__rtf_footer][@_lb@_bsl[]footer#1 #2@_rb[]]
+%
+@newcommand[rtf_header][@__rtf_header[#1][@para[#2]#3]]
+@newcommand[rtf_footer][@__rtf_footer[#1][@para[#2]#3]]
+% ignore true
+% @newcommand[rtf_header][@_lb@_bsl[]header#1 @para[#2]#3@_rb[]]
+% @newcommand[rtf_footer][@_lb@_bsl[]footer#1 @para[#2]#3@_rb[]]
+% ignore false
+@newcommand[begin_rtf_para]\
+[@_bsl[]pard@rtf_intbl[]\
+@_bsl[]plain@sty_#1@_bsl[]fi@message[parfi @var[_parafi]*56]\
+@_bsl[]sb@message[parsb @var[_parasb]*56]@_bsl[]sa@message[parsa @var[_parasa]*56]\
+@_bsl[]li@message[parli @var[_parali]*56]@_bsl[]ri@message[parri @var[_parari]*56]#2%
+]
+@newenvironment[rtf_caption]\
+% [@_lb@_bsl[]pard@_bsl[]plain@sty_#1@_bsl[]keepn%
+[@_bsl[]pard@_bsl[]plain@sty_#1@_bsl[]sb@message[cap#2 @var[_capsb#2]*56]\
+@_bsl[]sa@message[cap#2 @var[_capsa#2]*56]@_bsl[]li@message[cap#2 @var[_capli#2]*56]\
+@_bsl[]ri@message[cap#2 @var[_capri#2]*56]@_bsl[]keepn%
+]\
+% [@_rb@_bsl[]par]
+[@_bsl[]par][1]
+@newenvironment[rtf_para]\
+% [@_lb@_bsl[]pard@_bsl[]plain@sty_#1@_bsl[]fi150%
+% ][@_rb@_bsl[]par]
+[@_bsl[]pard@rtf_intbl[]\
+@_bsl[]plain@sty_#1@_bsl[]fi@message[parfi @var[_parafi]*56]\
+@_bsl[]sb@message[parsb @var[_parasb]*56]@_bsl[]sa@message[parsa @var[_parasa]*56]\
+@_bsl[]li@message[parli @var[_parali]*56]@_bsl[]ri@message[parri @var[_parari]*56]%
+][@_bsl[]par][normal1]
+%endif
+
+% args: type (t - top, b - bottom, r - right, l - left)
+%       thickness (s - single, th - thick)
+%       indent 
+%       color
+@newcommand[para_border][@_bsl[]brdr#1@_bsl[]brdr#2@_bsl[]brdrw20@_bsl[]brsp#3@_bsl[]brdrcf@_#4 ]
+
+%endif __RTF_RTFSTYLE_UDH__

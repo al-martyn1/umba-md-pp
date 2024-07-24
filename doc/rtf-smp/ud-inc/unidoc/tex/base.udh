@@ -1,0 +1,3 @@
+%if !defined(__TEX_BASE_UDH__)
+%define __TEX_BASE_UDH__
+%endif __TEX_BASE_UDH__

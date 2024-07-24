@@ -1,0 +1,10 @@
+%if !defined(__RTF_RTFCNT_UDH__)
+%define __RTF_RTFCNT_UDH__
+% args: allow page number, allow item number, number, text, level
+@newcommand[__rtf_cnt_item][\
+% if depth <= tocdepth
+@ifthenelse[#5 <= @getcounter[tocdepth]][\
+@_lb[]@_bsl[]tc#1 @_lb[]@_bsl[]v @ifthenelse[#2][#3 ]#4@_rb[]@_lb[]@_bsl[]tcf67 @_bsl[]tcl#5 @_rb[]@_rb[]\
+]\
+]
+%endif __RTF_RTFCNT_UDH__

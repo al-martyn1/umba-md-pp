@@ -1,0 +1,305 @@
+%if !defined(___STYLE_UDH__)
+%define ___STYLE_UDH__ 1
+% paragraph space before
+@newcommand[parasb][@var[_parasb][#1]]
+% paragraph space after
+@newcommand[parasa][@var[_parasa][#1]]
+% paragraph first indent
+@newcommand[parafi][@var[_parafi][#1]]
+% paragraph left indent
+@newcommand[parali][@var[_parali][#1]]
+% paragraph right indent
+@newcommand[parari][@var[_parari][#1]]
+
+% caption space before
+@newcommand[capsb][@var[_capsb#2][#1]]
+% caption space after
+@newcommand[capsa][@var[_capsa#2][#1]]
+% caption left indent
+@newcommand[capli][@var[_capli#2][#1]]
+% caption right indent
+@newcommand[capri][@var[_capri#2][#1]]
+
+% enum space before
+@newcommand[enumsb][@var[_enumsb][#1]]
+% enum space after
+@newcommand[enumsa][@var[_enumsa][#1]]
+% enum left indent
+@newcommand[enumli][@var[_enumli][#1]]
+% enumh right indent
+@newcommand[enumri][@var[_enumri][#1]]
+
+% unum space before
+% @newcommand[unumsb][@var[_unumsb][#1]]
+% unum space after
+% @newcommand[unumsa][@var[_unumsa][#1]]
+% unum left indent
+% @newcommand[unumli][@var[_unumli][#1]]
+% unumh right indent
+% @newcommand[unumri][@var[_unumri][#1]]
+
+% entry label space before
+@newcommand[entrylabelsb][@var[_entrylabelsb][#1]]
+% entry label space after
+@newcommand[entrylabelsa][@var[_entrylabelsa][#1]]
+% entry label left indent
+@newcommand[entrylabelli][@var[_entrylabelli][#1]]
+% entry label right indent
+@newcommand[entrylabelri][@var[_entrylabelri][#1]]
+
+% entry space before
+@newcommand[entrysb][@var[_entrysb][#1]]
+% entry space after
+@newcommand[entrysa][@var[_entrysa][#1]]
+% entry first indent
+@newcommand[entryfi][@var[_entryfi][#1]]
+% entry left indent
+@newcommand[entryli][@var[_entryli][#1]]
+% entry right indent
+@newcommand[entryri][@var[_entryri][#1]]
+
+@enumsb[0]
+@enumsa[0]
+@enumli[6]
+@enumri[0]
+
+% @unumsb[0]
+% @unumsa[0]
+% @unumli[6]
+% @unumri[0]
+
+@entrysb[0]
+@entrysa[1]
+@entryfi[2]
+@entryli[25]
+@entryri[0]
+
+@entrylabelsb[2]
+@entrylabelsa[0]
+@entrylabelli[0]
+@entrylabelri[0]
+
+
+@parasb[1]
+@parasa[1]
+@parafi[2]
+@parali[0]
+@parari[0]
+
+%if defined(HELP)
+@capsb[2][1]
+@capsa[1][1]
+@capli[0][1]
+@capri[0][1]
+
+@capsb[2][2]
+@capsa[1][2]
+@capli[0][2]
+@capri[0][2]
+
+@capsb[2][3]
+@capsa[1][3]
+@capli[0][3]
+@capri[0][3]
+
+@capsb[1][4]
+@capsa[1][4]
+@capli[0][4]
+@capri[0][4]
+
+@capsb[2][5]
+@capsa[1][5]
+@capli[0][5]
+@capri[0][5]
+
+@capsb[2][6]
+@capsa[1][6]
+@capli[0][6]
+@capri[0][6]
+
+%else
+
+@capsb[7][1]
+@capsa[2][1]
+@capli[3][1]
+@capri[0][1]
+
+@capsb[6][2]
+@capsa[2][2]
+@capli[3][2]
+@capri[0][2]
+
+@capsb[5][3]
+@capsa[1][3]
+@capli[3][3]
+@capri[0][3]
+
+@capsb[4][4]
+@capsa[1][4]
+@capli[3][4]
+@capri[0][4]
+
+@capsb[3][5]
+@capsa[1][5]
+@capli[3][5]
+@capri[0][5]
+
+@capsb[3][6]
+@capsa[1][6]
+@capli[3][6]
+@capri[0][6]
+
+%endif
+
+@newcommand[make_text_style_sheet][\
+@_begin_text_style_sheet[]\
+% font family, size, width, shape, align, color, name, 
+%if defined(PRINTABLE)
+@_define_text_style[serif][Huge][bold][normal][left][black][header1]\
+@_define_text_style[serif][huge][bold][normal][left][black][header2]\
+@_define_text_style[serif][LARGE][bold][normal][left][black][header3]\
+@_define_text_style[serif][Large][bold][normal][left][black][header4]\
+@_define_text_style[serif][large][bold][normal][left][black][header5]\
+@_define_text_style[serif][normalsize][bold][normal][left][black][header6]\
+
+@_define_text_style[roman][large][bold][normal][left][black][tdck_header1]\
+@_define_text_style[roman][large][bold][normal][left][black][tdck_header2]\
+@_define_text_style[roman][normalsize][bold][normal][left][black][tdck_header3]\
+@_define_text_style[roman][normalsize][bold][normal][left][black][tdck_header4]\
+@_define_text_style[roman][normalsize][bold][normal][left][black][tdck_header5]\
+@_define_text_style[roman][normalsize][bold][normal][left][black][tdck_header6]\
+%else
+@_define_text_style[serif][Huge][bold][normal][left][blue][header1]\
+@_define_text_style[serif][huge][bold][normal][left][blue][header2]\
+@_define_text_style[serif][LARGE][bold][normal][left][blue][header3]\
+@_define_text_style[serif][Large][bold][normal][left][blue][header4]\
+@_define_text_style[serif][large][bold][normal][left][blue][header5]\
+@_define_text_style[serif][normalsize][bold][normal][left][blue][header6]\
+
+@_define_text_style[roman][large][bold][normal][left][blue][tdck_header1]\
+@_define_text_style[roman][large][bold][normal][left][blue][tdck_header2]\
+@_define_text_style[roman][normalsize][bold][normal][left][blue][tdck_header3]\
+@_define_text_style[roman][normalsize][bold][normal][left][blue][tdck_header4]\
+@_define_text_style[roman][normalsize][bold][normal][left][blue][tdck_header5]\
+@_define_text_style[roman][normalsize][bold][normal][left][blue][tdck_header6]\
+%endif
+%if defined(HELP)
+@_define_text_style[serif][normalsize][normal][normal][justify][black][normal1]\
+@_define_text_style[serif][normalsize][normal][normal][left][black][enumerate1]\
+@_define_text_style[serif][normalsize][normal][normal][left][black][normalleft1]\
+@_define_text_style[serif][normalsize][normal][normal][right][black][normalright1]\
+@_define_text_style[serif][normalsize][normal][normal][left][black][left]\
+@_define_text_style[serif][normalsize][normal][normal][right][black][right]\
+@_define_text_style[serif][normalsize][normal][normal][center][black][center]\
+@_define_text_style[serif][normalsize][normal][normal][justify][black][justify]\
+%else
+@_define_text_style[roman][normalsize][normal][normal][justify][black][normal1]\
+@_define_text_style[roman][normalsize][normal][normal][left][black][enumerate1]\
+@_define_text_style[roman][normalsize][normal][normal][left][black][normalleft1]\
+@_define_text_style[roman][normalsize][normal][normal][right][black][normalright1]\
+@_define_text_style[roman][normalsize][normal][normal][left][black][left]\
+@_define_text_style[roman][normalsize][normal][normal][right][black][right]\
+@_define_text_style[roman][normalsize][normal][normal][center][black][center]\
+@_define_text_style[roman][normalsize][normal][normal][justify][black][justify]\
+%endif
+
+@_define_text_style[teletype][normalsize][normal][normal][left][black][verbatim]\
+
+%if defined(RTF) && defined(PRINTABLE)
+@_define_text_style[teletype][small][normal][normal][left][sourcecolor][listinparastyle]\
+% @_define_text_style[teletype][small][normal][normal][left][black][verbatim]\
+%else
+@_define_text_style[teletype][normalsize][normal][normal][left][sourcecolor][listinparastyle]\
+% @_define_text_style[teletype][normalsize][normal][normal][left][black][verbatim]\
+%endif
+
+@_define_text_style[roman][normalsize][normal][normal][left][black][pictureleftparastyle]\
+@_define_text_style[roman][normalsize][normal][normal][center][black][picturecenterparastyle]\
+@_define_text_style[roman][normalsize][normal][normal][right][black][picturerightparastyle]\
+
+
+% title headings
+
+%if defined(PRINTABLE)
+
+@_define_text_style[serif][HUGE][bold][normal][center][black][title_center_HUGE_bold]\
+@_define_text_style[serif][Huge][bold][normal][center][black][title_center_Huge_bold]\
+@_define_text_style[serif][huge][bold][normal][center][black][title_center_huge_bold]\
+@_define_text_style[serif][LARGE][bold][normal][center][black][title_center_LARGE_bold]\
+@_define_text_style[serif][Large][bold][normal][center][black][title_center_Large_bold]\
+@_define_text_style[serif][large][bold][normal][center][black][title_center_large_bold]\
+@_define_text_style[serif][normalsize][bold][normal][center][black][title_center_normalsize_bold]\
+@_define_text_style[serif][small][bold][normal][center][black][title_center_small_bold]\
+@_define_text_style[serif][footnotesize][bold][normal][center][black][title_center_footnotesize_bold]\
+@_define_text_style[serif][scriptsize][bold][normal][center][black][title_center_scriptsize_bold]\
+@_define_text_style[serif][tiny][bold][normal][center][black][title_center_tiny_bold]\
+
+@_define_text_style[serif][HUGE][normal][normal][center][black][title_center_HUGE]\
+@_define_text_style[serif][Huge][normal][normal][center][black][title_center_Huge]\
+@_define_text_style[serif][huge][normal][normal][center][black][title_center_huge]\
+@_define_text_style[serif][LARGE][normal][normal][center][black][title_center_LARGE]\
+@_define_text_style[serif][Large][normal][normal][center][black][title_center_Large]\
+@_define_text_style[serif][large][normal][normal][center][black][title_center_large]\
+@_define_text_style[serif][normalsize][normal][normal][center][black][title_center_normalsize]\
+@_define_text_style[serif][small][normal][normal][center][black][title_center_small]\
+@_define_text_style[serif][footnotesize][normal][normal][center][black][title_center_footnotesize]\
+@_define_text_style[serif][scriptsize][normal][normal][center][black][title_center_scriptsize]\
+@_define_text_style[serif][tiny][normal][normal][center][black][title_center_tiny]\
+
+@_define_text_style[roman][HUGE][bold][normal][center][black][tdck_title_center_HUGE_bold]\
+@_define_text_style[roman][Huge][bold][normal][center][black][tdck_title_center_Huge_bold]\
+@_define_text_style[roman][huge][bold][normal][center][black][tdck_title_center_huge_bold]\
+@_define_text_style[roman][LARGE][bold][normal][center][black][tdck_title_center_LARGE_bold]\
+@_define_text_style[roman][Large][bold][normal][center][black][tdck_title_center_Large_bold]\
+@_define_text_style[roman][large][bold][normal][center][black][tdck_title_center_large_bold]\
+@_define_text_style[roman][normalsize][bold][normal][center][black][tdck_title_center_normalsize_bold]\
+@_define_text_style[roman][small][bold][normal][center][black][tdck_title_center_small_bold]\
+@_define_text_style[roman][footnotesize][bold][normal][center][black][tdck_title_center_footnotesize_bold]\
+@_define_text_style[roman][scriptsize][bold][normal][center][black][tdck_title_center_scriptsize_bold]\
+@_define_text_style[roman][tiny][bold][normal][center][black][tdck_title_center_tiny_bold]\
+
+@_define_text_style[roman][HUGE][normal][normal][center][black][tdck_title_center_HUGE]\
+@_define_text_style[roman][Huge][normal][normal][center][black][tdck_title_center_Huge]\
+@_define_text_style[roman][huge][normal][normal][center][black][tdck_title_center_huge]\
+@_define_text_style[roman][LARGE][normal][normal][center][black][tdck_title_center_LARGE]\
+@_define_text_style[roman][Large][normal][normal][center][black][tdck_title_center_Large]\
+@_define_text_style[roman][large][normal][normal][center][black][tdck_title_center_large]\
+@_define_text_style[roman][normalsize][normal][normal][center][black][tdck_title_center_normalsize]\
+@_define_text_style[roman][small][normal][normal][center][black][tdck_title_center_small]\
+@_define_text_style[roman][footnotesize][normal][normal][center][black][tdck_title_center_footnotesize]\
+@_define_text_style[roman][scriptsize][normal][normal][center][black][tdck_title_center_scriptsize]\
+@_define_text_style[roman][tiny][normal][normal][center][black][tdck_title_center_tiny]\
+
+%else
+
+@_define_text_style[serif][HUGE][bold][normal][center][black][title_center_HUGE_bold]\
+@_define_text_style[serif][Huge][bold][normal][center][black][title_center_Huge_bold]\
+@_define_text_style[serif][huge][bold][normal][center][black][title_center_huge_bold]\
+@_define_text_style[serif][LARGE][bold][normal][center][black][title_center_LARGE_bold]\
+@_define_text_style[serif][Large][bold][normal][center][black][title_center_Large_bold]\
+@_define_text_style[serif][large][bold][normal][center][black][title_center_large_bold]\
+@_define_text_style[serif][normalsize][bold][normal][center][black][title_center_normalsize_bold]\
+@_define_text_style[serif][small][bold][normal][center][black][title_center_small_bold]\
+@_define_text_style[serif][footnotesize][bold][normal][center][black][title_center_footnotesize_bold]\
+@_define_text_style[serif][scriptsize][bold][normal][center][black][title_center_scriptsize_bold]\
+@_define_text_style[serif][tiny][bold][normal][center][black][title_center_tiny_bold]\
+
+@_define_text_style[serif][HUGE][normal][normal][center][black][title_center_HUGE]\
+@_define_text_style[serif][Huge][normal][normal][center][black][title_center_Huge]\
+@_define_text_style[serif][huge][normal][normal][center][black][title_center_huge]\
+@_define_text_style[serif][LARGE][normal][normal][center][black][title_center_LARGE]\
+@_define_text_style[serif][Large][normal][normal][center][black][title_center_Large]\
+@_define_text_style[serif][large][normal][normal][center][black][title_center_large]\
+@_define_text_style[serif][normalsize][normal][normal][center][black][title_center_normalsize]\
+@_define_text_style[serif][small][normal][normal][center][black][title_center_small]\
+@_define_text_style[serif][footnotesize][normal][normal][center][black][title_center_footnotesize]\
+@_define_text_style[serif][scriptsize][normal][normal][center][black][title_center_scriptsize]\
+@_define_text_style[serif][tiny][normal][normal][center][black][title_center_tiny]\
+
+%endif
+
+
+
+@_end_text_style_sheet[]\
+]
+%endif ___STYLE_UDH__

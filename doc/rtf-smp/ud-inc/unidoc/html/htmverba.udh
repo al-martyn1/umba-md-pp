@@ -1,0 +1,6 @@
+%if !defined(__HTML_HTMVERBA_UDH__)
+%define __HTML_HTMVERBA_UDH__
+@newenvironment[verbatim]\
+[<PRE>]\
+[</PRE>]
+%endif __HTML_HTMVERBA_UDH__

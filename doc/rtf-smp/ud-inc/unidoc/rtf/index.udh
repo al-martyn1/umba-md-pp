@@ -1,0 +1,19 @@
+%if !defined(__RTF_INDEX_UDH__)
+%define __RTF_INDEX_UDH__
+
+%if defined(HELP)
+    %if !defined(__RTF_HLPIDX_UDH__)
+        %include <rtf\hlpidx.udh>
+    %endif __RTF_HLPIDX_UDH__
+%else
+    %if !defined(__RTF_PRNIDX_UDH__)
+        %include <rtf\prnidx.udh>
+    %endif __RTF_PRNIDX_UDH__
+%endif
+
+% hidden index keyword, not included to document text
+@newcommand[hindex][@ifthenelse[#0<2][@_hindex1[#1]][@_hindex2[#1][#2]]]
+% visible index keyword, included to document text
+@newcommand[index][@ifthenelse[#0<2][#1@_hindex1[#1]][#2@_hindex2[#1][#2]]]
+
+%endif __RTF_INDEX_UDH__

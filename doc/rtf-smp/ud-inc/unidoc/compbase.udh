@@ -1,0 +1,34 @@
+%if !defined(__COMPBASE_UDH__)
+%define __COMPBASE_UDH__ 1
+%if !defined(QUET)
+ % message Precompiling base commands
+%endif
+%<
+@compilecommand[unidoc]
+@compilecommand[at]
+@compilecommand[hash]
+@compilecommand[lsb]
+@compilecommand[rsb]
+@compilecommand[lt]
+@compilecommand[gt]
+@compilecommand[amp]
+@compilecommand[quot]
+@compilecommand[lquot]
+@compilecommand[rquot]
+@compilecommand[ldquot]
+@compilecommand[rdquot]
+@compilecommand[bvb]
+@compilecommand[lb]
+@compilecommand[rb]
+@compilecommand[bsl]
+@compilecommand[tex]
+@compilecommand[latex]
+@compilecommand[unidoc]
+@compilecommand[reg]
+@compilecommand[copy]
+@compilecommand[nbsp]
+@compilecommand[br]
+@compilecommand[usd]
+@compilecommand[percent]
+%>
+%endif __COMPBASE_UDH__

@@ -1,0 +1,16 @@
+%if !defined(__PFORMAT_UDH__)
+%define __PFORMAT_UDH__ 1
+
+%if defined(HTML)
+    %include <html\htmpf.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_RTFPF_UDH__)
+        %include <rtf\rtfpf.udh>
+    %endif __RTF_RTFPF_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\texpf.udh>
+%elseif defined(WIKI) || defined(KBWIKI)
+    %  include <wiki\pformat.udh>
+%endif
+
+%endif __PFORMAT_UDH__

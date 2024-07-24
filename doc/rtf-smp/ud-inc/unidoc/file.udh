@@ -1,0 +1,23 @@
+%if !defined(__FILE_UDH__)
+%define __FILE_UDH__ 1
+
+% args - 1 - source, 2 - destination
+@newcommand[filecopyif][\
+% @message[filecopyif - check existence #2]\
+@ifthen[!@fileexist[#2]][\
+% @message[filecopyif - lookup in includes]\
+% file not exist, lookup in includes
+@ifthen[@fileexistex[#1]][\
+% @message[filecopyif - exist in includes]\
+% @message[filecopyif - copying from @findfile[#1] to #2]\
+% copying from include dir
+@copyfile[@findfile[#1]][#2]\
+% @ifthen[!@fileexist[#1]][\
+% @error[Emergency stop, file @findfile[#1] not properly copied to #1]]
+]]]
+
+@newcommand[__int_bmp2emf][@exec[bmp2emf.exe][#1.bmp #1.emf]]
+@newcommand[__int_emf2bmp][@exec[emf2bmp.exe][#1.emf #1.bmp]]
+
+
+%endif __FILE_UDH__

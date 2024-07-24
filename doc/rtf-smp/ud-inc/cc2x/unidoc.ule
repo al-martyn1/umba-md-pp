@@ -1,0 +1,31 @@
+; Lexem environment for UniDoc
+prolog                         
+epilog                         
+preprocessor_begin             @c_preprocessor[
+preprocessor_end               ]
+preprocessor_keyword_begin     @cpp_keyword[
+preprocessor_keyword_end       ]
+comment_start                  @c_comment[
+comment_end                    ]
+string_start                   @c_string[
+string_end                     ]
+number_start                   @c_number[
+number_end                     ]
+operator_start                 
+operator_end                   
+semicolon_start                @c_semicolon[
+semicolon_end                  ]
+keyword_begin                  @c_keyword[
+keyword_end                    ]
+user_keyword_begin             @c_user_keyword[
+user_keyword_end               ]
+type_begin                     @c_type[
+type_end                       ]
+user_type_begin                @c_user_type[
+user_type_end                  ]
+
+; printf style strings
+; label_begin                    <A name="#%s">
+; label_end                      </A>
+ref_begin                      @typeref[%s][
+ref_end                        ]

@@ -1,0 +1,8 @@
+%if !defined (__TOC__)
+%define __TOC__
+
+%if !defined(__TOC_UDH__)
+    %include <toc.udh>
+%endif __TOC_UDH__
+
+%endif __TOC__

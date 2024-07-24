@@ -1,0 +1,137 @@
+%if !defined(__RTF_RTFENUM_UDH__)
+%define __RTF_RTFENUM_UDH__
+
+@ifthen[!@iscommand[item]][@newcommand[item][]]
+@ifthen[!@iscommand[enumitem]][@newcommand[enumitem][]]
+@ifthen[!@iscommand[unumitem]][@newcommand[unumitem][]]
+
+% enumeration level
+@newcounter[enum_level]
+% non-numbered enumeration level
+@newcounter[unum_level]
+% summary level
+@newcounter[num_level]
+
+% enumeration counters
+@newcounter[num0]
+@newcounter[num1][num0]
+@newcounter[num2][num1]
+@newcounter[num3][num2]
+@newcounter[num4][num3]
+@newcounter[num5][num4]
+@newcounter[num6][num5]
+@newcounter[num7][num6]
+@newcounter[num8][num7]
+@newcounter[num9][num8]
+@newcounter[num10][num9]
+@newcounter[num11][num10]
+@newcounter[num12][num11]
+@newcounter[num13][num12]
+@newcounter[num14][num13]
+@newcounter[num15][num14]
+@newcounter[num16][num15]
+
+% returns item counter for current numeration level
+@newcommand[get_num_count][@getcounter[[num@getcounter[num_level]]]]
+
+% decorate item
+% one arg, e - enum, u - unum
+@newcommand[_thenum][@_the#1num[[@getcounter[#1num_level]]][[@get_num_count[]]]]
+
+% increase current counter
+@newcommand[_inc_num][@addcounter[[num@getcounter[num_level]]][1]]
+
+% reset current counter
+@newcommand[_rst_num][@resetcounter[[num@getcounter[num_level]]]]
+
+
+@newcommand[_begin_num][\
+@_lb\
+@_bsl[]sa@_eval_enum_sa[]\
+@_bsl[]par@_bsl[]pard@_bsl[]plain@sty_#1\
+@_bsl[]sb@_eval_enum_sb[]][normal1]
+
+
+@newcommand[_soft_begin_num][\
+@_lb\
+@_bsl[]sa@_eval_enum_sa[]\
+@_bsl[]pard@_bsl[]plain@sty_#1\
+@_bsl[]sb@_eval_enum_sb[]][normal1]
+
+
+@newcommand[_end_num][\
+@_rb[]\
+@_bsl[]sb@_eval_enum_sb[]\
+]
+
+% starts new item, arg 1 - u,e
+@newcommand[_begin_num_item][\
+@_lb\
+@_bsl[]fi@_eval_enum_fi\
+@_bsl[]li@_eval_enum_li\
+@_bsl[]ri@_eval_enum_ri[]%
+%if defined(HELP)
+@_thenum[#1] \
+%else
+@_thenum[#1]@_bsl[]tab%
+%endif
+]
+
+
+@newcommand[_end_num_item][\
+@_bsl[]par@_rb[]%
+]
+@newcommand[_soft_end_num_item][\
+@_rb[]%
+]
+
+
+@newcommand[_enum_restoreprev_indents][]
+@newcommand[_eval_enum_fi][@eval[-@var[_enumli]*56]]
+@newcommand[_eval_enum_li][@eval[@var[_enumli]*56*@getcounter[num_level]]]
+@newcommand[_eval_enum_ri][@eval[@var[_enumri]*56]]
+@newcommand[_eval_enum_sb][@eval[@var[_enumsb]*56]]
+@newcommand[_eval_enum_sa][@eval[@var[_enumsa]*56]]
+
+
+@var[_prev_numerate][false]
+
+% args: 1 - u, e
+%   
+@newcommand[numitem][\
+@ifthenelse[@get_num_count[]>0 && !@var[_prev_numerate]][@_end_num_item[]]\
+@var[_prev_numerate][false]\
+@_inc_num[]
+@_begin_num_item[#1]\
+]
+
+
+@newcommand[_begin_numerate][\
+@renewcommand[para][@_bsl[]par@_bsl[]pard@_bsl[]plain@sty_##1@_bsl[]fi@_eval_enum_fi[]][normal1]\
+@ifthenelse[@getcounter[num_level]>0]\
+[@ifthenelse[@get_num_count[]>0][@_end_num_item[]]]\
+@var[_prev_numerate][true]\
+@addcounter[num_level][1]\
+@addcounter[#1num_level][1]\
+@_rst_num[]\
+@ifthenelse[@getcounter[num_level]>1][@_soft_begin_num[#2]][@_begin_num[#2]]\
+% @_begin_enum[#1]\
+]
+@newcommand[_end_numerate][\
+@ifthenelse[@get_num_count[]>0 && !@var[_prev_numerate]][@_end_num_item[]]\
+@addcounter[num_level][-1]\
+@addcounter[#1num_level][-1]\
+@_end_num[]\
+@var[_prev_numerate][true]\
+@ifthenelse[@getcounter[num_level]<1][@_enum_restoreprev_indents[]]\
+]
+
+%if !defined(__RTF__RTFENUM_UDH__)
+    %include <rtf/_rtfenum.udh>
+%endif __RTF__RTFENUM_UDH__
+
+%if !defined(__RTF__RTFUNUM_UDH__)
+    %include <rtf/_rtfunum.udh>
+%endif __RTF__RTFUNUM_UDH__
+                  
+%endif __RTF_RTFENUM_UDH__

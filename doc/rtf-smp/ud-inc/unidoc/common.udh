@@ -1,0 +1,26 @@
+%if !defined(__COMMON_UDH__)
+%define __COMMON_UDH__ 1
+
+%if defined(HELP)
+@newcommand[ifhelp][#1]
+@newcommand[ifnhelp][]
+%else
+@newcommand[ifhelp][]
+@newcommand[ifnhelp][#1]
+%endif
+
+%if defined(HTML)
+    %include <html\common.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_COMMON_UDH__)
+        %include <rtf\common.udh>
+    %endif __RTF_COMMON_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\common.udh>
+%elseif defined(WIKI) || defined(KBWIKI)
+    %  include <wiki\common.udh>
+%endif
+
+
+
+%endif __COMMON_UDH__

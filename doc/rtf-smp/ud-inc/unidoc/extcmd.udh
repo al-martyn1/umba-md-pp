@@ -1,0 +1,6 @@
+%if !defined(__EXTCMD_UDH__)
+%define __EXTCMD_UDH__
+@newcommand[make_winhelp][]
+
+
+%endif __EXTCMD_UDH__

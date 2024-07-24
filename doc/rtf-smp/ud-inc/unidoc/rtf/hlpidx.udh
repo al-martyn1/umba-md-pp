@@ -1,0 +1,83 @@
+%if !defined(__RTF_HLPIDX_UDH__)
+%define __RTF_HLPIDX_UDH__ 1
+
+
+%<
+
+***
+A comprehensive keyword list is one of the most helpful navigating tools 
+you can provide for users. In an index, you can provide synonyms that help 
+users find information without requiring them to be familiar with your 
+terminology. Even though WinHelp 4.0 supports full-text search features, 
+you will probably want to prepare a keyword list. If users have only a 
+full-text search index available to them, they can search for and find 
+only words that are actually present in the text of the Help file.
+
+
+***
+To create index entries for a topic
+
+1	Place the insertion point at the beginning of the topic.
+2	Insert a K as a footnote mark.
+3	Type a list of keywords as the corresponding footnote text. 
+	Observe the following restrictions:
+
+ú	Separate keywords with a semicolon.
+ú	Spaces before and after keywords are removed.
+ú	Do not use carriage returns.
+ú	Use no more than 255 characters per keyword.
+
+Notes
+
+ú	The KLink macro searches for topics containing a K-keyword.
+
+ú	Keywords are case-sensitive, but Help Workshop assumes that two 
+	keywords that differ only in case are meant to be the same keyword. 
+	Help Workshop changes one of the keywords to agree with the other 
+	and displays a warning message.
+
+***
+To create second-level index entries for a topic
+
+1	In the K-footnote of a topic, type the first-level keyword entry 
+	followed by a semicolon (;).
+
+2	Immediately after the semicolon, type the first-level entry again, 
+	followed by a comma (,) or a colon (:), a space, the second-level 
+	entry, and a semicolon.
+
+Example
+
+The following K-footnote text results in the index entries shown below it:
+macro; macro, library; macro, automatic; macro, complex; macro, simple
+
+macro
+		automatic
+		complex
+		library
+		simple
+
+Notes
+
+ú	Entries appear alphabetically in the index, regardless of their 
+	order in footnote text.
+
+ú	Spaces before and after keywords are removed.
+ú	You can change the characters you use to identify second-level index 
+	entries. For more information, click Related Topics.
+%>
+
+@newcommand[__winhelp_addkwd][\
+@varcat[keywords_@evar[__cur_section_id]][;#1]\
+]
+
+@newcommand[_hindex1][@__winhelp_addkwd[#1]]
+@newcommand[_hindex2][@__winhelp_addkwd[#1;#1,#2]]
+
+
+@newcommand[makeindex][]
+
+@newcommand[make_bibliography_section][@chapter*[BIBLIOGRAPHY][@bibliography_text[]]]
+
+
+%endif __RTF_HLPIDX_UDH__

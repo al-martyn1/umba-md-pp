@@ -1,0 +1,8 @@
+%if !defined (__STDDEF__)
+%define __STDDEF__
+
+%if !defined(__STDDEF_UDH__)
+    %include <stddef.udh>
+%endif __STDDEF_UDH__
+
+%endif __STDDEF__

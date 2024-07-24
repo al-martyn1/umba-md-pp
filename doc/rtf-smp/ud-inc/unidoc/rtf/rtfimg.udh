@@ -1,0 +1,215 @@
+%if !defined(__RTF_RTFIMG_UDH__)
+%define __RTF_RTFIMG_UDH__
+
+%if !defined(RTFSHAPE_UDH)
+    %include <rtf/rtfshape.udh>
+%endif
+
+%if !defined(__FILE_UDH__)
+    %include <file.udh>
+%endif
+
+
+@newcommand[_hlprtf_img_root][img]
+
+@newcommand[_rtf_insert_emf][\
+@ifthenelse[@pass[]==2][\
+% @_lb@_bsl[]sectexpand0
+% @_lb@_bsl[]objtransy-2000
+@_lb@_bsl[]sub
+@_lb@_bsl[]pict\
+@ifthenelse[#0>1][\
+@ifthenelse[#0==2][@_bsl[]picscalex#2@_bsl[]picscaley#2][@_bsl[]picscalex#2@_bsl[]picscaley#3]\
+]\
+@_bsl[]emfblip
+@hexfile[@var[_image_root]/#1.emf]@_rb[]\
+@_rb[]\
+]\
+]
+
+@newcommand[_hlprtf_insert_bmp_c][@lb[]bmc #1_256.bmp;#1_16.bmp;#1_2.bmp@rb[]]
+@newcommand[_hlprtf_insert_bmp_l][@lb[]bml #1_256.bmp;#1_16.bmp;#1_2.bmp@rb[]]
+@newcommand[_hlprtf_insert_bmp_r][@lb[]bmr #1_256.bmp;#1_16.bmp;#1_2.bmp@rb[]]
+
+
+@newcommand[_rtf_bmp2emf][\
+% копируем из инклюдов, если нет в текущем каталоге img
+@filecopyif[#1.emf][@var[_image_root]/#1.emf]\
+% такого файла нет?
+@ifthen[!@fileexist[@var[_image_root]/#1.emf]][\
+% нету такого файла, хоть ты тресни
+% что же делать? копируем битмапку
+@filecopyif[#1.bmp][@var[_image_root]/#1.bmp]\
+% есть такая битмапка?
+@ifthenelse[@fileexist[@var[_image_root]/#1.bmp]][\
+% такая битмапка есть!
+@__int_bmp2emf[@var[_image_root]/#1]][\
+% такой битмапки нет, надо сделать что-то еще
+]]]
+
+
+@newcommand[_rtf_emf2bmp][\
+% копируем из инклюдов, если нет в текущем каталоге img
+@filecopyif[#1.bmp][@var[_image_root]/#1.bmp]\
+% такого файла нет?
+@ifthen[!@fileexist[@var[_image_root]/#1.bmp]][\
+% нету такого файла, хоть ты тресни
+% что же делать? копируем emf
+@filecopyif[#1.emf][@var[_image_root]/#1.emf]\
+% есть такой emf?
+@ifthenelse[@fileexist[@var[_image_root]/#1.emf]][\
+% есть!
+@__int_emf2bmp[@var[_image_root]/#1]][\
+% нет, надо сделать что-то еще
+]]]
+
+
+%<
+@newcommand[_rtf_bmp2emf][\
+@ifthenelse[!@fileexist[@var[_image_root]/#1.emf]]\
+[@ifthen[!@fileexist[@var[_image_root]/#1.bmp]]\
+[@copyfile[@findfile[@var[_image_root]/#1.bmp]][@var[_image_root]/#1.bmp]]\
+@exec[bmp2emf.exe][@var[_image_root]/#1.bmp @var[_image_root]/#1.emf]\
+]\
+]
+
+@newcommand[_rtf_emf2bmp][\
+@ifthenelse[!@fileexist[@var[_image_root]/#1.bmp]]\
+[@ifthen[!@fileexist[@var[_image_root]/#1.emf]]\
+[@copyfile[@findfile[@var[_image_root]/#1.emf]][@var[_image_root]/#1.emf]]\
+@exec[emf2bmp.exe][@var[_image_root]/#1.emf @var[_image_root]/#1.bmp]\
+]\
+]
+%>
+
+%< Old version of bitmap conversion ;-)
+@newcommand[_bmp_convert_if_org][\
+@ifthenelse[!@fileexist[@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1.bmp]]\
+[@copyfile[@findfile[@var[_image_root]/#1.bmp]][@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1.bmp]]\
+]
+@newcommand[_bmp_convert256_if][\
+@ifthenelse[!@fileexist[@var[_image_root]/#1_256.bmp]]\
+[@exec[bmpcvt.exe][8 @findfile[@var[_image_root]/#1.bmp] @var[_image_root]/#1_256.bmp]]\
+@ifthenelse[!@fileexist[@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_256.bmp]]\
+[@copyfile[@findfile[@var[_image_root]/#1_256.bmp]][@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_256.bmp]]\
+]
+@newcommand[_bmp_convert16_if][\
+@ifthenelse[!@fileexist[@var[_image_root]/#1_16.bmp]]\
+[@exec[bmpcvt.exe][4 @findfile[@var[_image_root]/#1.bmp] @var[_image_root]/#1_16.bmp]]\
+@ifthenelse[!@fileexist[@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_16.bmp]]\
+[@copyfile[@findfile[@var[_image_root]/#1_16.bmp]][@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_16.bmp]]\
+]
+@newcommand[_bmp_convert2_if][\
+@ifthenelse[!@fileexist[@var[_image_root]/#1_2.bmp]]\
+[@exec[bmpcvt.exe][2 @findfile[@var[_image_root]/#1.bmp] @var[_image_root]/#1_2.bmp]]\
+@ifthenelse[!@fileexist[@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_2.bmp]]\
+[@copyfile[@findfile[@var[_image_root]/#1_2.bmp]][@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_2.bmp]]\
+]
+%>
+
+
+@newcommand[__hlpimg_destfile][@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1]
+% filename, bits_per_pixel (2,4,8), suffix (2, 16, 256)
+@newcommand[__hlpimg_cvtbppx][\
+@exec[bmpcvt.exe]\
+[#2 @var[_image_root]/#1.bmp \
+@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_#3.bmp]]
+
+
+@newcommand[_bmp_convert_if_org][\
+@filecopyif[#1.bmp][@var[_image_root]/#1.bmp]\
+@ifthen[@fileexist[@var[_image_root]/#1.bmp]][\
+% такой файл существует, просто копируем
+@copyfile[@var[_image_root]/#1.bmp][@__hlpimg_destfile[#1.bmp]]\
+]]
+
+@newcommand[_bmp_convert256_if][\
+@filecopyif[#1.bmp][@var[_image_root]/#1_256.bmp]\
+@ifthenelse[@fileexist[@var[_image_root]/#1_256.bmp]][\
+% такой файл существует, просто копируем
+@copyfile[@var[_image_root]/#1_256.bmp][@__hlpimg_destfile[#1_256.bmp]]\
+][\
+% конвертируем 
+@__hlpimg_cvtbppx[#1][8][256]\
+]]
+
+@newcommand[_bmp_convert16_if][\
+@filecopyif[#1.bmp][@var[_image_root]/#1_16.bmp]\
+@ifthenelse[@fileexist[@var[_image_root]/#1_16.bmp]][\
+% такой файл существует, просто копируем
+@copyfile[@var[_image_root]/#1_16.bmp][@__hlpimg_destfile[#1_16.bmp]]\
+][\
+% конвертируем 
+@__hlpimg_cvtbppx[#1][4][16]\
+]]
+
+@newcommand[_bmp_convert2_if][\
+@filecopyif[#1.bmp][@var[_image_root]/#1_2.bmp]\
+@ifthenelse[@fileexist[@var[_image_root]/#1_2.bmp]][\
+% такой файл существует, просто копируем
+@copyfile[@var[_image_root]/#1_2.bmp][@__hlpimg_destfile[#1_2.bmp]]\
+][\
+% конвертируем
+@__hlpimg_cvtbppx[#1][2][2]\
+]]
+
+
+@newcommand[_bmp_convert_if][\
+@_bmp_convert_if_org[#1]\
+@_bmp_convert256_if[#1]\
+@_bmp_convert16_if[#1]\
+@_bmp_convert2_if[#1]\
+]
+
+
+%if defined(HELP)
+% bmc
+@newcommand[_rtf_bmc][\
+@_rtf_emf2bmp[#1]\
+@_bmp_convert_if[#1]\
+% @exec[iconvert.exe][-colors 256 @var[_image_root]/#1.bmp @filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_256.bmp]
+% @exec[iconvert.exe][-colors 16 @var[_image_root]/#1.bmp @filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_16.bmp]
+% @exec[iconvert.exe][-colors 2 @var[_image_root]/#1.bmp @filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_mono.bmp]
+% @copyfile[@var[_image_root]/#1.bmp][@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1.bmp]\
+@_hlprtf_insert_bmp_c[#1]]
+% bml
+@newcommand[_rtf_bml][\
+@_rtf_emf2bmp[#1]\
+@_bmp_convert_if[#1]\
+% @exec[iconvert.exe][-colors 256 @var[_image_root]/#1.bmp @filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_256.bmp]
+% @exec[iconvert.exe][-colors 16 @var[_image_root]/#1.bmp @filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_16.bmp]
+% @exec[iconvert.exe][-colors 2 @var[_image_root]/#1.bmp @filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_mono.bmp]
+% @copyfile[@var[_image_root]/#1.bmp][@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1.bmp]\
+@_hlprtf_insert_bmp_l[#1]]
+% bmr
+@newcommand[_rtf_bmr][\
+@_rtf_emf2bmp[#1]\
+@_bmp_convert_if[#1]\
+% @exec[iconvert.exe][-colors 256 @var[_image_root]/#1.bmp @filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_256.bmp]
+% @exec[iconvert.exe][-colors 16 @var[_image_root]/#1.bmp @filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_16.bmp]
+% @exec[iconvert.exe][-colors 2 @var[_image_root]/#1.bmp @filepath[@thebasefileext]/@_hlprtf_img_root[]/#1_mono.bmp]
+% @copyfile[@var[_image_root]/#1.bmp][@filepath[@thebasefileext]/@_hlprtf_img_root[]/#1.bmp]\
+@_hlprtf_insert_bmp_r[#1]]
+ 
+%else
+@newcommand[_rtf_bmc][\
+@_rtf_bmp2emf[#1]\
+@_rtf_insert_emf[#1][#2][#3]\
+]
+@newcommand[_rtf_bml][\
+@_rtf_bmp2emf[#1]\
+@_rtf_insert_emf[#1][#2][#3]\
+]
+@newcommand[_rtf_bmr][\
+@_rtf_bmp2emf[#1]\
+@_rtf_insert_emf[#1][#2][#3]\
+]
+%endif
+
+@newcommand[rtf_pic_left][@_rtf_bml[#1][#2][#3]]
+@newcommand[rtf_pic_center][@_rtf_bmc[#1][#2][#3]]
+@newcommand[rtf_pic_right][@_rtf_bmr[#1][#2][#3]]
+% @newcommand[picture][@rtf_pic_#2[#1]][][center]
+@newcommand[picture][@_rtf_bmc[#1][#2][#3]]
+
+%endif __RTF_RTFIMG_UDH__

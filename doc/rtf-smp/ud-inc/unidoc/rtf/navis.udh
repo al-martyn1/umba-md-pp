@@ -1,0 +1,125 @@
+%if !defined(__RTF_NAVIS_UDH__)
+%define __RTF_NAVIS_UDH__
+
+%if !defined(__RTF_RTFSHAPE_UDH__)
+    %include <rtf/rtfshape.udh>
+%endif __RTF_RTFSHAPE_UDH__
+
+%if !defined(HELP)
+
+%if defined(NAVIS)
+
+
+@newcommand[navis_kb_text][Конструкторское бюро]
+@newcommand[navis_ns_text][навигационных систем]
+@newcommand[navis_navis_text][Н А В И С]
+@newcommand[navis_spb_text][Санкт-Петербургский филиал]
+
+
+@newcounter[navis_top_offset][70]
+
+
+@newcommand[rtf_ncap_para][
+@_bsl[]par@_bsl[]pard@_bsl[]plain@sty_#1][left]
+
+
+
+% #1 - left, #2 - top
+
+@newcommand[make_navis_logo_img][\
+@_rtf_txt_shape[1][1][@eval[(#1)*1440/254]]\
+[@eval[( #2)*1440/254]]\
+[@eval[( #1)*1440/254+1200]]\
+[@eval[( #2)*1440/254+1300]]\
+[3][
+@_rtf_shprop[ShapeType][75]
+@_rtf_shprop[fLayoutInCell][1]
+][@_rtf_bmc[navislogo][128][128]
+% @rtf_ncap_para[]@tab[]#2@br[]#3@br[]@br[]#4@br[]@br[]#5]\
+]\
+]
+
+@newcommand[make_navis_text_logo][\
+@_rtf_txt_shape[1][1][@eval[(#1)*1440/254]]\
+[@eval[(#2)*1440/254]]\
+[@eval[(#1)*1440/254+1890]]\
+[@eval[(#2)*1440/254+1300]]\
+[3][
+@_rtf_shprop[ShapeType][75]
+@_rtf_shprop[fLayoutInCell][1]
+][\
+@rtf_ncap_para[normal1]\
+@footnotesize[@navis_kb_text[]@br[]@navis_ns_text[]@br[]]\
+@textbf[@navis_navis_text[]]@scriptsize[@br[]@navis_spb_text[]]\
+]\
+]
+
+
+
+@newcommand[make_navis_logo_address][\
+@_rtf_txt_shape[1][1][@eval[(#1)*1440/254]]\
+[@eval[(#2)*1440/254]]\
+[@eval[(#1)*1440/254+4600]]\
+[@eval[(#2)*1440/254+2500]]\
+[3][
+@_rtf_shprop[ShapeType][75]
+@_rtf_shprop[fLayoutInCell][1]
+][\
+@rtf_ncap_para[left]\
+@small[__________________________________________@br[]\
+197376, С.-Петербург, ул Инструментальная, д. 3@br[]@tab[]тел/факс (812) 103-71-81, 103-71-82@br[]]\
+@small[#3]]\
+]
+
+
+
+% Коды полей указаны согласно "Правилам составления м оформления документов"
+
+% Поле 01
+
+@newcommand[make_navis_logo]\
+[@make_navis_logo_img[#1][#2]\
+@make_navis_text_logo[#1+170][#2+2]\
+@make_navis_logo_address[#1][#2+140][#3]\
+]\
+[240]\
+[130+@getcounter[navis_top_offset]]
+
+
+%<
+@newcommand[make_navis_logo][\
+@_rtf_txt_shape[1][1][@eval[(#1)*1440/254]]\
+[@eval[(#2)*1440/254]]\
+[@eval[(#1)*1440/254+5000]]\
+[@eval[(#2)*1440/254+3000]]\
+[3][
+@_rtf_shprop[ShapeType][75]
+@_rtf_shprop[fLayoutInCell][1]
+][\
+@make_navis_logo_img[0][0]\
+@make_navis_text_logo[128][2]\
+@make_navis_logo_address[0][140][#3]\
+]\
+]\
+[240]\
+[130+@getcounter[navis_top_offset]]
+%>
+
+
+
+
+
+
+%else
+@newcommand[make_navis_logo_img][]
+@newcommand[make_navis_text_logo][]
+@newcommand[make_navis_logo_address][]
+@newcommand[make_navis_logo][]
+
+%endif
+
+%endif
+
+
+
+%endif __RTF_NAVIS_UDH__

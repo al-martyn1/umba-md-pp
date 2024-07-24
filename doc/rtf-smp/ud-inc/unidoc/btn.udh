@@ -1,0 +1,32 @@
+%if !defined(__BTN_UDH__)
+%define __BTN_UDH__ 1
+
+%if !defined(DISABLE_PIC_BUTTONS)
+@newcommand[btn_back][@picture[btn_back][60]]
+@newcommand[btn_next][@picture[btn_next][60]]
+@newcommand[btn_finish1][@picture[btn_finish1][60]]
+@newcommand[btn_finish][@picture[btn_finish1][60]]
+@newcommand[btn_yes][@picture[btn_yes][60]]
+@newcommand[btn_no][@picture[btn_no][60]]
+@newcommand[btn_ok][@picture[btn_ok][60]]
+@newcommand[btn_cancel1][@picture[btn_cancel1][60]]
+@newcommand[btn_cancel][@picture[btn_cancel1][60]]
+@newcommand[btn_setup][@picture[btn_setup][60]]
+@newcommand[btn_mdot][@picture[btn_mdot][80]]
+@newcommand[btn_x][@picture[btn_x][80]]
+%else
+@newcommand[btn_back][@dquoted[@CYR_N@cyr_a@cyr_z@cyr_a@cyr_d[]]]
+@newcommand[btn_next][@dquoted[@CYR_D@cyr_a@cyr_l@cyr_e@cyr_e[]]]
+@newcommand[btn_finish1][@dquoted[@CYR_Z@cyr_a@cyr_v@cyr_e@cyr_r@cyr_sh@cyr_e@cyr_n@cyr_i@cyr_e[]]]
+@newcommand[btn_finish][@dquoted[@CYR_Z@cyr_a@cyr_v@cyr_e@cyr_r@cyr_sh@cyr_e@cyr_n@cyr_i@cyr_e[]]]
+@newcommand[btn_yes][@dquoted[@CYR_D@cyr_a[]]]
+@newcommand[btn_no][@dquoted[@CYR_N@cyr_e@cyr_t[]]]
+@newcommand[btn_ok][@dquoted[Ok]]
+@newcommand[btn_cancel1][@dquoted[@CYR_O@cyr_t@cyr_m@cyr_e@cyr_n@cyr_i@cyr_t@cyr_sftsn[]]]
+@newcommand[btn_cancel][@dquoted[@CYR_O@cyr_t@cyr_m@cyr_e@cyr_n@cyr_i@cyr_t@cyr_sftsn[]]]
+@newcommand[btn_setup][@dquoted[@CYR_U@cyr_s@cyr_t@cyr_a@cyr_n@cyr_o@cyr_v@cyr_i@cyr_t@cyr_sftsn[]]]
+@newcommand[btn_mdot][@lsb[]...@rsb[]]
+@newcommand[btn_x][@lsb[]X@rsb[]]
+%endif
+
+%endif __BTN_UDH__

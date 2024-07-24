@@ -1,0 +1,12 @@
+%if !defined(__CAP_UDH__)
+%define __CAP_UDH__ 1
+    %if defined(HTML)
+        %include <html\htmcap.udh>
+    %elseif defined(RTF)
+        %if !defined(RTFCNT_UDH)
+            %include <rtf\rtfcap.udh>
+        %endif RTFCAP_UDH
+    %elseif defined(TEX) || defined(LATEX)
+        %  include <tex\texcap.udh>
+    %endif
+%endif __CAP_UDH__

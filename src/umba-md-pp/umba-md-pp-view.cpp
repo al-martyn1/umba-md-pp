@@ -44,6 +44,7 @@
 #include "umba/utf8.h"
 //
 #include "snippet_options.h"
+#include "rtf_workarounds.h"
 
 #include "encoding/encoding.h"
 #include "utils.h"
@@ -553,6 +554,12 @@ main/wmain - нужны только для MSVC/Console
             return 9;
         }
 
+        if (!rtfEmbedImagesWorkaround(generatedRtfFile))
+        {
+            showErrorMessageBox("Failed to embed images");
+            return 10;
+        }
+
 
         FilenameStringType generatedRtfFileCanonical  = umba::filename::makeCanonical(generatedRtfFile);
         FilenameStringType fullFinalFilenameCanonical = umba::filename::makeCanonical(fullFinalFilename);
@@ -579,7 +586,7 @@ main/wmain - нужны только для MSVC/Console
            )
         {
             showErrorMessageBox("Failed to create final file"); // !!! Это вылезает, если предыдущая версия файла уже открыта в ворде
-            return 10;
+            return 11;
         }
 
         ShellExecuteA( 0 // HWND
@@ -595,13 +602,11 @@ main/wmain - нужны только для MSVC/Console
     {
 
         showErrorMessageBox(e.what());
-        return 11;
+        return 12;
 
         // LOG_ERR_OPT << e.what() << "\n";
         // return 1;
     }
-
-
 
     return 0;
 }

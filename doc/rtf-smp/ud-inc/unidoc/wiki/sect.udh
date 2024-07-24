@@ -1,0 +1,49 @@
+%if !defined(__WIKI_SECT_UDH__)
+%define __WIKI_SECT_UDH__
+
+% TODO: para command - add styles - left, right, center, justify
+@newcommand[para][@__lf@__lf]
+@newcommand[br][<br>]
+
+
+@newcommand[_sect_base_prefix][=]
+
+@newcommand[chapter][@__lf[]@_sect_base_prefix[]=#2@_sect_base_prefix[]=@__lf[]]
+@newcommand[section][@__lf[]@_sect_base_prefix[]==#2@_sect_base_prefix[]==@__lf[]]
+@newcommand[subsection][@__lf[]@_sect_base_prefix[]===#2@_sect_base_prefix[]===@__lf[]]
+@newcommand[subsubsection][@__lf[]@_sect_base_prefix[]====#2@_sect_base_prefix[]====@__lf[]]
+@newcommand[paragraph][@__lf[]@_sect_base_prefix[]=====#2@_sect_base_prefix[]=====@__lf[]]
+@newcommand[subparagraph][@__lf[]@_sect_base_prefix[]=====#2@_sect_base_prefix[]=====@__lf[]]
+
+@newcommand[chapter*][@__lf[]@_sect_base_prefix[]=#1@_sect_base_prefix[]=@__lf[]]
+@newcommand[section*][@__lf[]@_sect_base_prefix[]==#1@_sect_base_prefix[]==@__lf[]]
+@newcommand[subsection*][@__lf[]@_sect_base_prefix[]===#1@_sect_base_prefix[]===@__lf[]]
+@newcommand[subsubsection*][@__lf[]@_sect_base_prefix[]====#1@_sect_base_prefix[]====@__lf[]]
+@newcommand[paragraph*][@__lf[]@_sect_base_prefix[]=====#1@_sect_base_prefix[]=====@__lf[]]
+@newcommand[subparagraph*][@__lf[]@_sect_base_prefix[]=====#1@_sect_base_prefix[]=====@__lf[]]
+
+@newenvironment[book][\
+% book open commands
+@renewcommand[_sect_base_prefix][=]@compilecommand[_sect_base_prefix]\
+@openfile[]\
+][\
+% book close commands
+@closefile[]\
+]
+
+@newenvironment[article][\
+% book open commands
+@renewcommand[_sect_base_prefix][]@compilecommand[_sect_base_prefix]\
+@openfile[]\
+][\
+% book close commands
+@closefile[]\
+]
+
+% stubs
+@newcommand[maketitle][]
+@newcommand[makecontents][]
+@newcommand[page_break][]
+
+
+%endif __WIKI_SECT_UDH__

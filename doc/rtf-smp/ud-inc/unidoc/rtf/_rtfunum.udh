@@ -1,0 +1,39 @@
+%if !defined(__RTF__RTFUNUM_UDH__)
+%define __RTF__RTFUNUM_UDH__
+
+@newcommand[_unum_try_close][\
+@ifthenelse[@iscurenv[#1]]\
+[@end[#1]]\
+[#2]\
+]
+
+% items decoration
+@newcommand[theunum0][UNUM COUNT IS ZERO-]
+@newcommand[theunum1][-]
+@newcommand[theunum2][-]
+@newcommand[theunum3][-]
+@newcommand[theunum4][-]
+@newcommand[theunum5][-]
+@newcommand[theunum6][-]
+@newcommand[theunum7][-]
+@newcommand[theunum8][-]
+@newcommand[theunum9][-]
+@newcommand[theunum10][-]
+@newcommand[theunum11][-]
+@newcommand[theunum12][-]
+@newcommand[theunum13][-]
+@newcommand[theunum14][-]
+@newcommand[theunum15][-]
+@newcommand[theunum16][-]
+
+% makes marker item decoration
+@newcommand[_theunum][@theunum#1[#2]]
+
+
+@newenvironment[unumerate]\
+[@renewcommand[unumitem][@numitem[u]]@renewcommand[item][@numitem[u]]\
+@_begin_numerate[u][#1]]\
+[@_end_numerate[u][#1]]\
+[normal1]
+
+%endif __RTF__RTFUNUM_UDH__

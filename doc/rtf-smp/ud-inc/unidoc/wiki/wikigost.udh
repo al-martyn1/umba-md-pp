@@ -1,0 +1,4 @@
+%if !defined(__WIKI_WIKIGOST_UDH__)
+%define __WIKI_WIKIGOST_UDH__ 1
+
+%endif __WIKI_WIKIGOST_UDH__

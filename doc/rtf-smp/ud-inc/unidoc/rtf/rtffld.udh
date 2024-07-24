@@ -1,0 +1,8 @@
+%if !defined(__RTF_RTFFLS_UDH__)
+%define __RTF_RTFFLS_UDH__
+
+@newcommand[rtf_field][\
+@_lb@_bsl[]field@_lb@_bsl[]*@_bsl[]fldinst @_lb[]#1@_rb@_rb@_rb[]\
+]
+
+%endif __RTF_RTFFLS_UDH__

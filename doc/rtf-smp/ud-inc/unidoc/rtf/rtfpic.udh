@@ -1,0 +1,108 @@
+%if !defined(__RTF_RTFPIC_UDH__)
+%define __RTF_RTFPIC_UDH__
+
+%if !defined(__RTF_RTFSTYLE_UDH__)
+    %include <rtf/rtfstyle.udh>
+%endif __RTF_RTFSTYLE_UDH__
+
+%if !defined(__RTF_RTFTOC_UDH__)
+    %include <rtf/rtftoc.udh>
+%endif __RTF_RTFTOC_UDH__
+
+%if !defined(__RTF_RTFSECT_UDH__)
+    %include <rtf/rtfsect.udh>
+%endif __RTF_RTFSECT_UDH__
+
+%if !defined(__RTF_RTFIMG_UDH__)
+    %include <rtf/rtfimg.udh>
+%endif __RTF_RTFIMG_UDH__
+
+% args: number, text
+@newcommand[__rtf_pic_cnt_item][\
+@renewcommand[quot]['']\
+@renewcommand[lquot][']\
+@renewcommand[rquot][']\
+@renewcommand[ldquot]['']\
+@renewcommand[rdquot]['']\
+@renewcommand[quoted]['##1']
+@renewcommand[dquoted][''##1'']
+% if depth <= tocdepth
+@_lb[]@_bsl[]tc @_lb[]@_bsl[]v #1 #2@_rb[]@_lb[]@_bsl[]tcf80 @_bsl[]tcl1 @_rb[]@_rb[]\
+]
+
+
+% args: id, string, parastyle
+@newenvironment[picture]\
+[\
+%if defined(WINHELP)
+@renewcommand[picture][@_rtf_bml[##1][##2][##3]]\
+%endif
+% picture begin 
+@addcounter[picture][1]\
+@evar[_#1_NUMBER][@thepicture[]]\
+@evar[_#1_LABEL][#1]\
+@evar[_#1_CAPTION][@dquoted[#2]]\
+@push[_parafi]@evar[_parafi][@var[_parali]]\
+@push[_parasa]@push[_parasb]\
+@parasb[3]@parasa[1]\
+%if defined(PRINTABLE)
+%if !defined(GOST)
+@_bsl[]par@begin_rtf_para[#3][@_bsl[]keepn]@textbf[@picturefixed[] @thepicture[].] #2\
+%endif
+%else
+@_bsl[]par@begin_rtf_para[#3]\
+@rtf_footnote[@_hash][#1]
+@textbf[@picturefixed[] @thepicture[].] #2\
+%endif
+@pushcommands[]\
+@__rtf_pic_cnt_item[@thepicture[]][#2]\
+@popcommands[]\
+@_bsl[]par@begin_rtf_para[picture#4parastyle]\
+%if defined(GOST)
+[@_bsl[]keepn]\
+%endif
+% @renewcommand[picture][@rtf_pic_#4[##1]]\
+% @para_border[t][s][80]\
+% @para_border[b][s][80]\
+% @para_border[l][s][80]\
+% @para_border[r][s][80]\
+]\
+% picture end
+[
+%if defined(GOST)
+@_bsl[]par@begin_rtf_para[#3][@_bsl[]keepn]@textbf[@picturefixed[] @thepicture[].] #2\
+%endif
+@pop[_parasb]@pop[_parasa]\
+@_bsl[]par\
+@pop[_parafi]\
+@begin_rtf_para[[@var[_para_style]]]\
+]\
+[][][normalleft1][center]
+
+
+@newcommand[makepictures][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+@_try_close[_chapter]\
+@_try_close[_part]\
+@para[#2]%
+#1
+@rtf_cnt_item[][#1][@_chapter_numdepth][true][false]\
+@para[#3]%
+% content item
+@_lb@_bsl[]field@_bsl[]fldedit@_lb@_bsl[]*@_bsl[]fldinst @_lb \
+TOC \
+@bsl[]f P @bsl[]h @bsl[]* MERGEFORMAT @_rb@_rb@_rb[]\
+@br[]\
+% @rtf_page_break[]\
+]\
+[@picture_index_text[]\
+]\
+[[@pictures_capstyle]]\
+[normalleft1]
+
+%endif __RTF_RTFPIC_UDH__

@@ -1,0 +1,25 @@
+%if !defined(__FILEFORM_UDH__)
+%define __FILEFORM_UDH__ 1
+%if defined(HTML)
+    %if !defined(QUET)
+        % message Use file format definitions for HTML
+    %endif
+    %if !defined(__HTML_FILEFORM_UDH__)
+        %include <html\fileform.udh>
+    %endif __HTML_FILEFORM_UDH__
+%elseif defined(RTF)
+    %if !defined(QUET)
+        % message Use file format definitions for RTF
+    %endif
+    %if !defined(__RTF_FILEFORM_UDH__)
+        %include <rtf\fileform.udh>
+    %endif __RTF_FILEFORM_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %if !defined(QUET)
+        % message Use file format definitions for TeX/LaTeX
+    %endif
+    %include <tex\fileform.udh>
+%elseif defined(WIKI) || defined(KBWIKI)
+    %include <wiki\fileform.udh>
+%endif
+%endif __FILEFORM_UDH__

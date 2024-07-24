@@ -1,0 +1,18 @@
+; Symbol mappin for UniDoc
+@ @at[]
+# @hash[]
+[ @lsb[]
+] @rsb[]
+< @lt[]
+> @gt[]
+& @amp[]
+" @quot[]
+;" ''
+{ @lb[]
+} @rb[]
+\ @bsl[]
+$ @usd[]
+% @percent[]
+0x0D
+0x0A \n@lbr[]
+0x09 @tab[]

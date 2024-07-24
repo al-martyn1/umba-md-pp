@@ -1,0 +1,49 @@
+%if !defined(__RTF_BASE_UDH__)
+%define __RTF_BASE_UDH__
+
+%if !defined(__RTF_RTFLANG_UDH__)
+    %include <rtf\rtflang.udh>
+%endif __RTF_RTFLANG_UDH__
+
+% @newcommand[at][@_lb@_bsl[]lang1033 @_at@_rb]
+% @newcommand[hash][@_lb@_bsl[]lang1033 @_hash@_rb]
+% @newcommand[lsb][@_lb@_bsl[]lang1033 @_lsb@_rb]
+% @newcommand[rsb][@_lb@_bsl[]lang1033 @_rsb@_rb]
+% @newcommand[lt][@_lb@_bsl[]lang1033 @_lt@_rb]
+% @newcommand[gt][@_lb@_bsl[]lang1033 @_gt@_rb]
+% @newcommand[amp][@_lb@_bsl[]lang1033 &@_rb]
+
+@newcommand[at][@_at[]]
+@newcommand[hash][@_hash[]]
+@newcommand[lsb][@_lsb[]]
+@newcommand[rsb][@_rsb[]]
+@newcommand[lt][@_lt[]]
+@newcommand[gt][@_gt[]]
+@newcommand[amp][&]
+@newcommand[apos][']
+@newcommand[quot]["]
+@newcommand[lquot][@_bsl[]'91]
+@newcommand[rquot][@_bsl[]'92]
+@newcommand[ldquot][@_bsl[]'93]
+@newcommand[rdquot][@_bsl[]'94]
+@newcommand[quoted][@_bsl[]'91#1@_bsl[]'92]
+@newcommand[dquoted][@_bsl[]'93#1@_bsl[]'94]
+@newcommand[bvb][|]
+@newcommand[lb][@_bsl@_lb[]]
+@newcommand[rb][@_bsl@_rb[]]
+@newcommand[bsl][@_bsl@_bsl]
+@newcommand[tex][TeX]
+@newcommand[latex][LaTeX]
+@newcommand[reg][@_bsl[]'ae]
+@newcommand[copy][@_bsl[]'a9]
+@newcommand[nbsp][@_bsl[]~]
+@newcommand[br][@_bsl[]line ]
+@newcommand[usd][@_usd[]]
+@newcommand[percent][@_percent[]]
+@newcommand[tab][@_bsl[]tab ]
+@newcommand[xor][{{@_bsl[]field{@_bsl[]*@_bsl[]fldinst SYMBOL 197 @_bsl[]@_bsl[]f "Symbol"}}}]
+@newcommand[hyph][@_bsl[]-]
+% @newcommand[texttt][@_lb@_bsl[]f6 #1@_rb]
+
+
+%endif __RTF_BASE_UDH__

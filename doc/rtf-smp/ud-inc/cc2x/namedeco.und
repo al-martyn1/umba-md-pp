@@ -1,0 +1,3 @@
+; cc2x names decorations file
+type_label_prefix               TYPE_
+type_label_postfix

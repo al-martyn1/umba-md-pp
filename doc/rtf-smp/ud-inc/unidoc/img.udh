@@ -1,0 +1,17 @@
+%if !defined(__IMG_UDH__)
+%define __IMG_UDH__ 1
+
+@newcommand[set_image_root][@var[_image_root][#1]]
+@var[_image_root][img]
+
+%if defined(HTML)
+    %include <html\htmimg.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_RTFIMG_UDH__)
+        %include <rtf\rtfimg.udh>
+    %endif __RTF_RTFIMG_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\teximg.udh>
+%endif
+
+%endif __IMG_UDH__

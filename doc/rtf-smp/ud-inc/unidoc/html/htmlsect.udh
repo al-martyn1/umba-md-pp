@@ -1,0 +1,12 @@
+%if !defined(__HTML_HTMLSECT_UDH__)
+%define __HTML_HTMLSECT_UDH__
+
+@newenvironment[book][\
+@html_make_css_file[@thebasefile[].css]
+@openfile[]\
+@begin_doc_file[@var[_title]]\
+][@end_doc_file\
+@closefile[]\
+]
+
+%define __HTML_HTMLSECT_UDH__

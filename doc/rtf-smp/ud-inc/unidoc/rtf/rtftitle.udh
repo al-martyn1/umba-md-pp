@@ -1,0 +1,274 @@
+%if !defined(__RTF_RTFTITLE_UDH__)
+%define __RTF_RTFTITLE_UDH__
+
+%if !defined(__RTF_RTFSECT_UDH__)
+    %include <rtf/rtfsect.udh>
+%endif __RTF_RTFSECT_UDH__
+
+%if !defined(HELP)
+@newcommand[maketitle][\
+
+@push[_parafi]@push[_parali]@push[_parari]\
+@parafi[0]@parali[0]@parari[0]\
+
+%if defined(GOST) && !defined(NO_GOST_FRAMES) && !defined(NO_GOST_TITLE_FRAME)
+@rtf_gost_frame[f][[@frame_vert_title_filename[]]]
+%else
+% organisation
+%if !defined(NO_TITLE_COLONTITLE)
+@ifthenelse[@strlen[@var[_organization]]>0][\
+@rtf_header[f][[@thetopcolontitle_style[]]][@var[_organization]]\
+]\
+%endif
+%endif GOST
+% title
+@makeassertionlist[]\
+@para[title_center_tiny]\
+
+@ifthenelse[@strlen[@var[_title]]>0][\
+@maketitle_make_blanklines[@getcounter[lines_before_title]]\
+@para[[@thetitle_style[]]]%
+@var[_title]@para[title_center_tiny]\
+@maketitle_make_blanklines[@getcounter[lines_after_title]]\
+]\
+% subtitle
+@ifthenelse[@strlen[@var[_subtitle]]>0][\
+@maketitle_make_blanklines[@getcounter[lines_before_subtitle]]\
+@para[[@thesubtitle_style[]]]%
+@var[_subtitle]@para[title_center_tiny]\
+@maketitle_make_blanklines[@getcounter[lines_after_subtitle]]\
+% @br[]
+]\
+% subsubtitle
+@ifthenelse[@strlen[@var[_subsubtitle]]>0][\
+@maketitle_make_blanklines[@getcounter[lines_before_subsubtitle]]\
+@para[[@thesubsubtitle_style[]]]%
+@var[_subsubtitle]@para[title_center_tiny]\
+@maketitle_make_blanklines[@getcounter[lines_after_subsubtitle]]\
+% @br[]
+]\
+% author
+@ifthenelse[@strlen[@var[_author]]>0][\
+@maketitle_make_blanklines[@getcounter[lines_before_author]]\
+@para[[@thesubsubtitle_style[]]]%
+@var[_author]@para[title_center_tiny]\
+@maketitle_make_blanklines[@getcounter[lines_after_author]]\
+]\
+@ifthenelse[@strlen[@var[_student]]>0][\
+% @maketitle_make_blanklines[@getcounter[lines_before_author]]\
+@para[[@thesubsubtitle_style[]]]%
+@made_by_text[]: @var[_student]@para[title_center_tiny]\
+]\
+@ifthenelse[@strlen[@var[_students]]>0][\
+% @maketitle_make_blanklines[@getcounter[lines_before_author]]\
+@para[[@thesubsubtitle_style[]]]%
+@students_by_text[]: @var[_students]@para[title_center_tiny]\
+% @maketitle_make_blanklines[@getcounter[lines_after_author]]\
+]\
+@ifthenelse[@strlen[@var[_teacher]]>0][\
+% @maketitle_make_blanklines[@getcounter[lines_before_author]]\
+@para[[@thesubsubtitle_style[]]]%
+@approved_by_text[]: @var[_teacher]@para[title_center_tiny]\
+% @maketitle_make_blanklines[@getcounter[lines_after_author]]\
+]\
+% date
+% if !defined(GOST)
+@ifthenelse[@strlen[@var[_year]]>0][\
+@rtf_footer[f][[@thebottomcolontitle_style[]]][@var[_year]]\
+]\
+% endif GOST
+
+% if defined(GOST)
+%if defined(GOST) && !defined(NO_GOST_FRAMES) && !defined(NO_GOST_PAGE_FRAME)
+@rtf_gost_frame[][[@frame_vert_pages_filename[]]]
+%endif GOST
+% 
+@pop[_parari]@pop[_parali]@pop[_parafi]\
+%if !defined(GOST)
+@rtf_page_break[]\
+%endif GOST
+]
+%else
+@newcommand[maketitle][]
+%endif
+
+
+
+
+
+
+
+
+%if !defined(HELP)
+@newcommand[makeparttitle][\
+@push[_parafi]@push[_parali]@push[_parari]\
+@parafi[0]@parali[0]@parari[0]\
+
+% part N
+@_rtftit_rtf_para_b[title_center_tiny]\
+% @para[title_center_tiny]\
+@maketitle_make_blanklines[@getcounter[lines_before_title]]\
+@_rtftit_rtf_para_e[]@_rtftit_rtf_para_b[[@thesubtitle_style[]]]\
+% @para[[@thesubsubtitle_style[]]]\
+@part_text[] @Roman[@getcounter[part]]\
+\
+@_rtftit_rtf_para_e[]@_rtftit_rtf_para_b[title_center_tiny]\
+% @para[title_center_tiny]\
+@maketitle_make_blanklines[3]\
+\
+% title
+@_rtftit_rtf_para_e[]@_rtftit_rtf_para_b[[@thetitle_style[]]]\
+% @para[[@thetitle_style[]]]\
+#1\
+@_rtftit_rtf_para_e[]@_rtftit_rtf_para_b[title_center_tiny]\
+% @para[title_center_tiny]\
+@maketitle_make_blanklines[5]\
+@_rtftit_rtf_para_e[]
+@pop[_parari]@pop[_parali]@pop[_parafi]\
+]
+%else
+@newcommand[makeparttitle][]
+%endif
+
+
+@newcommand[_rtftit_rtf_para_b]\
+[@_bsl[]pard@rtf_intbl[]\
+@_bsl[]plain@sty_#1@_bsl[]fi@eval[@var[_parafi]*56]\
+@_bsl[]sb@eval[@var[_parasb]*56]@_bsl[]sa@eval[@var[_parasa]*56]\
+@_bsl[]li@eval[@var[_parali]*56]@_bsl[]ri@eval[@var[_parari]*56]%
+]
+
+@newcommand[_rtftit_rtf_para_e]\
+[@_bsl[]par]
+
+% It is authorized
+% It is coordinated
+@newcommand[makeassertionlist][\
+@ifthen[@is_coordinated_taken[] || @is_authorized_taken[]][@__makeassertionlist[]]\
+]
+
+@newcommand[__makeassertionlist][
+@addcounter[lines_before_title][-12]
+% @begin[tabular][center][2mmt][single]
+% @begin[tabular]
+@begin[tabular][][0][none]
+% @begin[tabular][][2mmt][single]\
+@newcommand[cellleftalign][@renewcommand[cell_para_style][left]]\
+@newcommand[cellrightalign][@renewcommand[cell_para_style][right]]\
+@newcommand[cellcenteralign][@renewcommand[cell_para_style][center]]\
+
+@begin[tbl_row]
+
+@cellleftalign[]@begin[tbl_cell][55mm]
+@if_coordinated_taken[@Large[@COORDINATED_TEXT[]]]
+@end[tbl_cell]
+
+@cellleftalign[]@begin[tbl_cell][55mm]@end[tbl_cell]
+
+@cellleftalign[]@begin[tbl_cell][55mm]
+@if_authorized_taken[@Large[@AUTHORIZED_TEXT]]
+@end[tbl_cell]
+
+@end[tbl_row]
+
+@begin[tbl_row]@begin[tbl_cell][165mm]@end[tbl_cell]@end[tbl_row]
+
+@begin[tbl_row]
+
+@cellleftalign[]@begin[tbl_cell][55mm]
+@if_coordinated_post_taken[@var[_coordinated_by_post]]
+@end[tbl_cell]
+
+@cellleftalign[]@begin[tbl_cell][55mm]@end[tbl_cell]
+
+@cellleftalign[]@begin[tbl_cell][55mm]
+@if_authorized_post_taken[@var[_authorized_by_post]]
+@end[tbl_cell]
+
+@end[tbl_row]
+
+
+@begin[tbl_row]
+
+@cellleftalign[]@begin[tbl_cell][55mm]
+@if_coordinated_organization_taken[@var[_coordinated_by_organization]]
+@end[tbl_cell]
+
+@cellleftalign[]@begin[tbl_cell][55mm]@end[tbl_cell]
+
+
+@cellleftalign[]@begin[tbl_cell][55mm]
+@if_authorized_organization_taken[@var[_authorized_by_organization]]
+@end[tbl_cell]
+
+@end[tbl_row]
+
+@begin[tbl_row]@begin[tbl_cell][165mm]@end[tbl_cell]@end[tbl_row]
+
+@begin[tbl_row]
+
+@cellleftalign[]@begin[tbl_cell][55mm]
+__________ @if_coordinated_name_taken[@var[_coordinated_by_name]]
+@end[tbl_cell]
+
+@cellleftalign[]@begin[tbl_cell][55mm]@end[tbl_cell]
+
+@cellleftalign[]@begin[tbl_cell][55mm]
+__________ @if_authorized_name_taken[@var[_authorized_by_name]]
+@end[tbl_cell]
+
+@end[tbl_row]
+
+% @begin[tbl_cell]@Large[@Uppercase[@authorized_text]][]@end[tbl_cell]
+
+@end[tabular]\
+]
+
+@newcommand[is_coordinated_name_taken][@strlen[@var[_coordinated_by_name]]>0]
+@newcommand[is_coordinated_post_taken][@strlen[@var[_coordinated_by_post]]>0]
+@newcommand[is_coordinated_organization_taken][@strlen[@var[_coordinated_by_organization]]>0]
+@newcommand[is_coordinated_taken][(@is_coordinated_name_taken[])||(@is_coordinated_post_taken[])||(@is_coordinated_organization_taken[])]
+
+@newcommand[if_coordinated_taken][@ifthen[@is_coordinated_taken[]][#1]]
+@newcommand[if_coordinated_name_taken][@ifthen[@is_coordinated_name_taken[]][#1]]
+@newcommand[if_coordinated_post_taken][@ifthen[@is_coordinated_taken[]][#1]]
+@newcommand[if_coordinated_organization_taken][@ifthen[@is_coordinated_organization_taken[]][#1]]
+
+
+
+@newcommand[is_authorized_name_taken][@strlen[@var[_authorized_by_name]]>0]
+@newcommand[is_authorized_post_taken][@strlen[@var[_authorized_by_post]]>0]
+@newcommand[is_authorized_organization_taken][@strlen[@var[_authorized_by_organization]]>0]
+@newcommand[is_authorized_taken][@is_authorized_name_taken[] || @is_authorized_post_taken[] || @is_authorized_organization_taken[]]
+
+@newcommand[if_authorized_taken][@ifthen[@is_authorized_taken[]][#1]]
+@newcommand[if_authorized_name_taken][@ifthen[@is_authorized_name_taken[]][#1]]
+@newcommand[if_authorized_post_taken][@ifthen[@is_authorized_taken[]][#1]]
+@newcommand[if_authorized_organization_taken][@ifthen[@is_authorized_organization_taken[]][#1]]
+
+
+
+% @newcommand[authorized][\
+% var[authorized_by_name][#1]\
+% @var[authorized_by_post][#2]\
+% @var[authorized_by_organization][#3]\
+% ]
+% @newcommand[coordinated][\
+% @var[coordinated_by_name][#1]\
+% @var[coordinated_by_post][#2]\
+% @var[coordinated_by_organization][#3]\
+% ]
+
+
+
+% Согласовано
+% @newcommand[coordinated_text][@CYR_S@cyr_o@cyr_g@cyr_l@cyr_a@cyr_s@cyr_o@cyr_v@cyr_a@cyr_n@cyr_o[]]
+% Утверждаю
+% @newcommand[authorized_text][@CYR_U@cyr_t@cyr_v@cyr_r@cyr_zh@cyr_d@cyr_a@cyr_yu[]]
+
+
+
+
+
+
+%endif __RTF_RTFTITLE_UDH__

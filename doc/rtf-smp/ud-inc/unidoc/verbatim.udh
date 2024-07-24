@@ -1,0 +1,18 @@
+%if !defined(__VERBATIM_UDH__)
+%define __VERBATIM_UDH__
+
+%if defined(HTML)
+    %if !defined(__HTML_HTMVERBA_UDH__)
+        %include <html\verbatim.udh>
+    %endif __HTML_HTMVERBA_UDH__
+%elseif defined(RTF)
+    %if !defined(__RTF_VERBATIM_UDH__)
+        %include <rtf\verbatim.udh>
+    %endif __RTF_VERBATIM_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\verbatim.udh>
+%elseif defined(WIKI) || defined(KBWIKI)
+    %  include <wiki\verbatim.udh>
+%endif
+
+%endif __VERBATIM_UDH__

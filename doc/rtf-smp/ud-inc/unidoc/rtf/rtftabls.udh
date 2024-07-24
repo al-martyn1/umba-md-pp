@@ -1,0 +1,32 @@
+%if !defined(__RTF_RTFTABLS_UDH__)
+%define __RTF_RTFTABLS_UDH__
+
+
+@newcommand[maketables][\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+@_try_close[_chapter]\
+@_try_close[_part]\
+@para[#2]%
+#1
+@rtf_cnt_item[][#1][@_chapter_numdepth][true][false]\
+@para[#3]%
+% content item
+@_lb@_bsl[]field@_bsl[]fldedit@_lb@_bsl[]*@_bsl[]fldinst @_lb \
+TOC \
+@bsl[]f T @bsl[]h @bsl[]* MERGEFORMAT @_rb@_rb@_rb[]\
+@br[]\
+% @rtf_page_break[]\
+]\
+[@table_index_text[]]\
+[[@tables_capstyle]]\
+% [title_center_LARGE_bold]\
+[normalleft1]
+
+
+
+%endif __RTF_RTFTABLS_UDH__

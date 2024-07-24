@@ -1,0 +1,123 @@
+<STYLE type="text/css">
+
+BODY
+{       
+    COLOR: #000000;
+    BACKGROUND-COLOR: white;
+    MARGIN:20pt; 
+    MARGIN-RIGHT:10pt; 
+    PADDING:20pt; 
+    PADDING-RIGHT:10pt; 
+    BORDER:30pt; 
+
+}
+
+
+SMALL.logo
+{
+    FONT-FAMILY:Arial,Verdana;
+    FONT-SIZE:10%;
+    FONT-STYLE:normal;
+    FONT-WEIGHT:normal;
+    PADDING-TOP:0;
+    PADDING-BOTTOM:0;
+}
+
+BIG.logo
+{
+    FONT-FAMILY:Arial, Verdana;
+    FONT-SIZE:90%;
+    FONT-WEIGHT:bold;
+    FONT-STYLE:normal;
+    PADDING-TOP:0;
+    PADDING-BOTTOM:0;
+}
+
+FONT.logo_small
+{
+    FONT-FAMILY:Arial,Verdana;
+    FONT-SIZE:7pt;
+    FONT-STYLE:normal;
+    FONT-WEIGHT:normal;
+    PADDING-TOP:0pt;
+    PADDING-BOTTOM:0pt;
+}
+
+FONT.logo_big
+{
+    FONT-FAMILY:Arial, Verdana;
+    FONT-SIZE:11pt;
+    FONT-WEIGHT:bold;
+    FONT-STYLE:normal;
+    PADDING-TOP:0pt;
+    PADDING-BOTTOM:0pt;
+}
+
+
+DIV.logo
+{
+    MARGIN:0px; 
+    PADDING:0px; 
+    BORDER:0px; 
+    FONT-FAMILY:Arial,Verdana;
+    FONT-SIZE:7pt;
+    FONT-STYLE:normal;
+    FONT-WEIGHT:normal;
+}
+
+DIV.biglogo
+{
+    MARGIN:0px; 
+    PADDING:0px; 
+    BORDER:0px; 
+    FONT-FAMILY:Arial,Verdana;
+    FONT-SIZE:12pt;
+    FONT-STYLE:normal;
+    FONT-WEIGHT:bold;
+}
+
+BODY.logo
+{       
+    COLOR: #000000;
+    BACKGROUND-COLOR: white;
+    MARGIN:1px; 
+    PADDING:0px; 
+    BORDER:0px; 
+}
+
+TABLE.logo
+{
+    MARGIN:0; 
+    PADDING:0; 
+    PADDING-RIGHT:0; 
+    CELLSPACING:0;
+    CELLPADDING:0;
+    BORDER-STYLE:solid;
+    BORDER-WIDTH:0;
+}
+/*
+TABLE TD.logo
+{
+    BORDER:0;
+    MARGIN:0; 
+}
+TABLE TR.info
+{
+    BORDER:1px;
+    MARGIN:0; 
+    BORDER-COLOR:#003661;
+    BACKGROUND-COLOR:#C0E0FF;
+    FONT-FAMILY:verdana,arial cyr,arial,courier cyr,courier;
+}
+
+TABLE TH.info
+{
+    BORDER:1px;
+    MARGIN:0; 
+    BACKGROUND-COLOR:#A0C0DF;
+    BORDER-COLOR:#003661;    
+    FONT-FAMILY:verdana,arial cyr,arial,courier cyr,courier;
+}
+*/
+
+</STYLE>

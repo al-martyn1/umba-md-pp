@@ -1,0 +1,27 @@
+%if !defined(__SECT_UDH__)
+%define __SECT_UDH__ 1
+
+%if defined(HTML)
+    %if !defined(QUET)
+        % message Use fonts definitions for HTML
+    %endif
+    %if !defined(__HTML_HTMLSECT_UDH__)
+        %include <html\htmlsect.udh>
+    %define __HTML_HTMLSECT_UDH__
+%elseif defined(RTF)
+    %if !defined(QUET)
+        % message Use fonts definitions for RTF
+    %endif
+    %if !defined(__RTF_RTFSECT_UDH__)
+        %include <rtf\rtfsect.udh>
+    %endif __RTF_RTFSECT_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %if !defined(QUET)
+        % message Use fonts definitions for TeX/LaTeX
+    %endif
+    %  include <tex\texsect.udh>
+%elseif defined(WIKI) || defined(KBWIKI)
+    %include <wiki\sect.udh>
+%endif
+
+%endif __SECT_UDH__

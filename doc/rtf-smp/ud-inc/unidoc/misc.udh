@@ -1,0 +1,6 @@
+%if !defined(__MISC_UDH__)
+%define __MISC_UDH__
+@newcommand[hlp_sectext][@var[_hlp_sectiontext][#1]]
+@var[_hlp_sectiontext][true]
+
+%endif __MISC_UDH__

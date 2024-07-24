@@ -1,0 +1,274 @@
+<STYLE type="text/css">
+
+BODY
+{       
+    COLOR: #000000;
+    BACKGROUND-COLOR: white;
+    MARGIN:5pt; 
+    MARGIN-RIGHT:15pt; 
+    PADDING:15pt; 
+    PADDING-RIGHT:15pt; 
+    BORDER:0pt; 
+
+}
+
+/*
+bgcolor='#C0E0FF' 
+cellspacing='0' 
+cellpadding='2' 
+style='border-style:solid;border-width:1;border-color:#003661;' align='center'>
+*/
+TABLE
+{
+    MARGIN:20pt; 
+    MARGIN-RIGHT:15pt; 
+    PADDING:20pt; 
+    PADDING-RIGHT:15pt; 
+
+    BORDER-STYLE:solid;
+    BORDER-WIDTH:1px;
+
+    BORDER-COLOR:#003661;
+/*
+    BACKGROUND-COLOR:#A0C0DF    
+*/
+}
+TABLE TD,TR,TH
+{
+    MARGIN:0; 
+    BORDER-STYLE:solid;
+
+    BORDER-COLOR:#003661;
+
+}
+
+TABLE TD,TR
+{
+/*
+    BACKGROUND-COLOR:#C0E0FF;
+*/
+}
+
+
+TABLE TH
+{
+    BORDER-WIDTH:1px;
+    FONT-WEIGHT:bold;
+/*
+    BACKGROUND-COLOR:#A0C0DF    
+*/
+}
+
+
+H1 
+{
+    COLOR:#003661;     
+    TEXT-ALIGN:right;
+    FONT-SIZE:200%;
+    MARGIN-RIGHT:30pt;
+}
+
+H2 
+{
+    COLOR:#003661;     
+    TEXT-ALIGN:right;
+    FONT-SIZE:150%;
+    MARGIN-RIGHT:20pt;
+}
+
+H3, H4, H5, H6, H7 
+{
+    COLOR:white; 
+    BACKGROUND-COLOR:#003661; 
+    TEXT-ALIGN:left;
+    LINE-HEIGHT:15pt;
+    MARGIN-RIGHT:15pt;
+}
+
+H3
+{
+    MARGIN-LEFT:10pt;
+    FONT-SIZE:110%
+}
+
+H4
+{
+    MARGIN-LEFT:25pt;
+    FONT-SIZE:102%
+}
+
+H5
+{
+    MARGIN-LEFT:40pt;
+    FONT-SIZE:94%
+}
+
+H6
+{
+    MARGIN-LEFT:55pt;
+    FONT-SIZE:86%
+}
+
+P
+{
+    TEXT-INDENT:20pt;
+    TEXT-ALIGN:justify; 
+    MARGIN-LEFT:50pt;
+    MARGIN-TOP:0pt;
+    MARGIN-BOTTOM:20pt;
+    MARGIN-RIGHT:15pt;
+    /*FONT-SIZE:95%;*/
+    FONT-FAMILY: Times new roman, Times;
+    /*FONT-FAMILY: verdana, arial, helvetica;*/    
+
+}
+
+
+PRE
+{
+    TEXT-INDENT:20pt;
+    MARGIN-LEFT:50pt;
+    MARGIN-TOP:0pt;
+    MARGIN-BOTTOM:20pt;
+    MARGIN-RIGHT:15pt;
+}
+/*
+CODE 
+{
+    COLOR: rgb(0,0,128);
+} 
+*/
+
+UL
+{
+    TEXT-INDENT:0pt;
+    MARGIN-LEFT:100px;
+}
+OL
+{
+    TEXT-INDENT:0pt;
+    MARGIN-LEFT:100px;
+}
+
+/*
+UL LI
+{ 
+    TEXT-INDENT:20pt;
+    MARGIN-TOP:0pt;
+    MARGIN-BOTTOM:0pt;
+    MARGIN-LEFT:70px;
+    PADDING-TOP:0pt;
+    PADDING-BOTTOM:0pt;
+    list-style-position: outside; 
+}
+OL LI
+{ 
+    TEXT-INDENT:20pt;
+    MARGIN-TOP:0pt;
+    MARGIN-BOTTOM:0pt;
+    MARGIN-LEFT:70px;
+    PADDING-TOP:0pt;
+    PADDING-BOTTOM:0pt;
+    list-style-position: outside; 
+}
+*/
+
+
+.epigraph 
+{
+    FONT-SIZE: 12pt;
+    FONT-STYLE: italic;
+    TEXT-ALIGN: right;
+    COLOR: rgb(127,127,0);
+} 
+
+.author 
+{
+    FONT-SIZE: 12pt;
+    FONT-STYLE: italic;
+    TEXT-ALIGN: right;
+    COLOR: rgb(0,0,128);
+} 
+
+A 
+{ 
+    
+}
+
+A:LINK
+{
+    COLOR: rgb(0,0,128);
+}
+
+A:ACTIVE
+{
+    COLOR: rgb(0,0,128);
+}
+
+A:VISITED
+{
+    COLOR: rgb(0,0,128);
+}
+
+A:HOVER
+{
+    COLOR: rgb(0,0,255);
+}
+
+.shown 
+{
+    DISPLAY:block;
+}
+
+.hidden 
+{
+    DISPLAY:none; 
+}
+
+CODE
+{       
+    COLOR: rgb(0,0,128);
+}
+
+PRE
+{       
+    COLOR: rgb(0,0,128);
+}
+
+
+PRE SPAN.KEYWORD
+{       
+    FONT-WEIGHT:bold;
+    COLOR: rgb(0,0,128);
+}
+
+PRE SPAN.COMMENT
+{       
+    FONT-STYLE: italic;
+    COLOR: rgb(64,96,128);
+}
+
+PRE SPAN.PREPROCESSOR
+{       
+    FONT-WEIGHT:bold;
+    COLOR: rgb(0,128,0);
+}
+
+PRE SPAN.STRING
+{       
+    COLOR: rgb(255,0,0);
+}
+
+PRE SPAN.CHARACTER
+{       
+    COLOR: rgb(255,0,0);
+}
+
+PRE SPAN.NUMBER
+{       
+    COLOR: rgb(0,0,255);
+}
+
+
+</STYLE>
+

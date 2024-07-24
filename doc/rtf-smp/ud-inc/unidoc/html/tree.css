@@ -1,0 +1,121 @@
+<STYLE type="text/css">
+
+BODY
+{       
+    COLOR: #000000;
+    BACKGROUND-COLOR: white;
+    MARGIN:20pt; 
+    MARGIN-RIGHT:10pt; 
+    PADDING:20pt; 
+    PADDING-RIGHT:10pt; 
+    BORDER:30pt; 
+
+}
+
+UL {
+    BORDER-BOTTOM:medium none; 
+    BORDER-LEFT:medium none; 
+    BORDER-RIGHT:medium none; 
+    BORDER-TOP:medium none; 
+    LIST-STYLE:none;
+    LIST-STYLE-IMAGE:URL(/img/lm.gif);
+    MARGIN-LEFT:12px; 
+    MARGIN-TOP:2px; 
+    PADDING-BOTTOM:0px; 
+    PADDING-LEFT:0px; 
+    PADDING-RIGHT:0px; 
+    PADDING-TOP:0px;
+}
+
+LI {
+    BORDER-BOTTOM:medium none; 
+    BORDER-LEFT:medium none; 
+    BORDER-RIGHT:medium none; 
+    BORDER-TOP:medium none; 
+    MARGIN:0px; 
+    MARGIN-LEFT:0px; 
+    PADDING-BOTTOM:0px; 
+    PADDING-LEFT:0px; 
+    PADDING-RIGHT:0px;
+    PADDING-TOP:0px;
+}
+
+UL LI {
+    BORDER-BOTTOM:medium none; 
+    BORDER-LEFT:medium none; 
+    BORDER-RIGHT:medium none; 
+    BORDER-TOP:medium none; 
+    MARGIN:0px; 
+    MARGIN-LEFT:6px; 
+    PADDING-BOTTOM:0px; 
+    PADDING-LEFT:0px; 
+    PADDING-RIGHT:0px;
+    PADDING-TOP:0px;
+}
+
+
+LI.expanded{
+    LIST-STYLE-IMAGE:URL(/img/expanded2.gif);
+    CURSOR: hand;
+}
+
+LI.collapsed{
+    LIST-STYLE-IMAGE:URL(/img/collapsed2.gif);
+    CURSOR: hand;
+}
+
+UL.shown {
+    DISPLAY:block;
+}
+
+UL.hidden {
+    DISPLAY:none; 
+}
+
+/*
+UL.hdn {
+    DISPLAY: none
+}
+*/
+
+.menu 
+{
+/*    FONT-WEIGHT: bold;*/
+    FONT-SIZE: 9pt;
+    FONT-FAMILY: arial, helvetica, sans-serif;
+} 
+
+DIV.menu 
+{
+    MARGIN-LEFT:10pt;
+    MARGIN-TOP:0pt;
+} 
+
+A.menu
+{ 
+    TEXT-DECORATION:none;
+}
+
+A:LINK.menu
+{
+    COLOR: rgb(0,64,128);
+}
+
+A:ACTIVE.menu
+{
+/*    BACKGROUND-COLOR: rgb(128,224,255);*/
+    BACKGROUND-COLOR: rgb(212,236,255);
+    FONT-WEIGHT:bold;
+}
+
+A:VISITED.menu
+{
+    COLOR: rgb(64,96,128);
+}
+
+A:HOVER.menu
+{
+    COLOR: rgb(0,128,192);
+}
+
+</STYLE>

@@ -1,0 +1,14 @@
+%if !defined(__INDEX_UDH__)
+%define __INDEX_UDH__ 1
+
+%if defined(HTML)
+    %include <html\index.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_INDEX_UDH__)
+        %include <rtf\index.udh>
+    %endif __RTF_INDEX_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\index.udh>
+%endif
+
+%endif __INDEX_UDH__

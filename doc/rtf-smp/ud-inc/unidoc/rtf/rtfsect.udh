@@ -1,0 +1,784 @@
+%if !defined(__RTF_RTFSECT_UDH__)
+%define __RTF_RTFSECT_UDH__
+
+% message rtf/rtfsect.udh included
+
+%if !defined(___SECT_UDH__)
+    %include <_sect.udh>
+%endif ___SECT_UDH__
+
+% args number, text, level
+@newcommand[rtf_cnt_item][]
+% tocdepth
+
+% Args
+% 1 - use first different page
+%if defined(HELP)
+@newcommand[__rtf_sect][]
+%else
+@newcommand[__rtf_sect][\
+@_bsl[]sect%
+@_bsl[]sectd%
+@ifthen[@strlen[@var[__margin_left]]][@_bsl[]margl@var[__margin_left]]\
+@ifthen[@strlen[@var[__margin_right]]][@_bsl[]margr@var[__margin_right]]\
+@ifthen[@strlen[@var[__margin_top]]][@_bsl[]margt@var[__margin_top]]\
+@ifthen[@strlen[@var[__margin_bottom]]][@_bsl[]margb@var[__margin_bottom]]\
+@ifthen[@strlen[@var[__gutter]]][@_bsl[]gutter@var[__gutter]]\
+@ifthen[@strlen[@var[__header_size]]][@_bsl[]headery@var[__header_size]]\
+@ifthen[@strlen[@var[__footer_size]]][@_bsl[]footery@var[__footer_size]]\
+@ifthen[#1][@_bsl[]titlepg%
+]\
+]
+%endif
+
+@newcommand[rtf_sec_begin_para][\
+@ifthenelse[@getcounter[secnotext]][@begin_rtf_para[]][@para]@setcounter[secnotext][0]]
+
+
+@var[hlpmaxsectionlevel][0]
+@newcommand[partlevel][@eval[@var[hlpmaxsectionlevel]+1]]
+@newcommand[chapterlevel][@eval[@var[hlpmaxsectionlevel]+2]]
+@newcommand[sectionlevel][@eval[@var[hlpmaxsectionlevel]+3]]
+@newcommand[subsectionlevel][@eval[@var[hlpmaxsectionlevel]+4]]
+@newcommand[subsubsectionlevel][@eval[@var[hlpmaxsectionlevel]+5]]
+@newcommand[paragraphlevel][@eval[@var[hlpmaxsectionlevel]+6]]
+@newcommand[subparagraphlevel][@eval[@var[hlpmaxsectionlevel]+7]]
+
+@newcommand[winhelp_force_make_node][@evar[_#1_#2_subtopic_count][3]]
+
+% Создание файлов для проекта справки WinHelp
+@newcommand[hlp_create_files]\
+[\
+%
+% Заголовочный файл для использования топиков в С/С++ исходниках
+@openfile[@thebasefile[].h]\
+@closefile[]\
+%
+% Файл содержания справки (чистый ASCII файл)
+% Содержит заглавие документа
+% К нему подключается файл .toc, 
+@openfile[@thebasefile[].cnt]\
+@closefile[]\
+%
+% Файл содержания справки (чистый ASCII файл)
+@openfile[@thebasefile[].toc]\
+@closefile[]\
+%
+% Файл проекта справки
+@openfile[@thebasefile[].hpj]
+@_lsb[]CONFIG@_rsb[]
+BrowseButtons()
+@_lsb[]OPTIONS@_rsb[]
+REPORT=Yes
+BMROOT=@_hlprtf_img_root[]
+% @message[@filepath[@thebasefileext]/@_hlprtf_img_root[]/udpcreate.tmp]
+@mkdir[@filepath[@thebasefileext]/@_hlprtf_img_root[]]\
+% ROOT=.@_bsl@filepath[@thebasefileext]
+% HLP=.@_bsl@thebasefile[].hlp
+% HLP=@thebasefile[].hlp
+@_lsb[]FILES@_rsb[]
+@filename[@thebasefile].rtf
+@_lsb[]MAP@_rsb[]
+@closefile[]\
+@writecnt[@thebasefile[].cnt][:TITLE @var[_title]
+]
+@writecnt[@thebasefile[].cnt][:INCLUDE @filename[@thebasefile[]].toc
+]
+% @begin[cnt_file][@thebasefile[].cnt]\
+% :TITLE @var[_title]
+% @end[cnt_file]\
+]
+%
+% Вспомогательная команда записи темы в файл оглавления
+% args level topic_id text
+@newcommand[cnt_write_topic][@writecnt[@thebasefile[].toc][#1 #3=#2@_at[]@filename[@thebasefile[]].hlp
+]]
+% Вспомогательная команда записи раздела в файл оглавления (раскрывающаяся книжечка)
+% args - level, topic, title, make_preamble
+@newcommand[cnt_write_node][\
+@writecnt[@thebasefile[].toc][#1 #3
+]
+@ifthenelse[#4][@cnt_write_topic[@eval[#1+1]][#2][#3]]]
+%
+% Команда записи идентификатора темы
+% args - level, topic, title, make_node, make_preamble
+@newcommand[hlp_write_topic_id][\
+% c header
+@appendfile[@thebasefile[].h]\
+@_hash[]define IDH_@uppercase[[#1]] @getcounter[hlpmapcounter]
+@closefile[]\
+% help project file
+@appendfile[@thebasefile[].hpj]\
+#1 @getcounter[hlpmapcounter]
+@closefile[]\
+@addcounter[hlpmapcounter][1]\
+]
+%
+% Команда записи темы в сопутствующие файлы
+% args - topic_level, label, caption
+@newcommand[hlp_write_topic][\
+% @message[arg @_hash[]4 = #4]
+% contents file
+% @begin[cnt_file][@thebasefile[].cnt]\
+@ifthenelse[#4]\
+[@cnt_write_node[#1][#2][#3][#5 && @getcounter[secnotext]<1]]\
+[@cnt_write_topic[#1][#2][#3]]\
+% #1 #3=#2
+% @end[cnt_file]\
+@hlp_write_topic_id[#2]\
+]
+%
+% Вспомогательная команда записи концевой сноски произвольного вида в rtf файл
+@newcommand[rtf_footnote][#1@_lb@_bsl[]footnote@_bsl[]pard@_bsl[]plain\
+@_bsl[]adjustright@_lb@_bsl[]super #1@_rb #2@_rb]
+@newcommand[rtf_page_break][@_bsl[]page]
+%if defined(HELP)
+@newcommand[page_break][]
+%else
+@newcommand[page_break][@_bsl[]page\
+@setcounter[rtfcap_left_ypos][720]
+@setcounter[rtfcap_right_ypos][720]]
+
+%endif
+@newenvironment[para]\
+[@var[_para_style][#1]@begin[rtf_para][#1]]\
+[@end[rtf_para]][normal1]
+@newcommand[para]\
+[@_try_close[para]@begin[para][#1]][normal1]
+@newcommand[endpara]\
+[@_try_close[para]]
+%
+%
+% -----------------------------------------------------------------------------
+%  Окружения документа
+% -----------------------------------------------------------------------------
+%
+% -----------------------------------------------------------------------------
+% Стиль книга
+@newenvironment[book][
+%if defined(HELP)
+@evar[winhelp_popups][]\
+%endif
+@define_section[part]\
+@define_section[chapter]\
+@define_section[section]\
+@define_section[subsection]\
+@define_section[subsubsection]\
+@define_section[paragraph]\
+@define_section[subparagraph]\
+@newcounter[part]\
+@newcounter[chapter]\
+@newcounter[chapterinpart]part\
+@newcounter[section][chapter]\
+@newcounter[subsection][section]\
+@newcounter[subsubsection][subsection]\
+@newcounter[paragraph][subsubsection]\
+@newcounter[subparagraph][paragraph]\
+@newcounter[point][paragraph]\
+@newcounter[hlpmapcounter][1]\
+@newcommand[appendix][@_try_close[para]@_try_close[_subparagraph]\
+@_try_close[_paragraph]@_try_close[_subsubsection]@_try_close[_subsection]\
+@_try_close[_section]@_try_close[_chapter]\
+@ifthenelse[!##1][\
+@resetcounter[chapter]\
+@renewcommand[thepart][@part_text[] @Roman[@getcounter[part]].]\
+@renewcommand[thechapter][@Alpha[@getcounter[chapter]]]\
+@renewcommand[thechaptertext][@appendix_text[]]\
+][\
+@setcounter[part][##1]\
+@renewcommand[thechapter][@Alpha[@getcounter[part]].@getcounter[chapter]]\
+]\
+][0]\
+@ifthenelse[@iscounter[listing]][@addtoresetcounter[listing][chapter]]\
+@ifthenelse[@iscounter[picture]][@addtoresetcounter[picture][chapter]]\
+@ifthenelse[@iscounter[table]][@addtoresetcounter[table][chapter]]\
+%if defined(HELP)
+@hlp_create_files[]\
+%endif
+@begin[doc_file]\
+% @begin[para]
+% if !defined(GOST)
+@_bsl[]titlepg
+% endif
+% @_bsl[]facingp
+% @_bsl[]pgnstarts3
+@ifthen[@strlen[@var[__paperh]]][@_bsl[]paperw@var[__paperw]@_bsl[]paperh@var[__paperh]]
+@ifthen[@strlen[@var[__margin_left]]][@_bsl[]margl@var[__margin_left]]
+@ifthen[@strlen[@var[__margin_right]]][@_bsl[]margr@var[__margin_right]]
+@ifthen[@strlen[@var[__margin_top]]][@_bsl[]margt@var[__margin_right]]
+@ifthen[@strlen[@var[__margin_bottom]]][@_bsl[]margb@var[__margin_bottom]]
+@ifthen[@strlen[@var[__gutter]]][@_bsl[]gutter@var[__gutter]]
+@ifthen[@strlen[@var[__header_size]]][@_bsl[]headery@var[__header_size]]\
+@ifthen[@strlen[@var[__footer_size]]][@_bsl[]footery@var[__footer_size]]\
+]\
+[\
+@_try_close[para]\
+% _try_close para 
+@_try_close[_subparagraph]\
+% _try_close _paragraph
+@_try_close[_paragraph]\
+% _try_close _subsubsection
+@_try_close[_subsubsection]\
+% _try_close _subsection
+@_try_close[_subsection]\
+% _try_close _section
+@_try_close[_section]\
+% _try_close _chapter
+@disable_chapter_page_break[]\
+@_try_close[_chapter]\
+% _try_close _part
+@_try_close[_part]\
+%if defined(HELP)
+@evar[winhelp_popups]\
+%endif
+% end doc_file
+@end[doc_file]
+]
+%
+%
+%
+% -----------------------------------------------------------------------------
+% Стиль статья
+@newenvironment[article][
+%if defined(HELP)
+@evar[winhelp_popups][]\
+%endif
+@define_section[section]\
+@define_section[subsection]\
+@define_section[subsubsection]\
+@define_section[paragraph]\
+@define_section[subparagraph]\
+@newcounter[section]\
+@newcounter[subsection][section]\
+@newcounter[subsubsection][subsection]\
+@newcounter[paragraph][subsubsection]\
+@newcounter[subparagraph][paragraph]\
+@newcounter[point][paragraph]\
+@newcounter[hlpmapcounter][1]\
+@renewcommand[thesection][@arabic[@getcounter[section]]]\
+@newcommand[appendix][@_try_close[para]@_try_close[_subparagraph]\
+@_try_close[_paragraph]@_try_close[_subsubsection]@_try_close[_subsection]\
+@_try_close[_section]\
+@ifthenelse[!##1][\
+@resetcounter[section]\
+@renewcommand[thesection][@Alpha[@getcounter[section]]]\
+@renewcommand[thesectiontext][@appendix_text[]]\
+][\
+@setcounter[chapter][##1]\
+@renewcommand[thesection][@Alpha[@getcounter[chapter]].@getcounter[section]]\
+]\
+][0]
+@ifthenelse[@iscounter[listing]][@addtoresetcounter[listing][section]]\
+@ifthenelse[@iscounter[picture]][@addtoresetcounter[picture][section]]\
+@ifthenelse[@iscounter[table]][@addtoresetcounter[table][section]]\
+%if defined(HELP)
+@hlp_create_files[]\
+%endif
+@begin[doc_file]\
+% @begin[para]
+% if !defined(GOST)
+@_bsl[]titlepg
+% endif
+% @_bsl[]facingp
+% @_bsl[]pgnstarts3
+@ifthen[@strlen[@var[__paperh]]][@_bsl[]paperw@var[__paperw]@_bsl[]paperh@var[__paperh]]
+@ifthen[@strlen[@var[__margin_left]]][@_bsl[]margl@var[__margin_left]]
+@ifthen[@strlen[@var[__margin_right]]][@_bsl[]margr@var[__margin_right]]
+@ifthen[@strlen[@var[__margin_top]]][@_bsl[]margt@var[__margin_right]]
+@ifthen[@strlen[@var[__margin_bottom]]][@_bsl[]margb@var[__margin_bottom]]
+@ifthen[@strlen[@var[__gutter]]][@_bsl[]gutter@var[__gutter]]
+@ifthen[@strlen[@var[__header_size]]][@_bsl[]headery@var[__header_size]]\
+@ifthen[@strlen[@var[__footer_size]]][@_bsl[]footery@var[__footer_size]]\
+]\
+[\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+%if defined(HELP)
+@evar[winhelp_popups]\
+%endif
+@end[doc_file]]
+%
+%
+%
+%
+%
+%
+%
+% -----------------------------------------------------------------------------
+% Стиль "Техническое задание"
+@newenvironment[techtask][
+%if defined(HELP)
+@evar[winhelp_popups][]\
+%endif
+@define_section[section]\
+@define_section[subsection]\
+@define_section[subsubsection]\
+@define_section[paragraph]\
+@define_section[subparagraph]\
+@newcounter[section]\
+@newcounter[subsection][section]\
+@newcounter[subsubsection][subsection]\
+@newcounter[paragraph][subsubsection]\
+@newcounter[subparagraph][paragraph]\
+@newcounter[point][paragraph]\
+@newcounter[hlpmapcounter][1]\
+@renewcommand[thesection][@arabic[@getcounter[section]]]\
+% @renewcommand[toctitle_style][title_center_normal_bold]
+@newcommand[appendix][@_try_close[para]@_try_close[_subparagraph]\
+@_try_close[_paragraph]@_try_close[_subsubsection]@_try_close[_subsection]\
+@_try_close[_section]\
+@ifthenelse[!##1][\
+@resetcounter[section]\
+@renewcommand[thesection][@Alpha[@getcounter[section]]]\
+@renewcommand[thesectiontext][@appendix_text[]]\
+][\
+@setcounter[chapter][##1]\
+@renewcommand[thesection][@Alpha[@getcounter[chapter]].@getcounter[section]]\
+]\
+][0]\
+%if !defined(HELP)
+@renewcommand[thepart_capstyle][tdck_header1]\
+@renewcommand[thechapter_capstyle][tdck_header2]\
+@renewcommand[thesection_capstyle][tdck_header3]\
+@renewcommand[thesubsection_capstyle][tdck_header4]\
+@renewcommand[thesubsubsection_capstyle][tdck_header5]\
+@renewcommand[theparagraph_capstyle][tdck_header6]\
+@renewcommand[thesubparagraph_capstyle][tdck_header6]\
+%
+@renewcommand[thetopcolontitle_style][title_center_large]
+@renewcommand[thebottomcolontitle_style][title_center_large]
+@renewcommand[thetitle_style][title_center_Large]
+@renewcommand[thesubtitle_style][title_center_large]
+@renewcommand[thesubsubtitle_style][title_center_normalsize]
+%endif
+%<
+@renewcommand[maketitle][\
+@push[_parafi]@push[_parali]@push[_parari]\
+@parafi[0]@parali[0]@parari[0]\
+
+% if defined(GOST)
+%if defined(GOST) && !defined(NO_GOST_FRAMES) && !defined(NO_GOST_TITLE_FRAME)
+@rtf_gost_frame[f][[@frame_vert_title_filename[]]]
+%endif GOST
+
+% organisation
+@ifthenelse[@strlen[@var[_organization]]>0][\
+@rtf_header[f][title_center_Large][@var[_organization]]\
+]\
+@para[title_center_normalsize]@br@br@br@br@br@br@br@br@br@br@br@br@br@br@br@br[]\
+% title
+@ifthenelse[@strlen[@var[_title]]>0][\
+@para[title_center_Large]%
+@var[_title]@para[title_center_normalsize]\
+]\
+% subtitle
+@ifthenelse[@strlen[@var[_subtitle]]>0][\
+@para[title_center_large]%
+@var[_subtitle]@para[title_center_normalsize]\
+]\
+% subsubtitle
+@ifthenelse[@strlen[@var[_subsubtitle]]>0][\
+@para[title_center_normalsize]%
+@var[_subsubtitle]@para[title_center_normalsize]\
+% @br[]
+]\
+% author
+@ifthenelse[@strlen[@var[_author]]>0][\
+@para[title_center_normalsize]%
+@var[_author]@para[title_center_normalsize]\
+]\
+% 
+@ifthenelse[@strlen[@var[_student]]>0][\
+@para[title_center_normalsize]%
+@made_by_text[]: @var[_student]@para[title_center_normalsize]\
+]\
+% 
+@ifthenelse[@strlen[@var[_students]]>0][\
+@para[title_center_normalsize]%
+@students_by_text[]: @var[_students]@para[title_center_normalsize]\
+]\
+% 
+@ifthenelse[@strlen[@var[_teacher]]>0][\
+@para[title_center_normalsize]%
+@approved_by_text[]: @var[_teacher]@para[title_center_normalsize]\
+]\
+% date
+@ifthenelse[@strlen[@var[_year]]>0][\
+@rtf_footer[f][title_center_large][@var[_year]]\
+]\
+@pop[_parari]@pop[_parali]@pop[_parafi]\
+% if defined(GOST)
+%if defined(GOST) && !defined(NO_GOST_FRAMES) && !defined(NO_GOST_PAGE_FRAME)
+@rtf_gost_frame[][[@frame_vert_pages_filename[]]]
+%endif GOST
+
+% if !defined(GOST)
+@rtf_page_break[]\
+% endif GOST
+]
+%>
+@ifthenelse[@iscounter[listing]][@addtoresetcounter[listing][section]]\
+@ifthenelse[@iscounter[picture]][@addtoresetcounter[picture][section]]\
+%if defined(HELP)
+@hlp_create_files[]\
+%endif
+@begin[doc_file]\
+% @begin[para]
+% if !defined(GOST)
+@_bsl[]titlepg
+% endif
+% @_bsl[]facingp
+% @_bsl[]pgnstarts3
+@ifthen[@strlen[@var[__paperh]]][@_bsl[]paperw@var[__paperw]@_bsl[]paperh@var[__paperh]]
+@ifthen[@strlen[@var[__margin_left]]][@_bsl[]margl@var[__margin_left]]
+@ifthen[@strlen[@var[__margin_right]]][@_bsl[]margr@var[__margin_right]]
+@ifthen[@strlen[@var[__margin_top]]][@_bsl[]margt@var[__margin_right]]
+@ifthen[@strlen[@var[__margin_bottom]]][@_bsl[]margb@var[__margin_bottom]]
+@ifthen[@strlen[@var[__gutter]]][@_bsl[]gutter@var[__gutter]]
+@ifthen[@strlen[@var[__header_size]]][@_bsl[]headery@var[__header_size]]\
+@ifthen[@strlen[@var[__footer_size]]][@_bsl[]footery@var[__footer_size]]\
+]\
+[\
+@_try_close[para]\
+@_try_close[_subparagraph]\
+@_try_close[_paragraph]\
+@_try_close[_subsubsection]\
+@_try_close[_subsection]\
+@_try_close[_section]\
+%if defined(HELP)
+@evar[winhelp_popups]\
+%endif
+@end[doc_file]]
+%
+%
+%
+%
+% -----------------------------------------------------------------------------
+%  Команды секционирования
+% -----------------------------------------------------------------------------
+% 
+%
+% -----------------------------------------------------------------------------
+% Часть
+@newcommand[defineenv_part][\
+@newenvironment[_part][\
+@resetcounter[chapterinpart]\
+@ifthenelse[##1][@addcounter[part][1]]\
+@var[_curpartid][##2]\
+@var[_curpartcap][##3]\
+@evar[_##2_NUMBER][@thepart[]]\
+@evar[_##2_LABEL][##2]\
+@evar[_##2_CAPTION][##3]\
+@ifthenelse[@pass[]==1][@var[_part_##2_subtopic_count][1]]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_part_numdepth && ##1][\
+@hlp_write_topic[@partlevel[]][##2][##3]\
+[@var[_part_##2_subtopic_count]][@var[_hlp_sectiontext]]\
+]\
+%endif
+@begin[rtf_caption][[@thepart_capstyle]][1]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_part_numdepth && ##1][\
+@var[__cur_section_id][##2]\
+@rtf_footnote[@_hash][##2]
+@rtf_footnote[@_usd][##3]
+@rtf_footnote[K][@var[[keywords_@evar[__cur_section_id]]]]
+@ifthenelse[!@getcounter[secnotext]][@rtf_footnote[+][auto]]
+]
+%else
+% @rtf_cnt_item[@thepart[]][##3][@_part_numdepth]\
+@makeparttitle[##3]\
+@rtf_cnt_item[@textbf[@thepart[]]][@textbf[##3]][@_part_numdepth]\
+[true][@getcounter[tocdepth]>=@_part_numdepth && ##1]\
+%endif
+@end[rtf_caption]\
+% @rtf_page_break[]\
+% @para\
+@rtf_sec_begin_para\
+][\
+%if !defined(HELP)
+% @rtf_page_break[]\
+% @rtf_page_break[]\
+%endif
+]\
+]
+%
+% -----------------------------------------------------------------------------
+% Глава
+@newcommand[defineenv_chapter][\
+@newenvironment[_chapter][\
+@ifthen[@isinenv[_part] && @getcounter[chapterinpart]==0][@rtf_page_break[]]\
+@resetcounter[point]\
+@renewcommand[point][@addcounter[point][1]@ifthen[@getcounter[point]>1][@para[]]@thechapter[].@getcounter[point] ]\
+@ifthenelse[##1][@addcounter[chapter][1]]\
+@addcounter[chapterinpart][1]\
+@var[_curchapterid][##2]\
+@var[_curchaptercap][##3]\
+@evar[_##2_NUMBER][@thechapter[]]\
+@evar[_##2_LABEL][##2]\
+@evar[_##2_CAPTION][##3]\
+@ifthenelse[@pass[]==1]\
+[@var[_chapter_##2_subtopic_count][0]][]\
+% @message[begin - _chapter_##2_subtopic_count = @var[_chapter_##2_subtopic_count]]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_chapter_numdepth && ##1][\
+@rtf_page_break[]\
+@hlp_write_topic[@chapterlevel[]][##2][##3]\
+[@var[_chapter_##2_subtopic_count]][@var[_hlp_sectiontext]]\
+]\
+%endif
+@begin[rtf_caption][[@thechapter_capstyle]][2]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_chapter_numdepth && ##1][\
+@var[__cur_section_id][##2]\
+@rtf_footnote[@_hash][##2]
+@rtf_footnote[@_usd][##3]
+@rtf_footnote[K][@var[[keywords_@evar[__cur_section_id]]]]
+@ifthenelse[!@getcounter[secnotext]][@rtf_footnote[+][auto]]
+]##3\
+%else
+@make_caption[chapter][##1][##3]\
+% @rtf_cnt_item[@thechapter[]][##3][@_chapter_numdepth]\
+@rtf_cnt_item[@textbf[@thechapter[]]][@textbf[##3]][@_chapter_numdepth]\
+[true][@getcounter[tocdepth]>=@_chapter_numdepth && ##1]\
+%endif
+@end[rtf_caption]\
+% @para\
+@rtf_sec_begin_para\
+][\
+@evar[_chapter_##2_subtopic_count][@getcounter[section]]\
+% @message[end - _chapter_##2_subtopic_count = @var[_chapter_##2_subtopic_count]]\
+%if !defined(HELP)
+@ifthenelse[@var[_chapter_page_break]==true][@rtf_page_break[]][@var[_chapter_page_break][true]]\
+% @rtf_page_break[]\
+%endif
+]\
+]
+%
+% -----------------------------------------------------------------------------
+% Секция
+@newcommand[defineenv_section][\
+@newenvironment[_section][\
+@resetcounter[point]\
+@renewcommand[point][@addcounter[point][1]@ifthen[@getcounter[point]>1][@para[]]@thesection[].@getcounter[point] ]\
+@ifthenelse[##1][@addcounter[section][1]]\
+@var[_cursectionid][##2]\
+@var[_cursectioncap][##3]\
+@evar[_##2_NUMBER][@thesection[]]\
+@evar[_##2_LABEL][##2]\
+@evar[_##2_CAPTION][##3]\
+@ifthenelse[@pass[]==1][@var[_section_##2_subtopic_count][0]]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_section_numdepth && ##1][\
+@rtf_page_break[]\
+@hlp_write_topic[@sectionlevel[]][##2][##3]\
+[@var[_section_##2_subtopic_count]][@var[_hlp_sectiontext]]\
+]\
+%endif
+@begin[rtf_caption][[@thesection_capstyle]][3]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_section_numdepth && ##1][\
+@var[__cur_section_id][##2]\
+@rtf_footnote[@_hash][##2]
+@rtf_footnote[@_usd][##3]
+@rtf_footnote[K][@var[[keywords_@evar[__cur_section_id]]]]
+@ifthenelse[!@getcounter[secnotext]][@rtf_footnote[+][auto]]
+]##3\
+%else
+@make_caption[section][##1][##3]\
+@rtf_cnt_item[@thesection[]][##3][@_section_numdepth]\
+[true][@getcounter[tocdepth]>=@_section_numdepth && ##1]\
+%endif
+@end[rtf_caption]\
+% @para\
+@rtf_sec_begin_para\
+][\
+@evar[_section_##2_subtopic_count][@getcounter[subsection]]
+]\
+]
+%
+% -----------------------------------------------------------------------------
+% Подсекция
+@newcommand[defineenv_subsection][\
+@newenvironment[_subsection][\
+@resetcounter[point]\
+@renewcommand[point][@addcounter[point][1]@ifthen[@getcounter[point]>1][@para[]]@thesubsection[].@getcounter[point] ]\
+@ifthenelse[##1][@addcounter[subsection][1]]\
+@var[_cursubsectionid][##2]\
+@var[_cursubsectioncap][##3]\
+@evar[_##2_NUMBER][@thesubsection[]]\
+@evar[_##2_LABEL][##2]\
+@evar[_##2_CAPTION][##3]\
+@ifthenelse[@pass[]==1][@var[_subsection_##2_subtopic_count][0]]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_subsection_numdepth && ##1][\
+@rtf_page_break[]\
+@hlp_write_topic[@subsectionlevel[]][##2][##3]\
+[@var[_subsection_##2_subtopic_count]][@var[_hlp_sectiontext]]\
+]\
+%endif
+@begin[rtf_caption][[@thesubsection_capstyle]][4]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_subsection_numdepth && ##1][\
+@var[__cur_section_id][##2]\
+@rtf_footnote[@_hash][##2]
+@rtf_footnote[@_usd][##3]
+@rtf_footnote[K][@var[[keywords_@evar[__cur_section_id]]]]
+@ifthenelse[!@getcounter[secnotext]][@rtf_footnote[+][auto]]
+]##3\
+%else
+@make_caption[subsection][##1][##3]\
+@rtf_cnt_item[@thesubsection[]][##3][@_subsection_numdepth]\
+[true][@getcounter[tocdepth]>=@_subsection_numdepth && ##1]\
+%endif
+@end[rtf_caption]\
+% @para\
+@rtf_sec_begin_para\
+][\
+@evar[_subsection_##2_subtopic_count][@getcounter[subsubsection]]
+]\
+]
+%
+% -----------------------------------------------------------------------------
+% Подподсекция
+@newcommand[defineenv_subsubsection][\
+@newenvironment[_subsubsection][\
+@resetcounter[point]\
+@renewcommand[point][@addcounter[point][1]@ifthen[@getcounter[point]>1][@para[]]@thesubsubsection[].@getcounter[point] ]\
+@ifthenelse[##1][@addcounter[subsubsection][1]]\
+@var[_cursubsubsectionid][##2]\
+@var[_cursubsubsectioncap][##3]\
+@evar[_##2_NUMBER][@thesubsubsection[]]\
+@evar[_##2_LABEL][##2]\
+@evar[_##2_CAPTION][##3]\
+@ifthenelse[@pass[]==1][@var[_subsubsection_##2_subtopic_count][0]]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_subsubsection_numdepth && ##1][\
+@rtf_page_break[]\
+@hlp_write_topic[@subsubsectionlevel[]][##2][##3]\
+[@var[_subsubsection_##2_subtopic_count]\
+][@var[_hlp_sectiontext]]\
+]\
+%endif
+@begin[rtf_caption][[@thesubsubsection_capstyle]][5]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_subsubsection_numdepth && ##1][\
+@var[__cur_section_id][##2]\
+@rtf_footnote[@_hash][##2]
+@rtf_footnote[@_usd][##3]
+@rtf_footnote[K][@var[[keywords_@evar[__cur_section_id]]]]
+@ifthenelse[!@getcounter[secnotext]][@rtf_footnote[+][auto]]
+]##3\
+%else
+@make_caption[subsubsection][##1][##3]\
+@rtf_cnt_item[@thesubsubsection[]][##3][@_subsubsection_numdepth]\
+[true][@getcounter[tocdepth]>=@_subsubsection_numdepth && ##1]\
+%endif
+@end[rtf_caption]\
+% @para\
+@rtf_sec_begin_para\
+][\
+@evar[_subsubsection_##2_subtopic_count][@getcounter[paragraph]]
+]\
+]
+%
+% -----------------------------------------------------------------------------
+% Параграф
+@newcommand[defineenv_paragraph][\
+@newenvironment[_paragraph][\
+@resetcounter[point]\
+@renewcommand[point][@addcounter[point][1]@ifthen[@getcounter[point]>1][@para[]]@theparagraph[].@getcounter[point] ]\
+@ifthenelse[##1][@addcounter[paragraph][1]]\
+@var[_curparagraphid][##2]@var[_curparagraphcap][##3]\
+@evar[_##2_NUMBER][@theparagraph[]]\
+@evar[_##2_LABEL][##2]@evar[_##2_CAPTION][##3]\
+@ifthenelse[@pass[]==1][@var[_paragraph_##2_subtopic_count][0]]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_paragraph_numdepth && ##1][\
+@rtf_page_break[]\
+@hlp_write_topic[@paragraphlevel[]][##2][##3]\
+[@var[_paragraph_##2_subtopic_count]\
+][@var[_hlp_sectiontext]]\
+]\
+%endif
+@begin[rtf_caption][[@theparagraph_capstyle]][6]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_paragraph_numdepth && ##1][\
+@var[__cur_section_id][##2]\
+@rtf_footnote[@_hash][##2]
+@rtf_footnote[@_usd][##3]
+@rtf_footnote[K][@var[[keywords_@evar[__cur_section_id]]]]
+@ifthenelse[!@getcounter[secnotext]][@rtf_footnote[+][auto]]
+]##3\
+%else
+@make_caption[paragraph][##1][##3]\
+@rtf_cnt_item[@theparagraph[]][##3][@_paragraph_numdepth]\
+[true][@getcounter[tocdepth]>=@_paragraph_numdepth && ##1]\
+%endif
+@end[rtf_caption]\
+% @para\
+@rtf_sec_begin_para\
+][@evar[_paragraph_##2_subtopic_count][@getcounter[subparagraph]]]\
+]
+%
+% -----------------------------------------------------------------------------
+% Подпараграф
+@newcommand[defineenv_subparagraph][\
+@newenvironment[_subparagraph][\
+@resetcounter[point]\
+@renewcommand[point][@addcounter[point][1]@ifthen[@getcounter[point]>1][@para[]]@thesubparagraph[].@getcounter[point] ]\
+@ifthenelse[##1][@addcounter[subparagraph][1]]\
+@var[_cursubparagraphid][##2]@var[_cursubparagraphcap][##3]\
+@evar[_##2_NUMBER][@thesubparagraph[]]\
+@evar[_##2_LABEL][##2]@evar[_##2_CAPTION][##3]\
+@ifthenelse[@pass[]==1][@var[_subparagraph_##2_subtopic_count][0]]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_subparagraph_numdepth && ##1][\
+@rtf_page_break[]\
+@hlp_write_topic[@subparagraphlevel[]][##2][##3]\
+[@var[_subparagraph_##2_subtopic_count]\
+% @getcounter[tocdepth]>=7 && 
+][@var[_hlp_sectiontext]]\
+]\
+%endif
+@begin[rtf_caption][[@thesubparagraph_capstyle]][6]\
+%if defined(HELP)
+@ifthenelse[@getcounter[tocdepth]>=@_subparagraph_numdepth && ##1][\
+@var[__cur_section_id][##2]\
+@rtf_footnote[@_hash][##2]
+@rtf_footnote[@_usd][##3]
+@rtf_footnote[K][@var[[keywords_@evar[__cur_section_id]]]]
+@ifthenelse[!@getcounter[secnotext]][@rtf_footnote[+][auto]]
+]##3\
+%else
+@make_caption[subparagraph][##1][##3]\
+@rtf_cnt_item[@thesubparagraph[]][##3][@_subparagraph_numdepth]\
+[true][@getcounter[tocdepth]>=@_subparagraph_numdepth && ##1]\
+%endif
+@end[rtf_caption]\
+% @para\
+@rtf_sec_begin_para\
+][@evar[_subparagraph_##2_subtopic_count][0]]\
+]
+
+%if !defined(__RTF_RTFREF_UDH__)
+    %include <rtf\rtfref.udh>
+%endif __RTF_RTFREF_UDH__
+
+%if !defined(__RTF_RTFENUM_UDH__)
+    %include <rtf\rtfenum.udh>
+%endif __RTF_RTFENUM_UDH__
+
+%if !defined(__RTF_RTFENTRY_UDH__)
+    %include <rtf\rtfentry.udh>
+%endif __RTF_RTFENTRY_UDH__
+
+%if defined(HELP)
+@renewcommand[make_winhelp][@ifthen[@pass[]==2][@exec[hcw.exe][/C /M @thebasefile[].hpj]]]
+%endif
+
+%endif __RTF_RTFSECT_UDH__

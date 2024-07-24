@@ -1,0 +1,30 @@
+%if !defined(__WIKI_WIKIUTIL_UDH__)
+%define __WIKI_WIKIUTIL_UDH__
+
+@newcommand[__lf][@char[0A]]
+@newcommand[_xmlattr][#1="#2"]
+@newcommand[_nowiki_tag_raw][<#1nowiki>]
+@newenvironment[_real_nowiki][@_nowiki_tag_raw[]][@_nowiki_tag_raw[/]]
+% @newcommand[_set_in_nowiki][@evar[_in_nowiki][#1]]
+
+@newcounter[_in_nowiki_count][0]
+@newcommand[_is_in_nowiki][@getcounter[_in_nowiki_count]>0]
+
+
+
+@newenvironment[_nowiki]\
+% [@ifthen[!@_is_in_nowiki][@_set_in_nowiki[1]@begin[_real_nowiki]]]\
+% [@ifthen[@isinenv[_real_nowiki]][@_set_in_nowiki[0]@end[_real_nowiki]]]
+[@ifthen[!@_is_in_nowiki][@begin[_real_nowiki]]@addcounter[_in_nowiki_count][1]]\
+[@addcounter[_in_nowiki_count][-1]@ifthen[!@_is_in_nowiki][@end[_real_nowiki]]]
+
+
+@newcommand[_nowiki][@begin[_nowiki]#1@end[_nowiki]]
+
+@newcommand[_beginwikibox][<box #1>]
+@newcommand[_beginexpwikibox][<box @_xmlattr[expanded][false] #1>]
+@newcommand[_endwikibox][</box>]
+
+
+
+%endif __WIKI_WIKIUTIL_UDH__

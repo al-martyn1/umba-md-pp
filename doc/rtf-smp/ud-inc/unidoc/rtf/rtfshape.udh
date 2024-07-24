@@ -1,0 +1,156 @@
+%if !defined(__RTF_RTFSHAPE_UDH__)
+%define __RTF_RTFSHAPE_UDH__
+
+%if !defined(__RTF_RTFIMG_UDH__)
+    %include <rtf/rtfimg.udh>
+%endif __RTF_RTFIMG_UDH__
+
+@newcommand[_rtf_insert_shape_emf][\
+@ifthenelse[@pass[]==2][\
+% @_lb@_bsl[]sectexpand0
+% @_lb@_bsl[]objtransy-2000
+{@_bsl[]pict\
+@ifthenelse[#0>1][\
+@ifthenelse[#0==2][@_bsl[]picscalex#2@_bsl[]picscaley#2][@_bsl[]picscalex#2@_bsl[]picscaley#3]\
+]\
+\picw21114\pich29342@_bsl[]emfblip
+% @message[_rtf_insert_shape_emf: Shape filename: @var[_image_root]/#1.emf]\
+@hexfile[@findfile[@var[_image_root]/#1.emf]]}\
+]\
+]
+
+
+% Position horizontaly relative
+@newcommand[__rtfshp_posrelh0][margin]
+@newcommand[__rtfshp_posrelh1][page]
+@newcommand[__rtfshp_posrelh2][column]
+% Arg
+% 0 - Margin
+% 1 - Page
+% 2 - Column
+@newcommand[__rtfshp_posrelh][@__rtfshp_posrelh#1[]]
+
+
+% Position verticaly relative
+@newcommand[__rtfshp_posrelv0][margin]
+@newcommand[__rtfshp_posrelv1][page]
+@newcommand[__rtfshp_posrelv2][para]
+% Arg
+% 0 - Margin
+% 1 - Page
+% 2 - Paragraph
+@newcommand[__rtfshp_posrelv][@__rtfshp_posrelv#1[]]
+
+
+% RTF Shape property
+@newcommand[_rtf_shprop][@_lb[]@_bsl[]sp@_lb[]@_bsl[]sn #1@_rb@_lb@_bsl[]sv #2@_rb@_rb[]]
+
+
+
+% RTF Shape
+% Args
+% #      name            value
+% 1     hor  relation:   0 - margin
+%                        1 - page
+%                        2 - column
+% 2     vert relation:   0 - margin
+%                        1 - page
+%                        2 - paragraph
+% 3,4,5,6    left, top, right, bottom  - position in twips
+% 7     Wrap:            1 - Wrap around top and bottom of shape (no text allowed beside shape)
+%                        2 - Wrap around shape
+%                        3 - None (wrap as if shape isn't present)
+%                        4 - Wrap tightly around shape
+%                        5 - Wrap text through shape
+% 8     Properties
+% 9     File name
+%%%%%%%%%%%%%
+%       ShapeType        0 - Freeform or non-autoshape
+%                        75 - Picture frame
+
+% 11980\shpbottom16660
+@newcommand[_rtf_img_shape][\
+@_lb[]@_bsl[]shp@_lb[]@_bsl[]*@_bsl[]shpinst
+@_bsl[]shpfhdr0\
+@_bsl[]shpfblwtxt1\
+@_bsl[]shpz0
+@_bsl[]shpleft#3@_bsl[]shptop#4@_bsl[]shpright#5@_bsl[]shpbottom#6
+@_bsl[]shpbx@__rtfshp_posrelh[#1]@_bsl[]shpbxignore
+@_bsl[]shpby@__rtfshp_posrelh[#2]@_bsl[]shpbyignore
+@_bsl[]shpwr#7@_bsl[]shpwrk0
+@_lb[]@_bsl[]sp@_lb[]@_bsl[]sn pib@_rb[]@_lb[]@_bsl[]sv 
+@_rtf_insert_shape_emf[#9][100][100]
+@_rb[]@_rb[]
+@_rtf_shprop[pibName][#9.emf]
+@_rtf_shprop[pibFlags][0]
+@_rtf_shprop[posrelh][#1]
+@_rtf_shprop[posrelv][#2]
+% @_rtf_shprop[][]
+#8
+% {\sp{\sn fLine}{\sv 0}}
+% {\sp{\sn posh}{\sv 1}}
+% {\sp{\sn posv}{\sv 1}}
+@_rb[]\
+@_rb[]\
+]
+
+
+
+@newcommand[_rtf_txt_shape][\
+@_lb[]@_bsl[]shp@_lb[]@_bsl[]*@_bsl[]shpinst
+@_bsl[]shpfhdr0\
+@_bsl[]shpfblwtxt1\
+@_bsl[]shpz0
+@_bsl[]shpleft#3@_bsl[]shptop#4@_bsl[]shpright#5@_bsl[]shpbottom#6
+@_bsl[]shpbx@__rtfshp_posrelh[#1]@_bsl[]shpbxignore
+@_bsl[]shpby@__rtfshp_posrelh[#2]@_bsl[]shpbyignore
+@_bsl[]shpwr#7@_bsl[]shpwrk0
+% @_lb[]@_bsl[]sp@_lb[]@_bsl[]sn pib@_rb[]@_lb[]@_bsl[]sv 
+% @_rtf_shprop[gtextRTF][#9]
+@_lb[]@_bsl[]shptxt #9@_rb[]
+% @_rb[]@_rb[]
+@_rtf_shprop[posrelh][#1]
+@_rtf_shprop[posrelv][#2]
+% @_rtf_shprop[][]
+#8
+% {\sp{\sn fLine}{\sv 0}}
+% {\sp{\sn posh}{\sv 1}}
+% {\sp{\sn posv}{\sv 1}}
+@_rb[]\
+@_rb[]\
+]
+
+
+
+@newcommand[_rtf_generic_shape][\
+@_lb[]@_bsl[]shp@_lb[]@_bsl[]*@_bsl[]shpinst
+@_bsl[]shpfhdr0\
+@_bsl[]shpfblwtxt1\
+@_bsl[]shpz0
+@_bsl[]shpleft#3@_bsl[]shptop#4@_bsl[]shpright#5@_bsl[]shpbottom#6
+@_bsl[]shpbx@__rtfshp_posrelh[#1]@_bsl[]shpbxignore
+@_bsl[]shpby@__rtfshp_posrelh[#2]@_bsl[]shpbyignore
+@_bsl[]shpwr#7@_bsl[]shpwrk0
+% @_lb[]@_bsl[]sp@_lb[]@_bsl[]sn pib@_rb[]@_lb[]@_bsl[]sv 
+% @_rtf_shprop[gtextRTF][#9]
+% @_rb[]@_rb[]
+@_rtf_shprop[posrelh][#1]
+@_rtf_shprop[posrelv][#2]
+% @_rtf_shprop[][]
+#8
+% {\sp{\sn fLine}{\sv 0}}
+% {\sp{\sn posh}{\sv 1}}
+% {\sp{\sn posv}{\sv 1}}
+@_rb[]\
+@_rb[]\
+]
+
+
+% _rtf_shprop[name][value]
+% {\sp{\sn ShapeType}{\sv #8}}
+% {\sp{\sn fFlipH}{\sv 0}}
+% {\sp{\sn fFlipV}{\sv 0}}
+% {\sp{\sn fLayoutInCell}{\sv 1}}}
+
+
+%endif __RTF_RTFSHAPE_UDH__

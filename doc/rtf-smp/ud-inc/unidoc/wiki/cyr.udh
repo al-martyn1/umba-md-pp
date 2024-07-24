@@ -1,0 +1,6 @@
+%if !defined(__WIKI_CYR_UDH__)
+%define __WIKI_CYR_UDH__
+
+%include <html/cyr.udh>
+
+%endif __WIKI_CYR_UDH__

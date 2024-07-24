@@ -1,0 +1,47 @@
+%if !defined(RTFCNT_UDH)
+%define RTFCAP_UDH
+@newcounter[rtfcap_left_ypos]
+@newcounter[rtfcap_right_ypos]
+@newcounter[rtfcap_left_xpos]
+@newcounter[rtfcap_right_xpos]
+@newcounter[rtfcap_ystep]
+@newcounter[rtfcap_xsize]
+% x size - 3 inches
+@setcounter[rtfcap_xsize][4320]
+% left cap position - 1 inch from page border
+@setcounter[rtfcap_left_xpos][1440]
+% right cap position - 5 inches from page border
+@setcounter[rtfcap_right_xpos][7200]
+% y step - 2 inches
+@setcounter[rtfcap_ystep][2880]
+% initial y left pos - 0.5 inch (1.5 - 2160)
+@setcounter[rtfcap_left_ypos][720]
+% initial y right pos - 0.5 inch (1.5 - 2160)
+@setcounter[rtfcap_right_ypos][720]
+
+%if !defined(__RTF_RTFSHAPE_UDH__)
+    %include <rtf/rtfshape.udh>
+%endif __RTF_RTFSHAPE_UDH__
+
+@newcommand[rtf_cap_para][
+@_bsl[]par@_bsl[]pard@_bsl[]plain@sty_#1][left]
+
+% args: left/right, action, who_post, who_post,who_name, when
+@newcommand[makecap][\
+%                     left
+@_rtf_txt_shape[1][1][@getcounter[rtfcap_#1_xpos]]\
+%                     top
+[@getcounter[rtfcap_#1_ypos]]\
+%                     right
+[@eval[@getcounter[rtfcap_#1_xpos]+@getcounter[rtfcap_xsize]]]\
+%                     bottom
+[@eval[@getcounter[rtfcap_#1_ypos]+@getcounter[rtfcap_ystep]]]\
+[3][
+@_rtf_shprop[ShapeType][75]
+@_rtf_shprop[fLayoutInCell][1]
+% ][@rtf_cap_para[]@tab[]#2@br[]#3@br[]@br[]@tab[]#4@br[]@br[]@tab[]#5]\
+][@rtf_cap_para[]@tab[]#2@br[]#3@br[]@br[]#4@br[]@br[]#5]\
+@addcounter[rtfcap_#1_ypos][@getcounter[rtfcap_ystep]]\
+]
+
+%endif RTFCAP_UDH

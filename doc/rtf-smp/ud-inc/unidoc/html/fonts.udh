@@ -1,0 +1,68 @@
+%if !defined(__HTML_FONTS_UDH__)
+%define __HTML_FONTS_UDH__ 1
+
+%include <html\htmfsize.udh>
+% Roman font - Times New Roman
+@newcommand[textrm][<SPAN class="rmfamily">#1</SPAN>]
+@newenvironment[rmfamily][<SPAN class="rmfamily">][</SPAN>]
+% Sans Serif - Arial
+@newcommand[textsf][<SPAN class="sffamily">#1</SPAN>]
+@newenvironment[sffamily][<SPAN class="sffamily">][</SPAN>]
+% Typewriter - Courier New
+@newcommand[texttt][<SPAN class="ttfamily">#1</SPAN>]
+@newenvironment[ttfamily][<SPAN class="ttfamily">][</SPAN>]
+%
+% font series
+% bold
+@newcommand[textbf][<B>#1</B>]
+@newenvironment[bfseries][<B>][</B>]
+% normal
+@newcommand[textmd][<SPAN class="mdseries">#1</SPAN>]
+@newenvironment[mdseries][<SPAN class="mdseries">][</SPAN>]
+%
+% font shape
+% italic
+@newcommand[textit][@begin[itshape]#1@end[itshape]]
+@newenvironment[itshape][\
+@renewcommand[em_begin][<EM class="upshape">]\
+<I>][</I>]
+% normal
+@newcommand[textup][<SPAN class="upshape">#1</SPAN>]
+@newenvironment[upshape][<SPAN class="upshape">][</SPAN>]
+% capital
+@newcommand[textsc][#1]
+@newenvironment[scshape][][]
+%
+%
+@newcommand[em_begin][<EM>]
+@newcommand[emph][@begin[em]#1@end[em]]
+@newenvironment[em][@em_begin\
+@renewcommand[em_begin][<EM class="upshape">]\
+][</EM>]
+
+% default document font
+@newcommand[textnormal][<SPAN class="textnormal">#1</SPAN>]
+@newenvironment[normalfont][<SPAN class="textnormal">][</SPAN>]
+
+@newcommand[tiny][<SPAN class="tiny">#1</SPAN>]
+@newcommand[scriptsize][<SPAN class="scriptsize">#1</SPAN>]
+@newcommand[footnotesize][<SPAN class="footnotesize">#1</SPAN>]
+@newcommand[small][<SPAN class="small">#1</SPAN>]
+@newcommand[normalsize][<SPAN class="normalsize">#1</SPAN>]
+@newcommand[large][<SPAN class="large">#1</SPAN>]
+@newcommand[Large][<SPAN class="Large">#1</SPAN>]
+@newcommand[LARGE][<SPAN class="LARGE">#1</SPAN>]
+@newcommand[huge][<SPAN class="huge">#1</SPAN>]
+@newcommand[Huge][<SPAN class="Huge">#1</SPAN>]
+
+@newenvironment[tiny][<SPAN class="tiny">][</SPAN>]
+@newenvironment[scriptsize][<SPAN class="scriptsize">][</SPAN>]
+@newenvironment[footnotesize][<SPAN class="footnotesize">][</SPAN>]
+@newenvironment[small][<SPAN class="small">][</SPAN>]
+@newenvironment[normalsize][<SPAN class="normalsize">][</SPAN>]
+@newenvironment[large][<SPAN class="large">][</SPAN>]
+@newenvironment[Large][<SPAN class="Large">][</SPAN>]
+@newenvironment[LARGE][<SPAN class="LARGE">][</SPAN>]
+@newenvironment[huge][<SPAN class="huge">][</SPAN>]
+@newenvironment[Huge][<SPAN class="Huge">][</SPAN>]
+%endif __HTML_FONTS_UDH__

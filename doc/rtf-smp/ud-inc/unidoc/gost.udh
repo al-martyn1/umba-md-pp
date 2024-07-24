@@ -1,0 +1,19 @@
+%if !defined(__GOST_UDH__)
+%define __GOST_UDH__ 1
+@newcommand[frame_vert_title_filename][a4tit_v]
+@newcommand[frame_vert_content_filename][a4f2_v]
+@newcommand[frame_vert_pages_filename][a4f2n_v]
+
+%if defined(HTML)
+    %include <html\htmgost.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_RTFGOST_UDH__)
+        %include <rtf\rtfgost.udh>
+    %endif __RTF_RTFGOST_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\texgost.udh>
+%elseif defined(WIKI) || defined(KBWIKI)
+    %  include <wiki\wikigost.udh>
+%endif
+
+%endif __GOST_UDH__

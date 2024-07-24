@@ -1,0 +1,3 @@
+%if !defined(___DOCSTYL_UDH__)
+%define ___DOCSTYL_UDH__ 1
+%endif ___DOCSTYL_UDH__

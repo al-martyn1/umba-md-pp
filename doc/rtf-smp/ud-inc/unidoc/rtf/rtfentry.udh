@@ -1,0 +1,111 @@
+%if !defined(__RTF_RTFENTRY_UDH__)
+%define __RTF_RTFENTRY_UDH__
+
+
+% @ifthenelse[!@iscommand[item]][@newcommand[item]][]
+% @ifthenelse[!@iscommand[item]][@message[command item not exist]][@message[command item exist]]
+@ifthen[!@iscommand[item]][@newcommand[item][]]
+
+@newcommand[makeentryitem][@textbf[#1]]
+
+@newcounter[entry]
+@newcommand[_eval_entrylabel_li][@eval[@var[_entrylabelli]*56]]
+@newcommand[_eval_entrylabel_ri][@eval[@var[_entrylabelri]*56]]
+@newcommand[_eval_entrylabel_sb][@eval[@var[_entrylabelsb]*56]]
+@newcommand[_eval_entrylabel_sa][@eval[@var[_entrylabelsa]*56]]
+@newcommand[_eval_entry_li][@eval[@var[_entryli]*56]]
+@newcommand[_eval_entry_fi][@eval[@var[_entryfi]*56]]
+@newcommand[_eval_entry_ri][@eval[@var[_entryri]*56]]
+@newcommand[_eval_entry_sb][@eval[@var[_entrysb]*56]]
+@newcommand[_eval_entry_sa][@eval[@var[_entrysa]*56]]
+
+
+@newcommand[_entry_item][\
+% @_lb\
+@_bsl[]par\
+%if defined(PRINTABLE)
+@_bsl[]pard@_bsl[]plain@sty_#1 @_bsl[]keepn
+%else
+@_bsl[]pard@_bsl[]plain@sty_#1 
+%endif
+@_bsl[]li@_eval_entrylabel_li\
+@_bsl[]ri@_eval_entrylabel_ri[]\
+@_bsl[]sa@_eval_entrylabel_sa\
+@_bsl[]sb@_eval_entrylabel_sb[]\
+@makeentryitem[#2]\
+% @_rb[]\
+%if defined(HELP)
+@evar[winhelp_popups]\
+[@evar[winhelp_popups]@rtf_page_break[]\
+% @_bsl[]par\
+@_bsl[]pard@_bsl[]plain@sty_#1\
+@rtf_footnote[@_hash][#3]%
+@makeentryitem[#2] - ]\
+%endif
+][normal1]
+
+@newcommand[_begin_entry_item_text][\
+% @_lb\
+@_bsl[]par\
+@_bsl[]pard@_bsl[]plain@sty_#1%
+@_bsl[]li@_eval_entry_li\
+@_bsl[]ri@_eval_entry_ri[]\
+@_bsl[]sa@_eval_entry_sa\
+@_bsl[]sb@_eval_entry_sb[]
+%if defined(HELP)
+@openfile[@thebasefile[].pop]\
+@hlp_write_topic_id[#2]\
+%endif
+@evar[_#2_LABEL][#2]\
+@evar[_#2_CAPTION][#3]\
+%if defined(HELP)
+% @var[_curentryitemlabel][#2]\
+%endif
+][normal1]
+
+@newcommand[_end_entry_item_text][\
+%if defined(HELP)
+@closefile[]\
+@insertfile[@thebasefile[].pop]\
+@evar[winhelp_popups]\
+[\
+@evar[winhelp_popups]\
+% @rtf_page_break[]\
+% @_bsl[]pard@_bsl[]plain@sty_#1%
+% @rtf_footnote[@_hash][@var[_curentryitemlabel]]
+@insertfile[@thebasefile[].pop]@_bsl[]par%
+@rmfile[@thebasefile[].pop]\
+]\
+%endif
+]
+
+% args - id, text, style1, style2
+@newcommand[entryitem][\
+@ifthenelse[@getcounter[entry]>0][@_end_entry_item_text[true]]\
+@addcounter[entry][1]\
+@_entry_item[#3][#2][#1]\
+@_begin_entry_item_text[#4][#1][#2]\
+][normal1][normal1]
+
+@newenvironment[entry][\
+% @renewcommand[para][@_bsl[]par@_bsl[]pard@_bsl[]plain@sty_##1
+% @_bsl[]li@_eval_entrylabel_li\
+% @_bsl[]ri@_eval_entrylabel_ri[]\
+% @_bsl[]sa@_eval_entrylabel_sa\
+% @_bsl[]sb@_eval_entrylabel_sb[]\
+% @_bsl[]fi@_eval_entry_fi[]][normal1]\
+@renewcommand[para][@_bsl[]par
+]\
+@renewcommand[_eval_enum_fi][@eval[-@var[_enumli]*56]]\
+@renewcommand[_eval_enum_li][@eval[@_eval_entry_li[]+@var[_enumli]*56*@getcounter[num_level]]]\
+@renewcommand[_eval_enum_ri][@eval[@_eval_entry_ri[]+@var[_enumri]*56]]\
+%if defined(HELP)
+% @renewcommand[_enum_restoreprev_indents][@_bsl[]li@_eval_entry_li@_bsl[]ri@_eval_entry_ri[]]\
+%endif
+@resetcounter[entry]\
+@renewcommand[item][@entryitem[##1][##2][##3][##4]]
+][\
+@ifthenelse[@getcounter[entry]>0][@_end_entry_item_text[false]]@ifthenelse[#2][@_bsl[]par]\
+][][false]
+
+%endif __RTF_RTFENTRY_UDH__

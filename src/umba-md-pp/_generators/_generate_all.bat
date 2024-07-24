@@ -33,23 +33,23 @@
 
 
 
-umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% ^
-%SNIPPETOPTIONS_GEN_FLAGS%                %UINT32% %HEX4% -E=SnippetOptions                -F=@SnippetOptions.txt               ^
-                                          %UINT32% %HEX4% -E=SnippetOptionsParsingResult   -F=@SnippetOptionsParsingResult.txt  ^
-                                          %UINT32% %HEX4% -E=ConditionOperators            -F=@ConditionOperators.txt           ^
-                                          %UINT32% %HEX4% -E=ListingNestedTagsMode         -F=@ListingNestedTagsMode.txt        ^
-                                          %UINT32% %HEX4% -E=ProcessingOptions             -F=@ProcessingOptions.txt            ^
-                                          %UINT32% %HEX4% -E=TargetRenderer                -F=@TargetRenderer.txt               ^
-                                          %UINT32% %HEX4% -E=LineHandlerEvent              -F=@LineHandlerEvent.txt             ^
-                                          %UINT32% %HEX4% -E=PreprocessorParsingState      -F=@PreprocessorParsingState.txt     ^
-                                          %UINT32% %HEX4% -E=MetaTagType                   -F=@MetaTagType.txt                  ^
-                                          %UINT32% %HEX4% -E=TargetFormat                  -F=@TargetFormat.txt                 ^
-                                          %UINT32% %HEX4% -E=BacktickProcessingState       -F=@BacktickProcessingState.txt      ^
-                                          %UINT32% %HEX4% -E=PreprocessorDirective         -F=@PreprocessorDirective.txt        ^
-                                          %UINT32% %HEX4% -E=SnippetTagType                -F=@SnippetTagType.txt               ^
-                                          %SERIALIZE_HYPHEN%                                                                    ^
-                                          %UINT32% %HEX4% -E=MdPpTag                       -F=@MdPpTag.txt                      ^
-                                          %UINT32% %HEX4% -E=GraphVizTargetFormat          -F=@GraphVizTargetFormat.txt         ^
-                                          %UINT32% %HEX4% -E=GraphType                     -F=@GraphType.txt                    ^
+umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% %SNIPPETOPTIONS_GEN_FLAGS% ^
+    %UINT32% %HEX4% -E=SnippetOptions                -F=@SnippetOptions.txt               ^
+    %UINT32% %HEX4% -E=SnippetOptionsParsingResult   -F=@SnippetOptionsParsingResult.txt  ^
+    %UINT32% %HEX4% -E=ConditionOperators            -F=@ConditionOperators.txt           ^
+    %UINT32% %HEX4% -E=ListingNestedTagsMode         -F=@ListingNestedTagsMode.txt        ^
+    %UINT32% %HEX4% -E=ProcessingOptions             -F=@ProcessingOptions.txt            ^
+    %UINT32% %HEX4% -E=TargetRenderer                -F=@TargetRenderer.txt               ^
+    %UINT32% %HEX4% -E=LineHandlerEvent              -F=@LineHandlerEvent.txt             ^
+    %UINT32% %HEX4% -E=PreprocessorParsingState      -F=@PreprocessorParsingState.txt     ^
+    %UINT32% %HEX4% -E=MetaTagType                   -F=@MetaTagType.txt                  ^
+    %UINT32% %HEX4% -E=TargetFormat                  -F=@TargetFormat.txt                 ^
+    %UINT32% %HEX4% -E=BacktickProcessingState       -F=@BacktickProcessingState.txt      ^
+    %UINT32% %HEX4% -E=PreprocessorDirective         -F=@PreprocessorDirective.txt        ^
+    %UINT32% %HEX4% -E=SnippetTagType                -F=@SnippetTagType.txt               ^
+    %SERIALIZE_HYPHEN%                                                                    ^
+    %UINT32% %HEX4% -E=MdPpTag                       -F=@MdPpTag.txt                      ^
+    %UINT32% %HEX4% -E=GraphVizTargetFormat          -F=@GraphVizTargetFormat.txt         ^
+    %UINT32% %HEX4% -E=GraphType                     -F=@GraphType.txt                    ^
 ..\enums.h
 

@@ -1,0 +1,7 @@
+; Symbol mappin for html
+" &quot;
+& &amp;
+< &lt;
+> &gt;
+0x0D
+0x0A <br />

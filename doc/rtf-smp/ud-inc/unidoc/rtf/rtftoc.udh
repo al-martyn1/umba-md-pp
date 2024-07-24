@@ -1,0 +1,123 @@
+%if !defined(__RTF_RTFTOC_UDH__)
+%define __RTF_RTFTOC_UDH__
+
+%if !defined(__RTF_RTFSECT_UDH__)
+    %include <rtf/rtfsect.udh>
+%endif __RTF_RTFSECT_UDH__
+
+%if !defined(__RTF_RTFFLS_UDH__)
+    %include <rtf/rtffld.udh>
+%endif __RTF_RTFFLS_UDH__
+
+@newcommand[makecontents][\
+%if defined(GOST)
+@push[__margin_right]@push[__margin_bottom]@push[__footer_size]
+@margin_bottom[600]
+@margin_right[100]
+% @footer_size[230]
+@__rtf_sect[1]
+@pop[__footer_size]@pop[__margin_bottom]@pop[__margin_right]
+%if !defined(NO_GOST_FRAMES) 
+%if !defined(NO_GOST_CONTENT_FRAME)
+@rtf_gost_frame[f][[@frame_vert_content_filename[]]]
+%endif NO_GOST_CONTENT_FRAME
+%if !defined(NO_GOST_PAGE_FRAME)
+@rtf_gost_frame[][[@frame_vert_pages_filename[]]]
+%endif NO_GOST_PAGE_FRAME
+%endif NO_GOST_FRAMES
+%if defined(NO_GOST_FRAMES) || defined(NO_GOST_PAGE_FRAME)
+@rtf_header[f][[@thetopcolontitle_style[]]][]\
+%endif
+% GOST_FRAMES
+% @rtf_gost_frame[f][a4f2_v]\
+% @rtf_gost_frame[][a4f2n_v]\
+%                        18      25   20.5
+% @_rtf_shape[1][1][25920][36000][29520][40320][3][
+% @_rtf_txt_shape[1][1][9650][15200][11600][16000][3][
+@_rtf_txt_shape[1][1][9800][15200][10300][15600][3][
+@_rtf_shprop[ShapeType][75]
+@_rtf_shprop[fLayoutInCell][1]
+% ][@rtf_field[PAGE]   @tab[]   @rtf_field[DOCPROPERTY "Pages"]]
+][ @rtf_field[PAGE]]
+
+@_rtf_txt_shape[1][1][10800][15200][11600][15600][3][
+@_rtf_shprop[ShapeType][75]
+@_rtf_shprop[fLayoutInCell][1]
+% @_rtf_shprop[fLayoutInCell][1]
+% ][@rtf_field[PAGE]   @tab[]   @rtf_field[DOCPROPERTY "Pages"]]
+][ @rtf_field[DOCPROPERTY "Pages"]]
+
+@rtf_footer[][normalright1][\
+@rtf_field[PAGE]]\
+%else 
+@rtf_footer[][normalright1][@rtf_field[PAGE]]\
+%endif GOST
+@para[#2]%
+#1
+@para[#3]%
+% content item
+@_lb@_bsl[]field@_bsl[]fldedit@_lb@_bsl[]*@_bsl[]fldinst @_lb \
+TOC \
+@bsl[]f C @bsl[]h @bsl[]* MERGEFORMAT @_rb@_rb@_rb[]\
+@br[]\
+
+%if defined(GOST)
+% @rtf_page_break[]\
+@__rtf_sect[0]\
+%if !defined(NO_GOST_FRAMES) 
+%if !defined(NO_GOST_PAGE_FRAME)
+@rtf_gost_frame[][[@frame_vert_pages_filename[]]]\
+%endif NO_GOST_PAGE_FRAME
+%endif NO_GOST_FRAMES
+% @rtf_gost_frame[r][[@frame_vert_pages_filename[]]]\
+% GOST_FRAMES
+% @rtf_gost_frame[][a4f2n_v]\
+%   @rtf_gost_frame[r][a4f2n_v]\
+% @_bsl[]sbknone
+% @chapter_page_break[true]
+%else
+@rtf_page_break[]\
+%endif GOST
+]\
+[@contents_text[]]\
+% [@toctitle_style[]]\
+[[@contents_capstyle]]\
+[normalleft1]
+
+@newenvironment[__rtf_cnt_item_aux][\
+@renewcommand[quot][!]\
+@renewcommand[lquot][<]\
+@renewcommand[rquot][>]\
+@renewcommand[ldquot][<<]\
+@renewcommand[rdquot][>>]\
+][]
+
+% args: allow page number, allow item number, number, text, level
+@newcommand[__rtf_cnt_item][\
+% if depth <= tocdepth
+@ifthenelse[#5 <= @getcounter[tocdepth]][\
+@_lb[]@_bsl[]tc#1 @_lb[]@_bsl[]v @ifthenelse[#2][#3 ]#4@_rb[]@_lb[]@_bsl[]tcf67 @_bsl[]tcl#5 @_rb[]@_rb[]\
+]\
+]
+
+% args: number, text, level, allow page number, allow item number
+@renewcommand[rtf_cnt_item][\
+% @begin[__rtf_cnt_item_aux]\
+@renewcommand[quot]['']\
+@renewcommand[lquot][']\
+@renewcommand[rquot][']\
+@renewcommand[ldquot]['']\
+@renewcommand[rdquot]['']\
+@renewcommand[quoted]['##1']
+@renewcommand[dquoted][''##1'']
+@__rtf_cnt_item[[@ifthenelse[#4][][n]]][#5][#1][#2][#3]\
+% @end[__rtf_cnt_item_aux]\
+]
+
+
+% @begin[__rtf_cnt_item_aux]\
+% @end[__rtf_cnt_item_aux]\
+
+
+
+%endif __RTF_RTFTOC_UDH__

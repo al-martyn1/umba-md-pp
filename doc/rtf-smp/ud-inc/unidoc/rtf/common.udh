@@ -1,0 +1,46 @@
+%if !defined(__RTF_COMMON_UDH__)
+%define __RTF_COMMON_UDH__ 1
+
+%include <fonts.udh>
+
+@newcommand[note][@begin[em]@textbf[#1]. #2@end[em]][@note_text[]]
+@newenvironment[note]\
+[@begin[em]@textbf[#1]. ]\
+[@end[em]]\
+[@note_text[]]
+
+@newcommand[attention][@begin[em]@textbf[#1]. #2@end[em]][@attention_text[]]
+@newenvironment[attention]\
+[@begin[em]@textbf[#1]. ]\
+[@end[em]]\
+[@attention_text[]]
+
+
+@newcommand[warning][@begin[em]@textbf[#1]. #2@end[em]][@warning_text[]]
+@newenvironment[warning]\
+[@begin[em]@textbf[#1]. ]\
+[@end[em]]\
+[@warning_text[]]
+
+
+@newcommand[seepara][\
+%if defined(HELP)
+@para[#1]\
+%endif
+][normalleft1]
+@newenvironment[seealso][\
+%if !defined(HELP)
+@openfile[@filepath[@thebasefileext[]]\seealso.tmp]\
+%endif
+@newcommand[seeentry][@ref[##1]@br[]]\
+#1:@br[]\
+][\
+%if !defined(HELP)
+@closefile[]\
+%endif
+][@seealso_text[]]
+
+
+
+
+%endif __RTF_COMMON_UDH__

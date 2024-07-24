@@ -1,0 +1,8 @@
+%if !defined(__RTF_VERBATIM_UDH__)
+%define __RTF_VERBATIM_UDH__
+
+%if !defined(__RTF_RTFVERBA_UDH__)
+    %include <rtf\rtfverba.udh>
+%endif __RTF_RTFVERBA_UDH__
+
+%endif __RTF_VERBATIM_UDH__

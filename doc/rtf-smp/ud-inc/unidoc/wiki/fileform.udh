@@ -1,0 +1,8 @@
+%if !defined(__WIKI_FILEFORM_UDH__)
+%define __WIKI_FILEFORM_UDH__
+
+@newenvironment[doc_file]
+[@openfile]
+[@closefile]
+
+%endif __WIKI_FILEFORM_UDH__

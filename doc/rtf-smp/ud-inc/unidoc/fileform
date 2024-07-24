@@ -1,0 +1,11 @@
+%if !defined (__FILEFORM__)
+%define __FILEFORM__
+
+%if !defined(QUET)
+ % message File format definitions
+%endif
+%if !defined(__FILEFORM_UDH__)
+    %include <fileform.udh>
+%endif __FILEFORM_UDH__
+
+%endif __FILEFORM__

@@ -1,0 +1,160 @@
+%if !defined(HTMLSTYLE_UDH)
+%define HTMLSTYLE_UDH 1
+%include <html\htmfsize.udh>
+@newcommand[html_roman_fonts][Times new roman, Times]
+@newcommand[html_serif_fonts][arial cyr, arial, sans-serif, verdana, helvetica]
+@newcommand[html_teletype_fonts][courier cyr,courier]
+
+@newcommand[ffroman][@html_roman_fonts]
+@newcommand[ffserif][@html_serif_fonts]
+@newcommand[ffteletype][@html_teletype_fonts]
+@compilecommand[ffroman]
+@compilecommand[ffserif]
+@compilecommand[ffteletype]
+@newcommand[html_align][align: #1]
+
+@newcommand[_begin_text_style_sheet][]
+@newcommand[_end_text_style_sheet][]
+
+% text style 
+% font family, size, width, shape, align, color, name
+% family - roman, serif, teletype
+% size - Huge, huge, LARGE, Large, large, normalsize, 
+%        small, footnotesize, scriptsize, tiny
+% width - bold, normal
+% shape - italic, normal
+% align - left, right, center, justify
+% color
+% additional styles
+% @ifthenelse[!@iscommand[ffroman]][@message[ffroman isn't command]][@message[ffroman is command]]
+@newcommand[_define_text_style][%
+@begin[html_style][.sty_#7]
+% @ifthenelse[!@iscommand[ffroman]][@message[dts: ffroman isn't command]][@message[dts: ffroman is command]]
+ FONT-FAMILY: @ff#1[];
+ FONT-SIZE: @_s#2[]%;
+ FONT-WIDTH: #3;
+ FONT-STYLE: #4;
+ TEXT-ALIGN: #5;
+ COLOR: @_rgb_#6[];
+@end[html_style]
+@newcommand[sty_#7][class="sty_#7"]
+]
+
+%if defined(HELP)
+@newcommand[html_std_fonts][@html_serif_fonts]
+%else
+@newcommand[html_std_fonts][@html_roman_fonts]
+%endif
+
+@newcommand[_begin_html_css][@_lt[]STYLE type="text@_bsl[]css"@_gt]
+@newcommand[_end_html_css][@_lt[]/STYLE@_gt]
+% @newenvironment[html_css][@_lt[]STYLE type="text@_bsl[]css"@_gt][@_lt[]/STYLE@_gt]
+@newenvironment[html_style][#1
+@_lb][
+@_rb
+]
+
+%include <html\htmcolor.udh>
+%include <_style.udh>
+
+@newcommand[html_link_stylesheet][\
+@_lt[]LINK rel="stylesheet" type="text/css" href="@filenameext[#1]"@_gt]
+
+@newcommand[html_make_style_sheet][
+@_begin_html_css
+ 
+@begin[html_style][.rmfamily]
+ FONT-FAMILY: @html_roman_fonts[];
+ @end[html_style]
+ 
+@begin[html_style][.sffamily]
+ FONT-FAMILY: @html_serif_fonts[];
+ @end[html_style]
+
+@begin[html_style][.ttfamily]
+ FONT-FAMILY: @html_teletype_fonts[];
+ @end[html_style]
+ 
+@begin[html_style][.mdseries]
+ FONT-WEIGHT:normal;
+ @end[html_style]
+ 
+@begin[html_style][.bfseries]
+ FONT-WEIGHT:bold;
+ @end[html_style]
+ 
+@begin[html_style][.upshape]
+ FONT-STYLE: normal;
+ @end[html_style]
+ 
+@begin[html_style][.itshape]
+ FONT-STYLE: italic;
+ @end[html_style]
+ 
+@begin[html_style][.textnormal]
+ FONT-STYLE: normal;
+ FONT-WEIGHT:normal;
+ FONT-FAMILY: Times new roman, Times;
+ @end[html_style]
+ 
+@begin[html_style][P]
+ FONT-FAMILY : @html_std_fonts[];
+ @end[html_style]
+
+@begin[html_style][.normalsize]
+ FONT-SIZE: @_snormalsize[]%;
+ @end[html_style]
+
+@begin[html_style][.large]
+ FONT-SIZE: @_slarge[]%;
+ @end[html_style]
+
+@begin[html_style][.Large]
+ FONT-SIZE: @_sLarge[]%;
+ @end[html_style]
+
+@begin[html_style][.LARGE]
+ FONT-SIZE: @_sLARGE[]%;
+ @end[html_style]
+
+@begin[html_style][.huge]
+ FONT-SIZE: @_shuge[]%;
+ @end[html_style]
+
+@begin[html_style][.Huge]
+ FONT-SIZE: @_sHuge[]%;
+ @end[html_style]
+
+@begin[html_style][.small]
+ FONT-SIZE: @_ssmall[]%;
+ @end[html_style]
+
+@begin[html_style][.footnotesize]
+ FONT-SIZE: @_sfootnotesize[]%;
+ @end[html_style]
+
+@begin[html_style][.scriptsize]
+ FONT-SIZE: @_sscriptsize[]%;
+ @end[html_style]
+
+@begin[html_style][.tiny]
+ FONT-SIZE: @_stiny[]%;
+ @end[html_style]
+
+
+ @make_color_table
+
+ @make_text_style_sheet
+% @begin[html_style][]
+% @end[html_style]
+
+@_end_html_css
+]
+@newcommand[html_make_css_file][
+% @message[Make html css file: #1]
+@openfile[#1]\
+@html_make_style_sheet
+@closefile
+]
+
+%endif HTMLSTYLE_UDH

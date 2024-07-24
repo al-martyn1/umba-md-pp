@@ -1,0 +1,86 @@
+%if !defined(__TEXTS_UDH__)
+%define __TEXTS_UDH__ 1
+
+% Внимание
+@newcommand[attention_text][@CYR_V@cyr_n@cyr_i@cyr_m@cyr_a@cyr_n@cyr_i@cyr_e[]]
+
+% Примечание
+@newcommand[note_text][@CYR_P@cyr_r@cyr_i@cyr_m@cyr_e@cyr_ch@cyr_a@cyr_n@cyr_i@cyr_e[]]
+
+% Предупреждение
+@newcommand[warning_text][@CYR_P@cyr_r@cyr_e@cyr_d@cyr_u@cyr_p@cyr_r@cyr_e@cyr_zh@cyr_d@cyr_e@cyr_n@cyr_i@cyr_e[]]
+
+% Смотрите также
+@newcommand[seealso_text][@CYR_S@cyr_m@cyr_o@cyr_t@cyr_r@cyr_i@cyr_t@cyr_e @cyr_t@cyr_a@cyr_k@cyr_zh@cyr_e[]]
+ 
+% Листинг
+@newcommand[listing_text][@CYR_L@cyr_i@cyr_s@cyr_t@cyr_i@cyr_n@cyr_g[]]
+
+% Параметры
+@newcommand[fnparams_text][@CYR_P@cyr_a@cyr_r@cyr_a@cyr_m@cyr_e@cyr_t@cyr_r@cyr_hrdi[]]
+
+% Возвращаемое значение
+@newcommand[fnreturn_text][@CYR_V@cyr_o@cyr_z@cyr_v@cyr_r@cyr_a@cyr_tsh@cyr_a@cyr_e@cyr_m@cyr_o@cyr_e @cyr_z@cyr_n@cyr_a@cyr_ch@cyr_e@cyr_n@cyr_i@cyr_e[]]
+
+%  Примечания
+@newcommand[fnremarks_text][@CYR_P@cyr_r@cyr_i@cyr_m@cyr_e@cyr_ch@cyr_a@cyr_n@cyr_i@cyr_ya[]]
+
+% Рисунок
+@newcommand[picture_text][@CYR_R@cyr_i@cyr_s@cyr_u@cyr_n@cyr_o@cyr_k[]]
+
+% Таблица
+@newcommand[table_text][@CYR_T@cyr_a@cyr_b@cyr_l@cyr_i@cyr_ts@cyr_a[]]
+
+% Перечень листингов
+@newcommand[listing_index_text][@CYR_P@cyr_e@cyr_r@cyr_e@cyr_ch@cyr_e@cyr_n@cyr_sftsn[] @cyr_l@cyr_i@cyr_s@cyr_t@cyr_i@cyr_n@cyr_g@cyr_o@cyr_v[]]
+
+% Перечень иллюстраций
+@newcommand[picture_index_text][@CYR_P@cyr_e@cyr_r@cyr_e@cyr_ch@cyr_e@cyr_n@cyr_sftsn[] @cyr_i@cyr_l@cyr_l@cyr_yu@cyr_s@cyr_t@cyr_r@cyr_a@cyr_ts@cyr_i@cyr_y[]]
+
+% Перечень таблиц
+@newcommand[table_index_text][@CYR_P@cyr_e@cyr_r@cyr_e@cyr_ch@cyr_e@cyr_n@cyr_sftsn[] @cyr_t@cyr_a@cyr_b@cyr_l@cyr_i@cyr_ts]
+
+% Глава
+@newcommand[chapter_text][@CYR_G@cyr_l@cyr_a@cyr_v@cyr_a[]]
+
+% Приложение
+@newcommand[appendix_text][@CYR_P@cyr_r@cyr_i@cyr_l@cyr_o@cyr_zh@cyr_e@cyr_n@cyr_i@cyr_e[]]
+
+% Содержание
+@newcommand[contents_text][@CYR_S@cyr_o@cyr_d@cyr_e@cyr_r@cyr_zh@cyr_a@cyr_n@cyr_i@cyr_e[]]
+
+% Предметный указатель
+@newcommand[index_text][@CYR_P@cyr_r@cyr_e@cyr_d@cyr_m@cyr_e@cyr_t@cyr_n@cyr_hrdi@cyr_y[] @cyr_u@cyr_k@cyr_a@cyr_z@cyr_a@cyr_t@cyr_e@cyr_l@cyr_sftsn[]]
+
+% Часть
+@newcommand[part_text][@CYR_CH@cyr_a@cyr_s@cyr_t@cyr_sftsn[]]
+
+% Выполнил
+@newcommand[made_by_text][@CYR_V@cyr_hrdi@cyr_p@cyr_o@cyr_l@cyr_n@cyr_i@cyr_l[]]
+
+% Студенты
+@newcommand[students_by_text][@CYR_S@cyr_t@cyr_u@cyr_d@cyr_e@cyr_n@cyr_t@cyr_hrdi[]]
+
+% Проверил
+% Преподаватель
+@newcommand[approved_by_text][@CYR_P@cyr_r@cyr_o@cyr_v@cyr_e@cyr_r@cyr_i@cyr_l[]]
+% @newcommand[approved_by_text][@CYR_P@cyr_r@cyr_e@cyr_p@cyr_o@cyr_d@cyr_a@cyr_v@cyr_a@cyr_t@cyr_e@cyr_l@cyr_sftsn[]]
+
+
+% Литература
+@newcommand[bibliography_text][@CYR_L@cyr_i@cyr_t@cyr_e@cyr_r@cyr_a@cyr_t@cyr_u@cyr_r@cyr_a[]]
+
+% Комментарий
+@newcommand[comment_text][@CYR_K@cyr_o@cyr_m@cyr_m@cyr_e@cyr_n@cyr_t@cyr_a@cyr_r@cyr_i@cyr_y[]]
+
+% Согласовано
+@newcommand[coordinated_text][@CYR_S@cyr_o@cyr_g@cyr_l@cyr_a@cyr_s@cyr_o@cyr_v@cyr_a@cyr_n@cyr_o[]]
+@newcommand[COORDINATED_TEXT][@CYR_S@CYR_O@CYR_G@CYR_L@CYR_A@CYR_S@CYR_O@CYR_V@CYR_A@CYR_N@CYR_O[]]
+
+% Утверждаю
+@newcommand[authorized_text][@CYR_U@cyr_t@cyr_v@cyr_e@cyr_r@cyr_zh@cyr_d@cyr_a@cyr_yu[]]
+@newcommand[AUTHORIZED_TEXT][@CYR_U@CYR_T@CYR_V@CYR_E@CYR_R@CYR_ZH@CYR_D@CYR_A@CYR_YU[]]
+
+
+
+%endif __TEXTS_UDH__

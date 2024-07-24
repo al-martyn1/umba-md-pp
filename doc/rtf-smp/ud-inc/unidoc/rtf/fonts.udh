@@ -1,0 +1,86 @@
+%if !defined(__RTF_FONTS_UDH__)
+%define __RTF_FONTS_UDH__
+
+%if !defined(__RTF_RTFFSIZE_UDH__)
+    %include <rtf\rtffsize.udh>
+%endif __RTF_RTFFSIZE_UDH__
+% Roman font - Times New Roman
+@newcommand[textrm][@_lb@_bsl[]f0 #1@_rb]
+@newenvironment[rmfamily][@_lb@_bsl[]f0 ][@_rb]
+% Sans Serif - Arial
+@newcommand[textsf][@_lb@_bsl[]f2 #1@_rb]
+@newenvironment[sffamily][@_lb@_bsl[]f2 ][@_rb]
+% Typewriter - Courier New
+@newcommand[texttt][@_lb@_bsl[]f6 #1@_rb]
+@newenvironment[ttfamily][@_lb@_bsl[]f6 ][@_rb]
+%
+% font series
+% bold
+@newcommand[textbf][@_lb@_bsl[]b1 #1@_rb[]]
+@newenvironment[bfseries][@_lb@_bsl[]b1 ][@_rb]
+% normal
+@newcommand[textmd][@_lb@_bsl[]b0 #1@_rb[]]
+@newenvironment[mdseries][@_lb@_bsl[]b0 ][@_rb]
+%
+% font shape
+% italic
+@newcommand[textit][@begin[itshape]#1@end[itshape]]
+@newenvironment[itshape][\
+@renewcommand[em_begin][@_lb@_bsl[]i0 ]\
+@_lb@_bsl[]i1][@_rb]
+% normal
+@newcommand[textup][@_lb@_bsl[]i0 #1@_rb]
+@newenvironment[upshape][@_lb@_bsl[]i1 ][@_rb]
+% capital
+@newcommand[textsc][@_lb@_bsl[]scaps #1@_rb]
+@newenvironment[scshape][@_lb@_bsl[]scaps ][@_rb]
+%
+%
+@newcommand[emph][@begin[em]#1@end[em]]
+@newcommand[em_begin][@_lb@_bsl[]i]
+@newenvironment[em][@em_begin[]\
+@renewcommand[em_begin][@_lb@_bsl[]i0]\
+ ][@_rb]
+
+% default document font
+@newcommand[textnormal][@_lb@_bsl[]f@deffont\
+% @_bsl[]fs@deffontsize\
+@_bsl[]b0\
+@_bsl[]i0\
+@_bsl[]scaps0\
+@_rb\
+]
+@newenvironment[normalfont][@_lb@_bsl[]f@deffont\
+@_bsl[]b0\
+@_bsl[]i0\
+@_bsl[]scaps0\
+][\
+@_rb\
+]
+
+@newcommand[tiny][@_lb@_fstiny[] #1@_rb]
+@newcommand[scriptsize][@_lb@_fsscriptsize[] #1@_rb]
+@newcommand[footnotesize][@_lb@_fsfootnotesize[] #1@_rb]
+@newcommand[small][@_lb@_fssmall[] #1@_rb]
+@newcommand[normalsize][@_lb@_fsnormalsize[] #1@_rb]
+@newcommand[large][@_lb@_fslarge[] #1@_rb]
+@newcommand[Large][@_lb@_fsLarge[] #1@_rb]
+@newcommand[LARGE][@_lb@_fsLARGE[] #1@_rb]
+@newcommand[huge][@_lb@_fshuge[] #1@_rb]
+@newcommand[Huge][@_lb@_fsHuge[] #1@_rb]
+
+@newenvironment[tiny][@_lb@_fstiny ][@_rb]
+@newenvironment[scriptsize][@_lb@_fsscriptsize ][@_rb]
+@newenvironment[footnotesize][@_lb@_fsfootnotesize ][@_rb]
+@newenvironment[small][@_lb@_fssmall ][@_rb]
+@newenvironment[normalsize][@_lb@_fsnormalsize ][@_rb]
+@newenvironment[large][@_lb@_fslarge ][@_rb]
+@newenvironment[Large][@_lb@_fsLarge ][@_rb]
+@newenvironment[LARGE][@_lb@_fsLARGE ][@_rb]
+@newenvironment[huge][@_lb@_fshuge ][@_rb]
+@newenvironment[Huge][@_lb@_fsHuge ][@_rb]
+
+
+@newcommand[sub][@_lb@_bsl[]sub #1@_rb]
+@newcommand[sup][@_lb@_bsl[]super #1@_rb]
+%endif __RTF_FONTS_UDH__

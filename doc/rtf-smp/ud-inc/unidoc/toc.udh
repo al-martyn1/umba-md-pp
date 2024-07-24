@@ -1,0 +1,18 @@
+%if !defined(__TOC_UDH__)
+%define __TOC_UDH__ 1
+
+@newcommand[toctitle_style][title_center_LARGE_bold]
+@newcommand[tocline][---]
+
+%if defined(HTML)
+    %include <html\htmtoc.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_RTFTOC_UDH__)
+        % message include rtf\rtftoc.udh
+        %include <rtf\rtftoc.udh>
+    %endif __RTF_RTFTOC_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\textoc.udh>
+%endif
+
+%endif __TOC_UDH__

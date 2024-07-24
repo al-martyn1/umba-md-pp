@@ -1,0 +1,6 @@
+%if !defined(HTMFSIZE_UDH)
+%define HTMFSIZE_UDH 1
+@newcommand[deffontsize][100]
+%include <_fsize.udh>
+
+%endif HTMFSIZE_UDH

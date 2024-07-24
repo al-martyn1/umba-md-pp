@@ -1,0 +1,22 @@
+%if !defined(__WIKI_UDH__)
+%define __WIKI_UDH__ 1
+@inputopt[crlf_eliminate][1]@inputopt[crlf_to_space][1]
+
+%include "base.udh"
+%include "cyr.udh"
+
+%include <base.udh>
+%include <inputenc.udh>
+
+%include <document.udh>
+%include <texts.udh>
+
+%include "wikisect.udh"
+
+
+
+
+
+
+
+%endif __WIKI_UDH__

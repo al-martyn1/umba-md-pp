@@ -1,0 +1,21 @@
+; C/C++ standart types
+; modifiers
+type unsigned
+type signed
+type long
+type short
+; types
+type void
+; int types
+type bool
+type char
+type wchar_t
+type int
+type enum
+type __int8
+type __int16
+type __int32
+type __int64
+; float types
+type float
+type double

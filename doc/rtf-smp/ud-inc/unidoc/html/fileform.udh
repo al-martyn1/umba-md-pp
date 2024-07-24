@@ -1,0 +1,63 @@
+%if !defined(__HTML_FILEFORM_UDH__)
+%define __HTML_FILEFORM_UDH__ 1
+
+%include <html\htmstyle.udh>
+% html preambule
+@newcommand[html_doctype][<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML//EN">]
+% html code must always be in tags <HTML></HTML>
+@newcommand[file_begin][<HTML>]
+@newcommand[file_end][</HTML>]
+% header begin, end
+@newcommand[file_header_begin][<HEAD>]
+@newcommand[file_header_end][</HEAD>]
+% tail begin, end. HTML have no tail
+@newcommand[file_footer_begin][]
+@newcommand[file_footer_end][]
+% document title. Not all doc types have this part, in html it's optional
+@newcommand[file_title][<TITLE>#1</TITLE>]
+% document body
+@newcommand[file_body_begin][<BODY>]
+@newcommand[file_body_end][</BODY>]
+
+@newcommand[html_meta][<META Name="#1" Content="#2">]
+
+@newenvironment[para][@_lt[]P@_gt[]][@_lt[]/P@_gt[]]
+% @newcommand[section][@_lt[]H1@_gt[]#1@_lt[]/H1@_gt[]]
+% @newcommand[]
+
+% create html file
+% args - file_name, file_title
+@newcommand[begin_doc_file]\
+[\
+@html_doctype[]
+@file_begin[]
+@file_header_begin[]
+@html_meta[Author][@var[_author]]
+@html_meta[Generator][UDP 1.0]
+@file_title[#1]
+@html_link_stylesheet[@thebasefile[].css]
+@file_header_end[]
+@file_body_begin[]
+]
+
+@newcommand[end_doc_file]\
+[
+@file_body_end[]
+@file_end[]
+@closefile[]
+]
+
+@newenvironment[doc_file][
+@html_make_css_file[@thebasefile[].css]
+@openfile[]@html_doctype
+@file_begin[]
+@file_header_begin[]
+@html_meta[Author][@var[_author]]
+@html_meta[Generator][UDP 1.0]
+@file_title[#1]
+@html_link_stylesheet[@thebasefile[].css]
+@file_header_end
+@file_body_begin][
+@file_body_end[]
+@file_end[]@closefile]
+%endif __HTML_FILEFORM_UDH__

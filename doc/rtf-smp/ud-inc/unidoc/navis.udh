@@ -1,0 +1,29 @@
+%if !defined(__NAVIS_UDH__)
+%define __NAVIS_UDH__
+
+%if defined(NAVIS)
+
+@newcommand[navis_kb_text][\
+@CYR_K@cyr_o@cyr_n@cyr_s@cyr_t@cyr_r@cyr_u@cyr_k@cyr_t@cyr_o@cyr_r@cyr_s@cyr_k@cyr_o@cyr_e[]\
+ @cyr_b@cyr_yu@cyr_r@cyr_o[]\
+]
+
+@newcommand[navis_ns_text][@cyr_n@cyr_a@cyr_v@cyr_i@cyr_g@cyr_a@cyr_ts@cyr_i@cyr_o@cyr_n@cyr_n@cyr_hrdi@cyr_kh[]\
+ @cyr_s@cyr_i@cyr_s@cyr_t@cyr_e@cyr_m[]]
+
+@newcommand[navis_navis_text][@CYR_N @CYR_A @CYR_V @CYR_I @CYR_S[]]
+@newcommand[navis_spb_text][@CYR_S@cyr_a@cyr_n@cyr_k@cyr_t[]-@CYR_P@cyr_e@cyr_t@cyr_e@cyr_r@cyr_b@cyr_u@cyr_r@cyr_g@cyr_s@cyr_k@cyr_i@cyr_y[]\
+ @cyr_f@cyr_i@cyr_l@cyr_i@cyr_a@cyr_l[]]
+
+
+@newcommand[navis_okpo][44473627]
+
+%if !defined(__RTF_NAVIS_UDH__)
+    %include <rtf/navis.udh>
+%endif __RTF_NAVIS_UDH__
+
+
+
+%endif
+
+%endif __NAVIS_UDH__

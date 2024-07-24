@@ -1,0 +1,124 @@
+%if !defined(___COLOR_UDH__)
+%define ___COLOR_UDH__ 1
+% ¬нутренн€€ команда make_color_table
+% »спользуетс€ дл€ создани€ таблицы цветов документа
+% »спользует команды _begin_color_table, _end_color_table и _definecolor.
+% которые должны быть определены отдельно дл€ каждого типа выходного документа.
+@newcommand[make_color_table][\
+@_begin_color_table
+% black 0
+@_definecolor[0][0][0][black]\
+% green 1
+@_definecolor[0][128][0][green]\
+% gray 2
+@_definecolor[128][128][128][gray]\
+% navy 3
+@_definecolor[0][0][128][navy]\
+% blue 4
+@_definecolor[0][0][255][blue]\
+% purple 5
+@_definecolor[128][0][128][purple]\
+% red 6
+@_definecolor[255][0][0][red]\
+% maroon 7
+@_definecolor[128][0][0][maroon]\
+% aqua 8
+@_definecolor[0][255][255][aqua]\
+% olive 9
+@_definecolor[128][128][0][olive]\
+% fuchsia 10
+@_definecolor[255][0][255][fuchsia]\
+% silver 11
+@_definecolor[192][192][192][silver]\
+% lime 12
+@_definecolor[0][255][0][lime]\
+% teal 13
+@_definecolor[0][128][128][teal]\
+% yellow 14
+@_definecolor[255][255][0][yellow]\
+% white 15
+@_definecolor[255][255][255][white]\
+% cyan 16
+@_definecolor[0][255][255][cyan]\
+% darkcyan 17
+@_definecolor[0][139][139][darkcyan]\
+% aquamarine18
+@_definecolor[127][255][212][aquamarine]\
+% darkgray19
+@_definecolor[169][169][169][darkgray]\
+% lightgray 20
+@_definecolor[211][211][211][lightgray]\
+% magenta 21
+@_definecolor[255][0][255][magenta]\
+% darkmagenta 22
+@_definecolor[139][0][139][darkmagenta]\
+% violet 23
+@_definecolor[238][130][238][violet]\
+% darkviolet  24
+@_definecolor[148][0][211][darkviolet]\
+% darkblue 25
+@_definecolor[0][0][139][darkblue]\
+% mediumblue 26
+@_definecolor[0][0][205][mediumblue]\
+% sourcecolor
+@_definecolor[0][32][128][sourcecolor]\
+% cpreprocessorcolor
+@_definecolor[0][160][0][cpreprocessorcolor]\
+% ccommentcolor
+% @_definecolor[64][96][128][ccommentcolor]\
+@_definecolor[128][160][192][ccommentcolor]\
+% cstringcolor
+@_definecolor[240][0][0][cstringcolor]\
+% cnumbercolor - blue
+@_definecolor[0][0][255][cnumbercolor]\
+% csemicoloncolor 
+@_definecolor[96][96][96][csemicoloncolor]\
+% cuserkwdcolor
+% @_definecolor[96][96][96][cuserkwdcolor]\
+@_definecolor[96][0][96][cuserkwdcolor]\
+% cusertypecolor - gray
+@_definecolor[96][0][96][cusertypecolor]\
+%
+%
+% xmlcolor1 - blue
+@_definecolor[0][0][255][xmlcolor1]\
+% xmlcolor2 - blue
+@_definecolor[0][0][255][xmlcolor2]\
+%
+% xmltagcolor1 - dark red
+@_definecolor[150][0][0][xmltagcolor1]\
+% xmltagcolor2 - dark red
+@_definecolor[150][0][0][xmltagcolor2]\
+% 
+% xmlattrcolor1 - dark red
+@_definecolor[150][0][0][xmlattrcolor1]\
+% xmlattrcolor2 - green
+@_definecolor[0][178][0][xmlattrcolor2]\
+% xmlattrvalcolor1 - black
+@_definecolor[0][0][0][xmlattrvalcolor1]\
+% xmlattrvalcolor2 - red
+@_definecolor[224][0][0][xmlattrvalcolor2]\
+% 
+% xmltextcolor1 - black
+@_definecolor[0][0][0][xmltextcolor1]\
+% xmltextcolor2
+@_definecolor[0][32][128][xmltextcolor2]\
+%
+% xmlcdatacolor1 - gray
+@_definecolor[80][80][80][xmlcdatacolor1]\
+% xmlcdatacolor2 - 
+@_definecolor[32][48][128][xmlcdatacolor2]\
+% 
+% xmlcommentcolor1 - light gray
+@_definecolor[192][192][192][xmlcommentcolor1]\
+% xmlcommentcolor2 - light xmltextcolor2
+@_definecolor[176][192][208][xmlcommentcolor2]\
+% 
+% darkmediumblue 26
+@_definecolor[0][0][172][darkmediumblue]\
+%
+%
+@_end_color_table\
+]
+
+%endif ___COLOR_UDH__

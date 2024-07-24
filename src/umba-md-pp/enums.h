@@ -749,25 +749,36 @@ enum class GraphVizTargetFormat : std::uint32_t
     unknown   = (std::uint32_t)(-1),
     svg       = 0x0000,
     png       = 0x0001,
-    bmp       = 0x0002
+    bmp       = 0x0002,
+    emf       = 0x0003,
+    jpg       = 0x0004,
+    jpeg      = 0x0004,
+    gif       = 0x0005
 
 }; // enum class GraphVizTargetFormat : std::uint32_t
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(GraphVizTargetFormat)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( GraphVizTargetFormat, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::jpg       , "jpg"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::bmp       , "bmp"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::gif       , "gif"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::svg       , "svg"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::png       , "png"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphVizTargetFormat::emf       , "emf"     );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( GraphVizTargetFormat, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( GraphVizTargetFormat, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphVizTargetFormat::jpg       , "jpg"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphVizTargetFormat::jpg       , "jpeg"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphVizTargetFormat::bmp       , "bmp"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphVizTargetFormat::invalid   , "invalid" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphVizTargetFormat::invalid   , "unknown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphVizTargetFormat::gif       , "gif"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphVizTargetFormat::svg       , "svg"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphVizTargetFormat::png       , "png"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphVizTargetFormat::emf       , "emf"     );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( GraphVizTargetFormat, std::map, 1 )
 
 

@@ -1,0 +1,31 @@
+; Lexem environment for html, inline colors
+prolog                         <PRE style="BACKGROUND-COLOR:rgb(242,248,254);">
+epilog                         </PRE>
+preprocessor_begin             <SPAN style="color:rgb(0,160,0);">
+preprocessor_end               </SPAN>
+preprocessor_keyword_begin     <B>
+preprocessor_keyword_end       </B>
+comment_start                  <SPAN style="color:rgb(0,0,128);"><I>
+comment_end                    </I></SPAN>
+string_start                   <SPAN style="color:rgb(240,0,0);">
+string_end                     </SPAN>
+number_start                   <SPAN style="color:rgb(0,0,255);">
+number_end                     </SPAN>
+operator_start                 
+operator_end                   
+semicolon_start                <SPAN style="color:rgb(96,96,96);"><B>
+semicolon_end                  </B></SPAN>
+keyword_begin                  <B>
+keyword_end                    </B>
+user_keyword_begin             <SPAN style="color:rgb(96,96,96);"><B>
+user_keyword_end               </B></SPAN>
+type_begin                     <B>                                         
+type_end                       </B>                                  
+user_type_begin                <SPAN style="color:rgb(128,128,128);"><B>
+user_type_end                  </B></SPAN>                           
+
+; printf style strings
+label_begin                    <A name="#%s">
+label_end                      </A>
+ref_begin                      <A href="#%s">
+ref_end                        </A>

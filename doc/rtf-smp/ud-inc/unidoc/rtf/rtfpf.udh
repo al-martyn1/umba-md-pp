@@ -1,0 +1,34 @@
+%if !defined(__RTF_RTFPF_UDH__)
+%define __RTF_RTFPF_UDH__
+
+@newcommand[__paper_format][\
+@ifthen[#0>=2]\
+[@evar[__paperw][@eval[#1*1440/254]]@evar[__paperh][@eval[#2*1440/254]]]\
+]
+
+@newcommand[margin_left][@evar[__margin_left][@eval[#1*1440/254]]]
+@newcommand[margin_top][@evar[__margin_top][@eval[#1*1440/254]]]
+@newcommand[margin_right][@evar[__margin_right][@eval[#1*1440/254]]]
+@newcommand[margin_bottom][@evar[__margin_bottom][@eval[#1*1440/254]]]
+@newcommand[gutter][@evar[__gutter][@eval[#1*1440/254]]]
+@newcommand[header_size][@evar[__header_size][@eval[#1*1440/254]]]
+@newcommand[footer_size][@evar[__footer_size][@eval[#1*1440/254]]]
+@newcommand[header_margin_left][@evar[__header_margin_left][@eval[#1*1440/254]]]
+@newcommand[header_margin_right][@evar[__header_margin_right][@eval[#1*1440/254]]]
+
+@newcommand[paper_format][@__paper_format_#1[]]
+% A4 21x29.7
+@newcommand[__paper_format_A4][@__paper_format[2100][2970]]
+@newcommand[__paper_format_A4landscape][@__paper_format[2970][2100]]
+% A5 14.8x21
+@newcommand[__paper_format_A5][@__paper_format[1480][2100]]
+% A6 10.5x14.8
+@newcommand[__paper_format_A6][@__paper_format[1050][1480]]
+% 
+% @newcommand[__paper_format_][@__paper_format[][]]
+% @newcommand[__paper_format_][@__paper_format[][]]
+% @newcommand[__paper_format_][@__paper_format[][]]
+                        
+@paper_format[A4]
+
+%endif __RTF_RTFPF_UDH__

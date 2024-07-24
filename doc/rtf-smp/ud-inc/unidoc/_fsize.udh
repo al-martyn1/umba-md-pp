@@ -1,0 +1,65 @@
+%if !defined(___FSIZE_UDH__)
+%define ___FSIZE_UDH__
+% Размеры шрифтов
+% Размеры шрифтов определяються на основе размера базового шрифта
+% Существуют следующие размеры:
+% _stiny
+% _sscriptsize
+% _sfootnotesize
+% _ssmall
+% _snormalsize    - базовый
+% _slarge
+% _sLarge
+% _sLARGE
+% _shuge
+% _sHuge
+
+% Каждый шрифт больше(меньше) предыдущего в ~1.2 раза
+% Для файлов справки это соотношение равно 1.3
+
+%if defined(HELP)
+@newcommand[_sizefractnum][130]
+%else
+@newcommand[_sizefractnum][117]
+%endif
+
+@newcommand[_sizefractdenum][100]
+
+% Размер базового шрифта определяется ранее командой deffontsize.
+
+
+@newcommand[_snormalsize][@deffontsize]
+@compilecommand[_snormalsize]
+
+@newcommand[_slarge][@eval[@_snormalsize[]*@_sizefractnum[]/@_sizefractdenum[]]]
+@compilecommand[_slarge]
+
+@newcommand[_sLarge][@eval[@_slarge[]*@_sizefractnum[]/@_sizefractdenum[]]]
+@compilecommand[_sLarge]
+
+@newcommand[_sLARGE][@eval[@_sLarge[]*@_sizefractnum[]/@_sizefractdenum[]]]
+@compilecommand[_sLarge]
+
+@newcommand[_shuge][@eval[@_sLARGE[]*@_sizefractnum[]/@_sizefractdenum[]]]
+@compilecommand[_shuge]
+
+@newcommand[_sHuge][@eval[@_shuge[]*@_sizefractnum[]/@_sizefractdenum[]]]
+@compilecommand[_sHuge]
+
+@newcommand[_sHUGE][@eval[@_sHuge[]*@_sizefractnum[]/@_sizefractdenum[]]]
+@compilecommand[_sHUGE]
+
+@newcommand[_ssmall][@eval[@_snormalsize[]*@_sizefractdenum[]/@_sizefractnum[]]]
+@compilecommand[_ssmall]
+
+@newcommand[_sfootnotesize][@eval[@_ssmall[]*@_sizefractdenum[]/@_sizefractnum[]]]
+@compilecommand[_sfootnotesize]
+
+@newcommand[_sscriptsize][@eval[@_sfootnotesize[]*@_sizefractdenum[]/@_sizefractnum[]]]
+@compilecommand[_sscriptsize]
+
+@newcommand[_stiny][@eval[@_sscriptsize[]*@_sizefractdenum[]/@_sizefractnum[]]]
+@compilecommand[_stiny]
+
+%endif ___FSIZE_UDH__
+

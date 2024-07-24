@@ -1,0 +1,29 @@
+%if !defined(__PICTURE_UDH__)
+%define __PICTURE_UDH__ 1
+
+@newcounter[picture]
+@newcommand[picturefixed][@picture_text[]]
+
+
+@newcommand[thepicture][\
+@ifthenelse[@isinenv[book]][\
+@thechapter[]\
+][\
+@ifthenelse[@isinenv[article] || @isinenv[techtask]][\
+@thesection[]\
+][\
+]\
+]\
+.@arabic[@getcounter[picture]]]
+
+%if defined(HTML)
+    %include <html\htmpic.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_RTFPIC_UDH__)
+        %include <rtf\rtfpic.udh>
+    %endif __RTF_RTFPIC_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\texpic.udh>
+%endif
+
+%endif __PICTURE_UDH__

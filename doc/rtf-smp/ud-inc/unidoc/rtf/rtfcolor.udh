@@ -1,0 +1,28 @@
+%if !defined(__RTF_RTFCOLOR_UDH__)
+%define __RTF_RTFCOLOR_UDH__
+@newcommand[rtf_definecolor][@_bsl[]red#1@_bsl[]green#2@_bsl[]blue#3]
+% args - r,g,b, name
+@newcommand[_definecolor][@rtf_definecolor[#1][#2][#3];\
+@newcommand[_#4][@getcounter[_rtf_color_index]]\
+@compilecommand[_#4]\
+@addcounter[_rtf_color_index][1]\
+]
+% @newenvironment[_color_table][\
+% @newcounter[_rtf_color_index]\
+% @_lb@_bsl[]colortbl][@_rb]
+@newcommand[_begin_color_table][\
+@ifthenelse[@iscounter[_rtf_color_index]]\
+[@resetcounter[_rtf_color_index]]\
+[@newcounter[_rtf_color_index]]\
+@_lb@_bsl[]colortbl]\
+@newcommand[_end_color_table][@_rb]
+
+%include <_color.udh>
+%
+@newcommand[_color][@_bsl[]cf@_#1][black]
+@newcommand[_bgcolor][@_bsl[]cb@_#1@_bsl[]chcbpat@_#1][white]
+@newcommand[color][@_lb@_color[#1] #2@_rb][black]
+@newcommand[bgcolor][@_lb@_bgcolor[#1] #2@_rb][white]
+@newenvironment[color][@_lb@_color[#1] ][@_rb][black]
+@newenvironment[bgcolor][@_lb@_bgcolor[#1] ][@_rb][white]
+%endif __RTF_RTFCOLOR_UDH__

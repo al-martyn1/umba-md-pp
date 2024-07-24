@@ -1,0 +1,8 @@
+%if !defined (__PICTURE__)
+%define __PICTURE__
+
+%if !defined(__PICTURE_UDH__)
+    %include <picture.udh>
+%endif __PICTURE_UDH__
+
+%endif __PICTURE__

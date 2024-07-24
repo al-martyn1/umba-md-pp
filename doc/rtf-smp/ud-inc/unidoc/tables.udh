@@ -1,0 +1,14 @@
+%if !defined(__TABLES_UDH__)
+%define __TABLES_UDH__
+
+%if defined(HTML)
+    %include <html\htmtabls.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_RTFTABLS_UDH__)
+        %include <rtf\rtftabls.udh>
+    %endif __RTF_RTFTABLS_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    % include <tex\textabls.udh>
+%endif
+
+%endif __TABLES_UDH__

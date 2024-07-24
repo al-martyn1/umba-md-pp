@@ -1,0 +1,11 @@
+%if !defined (__BASE__)
+%define __BASE__
+
+%if !defined(QUET)
+% message Base definitions
+%endif
+%if !defined(__BASE_UDH__)
+    %include <base.udh>
+%endif __BASE_UDH__
+
+%endif __BASE__

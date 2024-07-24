@@ -43,6 +43,7 @@ Language   : Russian
   - умеет в метаданные **Markdown**;
 
 
+#/*
 Пытаемся в графы
 
 <graph> doc\dot\test001.dot
@@ -70,7 +71,7 @@ digraph G{
  VERIFIED->OPEN[label="обнаружены ошибки",style="dashed",arrowhead="dot"];
 }
 </graph>
-
+#*/
 Пытаемся в картинки
 
 ![Todo 1](doc/icons/todo-list-50.png)

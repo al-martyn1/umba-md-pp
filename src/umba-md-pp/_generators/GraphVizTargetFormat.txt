@@ -1,4 +1,8 @@
+# https://graphviz.org/docs/outputs/
 invalid,unknown=-1
 svg
 png
 bmp
+emf
+jpg,jpeg
+gif

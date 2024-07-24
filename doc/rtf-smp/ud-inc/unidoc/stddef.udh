@@ -1,0 +1,182 @@
+%if !defined(__STDDEF_UDH__)
+%define __STDDEF_UDH__ 1
+
+%if !defined(QUET)
+    % message Std definitions
+%endif QUET
+
+%if defined(RTF) && !defined(WINHELP)
+
+    % message define RTF && !WINHELP
+
+    %if !defined(PRINTABLE)
+        %define PRINTABLE 1
+    %endif
+
+%elseif defined(HTMLHELP)
+
+    % message define HTMLHELP
+
+    %if !defined(HTML)
+        %define HTML 1
+    %endif HTML
+   
+    %if !defined(HELP)
+        %define HELP 1
+    %endif
+   
+    %if !defined(HYPERTEXT)
+        %define HYPERTEXT 1
+    %endif
+   
+%elseif defined(WINHELP)
+ 
+    % message define WINHELP
+
+    %if !defined(RTF)
+        %define RTF 1
+    %endif
+   
+    %if !defined(HELP)
+        %define HELP 1
+    %endif
+   
+    %if !defined(HYPERTEXT)
+        %define HYPERTEXT 1
+    %endif
+   
+%elseif (defined(TEX) || defined(LATEX))
+
+    % message define TEX || LATEX
+
+    %if !defined(PRINTABLE)
+        %define PRINTABLE 1
+    %endif
+
+%elseif (defined(WIKI) || defined(KBWIKI))
+
+    % message define WIKI || KBWIKI
+
+    %if !defined(HYPERTEXT)
+        %define HYPERTEXT 1
+    %endif
+
+%else
+% no output format defined
+
+    % message no output format defined
+
+    %if !defined(RTF)
+        %define RTF 1
+    %endif
+%endif
+
+%if defined(KBWIKI) && !defined(WIKI)
+        %define WIKI 1
+%endif
+
+%if defined(RTF) && !defined(HYPERTEXT)
+    %if !defined(PRINTABLE)
+        %define PRINTABLE 1
+    %endif
+%endif
+
+%if !defined(BASE_FONT_SIZE)
+    %if defined(HELP)
+        %define BASE_FONT_SIZE 10
+    %else
+        %define BASE_FONT_SIZE 12
+    %endif 
+%endif BASE_FONT_SIZE
+
+%if defined(GOST)
+    %if !defined(__GOST_UDH__)
+        %include <gost.udh>
+    %endif __GOST_UDH__
+%endif GOST
+
+%if !defined(__EXTCMD_UDH__)
+    %include <extcmd.udh>
+%endif __EXTCMD_UDH__
+
+%if !defined(__BASE_UDH__)
+    %include <base.udh>
+%endif __BASE__
+
+%if !defined(__PFORMAT_UDH__)
+    %include <pformat.udh>
+%endif __PFORMAT__
+
+%if !defined(__FILEFORM_UDH__)
+    %include <fileform.udh>
+%endif __FILEFORM__
+
+%if !defined(__INPUTENC_UDH__)
+    %include <inputenc.udh>
+%endif __INPUTENC__
+
+%if !defined(__SECT_UDH__)
+    %include <sect.udh>
+%endif __SECT__
+
+%if !defined(__DOCUMENT_UDH__)
+    %include <document.udh>
+%endif __DOCUMENT_UDH__
+
+%if !defined(__COMMON_UDH__)
+    %include <common.udh>
+%endif __COMMON_UDH__
+
+%if !defined(__VERBATIM_UDH__)
+    %include <verbatim.udh>
+%endif __VERBATIM_UDH__
+
+%if !defined(__LISTING_UDH__)
+    %include <listing.udh>
+%endif __LISTING_UDH__
+
+%if !defined(__IMG_UDH__)
+    %include <img.udh>
+%endif __IMG_UDH__
+
+%if !defined(__PICTURE_UDH__)
+    %include <picture.udh>
+%endif __PICTURE_UDH__
+
+%if !defined(__TABULAR_UDH__)
+    %include <tabular.udh>
+%endif __TABULAR_UDH__
+
+%if !defined(__CAP_UDH__)
+    %include <cap.udh>
+%endif __CAP_UDH__
+
+%if !defined(__MISC_UDH__)
+    %include <misc.udh>
+%endif __MISC_UDH__
+
+%if !defined(__TEXTS_UDH__)
+    %include <texts.udh>
+%endif __TEXTS_UDH__
+
+%if !defined(__INDEX_UDH__)
+    %include <index.udh>
+%endif __INDEX_UDH__
+
+%if !defined(__TITLE_UDH__)
+    %include <title.udh>
+%endif __TITLE_UDH__
+
+%if !defined(__TOC_UDH__)
+    %include <toc.udh>
+%endif __TOC_UDH__
+
+%if !defined(__TABLES_UDH__)
+    %include <tables.udh>
+%endif __TABLES_UDH__
+
+%if !defined(__BTN_UDH__)
+    %include <btn.udh>
+%endif __BTN_UDH__
+
+%endif __STDDEF_UDH__

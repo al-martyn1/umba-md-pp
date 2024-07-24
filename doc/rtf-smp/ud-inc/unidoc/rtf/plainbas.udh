@@ -1,0 +1,7 @@
+@renewcommand[quot]["]\
+@renewcommand[lquot][']\
+@renewcommand[rquot][']\
+@renewcommand[ldquot]["]\
+@renewcommand[rdquot]["]\
+@renewcommand[quoted]['##1']\
+@renewcommand[dquoted]["##1"]\

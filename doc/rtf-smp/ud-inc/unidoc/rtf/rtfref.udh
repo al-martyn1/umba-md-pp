@@ -1,0 +1,67 @@
+%if !defined(__RTF_RTFREF_UDH__)
+%define __RTF_RTFREF_UDH__
+@newcommand[_getsecnum][@evar[_#1_NUMBER]]
+@newcommand[_getseclabel][@evar[_#1_LABEL]]
+@newcommand[_getseccaption][@evar[_#1_CAPTION]]
+
+%if defined(HELP)
+@newcommand[typeref][\
+@_lb@_bsl[]uldb @ifthenelse[#0>1][#2][@_getseccaption[#1]]@_rb\
+@_lb@_bsl[]v *@_getseclabel[#1]@_rb[]]
+@newcommand[typepopref][\
+@_lb@_bsl[]ul @ifthenelse[#0>1][#2][@_getseccaption[#1]]@_rb\
+@_lb@_bsl[]v *@_getseclabel[#1]@_rb[]]
+@newcommand[ref][\
+@_lb@_bsl[]uldb @ifthenelse[#0>1][#2][@_getseccaption[#1]]@_rb\
+@_lb@_bsl[]v @_getseclabel[#1]@_rb[]]
+@newcommand[popref][\
+@_lb@_bsl[]ul @ifthenelse[#0>1][#2][\
+@_getseccaption[#1]]@_rb\
+@_lb@_bsl[]v @_getseclabel[#1]@_rb[]]
+@newcommand[webref][\
+@_lb@_bsl[]uldb @ifthenelse[#0>1][#2][#1]@_rb[]\
+@_lb@_bsl[]v !ExecFile("#1")@_rb[]]
+@newcommand[mailto][\
+@_lb@_bsl[]uldb @ifthenelse[#0>1][#2][#1]@_rb[]\
+@_lb@_bsl[]v !ExecFile("mailto:#1")@_rb[]]
+% @_lb@_bsl[]v !SE('#1','',,'open','')@_rb[]]
+% @newcommand[webref][\
+% @_lb@_bsl[]uldb #1@_rb[]\
+% @_lb@_bsl[]v @_rb[]]
+% ShellExecute(filename,ÿ[options[,ÿshow-flag[,ÿoperation[,ÿpath[,ÿtopic-id]]]]])
+%else
+@newcommand[typeref][\
+@ifthenelse[#0>1][#2][@_getcaption[#1]]]
+@newcommand[typepopref][@ifthenelse[#0>1][#2][@emph[@_getseccaption[#1]]]]
+@newcommand[ref][\
+@ifthenelse[#0>1][#2 (@_getsecnum[#1])][@_getsecnum[#1]]]
+% @newcommand[ref][@_getsecnum[#1]]
+@newcommand[popref][@ifthenelse[#0>1][#2][@emph[@_getseccaption[#1]]]]
+
+%<
+{ \hl  { \hlloc  RTF-string } { \hlsrc RTF-string } { \hlfr RTF-string } }
+
+{\sp{\sn pihlShape}{\sv 1}}
+
+
+{\insrsid11234593 -\tab Brainbench (}
+{\field{\*\fldinst 
+         {\insrsid11234593  HYPERLINK "http://www.brainbench.com/xml/bb/transcript/public/viewtranscript.xml?pid=5829133" 
+         }
+         {\insrsid11234593 {\*\datafield 00d0c9ea ... 33000000}
+         }
+       }
+       {\fldrslt {\cs62\ul\cf2\insrsid11234593\charrsid11234593 brainbench
+                 }
+       }
+}
+%>
+
+@newcommand[webref][\
+@ifthenelse[#0>1][#2 (#1)][#1]]
+@newcommand[mailto][\
+@ifthenelse[#0>1][#2 (#1)][#1]]
+%endif
+
+
+%endif __RTF_RTFREF_UDH__

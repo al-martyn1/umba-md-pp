@@ -1,0 +1,29 @@
+%if !defined(HTMLCOLOR_UDH)
+%define HTMLCOLOR_UDH 1
+@newcommand[html_definecolor][rgb(#1,#2,#3)]
+@newcommand[_definecolor][
+@begin[html_style][.cf#4]
+ COLOR: @html_definecolor[#1][#2][#3];
+@end[html_style]
+@begin[html_style][.cb#4]
+ BACKGROUND-COLOR: @html_definecolor[#1][#2][#3];
+@end[html_style]
+@newcommand[_cf#4][class="cf#4"]@compilecommand[_cf#4]\
+@newcommand[_cb#4][class="cb#4"]@compilecommand[_cb#4]\
+@newcommand[_rgb_#4][@html_definecolor[#1][#2][#3]]@compilecommand[_rgb_#4]\
+]
+
+% @newenvironment[_color_table][]
+@newcommand[_begin_color_table][]
+@newcommand[_end_color_table][]
+%include <_color.udh>
+
+@newcommand[_color][@_cf#1]
+@newcommand[_bgcolor][@_cb#1]
+@newcommand[color][<SPAN @_color[#1]>#2</SPAN>]
+@newcommand[bgcolor][<SPAN @_bgcolor[#1]>#2</SPAN>]
+@newenvironment[color][<SPAN @_color[#1]>][</SPAN>]
+@newenvironment[bgcolor][<SPAN @_bgcolor[#1]>][</SPAN>]
+
+
+%endif HTMLCOLOR_UDH

@@ -1,0 +1,44 @@
+<STYLE type="text/css">
+
+BODY
+{       
+    COLOR: #000000;
+    BACKGROUND-COLOR: white;
+    MARGIN:20pt; 
+    MARGIN-RIGHT:10pt; 
+    PADDING:20pt; 
+    PADDING-RIGHT:10pt; 
+    BORDER:30pt; 
+
+}
+
+.flatbtn 
+{
+ BORDER-STYLE:solid;
+ BORDER-WIDTH:1;
+ BORDER-COLOR:#003661;
+ BACKGROUND-COLOR:#A0C0D0;
+ FONT-FAMILY:verdana,arial cyr,arial,courier cyr,courier;
+}
+
+.flatinput
+{
+ BORDER-WIDTH:1;
+ BORDER-STYLE:solid; 
+ BORDER-COLOR:#003661;
+ BACKGROUND-COLOR:white;
+ FONT-FAMILY:verdana,arial cyr,arial,courier cyr,courier;
+}
+
+BODY, TR, TD
+{
+ FONT-FAMILY:verdana,arial cyr,arial,courier cyr,courier;
+ FONT-SIZE:12px;
+}
+
+BODY
+{
+ BACKGROUND-COLOR:white;
+}
+
+</STYLE>

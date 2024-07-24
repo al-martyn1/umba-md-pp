@@ -1,0 +1,88 @@
+; C/C++ keywords
+;
+; flow control
+keyword goto
+; flow control - cicles
+keyword while
+keyword for
+keyword do
+keyword continue
+keyword break
+; flow control - conditions
+keyword if
+keyword else
+keyword switch
+keyword case
+keyword default
+; flow control - exceptions
+keyword try
+keyword catch
+keyword __try
+keyword __finally
+keyword __except    
+keyword throw
+; flow control - other
+keyword __leave
+; casts & RTTI
+keyword reinterpret_cast
+keyword const_cast
+keyword static_cast
+keyword dynamic_cast
+keyword typeid
+; type definition
+keyword class
+keyword struct
+keyword typedef
+keyword union
+keyword typename
+keyword template
+; name spaces, visibility
+keyword namespace
+keyword using
+keyword this
+keyword friend
+keyword private
+keyword public
+keyword protected
+keyword extern
+; operations
+keyword sizeof
+keyword operator
+keyword new
+keyword delete
+keyword return
+; modifiers - memory classes
+keyword auto 
+keyword register
+keyword static
+; modifiers - calling conventions
+keyword inline
+keyword __inline
+keyword __fastcall
+keyword __cdecl
+keyword __stdcall
+keyword _cdecl
+keyword _stdcall
+; modifiers - other
+keyword explicit
+keyword mutable
+keyword volatile
+keyword naked
+keyword const
+keyword virtual
+keyword dllexport
+keyword dllimport
+keyword novtable
+
+;other
+keyword __asm
+keyword __assume
+keyword __multiple_inheritance
+keyword __single_inheritance
+keyword __virtual_inheritance
+keyword __based 
+keyword false
+keyword true
+keyword noreturn
+keyword __declspec
+keyword __uuidof

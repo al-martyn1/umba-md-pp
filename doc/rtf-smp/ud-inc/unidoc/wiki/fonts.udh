@@ -1,0 +1,82 @@
+%if !defined(__WIKI_FONTS_UDH__)
+%define __WIKI_FONTS_UDH__ 1
+
+
+% Roman font - Times New Roman
+% TODO: define textrm command
+% TODO: define rmfamily environment
+@newcommand[textrm][@message[* TODO: textrm command]#1]
+@newenvironment[rmfamily][@message[* TODO: rmfamily environment]][]
+% Sans Serif - Arial
+% TODO: define textsf command
+% TODO: define sffamily environment
+@newcommand[textsf][@message[* TODO: textsf command]#1]
+@newenvironment[sffamily][@message[* TODO: sffamily environment]][]
+% Typewriter - Courier New
+@newcommand[texttt][@begin[ttfamily]#1@end[ttfamily]]
+@newenvironment[ttfamily][<tt>][</tt>]
+%
+% font series
+% bold
+@newcommand[textbf]['''#1''']
+@newenvironment[bfseries]['''][''']
+% normal
+@newcommand[textmd][#1]
+@newenvironment[mdseries][][]
+%
+% font shape
+% italic
+@newcommand[textit][''#1'']
+@newenvironment[itshape]['']['']
+% normal
+% TODO: define textup command
+% TODO: define upshape environment
+@newcommand[textup][#1]
+@newenvironment[upshape][][]
+% aux - small
+@newenvironment[small][<small>][</small>]
+%
+% capital
+@newcommand[textsc][@begin[small]@uppercase[#1]@end[small]]
+@newenvironment[scshape][@openfile[@thebasefile[]_small_caps.tmp]][@closefile[]@textsc[@insertfile[@thebasefile[]_small_caps.tmp]]@rmfile[@thebasefile[]_small_caps.tmp]]]
+%
+%
+@newcommand[emph][@begin[em]#1@end[em]]
+@newenvironment[em]['']['']
+
+% default document font
+% TODO: define textnormal command
+% TODO: define normalfont environment
+@newcommand[textnormal][#1]
+@newenvironment[normalfont][][]
+
+% TODO: define tiny, scriptsize, footnotesize, small, normalsize, large, Large, LARGE, huge, Huge commands
+@newcommand[tiny][@begin[small]#1@end[small]]
+@newcommand[scriptsize][@begin[small]#1@end[small]]
+@newcommand[footnotesize][@begin[small]#1@end[small]]
+@newcommand[small][@begin[small]#1@end[small]]
+@newcommand[normalsize][#1]
+@newcommand[large][#1]
+@newcommand[Large][#1]
+@newcommand[LARGE][#1]
+@newcommand[huge][#1]
+@newcommand[Huge][#1]
+
+% TODO: define tiny, scriptsize, footnotesize, small, normalsize, large, Large, LARGE, huge, Huge environments
+@newenvironment[tiny][@begin[small]][@end[small]]
+@newenvironment[scriptsize][@begin[small]][@end[small]]
+@newenvironment[footnotesize][@begin[small]][@end[small]]
+@newenvironment[small][@begin[small]][@end[small]]
+@newenvironment[normalsize][][]
+@newenvironment[large][][]
+@newenvironment[Large][][]
+@newenvironment[LARGE][][]
+@newenvironment[huge][][]
+@newenvironment[Huge][][]
+
+@newcommand[sub][<sub>#1</sub>]
+@newcommand[sup][<sup>#1</sup>]
+
+
+
+%endif __WIKI_FONTS_UDH__

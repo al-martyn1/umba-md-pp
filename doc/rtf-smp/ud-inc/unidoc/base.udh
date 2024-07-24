@@ -1,0 +1,74 @@
+%if !defined(__BASE_UDH__)
+%define __BASE_UDH__ 1
+@newcommand[roman][@_roman[#1][mdclxvi]]
+@newcommand[Roman][@_roman[#1][MDCLXVI]]
+@newcommand[Alpha][@_alpha[#1][ABCDEFGHIJKLMNOPQRSTUVWXYZ]]
+@newcommand[alpha][@_alpha[#1][abcdefghijklmnopqrstuvwxyz]]
+
+@newcommand[Cyr_Alpha][@_alpha[#1][\
+@CYR_A[]@CYR_B[]@CYR_V[]@CYR_G[]\
+@CYR_D[]@CYR_E[]@CYR_YO[]@CYR_ZH[]@CYR_Z[]@CYR_I[]@CYR_Y[]@CYR_K[]@CYR_L[]\
+@CYR_M[]@CYR_N[]@CYR_O[]@CYR_P[]@CYR_R[]@CYR_S[]@CYR_T[]@CYR_U[]@CYR_F[]\
+@CYR_KH[]@CYR_TS[]@CYR_CH[]@CYR_SH[]@CYR_TSH[]@CYR_HRDSN[]@CYR_HRDI[]\
+@CYR_SFTSN[]@CYR_EREV[]@CYR_YU[]@CYR_YA[]]]
+
+@newcommand[cyr_alpha][@_alpha[#1][\
+@cyr_a[]@cyr_b[]@cyr_v[]@cyr_g[]\
+@cyr_d[]@cyr_e[]@cyr_yo[]@cyr_zh[]@cyr_z[]@cyr_i[]@cyr_y[]@cyr_k[]@cyr_l[]\
+@cyr_m[]@cyr_n[]@cyr_o[]@cyr_p[]@cyr_r[]@cyr_s[]@cyr_t[]@cyr_u[]@cyr_f[]\
+@cyr_kh[]@cyr_ts[]@cyr_ch[]@cyr_sh[]@cyr_tsh[]@cyr_hrdsn[]@cyr_hrdi[]\
+@cyr_sftsn[]@cyr_erev[]@cyr_yu[]@cyr_ya[]]]
+
+@newcommand[unidoc][UniDoc]
+
+% @newcommand[Uppercase][@uppercase[@slice[#1][0][0]]@lowercase[@slice[#1][1]]]]
+% @newcommand[Lowercase][@lowercase[@slice[#1][0][0]]@uppercase[@slice[#1][1]]]]
+@newcommand[Uppercase][\
+@uppercase[[@slice[#1][0][@eval[0#2-1]]]]\
+@lowercase[[@slice[#1][@eval[0#2]]]]][][1]
+@newcommand[Lowercase][\
+@lowercase[[@slice[#1][0][@eval[0#2-1]]]]\
+@uppercase[[@slice[#1][@eval[0#2]]]]][][1]
+% @newcommand[Lowercase][@lowercase[@slice[#1][0][0]]@uppercase[@slice[#1][1]]]]
+
+
+%if defined(HTML)
+    %if !defined(QUET)
+        % message Use base definitions for HTML
+    %endif
+    %if !defined(__HTML_BASE_UDH__)
+        %include <html\base.udh>
+    %endif __HTML_BASE_UDH__
+%elseif defined(RTF)
+    %if !defined(QUET)
+        % message Use base definitions for RTF
+    %endif
+    %if !defined(__RTF_BASE_UDH__)
+        %include <rtf\base.udh>
+    %endif __RTF_BASE_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %if !defined(QUET)
+        % message Use base definitions for TeX/LaTeX
+    %endif
+    %if !defined(__TEX_BASE_UDH__)
+        %include <tex\base.udh>
+    %endif __TEX_BASE_UDH__
+%elseif defined(WIKI) || defined(KBWIKI)
+    %if !defined(__WIKI_BASE_UDH__)
+        %include <wiki\base.udh>
+    %endif __WIKI_BASE_UDH__
+%endif
+
+%if !defined(__COMPBASE_UDH__)
+    % include <compbase.udh>
+%endif __COMPBASE_UDH__
+
+%if !defined(__FONTS_UDH__)
+    %include <fonts.udh>
+%endif __FONTS_UDH__
+
+%if !defined(__VERBATIM_UDH__)
+    %include <verbatim.udh>
+%endif __VERBATIM_UDH__
+                       
+%endif __BASE_UDH__

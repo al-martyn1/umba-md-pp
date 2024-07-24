@@ -1,0 +1,83 @@
+%if !defined(__RTF_TWIPS_UDH__)
+%define __RTF_TWIPS_UDH__ 1
+
+% При компьютерном наборе используется англо-американский типографский пункт 
+% (point), равный 0,3528 мм. Для перевода англо-американской системы измерений 
+% в типографскую пользуются соотношением: 1 points=0,9348 п.; 
+% 1 п.=1,0697 points. Более крупная единица 1 пика (pica) 
+% равна 12 п. (?4,22 мм).
+ 
+
+% единицы измерения
+% in - Дюйм (inch) = 25.4 мм = 72.27 pt 6.022 pc
+% cm - сантиметр (centimeter) = 10 mm = 2.371 pc
+% mm - миллиметр (millimeter) = 2.845 pt
+% mmt - десятая доля миллиметра = 1/10 mm
+% mmh - сотая доля миллиметра = 1/100 mm
+% tw - твип (twip) = 1/20 bp 
+% pt - Пункт (point) = 1/72.27 in = 0.351 mm                             (0.35145980351459804 mm)
+% bp - Большой пункт (big point) = 1/72 in (bp known as pt in RTF)       (0.35277777777777778 mm)
+% dd - Пункт Дидо (Did^ot point) = 1/72 french inch = 0.376 (27.0540/72 = 0.37575 mm)
+% pc - Пика = 12pt = 4.218mm
+% cc - Цицеро = 12dd = 4.531mm
+
+% twips from inches
+@newcommand[_rtf_tw_from_in][@eval[(#1)*1440]]
+
+% twips from inches /10
+@newcommand[_rtf_tw_from_int][@eval[(#1)*144]]
+
+% twips from inches /100
+@newcommand[_rtf_tw_from_inh][@eval[(#1)*144/10]]
+
+% twips from centimeters
+@newcommand[_rtf_tw_from_cm][@eval[(#1)*144000/254]]
+
+% twips from centimeters /10
+@newcommand[_rtf_tw_from_cmt][@eval[(#1)*14400/254]]
+
+% twips from centimeters /100
+@newcommand[_rtf_tw_from_cmh][@eval[(#1)*1440/254]]
+
+% twips from millimeters
+@newcommand[_rtf_tw_from_mm][@eval[(#1)*14400/254]]
+
+% twips from 1/10 millimeters
+@newcommand[_rtf_tw_from_mmt][@eval[(#1)*1440/254]]
+
+% twips from 1/100 millimeters
+@newcommand[_rtf_tw_from_mmh][@eval[(#1)*1440/2540]]
+
+% twips from twips
+@newcommand[_rtf_tw_from_tw][@eval[#1]]
+
+% twips from points                    
+@newcommand[_rtf_tw_from_pt][@eval[(#1)*144000/7227]]
+
+% twips from big points
+@newcommand[_rtf_tw_from_bp][@eval[(#1)*20]]
+
+% twips from dd                         27.054/72*14400/254
+@newcommand[_rtf_tw_from_dd][@eval[(#1)*27054*144/72/2540]]
+
+% twips from pc
+@newcommand[_rtf_tw_from_pc][@eval[(#1)*12*144000/7227]]
+
+% twips from cc
+@newcommand[_rtf_tw_from_cc][@eval[(#1)*12*27054*144/72/2540]]
+
+
+@newcommand[_rtf_twips_from][@_rtf_tw_from_#2[#1]][0][pt]
+
+
+@newcommand[_rtf_twips][@_rtf_twips_from[[@nump[#1][0]]][[@symp[#1][mm]]]]
+
+
+
+% Перевод из десятых долей миллиметра в твипсы
+@newcommand[_rtf_twfrom10][@_rtf_tw_from_mmt[#1]]
+% Перевод из сотых долей миллиметра в твипсы
+@newcommand[_rtf_twfrom100][@_rtf_tw_from_mmh[#1]]
+
+
+%endif __RTF_TWIPS_UDH__

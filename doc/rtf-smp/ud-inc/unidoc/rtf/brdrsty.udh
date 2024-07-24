@@ -1,0 +1,149 @@
+%if !defined(__RTF_BRDRSTY_UDH__)
+%define __RTF_BRDRSTY_UDH__ 1
+
+% Border types - left, top, right, bottom, hor, vert
+@newcommand[___rtf_brdr_type_left][l]
+@newcommand[___rtf_brdr_type_top][t]
+@newcommand[___rtf_brdr_type_right][r]
+@newcommand[___rtf_brdr_type_bottom][b]
+@newcommand[___rtf_brdr_type_hor][h]
+@newcommand[___rtf_brdr_type_vert][v]
+@newcommand[___rtf_brdr_type_horizontal][h]
+@newcommand[___rtf_brdr_type_vertical][v]
+
+
+% Border styles - single, dblthick, shadowed, dbl, dot, dash, hairline, inset, 
+% dashsmall, dashddotdash, dotdotdash, outset, triple, thickthinsmall
+% thinthicksmall, thinthickthinsmall, thickthinmedium, thinthickmedium
+% thinthickthinmedium, thickthinlarge, thinthicklarge, thinthickthinlarge
+% wavy, wavydbl, stripped, emboss, engrave
+
+% generic borders
+
+% \brdrnone No border
+@newcommand[___rtf_brdr_style_none][none]
+% \brdrs Single-thickness border - single
+@newcommand[___rtf_brdr_style_single][s]
+% \brdrth Double-thickness border - dblthick
+@newcommand[___rtf_brdr_style_dblthick][th]
+% \brdrsh Shadowed border - shadowed
+@newcommand[___rtf_brdr_style_shadowed][sh]
+% \brdrdb Double border - dbl
+@newcommand[___rtf_brdr_style_dbl][db]
+% \brdrdot Dotted border - dot
+@newcommand[___rtf_brdr_style_dot][dot]
+% \brdrdash Dashed border - dash 
+@newcommand[___rtf_brdr_style_dash][dash]
+% \brdrhair Hairline border - hairline 
+@newcommand[___rtf_brdr_style_hairline][hair]
+% \brdrinset Inset border - inset
+@newcommand[___rtf_brdr_style_inset][inset]
+% \brdrdashsm Dash border (small) - dashsmall
+@newcommand[___rtf_brdr_style_dashsmall][dashsm]
+% \brdrdashd Dot dash border - dashddotdash
+@newcommand[___rtf_brdr_style_dashddotdash][dashd]
+% \brdrdashdd Dot dot dash border - dotdotdash
+@newcommand[___rtf_brdr_style_dotdotdash][dashdd]
+% \brdroutset Outset border - outset
+@newcommand[___rtf_brdr_style_outset][outset]
+% \brdrtriple Triple border - triple
+@newcommand[___rtf_brdr_style_triple][triple]
+% \brdrtnthsg Thick thin border (small) - thickthinsmall
+@newcommand[___rtf_brdr_style_thickthinsmall][tnthsg]
+% \brdrthtnsg Thin thick border (small) - thinthicksmall
+@newcommand[___rtf_brdr_style_thinthicksmall][thtnsg]
+% \brdrtnthtnsg Thin thick thin border (small) - thinthickthinsmall
+@newcommand[___rtf_brdr_style_thinthickthinsmall][tnthtnsg]
+% \brdrtnthmg Thick thin border (medium) - thickthinmedium
+@newcommand[___rtf_brdr_style_thickthinmedium][tnthmg]
+% \brdrthtnmg Thin thick border (medium) - thinthickmedium
+@newcommand[___rtf_brdr_style_thinthickmedium][thtnmg]
+% \brdrtnthtnmg Thin thick thin border (medium) - thinthickthinmedium
+@newcommand[___rtf_brdr_style_thinthickthinmedium][tnthtnmg]
+% \brdrtnthlg Thick thin border (large) - thickthinlarge
+@newcommand[___rtf_brdr_style_thickthinlarge][tnthlg]
+% \brdrthtnlg Thin thick border (large) - thinthicklarge
+@newcommand[___rtf_brdr_style_thinthicklarge][thtnlg]
+% \brdrtnthtnlg Thin thick thin border (large) - thinthickthinlarge
+@newcommand[___rtf_brdr_style_thinthickthinlarge][tnthtnlg]
+% \brdrwavy Wavy border - wavy
+@newcommand[___rtf_brdr_style_wavy][wavy]
+% \brdrwavydb Double wavy border - wavydbl
+@newcommand[___rtf_brdr_style_wavydbl][wavydb]
+% \brdrdashdotstr Striped border - stripped
+@newcommand[___rtf_brdr_style_stripped][dashdotstr]
+% \brdremboss Emboss border - emboss
+@newcommand[___rtf_brdr_style_emboss][emboss]
+% \brdrengrave Engrave border - engrave
+@newcommand[___rtf_brdr_style_engrave][engrave]
+
+
+% table row borders
+%<
+@newcommand[_rtf_trbrdr_style_none][]
+@newcommand[_rtf_trbrdr_style_single][@_bsl[]trbrdr@_rtf_brdr_style_single[]]
+@newcommand[_rtf_trbrdr_style_dblthick][@_bsl[]trbrdr@___rtf_brdr_style_dblthick[]]
+@newcommand[_rtf_trbrdr_style_shadowed][@_bsl[]trbrdr@___rtf_brdr_style_shadowed[]]
+@newcommand[_rtf_trbrdr_style_dbl][@_bsl[]trbrdr@___rtf_brdr_style_dbl[]]
+@newcommand[_rtf_trbrdr_style_dot][@_bsl[]trbrdr@___rtf_brdr_style_dot[]]
+@newcommand[_rtf_trbrdr_style_dash][@_bsl[]trbrdr@___rtf_brdr_style_dash[]]
+@newcommand[_rtf_trbrdr_style_hairline][@_bsl[]trbrdr@___rtf_brdr_style_hairline[]]
+@newcommand[_rtf_trbrdr_style_inset][@_bsl[]trbrdr@___rtf_brdr_style_inset[]]
+@newcommand[_rtf_trbrdr_style_dashsmall][@_bsl[]trbrdr@___rtf_brdr_style_dashsmall[]]
+@newcommand[_rtf_trbrdr_style_dashddotdash][@_bsl[]trbrdr@___rtf_brdr_style_dashddotdash[]]
+@newcommand[_rtf_trbrdr_style_dotdotdash][@_bsl[]trbrdr@___rtf_brdr_style_dotdotdash[]]
+@newcommand[_rtf_trbrdr_style_outset][@_bsl[]trbrdr@___rtf_brdr_style_outset[]]
+@newcommand[_rtf_trbrdr_style_triple][@_bsl[]trbrdr@___rtf_brdr_style_triple[]]
+@newcommand[_rtf_trbrdr_style_thickthinsmall][@_bsl[]trbrdr@___rtf_brdr_style_thickthinsmall[]]
+@newcommand[_rtf_trbrdr_style_thinthicksmall][@_bsl[]trbrdr@___rtf_brdr_style_thinthicksmall[]]
+@newcommand[_rtf_trbrdr_style_thinthickthinsmall][@_bsl[]trbrdr@___rtf_brdr_style_thinthickthinsmall[]]
+@newcommand[_rtf_trbrdr_style_thickthinmedium][@_bsl[]trbrdr@___rtf_brdr_style_thickthinmedium[]]
+@newcommand[_rtf_trbrdr_style_thinthickmedium][@_bsl[]trbrdr@___rtf_brdr_style_thinthickmedium[]]
+@newcommand[_rtf_trbrdr_style_thinthickthinmedium][@_bsl[]trbrdr@___rtf_brdr_style_thinthickthinmedium[]]
+@newcommand[_rtf_trbrdr_style_thickthinlarge][@_bsl[]trbrdr@___rtf_brdr_style_thickthinlarge[]]
+@newcommand[_rtf_trbrdr_style_thinthicklarge][@_bsl[]trbrdr@___rtf_brdr_style_thinthicklarge[]]
+@newcommand[_rtf_trbrdr_style_thinthickthinlarge][@_bsl[]trbrdr@___rtf_brdr_style_thinthickthinlarge[]]
+@newcommand[_rtf_trbrdr_style_wavy][@_bsl[]trbrdr@___rtf_brdr_style_wavy[]]
+@newcommand[_rtf_trbrdr_style_wavydbl][@_bsl[]trbrdr@___rtf_brdr_style_wavydbl[]]
+@newcommand[_rtf_trbrdr_style_stripped][@_bsl[]trbrdr@___rtf_brdr_style_stripped[]]
+@newcommand[_rtf_trbrdr_style_emboss][@_bsl[]trbrdr@___rtf_brdr_style_emboss[]]
+@newcommand[_rtf_trbrdr_style_engrave][@_bsl[]trbrdr@___rtf_brdr_style_engrave[]]
+%>
+@newcommand[_rtf_trbrdr_style][@_bsl[]brdr@___rtf_brdr_style_#1[]]
+
+
+
+% table cell borders
+%<
+@newcommand[_rtf_clbrdr_style_none][]
+@newcommand[_rtf_clbrdr_style_single][@_bsl[]clbrdr@___rtf_brdr_style_single[]]
+@newcommand[_rtf_clbrdr_style_dblthick][@_bsl[]clbrdr@___rtf_brdr_style_dblthick[]]
+@newcommand[_rtf_clbrdr_style_shadowed][@_bsl[]clbrdr@___rtf_brdr_style_shadowed[]]
+@newcommand[_rtf_clbrdr_style_dbl][@_bsl[]clbrdr@___rtf_brdr_style_dbl[]]
+@newcommand[_rtf_clbrdr_style_dot][@_bsl[]clbrdr@___rtf_brdr_style_dot[]]
+@newcommand[_rtf_clbrdr_style_dash][@_bsl[]clbrdr@___rtf_brdr_style_dash[]]
+@newcommand[_rtf_clbrdr_style_hairline][@_bsl[]clbrdr@___rtf_brdr_style_hairline[]]
+@newcommand[_rtf_clbrdr_style_inset][@_bsl[]clbrdr@___rtf_brdr_style_inset[]]
+@newcommand[_rtf_clbrdr_style_dashsmall][@_bsl[]clbrdr@___rtf_brdr_style_dashsmall[]]
+@newcommand[_rtf_clbrdr_style_dashddotdash][@_bsl[]clbrdr@___rtf_brdr_style_dashddotdash[]]
+@newcommand[_rtf_clbrdr_style_dotdotdash][@_bsl[]clbrdr@___rtf_brdr_style_dotdotdash[]]
+@newcommand[_rtf_clbrdr_style_outset][@_bsl[]clbrdr@___rtf_brdr_style_outset[]]
+@newcommand[_rtf_clbrdr_style_triple][@_bsl[]clbrdr@___rtf_brdr_style_triple[]]
+@newcommand[_rtf_clbrdr_style_thickthinsmall][@_bsl[]clbrdr@___rtf_brdr_style_thickthinsmall[]]
+@newcommand[_rtf_clbrdr_style_thinthicksmall][@_bsl[]clbrdr@___rtf_brdr_style_thinthicksmall[]]
+@newcommand[_rtf_clbrdr_style_thinthickthinsmall][@_bsl[]clbrdr@___rtf_brdr_style_thinthickthinsmall[]]
+@newcommand[_rtf_clbrdr_style_thickthinmedium][@_bsl[]clbrdr@___rtf_brdr_style_thickthinmedium[]]
+@newcommand[_rtf_clbrdr_style_thinthickmedium][@_bsl[]clbrdr@___rtf_brdr_style_thinthickmedium[]]
+@newcommand[_rtf_clbrdr_style_thinthickthinmedium][@_bsl[]clbrdr@___rtf_brdr_style_thinthickthinmedium[]]
+@newcommand[_rtf_clbrdr_style_thickthinlarge][@_bsl[]clbrdr@___rtf_brdr_style_thickthinlarge[]]
+@newcommand[_rtf_clbrdr_style_thinthicklarge][@_bsl[]clbrdr@___rtf_brdr_style_thinthicklarge[]]
+@newcommand[_rtf_clbrdr_style_thinthickthinlarge][@_bsl[]clbrdr@___rtf_brdr_style_thinthickthinlarge[]]
+@newcommand[_rtf_clbrdr_style_wavy][@_bsl[]clbrdr@___rtf_brdr_style_wavy[]]
+@newcommand[_rtf_clbrdr_style_wavydbl][@_bsl[]clbrdr@___rtf_brdr_style_wavydbl[]]
+@newcommand[_rtf_clbrdr_style_stripped][@_bsl[]clbrdr@___rtf_brdr_style_stripped[]]
+@newcommand[_rtf_clbrdr_style_emboss][@_bsl[]clbrdr@___rtf_brdr_style_emboss[]]
+@newcommand[_rtf_clbrdr_style_engrave][@_bsl[]clbrdr@___rtf_brdr_style_engrave[]]
+%>
+@newcommand[_rtf_clbrdr_style][@_bsl[]brdr@___rtf_brdr_style_#1[]]
+
+%endif __RTF_BRDRSTY_UDH__

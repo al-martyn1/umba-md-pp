@@ -1,0 +1,55 @@
+%if !defined(__TABULAR_UDH__)
+%define __TABULAR_UDH__
+
+% default cell shading
+@newcommand[cell_shading][0]
+
+@newcommand[chess_cell_shading]\
+[@renewcommand[cell_shading][@ifthenelse[((##1+##2)/2)*2==(##1+##2)][1000][0]]]
+
+@newcommand[grid_cell_shading]\
+[@renewcommand[cell_shading][@ifthenelse[((##1)/2)*2!=(##1)][1000][0]]]
+
+@newcommand[cell_para_style][normal1]
+
+@newcommand[cell_vert_alignment][center]
+
+
+@newcommand[cell_left_brdr_style][2mmt,single]
+@newcommand[cell_top_brdr_style][2mmt,single]
+@newcommand[cell_right_brdr_style][2mmt,single]
+@newcommand[cell_bottom_brdr_style][2mmt,single]
+
+@newcommand[header_cell_left_brdr_style][2mmt,single]
+@newcommand[header_cell_top_brdr_style][2mmt,single]
+@newcommand[header_cell_right_brdr_style][2mmt,single]
+@newcommand[header_cell_bottom_brdr_style][2mmt,single]
+
+
+@newcounter[table]
+@newcommand[tablefixed][@table_text[]]
+
+
+@newcommand[thetable][\
+@ifthenelse[@isinenv[book]][\
+@thechapter[]\
+][\
+@ifthenelse[@isinenv[article] || @isinenv[techtask]][\
+@thesection[]\
+][\
+]\
+]\
+.@arabic[@getcounter[table]]]
+
+
+%if defined(HTML)
+    %include <html\htmtab.udh>
+%elseif defined(RTF)
+    %if !defined(__RTF_RTFTAB_UDH__)
+        %include <rtf\rtftab.udh>
+    %endif __RTF_RTFTAB_UDH__
+%elseif defined(TEX) || defined(LATEX)
+    %  include <tex\textab.udh>
+%endif
+
+%endif __TABULAR_UDH__

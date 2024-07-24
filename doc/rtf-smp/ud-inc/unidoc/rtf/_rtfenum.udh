@@ -1,0 +1,39 @@
+%if !defined(__RTF__RTFENUM_UDH__)
+%define __RTF__RTFENUM_UDH__
+
+@newcommand[_enum_try_close][\
+@ifthenelse[@iscurenv[#1]]\
+[@end[#1]]\
+[#2]\
+]
+
+% items decoration
+@newcommand[theenum0][ENUM COUNT IS ZERO@arabic[#1])]
+@newcommand[theenum1][@arabic[#1])]
+@newcommand[theenum2][@alpha[#1])]
+@newcommand[theenum3][@roman[#1])]
+@newcommand[theenum4][@Alpha[#1])]
+@newcommand[theenum5][@arabic[#1])]
+@newcommand[theenum6][@alpha[#1])]
+@newcommand[theenum7][@roman[#1])]
+@newcommand[theenum8][@Alpha[#1])]
+@newcommand[theenum9][@arabic[#1])]
+@newcommand[theenum10][@alpha[#1])]
+@newcommand[theenum11][@roman[#1])]
+@newcommand[theenum12][@Alpha[#1])]
+@newcommand[theenum13][@arabic[#1])]
+@newcommand[theenum14][@alpha[#1])]
+@newcommand[theenum15][@roman[#1])]
+@newcommand[theenum16][@Alpha[#1])]
+
+% makes marker item decoration
+@newcommand[_theenum][@theenum#1[#2]]
+
+
+@newenvironment[enumerate]\
+[@renewcommand[enumitem][@numitem[e]]@renewcommand[item][@numitem[e]]\
+@_begin_numerate[e][#1]]\
+[@_end_numerate[e][#1]]\
+[normal1]
+
+%endif __RTF__RTFENUM_UDH__

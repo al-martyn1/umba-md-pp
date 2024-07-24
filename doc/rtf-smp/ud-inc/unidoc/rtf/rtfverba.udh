@@ -1,0 +1,32 @@
+%if !defined(__RTF_RTFVERBA_UDH__)
+%define __RTF_RTFVERBA_UDH__
+%ignore true
+% variant 1
+@newenvironment[verbatim]\
+[@inputencchar[0D][ ]@inputencchar[0A][@br[]]@inputencchar[09][@tab[]]\
+@_bsl[]par@_bsl[]ql ]\
+[@inputencchar[0D][]@inputencchar[0A][]@inputencchar[09][]]
+% variant 2
+@newenvironment[verbatim]\
+[@push[_parafi]@evar[_parafi][@var[_parali]]@begin[para][verbatim]]\
+[@_try_close[para]@pop[_parafi]]
+% variant 3
+@newenvironment[verbatim]\
+[@_bsl[]pard@_bsl[]plain@sty_verbatim@_bsl[]fi@eval[@var[_parafi]*56]\
+@_bsl[]sb@eval[@var[_parasb]*56]@_bsl[]sa@eval[@var[_parasa]*56]\
+@_bsl[]li@eval[@var[_parali]*56]@_bsl[]ri@eval[@var[_parari]*56]%
+][@_bsl[]par]
+% variant 4
+@newenvironment[verbatim]\
+[@_bsl[]par@_bsl[]pard@_bsl[]plain@sty_verbatim@_bsl[]fi@eval[@var[_parafi]*56]\
+@_bsl[]sb@eval[@var[_parasb]*56]@_bsl[]sa@eval[@var[_parasa]*56]\
+@_bsl[]li@eval[@var[_parali]*56]@_bsl[]ri@eval[@var[_parari]*56]%
+][@_bsl[]par]
+%ignore false
+@newenvironment[verbatim]\
+[@push[_parafi]@evar[_parafi][@var[_parali]]\
+@_bsl[]par@begin_rtf_para[verbatim]]\
+[@_bsl[]par@pop[_parafi]@begin_rtf_para[[@var[_para_style]]]]
+% [@pop[_parafi]@begin_rtf_para[[@var[_para_style]]]]
+
+%endif __RTF_RTFVERBA_UDH__

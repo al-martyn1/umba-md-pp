@@ -1,0 +1,242 @@
+%if !defined(__WIKISECT_UDH__)
+%define __WIKISECT_UDH__ 1
+
+%if !defined(___SECT_UDH__)
+    % include <_sect.udh>
+%endif ___SECT_UDH__
+
+%include <texts.udh>
+
+
+
+%<
+%if !defined(__COMPBASE_UDH__)
+    % include <compbase.udh>
+%endif __COMPBASE_UDH__
+%>
+
+@newcommand[__lf][@char[0A]]
+@newcommand[_xmlattr][#1="#2"]
+@newcommand[_nowiki_tag_raw][<#1nowiki>]
+@newenvironment[_real_nowiki][@_nowiki_tag_raw[]][@_nowiki_tag_raw[/]]
+% @newcommand[_set_in_nowiki][@evar[_in_nowiki][#1]]
+
+@newcounter[_in_nowiki_count][0]
+@newcommand[_is_in_nowiki][@getcounter[_in_nowiki_count]>0]
+
+
+% @addcounter[maketitle_linecount][1]@br[]\
+
+
+
+@newenvironment[_nowiki]\
+% [@ifthen[!@_is_in_nowiki][@_set_in_nowiki[1]@begin[_real_nowiki]]]\
+% [@ifthen[@isinenv[_real_nowiki]][@_set_in_nowiki[0]@end[_real_nowiki]]]
+[@ifthen[!@_is_in_nowiki][@begin[_real_nowiki]]@addcounter[_in_nowiki_count][1]]\
+[@addcounter[_in_nowiki_count][-1]@ifthen[!@_is_in_nowiki][@end[_real_nowiki]]]
+
+
+@newcommand[_nowiki][@begin[_nowiki]#1@end[_nowiki]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+%<
+@newenvironment[para]\
+[]\
+[][]
+@newcommand[para]\
+[@_try_close[para]@begin[para][#1]][normal1]
+@newcommand[endpara]\
+[@_try_close[para]]
+%>
+
+@newcommand[_sect_base_prefix][=]
+
+@newcommand[chapter][@__lf[]@_sect_base_prefix[]=#2@_sect_base_prefix[]=@__lf[]]
+@newcommand[section][@__lf[]@_sect_base_prefix[]==#2@_sect_base_prefix[]==@__lf[]]
+@newcommand[subsection][@__lf[]@_sect_base_prefix[]===#2@_sect_base_prefix[]===@__lf[]]
+@newcommand[subsubsection][@__lf[]@_sect_base_prefix[]====#2@_sect_base_prefix[]====@__lf[]]
+@newcommand[paragraph][@__lf[]@_sect_base_prefix[]=====#2@_sect_base_prefix[]=====@__lf[]]
+@newcommand[subparagraph][@__lf[]@_sect_base_prefix[]=====#2@_sect_base_prefix[]=====@__lf[]]
+
+@newcommand[chapter*][@__lf[]@_sect_base_prefix[]=#1@_sect_base_prefix[]=@__lf[]]
+@newcommand[section*][@__lf[]@_sect_base_prefix[]==#1@_sect_base_prefix[]==@__lf[]]
+@newcommand[subsection*][@__lf[]@_sect_base_prefix[]===#1@_sect_base_prefix[]===@__lf[]]
+@newcommand[subsubsection*][@__lf[]@_sect_base_prefix[]====#1@_sect_base_prefix[]====@__lf[]]
+@newcommand[paragraph*][@__lf[]@_sect_base_prefix[]=====#1@_sect_base_prefix[]=====@__lf[]]
+@newcommand[subparagraph*][@__lf[]@_sect_base_prefix[]=====#1@_sect_base_prefix[]=====@__lf[]]
+
+@newenvironment[book][\
+% book open commands
+@renewcommand[_sect_base_prefix][=]@compilecommand[_sect_base_prefix]\
+@openfile[]\
+][\
+% book close commands
+@closefile[]\
+]
+
+@newenvironment[article][\
+% book open commands
+@renewcommand[_sect_base_prefix][]@compilecommand[_sect_base_prefix]\
+@openfile[]\
+][\
+% book close commands
+@closefile[]\
+]
+
+% stubs
+@newcommand[maketitle][]
+@newcommand[makecontents][]
+@newcommand[page_break][]
+
+
+% roman
+@newcommand[textrm][@message[* TODO: textrm command]#1]
+@newenvironment[rmfamily][@message[* TODO: rmfamily environment]][]
+% Sans Serif - Arial
+@newcommand[textsf][@message[* TODO: textsf command]#1]
+@newenvironment[sffamily][@message[* TODO: sffamily environment]][]
+% Typewriter - Courier New
+@newcommand[texttt][@begin[ttfamily]#1@end[ttfamily]]
+@newenvironment[ttfamily][<tt>][</tt>]
+%
+% font series
+% bold
+@newcommand[textbf]['''#1''']
+@newenvironment[bfseries]['''][''']
+% normal
+@newcommand[textmd][#1]
+@newenvironment[mdseries][][]
+%
+% font shape
+% italic
+@newcommand[textit][''#1'']
+@newenvironment[itshape]['']['']
+% normal
+@newcommand[textup][#1]
+@newenvironment[upshape][][]
+% aux - small
+@newenvironment[small][<small>][</small>]
+%
+% capital
+@newcommand[textsc][@begin[small]@uppercase[#1]@end[small]]
+@newenvironment[scshape][@openfile[@thebasefile[]_small_caps.tmp]][@closefile[]@textsc[@insertfile[@thebasefile[]_small_caps.tmp]]@rmfile[@thebasefile[]_small_caps.tmp]]]
+% @newenvironment[scshape][@openfile[@thebasefile[]_small_caps.tmp]][@closefile[]@textsc[@insertfile[@thebasefile[]_small_caps.tmp]]]]
+%
+
+
+%
+@newcommand[emph][@begin[em]#1@end[em]]
+@newenvironment[em]['']['']
+
+@newcommand[sub][<sub>#1</sub>]
+@newcommand[sup][<sup>#1</sup>]
+
+
+
+@newenvironment[table]\
+[@__lf[]<box @_xmlattr[name][#1] @_xmlattr[title][@table_text[]: #2] @_xmlattr[expanded][false] @_xmlattr[white]>\
+]\
+[</box>]
+% @newenvironment[tabular][@__lf[]<table @_xmlattr[border][2] @_xmlattr[width][[100@_percent]] @_xmlattr[cellspacing][4] @_xmlattr[cellpadding][3] @_xmlattr[rules][all] @_xmlattr[style][margin:1em 1em 1em 0; border:solid 1px #000000; border-collapse:collapse;empty-cells:show;]>][</table>@__lf[]]
+@newenvironment[tabular][@__lf[]<table @_xmlattr[width][[90@_percent]] @_xmlattr[cellspacing][0] @_xmlattr[cellpadding][2] @_xmlattr[rules][all] @_xmlattr[class][prettytable]>][</table>@__lf[]]
+
+@newenvironment[tbl_header][@renewenvironment[tbl_cell][<th>][</th>]<tr>][</tr>@__lf[]]
+@newenvironment[tbl_row][@renewenvironment[tbl_cell][<td>][</td>]<tr>][</tr>@__lf[]]
+% @newenvironment[tbl_row][<tr>][</tr>@__lf[]]
+@newenvironment[tbl_cell][<td>][</td>]
+
+@newcommand[picture][@message[* TODO: picture command #1]@lt@lt[]#1 @begin[small]picture@end[small]@gt@gt[]]
+% @newcommand[picture][@message[* TODO: picture command]@lt@lt[]#1 @begin[small]picture@end[small]@gt@gt[]]
+@newenvironment[picture]\
+[@__lf[]<box @_xmlattr[name][#1] @_xmlattr[title][@picture_text[]: #2] @_xmlattr[expanded][false] @_xmlattr[white]>\
+]\
+[</box>]
+
+
+@newcommand[para][@message[* TODO: para command - add styles - left, right, center, justify]@__lf@__lf]
+@newcommand[lbr][]
+% @newcommand[textbf][]
+@newcounter[listing_line]
+% @setcounter[listing_line][1]\
+@newenvironment[listing]\
+[@__lf[]<box @_xmlattr[name][#1] @_xmlattr[title][@listing_text[]: #2] @_xmlattr[expanded][false]><pre>\
+@renewcommand[lbr][@__lf[]]]\
+[</pre></box>]
+
+@newenvironment[listingn]\
+[@__lf[]<box @_xmlattr[name][#1] @_xmlattr[title][@listing_text[]: #2] @_xmlattr[expanded][false]><pre>\
+@setcounter[listing_line][1]\
+@renewcommand[lbr][@__lf[]@addcounter[listing_line][1]@getcounter[listing_line]: ]@getcounter[listing_line]: ]\
+[</pre></box>]
+
+@newenvironment[listing*][<box><pre>@__lf[]@renewcommand[lbr][@__lf[]]][</pre></box>]
+% @begin[_nowiki]#1@end[_nowiki]
+
+% @newenvironment[][][]
+
+@newcommand[cell_shading][0]
+@newenvironment[auto_tbl_header][@begin[tbl_header][4mmt,single][4mmt,single][4mmt,single][4mmt,single][4mmt,single][4mmt,single]][@end[tbl_header]]\
+@newenvironment[auto_tbl_subheader][@begin[tbl_header][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]@renewcommand[cell_shading][1000]][@end[tbl_header]]\
+@newenvironment[auto_tbl_row][@begin[tbl_row][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single][2mmt,single]][@end[tbl_row]]\
+
+@newenvironment[auto_tbl_cell][@begin[tbl_cell][#2]][@end[tbl_cell]]
+
+
+@newcommand[item][]
+
+@newenvironment[enumerate][\
+@push[_numerate_prefix]@varcat[_numerate_prefix][@_hash[]]@newcommand[enumitem][@__lf[]@var[_numerate_prefix]]@renewcommand[item][@enumitem]\
+% @__lf[]\
+][\
+@pop[_numerate_prefix]@__lf[]\
+]
+
+@newenvironment[unumerate][\
+@push[_numerate_prefix]@varcat[_numerate_prefix][*]@newcommand[unumitem][@__lf[]@var[_numerate_prefix]]@renewcommand[item][@unumitem]\
+% @__lf[]\
+][\
+@pop[_numerate_prefix]@__lf[]\
+]
+
+
+%<
+
+@newenvironment[enumerate][][]
+@newenvironment[unumerate][][]
+@newcommand[item][]
+@newcommand[enumitem][]
+
+@newenvironment[enumerate][\
+% enumerate open commands
+@push[_numerate_prefix]@var[_numerate_prefix][@var[_numerate_prefix]@_hash[]]\
+@newcommand[enumitem][@__lf[]@var[_numerate_prefix]]\
+@newcommand[item][@__lf[]@var[_numerate_prefix]]\
+][\
+% enumerate close commands
+@pop[_numerate_prefix]
+]
+
+@newenvironment[unumerate][\
+% unumerate open commands
+@push[_numerate_prefix]@var[_numerate_prefix][@var[_numerate_prefix]*[]]\
+@newcommand[unumitem][@__lf[]@var[_numerate_prefix]]\
+@newcommand[item][@__lf[]@var[_numerate_prefix]]\
+][\
+% unumerate close commands
+@pop[_numerate_prefix]
+]
+%>
+
+
+%endif __WIKISECT_UDH__

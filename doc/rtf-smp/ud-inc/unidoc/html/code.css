@@ -1,0 +1,32 @@
+<STYLE type="text/css">
+
+PRE SPAN.KEYWORD
+{       
+    FONT-WEIGHT:bold;
+    COLOR: rgb(0,0,128);
+}
+
+PRE SPAN.COMMENT
+{       
+    FONT-STYLE: italic;
+    COLOR: rgb(0,0,128);
+}
+
+PRE SPAN.PREPROCESSOR
+{       
+    FONT-WEIGHT:bold;
+    COLOR: rgb(0,128,0);
+}
+
+PRE SPAN.STRING
+{       
+    COLOR: rgb(128,0,0);
+}
+
+PRE SPAN.NUMBER
+{       
+    COLOR: rgb(0,0,255);
+}
+
+
+</STYLE>

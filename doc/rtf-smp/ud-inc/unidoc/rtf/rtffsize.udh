@@ -1,0 +1,56 @@
+%if !defined(__RTF_RTFFSIZE_UDH__)
+%define __RTF_RTFFSIZE_UDH__
+%if BASE_FONT_SIZE==20
+@newcommand[deffontsize][20]
+%elseif BASE_FONT_SIZE==19
+@newcommand[deffontsize][19]
+%elseif BASE_FONT_SIZE==18
+@newcommand[deffontsize][18]
+%elseif BASE_FONT_SIZE==17
+@newcommand[deffontsize][17]
+%elseif BASE_FONT_SIZE==16
+@newcommand[deffontsize][16]
+%elseif BASE_FONT_SIZE==15
+@newcommand[deffontsize][15]
+%elseif BASE_FONT_SIZE==14
+@newcommand[deffontsize][14]
+%elseif BASE_FONT_SIZE==13
+@newcommand[deffontsize][13]
+%elseif BASE_FONT_SIZE==12
+@newcommand[deffontsize][12]
+%elseif BASE_FONT_SIZE==11
+@newcommand[deffontsize][11]
+%elseif BASE_FONT_SIZE==10
+@newcommand[deffontsize][10]
+%elseif BASE_FONT_SIZE==9
+@newcommand[deffontsize][9]
+%elseif BASE_FONT_SIZE==8
+@newcommand[deffontsize][8]
+%endif
+
+%if !defined(___FSIZE_UDH__)
+    %include <_fsize.udh>
+%endif ___FSIZE_UDH__
+
+@newcommand[_fstiny][@_bsl[]fs@eval[@_stiny[]*2]]
+@newcommand[_fsscriptsize][@_bsl[]fs@eval[@_sscriptsize[]*2]]
+@newcommand[_fsfootnotesize][@_bsl[]fs@eval[@_sfootnotesize[]*2]]
+@newcommand[_fssmall][@_bsl[]fs@eval[@_ssmall[]*2]]
+@newcommand[_fsnormalsize][@_bsl[]fs@eval[@_snormalsize[]*2]]
+@newcommand[_fslarge][@_bsl[]fs@eval[@_slarge[]*2]]
+@newcommand[_fsLarge][@_bsl[]fs@eval[@_sLarge[]*2]]
+@newcommand[_fsLARGE][@_bsl[]fs@eval[@_sLARGE[]*2]]
+@newcommand[_fshuge][@_bsl[]fs@eval[@_shuge[]*2]]
+@newcommand[_fsHuge][@_bsl[]fs@eval[@_sHuge[]*2]]
+@compilecommand[_fstiny]
+@compilecommand[_fsscriptsize]
+@compilecommand[_fsfootnotesize]
+@compilecommand[_fssmall]
+@compilecommand[_fsnormalsize]
+@compilecommand[_fslarge]
+@compilecommand[_fsLarge]
+@compilecommand[_fsLARGE]
+@compilecommand[_fshuge]
+@compilecommand[_fsHuge]
+
+%endif __RTF_RTFFSIZE_UDH__
