@@ -60,10 +60,13 @@ struct GraphVizOptions
 
     bool generateCommandLineArgs(std::string &tool, std::vector<std::string> &args, const std::string &inputDotFile, const std::string &outputImageFile) const
     {
-        if (graphType==GraphType::dot)
+        //if (graphType==GraphType::dot)
         {
             // dot -Tsvg -s72 -o test001_72.svg test001.dot
-            tool = "dot";
+            //tool = "dot";
+
+            tool = enum_serialize(graphType);
+
             args.emplace_back(makeDotTargetFormatCliArgument());
             //args.emplace_back(makeDotDpiCliArgument());
             args.emplace_back("-o"); args.emplace_back(outputImageFile);
