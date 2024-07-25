@@ -46,6 +46,12 @@ Test number one
 
 Пытаемся в графы
 
+[Node Shapes](https://graphviz.org/doc/info/shapes.html)
+[Undirected Graphs](https://graphviz.org/Gallery/undirected/)
+[Directed Graphs examples](https://graphviz.org/Gallery/directed/)
+[Neato Spring Graphs eamples](https://graphviz.org/Gallery/neato/)
+[Twopi Radial Graphs](https://graphviz.org/Gallery/twopi/)
+
 ![Entity relation diagram (dot)](.doc.generated_images/simple-er-dot.svg)
 ![Entity relation diagram (Neato)](.doc.generated_images/simple-er-neato.svg)
 ![Entity relation diagram (FDP)](.doc.generated_images/simple-er-fdp.svg)
@@ -71,7 +77,6 @@ Test number one
 
 ![Subgraph (cluster) sample](.doc.generated_images/subgraph-cluster-sample.svg)
 
-[Node Shapes](https://graphviz.org/doc/info/shapes.html)
 
 ![Node Shapes - digraph R](.doc.generated_images/node-shapes-digraph_r.svg)
 

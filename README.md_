@@ -46,6 +46,12 @@ Language   : Russian
 #// /*
 Пытаемся в графы
 
+[Node Shapes](https://graphviz.org/doc/info/shapes.html)
+[Undirected Graphs](https://graphviz.org/Gallery/undirected/)
+[Directed Graphs examples](https://graphviz.org/Gallery/directed/)
+[Neato Spring Graphs eamples](https://graphviz.org/Gallery/neato/)
+[Twopi Radial Graphs](https://graphviz.org/Gallery/twopi/)
+
 <graph            save-as=simple-er-dot>   doc\dot\test007.dot Entity relation diagram (dot)
 <graph type=neato save-as=simple-er-neato> doc\dot\test007.dot Entity relation diagram (Neato)
 <graph type=fdp   save-as=simple-er-fdp>   doc\dot\test007.dot Entity relation diagram (FDP)
@@ -141,7 +147,6 @@ digraph G {
 }
 </graph>
 
-[Node Shapes](https://graphviz.org/doc/info/shapes.html)
 
 <graph save-as=node-shapes-digraph_R> !Node Shapes - digraph R
 digraph R {
