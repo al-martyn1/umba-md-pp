@@ -86,7 +86,7 @@ StringType makeSystemFunctionCommandString(const StringType &cmd, std::vector<St
 
     using CharType = typename StringType::value_type;
 
-    return umba::string_plus::merge<std::string, std::vector<StringType>::const_iterator>( cmdArgs.begin(), cmdArgs.end(), (CharType)' '/*, [](auto s) { return s; }*/ );
+    return umba::string_plus::merge<std::string, typename std::vector<StringType>::const_iterator>( cmdArgs.begin(), cmdArgs.end(), (CharType)' '/*, [](auto s) { return s; }*/ );
 }
 
 //----------------------------------------------------------------------------
