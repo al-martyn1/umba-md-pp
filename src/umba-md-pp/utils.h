@@ -64,38 +64,6 @@ StringType tryMakeOutputFilenameFromInput(StringType name)
 }
 
 inline
-std::string escapeCommandLineArgument(const std::string &str)
-{
-    // http://learn.microsoft.com/en-us/cpp/c-language/parsing-c-command-line-arguments?view=msvc-170
-
-    bool needEscape = false;
-    if (str.find_first_of(" \"")!=str.npos)
-       needEscape = true;
-
-    if (!needEscape)
-        return str;
-
-    std::string res; res.reserve(str.size());
-    res.append(1, '\"');
-    for(auto ch : str)
-    {
-        if (ch=='\"')
-            res.append(2, '\"');
-        else
-            res.append(1, ch);
-    }
-    res.append(1, '\"');
-
-    return res;
-}
-
-inline
-std::wstring escapeCommandLineArgument(const std::wstring &str)
-{
-    return umba::fromUtf8(escapeCommandLineArgument(umba::toUtf8(str)));
-}
-
-inline
 bool findProjectOptionsFile(const std::string &mdFile, std::string &foundOptionsFile)
 {
     return umba::cli_tool_helpers::findProjectOptionsFile(mdFile, foundOptionsFile, std::vector<std::string>{".md-pp.options", ".umba-md-pp.options"});

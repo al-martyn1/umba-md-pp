@@ -68,7 +68,7 @@ TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
                         {
                             UMBA_USED(appCfg);
                             UMBA_USED(tagType);
-                            return umba::md::parsePossibleFilenameToGraphTag(mdHtmlTag, b, e);
+                            return umba::md::parsePossibleFilenameAndTextToGraphTag(mdHtmlTag, b, e);
                         };
 
     return m;

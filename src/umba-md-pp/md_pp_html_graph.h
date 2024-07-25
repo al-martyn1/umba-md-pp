@@ -28,7 +28,7 @@ namespace md {
 //----------------------------------------------------------------------------
 //! Мы уже распарсили стартовый тэг <graph>, за ним может быть имя файла
 template<typename IteratorType>
-IteratorType parsePossibleFilenameToGraphTag(umba::html::HtmlTag &parseTo, IteratorType b, IteratorType e)
+IteratorType parsePossibleFilenameAndTextToGraphTag(umba::html::HtmlTag &parseTo, IteratorType b, IteratorType e)
 {
     if (b==e)
         return b;
@@ -38,17 +38,12 @@ IteratorType parsePossibleFilenameToGraphTag(umba::html::HtmlTag &parseTo, Itera
 
     ++b;
 
-    auto isWhiteSpace = [](char ch)
-    {
-        return ch==' ' || ch=='\r' || ch=='\n' || ch=='\t';
-    };
-
-    while(b!=e && isWhiteSpace(*b)) ++b; // пропускаем возможные пробелы перед именем файла
+    b = umba::html::helpers::skipSpaces(b, e);
 
     if (b==e)
         return b;
 
-
+#if 0
     std::string fileName;
     for(; b!=e && !isWhiteSpace(*b); ++b)
     {
@@ -59,6 +54,19 @@ IteratorType parsePossibleFilenameToGraphTag(umba::html::HtmlTag &parseTo, Itera
     {
         parseTo.addAttr("file", fileName);
     }
+
+    return b;
+#endif
+
+    std::string filename;
+    std::string text;
+    b = parseTagLineExtra(filename, text, b, e, parseTo.hasAttr("file"));
+
+    if (!filename.empty())
+        parseTo.addAttr("file", filename);
+
+    if (!text.empty())
+        parseTo.addAttr("text", text);
 
     return b;
 }
@@ -147,15 +155,15 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
     std::vector<std::string> dotLines;
 
-    std::string graphvizTool, graphvizToolArgs;
-    if (!graphVizOptions.generateCommandLine(graphvizTool, graphvizToolArgs, tempDotFile, tempTargetFile))
+    std::string graphvizTool;
+    std::vector<std::string> graphvizToolArgs;
+    if (!graphVizOptions.generateCommandLineArgs(graphvizTool, graphvizToolArgs, tempDotFile, tempTargetFile))
     {
         resLines.emplace_back("# Failed to generate DOT command line: possible unknown graph type?");
         return;
     }
 
-
-    dotLines.emplace_back("// " + graphvizTool + " " + graphvizToolArgs);
+    dotLines.emplace_back("// " + makeSystemFunctionCommandString(graphvizTool, graphvizToolArgs));
     dotLines.emplace_back(std::string());
 
     for(auto tagLine : tagLines)
@@ -291,12 +299,14 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
             // else
             {
                 std::string toolExeName     = findGraphvizToolExecutableName<std::string>(appCfg.dontLookupForGraphviz, graphvizTool);
-                std::string toolCommandLine = toolExeName + " " + graphvizToolArgs;
+                //std::string toolCommandLine = toolExeName + " " + graphvizToolArgs;
             
-                int resCode = system(toolCommandLine.c_str());
+                std::string errMsg;
+                //int resCode = system(toolCommandLine.c_str());
+                int resCode = safeSystemFunction(&errMsg, toolExeName, graphvizToolArgs);
                 if (resCode!=0)
                 {
-                    errMsg = "Failed to calling '" + graphvizTool + "', result code: " + std::to_string(resCode) + ", command line: " + toolCommandLine;
+                    errMsg = "Failed to calling '" + graphvizTool + "', message: " + std::to_string(resCode) + ", command line: " + makeSystemFunctionCommandString(toolExeName, graphvizToolArgs);
                 }
             }
         }
@@ -345,7 +355,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
         imgLink = umba::filename::getFileName(outputFilename);
     }
 
-    resLines.emplace_back("![Graph](" + umba::filename::makeCanonical(imgLink, '/') + ")");
+    resLines.emplace_back("![" + mdHtmlTag.getAttrValue("text", "Graph") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
 
 }
 //----------------------------------------------------------------------------

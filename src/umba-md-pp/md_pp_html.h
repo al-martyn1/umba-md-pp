@@ -8,6 +8,9 @@
 namespace umba {
 namespace md {
 
+//----------------------------------------------------------------------------
+
+
 
 
 //----------------------------------------------------------------------------
@@ -68,6 +71,117 @@ IteratorType tryParseLineToHtmlTag(umba::html::HtmlTag &parseTo, IteratorType b,
 
     return e;
 }
+
+template<typename IteratorType>
+IteratorType parseTagLineExtra(std::string &filename, std::string &text, IteratorType b, IteratorType e, bool alreadyHasFileAttr)
+{
+    filename.clear();
+    text.clear();
+
+    b = umba::html::helpers::skipSpaces(b, e);
+    if (b==e)
+        return b;
+    
+    if (*b=='!')
+    {
+        // Это текст, до конца строки
+        ++b;
+        return umba::html::helpers::readUntilEnd(std::back_inserter(text), b, e);
+    }
+
+    std::string strTmp;
+
+    if (alreadyHasFileAttr)
+        b = umba::html::helpers::readQuotedOrUntilEnd(std::back_inserter(strTmp), b, e);
+    else
+        b = umba::html::helpers::readQuotedOrUntilSpace(std::back_inserter(strTmp), b, e);
+
+    if (b!=e)
+    {
+        if (umba::html::helpers::isSimpleQuot(*b))
+            ++b;
+    }
+
+    if (!strTmp.empty())
+    {
+        if (strTmp[0]!='!')
+        {
+            if (alreadyHasFileAttr)
+            {
+                text = strTmp;
+                return b;
+            }
+            else
+            {
+                filename = strTmp;
+            }
+        }
+        else
+        {
+            strTmp.erase(0,1);
+            text = strTmp;
+        }
+
+        strTmp.clear();
+    }
+
+
+    b = umba::html::helpers::skipSpaces(b, e);
+    if (b==e)
+        return b;
+    
+    if (*b=='!')
+    {
+        // Это текст, до конца строки
+        ++b;
+        return umba::html::helpers::readUntilEnd(std::back_inserter(text), b, e);
+    }
+
+    b = umba::html::helpers::readQuotedOrUntilEnd(std::back_inserter(strTmp), b, e);
+
+    if (!strTmp.empty())
+    {
+        if (strTmp[0]!='!')
+        {
+            if (filename.empty())
+                filename = strTmp;
+            else
+                text = strTmp;
+        }
+        else
+        {
+            strTmp.erase(0,1);
+            text = strTmp;
+        }
+
+        strTmp.clear();
+    }
+
+    return b;
+
+}
+
+
+
+// umba::html::helpers
+
+// bool isWhiteSpace(char ch)
+// char isSimpleQuot(char ch)
+
+
+// InputIterator skipSpaces(InputIterator b, InputIterator e)
+//  
+// InputIterator readUntilEnd(OutputIterator out, InputIterator b, InputIterator e)
+
+// //! Читаем текст до пробела или конца строки
+// InputIterator readUntilSpace(OutputIterator out, InputIterator b, InputIterator e)
+//  
+// InputIterator readUntilQuot(OutputIterator out, InputIterator b, InputIterator e, char quot)
+
+// InputIterator readQuotedOrUntilSpace(OutputIterator out, InputIterator b, InputIterator e, char quot)
+
+// InputIterator readQuotedOrUntilEnd(OutputIterator out, InputIterator b, InputIterator e)
+
 
 
 

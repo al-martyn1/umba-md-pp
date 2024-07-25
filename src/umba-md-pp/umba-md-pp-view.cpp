@@ -72,8 +72,6 @@
 #include "viewer_utils.h"
 #include "extern_tools.h"
 
-// For 'system' function
-#include <process.h>
 
 
 // #define TRY_UNICODE_VIEWER
@@ -537,19 +535,24 @@ main/wmain - нужны только для MSVC/Console
 
         std::wstring wDoxygenExeName = findDoxygenExecutableName<std::wstring>(appConfig.dontLookupForDoxygen);
         std::string  doxygenExeName  = umba::toUtf8(wDoxygenExeName);
-        std::string  doxygenExeNameEscaped  = escapeCommandLineArgument(doxygenExeName);
+        //std::string  doxygenExeNameEscaped  = escapeCommandLineArgument(doxygenExeName);
 
         #if defined(UMBA_MD_PP_VIEW_CONSOLE)
 
+        {
             std::cout << "Found Doxygen: " << doxygenExeName << "\n";
+            std::string  doxygenExeNameEscaped  = escapeCommandLineArgument(doxygenExeName);
             std::cout << "Escaped      : " << doxygenExeNameEscaped << "\n";
+        }
 
         #endif
 
-        auto systemRes = system(doxygenExeNameEscaped.c_str());
+        std::string callingDoxygenErrMsg;
+        //auto systemRes = system(doxygenExeNameEscaped.c_str());
+        auto systemRes = safeSystemFunction(&callingDoxygenErrMsg, doxygenExeName);
         if (systemRes<0)
         {
-            showErrorMessageBox("Failed to execute '" + doxygenExeName + "'");
+            showErrorMessageBox("Failed to execute '" + doxygenExeName + "': " + callingDoxygenErrMsg);
             return 8;
         }
 

@@ -31,24 +31,26 @@ struct GraphVizOptions
 
     std::string makeDotTargetFormatCliArgument() const
     {
-        return escapeCommandLineArgument("-T" + enum_serialize(targetFormat));
+        //return escapeCommandLineArgument("-T" + enum_serialize(targetFormat));
+        return "-T" + enum_serialize(targetFormat);
     }
 
     std::string makeDotDpiCliArgument() const
     {
-        return escapeCommandLineArgument("-Gdpi=" + std::to_string(getScaledDpi()));
+        //return escapeCommandLineArgument("-Gdpi=" + std::to_string(getScaledDpi()));
+        return "-Gdpi=" + std::to_string(getScaledDpi());
     }
 
-    bool generateCommandLine(std::string &tool, std::string &args, const std::string &inputDotFile, const std::string &outputImageFile) const
+    bool generateCommandLineArgs(std::string &tool, std::vector<std::string> &args, const std::string &inputDotFile, const std::string &outputImageFile) const
     {
         if (graphType==GraphType::dot)
         {
             // dot -Tsvg -s72 -o test001_72.svg test001.dot
             tool = "dot";
-            args  = makeDotTargetFormatCliArgument();
-            //args += " " + makeDotDpiCliArgument();
-            args += " -o " + escapeCommandLineArgument(outputImageFile);
-            args += " " + escapeCommandLineArgument(inputDotFile);
+            args.emplace_back(makeDotTargetFormatCliArgument());
+            //args.emplace_back(makeDotDpiCliArgument());
+            args.emplace_back("-o"); args.emplace_back(outputImageFile);
+            args.emplace_back(inputDotFile);
             return true;
         }
 
