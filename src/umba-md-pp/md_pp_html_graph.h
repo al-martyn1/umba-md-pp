@@ -441,7 +441,8 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
     
     if (errMsg.empty())
     {
-        umba::filesys::deleteFile(tempDotFile);
+        if (!graphVizOptions.keepTempDotFiles)
+            umba::filesys::deleteFile(tempDotFile);
         umba::filesys::deleteFile(tempTargetFile);
     }
 

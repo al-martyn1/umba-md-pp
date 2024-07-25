@@ -1099,6 +1099,22 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("gviz-keep-temp-dot-files")
+               || opt.isOption("graphviz-keep-temp-dot-files")
+               || opt.setDescription("Keep temporary dot files."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                return -1;
+            }
+
+            appConfig.graphVizOptions.keepTempDotFiles = boolVal;
+
+            return 0;
+        }
 
         else if ( opt.setParam("EXT[,EXT...]",umba::command_line::OptionType::optString)
                || opt.isOption("add-mdpp-extention")
