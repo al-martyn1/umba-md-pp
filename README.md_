@@ -46,7 +46,7 @@ Language   : Russian
 #// /*
 Пытаемся в графы
 
-<graph save-as=left-to-right> !Left to right graph flow (quoting not worked in tag attrs)
+<graph save-as=left-to-right> !Left to right graph flow
 digraph G{
  rankdir=LR;
  node[color="red",fontsize=14];
