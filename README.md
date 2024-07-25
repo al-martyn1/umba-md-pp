@@ -60,6 +60,14 @@ Test number one
 
 ![Subgraph (cluster) sample](.doc.generated_images/subgraph-cluster-sample.svg)
 
+[Node Shapes](https://graphviz.org/doc/info/shapes.html)
+
+![Node Shapes - digraph R](.doc.generated_images/node-shapes-digraph_r.svg)
+
+![Node Shapes - digraph structs](.doc.generated_images/node-shapes-digraph_structs.svg)
+
+![Node Shapes - digraph G](.doc.generated_images/node-shapes-digraph_g.svg)
+
 
 Пытаемся в картинки
 

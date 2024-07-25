@@ -120,6 +120,41 @@ digraph G {
 }
 </graph>
 
+[Node Shapes](https://graphviz.org/doc/info/shapes.html)
+
+<graph save-as=node-shapes-digraph_R> !Node Shapes - digraph R
+digraph R {
+  rankdir=LR
+  node [style=rounded]
+  node1 [shape=box]
+  node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
+  node3 [shape=record, label="{ a | b | c }"]
+
+  node1 -> node2 -> node3
+}
+</graph>
+
+<graph save-as=node-shapes-digraph_structs> !Node Shapes - digraph structs
+digraph structs {
+    node [shape=record];
+    struct1 [label="<f0> left|<f1> mid\ dle|<f2> right"];
+    struct2 [label="<f0> one|<f1> two"];
+    struct3 [label="hello\nworld |{ b |{c|<here> d|e}| f}| g | h"];
+    struct1:f1 -> struct2:f0;
+    struct1:f2 -> struct3:here;
+}
+</graph>
+
+<graph save-as=node-shapes-digraph_G> !Node Shapes - digraph G
+digraph G {
+  rankdir=LR
+  node [shape=box, color=blue]
+  node1 [style=filled] 
+  node2 [style=filled, fillcolor=red] 
+  node0 -> node1 -> node2
+}
+</graph>
+
 
 #// */
 Пытаемся в картинки
