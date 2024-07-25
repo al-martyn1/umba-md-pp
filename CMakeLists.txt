@@ -117,8 +117,11 @@ target_link_libraries(umba-md-pp-view-console PRIVATE "${PLATFORM_LIBS}" "${COMM
 
 add_executable(test_rtf_workarounds "${SRC_ROOT}/umba-md-pp/test_rtf_workarounds.cpp" "${headers}")
 umba_add_target_options(test_rtf_workarounds "BIGOBJ" "CONSOLE" "UTF8")
-target_compile_definitions(test_rtf_workarounds PRIVATE "UMBA_MD_PP_VIEW" "UMBA_MD_PP_VIEW_CONSOLE")
 target_link_libraries(test_rtf_workarounds PRIVATE "${PLATFORM_LIBS}" "${COMMON_SRC}" "${JSON_YAML_SRC}")
+
+add_executable(test_001 "${SRC_ROOT}/umba-md-pp/test_001.cpp" "${headers}")
+umba_add_target_options(test_001 "BIGOBJ" "CONSOLE" "UTF8")
+target_link_libraries(test_001 PRIVATE "${PLATFORM_LIBS}" "${COMMON_SRC}" "${JSON_YAML_SRC}")
 
 
 #https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements
