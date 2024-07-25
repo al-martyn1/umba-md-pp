@@ -29,6 +29,9 @@ struct GraphVizOptions
 
     std::string              savePath;
 
+    bool                     showLabels = false;
+
+
     std::string makeDotTargetFormatCliArgument() const
     {
         //return escapeCommandLineArgument("-T" + enum_serialize(targetFormat));

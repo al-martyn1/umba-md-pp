@@ -14,6 +14,7 @@
 # Graphviz common options
 --graphviz-output-format=svg
 --graphviz-dpi=120
+--graphviz-show-labels=true
 
 # Расширения, обрабатываемые (и сканируемые) MDPP
 # старое

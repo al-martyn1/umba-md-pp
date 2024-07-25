@@ -120,6 +120,110 @@ void updateGraphVizOptions(const AppConfig<FilenameStringType> &appCfg, const um
 }
 
 //----------------------------------------------------------------------------
+inline
+std::string grapvizLabelTextEscape(const std::string &text)
+{
+    std::string res; res.reserve(text.size());
+    for(auto ch : text)
+    {
+        if (ch=='\\' || ch=='\"' || ch=='\n')
+            res.append(1, '\\');
+        res.append(1, ch);
+    }
+
+    return res;
+}
+
+//----------------------------------------------------------------------------
+int grapvizGraphGetLineType(std::string line)
+{
+    umba::string_plus::trim(line);
+    if (line.empty())
+        return 2;
+    if (umba::string_plus::starts_with_and_strip(line, "#") || umba::string_plus::starts_with_and_strip(line, "//")) // single line comment
+        return 1;
+    if (umba::string_plus::starts_with_and_strip(line, "/*")) // multiline comment
+        return -1;
+
+    return 0; // not a comment line
+};
+
+//----------------------------------------------------------------------------
+inline
+void grapvizAddGraphLabel(const std::string &labelText, std::vector<std::string> &tagLines)
+{
+    if (tagLines.empty() || labelText.empty())
+        return;
+
+    const static std::string graphStr = "graph";
+
+    bool waitForBrace = false;
+    std::size_t bracePos = std::string::npos;
+
+    std::size_t idx = 0;
+
+    for(; idx!=tagLines.size(); ++idx)
+    {
+        auto &line = tagLines[idx];
+
+        int gvzLineType = grapvizGraphGetLineType(line);
+
+        if (gvzLineType<0) // многостроч не умеем обрабатывать
+            return;
+
+        if (gvzLineType!=0) // single line comment or empty line
+            continue;
+
+        // не пустая и не комент строка
+        if (!waitForBrace) // ещё ждём не скобку, а начало графа
+        {
+            // первая не пустая и не комент строка - тут должен начинаться граф
+            std::size_t graphPos = line.find(graphStr);
+    
+            if (graphPos==line.npos) // Не нашли начало графа - что-то пошло не так
+                return;
+    
+            bracePos = line.find('{', graphPos+graphStr.size());
+            waitForBrace = true;
+        }
+
+        if (waitForBrace)
+        {
+            if (bracePos==std::string::npos) // на строчке с началом графа не нашли курли скобку, ищем с начала текущей
+            {
+                bracePos = line.find('{');
+            }
+
+            if (bracePos==std::string::npos)
+                continue;
+
+            // нашли скобку
+            ++bracePos; // едем дальше
+
+            bool needSemicolon = umba::html::helpers::skipSpaces(line.begin()+bracePos, line.end())!=line.end();
+
+            std::string textToInsert = " label=\"" + grapvizLabelTextEscape(labelText) + "\"" + (needSemicolon?"; ":"");
+
+            line.insert(bracePos, textToInsert);
+
+            return; // Bingo!
+        }
+
+    } // for
+
+}
+
+
+// graph 	: 	[ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
+// digraph { a -> b }
+// strict graph { 
+// digraph graphname {
+
+// graph {
+//   label="Vincent van Gogh Paintings"
+
+// label is escString - https://graphviz.org/docs/attr-types/escString/
+
 
 template<typename FilenameStringType>
 void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType
@@ -168,9 +272,13 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
     for(auto tagLine : tagLines)
     {
-        umba::string_plus::rtrim(tagLine);
+        umba::string_plus::rtrim(tagLine); // Обрезаем справа, чтобы незначащие пробелы не 
         dotLines.emplace_back(tagLine);
     }
+
+    if (graphVizOptions.showLabels && mdHtmlTag.hasAttr("text"))
+       grapvizAddGraphLabel(mdHtmlTag.getAttrValue("text"), dotLines);
+
 
     std::string dotText    = marty_cpp::mergeLines(dotLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
     std::size_t dotHash    = std::hash<std::string>{}(dotText);

@@ -1082,6 +1082,22 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("gviz-show-labels")
+               || opt.isOption("graphviz-show-labels")
+               || opt.setDescription("Show labels on Graphviz graphs."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                return -1;
+            }
+
+            appConfig.graphVizOptions.showLabels = boolVal;
+
+            return 0;
+        }
 
 
         else if ( opt.setParam("EXT[,EXT...]",umba::command_line::OptionType::optString)

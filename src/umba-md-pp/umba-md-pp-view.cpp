@@ -402,6 +402,7 @@ main/wmain - нужны только для MSVC/Console
     appConfig.flattenImageLinks = true;
     appConfig.graphVizOptions.dpi = 240;
     appConfig.graphVizOptions.targetFormat = GraphVizTargetFormat::png;
+    appConfig.graphVizOptions.showLabels   = false;
     //appConfig.graphVizOptions.targetFormat = GraphVizTargetFormat::emf;
 
     appConfig.singleModeInOutPathsDifferent = true; // Без проверок говорим, что входной и выходной файл - в разных каталогах (выходной в сгенерённом TEMP'е - так что ок)
