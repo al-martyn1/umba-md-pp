@@ -46,6 +46,27 @@ Language   : Russian
 #// /*
 Пытаемся в графы
 
+<graph            save-as=simple-er-dot>   doc\dot\test007.dot Entity relation diagram (dot)
+<graph type=neato save-as=simple-er-neato> doc\dot\test007.dot Entity relation diagram (Neato)
+<graph type=fdp   save-as=simple-er-fdp>   doc\dot\test007.dot Entity relation diagram (FDP)
+<graph type=twopi save-as=simple-er-twopi> doc\dot\test007.dot Entity relation diagram (Twopi)
+<graph type=circo save-as=simple-er-circo> doc\dot\test007.dot Entity relation diagram (Circo)
+#// <graph type= save-as=simple-er> doc\dot\test007.dot Entity relation diagram ()
+
+#//     acyclic    = 0x0001 /*!< Make directed graphs acyclic. */,
+#//     bcomps     = 0x0002 /*!< Biconnected components filter for graphs. */,
+#//     ccomps     = 0x0003 /*!< Connected components filter for graphs. */,
+#//     cluster    = 0x0004 /*!< Find clusters in a graph and augment the graph with this information. */,
+#//     dijkstra   = 0x0005 /*!< Single-source distance filter. */,
+#//     gvmap      = 0x0006 /*!< Find clusters and create a geographical map highlighting clusters. */,
+#//     gvpack     = 0x0007 /*!< Merge and pack disjoint graphs. */,
+#//     mingle     = 0x0008 /*!< Fast edge bundling. */,
+#//     sccmap     = 0x0009 /*!< Extract strongly connected components of directed graphs. */,
+
+
+
+</graph>
+
 <graph save-as=left-to-right> !Left to right graph flow
 digraph G{
  rankdir=LR;

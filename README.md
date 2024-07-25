@@ -46,6 +46,17 @@ Test number one
 
 Пытаемся в графы
 
+![Entity relation diagram (dot)](.doc.generated_images/simple-er-dot.svg)
+![Entity relation diagram (Neato)](.doc.generated_images/simple-er-neato.svg)
+![Entity relation diagram (FDP)](.doc.generated_images/simple-er-fdp.svg)
+![Entity relation diagram (Twopi)](.doc.generated_images/simple-er-twopi.svg)
+![Entity relation diagram (Circo)](.doc.generated_images/simple-er-circo.svg)
+
+
+
+
+</graph>
+
 ![Left to right graph flow](.doc.generated_images/left-to-right.svg)
 
 ![A-B Graph](.doc.generated_images/doc/dot/test001.svg)

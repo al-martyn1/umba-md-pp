@@ -1,0 +1,16 @@
+graph G{
+
+name -- course
+code -- course
+course -- CI [label="n"];
+course -- SC [label="n"];
+CI -- Institute [label="l"]
+Institute -- name
+Institute -- SI [label="l"]
+SI -- student [label="n"]
+student -- name
+student -- grade
+student -- number
+student -- SC [label="m"]
+
+}
