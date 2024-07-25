@@ -3,7 +3,8 @@
 @set EXCLUDE=%EXCLUDE_DIRS% --batch-exclude-files=*upper_inc.md*
 @set COMMON=--overwrite --copy-images --add-examples-path=.\doc --add-examples-path=.\tests\snippets --add-examples-path=.\src
 @rem set GRAPHVIZ_OPTIONS=--graphviz-output-path=.\.doc.generated_images
-@set OPTIONS= %COMMON% %VARS% %EXCLUDE% %GRAPHVIZ_OPTIONS% --batch-scan-recurse=.
+@rem set TEMP_OPTS=--graphviz-keep-temp-dot-files
+@set OPTIONS= %TEMP_OPTS% %COMMON% %VARS% %EXCLUDE% %GRAPHVIZ_OPTIONS% --batch-scan-recurse=.
 
 
 @rem https://stackoverflow.com/questions/3160058/how-to-get-the-path-of-a-batch-script-without-the-trailing-backslash-in-a-single
