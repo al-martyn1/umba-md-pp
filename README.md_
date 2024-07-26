@@ -47,16 +47,26 @@ Language   : Russian
 Пытаемся в графы
 
 [Node Shapes](https://graphviz.org/doc/info/shapes.html)
+
 [Undirected Graphs](https://graphviz.org/Gallery/undirected/)
+
 [Directed Graphs examples](https://graphviz.org/Gallery/directed/)
+
 [Neato Spring Graphs eamples](https://graphviz.org/Gallery/neato/)
+
 [Twopi Radial Graphs](https://graphviz.org/Gallery/twopi/)
 
-<graph            save-as=simple-er-dot>   doc\dot\test007.dot Entity relation diagram (dot)
+
+<graph            save-as=simple-er-dot>   doc\dot\test007.dot Entity relation diagram (Dot)
+
 <graph type=neato save-as=simple-er-neato> doc\dot\test007.dot Entity relation diagram (Neato)
+
 <graph type=fdp   save-as=simple-er-fdp>   doc\dot\test007.dot Entity relation diagram (FDP)
+
 <graph type=twopi save-as=simple-er-twopi> doc\dot\test007.dot Entity relation diagram (Twopi)
+
 <graph type=circo save-as=simple-er-circo> doc\dot\test007.dot Entity relation diagram (Circo)
+
 #// <graph type= save-as=simple-er> doc\dot\test007.dot Entity relation diagram ()
 
 #//     acyclic    = 0x0001 /*!< Make directed graphs acyclic. */,
@@ -69,9 +79,6 @@ Language   : Russian
 #//     mingle     = 0x0008 /*!< Fast edge bundling. */,
 #//     sccmap     = 0x0009 /*!< Extract strongly connected components of directed graphs. */,
 
-
-
-</graph>
 
 <graph save-as=left-to-right> !Left to right graph flow
 digraph G{
