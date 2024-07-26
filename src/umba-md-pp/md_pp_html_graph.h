@@ -179,10 +179,10 @@ void grapvizAddGraphLabel(const std::string &labelText, std::vector<std::string>
         {
             // первая не пустая и не комент строка - тут должен начинаться граф
             std::size_t graphPos = line.find(graphStr);
-    
+
             if (graphPos==line.npos) // Не нашли начало графа - что-то пошло не так
                 return;
-    
+
             bracePos = line.find('{', graphPos+graphStr.size());
             waitForBrace = true;
         }
@@ -214,9 +214,9 @@ void grapvizAddGraphLabel(const std::string &labelText, std::vector<std::string>
 }
 
 
-// graph 	: 	[ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
+// graph     :     [ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
 // digraph { a -> b }
-// strict graph { 
+// strict graph {
 // digraph graphname {
 
 // graph {
@@ -272,7 +272,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
     for(auto tagLine : tagLines)
     {
-        umba::string_plus::rtrim(tagLine); // Обрезаем справа, чтобы незначащие пробелы не 
+        umba::string_plus::rtrim(tagLine); // Обрезаем справа, чтобы незначащие пробелы не
         dotLines.emplace_back(tagLine);
     }
 
@@ -408,7 +408,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
             {
                 std::string toolExeName     = findGraphvizToolExecutableName<std::string>(appCfg.dontLookupForGraphviz, graphvizTool);
                 //std::string toolCommandLine = toolExeName + " " + graphvizToolArgs;
-            
+
                 std::string errMsg;
                 //int resCode = system(toolCommandLine.c_str());
                 int resCode = safeSystemFunction(&errMsg, toolExeName, graphvizToolArgs);
@@ -438,7 +438,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
     {
         resLines.emplace_back("# " + errMsg);
     }
-    
+
     if (errMsg.empty())
     {
         if (!graphVizOptions.keepTempDotFiles)
@@ -448,7 +448,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
 
     std::string imgLink;
-    
+
     umba::filename::makeRelPath( imgLink
                                , umba::filename::getPath(docFilename)
                                , outputFilename

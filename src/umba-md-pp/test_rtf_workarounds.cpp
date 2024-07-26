@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     }
     catch(const std::exception &e)
     {
-        //LOG_ERR_OPT 
+        //LOG_ERR_OPT
         std::cerr << "Exception found: " << e.what() << "\n";
     }
     catch(...)
@@ -52,10 +52,10 @@ int main(int argc, char* argv[])
 int safe_main(int argc, char* argv[])
 {
     // umba::time_service::init();
-    //  
+    //
     // marty_tr::tr_set_err_handler(&trErrHandler);
     // marty_tr::tr_init_all_translations(tr_get_translations_json());
-    //  
+    //
 
     //std::cout << "Doxygen: " << umba::toUtf8(findDoxygenExecutableName()) << "\n";
 

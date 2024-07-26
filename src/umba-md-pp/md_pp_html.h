@@ -81,7 +81,7 @@ IteratorType parseTagLineExtra(std::string &filename, std::string &text, Iterato
     b = umba::html::helpers::skipSpaces(b, e);
     if (b==e)
         return b;
-    
+
     if (*b=='!')
     {
         // Это текст, до конца строки
@@ -129,7 +129,7 @@ IteratorType parseTagLineExtra(std::string &filename, std::string &text, Iterato
     b = umba::html::helpers::skipSpaces(b, e);
     if (b==e)
         return b;
-    
+
     if (*b=='!')
     {
         // Это текст, до конца строки
@@ -170,12 +170,12 @@ IteratorType parseTagLineExtra(std::string &filename, std::string &text, Iterato
 
 
 // InputIterator skipSpaces(InputIterator b, InputIterator e)
-//  
+//
 // InputIterator readUntilEnd(OutputIterator out, InputIterator b, InputIterator e)
 
 // //! Читаем текст до пробела или конца строки
 // InputIterator readUntilSpace(OutputIterator out, InputIterator b, InputIterator e)
-//  
+//
 // InputIterator readUntilQuot(OutputIterator out, InputIterator b, InputIterator e, char quot)
 
 // InputIterator readQuotedOrUntilSpace(OutputIterator out, InputIterator b, InputIterator e, char quot)

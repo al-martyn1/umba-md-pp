@@ -107,7 +107,7 @@ bool rtfEmbedImagesWorkaround(const std::string &rtfFilename)
 
     while(findPos!=rtfData.npos)
     {
-        
+
         std::size_t fieldPos = findPos;
         #ifndef NDEBUG
         const char *rtfDataFieldPtr = &rtfData[fieldPos];

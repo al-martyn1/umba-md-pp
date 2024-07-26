@@ -94,7 +94,7 @@ StringType makeSystemFunctionCommandString(const StringType &cmd, std::vector<St
 inline
 int safeSystemFunction(std::string *pErrMsg, const std::string &cmd)
 {
-    // system returns the value that is returned by the command interpreter. 
+    // system returns the value that is returned by the command interpreter.
     // It returns the value 0 only if the command interpreter returns the value 0.
     // A return value of -1 indicates an error, and errno is set
 
@@ -107,7 +107,7 @@ int safeSystemFunction(std::string *pErrMsg, const std::string &cmd)
         {
             if (resVal==-1)
                *pErrMsg = std::string("Launch command failed: ") + std::strerror(errno);
-            else 
+            else
                *pErrMsg = "Command result code: " + std::to_string(resVal);
         }
     }
@@ -130,7 +130,7 @@ int safeSystemFunction(std::wstring *pErrMsg, const std::wstring &cmd)
         {
             if (resVal==1)
                *pErrMsg = umba::fromUtf8(std::string("Launch command failed: ") + std::strerror(errno));
-            else 
+            else
                *pErrMsg = umba::fromUtf8("Command result code: " + std::to_string(resVal));
         }
     }

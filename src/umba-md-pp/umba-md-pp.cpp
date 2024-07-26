@@ -377,8 +377,8 @@ int safe_main(int argc, char* argv[])
 
         argsParser.args.push_back("--graphviz-output-path="+rootPath+"\\doc\\generated_images");
         //argsParser.args.push_back("--graphviz-output-format=svg");
-        
-        
+
+
         //argsParser.args.push_back("");
 
 
