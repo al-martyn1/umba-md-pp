@@ -1,6 +1,6 @@
 digraph {
 
-    r_1   [label="!"]
+    r_1 [label="!"]
 
     n_2_1 [label="+"];  n_2_2 [label="-"];  n_2_3 [label="="];  n_2_4 [label=">"]
     r_1->n_2_1;  r_1->n_2_2;  r_1->n_2_3;  r_1->n_2_4
@@ -12,7 +12,7 @@ digraph {
     n_3_3->n_4_0;  n_3_3->n_4_1;  n_3_3->n_4_2;  n_3_3->n_4_3;  n_3_3->n_4_4
 
 
-    r_2   [label="+"]
+    r_2 [label="+"]
 
     p_2_1 [label="+"];  p_2_2 [label="-"];  p_2_3 [label="="]
     r_2->p_2_1;  r_2->p_2_2;  r_2->p_2_3
@@ -21,7 +21,7 @@ digraph {
     p_2_1->p_3_1;  p_2_1->p_3_2
 
 
-    r_3   [label="-"]
+    r_3 [label="-"]
 
     m_2_1 [label="-"];  m_2_2 [label="="];  m_2_3 [label=">"]
     r_3->m_2_1;  r_3->m_2_2;  r_3->m_2_3
@@ -31,6 +31,13 @@ digraph {
 
     m_4_1 [label=">"]
     m_2_2->m_4_1
+
+
+    r_4 [label="="]
+
+    e_2_1 [label="="];  e_2_2 [label=">"];  e_3_1 [label="="]
+    r_4->e_2_1->e_3_1;  r_4->e_2_2
+
 
 }
 
@@ -67,6 +74,7 @@ std::vector<OperatorInfo> operatorInfos = { { UMBA_TOKENISER_TOKEN_OPERATOR_LOGI
                                           , { 669                                                   , "--="  }
                                           , { 667                                                   , "-->"  }
                                           , { 666                                                   , "-=>"  }
+
                                           , { UMBA_TOKENISER_TOKEN_OPERATOR_ASSIGNMENT              , "="    }
                                           , { UMBA_TOKENISER_TOKEN_OPERATOR_EQUAL                   , "=="   }
                                           , { UMBA_TOKENISER_TOKEN_OPERATOR_LAMBDA                  , "=>"   }

@@ -58,6 +58,7 @@ Language   : Russian
 
 
 <graph> doc/trie.dot Trie
+<graph> doc/trie_flat.dot Flat Trie
 
 <graph            save-as=simple-er-dot>   doc\dot\test007.dot Entity relation diagram (Dot)
 

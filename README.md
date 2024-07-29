@@ -58,6 +58,7 @@ Test number one
 
 
 ![Trie](.doc.generated_images/doc/trie.svg)
+![Flat Trie](.doc.generated_images/doc/trie_flat.svg)
 
 ![Entity relation diagram (Dot)](.doc.generated_images/simple-er-dot.svg)
 
