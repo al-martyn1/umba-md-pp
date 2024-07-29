@@ -2,6 +2,8 @@
     \brief Тестируем корректность генерации индексов для таблицы CharClass по символу
  */
 
+#define UMBA_TOKENISER_DISABLE_UMBA_TOKENISER_GET_CHAR_CLASS_FUNCTION
+
 #include "umba/umba.h"
 #include "umba/tokeniser.h"
 

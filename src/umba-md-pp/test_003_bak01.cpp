@@ -63,7 +63,52 @@ using std::cerr;
 template<typename ContainerType>
 umba::tokeniser::trie_index_type tokenTrieGoNext(const ContainerType &tokenTrie, umba::tokeniser::trie_index_type curIndex, char ch)
 {
-    return umba::tokeniser::tokenTrieFindNext(tokenTrie, curIndex, ch);
+    using namespace umba::tokeniser;
+
+    // Если на входе инвалид, то начинать надо 
+
+    trie_index_type levelStartIdx  = 0;
+    trie_index_type levelSize      = 0;
+
+    if (curIndex==umba::tokeniser::trie_index_invalid)
+    {
+        levelStartIdx  = tokenTrie[0].levelStartIndex;
+        levelSize      = tokenTrie[0].levelSize;      
+    }
+    else
+    {
+        if (curIndex>=tokenTrie.size())
+        {
+            return umba::tokeniser::trie_index_invalid;
+        }
+
+        levelStartIdx = tokenTrie[curIndex].childsIndex;
+        UMBA_ASSERT(levelStartIdx<tokenTrie.size());
+        // if (levelStartIdx>=tokenTrie.size()) // тут бы assert, тут не штатная ситуация
+        // {
+        //     return umba::tokeniser::trie_index_invalid;
+        // }
+
+        levelSize = tokenTrie[levelStartIdx].levelSize;      
+    }
+
+    for(trie_index_type i=0; i!=levelSize; ++i)
+    {
+        const auto idx = levelStartIdx + i;
+        UMBA_ASSERT(idx<tokenTrie.size());
+        // if (idx>=tokenTrie.size()) // тут бы assert, тут не штатная ситуация
+        // {
+        //     return umba::tokeniser::trie_index_invalid;
+        // }
+
+        if (tokenTrie[idx].symbol==ch)
+            return idx;
+
+        if (tokenTrie[idx].symbol>ch)
+            return trie_index_invalid; // у нас символы отсортированы по возрастанию, и если код искомого символа больше того, что мы обнаружили в очередной entry, то дальше искать нет смысла
+    }
+
+    return trie_index_invalid; // Не нашли, обломс
 }
 
 
@@ -136,6 +181,31 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
 // umba::tokeniser::
 // umba::tokeniser::trie_index_type
 
+
+struct MapTrieNode
+{
+    umba::tokeniser::TrieNode      trieNode;
+    std::map<char, MapTrieNode>    childs  ;
+
+    MapTrieNode() : trieNode(), childs()
+    {
+        trieNode.parentNodeIndex = umba::tokeniser::trie_index_invalid;
+        trieNode.levelStartIndex = umba::tokeniser::trie_index_invalid;
+        trieNode.levelSize       = umba::tokeniser::trie_index_invalid;
+        trieNode.childsIndex     = umba::tokeniser::trie_index_invalid;
+        trieNode.tokenId         = umba::tokeniser::token_id_invalid  ;
+        trieNode.symbol          = 0;
+    }
+
+    MapTrieNode(const MapTrieNode &) = default;
+    MapTrieNode& operator=(const MapTrieNode &) = default;
+    MapTrieNode(MapTrieNode &&) = default;
+    MapTrieNode& operator=(MapTrieNode &&) = default;
+
+};
+
+typedef std::map<char, MapTrieNode> TrieNodesMap;
+
 struct OperatorInfo
 {
     umba::tokeniser::token_id_type     operatorId;
@@ -160,28 +230,6 @@ std::vector<OperatorInfo> operatorInfos = { { UMBA_TOKENISER_TOKEN_OPERATOR_LOGI
                                           , { UMBA_TOKENISER_TOKEN_OPERATOR_STRICT_EQUAL            , "===" }
                                           , { UMBA_TOKENISER_TOKEN_OPERATOR_STRICT_NOT_EQUAL        , "!==" }
                                           };
-
-
-
-struct MapTrieNode
-{
-    umba::tokeniser::TrieNode      trieNode;
-    std::map<char, MapTrieNode>    childs  ;
-
-    MapTrieNode() : trieNode(), childs()
-    {
-        trieNodeInitMakeUninitialized(trieNode);
-    }
-
-    MapTrieNode(const MapTrieNode &) = default;
-    MapTrieNode& operator=(const MapTrieNode &) = default;
-    MapTrieNode(MapTrieNode &&) = default;
-    MapTrieNode& operator=(MapTrieNode &&) = default;
-
-};
-
-typedef std::map<char, MapTrieNode> TrieNodesMap;
-
 
 
 
