@@ -72,20 +72,20 @@ void printTokenTrieNode(const umba::tokeniser::TrieNode &tn)
 {
     using namespace std;
 
-    cout << "symbol   : "; 
-    if (tn.symbol>=' ')
-       cout << "'" << (char)tn.symbol << "'";
+    cout << "token   : "; 
+    if (tn.token>=' ')
+       cout << "'" << (char)tn.token << "'";
     else
-       cout << " " << (unsigned)(unsigned char)tn.symbol;
+       cout << " " << (unsigned)(unsigned char)tn.token;
     cout << "\n";
 
-    cout << "tokenId   : " << tn.tokenId << "\n";
+    cout << "payload  : " << tn.payload << "\n";
 
     cout << "parentIdx: " << tn.parentNodeIndex << "\n";
     cout << "levelIdx : " << tn.lookupChunkStartIndex << "\n";
     cout << "levelSize: " << tn.lookupChunkSize       << "\n";
     cout << "childsIdx: " << tn.childsIndex     << "\n";
-    cout << "tokenId  : " << tn.tokenId         << "\n";
+    //cout << "tokenId  : " << tn.tokenId         << "\n";
 
 }
 
@@ -98,12 +98,12 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
     using namespace umba::tokeniser;
 
     trie_index_type idx = umba::tokeniser::trie_index_invalid; // trie_index_initial;
-    token_id_type   foundToken = token_id_invalid;
+    //token_type   foundToken = token_id_invalid;
+    payload_type   foundPayload = payload_invalid;
 
     for(auto ch : str)
     {
-        //printTokenTrieNode
-        trie_index_type nextIdx = tokenTrieGoNext(tokenTrie, idx, ch);
+        trie_index_type nextIdx = tokenTrieGoNext(tokenTrie, idx, (token_type)ch);
 
         cout << "found index(idx): " << nextIdx << "\n";
         if (nextIdx==umba::tokeniser::trie_index_invalid)
@@ -133,19 +133,19 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
     else
     {
         //TrieNode.tokenId
-        foundToken = tokenTrie[idx].tokenId;
+        foundPayload = tokenTrie[idx].payload;
         cout << "Backtrace: ";
-        tokenTrieBackTrace(tokenTrie, idx, [](char ch) { cout << ch; });
+        tokenTrieBackTrace(tokenTrie, idx, [](token_type ch) { cout << std::string(1,(char)ch); });
         cout << "\n";
     }
     
-    if (foundToken==token_id_invalid)
+    if (foundPayload==payload_invalid)
     {
-        cout << "Token not found\n";
+        cout << "Tokens sequence is bad, payload not found\n";
     }
     else
     {
-        cout << "Found token (" << str << "): " << foundToken << "\n";
+        cout << "Found payload (" << str << "): " << (char)foundPayload << "\n";
     }
 
 }
@@ -162,7 +162,7 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
 
 struct OperatorInfo
 {
-    umba::tokeniser::token_id_type     operatorId;
+    umba::tokeniser::payload_type      operatorId;
     std::string                        operatorStr;
 };
 
@@ -427,7 +427,7 @@ int main(int argc, char* argv[])
     cout << "---------------------\n";
 
     std::cout << "Trie size : " << trie.size() << " items, " << trie.size()*sizeof(umba::tokeniser::TrieNode) << " bytes\n";
-    umba::tokeniser::tokenTriePrintGraph(trie, std::cout);
+    umba::tokeniser::tokenTriePrintGraph(trie, std::cout, [](umba::tokeniser::payload_type p) { return std::string(1, (char)p); } );
 
     std::cout << "-------\n";
     testTraverseToken(trie, "-->");
