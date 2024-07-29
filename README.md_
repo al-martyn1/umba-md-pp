@@ -57,6 +57,8 @@ Language   : Russian
 [Twopi Radial Graphs](https://graphviz.org/Gallery/twopi/)
 
 
+<graph> doc/trie.dot Trie
+
 <graph            save-as=simple-er-dot>   doc\dot\test007.dot Entity relation diagram (Dot)
 
 <graph type=neato save-as=simple-er-neato> doc\dot\test007.dot Entity relation diagram (Neato)
