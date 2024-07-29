@@ -82,10 +82,11 @@ void printTokenTrieNode(const umba::tokeniser::TrieNode &tn)
     cout << "tokenId   : " << tn.tokenId << "\n";
 
     cout << "parentIdx: " << tn.parentNodeIndex << "\n";
-    cout << "levelIdx : " << tn.levelStartIndex << "\n";
-    cout << "levelSize: " << tn.levelSize       << "\n";
+    cout << "levelIdx : " << tn.lookupChunkStartIndex << "\n";
+    cout << "levelSize: " << tn.lookupChunkSize       << "\n";
     cout << "childsIdx: " << tn.childsIndex     << "\n";
     cout << "tokenId  : " << tn.tokenId         << "\n";
+
 }
 
 #if 1
@@ -97,6 +98,7 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
     using namespace umba::tokeniser;
 
     trie_index_type idx = umba::tokeniser::trie_index_invalid; // trie_index_initial;
+    token_id_type   foundToken = token_id_invalid;
 
     for(auto ch : str)
     {
@@ -124,6 +126,28 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
         idx = nextIdx;
     }
 
+    if (idx>=tokenTrie.size())
+    {
+         cout << "Final index is invalid\n";
+    }
+    else
+    {
+        //TrieNode.tokenId
+        foundToken = tokenTrie[idx].tokenId;
+        cout << "Backtrace: ";
+        tokenTrieBackTrace(tokenTrie, idx, [](char ch) { cout << ch; });
+        cout << "\n";
+    }
+    
+    if (foundToken==token_id_invalid)
+    {
+        cout << "Token not found\n";
+    }
+    else
+    {
+        cout << "Found token (" << str << "): " << foundToken << "\n";
+    }
+
 }
 
     // void printTokenTrieNode(const umba::tokeniser::TrieNode &tn)
@@ -143,44 +167,64 @@ struct OperatorInfo
 };
 
 
-std::vector<OperatorInfo> operatorInfos = { { UMBA_TOKENISER_TOKEN_OPERATOR_LOGICAL_NOT             , "!"   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_ASSIGNMENT              , "="   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_ADDITION                , "+"   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_SUBTRACTION             , "-"   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_INCREMENT               , "++"  }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_ADDITION_ASSIGNMENT     , "+="  }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_DECREMENT               , "--"  }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_SUBTRACTION_ASSIGNMENT  , "-="  }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_STRUCTURE_DEREFERENCE   , "->"  }
-                                          , { 666                                                   , "-=>" }
-                                          , { 999                                                   , "-->" }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_EQUAL                   , "=="  }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_NOT_EQUAL               , "!="  }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_LAMBDA                  , "=>"  }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_STRICT_EQUAL            , "===" }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_STRICT_NOT_EQUAL        , "!==" }
+std::vector<OperatorInfo> operatorInfos = { { UMBA_TOKENISER_TOKEN_OPERATOR_LOGICAL_NOT             , "!"    }
+                                          , { 555                                                   , "!+"   }
+                                          , { 556                                                   , "!-"   }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_NOT_EQUAL               , "!="   }
+                                          , { 557                                                   , "!>"   }
+
+                                          , { 558                                                   , "!=+"  }
+                                          , { 559                                                   , "!=-"  }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_STRICT_NOT_EQUAL        , "!=="  }
+                                          , { 560                                                   , "!=>"  }
+
+                                          , { 561                                                   , "!==!" }
+                                          , { 562                                                   , "!==+" }
+                                          , { 563                                                   , "!==-" }
+                                          , { 564                                                   , "!===" }
+                                          , { 565                                                   , "!==>" }
+
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_ADDITION                , "+"    }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_INCREMENT               , "++"   }
+                                          , { 566                                                   , "+-"   }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_ADDITION_ASSIGNMENT     , "+="   }
+                                          , { 567                                                   , "+++"  }
+                                          , { 568                                                   , "++-"  }
+
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_SUBTRACTION             , "-"    }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_DECREMENT               , "--"   }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_SUBTRACTION_ASSIGNMENT  , "-="   }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_STRUCTURE_DEREFERENCE   , "->"   }
+                                          , { 668                                                   , "--!"  }
+                                          , { 669                                                   , "--="  }
+                                          , { 667                                                   , "-->"  }
+                                          , { 666                                                   , "-=>"  }
+
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_ASSIGNMENT              , "="    }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_EQUAL                   , "=="   }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_LAMBDA                  , "=>"   }
+                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_STRICT_EQUAL            , "==="  }
                                           };
 
 
-
-struct MapTrieNode
-{
-    umba::tokeniser::TrieNode      trieNode;
-    std::map<char, MapTrieNode>    childs  ;
-
-    MapTrieNode() : trieNode(), childs()
-    {
-        trieNodeInitMakeUninitialized(trieNode);
-    }
-
-    MapTrieNode(const MapTrieNode &) = default;
-    MapTrieNode& operator=(const MapTrieNode &) = default;
-    MapTrieNode(MapTrieNode &&) = default;
-    MapTrieNode& operator=(MapTrieNode &&) = default;
-
-};
-
-typedef std::map<char, MapTrieNode> TrieNodesMap;
+// struct MapTrieNode
+// {
+//     umba::tokeniser::TrieNode      trieNode;
+//     std::map<char, MapTrieNode>    childs  ;
+//  
+//     MapTrieNode() : trieNode(), childs()
+//     {
+//         trieNodeInitMakeUninitialized(trieNode);
+//     }
+//  
+//     MapTrieNode(const MapTrieNode &) = default;
+//     MapTrieNode& operator=(const MapTrieNode &) = default;
+//     MapTrieNode(MapTrieNode &&) = default;
+//     MapTrieNode& operator=(MapTrieNode &&) = default;
+//  
+// };
+//  
+// typedef std::map<char, MapTrieNode> TrieNodesMap;
 
 
 
@@ -188,64 +232,150 @@ typedef std::map<char, MapTrieNode> TrieNodesMap;
 int main(int argc, char* argv[])
 {
 
-    TrieNodesMap  trieNodesMap;
-    std::size_t finalTableNumEntries = 0;
+    // TrieNodesMap  trieNodesMap;
+    // std::size_t finalTableNumEntries = 0;
+    //  
+    // for(auto opInfo: operatorInfos)
+    // {
+    //     auto pCurMap = &trieNodesMap;
+    //     MapTrieNode *pCurNode = 0;
+    //  
+    //     for(auto ch: opInfo.operatorStr)
+    //     {
+    //         auto &curMap = *pCurMap;
+    //         pCurNode = &curMap[ch]; // .second;
+    //         pCurMap  = &pCurNode->childs;
+    //  
+    //         pCurNode->trieNode.symbol = ch;
+    //  
+    //         ++finalTableNumEntries;
+    //     }
+    //  
+    //     // Прошагали всё символы обрабатываемой строки
+    //     // Финальный узел у нас есть
+    //     // Записываем туда идентификатор оператора
+    //     pCurNode->trieNode.tokenId = opInfo.operatorId;
+    // }
+
+    umba::tokeniser::TrieBuilder trieBuilder;
 
     for(auto opInfo: operatorInfos)
     {
-        auto pCurMap = &trieNodesMap;
-        MapTrieNode *pCurNode = 0;
-
-        for(auto ch: opInfo.operatorStr)
-        {
-            auto &curMap = *pCurMap;
-            pCurNode = &curMap[ch]; // .second;
-            pCurMap  = &pCurNode->childs;
-
-            pCurNode->trieNode.symbol = ch;
-
-            ++finalTableNumEntries;
-        }
-
-        // Прошагали всё символы обрабатываемой строки
-        // Финальный узел у нас есть
-        // Записываем туда идентификатор оператора
-        pCurNode->trieNode.tokenId = opInfo.operatorId;
+        trieBuilder.addTokenSequence(opInfo.operatorStr, opInfo.operatorId);
     }
 
-    std::vector<umba::tokeniser::TrieNode> trie; trie.reserve(finalTableNumEntries);
+    std::vector<umba::tokeniser::TrieNode> trie; 
+    //trie.reserve(finalTableNumEntries);
 
+    trieBuilder.buildTokenTrie(trie);
 
+#if 0
     struct QueItem
     {
-        TrieNodesMap                        *pMap;
-        umba::tokeniser::trie_index_type    parentNodeIndex;
-        umba::tokeniser::trie_index_type    levelStartIndex;
-        umba::tokeniser::trie_index_type    levelChildsSize;
+        umba::tokeniser::TrieBuilder::TrieNodesMap   *pMap;
+        umba::tokeniser::trie_index_type             level;
+        umba::tokeniser::trie_index_type             parentNodeIndex;
+        //umba::tokeniser::trie_index_type    lookupChunkStartIndex;
+        //umba::tokeniser::trie_index_type    levelChildsSize;
     };
 
 
     std::deque<QueItem>  que;
-    QueItem firstItem = {&trieNodesMap, umba::tokeniser::trie_index_invalid, umba::tokeniser::trie_index_initial};
+    //QueItem firstItem = {&trieNodesMap, umba::tokeniser::trie_index_invalid, umba::tokeniser::trie_index_initial};
     //que.emplace_back(firstItem);
-    que.emplace_back(QueItem{&trieNodesMap, umba::tokeniser::trie_index_invalid, umba::tokeniser::trie_index_initial, trieNodesMap.size()});
+    que.emplace_back( QueItem{ &trieBuilder.m_trieNodesMap
+                             , 0                                    // level
+                             , umba::tokeniser::trie_index_invalid  // parentNodeIndex
+                             // , 0                                      // levelStartIndex
+                             // , trieNodesMap.size()                    // levelSize
+                             // , 0                                      // lookupChunkStartIndex
+                             }
+                    );
 
-    std::size_t firstFreeNodeIdx = 0;
+    std::size_t nodeIdx = 0;
+    while(!que.empty())
+    {
+        QueItem qi = que.front();  que.pop_front();
+        auto &m = *qi.pMap;
+        //std::size_t childsLevelSize = 0;
+        for(auto &kv : m)
+        {
+            kv.second.nodeIndex = nodeIdx++;
+            kv.second.level     = qi.level;
+            if (!kv.second.childs.empty())
+            {
+                que.emplace_back(QueItem{&kv.second.childs, kv.second.level+1 /* kv.second.childs.nodeIndex */ });
+            }
+        }
+    }
 
+    que.emplace_back( QueItem{ &trieBuilder.m_trieNodesMap
+                             , 0                                    // level
+                             , umba::tokeniser::trie_index_invalid  // parentNodeIndex
+                             }
+                    );
+
+    while(!que.empty())
+    {
+        QueItem qi = que.front();  que.pop_front();
+        auto &m = *qi.pMap;
+        std::size_t curParentNodeIndex = qi.parentNodeIndex;
+
+        if (m.empty())
+        {
+            continue;
+        }
+
+        umba::tokeniser::trie_index_type lookupChunkStartIndex = m.begin()->second.nodeIndex;
+        for(auto &kv : m)
+        {
+            trie.emplace_back(kv.second.trieNode); // tokenId тут уже настроен, а childsIndex - инвалид
+            trie.back().parentNodeIndex       = curParentNodeIndex;
+            trie.back().lookupChunkStartIndex = lookupChunkStartIndex;
+            trie.back().lookupChunkSize       = m.size();
+            trie.back().symbol                = kv.first;
+
+            if (!kv.second.childs.empty())
+            {
+                trie.back().childsIndex = kv.second.childs.begin()->second.nodeIndex;
+                que.emplace_back(QueItem{&kv.second.childs, kv.second.level+1, kv.second.nodeIndex});
+            }
+        }
+    }
+#endif
+
+// typedef struct tag_umba_tokeniser_trie_node
+// {
+//     UMBA_TOKENISER_TRIE_INDEX_TYPE       parentNodeIndex      ;
+//     UMBA_TOKENISER_TRIE_INDEX_TYPE       lookupChunkStartIndex; /* Одно и то же значение для всех элементов lookupChunk'а */
+//     UMBA_TOKENISER_TRIE_INDEX_TYPE       lookupChunkSize      ; /* Одно и то же значение для всех элементов lookupChunk'а */
+//     UMBA_TOKENISER_TRIE_INDEX_TYPE       childsIndex          ;
+// #if !defined(UMBA_TOKENISER_TRIE_NODE_LEVEL_FIELD_DISABLE)
+//     UMBA_TOKENISER_TRIE_INDEX_TYPE       level                ; // Нужно, чтобы делать красивый граф таблицы trie
+// #endif
+//     UMBA_TOKENISER_TOKEN_ID_TYPE         tokenId              ;
+//     char                                 symbol               ;
+//  
+// } umba_tokeniser_trie_node;
+
+
+
+
+#if 0
     while(!que.empty())
     {
         QueItem qi = que.front();
         que.pop_front();
 
-        cout << "---------------------\n";
+        // cout << "---------------------\n";
 
-        std::size_t levelStartIndex    = qi.levelStartIndex;
-        std::size_t levelChildsSize    = qi.levelChildsSize;
         std::size_t curParentNodeIndex = qi.parentNodeIndex;
-        std::size_t curIndex           = levelStartIndex;
+        std::size_t levelStartIndex    = qi.levelStartIndex;
+        std::size_t levelSize          = qi.levelSize;
+        std::size_t curIndex           = qi.lookupChunkStartIndex;
 
         auto &m = *qi.pMap;
-        std::size_t curLevelSize    = m.size();
+        //std::size_t curLevelSize    = m.size();
         std::size_t childsLevelSize = 0;
         for(auto &kv : m)
         {
@@ -258,23 +388,23 @@ int main(int argc, char* argv[])
         std::size_t nextLevelStartIndex  = levelStartIndex+levelChildsSize;
         std::size_t buddyLevelStartIndex = levelStartIndex+m.size();
         
-        cout << "levelStartIndex      : " << levelStartIndex    << "\n";
-        cout << "levelChildsSize      : " << levelChildsSize    << "\n";
-        cout << "curParentNodeIndex   : " << curParentNodeIndex << "\n";
-        cout << "curIndex             : " << curIndex           << "\n";
-        cout << "curLevelSize         : " << curLevelSize       << "\n";
-        cout << "childsLevelSize      : " << childsLevelSize    << "\n";
-        cout << "nextLevelStartIndex  : " << nextLevelStartIndex  << "\n";
-        cout << "buddyLevelStartIndex : " << buddyLevelStartIndex << "\n";
+        // cout << "levelStartIndex      : " << levelStartIndex    << "\n";
+        // cout << "levelChildsSize      : " << levelChildsSize    << "\n";
+        // cout << "curParentNodeIndex   : " << curParentNodeIndex << "\n";
+        // cout << "curIndex             : " << curIndex           << "\n";
+        // cout << "curLevelSize         : " << curLevelSize       << "\n";
+        // cout << "childsLevelSize      : " << childsLevelSize    << "\n";
+        // cout << "nextLevelStartIndex  : " << nextLevelStartIndex  << "\n";
+        // cout << "buddyLevelStartIndex : " << buddyLevelStartIndex << "\n";
 
         for(auto &kv : m)
         {
-            cout << "---\n";
+            // cout << "---\n";
 
             trie.emplace_back(kv.second.trieNode); // tokenId тут уже настроен, а childsIndex - инвалид
 
-            cout << "    Trie size: " << trie.size() << "\n";
-            cout << "    curIndex : " << curIndex    << "\n";
+            // cout << "    Trie size: " << trie.size() << "\n";
+            // cout << "    curIndex : " << curIndex    << "\n";
 
             trie[curIndex].parentNodeIndex = curParentNodeIndex;
             trie[curIndex].levelStartIndex = levelStartIndex;
@@ -284,7 +414,7 @@ int main(int argc, char* argv[])
             if (!kv.second.childs.empty())
             {
                 trie[curIndex].childsIndex = nextLevelStartIndex;
-                que.emplace_back(QueItem{&kv.second.childs, curIndex, buddyLevelStartIndex, childsLevelSize});
+                //que.emplace_back(QueItem{&kv.second.childs, curIndex, buddyLevelStartIndex, childsLevelSize});
                 nextLevelStartIndex += kv.second.childs.size();
             }
             
@@ -292,10 +422,12 @@ int main(int argc, char* argv[])
         }
     
     }
+#endif
 
     cout << "---------------------\n";
 
-    std::cout << "Trie size: " << trie.size() << "\n";
+    std::cout << "Trie size : " << trie.size() << " items, " << trie.size()*sizeof(umba::tokeniser::TrieNode) << " bytes\n";
+    umba::tokeniser::tokenTriePrintGraph(trie, std::cout);
 
     std::cout << "-------\n";
     testTraverseToken(trie, "-->");
