@@ -44,6 +44,14 @@ void printPos(const umba::TextPositionInfo &pos)
     cout << pos.lineNumber+1 << ":" << pos.symbolOffset+1; // печатаем человеческие номера
 }
 
+inline
+void printChar(char ch)
+{
+    if (ch>=' ')
+       cout << "'" << (char)ch << "'";
+    else
+       cout << " " << (unsigned)(unsigned char)ch;
+}
 
 int main(int argc, char* argv[])
 {
@@ -51,19 +59,24 @@ int main(int argc, char* argv[])
 
     cout << "---\n";
 
-    for( umba::iterator::TextPositionCountingIterator<char> it=umba::iterator::TextPositionCountingIterator<char>(text.data(), text.size())
-       ; it!=umba::iterator::TextPositionCountingIterator<char>()
-       ; ++it
-       )
+    using PosCountingIterator = umba::iterator::TextPositionCountingIterator<char>;
+
+    for( PosCountingIterator it=PosCountingIterator(text.data(), text.size()); it!=PosCountingIterator(); ++it)
     {
         char ch = *it;
-        if (ch>=' ')
-           cout << "'" << (char)ch << "'";
-        else
-           cout << " " << (unsigned)(unsigned char)ch;
-
+        printChar(ch);
         cout << "  ";
         printPos(it.getPosition());
+
+        auto nextIt = it + 1;
+        if (nextIt!=PosCountingIterator())
+        {
+            cout << ", next char: ";
+            printChar(*nextIt);
+            cout << "  ";
+            printPos(nextIt.getPosition());
+        }
+
         cout << "\n";
     }
 
