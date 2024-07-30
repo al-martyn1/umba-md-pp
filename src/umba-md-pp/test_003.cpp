@@ -109,7 +109,7 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
     }
     else
     {
-        cout << "Found payload (" << str << "): " << (char)foundPayload << "\n";
+        cout << "Found payload (" << str << "): " << foundPayload << "\n";
     }
 
 }
