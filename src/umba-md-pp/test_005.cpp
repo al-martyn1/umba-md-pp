@@ -10,6 +10,7 @@
 //
 #include "umba/text_position_info.h"
 #include "umba/iterator.h"
+#include "umba/the.h"
 
 #include <iostream>
 #include <map>
@@ -48,7 +49,7 @@ void printPos(const umba::TextPositionInfo &pos)
 
 int main(int argc, char* argv[])
 {
-    using namespace umba::tokenizer
+    using namespace umba::tokenizer;
 
     std::array<CharClass, 128> charClassTable;
 
@@ -62,7 +63,7 @@ int main(int argc, char* argv[])
 
 
     generation::generateCharClassTable(charClassTable, false /* !addOperatorChars */ );
-    std::vector<std::string> operators{"+","-","*","/","%","^","&","|","~","!","=","<",">","+=","-=","*=","/=","%=","^=","&=","|=","<<",">>",">>=","<<=","==","!=","<=",">=","<=>","&&","||","++","--",",","->*",".*","->",":","::",";","?"};
+    std::vector<std::string> operators{"+","-","*","/","%","^","&","|","~","!","=","<",">","+=","-=","*=","/=","%=","^=","&=","|=","<<",">>",">>=","<<=","==","!=","<=",">=","<=>","&&","||","++","--",",","->*",".*","->",":","::",";","?","..."};
     for(const auto &opStr : operators)
     {
         // Устанавливаем класс opchar только тем символам, которые входят в операторы
@@ -87,6 +88,44 @@ int main(int argc, char* argv[])
                                         );
     std::cout << "---\n";
 
+    {
+        auto charClass = charClassTable[charToCharClassTableIndex('(')];
+        bool bRes = umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close);
+        cout << "Is brace '(': " << (bRes?"true":"false") << "\n";
+    }
+    {
+        auto charClass = charClassTable[charToCharClassTableIndex('!')];
+        bool bRes = umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close);
+        cout << "Is brace '!': " << (bRes?"true":"false") << "\n";
+    }
+
+    {
+        auto charClass = charClassTable[charToCharClassTableIndex('8')];
+        bool bRes = umba::TheFlags(charClass).allOf(CharClass::identifier, CharClass::alpha);
+        cout << "Is identifier && alpha '8': " << (bRes?"true":"false") << "\n";
+    }
+    {
+        auto charClass = charClassTable[charToCharClassTableIndex('a')];
+        bool bRes = umba::TheFlags(charClass).allOf(CharClass::identifier, CharClass::alpha);
+        cout << "Is identifier && alpha 'a': " << (bRes?"true":"false") << "\n";
+    }
+
+    {
+        char ch = 'a';
+        bool bRes = umba::TheValue(ch).oneOf('a', 'b', 'c');
+        cout << "Is 'a' one of 'a', 'b', 'c': " << (bRes?"true":"false") << "\n";
+    }
+
+    {
+        char ch = 'a';
+        bool bRes = umba::TheValue(ch).oneOf('b', 'c', 'd');
+        cout << "Is 'a' one of 'b', 'c', 'd': " << (bRes?"true":"false") << "\n";
+    }
+
+
+    // setCharClassFlags(charClasses, braceChars[0], umba::tokenizer::CharClass::open );
+    // setCharClassFlags(charClasses, braceChars[1], umba::tokenizer::CharClass::close);
+
 
     enum State
     {
@@ -108,13 +147,13 @@ int main(int argc, char* argv[])
     for( PosCountingIterator it=PosCountingIterator(text.data(), text.size()); it!=PosCountingIterator(); ++it)
     {
         const auto ch = *it;
-        CharClass charClass = charToCharClassTableIndex(ch);
+        //CharClass charClass = charToCharClassTableIndex(ch);
 
         switch(st)
         {
             case stInitial:
             {
-                if ((charClass::linefeed))
+                //if ((charClass::linefeed))
             } break;
 
             case stReadSpace:
