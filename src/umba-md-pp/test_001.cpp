@@ -2,10 +2,10 @@
     \brief Тестируем корректность генерации индексов для таблицы CharClass по символу
  */
 
-#define UMBA_TOKENISER_DISABLE_UMBA_TOKENISER_GET_CHAR_CLASS_FUNCTION
+#define UMBA_TOKENIZER_DISABLE_UMBA_TOKENIZER_GET_CHAR_CLASS_FUNCTION
 
 #include "umba/umba.h"
-#include "umba/tokeniser.h"
+#include "umba/tokenizer.h"
 
 
 #include <iostream>
@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
         else
            cout << "    ";
 
-        cout << "  - " << umba::tokeniser::charToCharClassTableIndex((char)i) << "\n";
+        cout << "  - " << umba::tokenizer::charToCharClassTableIndex((char)i) << "\n";
     }
 
     return 0;

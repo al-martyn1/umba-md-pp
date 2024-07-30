@@ -4,7 +4,7 @@
 
 
 #include "umba/umba.h"
-#include "umba/tokeniser.h"
+#include "umba/tokenizer.h"
 #include "umba/assert.h"
 
 //
@@ -26,14 +26,13 @@ std::string text = R"raw(digraph {
 
     r_1 [label="!"]
 
-    n_2_1 [label="+"];  n_2_2 [label="-"];  n_2_3 [label="="];  n_2_4 [label=">"]
     r_1->n_2_1;  r_1->n_2_2;  r_1->n_2_3;  r_1->n_2_4
-
-    n_3_1 [label="+"];  n_3_2 [label="-"];  n_3_3 [label="="];  n_3_4 [label=">"]
     n_2_3->n_3_1;  n_2_3->n_3_2;  n_2_3->n_3_3;  n_2_3->n_3_4
-
-    n_4_0 [label="!"];  n_4_1 [label="+"];  n_4_2 [label="-"];  n_4_3 [label="="];  n_4_4 [label=">"]
     n_3_3->n_4_0;  n_3_3->n_4_1;  n_3_3->n_4_2;  n_3_3->n_4_3;  n_3_3->n_4_4
+
+    n_2_1 [label="+"];  n_2_2 [label="-"];  n_2_3 [label="="];  n_2_4 [label=">"]
+    n_3_1 [label="+"];  n_3_2 [label="-"];  n_3_3 [label="="];  n_3_4 [label=">"]
+    n_4_0 [label="!"];  n_4_1 [label="+"];  n_4_2 [label="-"];  n_4_3 [label="="];  n_4_4 [label=">"]
 
 }
 )raw";
@@ -49,27 +48,109 @@ void printPos(const umba::TextPositionInfo &pos)
 
 int main(int argc, char* argv[])
 {
-#if 0
-    cout << text << "\n";
+    using namespace umba::tokenizer
 
-    cout << "---\n";
+    std::array<CharClass, 128> charClassTable;
 
-    for( umba::iterator::TextPositionCountingIterator it=umba::iterator::TextPositionCountingIterator(text.data(), text.size())
-       ; it!=umba::iterator::TextPositionCountingIterator()
-       ; ++it
-       )
+    TrieBuilder  operatorsTrieBuilder;
+    TrieBuilder  literalsTrieBuilder ;
+
+    std::vector<TrieNode> operatorsTrie;
+    std::vector<TrieNode> literalsTrie ;
+
+    payload_type tokenId = 1;
+
+
+    generation::generateCharClassTable(charClassTable, false /* !addOperatorChars */ );
+    std::vector<std::string> operators{"+","-","*","/","%","^","&","|","~","!","=","<",">","+=","-=","*=","/=","%=","^=","&=","|=","<<",">>",">>=","<<=","==","!=","<=",">=","<=>","&&","||","++","--",",","->*",".*","->",":","::",";","?"};
+    for(const auto &opStr : operators)
     {
-        char ch = *it;
-        if (ch>=' ')
-           cout << "'" << (char)ch << "'";
-        else
-           cout << " " << (unsigned)(unsigned char)ch;
-
-        cout << "  ";
-        printPos(it.getPosition());
-        cout << "\n";
+        // Устанавливаем класс opchar только тем символам, которые входят в операторы
+        generation::setCharClassFlags(charClassTable, opStr, umba::tokenizer::CharClass::opchar);
+        operatorsTrieBuilder.addTokenSequence(opStr.begin(), opStr.end(), tokenId);
+        ++tokenId;
     }
-#endif
+
+
+    operatorsTrieBuilder.buildTokenTrie(operatorsTrie);
+    literalsTrieBuilder.buildTokenTrie(literalsTrie);
+
+    std::cout << "--- Operators trie\n";
+    umba::tokenizer::tokenTriePrintGraph( operatorsTrie, cout
+                                        , [](payload_type p) { return std::string(1, (char)p); }
+                                        );
+    std::cout << "---\n";
+
+    std::cout << "--- Literals trie\n";
+    umba::tokenizer::tokenTriePrintGraph( literalsTrie, cout
+                                        , [](payload_type p) { return std::string(1, (char)p); }
+                                        );
+    std::cout << "---\n";
+
+
+    enum State
+    {
+        stInitial         = 0,
+        stReadSpace          ,
+        stReadIdentifier     ,
+        stReadNumber         ,
+        stReadOperator       ,
+        stReadUserLiteral
+
+    };
+
+    State st = stInitial;
+
+    // The - https://rsdn.org/forum/cpp.applied/8555847.1
+    using PosCountingIterator = umba::iterator::TextPositionCountingIterator<char>;
+
+
+    for( PosCountingIterator it=PosCountingIterator(text.data(), text.size()); it!=PosCountingIterator(); ++it)
+    {
+        const auto ch = *it;
+        CharClass charClass = charToCharClassTableIndex(ch);
+
+        switch(st)
+        {
+            case stInitial:
+            {
+                if ((charClass::linefeed))
+            } break;
+
+            case stReadSpace:
+            {
+            } break;
+
+            case stReadIdentifier:
+            {
+            } break;
+
+            case stReadNumber:
+            {
+            } break;
+
+            case stReadOperator:
+            {
+            } break;
+
+            case stReadUserLiteral:
+            {
+            } break;
+
+
+
+        }
+
+        // char ch = *it;
+        // if (ch>=' ')
+        //    cout << "'" << (char)ch << "'";
+        // else
+        //    cout << " " << (unsigned)(unsigned char)ch;
+        //
+        // cout << "  ";
+        // printPos(it.getPosition());
+        // cout << "\n";
+    }
 
     return 0;
 }

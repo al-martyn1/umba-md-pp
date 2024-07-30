@@ -2,12 +2,12 @@
     \brief Тесты токенизера
  */
 
-#define UMBA_TOKENISER_DISABLE_UMBA_TOKENISER_GET_CHAR_CLASS_FUNCTION
-// #define UMBA_TOKENISER_TYPES_COMPACT
-// #define UMBA_TOKENISER_NO_PAYLOAD_FLAGS
+#define UMBA_TOKENIZER_DISABLE_UMBA_TOKENIZER_GET_CHAR_CLASS_FUNCTION
+// #define UMBA_TOKENIZER_TYPES_COMPACT
+// #define UMBA_TOKENIZER_NO_PAYLOAD_FLAGS
 
 #include "umba/umba.h"
-#include "umba/tokeniser.h"
+#include "umba/tokenizer.h"
 #include "umba/assert.h"
 
 #include <iostream>
@@ -25,14 +25,14 @@ using std::cerr;
 
 
 template<typename ContainerType>
-umba::tokeniser::trie_index_type tokenTrieGoNext(const ContainerType &tokenTrie, umba::tokeniser::trie_index_type curIndex, char ch)
+umba::tokenizer::trie_index_type tokenTrieGoNext(const ContainerType &tokenTrie, umba::tokenizer::trie_index_type curIndex, char ch)
 {
-    return umba::tokeniser::tokenTrieFindNext(tokenTrie, curIndex, ch);
+    return umba::tokenizer::tokenTrieFindNext(tokenTrie, curIndex, ch);
 }
 
 
 inline
-void printTokenTrieNode(const umba::tokeniser::TrieNode &tn)
+void printTokenTrieNode(const umba::tokenizer::TrieNode &tn)
 {
     using namespace std;
 
@@ -59,9 +59,9 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
 {
     using namespace std;
 
-    using namespace umba::tokeniser;
+    using namespace umba::tokenizer;
 
-    trie_index_type idx = umba::tokeniser::trie_index_invalid; // trie_index_initial;
+    trie_index_type idx = umba::tokenizer::trie_index_invalid; // trie_index_initial;
     //token_type   foundToken = token_id_invalid;
     payload_type   foundPayload = payload_invalid;
 
@@ -70,7 +70,7 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
         trie_index_type nextIdx = tokenTrieGoNext(tokenTrie, idx, (token_type)ch);
 
         cout << "found index(idx): " << nextIdx << "\n";
-        if (nextIdx==umba::tokeniser::trie_index_invalid)
+        if (nextIdx==umba::tokenizer::trie_index_invalid)
         {
             cout << "symbol ";
             if (ch>=' ')
@@ -120,20 +120,20 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
 
 struct OperatorInfo
 {
-    umba::tokeniser::payload_type      operatorId;
+    umba::tokenizer::payload_type      operatorId;
     std::string                        operatorStr;
 };
 
 
-std::vector<OperatorInfo> operatorInfos = { { UMBA_TOKENISER_TOKEN_OPERATOR_LOGICAL_NOT             , "!"    }
+std::vector<OperatorInfo> operatorInfos = { { UMBA_TOKENIZER_TOKEN_OPERATOR_LOGICAL_NOT             , "!"    }
                                           , { 555                                                   , "!+"   }
                                           , { 556                                                   , "!-"   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_NOT_EQUAL               , "!="   }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_NOT_EQUAL               , "!="   }
                                           , { 557                                                   , "!>"   }
 
                                           , { 558                                                   , "!=+"  }
                                           , { 559                                                   , "!=-"  }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_STRICT_NOT_EQUAL        , "!=="  }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_STRICT_NOT_EQUAL        , "!=="  }
                                           , { 560                                                   , "!=>"  }
 
                                           , { 561                                                   , "!==!" }
@@ -142,26 +142,26 @@ std::vector<OperatorInfo> operatorInfos = { { UMBA_TOKENISER_TOKEN_OPERATOR_LOGI
                                           , { 564                                                   , "!===" }
                                           , { 565                                                   , "!==>" }
 
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_ADDITION                , "+"    }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_INCREMENT               , "++"   }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_ADDITION                , "+"    }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_INCREMENT               , "++"   }
                                           , { 566                                                   , "+-"   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_ADDITION_ASSIGNMENT     , "+="   }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_ADDITION_ASSIGNMENT     , "+="   }
                                           , { 567                                                   , "+++"  }
                                           , { 568                                                   , "++-"  }
 
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_SUBTRACTION             , "-"    }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_DECREMENT               , "--"   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_SUBTRACTION_ASSIGNMENT  , "-="   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_STRUCTURE_DEREFERENCE   , "->"   }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_SUBTRACTION             , "-"    }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_DECREMENT               , "--"   }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_SUBTRACTION_ASSIGNMENT  , "-="   }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_STRUCTURE_DEREFERENCE   , "->"   }
                                           , { 668                                                   , "--!"  }
                                           , { 669                                                   , "--="  }
                                           , { 667                                                   , "-->"  }
                                           , { 666                                                   , "-=>"  }
 
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_ASSIGNMENT              , "="    }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_EQUAL                   , "=="   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_LAMBDA                  , "=>"   }
-                                          , { UMBA_TOKENISER_TOKEN_OPERATOR_STRICT_EQUAL            , "==="  }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_ASSIGNMENT              , "="    }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_EQUAL                   , "=="   }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_LAMBDA                  , "=>"   }
+                                          , { UMBA_TOKENIZER_TOKEN_OPERATOR_STRICT_EQUAL            , "==="  }
                                           };
 
 
@@ -170,14 +170,14 @@ std::vector<OperatorInfo> operatorInfos = { { UMBA_TOKENISER_TOKEN_OPERATOR_LOGI
 int main(int argc, char* argv[])
 {
 
-    umba::tokeniser::TrieBuilder trieBuilder;
+    umba::tokenizer::TrieBuilder trieBuilder;
 
     for(auto opInfo: operatorInfos)
     {
         trieBuilder.addTokenSequence(opInfo.operatorStr, opInfo.operatorId);
     }
 
-    std::vector<umba::tokeniser::TrieNode> trie;
+    std::vector<umba::tokenizer::TrieNode> trie;
     //trie.reserve(finalTableNumEntries);
 
     trieBuilder.buildTokenTrie(trie);
@@ -187,11 +187,11 @@ int main(int argc, char* argv[])
 
     // Trie size : 32 items, 384 bytes, item size: 12
     // Trie size : 32 items, 1024 bytes, item size: 32
-    auto itemSize = sizeof(umba::tokeniser::TrieNode);
+    auto itemSize = sizeof(umba::tokenizer::TrieNode);
     std::cout << "Trie size : " << trie.size() << " items, " << trie.size()*itemSize << " bytes, item size: " << itemSize << "\n";
 
-#if !defined(UMBA_TOKENISER_TRIE_NODE_LEVEL_FIELD_DISABLE)
-    umba::tokeniser::tokenTriePrintGraph(trie, std::cout, [](umba::tokeniser::payload_type p) { return std::string(1, (char)p); } );
+#if !defined(UMBA_TOKENIZER_TRIE_NODE_LEVEL_FIELD_DISABLE)
+    umba::tokenizer::tokenTriePrintGraph(trie, std::cout, [](umba::tokenizer::payload_type p) { return std::string(1, (char)p); } );
 #endif
 
     std::cout << "-------\n";
