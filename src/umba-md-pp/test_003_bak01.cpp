@@ -53,10 +53,10 @@ using std::cerr;
 //     UMBA_TOKENISER_TRIE_INDEX_TYPE       levelStartIndex;
 //     UMBA_TOKENISER_TRIE_INDEX_TYPE       levelSize      ;
 //     UMBA_TOKENISER_TRIE_INDEX_TYPE       childsIndex    ;
-//  
+//
 //     UMBA_TOKENISER_TOKEN_ID_TYPE         tokenId        ;
 //     char                                 symbol         ;
-//  
+//
 // } umba_tokeniser_trie_node;
 
 
@@ -65,7 +65,7 @@ umba::tokeniser::trie_index_type tokenTrieGoNext(const ContainerType &tokenTrie,
 {
     using namespace umba::tokeniser;
 
-    // Если на входе инвалид, то начинать надо 
+    // Если на входе инвалид, то начинать надо
 
     trie_index_type levelStartIdx  = 0;
     trie_index_type levelSize      = 0;
@@ -73,7 +73,7 @@ umba::tokeniser::trie_index_type tokenTrieGoNext(const ContainerType &tokenTrie,
     if (curIndex==umba::tokeniser::trie_index_invalid)
     {
         levelStartIdx  = tokenTrie[0].levelStartIndex;
-        levelSize      = tokenTrie[0].levelSize;      
+        levelSize      = tokenTrie[0].levelSize;
     }
     else
     {
@@ -89,7 +89,7 @@ umba::tokeniser::trie_index_type tokenTrieGoNext(const ContainerType &tokenTrie,
         //     return umba::tokeniser::trie_index_invalid;
         // }
 
-        levelSize = tokenTrie[levelStartIdx].levelSize;      
+        levelSize = tokenTrie[levelStartIdx].levelSize;
     }
 
     for(trie_index_type i=0; i!=levelSize; ++i)
@@ -117,7 +117,7 @@ void printTokenTrieNode(const umba::tokeniser::TrieNode &tn)
 {
     using namespace std;
 
-    cout << "symbol   : "; 
+    cout << "symbol   : ";
     if (tn.symbol>=' ')
        cout << "'" << (char)tn.symbol << "'";
     else
@@ -151,7 +151,7 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
         cout << "found index(idx): " << nextIdx << "\n";
         if (nextIdx==umba::tokeniser::trie_index_invalid)
         {
-            cout << "symbol "; 
+            cout << "symbol ";
             if (ch>=' ')
                cout << "'" << (char)ch << "'";
             else
@@ -305,7 +305,7 @@ int main(int argc, char* argv[])
         //std::size_t nextLevelStartIndex = levelStartIndex+m.size();
         std::size_t nextLevelStartIndex  = levelStartIndex+levelChildsSize;
         std::size_t buddyLevelStartIndex = levelStartIndex+m.size();
-        
+
         cout << "levelStartIndex      : " << levelStartIndex    << "\n";
         cout << "levelChildsSize      : " << levelChildsSize    << "\n";
         cout << "curParentNodeIndex   : " << curParentNodeIndex << "\n";
@@ -335,10 +335,10 @@ int main(int argc, char* argv[])
                 que.emplace_back(QueItem{&kv.second.childs, curIndex, buddyLevelStartIndex, childsLevelSize});
                 nextLevelStartIndex += kv.second.childs.size();
             }
-            
+
             ++curIndex;
         }
-    
+
     }
 
     cout << "---------------------\n";

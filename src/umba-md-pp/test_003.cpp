@@ -1,10 +1,10 @@
 /*! \file
-    \brief
+    \brief Тесты токенизера
  */
 
 #define UMBA_TOKENISER_DISABLE_UMBA_TOKENISER_GET_CHAR_CLASS_FUNCTION
-#define UMBA_TOKENISER_TYPES_COMPACT
-#define UMBA_TOKENISER_NO_PAYLOAD_FLAGS
+// #define UMBA_TOKENISER_TYPES_COMPACT
+// #define UMBA_TOKENISER_NO_PAYLOAD_FLAGS
 
 #include "umba/umba.h"
 #include "umba/tokeniser.h"
@@ -36,7 +36,7 @@ void printTokenTrieNode(const umba::tokeniser::TrieNode &tn)
 {
     using namespace std;
 
-    cout << "token   : "; 
+    cout << "token   : ";
     if (tn.token>=' ')
        cout << "'" << (char)tn.token << "'";
     else
@@ -72,7 +72,7 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
         cout << "found index(idx): " << nextIdx << "\n";
         if (nextIdx==umba::tokeniser::trie_index_invalid)
         {
-            cout << "symbol "; 
+            cout << "symbol ";
             if (ch>=' ')
                cout << "'" << (char)ch << "'";
             else
@@ -102,7 +102,7 @@ void testTraverseToken(const ContainerType &tokenTrie, const std::string &str)
         tokenTrieBackTrace(tokenTrie, idx, [](token_type ch) { cout << std::string(1,(char)ch); });
         cout << "\n";
     }
-    
+
     if (foundPayload==payload_invalid)
     {
         cout << "Tokens sequence is bad, payload not found\n";
@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
         trieBuilder.addTokenSequence(opInfo.operatorStr, opInfo.operatorId);
     }
 
-    std::vector<umba::tokeniser::TrieNode> trie; 
+    std::vector<umba::tokeniser::TrieNode> trie;
     //trie.reserve(finalTableNumEntries);
 
     trieBuilder.buildTokenTrie(trie);
@@ -185,7 +185,10 @@ int main(int argc, char* argv[])
 
     cout << "---------------------\n";
 
-    std::cout << "Trie size : " << trie.size() << " items, " << trie.size()*sizeof(umba::tokeniser::TrieNode) << " bytes\n";
+    // Trie size : 32 items, 384 bytes, item size: 12
+    // Trie size : 32 items, 1024 bytes, item size: 32
+    auto itemSize = sizeof(umba::tokeniser::TrieNode);
+    std::cout << "Trie size : " << trie.size() << " items, " << trie.size()*itemSize << " bytes, item size: " << itemSize << "\n";
 
 #if !defined(UMBA_TOKENISER_TRIE_NODE_LEVEL_FIELD_DISABLE)
     umba::tokeniser::tokenTriePrintGraph(trie, std::cout, [](umba::tokeniser::payload_type p) { return std::string(1, (char)p); } );
