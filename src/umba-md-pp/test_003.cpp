@@ -3,6 +3,8 @@
  */
 
 #define UMBA_TOKENISER_DISABLE_UMBA_TOKENISER_GET_CHAR_CLASS_FUNCTION
+#define UMBA_TOKENISER_TYPES_COMPACT
+#define UMBA_TOKENISER_NO_PAYLOAD_FLAGS
 
 #include "umba/umba.h"
 #include "umba/tokeniser.h"
@@ -427,7 +429,10 @@ int main(int argc, char* argv[])
     cout << "---------------------\n";
 
     std::cout << "Trie size : " << trie.size() << " items, " << trie.size()*sizeof(umba::tokeniser::TrieNode) << " bytes\n";
+
+#if !defined(UMBA_TOKENISER_TRIE_NODE_LEVEL_FIELD_DISABLE)
     umba::tokeniser::tokenTriePrintGraph(trie, std::cout, [](umba::tokeniser::payload_type p) { return std::string(1, (char)p); } );
+#endif
 
     std::cout << "-------\n";
     testTraverseToken(trie, "-->");
