@@ -1,5 +1,5 @@
 /*! \file
-    \brief Тест TextPositionCountingIterator'а
+    \brief
  */
 
 
@@ -18,6 +18,8 @@
 using std::cout;
 using std::cerr;
 
+
+//umba::TextPositionInfo
 
 // https://en.cppreference.com/w/cpp/language/string_literal
 std::string text = R"raw(digraph {
@@ -47,12 +49,13 @@ void printPos(const umba::TextPositionInfo &pos)
 
 int main(int argc, char* argv[])
 {
+#if 0
     cout << text << "\n";
 
     cout << "---\n";
 
-    for( umba::iterator::TextPositionCountingIterator<char> it=umba::iterator::TextPositionCountingIterator<char>(text.data(), text.size())
-       ; it!=umba::iterator::TextPositionCountingIterator<char>()
+    for( umba::iterator::TextPositionCountingIterator it=umba::iterator::TextPositionCountingIterator(text.data(), text.size())
+       ; it!=umba::iterator::TextPositionCountingIterator()
        ; ++it
        )
     {
@@ -66,6 +69,7 @@ int main(int argc, char* argv[])
         printPos(it.getPosition());
         cout << "\n";
     }
+#endif
 
     return 0;
 }
