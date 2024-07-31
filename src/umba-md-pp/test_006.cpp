@@ -2,10 +2,17 @@
     \brief
  */
 
+#define UMBA_TOKENIZER_DISABLE_UMBA_TOKENIZER_GET_CHAR_CLASS_FUNCTION
+
 
 #include "umba/umba.h"
+//
 #include "umba/tokenizer.h"
 #include "umba/assert.h"
+#include "umba/filename.h"
+#include "umba/filesys.h"
+//
+#include "umba/debug_helpers.h"
 
 //
 #include "umba/text_position_info.h"
@@ -22,26 +29,70 @@ using std::cerr;
 
 //umba::TextPositionInfo
 
+#if 0
+enum class CharClass : char_class_underlying_uint_t
+{
+    // Это не флаг, не обрабатываем
+    none             = UMBA_TOKENIZER_CHARCLASS_NONE            ,
+
+    // таким флагом обозначаем пользовательские префиксы для спец обработчиков
+    user_flag        = UMBA_TOKENIZER_CHARCLASS_USER_FLAG       ,
+
+    // Не проверяем
+    nonprintable     = UMBA_TOKENIZER_CHARCLASS_NONPRINTABLE    ,
+
+
+    linefeed         = UMBA_TOKENIZER_CHARCLASS_LINEFEED        ,
+    space            = UMBA_TOKENIZER_CHARCLASS_SPACE           ,
+
+    opchar           = UMBA_TOKENIZER_CHARCLASS_OPCHAR          ,
+
+    open             = UMBA_TOKENIZER_CHARCLASS_OPEN            , // Флаг для парных символов
+    close            = UMBA_TOKENIZER_CHARCLASS_CLOSE           , // Флаг для парных символов
+
+    // не проверяем
+    quot             = UMBA_TOKENIZER_CHARCLASS_QUOT            ,
+
+    escape           = UMBA_TOKENIZER_CHARCLASS_ESCAPE            // Для символа '\', который везде используется как escape-символ
+
+    punctuation      = UMBA_TOKENIZER_CHARCLASS_PUNCTUATION     ,
+
+    digit            = UMBA_TOKENIZER_CHARCLASS_DIGIT           ,
+    alpha            = UMBA_TOKENIZER_CHARCLASS_ALPHA           ,
+    upper            = UMBA_TOKENIZER_CHARCLASS_UPPER           , // Флаг для символов верхнего регистра
+    identifier       = UMBA_TOKENIZER_CHARCLASS_IDENTIFIER      ,
+    identifier_first = UMBA_TOKENIZER_CHARCLASS_IDENTIFIER_FIRST,
+    semialpha        = UMBA_TOKENIZER_CHARCLASS_SEMIALPHA       , // Для символов, которые никуда не вошли, такие как @ # $
+};
+
+#endif
+
+
+
 // https://en.cppreference.com/w/cpp/language/string_literal
-std::string textRawDigraph = R"raw(
-  digraph {
-
-    r_1 [label="!"]
-
-    r_1->n_2_1;  r_1->n_2_2;  r_1->n_2_3;  r_1->n_2_4
-    n_2_3->n_3_1;  n_2_3->n_3_2;  n_2_3->n_3_3;  n_2_3->n_3_4
-    n_3_3->n_4_0;  n_3_3->n_4_1;  n_3_3->n_4_2;  n_3_3->n_4_3;  n_3_3->n_4_4
-
-    n_2_1 [label="+"];  n_2_2 [label="-"];  n_2_3 [label="="];  n_2_4 [label=">"]
-    n_3_1 [label="+"];  n_3_2 [label="-"];  n_3_3 [label="="];  n_3_4 [label=">"]
-    n_4_0 [label="!"];  n_4_1 [label="+"];  n_4_2 [label="-"];  n_4_3 [label="="];  n_4_4 [label=">"]
-
-}
-)raw";
-
-std::string textTabsAndSpaces = "  \r\n\n  \t\t  \t\n";
-
-std::string text = textTabsAndSpaces + textRawDigraph;
+// std::string textRawDigraph = R"raw(
+//  0X123 0b10021
+//   digraph {
+//     a+++b
+//     r_1 [label=aaa]
+//     b=a+22-b3();
+//     pData->second[12].field = -123'456.00;
+//     if (c==3 || c>=e)
+//         std::cout << eee;
+//     r_1->n_2_1;  r_1->n_2_2;  r_1->n_2_3;  r_1->n_2_4
+//     n_2_3->n_3_1;  n_2_3->n_3_2;  n_2_3->n_3_3;  n_2_3->n_3_4
+//     n_3_3->n_4_0;  n_3_3->n_4_1;  n_3_3->n_4_2;  n_3_3->n_4_3;  n_3_3->n_4_4
+// }
+// )raw";
+//
+//     // n_2_1 [label="+"];  n_2_2 [label="-"];  n_2_3 [label="="];  n_2_4 [label=">"]
+//     // n_3_1 [label="+"];  n_3_2 [label="-"];  n_3_3 [label="="];  n_3_4 [label=">"]
+//     // n_4_0 [label="!"];  n_4_1 [label="+"];  n_4_2 [label="-"];  n_4_3 [label="="];  n_4_4 [label=">"]
+//
+//
+// std::string textTabsAndSpaces = "  \r\n\n  \t\t  \t\n";
+//
+// std::string text = textTabsAndSpaces + textRawDigraph;
 
 
 inline
@@ -55,48 +106,175 @@ int main(int argc, char* argv[])
 {
     using namespace umba::tokenizer;
 
-    std::array<CharClass, 128> charClassTable;
-
-    TrieBuilder  operatorsTrieBuilder;
-    TrieBuilder  literalsTrieBuilder ;
-
-    std::vector<TrieNode> operatorsTrie;
-    std::vector<TrieNode> literalsTrie ;
-
-    payload_type tokenId = 1;
-
-
-    generation::generateCharClassTable(charClassTable, false /* !addOperatorChars */ );
-    std::vector<std::string> operators{"+","-","*","/","%","^","&","|","~","!","=","<",">","+=","-=","*=","/=","%=","^=","&=","|=","<<",">>",">>=","<<=","==","!=","<=",">=","<=>","&&","||","++","--",",","->*",".*","->",":","::",";","?","..."};
-    for(const auto &opStr : operators)
+    std::string text;
+    std::string inputFilename;
+    if (argc>1)
     {
-        // Устанавливаем класс opchar только тем символам, которые входят в операторы
-        generation::setCharClassFlags(charClassTable, opStr, umba::tokenizer::CharClass::opchar);
-        operatorsTrieBuilder.addTokenSequence(opStr.begin(), opStr.end(), tokenId);
-        ++tokenId;
+        inputFilename = argv[1];
+    }
+
+    if (umba::isDebuggerPresent() || inputFilename.empty())
+    {
+        std::string cwd = umba::filesys::getCurrentDirectory<std::string>();
+        std::cout << "Working Dir: " << cwd << "\n";
+        std::string rootPath;
+
+        #if (defined(WIN32) || defined(_WIN32))
+
+
+            if (winhelpers::isProcessHasParentOneOf({"devenv"}))
+            {
+                // По умолчанию студия задаёт текущим каталогом На  уровень выше от того, где лежит бинарник
+                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
+                //argsParser.args.push_back("--batch-output-root=D:/temp/mdpp-test");
+            }
+            else if (winhelpers::isProcessHasParentOneOf({"code"}))
+            {
+                // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
+                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
+                //argsParser.args.push_back("--batch-output-root=C:/work/temp/mdpp-test");
+
+            }
+            else
+            {
+                //rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
+            }
+
+            //#endif
+
+            rootPath = umba::filename::appendPathSepCopy(rootPath);
+
+        #endif
+
+        inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/the.h"));
+        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_initializer_list.h"));
+        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_type_traits.h"));
+        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/string_plus.h"));
+        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/rgbquad.h"));
+
+        // inputFilename = umba::filename::appendPath(rootPath, "_libs/umba/");
     }
 
 
+    if (!umba::filesys::readFile(inputFilename, text))
+    {
+        std::cout << "Failed to read input file: " << inputFilename << "\n";
+        return 1;
+    }
+
+
+    std::array<CharClass, 128> charClassTable;
+
+    TrieBuilder  numbersTrieBuilder;
+    TrieBuilder  bracketsTrieBuilder;
+    TrieBuilder  operatorsTrieBuilder;
+    TrieBuilder  literalsTrieBuilder ;
+
+    std::vector<TrieNode> numbersTrie ;
+    std::vector<TrieNode> bracketsTrie ;
+    std::vector<TrieNode> operatorsTrie;
+    std::vector<TrieNode> literalsTrie ;
+
+
+    {
+        payload_type numberTokenId = UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FIRST;
+
+        numbersTrieBuilder.addTokenSequence("0b", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN);
+        numbersTrieBuilder.addTokenSequence("0B", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN);
+
+        numbersTrieBuilder.addTokenSequence("0d", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DEC);
+        numbersTrieBuilder.addTokenSequence("0D", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DEC);
+
+        numbersTrieBuilder.addTokenSequence("4x", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_QUAT);
+        numbersTrieBuilder.addTokenSequence("4X", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_QUAT);
+
+        numbersTrieBuilder.addTokenSequence("0" , numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_OCT | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FLAG_MISS_DIGIT);
+
+        numbersTrieBuilder.addTokenSequence("12x", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DUOD);
+        numbersTrieBuilder.addTokenSequence("12X", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DUOD);
+
+        numbersTrieBuilder.addTokenSequence("0x", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_HEX);
+        numbersTrieBuilder.addTokenSequence("0X", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_HEX);
+
+        // numbersTrieBuilder.addTokenSequence("", numberTokenId++ | );
+    }
+
+
+    bracketsTrieBuilder.addTokenSequence('{', UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_OPEN  );
+    bracketsTrieBuilder.addTokenSequence('}', UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_CLOSE );
+    bracketsTrieBuilder.addTokenSequence('(', UMBA_TOKENIZER_TOKEN_ROUND_BRACKET_OPEN  );
+    bracketsTrieBuilder.addTokenSequence(')', UMBA_TOKENIZER_TOKEN_ROUND_BRACKET_CLOSE );
+    bracketsTrieBuilder.addTokenSequence('<', UMBA_TOKENIZER_TOKEN_ANGLE_BRACKET_OPEN  );
+    bracketsTrieBuilder.addTokenSequence('>', UMBA_TOKENIZER_TOKEN_ANGLE_BRACKET_CLOSE );
+    bracketsTrieBuilder.addTokenSequence('[', UMBA_TOKENIZER_TOKEN_SQUARE_BRACKET_OPEN );
+    bracketsTrieBuilder.addTokenSequence(']', UMBA_TOKENIZER_TOKEN_SQUARE_BRACKET_CLOSE);
+
+
+//#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERL_FIRST                               0x0800u
+    {
+
+        generation::generateCharClassTable(charClassTable, false /* !addOperatorChars */ );
+
+        operatorsTrieBuilder.addTokenSequence("//", UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_FIRST);
+        operatorsTrieBuilder.addTokenSequence("/*", UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_START);
+        operatorsTrieBuilder.addTokenSequence("*/", UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_END  );
+
+        payload_type operatorTokenId = UMBA_TOKENIZER_TOKEN_OPERATOR_FIRST_GENERIC;
+        std::vector<std::string> operators{"+","-","*","/","%","^","&","|","~","!","=","<",">","+=","-=","*=","/=","%=","^=","&=","|=","<<",">>",">>=","<<=","==","!=","<=",">=","<=>","&&","||","++","--",",","->*",".*","->",":","::",";","?","..."};
+        for(const auto &opStr : operators)
+        {
+            // Устанавливаем класс opchar только тем символам, которые входят в операторы
+            generation::setCharClassFlags(charClassTable, opStr, umba::tokenizer::CharClass::opchar);
+            operatorsTrieBuilder.addTokenSequence(opStr.begin(), opStr.end(), operatorTokenId);
+            ++operatorTokenId;
+        }
+    }
+
+
+    numbersTrieBuilder.buildTokenTrie(numbersTrie);
+    bracketsTrieBuilder.buildTokenTrie(bracketsTrie);
     operatorsTrieBuilder.buildTokenTrie(operatorsTrie);
     literalsTrieBuilder.buildTokenTrie(literalsTrie);
     // std::vector<TrieNode> operatorsTrie;
     // std::vector<TrieNode> literalsTrie ;
 
+    if (!numbersTrie.empty())
+    {
+        std::cout << "--- Numbers trie\n";
+        umba::tokenizer::tokenTriePrintTableGraph( "numbers"
+                                                 , numbersTrie, cout
+                                                 , [](token_type t) { return std::string(1, (char)t); }
+                                                 );
+        std::cout << "---\n";
+    }
+
+    if (!bracketsTrie.empty())
+    {
+        std::cout << "--- Brackets trie\n";
+        umba::tokenizer::tokenTriePrintTableGraph( "brackets"
+                                                 , bracketsTrie, cout
+                                                 , [](token_type t) { return std::string(1, (char)t); }
+                                                 );
+        std::cout << "---\n";
+    }
+
     if (!operatorsTrie.empty())
     {
         std::cout << "--- Operators trie\n";
-        umba::tokenizer::tokenTriePrintGraph( operatorsTrie, cout
-                                            , [](payload_type p) { return std::string(1, (char)p); }
-                                            );
+        umba::tokenizer::tokenTriePrintTableGraph( "operators"
+                                                 , operatorsTrie, cout
+                                                 , [](token_type t) { return std::string(1, (char)t); }
+                                                 );
         std::cout << "---\n";
     }
 
     if (!literalsTrie.empty())
     {
         std::cout << "--- Literals trie\n";
-        umba::tokenizer::tokenTriePrintGraph( literalsTrie, cout
-                                            , [](payload_type p) { return std::string(1, (char)p); }
-                                            );
+        umba::tokenizer::tokenTriePrintTableGraph( "literals"
+                                                 , literalsTrie, cout
+                                                 , [](token_type t) { return std::string(1, (char)t); }
+                                                 );
         std::cout << "---\n";
     }
 
@@ -105,7 +283,128 @@ int main(int argc, char* argv[])
 // #define UMBA_TOKENIZER_TOKEN_LINEFEED                                          1u
 // #define UMBA_TOKENIZER_TOKEN_SPACE                                             2u
 
-    auto parsingHandler = [&](token_type tokenType, const PosCountingIterator b, const PosCountingIterator &e)
+    enum State
+    {
+        stInitial              = 0,
+        stReadSpace               ,
+        stReadIdentifier          ,
+        stReadNumberPrefix        ,
+        stReadNumber              ,
+        stReadNumberFloat         ,
+        stReadOperator            ,
+        stReadUserLiteral         ,
+        stReadSingleLineComment   ,
+        stReadMultilineLineComment
+
+    };
+
+    State st = stInitial;
+
+    auto getStateStr = [](State s)
+    {
+        switch(s)
+        {
+            case stInitial                 : return std::string("Initial");
+            case stReadSpace               : return std::string("ReadSpace");
+            case stReadIdentifier          : return std::string("ReadIdentifier");
+            case stReadNumberPrefix        : return std::string("ReadNumberPrefix");
+            case stReadNumber              : return std::string("ReadNumber");
+            case stReadNumberFloat         : return std::string("ReadNumberFloat");
+            case stReadOperator            : return std::string("ReadOperator");
+            case stReadUserLiteral         : return std::string("ReadUserLiteral");
+            case stReadSingleLineComment   : return std::string("ReadSingleLineComment");
+            case stReadMultilineLineComment: return std::string("ReadMultilineLineComment");
+            default:                         return std::string("<UNKNOWN>");
+        }
+    };
+
+    auto getTokenStr = [](payload_type p)
+    {
+        switch(p)
+        {
+            case UMBA_TOKENIZER_TOKEN_UNEXPECTED          : return std::string("<UNEXPECTED>");
+            case UMBA_TOKENIZER_TOKEN_LINEFEED            : return std::string("LINEFEED");
+            case UMBA_TOKENIZER_TOKEN_SPACE               : return std::string("SPACE");
+            case UMBA_TOKENIZER_TOKEN_IDENTIFIER          : return std::string("IDENTIFIER");
+            case UMBA_TOKENIZER_TOKEN_NUMBER              : return std::string("NUMBER");
+            case UMBA_TOKENIZER_TOKEN_SEMIALPHA           : return std::string("SEMIALPHA");
+            case UMBA_TOKENIZER_TOKEN_FLOAT_NUMBER        : return std::string("FLOAT_NUMBER");
+            case UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_OPEN  : return std::string("KIND_OF_BRACKET");
+            case UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_CLOSE : return std::string("KIND_OF_BRACKET");
+            case UMBA_TOKENIZER_TOKEN_ROUND_BRACKET_OPEN  : return std::string("KIND_OF_BRACKET");
+            case UMBA_TOKENIZER_TOKEN_ROUND_BRACKET_CLOSE : return std::string("KIND_OF_BRACKET");
+            case UMBA_TOKENIZER_TOKEN_ANGLE_BRACKET_OPEN  : return std::string("KIND_OF_BRACKET");
+            case UMBA_TOKENIZER_TOKEN_ANGLE_BRACKET_CLOSE : return std::string("KIND_OF_BRACKET");
+            case UMBA_TOKENIZER_TOKEN_SQUARE_BRACKET_OPEN : return std::string("KIND_OF_BRACKET");
+            case UMBA_TOKENIZER_TOKEN_SQUARE_BRACKET_CLOSE: return std::string("KIND_OF_BRACKET");
+            case UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_START: return std::string("COMMENT_START");
+            case UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_END  : return std::string("COMMENT_END");
+            //case : return std::string("");
+            default:
+
+                if (p>=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_FIRST && p<=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_LAST)
+                    return std::string("KIND_OF_SINGLE_LINE_COMMENT");
+                if (p>=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_TOTAL_LAST)
+                    return std::string("KIND_OF_NUMBER");
+                if (p>=UMBA_TOKENIZER_TOKEN_OPERATOR_FIRST && p<=UMBA_TOKENIZER_TOKEN_OPERATOR_LAST)
+                    return std::string("KIND_OF_OPERATOR");
+                if (p>=UMBA_TOKENIZER_TOKEN_USER_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_USER_LITERAL_LAST)
+                    return std::string("KIND_OF_USER_LITERAL");
+                return std::string("");
+        }
+    };
+
+    auto isCommentToken = [](payload_type tokenType)
+    {
+        if (tokenType>=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_FIRST && tokenType<=UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_END)
+            return true;
+        return false;
+    };
+
+    // Тут надо, чтобы это уже был коммент - вызывать только после вызова isCommentToken
+    auto isSingleLineCommentToken = [](payload_type tokenType)
+    {
+        if (tokenType<=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_LAST)
+            return true;
+        return false;
+    };
+
+    auto isMultiLineCommentStartToken = [](payload_type tokenType)
+    {
+        return tokenType==UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_START;
+    };
+
+    auto isMultiLineCommentEndToken = [](payload_type tokenType)
+    {
+        return tokenType==UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_END;
+    };
+
+    auto isNumberPrefixRequiresDigits = [](payload_type tokenType)
+    {
+        return (tokenType & UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FLAG_MISS_DIGIT)==0;
+    };
+
+    auto isNumberPrefixMissDigits = [](payload_type tokenType)
+    {
+        return (tokenType & UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FLAG_MISS_DIGIT)!=0;
+    };
+
+    auto numberPrefixGetBase = [](payload_type tokenType)
+
+
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_MASK                          0x0700u  /* Маска для системы счисления */
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DEC                           0x0000u
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN                           0x0100u
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_QUAT                          0x0200u  /* четвертичная quaternary number system */
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_OCT                           0x0300u
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DUOD                          0x0400u  /* двенадцатеричная duodecimal number system */
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_HEX                           0x0500u
+
+
+
+
+
+    auto parsingHandler = [&](payload_type tokenType, const PosCountingIterator b, const PosCountingIterator &e)
     {
         using namespace umba::iterator;
 
@@ -120,15 +419,24 @@ int main(int argc, char* argv[])
         }
         else
         {
-            cout << umba::iterator::makeString(b, e);
+            cout << ", " << getTokenStr(tokenType) << ", '" << makeString(b, e) << "'";
         }
 
-        cout << "\n";
+        cout << ", state: " << getStateStr(st) << "\n";
     };
 
     auto unexpectedHandler = [&](const PosCountingIterator it, auto srcFile, auto srcLine)
     {
-        cout << "Unexpected at " << umba::makeSimpleTextPositionInfoString<std::string>(it.getPosition()) << "\n";
+        auto errPos = it.getPosition(true); // с поиском конца строки (а вообще не надо пока, но пусть)
+        std::string erroneousLineText = umba::iterator::makeString(it.getLineStartIterator(), it.getLineEndIterator());
+        cout << "Unexpected at " << inputFilename << ":" << umba::makeSimpleTextPositionInfoString<std::string>(errPos) << "\n";
+        cout << "Line:" << erroneousLineText << "\n";
+        //auto errMarkerO
+        cout << "    |" << std::string(errPos.symbolOffset, ' ') << "^";
+        if (erroneousLineText.size()>(errPos.symbolOffset+1))
+            cout << std::string(erroneousLineText.size()-(errPos.symbolOffset+1), ' ');
+        cout << "|\n";
+
         if (it!=PosCountingIterator())
         {
             char ch = *it;
@@ -140,23 +448,29 @@ int main(int argc, char* argv[])
             cout << "\n";
         }
         cout << "At " << srcFile << ":" << srcLine << "\n";
+        cout << "State: " << getStateStr(st) << "\n";
         return 1;
     };
 
-    enum State
-    {
-        stInitial         = 0,
-        stReadSpace          ,
-        stReadIdentifier     ,
-        stReadNumber         ,
-        stReadOperator       ,
-        stReadUserLiteral
+    // cout << "--- Text:\n";
+    // cout << text << "\n";
+    // cout << "---\n";
 
-    };
-
-    State st = stInitial;
 
     PosCountingIterator tokenStartIt;
+    trie_index_type operatorIdx = trie_index_invalid;
+
+    trie_index_type numberPrefixIdx = trie_index_invalid;
+    payload_type numberTokenId = 0;
+    payload_type numberReadedDigits = 0;
+
+    PosCountingIterator commentStartIt;
+    payload_type commentTokenId = 0;
+    bool allowNestedComments = true;
+    unsigned commentNestingLevel = 0;
+
+    //NOTE: !!! Надо ли semialpha проверять, не является ли она началом числового префикса? Наверное, не помешает
+
 
     for( PosCountingIterator it=PosCountingIterator(text.data(), text.size()); it!=PosCountingIterator(); ++it)
     {
@@ -175,6 +489,42 @@ int main(int argc, char* argv[])
                 {
                     tokenStartIt = it;
                     st = stReadSpace;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
+                {
+                    tokenStartIt = it;
+                    operatorIdx = tokenTrieFindNext(operatorsTrie, trie_index_invalid, (token_type)ch);
+                    if (operatorIdx==trie_index_invalid)
+                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    st = stReadOperator;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::identifier_first))
+                {
+                    //parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    tokenStartIt = it;
+                    st = stReadIdentifier;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::digit))
+                {
+                    numberPrefixIdx = tokenTrieFindNext(numbersTrie, trie_index_invalid, (token_type)ch);
+                    numberTokenId = 0;
+                    numberReadedDigits = 0;
+                    if (numberPrefixIdx!=trie_index_invalid) // Найдено начало префикса числа
+                        st = stReadNumberPrefix;
+                    else
+                        st = stReadNumber;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
+                {
+                    auto idx = tokenTrieFindNext(bracketsTrie, trie_index_invalid, (token_type)ch);
+                    if (idx==trie_index_invalid)
+                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    parsingHandler(bracketsTrie[idx].payload, it, it+1); // выплюнули
+                    st = stInitial;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::semialpha))
+                {
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
                 }
                 else
                 {
@@ -197,19 +547,134 @@ int main(int argc, char* argv[])
                     if (*tokenStartIt!=*it) // пробелы бывают разные, одинаковые мы коллекционируем, разные - выплевываем разными пачками
                     {
                         parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
-                        tokenStartIt = it;
+                        tokenStartIt = it; // Сохранили начало нового токена
                     }
                     else
                     {
                         break; // коллекционируем
                     }
                 }
-                return unexpectedHandler(it, __FILE__, __LINE__);
-
+                else if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
+                {
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
+                    tokenStartIt = it;
+                    operatorIdx = tokenTrieFindNext(operatorsTrie, trie_index_invalid, (token_type)ch);
+                    if (operatorIdx==trie_index_invalid)
+                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    st = stReadOperator;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::identifier_first))
+                {
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    tokenStartIt = it;
+                    st = stReadIdentifier;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::digit))
+                {
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
+                    numberPrefixIdx = tokenTrieFindNext(numbersTrie, trie_index_invalid, (token_type)ch);
+                    numberTokenId = 0;
+                    numberReadedDigits = 0;
+                    if (numberPrefixIdx!=trie_index_invalid) // Найдено начало префикса числа
+                        st = stReadNumberPrefix;
+                    else
+                        st = stReadNumber;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
+                {
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    auto idx = tokenTrieFindNext(bracketsTrie, trie_index_invalid, (token_type)ch);
+                    if (idx==trie_index_invalid)
+                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    parsingHandler(bracketsTrie[idx].payload, it, it+1); // выплюнули
+                    st = stInitial;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::semialpha))
+                {
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
+                    st = stInitial;
+                }
+                else
+                {
+                    return unexpectedHandler(it, __FILE__, __LINE__);
+                }
             } break;
 
             case stReadIdentifier:
             {
+                if (umba::TheFlags(charClass).oneOf(CharClass::identifier, CharClass::identifier_first))
+                {
+                    break; // коллекционируем
+                }
+
+                parsingHandler(UMBA_TOKENIZER_TOKEN_IDENTIFIER, tokenStartIt, it); // выплюнули
+                tokenStartIt = it; // Сохранили начало нового токена
+
+                if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
+                {
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
+                    st = stInitial;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::space))
+                {
+                    st = stReadSpace;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
+                {
+                    operatorIdx = tokenTrieFindNext(operatorsTrie, trie_index_invalid, (token_type)ch);
+                    if (operatorIdx==trie_index_invalid)
+                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    st = stReadOperator;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
+                {
+                    auto idx = tokenTrieFindNext(bracketsTrie, trie_index_invalid, (token_type)ch);
+                    if (idx==trie_index_invalid)
+                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    parsingHandler(bracketsTrie[idx].payload, it, it+1); // выплюнули
+                    st = stInitial;
+                }
+                else
+                {
+                    return unexpectedHandler(it, __FILE__, __LINE__);
+                }
+            } break;
+
+            case stReadNumberPrefix:
+            {
+                //NOTE: !!! У нас пока так: префикс числа начинается с любой цифры, потом могут следовать любые символы, после префикса - те символы, которые разрешены префиксом
+                auto nextNumberPrefixIdx = tokenTrieFindNext(numbersTrie, numberPrefixIdx, (token_type)ch);
+                if (nextNumberPrefixIdx!=trie_index_invalid)
+                {
+                    numberPrefixIdx = nextNumberPrefixIdx; // Всё в порядке, префикс числа продолжается
+                    break;
+                }
+                else // Не продолжения префикса, вероятно, он у нас закончился
+                {
+                    auto curPayload = operatorsTrie[numberPrefixIdx].payload;
+                    if (curPayload==payload_invalid) // текущий префикс нифига не префикс
+                        return unexpectedHandler(it, __FILE__, __LINE__);
+
+                    numberTokenId = curPayload;
+
+                    // Теперь тут у нас либо цифра, либо что-то другое
+
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FLAG_MISS_DIGIT                    0x0800u  /* После префикса может не быть ни одной цифры */
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_MASK                          0x0600u  /* Маска для системы счисления */
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DEC                           0x0000u
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN                           0x0200u
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_OCT                           0x0400u
+#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_HEX                           0x0600u
+
+
+
+                }
+
+    // trie_index_type numberPrefixIdx = trie_index_invalid;
+    // payload_type numberTokenId = 0;
+    // payload_type numberReadedDigits = 0;
+
                 return unexpectedHandler(it, __FILE__, __LINE__);
 
             } break;
@@ -220,14 +685,160 @@ int main(int argc, char* argv[])
 
             } break;
 
-            case stReadOperator:
+            case stReadNumberFloat:
             {
                 return unexpectedHandler(it, __FILE__, __LINE__);
 
             } break;
 
+
+    // auto isSingleLineCommentToken = [](payload_type tokenType)
+    // auto isMultiLineCommentStartToken = [](payload_type tokenType)
+    // auto isMultiLineCommentEndToken = [](payload_type tokenType)
+            case stReadOperator:
+            {
+                if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
+                {
+                    auto nextOperatorIdx = tokenTrieFindNext(operatorsTrie, operatorIdx, (token_type)ch);
+
+                    if (nextOperatorIdx!=trie_index_invalid)
+                    {
+                        operatorIdx = nextOperatorIdx; // Всё в порядке, оператор продолжается
+                    }
+                    else
+                    {
+                        // Нет продолжения, у нас был, вероятно, полностью заданный оператор
+                        auto curPayload = operatorsTrie[operatorIdx].payload;
+                        if (curPayload==payload_invalid) // текущий оператор нифига не оператор
+                            return unexpectedHandler(it, __FILE__, __LINE__);
+
+                        if (isCommentToken(curPayload)) // на каждом операторе в обрабатываемом тексте у нас это срабатывает. Жирно или нет?
+                        {
+                            commentTokenId = curPayload;
+
+                            if (isSingleLineCommentToken(curPayload))
+                            {
+                                tokenStartIt   = it;
+                                commentStartIt = it; // Сохранили начало коментария без самого оператора начала коментария - текст коментария потом выдадим по окончании
+                                st = stReadSingleLineComment;
+                                operatorIdx = trie_index_invalid;
+                                break;
+                            }
+                            else if (isMultiLineCommentStartToken(curPayload))
+                            {
+                                tokenStartIt   = it;
+                                commentStartIt = it; // Сохранили начало коментария без самого оператора начала коментария - текст коментария потом выдадим по окончании
+                                st = stReadMultilineLineComment;
+                                operatorIdx = trie_index_invalid;
+                                commentNestingLevel = 1; // Один вход сделали тут
+                                break;
+                            }
+                            else // коментарий, но не однострочный, и не начало многострочного - ошибка
+                            {
+                                return unexpectedHandler(it, __FILE__, __LINE__);
+                            }
+                        }
+
+                        parsingHandler(curPayload, tokenStartIt, it); // выплюнули текущий оператор
+                        tokenStartIt = it; // Сохранили начало нового токена
+
+                        operatorIdx = tokenTrieFindNext(operatorsTrie, trie_index_invalid, (token_type)ch); // Начали поиск нового оператора с начала
+                        if (operatorIdx==trie_index_invalid)
+                            return unexpectedHandler(it, __FILE__, __LINE__);
+                    }
+                    break; // коллекционируем символы оператора
+                }
+
+                // Заканчиваем обработку оператора на неоператорном символе
+
+                if (operatorIdx==trie_index_invalid)
+                    return unexpectedHandler(it, __FILE__, __LINE__);
+                if (operatorsTrie[operatorIdx].payload==payload_invalid)
+                    return unexpectedHandler(it, __FILE__, __LINE__);
+
+                auto curPayload = operatorsTrie[operatorIdx].payload;
+
+                // Всё тоже самое, что и выше, наверное, надо как-то это потом вынести
+                if (isCommentToken(curPayload)) // на каждом операторе в обрабатываемом тексте у нас это срабатывает. Жирно или нет?
+                {
+                    commentTokenId = curPayload;
+
+                    if (isSingleLineCommentToken(curPayload))
+                    {
+                        tokenStartIt   = it;
+                        commentStartIt = it; // Сохранили начало коментария без самого оператора начала коментария - текст коментария потом выдадим по окончании
+                        st = stReadSingleLineComment;
+                        operatorIdx = trie_index_invalid;
+                        break;
+                    }
+                    else if (isMultiLineCommentStartToken(curPayload))
+                    {
+                        tokenStartIt   = it;
+                        commentStartIt = it; // Сохранили начало коментария без самого оператора начала коментария - текст коментария потом выдадим по окончании
+                        st = stReadMultilineLineComment;
+                        operatorIdx = trie_index_invalid;
+                        commentNestingLevel = 1; // Один вход сделали тут
+                        break;
+                    }
+                    else // коментарий, но не однострочный, и не начало многострочного - ошибка
+                    {
+                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    }
+                }
+
+                parsingHandler(curPayload, tokenStartIt, it); // выплюнули
+                tokenStartIt = it; // Сохранили начало нового токена
+
+                if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
+                {
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
+                    st = stInitial;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::space))
+                {
+                    st = stReadSpace;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::identifier_first))
+                {
+                    st = stReadIdentifier;
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
+                {
+                    auto idx = tokenTrieFindNext(bracketsTrie, trie_index_invalid, (token_type)ch);
+                    if (idx==trie_index_invalid)
+                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    parsingHandler(bracketsTrie[idx].payload, it, it+1); // выплюнули
+                    st = stInitial;
+                }
+                else
+                {
+                    return unexpectedHandler(it, __FILE__, __LINE__);
+                }
+            } break;
+
             case stReadUserLiteral:
             {
+                return unexpectedHandler(it, __FILE__, __LINE__);
+
+            } break;
+
+            case stReadSingleLineComment:
+            {
+                if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
+                {
+                    //TODO: !!! Разобраться с continuation
+                    parsingHandler(commentTokenId, commentStartIt, it);
+                    parsingHandler(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
+                    st = stInitial;
+                }
+
+                // Иначе - ничего не делаем
+
+            } break;
+
+            case stReadMultilineLineComment:
+            {
+                // auto nextOperatorIdx = tokenTrieFindNext(operatorsTrie, operatorIdx, (token_type)ch);
                 return unexpectedHandler(it, __FILE__, __LINE__);
 
             } break;

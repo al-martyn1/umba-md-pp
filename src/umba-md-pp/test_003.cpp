@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
     std::cout << "Trie size : " << trie.size() << " items, " << trie.size()*itemSize << " bytes, item size: " << itemSize << "\n";
 
 #if !defined(UMBA_TOKENIZER_TRIE_NODE_LEVEL_FIELD_DISABLE)
-    umba::tokenizer::tokenTriePrintGraph(trie, std::cout, [](umba::tokenizer::payload_type p) { return std::string(1, (char)p); } );
+    umba::tokenizer::tokenTriePrintTableGraph("test", trie, std::cout, [](umba::tokenizer::payload_type p) { return std::string(1, (char)p); } );
 #endif
 
     std::cout << "-------\n";

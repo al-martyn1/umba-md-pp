@@ -75,6 +75,8 @@ endif()
 
 add_compile_definitions("YAML_CPP_STATIC_DEFINE")
 add_compile_definitions("USE_UMBA_LOUT_COUT")
+add_compile_definitions("UMBA_TOKENIZER_DISABLE_UMBA_TOKENIZER_GET_CHAR_CLASS_FUNCTION")
+
 
 
 file(GLOB_RECURSE sources   "${SRC_ROOT}/*.cpp")
