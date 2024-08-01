@@ -2,8 +2,6 @@
     \brief Генерируем CharClass таблицу
  */
 
-#define UMBA_TOKENIZER_DISABLE_UMBA_TOKENIZER_GET_CHAR_CLASS_FUNCTION
-
 #include "umba/umba.h"
 #include "umba/tokenizer.h"
 

@@ -2,9 +2,6 @@
     \brief
  */
 
-#define UMBA_TOKENIZER_DISABLE_UMBA_TOKENIZER_GET_CHAR_CLASS_FUNCTION
-
-
 #include "umba/umba.h"
 //
 #include "umba/tokenizer.h"
@@ -148,9 +145,9 @@ int main(int argc, char* argv[])
         #endif
 
 
-        inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/the.h"));
+        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/the.h"));
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_initializer_list.h"));
-        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_type_traits.h"));
+        inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_type_traits.h"));
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/string_plus.h"));
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/rgbquad.h"));
 
@@ -207,6 +204,9 @@ int main(int argc, char* argv[])
     bracketsTrieBuilder.addTokenSequence(']', UMBA_TOKENIZER_TOKEN_SQUARE_BRACKET_CLOSE);
 
 
+    std::string multiLineCommentEndStr = "*/"; // Конец многострочного коментария ищем как строку, с забеганием вперёд
+    // Это сейчас пока конец и начало добавили как операторы, а потом в токенизере будет метод, принимающий пару строк - начало и конец многострочного коментария, вот оттуда и возьмем сохраним окончание
+
 //#define UMBA_TOKENIZER_TOKEN_NUMBER_LITERL_FIRST                               0x0800u
     {
 
@@ -217,7 +217,7 @@ int main(int argc, char* argv[])
         operatorsTrieBuilder.addTokenSequence("*/", UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_END  );
 
         payload_type operatorTokenId = UMBA_TOKENIZER_TOKEN_OPERATOR_FIRST_GENERIC;
-        std::vector<std::string> operators{"+","-","*","/","%","^","&","|","~","!","=","<",">","+=","-=","*=","/=","%=","^=","&=","|=","<<",">>",">>=","<<=","==","!=","<=",">=","<=>","&&","||","++","--",",","->*",".*","->",":","::",";","?","..."};
+        std::vector<std::string> operators{".","...",".*","+","-","*","/","%","^","&","|","~","!","=","<",">","+=","-=","*=","/=","%=","^=","&=","|=","<<",">>",">>=","<<=","==","!=","<=",">=","<=>","&&","||","++","--",",","->*","->",":","::",";","?"};
         for(const auto &opStr : operators)
         {
             // Устанавливаем класс opchar только тем символам, которые входят в операторы
@@ -275,11 +275,18 @@ int main(int argc, char* argv[])
         std::cout << "---\n";
     }
 
+#if 1
+
     if (!umba::filesys::readFile(inputFilename, text))
     {
         std::cout << "Failed to read input file: " << inputFilename << "\n";
         return 1;
     }
+
+#else
+        text = "    { return __ils.begin(); }\n";
+
+#endif
 
     cout << "Input file: " << inputFilename << "\n";
     std::cout << "---\n";
@@ -361,7 +368,10 @@ int main(int argc, char* argv[])
     };
 
 
-    auto parsingHandler = [&](payload_type tokenType, const PosCountingIterator b, const PosCountingIterator &e)
+    const bool singleLineCommentOnlyAtBeginning = false; // Пока константа потом будет опция
+    bool curPosAtLineBeginning = true;
+
+    auto parsingHandlerLambda = [&](payload_type tokenType, const PosCountingIterator b, const PosCountingIterator &e)
     {
         using namespace umba::iterator;
 
@@ -370,6 +380,7 @@ int main(int argc, char* argv[])
         cout << "token_type: " << tokenType;
         if (tokenType==UMBA_TOKENIZER_TOKEN_LINEFEED)
         {
+            curPosAtLineBeginning = true; // Для поддержки однострочного комента только в начале строки
             cout << ", linefeed, '\\n'"; // "CRLF";
         }
         else if (tokenType==UMBA_TOKENIZER_TOKEN_SPACE)
@@ -378,23 +389,30 @@ int main(int argc, char* argv[])
         }
         else
         {
+            curPosAtLineBeginning = false; // Для поддержки однострочного комента только в начале строки
             cout << ", " << getTokenStr(tokenType) << ", '" << makeString(b, e) << "'";
         }
 
         cout << ", state: " << getStateStr(st) << ", in data location " << umba::makeSimpleTextPositionInfoString<std::string>(curPos) << "\n";
     };
 
-    auto unexpectedHandler = [&](const PosCountingIterator it, auto srcFile, auto srcLine)
+    auto unexpectedHandlerLambda = [&](const PosCountingIterator it, auto srcFile, auto srcLine)
     {
         auto errPos = it.getPosition(true); // с поиском конца строки (а вообще не надо пока, но пусть)
         std::string erroneousLineText = umba::iterator::makeString(it.getLineStartIterator(), it.getLineEndIterator());
         cout << "Unexpected at " << inputFilename << ":" << umba::makeSimpleTextPositionInfoString<std::string>(errPos) << "\n";
         cout << "Line:" << erroneousLineText << "\n";
         //auto errMarkerO
-        cout << "    |" << std::string(errPos.symbolOffset, ' ') << "^";
-        if (erroneousLineText.size()>(errPos.symbolOffset+1))
-            cout << std::string(erroneousLineText.size()-(errPos.symbolOffset+1), ' ');
-        cout << "|\n";
+        auto errMarkerStr = std::string(erroneousLineText.size(), ' ');
+        if (errPos.symbolOffset>=errMarkerStr.size())
+            errMarkerStr.append(1,'^');
+        else
+            errMarkerStr[errPos.symbolOffset] = '^';
+        cout << "    |" << errMarkerStr << "|\n";
+        // cout << "    |" << std::string(errPos.symbolOffset, ' ') << "^";
+        // if (erroneousLineText.size()>(errPos.symbolOffset+1))
+        //     cout << std::string(erroneousLineText.size()-(errPos.symbolOffset+1), ' ');
+        // cout << "|\n";
 
         if (it!=PosCountingIterator())
         {
@@ -411,6 +429,11 @@ int main(int argc, char* argv[])
         return 1;
     };
 
+    auto reportPossibleUnknownOperatorLambda = [&](const PosCountingIterator b, const PosCountingIterator &e)
+    {
+        cout << "Possible unknown operator: '" << makeString(b, e) << "'\n";
+    };
+
     // cout << "--- Text:\n";
     // cout << text << "\n";
     // cout << "---\n";
@@ -419,8 +442,8 @@ int main(int argc, char* argv[])
     PosCountingIterator tokenStartIt;
     trie_index_type operatorIdx = trie_index_invalid;
 
-    const bool numbersAllowDigitsSeparator = true; // apos ' (39/0x27) only can be used
-    const int numberDefaultBase = 10;
+    const bool numbersAllowDigitsSeparator = true; // apos ' (39/0x27) only can be used, это пока const, а вообще - это внешне задаваемая опция 
+    const int numberDefaultBase = 10; // это пока const, а вообще - это внешне задаваемая опция 
     int numberExplicitBase      =  0;
     trie_index_type numberPrefixIdx = trie_index_invalid;
     payload_type numberTokenId = 0;
@@ -435,7 +458,7 @@ int main(int argc, char* argv[])
 
     //NOTE: !!! Надо ли semialpha проверять, не является ли она началом числового префикса? Наверное, не помешает
 
-    auto performStartReadingNumber = [&](auto ch, auto it)
+    auto performStartReadingNumberLambda = [&](auto ch, auto it)
     {
         tokenStartIt = it;
         numberPrefixIdx = tokenTrieFindNext(numbersTrie, trie_index_invalid, (token_type)ch);
@@ -459,7 +482,7 @@ int main(int argc, char* argv[])
 
     };
 
-    auto performStartReadingOperator = [&](auto ch, auto it)
+    auto performStartReadingOperatorLambda = [&](auto ch, auto it)
     {
         tokenStartIt = it;
         operatorIdx = tokenTrieFindNext(operatorsTrie, trie_index_invalid, (token_type)ch);
@@ -469,22 +492,30 @@ int main(int argc, char* argv[])
         return true;
     };
 
-    auto performProcessBracket = [&](auto ch, auto it)
+    auto performProcessBracketLambda = [&](auto ch, auto it)
     {
         auto idx = tokenTrieFindNext(bracketsTrie, trie_index_invalid, (token_type)ch);
         if (idx==trie_index_invalid)
             return false;
-        parsingHandler(bracketsTrie[idx].payload, it, it+1); // выплюнули
+        parsingHandlerLambda(bracketsTrie[idx].payload, it, it+1); // выплюнули
         st = stInitial;
         return true;
     };
 
-    auto processCommentStartFromNonCommented = [&](auto curPayload, auto it)
+    auto processCommentStartFromNonCommentedLambda = [&](auto curPayload, auto it)
     {
         commentTokenId = curPayload;
     
         if (utils::isSingleLineCommentToken(curPayload))
         {
+            if (singleLineCommentOnlyAtBeginning && !curPosAtLineBeginning) 
+            {
+                // Error? Or process as regular operator?
+                //UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_FLAG_AS_REGULAR_OPERATOR
+                parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_FLAG_AS_REGULAR_OPERATOR|commentTokenId, tokenStartIt, it); // выплюнули как обычный оператор
+                st = stInitial;
+                return true;
+            }
             tokenStartIt   = it;
             commentStartIt = it; // Сохранили начало коментария без самого оператора начала коментария - текст коментария потом выдадим по окончании
             st = stReadSingleLineComment;
@@ -507,8 +538,9 @@ int main(int argc, char* argv[])
     };
 
 
-
-    for( PosCountingIterator it=PosCountingIterator(text.data(), text.size()); it!=PosCountingIterator(); ++it)
+    auto itBegin = PosCountingIterator(text.data(), text.size());
+    auto itEnd   = PosCountingIterator();
+    for( PosCountingIterator it=itBegin; it!=itEnd; ++it)
     {
         const auto ch = *it;
         CharClass charClass = charClassTable[charToCharClassTableIndex(ch)];
@@ -520,7 +552,7 @@ int main(int argc, char* argv[])
             {
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::space))
                 {
@@ -529,31 +561,31 @@ int main(int argc, char* argv[])
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
                 {
-                    if (!performStartReadingOperator(ch, it))
-                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    if (!performStartReadingOperatorLambda(ch, it))
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::identifier_first))
                 {
-                    //parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    //parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
                     tokenStartIt = it;
                     st = stReadIdentifier;
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::digit))
                 {
-                    performStartReadingNumber(ch, it);
+                    performStartReadingNumberLambda(ch, it);
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
                 {
-                    if (!performProcessBracket(ch, it))
-                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    if (!performProcessBracketLambda(ch, it))
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::semialpha))
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
                 }
                 else
                 {
-                    return unexpectedHandler(it, __FILE__, __LINE__);
+                    return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
 
                 //if ((charClass::linefeed))
@@ -563,15 +595,15 @@ int main(int argc, char* argv[])
             {
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
                     st = stInitial;
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::space))
                 {
                     if (*tokenStartIt!=*it) // пробелы бывают разные, одинаковые мы коллекционируем, разные - выплевываем разными пачками
                     {
-                        parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                        parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
                         tokenStartIt = it; // Сохранили начало нового токена
                     }
                     else
@@ -581,36 +613,36 @@ int main(int argc, char* argv[])
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
-                    if (!performStartReadingOperator(ch, it))
-                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
+                    if (!performStartReadingOperatorLambda(ch, it))
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::identifier_first))
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
                     tokenStartIt = it;
                     st = stReadIdentifier;
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::digit))
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
-                    performStartReadingNumber(ch, it);
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    performStartReadingNumberLambda(ch, it);
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
-                    if (!performProcessBracket(ch, it))
-                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    if (!performProcessBracketLambda(ch, it))
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::semialpha))
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
                     st = stInitial;
                 }
                 else
                 {
-                    return unexpectedHandler(it, __FILE__, __LINE__);
+                    return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
             } break;
 
@@ -621,12 +653,13 @@ int main(int argc, char* argv[])
                     break; // коллекционируем
                 }
 
-                parsingHandler(UMBA_TOKENIZER_TOKEN_IDENTIFIER, tokenStartIt, it); // выплюнули
+                parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_IDENTIFIER, tokenStartIt, it); // выплюнули
+                charClass = charClassTable[charToCharClassTableIndex(ch)]; // Перечитали значение класса символа - оно могло измениться
                 tokenStartIt = it; // Сохранили начало нового токена
 
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
                     st = stInitial;
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::space))
@@ -635,23 +668,27 @@ int main(int argc, char* argv[])
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
                 {
-                    if (!performStartReadingOperator(ch, it))
-                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    if (!performStartReadingOperatorLambda(ch, it))
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
                 {
-                    if (!performProcessBracket(ch, it))
-                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    if (!performProcessBracketLambda(ch, it))
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
                 else
                 {
-                    return unexpectedHandler(it, __FILE__, __LINE__);
+                    return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
             } break;
 
             case stReadNumberPrefix:
             {
                 //NOTE: !!! У нас пока так: префикс числа начинается с любой цифры, потом могут следовать любые символы, после префикса - те символы, которые разрешены префиксом
+                payload_type curPayload = payload_invalid;
+                bool prefixIsNumber     = true ;
+                bool requiresDigits     = false;
+
                 auto nextNumberPrefixIdx = tokenTrieFindNext(numbersTrie, numberPrefixIdx, (token_type)ch);
                 if (nextNumberPrefixIdx!=trie_index_invalid)
                 {
@@ -660,11 +697,29 @@ int main(int argc, char* argv[])
                 }
                 else // Нет продолжения префикса, вероятно, он у нас окончился
                 {
-                    auto curPayload = numbersTrie[numberPrefixIdx].payload;
+                    curPayload = numbersTrie[numberPrefixIdx].payload;
                     if (curPayload==payload_invalid) // текущий префикс нифига не префикс
-                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    {
+                        // Надо проверить, является ли то, что уже есть, чисто числом
+                        // int charToDigit(CharType ch)
+                        tokenTrieBackTrace( numbersTrie
+                                          , numberPrefixIdx
+                                          , [&](token_type ch)
+                                            {
+                                                int d = utils::charToDigit(ch);
+                                                if (d<0 || d>9)
+                                                    prefixIsNumber = false;
+                                            }
+                                          );
 
-                    bool requiresDigits   = utils::isNumberPrefixRequiresDigits(curPayload);
+                        if (!prefixIsNumber)
+                            return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+                        parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_NUMBER, tokenStartIt, it); // выплёвываем накопленное число как число без префикса, с системой счисления по умолчанию
+                        st = stInitial; // на всякий случай, если в stInitial обрабтчике состояние не переустанавливается, а подразумевается, что уже такое и есть
+                        goto explicit_initial;
+                    }
+
+                    requiresDigits   = utils::isNumberPrefixRequiresDigits(curPayload);
                     numberPrefixIdx       = trie_index_invalid; // сбрасываем индекс префикса, чтобы потом не париться
 
                     numberTokenId         = curPayload;
@@ -685,9 +740,9 @@ int main(int argc, char* argv[])
                     }
 
                     if (requiresDigits)
-                        return unexpectedHandler(it, __FILE__, __LINE__); // нужна хоть одна цифра, а её нет
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__); // нужна хоть одна цифра, а её нет
 
-                    parsingHandler(numberTokenId, tokenStartIt, it); // выплёвываем префикс (он является годным числом и без доп цифр)
+                    parsingHandlerLambda(numberTokenId, tokenStartIt, it); // выплёвываем префикс (он является годным числом и без доп цифр)
 
                     // у тут понеслась вся та же тема, как и в состоянии stInitial, только без обработки цифр
 
@@ -697,7 +752,7 @@ int main(int argc, char* argv[])
                     #if 0
                     if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                     {
-                        parsingHandler(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
+                        parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
                     }
                     else if (umba::TheFlags(charClass).oneOf(CharClass::space))
                     {
@@ -706,31 +761,31 @@ int main(int argc, char* argv[])
                     }
                     else if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
                     {
-                        if (!performStartReadingOperator(ch, it))
-                            return unexpectedHandler(it, __FILE__, __LINE__);
+                        if (!performStartReadingOperatorLambda(ch, it))
+                            return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                     }
                     else if (umba::TheFlags(charClass).oneOf(CharClass::identifier_first))
                     {
-                        //parsingHandler(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                        //parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
                         tokenStartIt = it;
                         st = stReadIdentifier;
                     }
                     else if (umba::TheFlags(charClass).oneOf(CharClass::digit))
                     {
-                        performStartReadingNumber(ch, it);
+                        performStartReadingNumberLambda(ch, it);
                     }
                     else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
                     {
-                        if (!performProcessBracket(ch, it))
-                            return unexpectedHandler(it, __FILE__, __LINE__);
+                        if (!performProcessBracketLambda(ch, it))
+                            return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                     }
                     else if (umba::TheFlags(charClass).oneOf(CharClass::semialpha))
                     {
-                        parsingHandler(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
+                        parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
                     }
                     else
                     {
-                        return unexpectedHandler(it, __FILE__, __LINE__);
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                     }
                     #endif
                 }
@@ -750,11 +805,12 @@ int main(int argc, char* argv[])
                 }
 
                 if (numberTokenId==0 || numberTokenId==payload_invalid)
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_NUMBER, tokenStartIt, it); // выплёвываем накопленное число как число без префикса, с системой счисления по умолчанию
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_NUMBER, tokenStartIt, it); // выплёвываем накопленное число как число без префикса, с системой счисления по умолчанию
                 else
-                    parsingHandler(numberTokenId, tokenStartIt, it); // выплёвываем накопленное число с явно указанной системой счисления
+                    parsingHandlerLambda(numberTokenId, tokenStartIt, it); // выплёвываем накопленное число с явно указанной системой счисления
 
-                //return unexpectedHandler(it, __FILE__, __LINE__);
+                numberTokenId = 0;
+                //return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 // Далее у нас всё как начальном состоянии
                 st = stInitial; // на всякий случай, если в stInitial обрабтчике состояние не переустанавливается, а подразумевается, что уже такое и есть
                 goto explicit_initial;
@@ -763,7 +819,7 @@ int main(int argc, char* argv[])
 
             case stReadNumberFloat:
             {
-                return unexpectedHandler(it, __FILE__, __LINE__);
+                return unexpectedHandlerLambda(it, __FILE__, __LINE__);
 
             } break;
 
@@ -783,21 +839,26 @@ int main(int argc, char* argv[])
                         // Нет продолжения, у нас был, вероятно, полностью заданный оператор
                         auto curPayload = operatorsTrie[operatorIdx].payload;
                         if (curPayload==payload_invalid) // текущий оператор нифига не оператор
-                            return unexpectedHandler(it, __FILE__, __LINE__);
-
+                        {
+                            reportPossibleUnknownOperatorLambda(tokenStartIt, it);
+                            return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+                        }
                         if (utils::isCommentToken(curPayload)) // на каждом операторе в обрабатываемом тексте у нас это срабатывает. Жирно или нет?
                         {
-                            if (!processCommentStartFromNonCommented(curPayload, it))
-                                return unexpectedHandler(it, __FILE__, __LINE__);
+                            if (!processCommentStartFromNonCommentedLambda(curPayload, it))
+                                return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                             break;
                         }
 
-                        parsingHandler(curPayload, tokenStartIt, it); // выплюнули текущий оператор
+                        parsingHandlerLambda(curPayload, tokenStartIt, it); // выплюнули текущий оператор
                         tokenStartIt = it; // Сохранили начало нового токена
 
                         operatorIdx = tokenTrieFindNext(operatorsTrie, trie_index_invalid, (token_type)ch); // Начали поиск нового оператора с начала
                         if (operatorIdx==trie_index_invalid)
-                            return unexpectedHandler(it, __FILE__, __LINE__);
+                        {
+                            reportPossibleUnknownOperatorLambda(it,it+1);
+                            return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+                        }
                     }
                     break; // коллекционируем символы оператора
                 }
@@ -805,26 +866,30 @@ int main(int argc, char* argv[])
                 // Заканчиваем обработку оператора на неоператорном символе
 
                 if (operatorIdx==trie_index_invalid)
-                    return unexpectedHandler(it, __FILE__, __LINE__);
+                    return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+
                 if (operatorsTrie[operatorIdx].payload==payload_invalid)
-                    return unexpectedHandler(it, __FILE__, __LINE__);
+                {
+                    reportPossibleUnknownOperatorLambda(tokenStartIt, it);
+                    return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+                }
 
                 auto curPayload = operatorsTrie[operatorIdx].payload;
 
                 // Всё тоже самое, что и выше, наверное, надо как-то это потом вынести
                 if (utils::isCommentToken(curPayload)) // на каждом операторе в обрабатываемом тексте у нас это срабатывает. Жирно или нет?
                 {
-                    if (!processCommentStartFromNonCommented(curPayload, it))
-                        return unexpectedHandler(it, __FILE__, __LINE__);
+                    if (!processCommentStartFromNonCommentedLambda(curPayload, it))
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                     break;
                 }
 
-                parsingHandler(curPayload, tokenStartIt, it); // выплюнули
+                parsingHandlerLambda(curPayload, tokenStartIt, it); // выплюнули
                 tokenStartIt = it; // Сохранили начало нового токена
 
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
                     st = stInitial;
                 }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::space))
@@ -835,23 +900,27 @@ int main(int argc, char* argv[])
                 {
                     st = stReadIdentifier;
                 }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::digit))
+                {
+                    performStartReadingNumberLambda(ch, it);
+                }
                 else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
                 {
                     auto idx = tokenTrieFindNext(bracketsTrie, trie_index_invalid, (token_type)ch);
                     if (idx==trie_index_invalid)
-                        return unexpectedHandler(it, __FILE__, __LINE__);
-                    parsingHandler(bracketsTrie[idx].payload, it, it+1); // выплюнули
+                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+                    parsingHandlerLambda(bracketsTrie[idx].payload, it, it+1); // выплюнули
                     st = stInitial;
                 }
                 else
                 {
-                    return unexpectedHandler(it, __FILE__, __LINE__);
+                    return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
             } break;
 
             case stReadUserLiteral:
             {
-                return unexpectedHandler(it, __FILE__, __LINE__);
+                return unexpectedHandlerLambda(it, __FILE__, __LINE__);
 
             } break;
 
@@ -860,8 +929,8 @@ int main(int argc, char* argv[])
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
                     //TODO: !!! Разобраться с continuation
-                    parsingHandler(commentTokenId, commentStartIt, it);
-                    parsingHandler(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
+                    parsingHandlerLambda(commentTokenId, commentStartIt, it);
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
                     st = stInitial;
                 }
 
@@ -872,13 +941,34 @@ int main(int argc, char* argv[])
             case stReadMultilineLineComment:
             {
                 // auto nextOperatorIdx = tokenTrieFindNext(operatorsTrie, operatorIdx, (token_type)ch);
-                return unexpectedHandler(it, __FILE__, __LINE__);
+                if (multiLineCommentEndStr.empty())
+                    return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+
+                if (multiLineCommentEndStr[0]!=*it) // текущий входной символ не является первым символом маркера конца коментария
+                    break;
+
+                auto it2 = it;
+                auto savedIt2 = it2;
+                auto strIt    = multiLineCommentEndStr.begin();
+                auto strItEnd = multiLineCommentEndStr.end();
+
+                for(; it2!=itEnd && strIt!=strItEnd && *it2==*strIt; ++/*Проверка многострочника*/it2, ++strIt)
+                {
+                    savedIt2 = it2; // Сохраняем предыдущее (до инкремента) значение it2
+                }
+
+                if (strIt==strItEnd) // дошли до конца строки окончания коментария, не прервались на общий конец и не прервались по несовпадению символа - значит, целиком совпало
+                {
+                    parsingHandlerLambda(commentTokenId, commentStartIt, it); // выплюнули текст коментария, без обрамления
+                    it = savedIt2; // переместили it на позицию последнего символа конца многострочника, инкремент в основном цикле переместит его на следующий символ за многострочником, как надо
+                    st = stInitial;
+                }
 
             } break;
 
             default:
             {
-                return unexpectedHandler(it, __FILE__, __LINE__);
+                return unexpectedHandlerLambda(it, __FILE__, __LINE__);
             }
 
         }
@@ -896,4 +986,22 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+
+/* TODO по токенизеру.
+   1) [X] Конец многострочного коментария - ищем просто как текст, а не оператор, да, вложенность не поддерживаем
+   2) [ ] Многострочник (стартовый) может быть продолжением любого существующего оператора, значит, его надо добавлять как суффикс ко всем операторам, заводить отдельный токен под это дело, и как-то разруливать ситуацию - "-/*"
+   3) [ ] Однострочники тоже могут быть такими подлыми
+   4) [X] Однострочник только в начале строки? Надо ли? Чтобы распарсить какой-нибудь существующий язык - надо
+   5) [ ] Разобраться с continuation в однострочнике
+   6) [ ] Числа с плавающей запятой
+   7) [ ] Строки - если встречаем символ с юзер флагом - это маркер строкового префикса
+   8) [ ] Юзер-флаг (строковый префикс) - проверять до идентификаторов, потому что префиксы строк могут начинаться с букв.
+   9) [ ] После окончания цикла надо проверить текущее состояние, если не stInitial, то что-то сделать
+
+
+
+
+
+*/
 
