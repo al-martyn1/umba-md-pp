@@ -442,8 +442,8 @@ int main(int argc, char* argv[])
     PosCountingIterator tokenStartIt;
     trie_index_type operatorIdx = trie_index_invalid;
 
-    const bool numbersAllowDigitsSeparator = true; // apos ' (39/0x27) only can be used, это пока const, а вообще - это внешне задаваемая опция 
-    const int numberDefaultBase = 10; // это пока const, а вообще - это внешне задаваемая опция 
+    const bool numbersAllowDigitsSeparator = true; // apos ' (39/0x27) only can be used, это пока const, а вообще - это внешне задаваемая опция
+    const int numberDefaultBase = 10; // это пока const, а вообще - это внешне задаваемая опция
     int numberExplicitBase      =  0;
     trie_index_type numberPrefixIdx = trie_index_invalid;
     payload_type numberTokenId = 0;
@@ -505,10 +505,10 @@ int main(int argc, char* argv[])
     auto processCommentStartFromNonCommentedLambda = [&](auto curPayload, auto it)
     {
         commentTokenId = curPayload;
-    
+
         if (utils::isSingleLineCommentToken(curPayload))
         {
-            if (singleLineCommentOnlyAtBeginning && !curPosAtLineBeginning) 
+            if (singleLineCommentOnlyAtBeginning && !curPosAtLineBeginning)
             {
                 // Error? Or process as regular operator?
                 //UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_FLAG_AS_REGULAR_OPERATOR
@@ -733,7 +733,7 @@ int main(int argc, char* argv[])
                     // Теперь тут у нас либо цифра, либо что-то другое
                     if (umba::TheFlags(charClass).oneOf(allowedDigitCharClass) && utils::isDigitAllowed(ch, numbersBase))
                     {
-                        //NOTE: !!! Да, сразу после префикса у нас не может быть разделителя разрядов 
+                        //NOTE: !!! Да, сразу после префикса у нас не может быть разделителя разрядов
                         st = stReadNumber; // Тут у нас годная цифра, продолжаем
                         numberReadedDigits = 1;
                         break;
