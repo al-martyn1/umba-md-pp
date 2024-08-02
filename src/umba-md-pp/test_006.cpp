@@ -227,6 +227,20 @@ int main(int argc, char* argv[])
         }
     }
 
+    
+    umba::tokenizer::CppEscapedSimpleQuotedStringLiteralParser<char>  cppEscapedSimpleQuotedStringLiteralParser;
+    {
+        generation::setCharClassFlags(charClassTable, '\'', umba::tokenizer::CharClass::string_literal_prefix);
+        generation::setCharClassFlags(charClassTable, '\"', umba::tokenizer::CharClass::string_literal_prefix);
+
+        auto pILiteralParserCppEscpdSmpQtdStr = static_cast<umba::tokenizer::ITokenizerLiteralParser<char>* >(&cppEscapedSimpleQuotedStringLiteralParser);
+
+        literalsTrieBuilder.addTokenSequence("\'", UMBA_TOKENIZER_TOKEN_CHAR_LITERAL  )
+            .payloadFlags = reinterpret_cast<umba::tokenizer::payload_type>(pILiteralParserCppEscpdSmpQtdStr);
+        literalsTrieBuilder.addTokenSequence("\"", UMBA_TOKENIZER_TOKEN_STRING_LITERAL)
+            .payloadFlags = reinterpret_cast<umba::tokenizer::payload_type>(pILiteralParserCppEscpdSmpQtdStr);
+    }
+
 
     numbersTrieBuilder.buildTokenTrie(numbersTrie);
     bracketsTrieBuilder.buildTokenTrie(bracketsTrie);
@@ -305,9 +319,9 @@ int main(int argc, char* argv[])
         stReadNumber              ,
         stReadNumberFloat         ,
         stReadOperator            ,
-        stReadUserLiteral         ,
         stReadSingleLineComment   ,
-        stReadMultilineLineComment
+        stReadMultilineLineComment,
+        stReadStringLiteral
 
     };
 
@@ -324,7 +338,6 @@ int main(int argc, char* argv[])
             case stReadNumber              : return std::string("ReadNumber");
             case stReadNumberFloat         : return std::string("ReadNumberFloat");
             case stReadOperator            : return std::string("ReadOperator");
-            case stReadUserLiteral         : return std::string("ReadUserLiteral");
             case stReadSingleLineComment   : return std::string("ReadSingleLineComment");
             case stReadMultilineLineComment: return std::string("ReadMultilineLineComment");
             default:                         return std::string("<UNKNOWN>");
@@ -361,8 +374,8 @@ int main(int argc, char* argv[])
                     return std::string("KIND_OF_NUMBER");
                 if (p>=UMBA_TOKENIZER_TOKEN_OPERATOR_FIRST && p<=UMBA_TOKENIZER_TOKEN_OPERATOR_LAST)
                     return std::string("KIND_OF_OPERATOR");
-                if (p>=UMBA_TOKENIZER_TOKEN_USER_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_USER_LITERAL_LAST)
-                    return std::string("KIND_OF_USER_LITERAL");
+                if (p>=UMBA_TOKENIZER_TOKEN_STRING_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_STRING_LITERAL_LAST)
+                    return std::string("KIND_OF_STRING_LITERAL");
                 return std::string("");
         }
     };
@@ -402,7 +415,6 @@ int main(int argc, char* argv[])
         std::string erroneousLineText = umba::iterator::makeString(it.getLineStartIterator(), it.getLineEndIterator());
         cout << "Unexpected at " << inputFilename << ":" << umba::makeSimpleTextPositionInfoString<std::string>(errPos) << "\n";
         cout << "Line:" << erroneousLineText << "\n";
-        //auto errMarkerO
         auto errMarkerStr = std::string(erroneousLineText.size(), ' ');
         if (errPos.symbolOffset>=errMarkerStr.size())
             errMarkerStr.append(1,'^');
@@ -434,6 +446,20 @@ int main(int argc, char* argv[])
         cout << "Possible unknown operator: '" << makeString(b, e) << "'\n";
     };
 
+    auto reportStringLiteralMessageLambda = [&](bool bErr, const PosCountingIterator it, const std::string msg)
+    {
+        auto errPos = it.getPosition(true); // с поиском конца строки (а вообще не надо пока, но пусть)
+        std::string erroneousLineText = umba::iterator::makeString(it.getLineStartIterator(), it.getLineEndIterator());
+        cout << (bErr ? "Error: " : "Warning: ") << msg << " at " << inputFilename << ":" << umba::makeSimpleTextPositionInfoString<std::string>(errPos) << "\n";
+        cout << "Line:" << erroneousLineText << "\n";
+        auto errMarkerStr = std::string(erroneousLineText.size(), ' ');
+        if (errPos.symbolOffset>=errMarkerStr.size())
+            errMarkerStr.append(1,'^');
+        else
+            errMarkerStr[errPos.symbolOffset] = '^';
+        cout << "    |" << errMarkerStr << "|\n";
+    };
+
     // cout << "--- Text:\n";
     // cout << text << "\n";
     // cout << "---\n";
@@ -455,6 +481,8 @@ int main(int argc, char* argv[])
     payload_type commentTokenId = 0;
     bool allowNestedComments = true;
     unsigned commentNestingLevel = 0;
+
+    //PosCountingIterator ;
 
     //NOTE: !!! Надо ли semialpha проверять, не является ли она началом числового префикса? Наверное, не помешает
 
@@ -537,6 +565,37 @@ int main(int argc, char* argv[])
         }
     };
 
+    ITokenizerLiteralParser<char>* pCurrentLiteralParser = 0;
+    payload_type literalTokenId = 0;
+    std::string externHandlerMessage;
+    ITokenizerLiteralCharNulInserterImpl<char> nullInserter;
+    //std::string ;
+
+    auto checkIsLiteralPrefix = [&](auto it, auto end, payload_type &literalToken) -> ITokenizerLiteralParser<char>*
+    {
+        auto idx = tokenTrieFindNext(literalsTrie, trie_index_invalid, *it);
+        for(; idx!=trie_index_invalid && it!=end; ++it)
+        {
+            auto nextIdx = tokenTrieFindNext(literalsTrie, idx, *it);
+            if (nextIdx==trie_index_invalid)
+            {
+                // Дошли до конца
+                // Проверяем предыдущий индекс
+                if (literalsTrie[idx].payload==payload_invalid)
+                    return 0;
+                literalToken = literalsTrie[idx].payload;
+                auto pParser = reinterpret_cast<ITokenizerLiteralParser<char>*>(literalsTrie[idx].payloadFlags);
+                if (pParser)
+                    pParser->reset();
+                return pParser;
+            }
+
+            idx = nextIdx;
+        }
+        
+        return 0;
+    };
+
 
     auto itBegin = PosCountingIterator(text.data(), text.size());
     auto itEnd   = PosCountingIterator();
@@ -550,6 +609,18 @@ int main(int argc, char* argv[])
             explicit_initial:
             case stInitial:
             {
+                if (umba::TheFlags(charClass).oneOf(CharClass::string_literal_prefix))
+                {
+                    pCurrentLiteralParser = checkIsLiteralPrefix(it, itEnd, literalTokenId);
+                    if (pCurrentLiteralParser)
+                    {
+                        tokenStartIt = it;
+                        st = stReadStringLiteral;
+                        goto explicit_readstringliteral;
+                        break;
+                    }
+                }
+
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
                     parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
@@ -593,6 +664,18 @@ int main(int argc, char* argv[])
 
             case stReadSpace:
             {
+                if (umba::TheFlags(charClass).oneOf(CharClass::string_literal_prefix))
+                {
+                    pCurrentLiteralParser = checkIsLiteralPrefix(it, itEnd, literalTokenId);
+                    if (pCurrentLiteralParser)
+                    {
+                        tokenStartIt = it;
+                        st = stReadStringLiteral;
+                        goto explicit_readstringliteral;
+                        break;
+                    }
+                }
+
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
                     parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
@@ -656,6 +739,18 @@ int main(int argc, char* argv[])
                 parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_IDENTIFIER, tokenStartIt, it); // выплюнули
                 charClass = charClassTable[charToCharClassTableIndex(ch)]; // Перечитали значение класса символа - оно могло измениться
                 tokenStartIt = it; // Сохранили начало нового токена
+
+                if (umba::TheFlags(charClass).oneOf(CharClass::string_literal_prefix))
+                {
+                    pCurrentLiteralParser = checkIsLiteralPrefix(it, itEnd, literalTokenId);
+                    if (pCurrentLiteralParser)
+                    {
+                        tokenStartIt = it;
+                        st = stReadStringLiteral;
+                        goto explicit_readstringliteral;
+                        break;
+                    }
+                }
 
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
@@ -865,7 +960,7 @@ int main(int argc, char* argv[])
 
                 // Заканчиваем обработку оператора на неоператорном символе
 
-                if (operatorIdx==trie_index_invalid)
+                if (operatorIdx==trie_index_invalid) // Текущий оператор почему-то не оператор
                     return unexpectedHandlerLambda(it, __FILE__, __LINE__);
 
                 if (operatorsTrie[operatorIdx].payload==payload_invalid)
@@ -886,6 +981,24 @@ int main(int argc, char* argv[])
 
                 parsingHandlerLambda(curPayload, tokenStartIt, it); // выплюнули
                 tokenStartIt = it; // Сохранили начало нового токена
+
+                // Далее у нас всё как начальном состоянии
+                st = stInitial; // на всякий случай, если в stInitial обрабтчике состояние не переустанавливается, а подразумевается, что уже такое и есть
+                goto explicit_initial;
+
+                #if 0
+                if (umba::TheFlags(charClass).oneOf(CharClass::string_literal_prefix))
+                {
+                    pCurrentLiteralParser = checkIsLiteralPrefix(it, itEnd, literalTokenId);
+                    if (pCurrentLiteralParser)
+                    {
+                        tokenStartIt = it;
+                        st = stReadStringLiteral;
+                        goto explicit_readstringliteral;
+                        break;
+                    }
+                }
+
 
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
@@ -916,11 +1029,32 @@ int main(int argc, char* argv[])
                 {
                     return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
+                #endif
+
             } break;
 
-            case stReadUserLiteral:
+            explicit_readstringliteral:
+            case stReadStringLiteral:
             {
-                return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+                externHandlerMessage.clear();
+                auto res = pCurrentLiteralParser->parseChar(it, &nullInserter, &externHandlerMessage);
+
+                if (res==StringLiteralParsingResult::error)
+                {
+                    reportStringLiteralMessageLambda(true /* bErr */ , it, externHandlerMessage);
+                    return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+                }
+
+                if (res==StringLiteralParsingResult::warnContinue || res==StringLiteralParsingResult::warnStop)
+                {
+                   reportStringLiteralMessageLambda(false /* !bErr */ , it, externHandlerMessage);
+                }
+
+                if (res==StringLiteralParsingResult::okStop || res==StringLiteralParsingResult::warnStop)
+                {
+                    parsingHandlerLambda(literalTokenId, tokenStartIt, it); // выплюнули текущий литерал
+                    st = stInitial;
+                }
 
             } break;
 
