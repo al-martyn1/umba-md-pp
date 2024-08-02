@@ -149,9 +149,12 @@ int main(int argc, char* argv[])
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_initializer_list.h"));
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_type_traits.h"));
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/string_plus.h"));
-        inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/rgbquad.h"));
+        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/rgbquad.h"));
 
-        // inputFilename = umba::filename::appendPath(rootPath, "_libs/umba/");
+        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/"));
+
+        inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/marty_decimal/tests/src/regression_tests.cpp"));
+        
     }
 
 
@@ -171,7 +174,7 @@ int main(int argc, char* argv[])
 
 
     {
-        payload_type numberTokenId = UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FIRST;
+        payload_type numberTokenId = UMBA_TOKENIZER_TOKEN_NUMBER_USER_LITERAL_FIRST;
 
         numbersTrieBuilder.addTokenSequence("0b", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN);
         numbersTrieBuilder.addTokenSequence("0B", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN);
@@ -289,7 +292,7 @@ int main(int argc, char* argv[])
         std::cout << "---\n";
     }
 
-#if 1
+#if 0
 
     if (!umba::filesys::readFile(inputFilename, text))
     {
@@ -298,8 +301,11 @@ int main(int argc, char* argv[])
     }
 
 #else
-        //text = "    { return __ils.begin(); }\n";
-        text = "blue  = (argb    ) & 0xFFu;";
+        // text = "    { return __ils.begin(); }\n";
+        // text = "blue  = (argb    ) & 0xFFu;";
+        // text = " i--/* comment */; \n";
+        // text = " i--// comment\n; \n";
+        text = "    DECIMAL_CTOR_TEST( 3.1415  1415            ,     \"3.1415\" );";
 
 #endif
 
@@ -319,14 +325,17 @@ int main(int argc, char* argv[])
         stReadNumberPrefix        ,
         stReadNumber              ,
         stReadNumberFloat         ,
+        stReadNumberMayBeFloat    ,
         stReadOperator            ,
         stReadSingleLineComment   ,
         stReadMultilineLineComment,
-        stReadStringLiteral
+        stReadStringLiteral       ,
+        stContinuationWaitLinefeed
 
     };
 
     State st = stInitial;
+    State stEscapeSaved = stInitial;
 
     auto getStateStr = [](State s)
     {
@@ -338,9 +347,13 @@ int main(int argc, char* argv[])
             case stReadNumberPrefix        : return std::string("ReadNumberPrefix");
             case stReadNumber              : return std::string("ReadNumber");
             case stReadNumberFloat         : return std::string("ReadNumberFloat");
+            case stReadNumberMayBeFloat    : return std::string("ReadNumberMayBeFloat");
             case stReadOperator            : return std::string("ReadOperator");
             case stReadSingleLineComment   : return std::string("ReadSingleLineComment");
             case stReadMultilineLineComment: return std::string("ReadMultilineLineComment");
+            case stReadStringLiteral       : return std::string("ReadStringLiteral");
+            case stContinuationWaitLinefeed: return std::string("ContinuationWaitLinefeed");
+            
             default:                         return std::string("<UNKNOWN>");
         }
     };
@@ -353,9 +366,7 @@ int main(int argc, char* argv[])
             case UMBA_TOKENIZER_TOKEN_LINEFEED            : return std::string("LINEFEED");
             case UMBA_TOKENIZER_TOKEN_SPACE               : return std::string("SPACE");
             case UMBA_TOKENIZER_TOKEN_IDENTIFIER          : return std::string("IDENTIFIER");
-            case UMBA_TOKENIZER_TOKEN_NUMBER              : return std::string("NUMBER");
             case UMBA_TOKENIZER_TOKEN_SEMIALPHA           : return std::string("SEMIALPHA");
-            case UMBA_TOKENIZER_TOKEN_FLOAT_NUMBER        : return std::string("FLOAT_NUMBER");
             case UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_OPEN  : return std::string("KIND_OF_BRACKET");
             case UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_CLOSE : return std::string("KIND_OF_BRACKET");
             case UMBA_TOKENIZER_TOKEN_ROUND_BRACKET_OPEN  : return std::string("KIND_OF_BRACKET");
@@ -369,14 +380,26 @@ int main(int argc, char* argv[])
             //case : return std::string("");
             default:
 
+                if (p>=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_LAST)
+                {
+                    if (p&UMBA_TOKENIZER_TOKEN_FLOAT_FLAG)
+                        return std::string("KIND_OF_FLOAT_NUMBER");
+                    else
+                        return std::string("KIND_OF_NUMBER");
+                }
+                    
                 if (p>=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_FIRST && p<=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_LAST)
                     return std::string("KIND_OF_SINGLE_LINE_COMMENT");
-                if (p>=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_TOTAL_LAST)
+
+                if (p>=UMBA_TOKENIZER_TOKEN_NUMBER_USER_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_NUMBER_USER_LITERAL_LAST)
                     return std::string("KIND_OF_NUMBER");
+
                 if (p>=UMBA_TOKENIZER_TOKEN_OPERATOR_FIRST && p<=UMBA_TOKENIZER_TOKEN_OPERATOR_LAST)
                     return std::string("KIND_OF_OPERATOR");
+
                 if (p>=UMBA_TOKENIZER_TOKEN_STRING_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_STRING_LITERAL_LAST)
                     return std::string("KIND_OF_STRING_LITERAL");
+
                 return std::string("");
         }
     };
@@ -404,7 +427,12 @@ int main(int argc, char* argv[])
         else
         {
             curPosAtLineBeginning = false; // Для поддержки однострочного комента только в начале строки
-            cout << ", " << getTokenStr(tokenType) << ", '" << makeString(b, e) << "'";
+            cout << ", ";
+            if (tokenType==UMBA_TOKENIZER_TOKEN_ESCAPE || tokenType==UMBA_TOKENIZER_TOKEN_LINE_CONTINUATION)
+                cout << umba::escapeStringC(getTokenStr(tokenType));
+            else
+               cout << getTokenStr(tokenType);
+            cout << ", '" << makeString(b, e) << "'";
         }
 
         cout << ", state: " << getStateStr(st) << ", in data location " << umba::makeSimpleTextPositionInfoString<std::string>(curPos) << "\n";
@@ -422,20 +450,11 @@ int main(int argc, char* argv[])
         else
             errMarkerStr[errPos.symbolOffset] = '^';
         cout << "    |" << errMarkerStr << "|\n";
-        // cout << "    |" << std::string(errPos.symbolOffset, ' ') << "^";
-        // if (erroneousLineText.size()>(errPos.symbolOffset+1))
-        //     cout << std::string(erroneousLineText.size()-(errPos.symbolOffset+1), ' ');
-        // cout << "|\n";
 
         if (it!=PosCountingIterator())
         {
             char ch = *it;
-            cout << "ch: ";
-            if (ch>=' ')
-               cout << "'" << (char)ch << "'";
-            else
-               cout << " " << (unsigned)(unsigned char)ch;
-            cout << "\n";
+            cout << "ch: " << umba::escapeStringC(std::string(1,ch)) << "\n";
         }
         cout << "At " << srcFile << ":" << srcLine << "\n";
         cout << "State: " << getStateStr(st) << "\n";
@@ -465,6 +484,11 @@ int main(int argc, char* argv[])
     // cout << text << "\n";
     // cout << "---\n";
 
+
+    // stContinuationWaitLinefeed
+    const bool processLineContinuation        = true;
+    const bool processCommentLineContinuation = true;
+    const bool warnCommentLineContinuation    = true;
 
     PosCountingIterator tokenStartIt;
     trie_index_type operatorIdx = trie_index_invalid;
@@ -566,6 +590,23 @@ int main(int argc, char* argv[])
         }
     };
 
+    auto processEscapeSymbolLambda = [&](auto it)
+    {
+        if (processLineContinuation)
+        {
+            tokenStartIt = it;
+            stEscapeSaved = st;
+            st = stContinuationWaitLinefeed;
+        }
+        else
+        {
+            parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_ESCAPE, it, it+1); // выплюнули
+            st = stInitial;
+        }
+    };
+
+
+
     ITokenizerLiteralParser<char>* pCurrentLiteralParser = 0;
     payload_type literalTokenId = 0;
     std::string externHandlerMessage;
@@ -578,10 +619,8 @@ int main(int argc, char* argv[])
         for(; idx!=trie_index_invalid && it!=end; ++it)
         {
             auto nextIdx = tokenTrieFindNext(literalsTrie, idx, *it);
-            if (nextIdx==trie_index_invalid)
+            if (nextIdx==trie_index_invalid) // Дошли до конца, проверяем предыдущий индекс
             {
-                // Дошли до конца
-                // Проверяем предыдущий индекс
                 if (literalsTrie[idx].payload==payload_invalid)
                     return 0;
                 literalToken = literalsTrie[idx].payload;
@@ -597,6 +636,22 @@ int main(int argc, char* argv[])
         return 0;
     };
 
+    auto checkIsNumericPrefix = [&](auto it, auto end)
+    {
+        auto idx = tokenTrieFindNext(numbersTrie, trie_index_invalid, *it);
+        for(; idx!=trie_index_invalid && it!=end; ++it)
+        {
+            auto nextIdx = tokenTrieFindNext(numbersTrie, idx, *it);
+            if (nextIdx==trie_index_invalid) // Дошли до конца, проверяем предыдущий индекс
+                return literalsTrie[idx].payload;
+            idx = nextIdx;
+        }
+        return trie_index_invalid;
+    };
+
+
+    //numbersTrie
+
 
     auto itBegin = PosCountingIterator(text.data(), text.size());
     auto itEnd   = PosCountingIterator();
@@ -607,9 +662,32 @@ int main(int argc, char* argv[])
 
         switch(st)
         {
+            //------------------------------
             explicit_initial:
             case stInitial:
             {
+
+                // st = stReadNumber;
+                // numbersBase = numberDefaultBase;
+                // allowedDigitCharClass = CharClass::digit;
+                // if (utils::isNumberHexDigitsAllowed(numbersBase))
+                //     allowedDigitCharClass |= CharClass::xdigit;
+
+                if (ch==(std::decay_t<decltype(ch)>)'.')
+                {
+                    st = stReadNumberMayBeFloat;
+                    tokenStartIt = it;
+			        numberPrefixIdx = trie_index_invalid;
+			        numberTokenId = 0;
+			        numberReadedDigits = 0;
+			        numberExplicitBase = 0;
+                    numbersBase = numberDefaultBase;
+                    allowedDigitCharClass = CharClass::digit;
+                    if (utils::isNumberHexDigitsAllowed(numbersBase))
+                        allowedDigitCharClass |= CharClass::xdigit;
+                    break;
+                }
+
                 if (umba::TheFlags(charClass).oneOf(CharClass::string_literal_prefix))
                 {
                     pCurrentLiteralParser = checkIsLiteralPrefix(it, itEnd, literalTokenId);
@@ -654,6 +732,10 @@ int main(int argc, char* argv[])
                 {
                     parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
                 }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::escape))
+                {
+                    processEscapeSymbolLambda(it);
+                }
                 else
                 {
                     return unexpectedHandlerLambda(it, __FILE__, __LINE__);
@@ -662,13 +744,32 @@ int main(int argc, char* argv[])
                 //if ((charClass::linefeed))
             } break;
 
+
+            //------------------------------
             case stReadSpace:
             {
+                if (ch==(std::decay_t<decltype(ch)>)'.')
+                {
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
+                    st = stReadNumberMayBeFloat;
+                    tokenStartIt = it;
+			        numberPrefixIdx = trie_index_invalid;
+			        numberTokenId = 0;
+			        numberReadedDigits = 0;
+			        numberExplicitBase = 0;
+                    numbersBase = numberDefaultBase;
+                    allowedDigitCharClass = CharClass::digit;
+                    if (utils::isNumberHexDigitsAllowed(numbersBase))
+                        allowedDigitCharClass |= CharClass::xdigit;
+                    break;
+                }
+
                 if (umba::TheFlags(charClass).oneOf(CharClass::string_literal_prefix))
                 {
                     pCurrentLiteralParser = checkIsLiteralPrefix(it, itEnd, literalTokenId);
                     if (pCurrentLiteralParser)
                     {
+                        parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
                         tokenStartIt = it;
                         st = stReadStringLiteral;
                         goto explicit_readstringliteral;
@@ -722,12 +823,19 @@ int main(int argc, char* argv[])
                     parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
                     st = stInitial;
                 }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::escape))
+                {
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
+                    processEscapeSymbolLambda(it);
+                }
                 else
                 {
                     return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 }
             } break;
 
+
+            //------------------------------
             case stReadIdentifier:
             {
                 if (umba::TheFlags(charClass).oneOf(CharClass::identifier, CharClass::identifier_first))
@@ -768,6 +876,10 @@ int main(int argc, char* argv[])
                 {
                     if (!performProcessBracketLambda(ch, it))
                         return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+                }
+                else if (umba::TheFlags(charClass).oneOf(CharClass::escape))
+                {
+                    processEscapeSymbolLambda(it);
                 }
                 else
                 {
@@ -832,6 +944,15 @@ int main(int argc, char* argv[])
                         break;
                     }
 
+                    if (umba::TheFlags(charClass).oneOf(CharClass::escape))
+                    {
+                        // Проблема будет, если на половине префикса пришел эскейп. Или не будет. В общем, если и будет, то выше выдадут ошибку, и в здравом уме никто такое не напишет в сорцах
+                        parsingHandlerLambda(numberTokenId, tokenStartIt, it); // выплёвываем префикс как число
+                        processEscapeSymbolLambda(it);
+                        break;
+                    }
+
+
                     if (requiresDigits)
                         return unexpectedHandlerLambda(it, __FILE__, __LINE__); // нужна хоть одна цифра, а её нет
 
@@ -848,12 +969,18 @@ int main(int argc, char* argv[])
 
             case stReadNumber:
             {
+                if (ch==(std::decay_t<decltype(ch)>)'.')
+                {
+                    st = stReadNumberFloat;
+                    break;
+                }
+
                 if (umba::TheFlags(charClass).oneOf(allowedDigitCharClass) && utils::isDigitAllowed(ch, numbersBase))
                 {
                     break; // Тут у нас годная цифра
                 }
 
-                if (numbersAllowDigitsSeparator && ch=='\'')
+                if (numbersAllowDigitsSeparator && ch==(std::decay_t<decltype(ch)>)'\'')
                 {
                     break; // Тут у нас разделитель разрядов
                 }
@@ -863,6 +990,12 @@ int main(int argc, char* argv[])
                 else
                     parsingHandlerLambda(numberTokenId, tokenStartIt, it); // выплёвываем накопленное число с явно указанной системой счисления
 
+                if (umba::TheFlags(charClass).oneOf(CharClass::escape))
+                {
+                    processEscapeSymbolLambda(it);
+                    break;
+                }
+
                 numberTokenId = 0;
                 //return unexpectedHandlerLambda(it, __FILE__, __LINE__);
                 // Далее у нас всё как начальном состоянии
@@ -871,15 +1004,74 @@ int main(int argc, char* argv[])
 
             } break;
 
-            case stReadNumberFloat:
+            
+            case stReadNumberMayBeFloat:
             {
-                return unexpectedHandlerLambda(it, __FILE__, __LINE__);
+                if (umba::TheFlags(charClass).oneOf(CharClass::escape))
+                {
+                    processEscapeSymbolLambda(it); // !!! Вот тут гавно какое-то получится, надо подумать
+                    break;
+                }
+
+                if (umba::TheFlags(charClass).oneOf(allowedDigitCharClass) && utils::isDigitAllowed(ch, numbersBase))
+                {
+                    break; // Тут у нас годная цифра
+                }
+
+                CharClass dotCharClass = charClassTable[charToCharClassTableIndex((std::decay_t<decltype(ch)>)'.')];
+
+                if (umba::TheFlags(dotCharClass).oneOf(CharClass::opchar)) // Точка - операторный символ?
+                {
+                    if (!performStartReadingOperatorLambda((std::decay_t<decltype(ch)>)'.', tokenStartIt)) 
+                        return unexpectedHandlerLambda(tokenStartIt, __FILE__, __LINE__); // но у нас нет операторов, начинающихся с точки
+                    goto explicit_readoperator; // Надо обработать текущий символ
+                }
+                else // точка - не операторный символ, и не начало дробной части плавающего числа
+                {
+                    return unexpectedHandlerLambda(tokenStartIt, __FILE__, __LINE__);
+                }
+
+                st = stReadNumberFloat;
+
+                goto explicit_readnumberfloat; // Текущий символ таки надо обработать
 
             } break;
 
 
+            explicit_readnumberfloat:
+            case stReadNumberFloat:
+            {
+                if (umba::TheFlags(charClass).oneOf(CharClass::escape))
+                {
+                    processEscapeSymbolLambda(it); // !!! Вот тут гавно какое-то получится, надо подумать
+                    break;
+                }
+
+                if (umba::TheFlags(charClass).oneOf(allowedDigitCharClass) && utils::isDigitAllowed(ch, numbersBase))
+                {
+                    break; // Тут у нас годная цифра
+                }
+
+                if (numberTokenId==0 || numberTokenId==payload_invalid)
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_NUMBER|UMBA_TOKENIZER_TOKEN_FLOAT_FLAG, tokenStartIt, it); // выплёвываем накопленное число с системой счисления по умолчанию
+                else
+                    parsingHandlerLambda(numberTokenId|UMBA_TOKENIZER_TOKEN_FLOAT_FLAG, tokenStartIt, it); // выплёвываем накопленное число с явно указанной системой счисления
+
+                st = stInitial; // на всякий случай, если в stInitial обрабтчике состояние не переустанавливается, а подразумевается, что уже такое и есть
+                goto explicit_initial;
+
+            } break;
+
+
+            explicit_readoperator:
             case stReadOperator:
             {
+                if (umba::TheFlags(charClass).oneOf(CharClass::escape))
+                {
+                    processEscapeSymbolLambda(it); // !!! Вот тут гавно какое-то получится, надо подумать
+                    break;
+                }
+
                 if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
                 {
                     auto nextOperatorIdx = tokenTrieFindNext(operatorsTrie, operatorIdx, (token_type)ch);
@@ -950,6 +1142,7 @@ int main(int argc, char* argv[])
             explicit_readstringliteral:
             case stReadStringLiteral:
             {
+                // литералы сами ловят хвостовой escape, если умеют
                 externHandlerMessage.clear();
                 auto res = pCurrentLiteralParser->parseChar(it, &nullInserter, &externHandlerMessage);
 
@@ -966,7 +1159,7 @@ int main(int argc, char* argv[])
 
                 if (res==StringLiteralParsingResult::okStop || res==StringLiteralParsingResult::warnStop)
                 {
-                    parsingHandlerLambda(literalTokenId, tokenStartIt, it); // выплюнули текущий литерал
+                    parsingHandlerLambda(literalTokenId, tokenStartIt, it+1); // выплюнули текущий литерал
                     st = stInitial;
                 }
 
@@ -974,6 +1167,18 @@ int main(int argc, char* argv[])
 
             case stReadSingleLineComment:
             {
+
+                if (umba::TheFlags(charClass).oneOf(CharClass::escape))
+                {
+                    parsingHandlerLambda(commentTokenId, commentStartIt, it);
+                    processEscapeSymbolLambda(it);
+                    break;
+                }
+
+    // stContinuationWaitLinefeed
+    // const bool processLineContinuation        = true;
+    // const bool processCommentLineContinuation = true;
+    // const bool warnCommentLineContinuation    = true;
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
                     //TODO: !!! Разобраться с continuation
@@ -1015,6 +1220,24 @@ int main(int argc, char* argv[])
             } break;
 
 
+            case stContinuationWaitLinefeed:
+            {
+                if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
+                {
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINE_CONTINUATION, tokenStartIt, it+1);
+                    st = stEscapeSaved;
+                    tokenStartIt = it+1;
+                    break;
+                }
+                else
+                {
+                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_ESCAPE, tokenStartIt, it);
+                    st = stInitial;
+                    goto explicit_initial;
+                }
+            }
+
+
             default:
             {
                 return unexpectedHandlerLambda(it, __FILE__, __LINE__);
@@ -1030,8 +1253,8 @@ int main(int argc, char* argv[])
 
 /* TODO по токенизеру.
    1) [X] Конец многострочного коментария - ищем просто как текст, а не оператор, да, вложенность не поддерживаем
-   2) [ ] Многострочник (стартовый) может быть продолжением любого существующего оператора, значит, его надо добавлять как суффикс ко всем операторам, заводить отдельный токен под это дело, и как-то разруливать ситуацию - "-/*"
-   3) [ ] Однострочники тоже могут быть такими подлыми
+   2) [X] На самом деле работает вполне и как сейчас сделано. Многострочник (стартовый) может быть продолжением любого существующего оператора, значит, его надо добавлять как суффикс ко всем операторам, заводить отдельный токен под это дело, и как-то разруливать ситуацию - "-/*"
+   3) [X] На самом деле работает вполне и как сейчас сделано. Однострочники тоже могут быть такими подлыми
    4) [X] Однострочник только в начале строки? Надо ли? Чтобы распарсить какой-нибудь существующий язык - надо
    5) [ ] Разобраться с continuation в однострочнике
    6) [ ] Числа с плавающей запятой
