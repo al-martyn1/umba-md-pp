@@ -292,7 +292,7 @@ int main(int argc, char* argv[])
         std::cout << "---\n";
     }
 
-#if 0
+#if 1
 
     if (!umba::filesys::readFile(inputFilename, text))
     {
@@ -305,7 +305,7 @@ int main(int argc, char* argv[])
         // text = "blue  = (argb    ) & 0xFFu;";
         // text = " i--/* comment */; \n";
         // text = " i--// comment\n; \n";
-        text = "    DECIMAL_CTOR_TEST( 3.1415  1415            ,     \"3.1415\" );";
+        text = "    DECIMAL_CTOR_TEST( 3.1415  1415 0x1415   ,     \"3.1415\" );";
 
 #endif
 
@@ -487,8 +487,8 @@ int main(int argc, char* argv[])
 
     // stContinuationWaitLinefeed
     const bool processLineContinuation        = true;
-    const bool processCommentLineContinuation = true;
-    const bool warnCommentLineContinuation    = true;
+    // const bool processCommentLineContinuation = true;
+    // const bool warnCommentLineContinuation    = true;
 
     PosCountingIterator tokenStartIt;
     trie_index_type operatorIdx = trie_index_invalid;
@@ -887,6 +887,8 @@ int main(int argc, char* argv[])
                 }
             } break;
 
+
+            //------------------------------
             case stReadNumberPrefix:
             {
                 //NOTE: !!! У нас пока так: префикс числа начинается с любой цифры, потом могут следовать любые символы, после префикса - те символы, которые разрешены префиксом
@@ -907,22 +909,32 @@ int main(int argc, char* argv[])
                     {
                         // Надо проверить, является ли то, что уже есть, чисто числом
                         // int charToDigit(CharType ch)
+
+                        numbersBase = numberDefaultBase;
+                        allowedDigitCharClass = CharClass::digit;
+                        if (utils::isNumberHexDigitsAllowed(numbersBase))
+                            allowedDigitCharClass |= CharClass::xdigit;
+
                         tokenTrieBackTrace( numbersTrie
                                           , numberPrefixIdx
                                           , [&](token_type ch)
                                             {
-                                                int d = utils::charToDigit(ch);
-                                                if (d<0 || d>9)
+                                                if (!utils::isDigitAllowed(ch, numbersBase))
                                                     prefixIsNumber = false;
                                             }
                                           );
 
                         if (!prefixIsNumber)
                             return unexpectedHandlerLambda(it, __FILE__, __LINE__);
-                        parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_NUMBER, tokenStartIt, it); // выплёвываем накопленное число как число без префикса, с системой счисления по умолчанию
-                        st = stInitial; // на всякий случай, если в stInitial обрабтчике состояние не переустанавливается, а подразумевается, что уже такое и есть
-                        goto explicit_initial;
+                        //parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_NUMBER, tokenStartIt, it); // выплёвываем накопленное число как число без префикса, с системой счисления по умолчанию
+                        //st = stInitial; // на всякий случай, если в stInitial обрабтчике состояние не переустанавливается, а подразумевается, что уже такое и есть
+                        //goto explicit_initial;
+
+                        st = stReadNumber;
+                        goto explicit_readnumber; // надо обработать текущий символ
                     }
+
+                    // Префикс нашелся
 
                     requiresDigits   = utils::isNumberPrefixRequiresDigits(curPayload);
                     numberPrefixIdx       = trie_index_invalid; // сбрасываем индекс префикса, чтобы потом не париться
@@ -967,6 +979,9 @@ int main(int argc, char* argv[])
 
             } break;
 
+
+            //------------------------------
+            explicit_readnumber:
             case stReadNumber:
             {
                 if (ch==(std::decay_t<decltype(ch)>)'.')
@@ -1005,6 +1020,7 @@ int main(int argc, char* argv[])
             } break;
 
             
+            //------------------------------
             case stReadNumberMayBeFloat:
             {
                 if (umba::TheFlags(charClass).oneOf(CharClass::escape))
@@ -1038,6 +1054,7 @@ int main(int argc, char* argv[])
             } break;
 
 
+            //------------------------------
             explicit_readnumberfloat:
             case stReadNumberFloat:
             {
@@ -1063,6 +1080,7 @@ int main(int argc, char* argv[])
             } break;
 
 
+            //------------------------------
             explicit_readoperator:
             case stReadOperator:
             {
@@ -1139,6 +1157,8 @@ int main(int argc, char* argv[])
 
             } break;
 
+
+            //------------------------------
             explicit_readstringliteral:
             case stReadStringLiteral:
             {
@@ -1165,32 +1185,48 @@ int main(int argc, char* argv[])
 
             } break;
 
+
+            //------------------------------
             case stReadSingleLineComment:
             {
 
                 if (umba::TheFlags(charClass).oneOf(CharClass::escape))
                 {
-                    parsingHandlerLambda(commentTokenId, commentStartIt, it);
-                    processEscapeSymbolLambda(it);
+                    auto nextIt = it+1;
+                    if (nextIt==itEnd)
+                    {
+                        parsingHandlerLambda(commentTokenId, commentStartIt, it);
+                        processEscapeSymbolLambda(it /* , stInitial */ );
+                        break;
+                    }
+
+                    CharClass nextCharClass = charClassTable[charToCharClassTableIndex(*nextIt)];
+                    if (umba::TheFlags(nextCharClass).oneOf(CharClass::linefeed))
+                    {
+                        parsingHandlerLambda(commentTokenId, commentStartIt, it);
+                        processEscapeSymbolLambda(it /* , stInitial */ );
+                        break;
+                    }
+                    
+                    // Если не конец текста и не перевод строки - то слэш просто внутри строки коментария, и ничего делать не надо
                     break;
                 }
-
-    // stContinuationWaitLinefeed
-    // const bool processLineContinuation        = true;
-    // const bool processCommentLineContinuation = true;
-    // const bool warnCommentLineContinuation    = true;
-                if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
+                else if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
                     //TODO: !!! Разобраться с continuation
                     parsingHandlerLambda(commentTokenId, commentStartIt, it);
                     parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
                     st = stInitial;
                 }
-
-                // Иначе - ничего не делаем
+                else
+                {
+                    // Иначе - ничего не делаем
+                }
 
             } break;
 
+
+            //------------------------------
             case stReadMultilineLineComment:
             {
                 // auto nextOperatorIdx = tokenTrieFindNext(operatorsTrie, operatorIdx, (token_type)ch);
@@ -1220,13 +1256,25 @@ int main(int argc, char* argv[])
             } break;
 
 
+            //------------------------------
             case stContinuationWaitLinefeed:
             {
+                // stReadSingleLineComment, stInitial
                 if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
                 {
                     parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINE_CONTINUATION, tokenStartIt, it+1);
+
                     st = stEscapeSaved;
                     tokenStartIt = it+1;
+
+                    // Если у нас был однострочный комент, и linefeed сразу после слеша, то выплёвываем коментарий (уже), выплёвываем continuation,
+                    // и затем не возвращаемся в предыдущее состояние, а в самое начальное
+                    // таким образом, если следующий после continuation токен (помимо пробелов) будет не коментарий
+                    // то всё будет отработано нормально, но можно выдать варнинг, что однострок использует continuation
+                    if (st==stReadSingleLineComment)
+                    {
+                        st = stInitial;
+                    }
                     break;
                 }
                 else
@@ -1238,6 +1286,7 @@ int main(int argc, char* argv[])
             }
 
 
+            //------------------------------
             default:
             {
                 return unexpectedHandlerLambda(it, __FILE__, __LINE__);
@@ -1256,8 +1305,8 @@ int main(int argc, char* argv[])
    2) [X] На самом деле работает вполне и как сейчас сделано. Многострочник (стартовый) может быть продолжением любого существующего оператора, значит, его надо добавлять как суффикс ко всем операторам, заводить отдельный токен под это дело, и как-то разруливать ситуацию - "-/*"
    3) [X] На самом деле работает вполне и как сейчас сделано. Однострочники тоже могут быть такими подлыми
    4) [X] Однострочник только в начале строки? Надо ли? Чтобы распарсить какой-нибудь существующий язык - надо
-   5) [ ] Разобраться с continuation в однострочнике
-   6) [ ] Числа с плавающей запятой
+   5) [X] Разобраться с continuation в однострочнике
+   6) [X] Числа с плавающей запятой
    7) [X] Строки - если встречаем символ с юзер флагом - это маркер строкового префикса - переделал флаг на string_literal_prefix
    8) [X] Юзер-флаг (строковый префикс) - проверять до идентификаторов, потому что префиксы строк могут начинаться с букв.
    9) [ ] После окончания цикла надо проверить текущее состояние, если не stInitial, то что-то сделать
