@@ -21,3 +21,4 @@ $*$.*
 /doc/trie_operators.png
 /doc/trie_operators.svg
 /doc/trie.png
+/tests/test_006/*.txt
