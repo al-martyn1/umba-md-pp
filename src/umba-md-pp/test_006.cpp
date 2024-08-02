@@ -147,9 +147,9 @@ int main(int argc, char* argv[])
 
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/the.h"));
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_initializer_list.h"));
-        inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_type_traits.h"));
+        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_type_traits.h"));
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/string_plus.h"));
-        // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/rgbquad.h"));
+        inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/rgbquad.h"));
 
         // inputFilename = umba::filename::appendPath(rootPath, "_libs/umba/");
     }
@@ -298,7 +298,8 @@ int main(int argc, char* argv[])
     }
 
 #else
-        text = "    { return __ils.begin(); }\n";
+        //text = "    { return __ils.begin(); }\n";
+        text = "blue  = (argb    ) & 0xFFu;";
 
 #endif
 
@@ -617,7 +618,6 @@ int main(int argc, char* argv[])
                         tokenStartIt = it;
                         st = stReadStringLiteral;
                         goto explicit_readstringliteral;
-                        break;
                     }
                 }
 
@@ -672,7 +672,6 @@ int main(int argc, char* argv[])
                         tokenStartIt = it;
                         st = stReadStringLiteral;
                         goto explicit_readstringliteral;
-                        break;
                     }
                 }
 
@@ -748,7 +747,6 @@ int main(int argc, char* argv[])
                         tokenStartIt = it;
                         st = stReadStringLiteral;
                         goto explicit_readstringliteral;
-                        break;
                     }
                 }
 
@@ -844,45 +842,6 @@ int main(int argc, char* argv[])
                     st = stInitial; // на всякий случай, если в stInitial обрабтчике состояние не переустанавливается, а подразумевается, что уже такое и есть
                     goto explicit_initial;
 
-                    #if 0
-                    if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
-                    {
-                        parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
-                    }
-                    else if (umba::TheFlags(charClass).oneOf(CharClass::space))
-                    {
-                        tokenStartIt = it;
-                        st = stReadSpace;
-                    }
-                    else if (umba::TheFlags(charClass).oneOf(CharClass::opchar))
-                    {
-                        if (!performStartReadingOperatorLambda(ch, it))
-                            return unexpectedHandlerLambda(it, __FILE__, __LINE__);
-                    }
-                    else if (umba::TheFlags(charClass).oneOf(CharClass::identifier_first))
-                    {
-                        //parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it); // выплюнули
-                        tokenStartIt = it;
-                        st = stReadIdentifier;
-                    }
-                    else if (umba::TheFlags(charClass).oneOf(CharClass::digit))
-                    {
-                        performStartReadingNumberLambda(ch, it);
-                    }
-                    else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
-                    {
-                        if (!performProcessBracketLambda(ch, it))
-                            return unexpectedHandlerLambda(it, __FILE__, __LINE__);
-                    }
-                    else if (umba::TheFlags(charClass).oneOf(CharClass::semialpha))
-                    {
-                        parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SEMIALPHA, it, it+1); // выплюнули
-                    }
-                    else
-                    {
-                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
-                    }
-                    #endif
                 }
 
             } break;
@@ -986,51 +945,6 @@ int main(int argc, char* argv[])
                 st = stInitial; // на всякий случай, если в stInitial обрабтчике состояние не переустанавливается, а подразумевается, что уже такое и есть
                 goto explicit_initial;
 
-                #if 0
-                if (umba::TheFlags(charClass).oneOf(CharClass::string_literal_prefix))
-                {
-                    pCurrentLiteralParser = checkIsLiteralPrefix(it, itEnd, literalTokenId);
-                    if (pCurrentLiteralParser)
-                    {
-                        tokenStartIt = it;
-                        st = stReadStringLiteral;
-                        goto explicit_readstringliteral;
-                        break;
-                    }
-                }
-
-
-                if (umba::TheFlags(charClass).oneOf(CharClass::linefeed))
-                {
-                    parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_LINEFEED, it, it+1); // Перевод строки мы всегда отдельно выплёвываем
-                    st = stInitial;
-                }
-                else if (umba::TheFlags(charClass).oneOf(CharClass::space))
-                {
-                    st = stReadSpace;
-                }
-                else if (umba::TheFlags(charClass).oneOf(CharClass::identifier_first))
-                {
-                    st = stReadIdentifier;
-                }
-                else if (umba::TheFlags(charClass).oneOf(CharClass::digit))
-                {
-                    performStartReadingNumberLambda(ch, it);
-                }
-                else if (umba::TheFlags(charClass).oneOf(CharClass::open, CharClass::close)) // Открывающая или закрывающая скобка
-                {
-                    auto idx = tokenTrieFindNext(bracketsTrie, trie_index_invalid, (token_type)ch);
-                    if (idx==trie_index_invalid)
-                        return unexpectedHandlerLambda(it, __FILE__, __LINE__);
-                    parsingHandlerLambda(bracketsTrie[idx].payload, it, it+1); // выплюнули
-                    st = stInitial;
-                }
-                else
-                {
-                    return unexpectedHandlerLambda(it, __FILE__, __LINE__);
-                }
-                #endif
-
             } break;
 
             explicit_readstringliteral:
@@ -1100,6 +1014,7 @@ int main(int argc, char* argv[])
 
             } break;
 
+
             default:
             {
                 return unexpectedHandlerLambda(it, __FILE__, __LINE__);
@@ -1107,15 +1022,6 @@ int main(int argc, char* argv[])
 
         }
 
-        // char ch = *it;
-        // if (ch>=' ')
-        //    cout << "'" << (char)ch << "'";
-        // else
-        //    cout << " " << (unsigned)(unsigned char)ch;
-        //
-        // cout << "  ";
-        // printPos(it.getPosition());
-        // cout << "\n";
     }
 
     return 0;
@@ -1129,8 +1035,8 @@ int main(int argc, char* argv[])
    4) [X] Однострочник только в начале строки? Надо ли? Чтобы распарсить какой-нибудь существующий язык - надо
    5) [ ] Разобраться с continuation в однострочнике
    6) [ ] Числа с плавающей запятой
-   7) [ ] Строки - если встречаем символ с юзер флагом - это маркер строкового префикса
-   8) [ ] Юзер-флаг (строковый префикс) - проверять до идентификаторов, потому что префиксы строк могут начинаться с букв.
+   7) [X] Строки - если встречаем символ с юзер флагом - это маркер строкового префикса - переделал флаг на string_literal_prefix
+   8) [X] Юзер-флаг (строковый префикс) - проверять до идентификаторов, потому что префиксы строк могут начинаться с букв.
    9) [ ] После окончания цикла надо проверить текущее состояние, если не stInitial, то что-то сделать
 
 
