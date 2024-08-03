@@ -612,7 +612,7 @@ int main(int argc, char* argv[])
     ITokenizerLiteralParser<char>* pCurrentLiteralParser = 0;
     payload_type literalTokenId = 0;
     std::string externHandlerMessage;
-    ITokenizerLiteralCharNulInserterImpl<char> nullInserter;
+    TokenizerLiteralCharNulInserterImpl<char> nullInserter;
     //std::string ;
 
     auto checkIsLiteralPrefix = [&](auto it, auto end, payload_type &literalToken) -> ITokenizerLiteralParser<char>*
@@ -1296,7 +1296,7 @@ int main(int argc, char* argv[])
 
         }
 
-    }
+    } // end for
 
     return 0;
 }
