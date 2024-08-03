@@ -239,9 +239,9 @@ int main(int argc, char* argv[])
         auto pILiteralParserCppEscpdSmpQtdStr = static_cast<umba::tokenizer::ITokenizerLiteralParser<char>* >(&cppEscapedSimpleQuotedStringLiteralParser);
 
         literalsTrieBuilder.addTokenSequence("\'", UMBA_TOKENIZER_TOKEN_CHAR_LITERAL  )
-            .payloadFlags = reinterpret_cast<umba::tokenizer::payload_type>(pILiteralParserCppEscpdSmpQtdStr);
+            .payloadExtra = reinterpret_cast<umba::tokenizer::payload_type>(pILiteralParserCppEscpdSmpQtdStr);
         literalsTrieBuilder.addTokenSequence("\"", UMBA_TOKENIZER_TOKEN_STRING_LITERAL)
-            .payloadFlags = reinterpret_cast<umba::tokenizer::payload_type>(pILiteralParserCppEscpdSmpQtdStr);
+            .payloadExtra = reinterpret_cast<umba::tokenizer::payload_type>(pILiteralParserCppEscpdSmpQtdStr);
     }
 
 
@@ -313,6 +313,8 @@ int main(int argc, char* argv[])
     std::cout << "---\n";
 
     using PosCountingIterator = umba::iterator::TextPositionCountingIterator<char>;
+
+    std::cout << "sizeof TextPositionCountingIterator: " << sizeof(umba::iterator::TextPositionCountingIterator<char>) << " bytes\n";
 
 // #define UMBA_TOKENIZER_TOKEN_LINEFEED                                          1u
 // #define UMBA_TOKENIZER_TOKEN_SPACE                                             2u
@@ -491,7 +493,7 @@ int main(int argc, char* argv[])
     // const bool warnCommentLineContinuation    = true;
 
     PosCountingIterator tokenStartIt;
-    trie_index_type operatorIdx = trie_index_invalid;
+    trie_index_type     operatorIdx = trie_index_invalid;
 
     const bool numbersAllowDigitsSeparator = true; // apos ' (39/0x27) only can be used, это пока const, а вообще - это внешне задаваемая опция
     const int numberDefaultBase = 10; // это пока const, а вообще - это внешне задаваемая опция
@@ -624,7 +626,7 @@ int main(int argc, char* argv[])
                 if (literalsTrie[idx].payload==payload_invalid)
                     return 0;
                 literalToken = literalsTrie[idx].payload;
-                auto pParser = reinterpret_cast<ITokenizerLiteralParser<char>*>(literalsTrie[idx].payloadFlags);
+                auto pParser = reinterpret_cast<ITokenizerLiteralParser<char>*>(literalsTrie[idx].payloadExtra);
                 if (pParser)
                     pParser->reset();
                 return pParser;
