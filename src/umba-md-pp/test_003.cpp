@@ -1,5 +1,5 @@
 /*! \file
-    \brief Тесты токенизера
+    \brief Тесты TrieBuilder'а
  */
 
 // #define UMBA_TOKENIZER_TYPES_COMPACT

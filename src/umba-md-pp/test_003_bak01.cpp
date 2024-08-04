@@ -1,5 +1,5 @@
 /*! \file
-    \brief
+    \brief Наброски построения плоско-векторного trie из мапы
  */
 
 #define UMBA_TOKENISER_DISABLE_UMBA_TOKENISER_GET_CHAR_CLASS_FUNCTION

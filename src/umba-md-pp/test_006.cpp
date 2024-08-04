@@ -1,5 +1,5 @@
 /*! \file
-    \brief
+    \brief "Грязная" тестовая POC реализация токенизера
  */
 
 #include "umba/umba.h"

@@ -1,5 +1,5 @@
 /*! \file
-    \brief
+    \brief Тест финальной реализации TokenizerBuilder'а и Tokenizer'а
  */
 
 #include "umba/umba.h"
@@ -23,9 +23,46 @@
 using std::cout;
 using std::cerr;
 
+// using tokenizer_type         = typename umba::tokenizer::TokenizerBuilder<char>::tokenizer_type;
+// using char_class_table_type  = typename tokenizer_type::char_class_table_type;
+// using trie_vector_type       = typename tokenizer_type::trie_vector_type    ;
+// using string_type            = typename tokenizer_type::string_type         ;
+// using iterator_type          = typename tokenizer_type::iterator_type       ;
+// using messages_string_type   = typename tokenizer_type::messages_string_type;
+//  
+//  
+// auto getCharClassTable()
+// {
+//     char_class_table_type res;
+//     return res;
+// }
+//  
+// auto getTrieVector()
+// {
+//     trie_vector_type res;
+//     return res;
+// }
+//  
+// auto getString()
+// {
+//     string_type res;
+//     return res;
+// }
+//  
+// auto getIterator()
+// {
+//     iterator_type res;
+//     return res;
+// }
+
 
 int main(int argc, char* argv[])
 {
+    // auto t1 = getCharClassTable();
+    // auto t2 = getTrieVector();
+    // auto t3 = getString();
+    // auto t4 = getIterator();
+
     using namespace umba::tokenizer;
 
     std::string text;
@@ -108,7 +145,9 @@ int main(int argc, char* argv[])
 
     umba::tokenizer::CppEscapedSimpleQuotedStringLiteralParser<char>  cppEscapedSimpleQuotedStringLiteralParser;
 
-    auto tokenizer = TokenizerBuilder<char>().addNumbersPrefix("0b", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN)                                                     
+    auto tokenizer = TokenizerBuilder<char>().generateStandardCharClassTable()
+
+                                             .addNumbersPrefix("0b", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN)                                                     
                                              .addNumbersPrefix("0B", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN)                                                     
 
                                              .addNumbersPrefix("0d", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DEC)                                                     
@@ -148,9 +187,10 @@ int main(int argc, char* argv[])
 // using PosCountingIterator = umba::iterator::TextPositionCountingIterator<char>;
 
     //using tokenizer_type      = std::decay<decltype(tokenizer)>;
-    using tokenizer_type      = decltype(tokenizer);
-    using InputIteratorType   = typename tokenizer_type::iterator_type;
-    using tokenizer_char_type = typename tokenizer_type::value_type;
+    using tokenizer_type       = decltype(tokenizer);
+    using InputIteratorType    = typename tokenizer_type::iterator_type;
+    using tokenizer_char_type  = typename tokenizer_type::value_type;
+    using messages_string_type = typename tokenizer_type::messages_string_type;
 
     tokenizer.tokenHandler = [&](payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData) -> void
                              {
@@ -182,6 +222,74 @@ int main(int argc, char* argv[])
                                  cout << /*", state: " << getStateStr(st) <<*/ ", in data location " << curPos.toString<std::string>() << "\n";
                              };
 
+    tokenizer.unexpectedHandler = [&](InputIteratorType it, InputIteratorType itEnd, const char* srcFile, int srcLine) -> bool
+                             {
+                                 if (it==itEnd)
+                                 {
+                                     cout << "Unexpected end of file";
+                                     return false;
+                                 }
+
+                                 auto errPos = it.getPosition(true); // с поиском конца строки (а вообще не надо пока, но пусть)
+                                 std::string erroneousLineText = umba::iterator::makeString(it.getLineStartIterator(), it.getLineEndIterator());
+                                 cout << "Unexpected at " << inputFilename << ":" << errPos.toString<std::string>() << "\n";
+                                 cout << "Line:" << erroneousLineText << "\n";
+                                 auto errMarkerStr = std::string(erroneousLineText.size(), ' ');
+                                 if (errPos.symbolOffset>=errMarkerStr.size())
+                                     errMarkerStr.append(1,'^');
+                                 else
+                                     errMarkerStr[errPos.symbolOffset] = '^';
+                                 cout << "    |" << errMarkerStr << "|\n";
+                              
+                                 if (it!=InputIteratorType())
+                                 {
+                                     char ch = *it;
+                                     cout << "ch: " << umba::escapeStringC(std::string(1,ch)) << "\n";
+                                 }
+                                 cout << "At " << srcFile << ":" << srcLine << "\n";
+                                 //cout << "State: " << getStateStr(st) << "\n";
+                                 return false;
+                             };
+
+    tokenizer.reportUnknownOperatorHandler = [&](InputIteratorType b, InputIteratorType e)
+                             {
+                                 cout << "Possible unknown operator: '" << umba::iterator::makeString(b, e) << "'\n";
+                             };
+
+    tokenizer.reportStringLiteralMessageHandler = [&](bool bErr, InputIteratorType it, const messages_string_type &msg)
+                             {
+                                 auto errPos = it.getPosition(true); // с поиском конца строки (а вообще не надо пока, но пусть)
+                                 std::string erroneousLineText = umba::iterator::makeString(it.getLineStartIterator(), it.getLineEndIterator());
+                                 cout << (bErr ? "Error: " : "Warning: ") << msg << " at " << inputFilename << ":" << errPos.toString<std::string>() << "\n";
+                                 cout << "Line:" << erroneousLineText << "\n";
+                                 auto errMarkerStr = std::string(erroneousLineText.size(), ' ');
+                                 if (errPos.symbolOffset>=errMarkerStr.size())
+                                     errMarkerStr.append(1,'^');
+                                 else
+                                     errMarkerStr[errPos.symbolOffset] = '^';
+                                 cout << "    |" << errMarkerStr << "|\n";
+                             };
+
+    //  
+    // auto reportPossibleUnknownOperatorLambda = [&](const PosCountingIterator b, const PosCountingIterator &e)
+    // {
+    //     cout << "Possible unknown operator: '" << makeString(b, e) << "'\n";
+    // };
+    //  
+    // auto reportStringLiteralMessageLambda = [&](bool bErr, const PosCountingIterator it, const std::string msg)
+    // {
+    //     auto errPos = it.getPosition(true); // с поиском конца строки (а вообще не надо пока, но пусть)
+    //     std::string erroneousLineText = umba::iterator::makeString(it.getLineStartIterator(), it.getLineEndIterator());
+    //     cout << (bErr ? "Error: " : "Warning: ") << msg << " at " << inputFilename << ":" << umba::makeSimpleTextPositionInfoString<std::string>(errPos) << "\n";
+    //     cout << "Line:" << erroneousLineText << "\n";
+    //     auto errMarkerStr = std::string(erroneousLineText.size(), ' ');
+    //     if (errPos.symbolOffset>=errMarkerStr.size())
+    //         errMarkerStr.append(1,'^');
+    //     else
+    //         errMarkerStr[errPos.symbolOffset] = '^';
+    //     cout << "    |" << errMarkerStr << "|\n";
+    // };
+
 
     auto itBegin = InputIteratorType(text.data(), text.size());
     auto itEnd   = InputIteratorType();
@@ -201,26 +309,7 @@ int main(int argc, char* argv[])
     }
 
 
-
-#if 0
-public: // handler types
-
-    using token_handler_type                         = std::function<void(payload_type, InputIteratorType, InputIteratorType, std::basic_string_view<value_type>)>;
-    using unexpected_handler_type                    = std::function<bool(InputIteratorType, const char*, int)>;
-    using report_unknown_operator_handler_type       = std::function<void(InputIteratorType,InputIteratorType)>;
-    using report_string_literal_message_handler_type = std::function<void(bool, InputIteratorType, const MessagesStringType &)>;
-
-
-//------------------------------
-public: // handlers
-
-    token_handler_type                          tokenHandler                     ;
-    unexpected_handler_type                     unexpectedHandler                ;
-    report_unknown_operator_handler_type        reportUnknownOperatorHandler     ;
-    report_string_literal_message_handler_type  reportStringLiteralMessageHandler;
-#endif
-
-
+    return bOk ? 0 : 1;
 
 }
 
