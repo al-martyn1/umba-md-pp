@@ -416,6 +416,8 @@ int main(int argc, char* argv[])
 
         auto curPos = b.getPosition(); // Выводим позицию начала токена
 
+        //cout << umba::tokenizer::utils::iterator_getRawValueTypePointer(b) << "\n";
+
         cout << "token_type: " << tokenType;
         if (tokenType==UMBA_TOKENIZER_TOKEN_LINEFEED)
         {
