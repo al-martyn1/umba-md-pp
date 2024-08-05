@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/"));
 
         inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/marty_decimal/tests/src/regression_tests.cpp"));
-        
+
     }
 
 
@@ -230,7 +230,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    
+
     umba::tokenizer::CppEscapedSimpleQuotedStringLiteralParser<char>  cppEscapedSimpleQuotedStringLiteralParser;
     {
         generation::setCharClassFlags(charClassTable, '\'', umba::tokenizer::CharClass::string_literal_prefix);
@@ -355,7 +355,7 @@ int main(int argc, char* argv[])
             case stReadMultilineLineComment: return std::string("ReadMultilineLineComment");
             case stReadStringLiteral       : return std::string("ReadStringLiteral");
             case stContinuationWaitLinefeed: return std::string("ContinuationWaitLinefeed");
-            
+
             default:                         return std::string("<UNKNOWN>");
         }
     };
@@ -389,7 +389,7 @@ int main(int argc, char* argv[])
                     else
                         return std::string("KIND_OF_NUMBER");
                 }
-                    
+
                 if (p>=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_FIRST && p<=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_LAST)
                     return std::string("KIND_OF_SINGLE_LINE_COMMENT");
 
@@ -636,7 +636,7 @@ int main(int argc, char* argv[])
 
             idx = nextIdx;
         }
-        
+
         return 0;
     };
 
@@ -681,10 +681,10 @@ int main(int argc, char* argv[])
                 {
                     st = stReadNumberMayBeFloat;
                     tokenStartIt = it;
-			        numberPrefixIdx = trie_index_invalid;
-			        numberTokenId = 0;
-			        numberReadedDigits = 0;
-			        numberExplicitBase = 0;
+                    numberPrefixIdx = trie_index_invalid;
+                    numberTokenId = 0;
+                    numberReadedDigits = 0;
+                    numberExplicitBase = 0;
                     numbersBase = numberDefaultBase;
                     allowedDigitCharClass = CharClass::digit;
                     if (utils::isNumberHexDigitsAllowed(numbersBase))
@@ -757,10 +757,10 @@ int main(int argc, char* argv[])
                     parsingHandlerLambda(UMBA_TOKENIZER_TOKEN_SPACE, tokenStartIt, it);
                     st = stReadNumberMayBeFloat;
                     tokenStartIt = it;
-			        numberPrefixIdx = trie_index_invalid;
-			        numberTokenId = 0;
-			        numberReadedDigits = 0;
-			        numberExplicitBase = 0;
+                    numberPrefixIdx = trie_index_invalid;
+                    numberTokenId = 0;
+                    numberReadedDigits = 0;
+                    numberExplicitBase = 0;
                     numbersBase = numberDefaultBase;
                     allowedDigitCharClass = CharClass::digit;
                     if (utils::isNumberHexDigitsAllowed(numbersBase))
@@ -1023,7 +1023,7 @@ int main(int argc, char* argv[])
 
             } break;
 
-            
+
             //------------------------------
             case stReadNumberMayBeFloat:
             {
@@ -1042,7 +1042,7 @@ int main(int argc, char* argv[])
 
                 if (umba::TheFlags(dotCharClass).oneOf(CharClass::opchar)) // Точка - операторный символ?
                 {
-                    if (!performStartReadingOperatorLambda((std::decay_t<decltype(ch)>)'.', tokenStartIt)) 
+                    if (!performStartReadingOperatorLambda((std::decay_t<decltype(ch)>)'.', tokenStartIt))
                         return unexpectedHandlerLambda(tokenStartIt, __FILE__, __LINE__); // но у нас нет операторов, начинающихся с точки
                     goto explicit_readoperator; // Надо обработать текущий символ
                 }
@@ -1211,7 +1211,7 @@ int main(int argc, char* argv[])
                         processEscapeSymbolLambda(it /* , stInitial */ );
                         break;
                     }
-                    
+
                     // Если не конец текста и не перевод строки - то слэш просто внутри строки коментария, и ничего делать не надо
                     break;
                 }

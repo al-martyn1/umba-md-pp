@@ -29,26 +29,26 @@ using std::cerr;
 // using string_type            = typename tokenizer_type::string_type         ;
 // using iterator_type          = typename tokenizer_type::iterator_type       ;
 // using messages_string_type   = typename tokenizer_type::messages_string_type;
-//  
-//  
+//
+//
 // auto getCharClassTable()
 // {
 //     char_class_table_type res;
 //     return res;
 // }
-//  
+//
 // auto getTrieVector()
 // {
 //     trie_vector_type res;
 //     return res;
 // }
-//  
+//
 // auto getString()
 // {
 //     string_type res;
 //     return res;
 // }
-//  
+//
 // auto getIterator()
 // {
 //     iterator_type res;
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
         // inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/umba/"));
 
         inputFilename = umba::filename::appendPath(rootPath, std::string("_libs/marty_decimal/tests/src/regression_tests.cpp"));
-        
+
     }
 
 #if 1
@@ -147,22 +147,22 @@ int main(int argc, char* argv[])
 
     auto tokenizer = TokenizerBuilder<char>().generateStandardCharClassTable()
 
-                                             .addNumbersPrefix("0b", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN)                                                     
-                                             .addNumbersPrefix("0B", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN)                                                     
+                                             .addNumbersPrefix("0b", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN)
+                                             .addNumbersPrefix("0B", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_BIN)
 
-                                             .addNumbersPrefix("0d", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DEC)                                                     
-                                             .addNumbersPrefix("0D", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DEC)                                                     
+                                             .addNumbersPrefix("0d", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DEC)
+                                             .addNumbersPrefix("0D", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DEC)
 
-                                             .addNumbersPrefix("4x", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_QUAT)                                                     
-                                             .addNumbersPrefix("4X", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_QUAT)                                                     
+                                             .addNumbersPrefix("4x", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_QUAT)
+                                             .addNumbersPrefix("4X", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_QUAT)
 
                                              .addNumbersPrefix("0" , numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_OCT | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FLAG_MISS_DIGIT)
 
-                                             .addNumbersPrefix("12x", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DUOD)                                                    
-                                             .addNumbersPrefix("12X", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DUOD)                                                    
+                                             .addNumbersPrefix("12x", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DUOD)
+                                             .addNumbersPrefix("12X", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_DUOD)
 
-                                             .addNumbersPrefix("0x", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_HEX)                                                      
-                                             .addNumbersPrefix("0X", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_HEX)                                                      
+                                             .addNumbersPrefix("0x", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_HEX)
+                                             .addNumbersPrefix("0X", numberTokenId++ | UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_BASE_HEX)
 
 
                                              .addBrackets("{}", UMBA_TOKENIZER_TOKEN_CURLY_BRACKETS )
@@ -192,14 +192,14 @@ int main(int argc, char* argv[])
     using tokenizer_char_type  = typename tokenizer_type::value_type;
     using messages_string_type = typename tokenizer_type::messages_string_type;
 
-    tokenizer.tokenHandler = [&](payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData) -> void
+    tokenizer.tokenHandler = [&](bool bLineStart, payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData) -> void
                              {
                                  using namespace umba::iterator;
-                         
+
                                  auto curPos = b.getPosition(); // Выводим позицию начала токена
-                         
+
                                  //cout << umba::tokenizer::utils::iterator_getRawValueTypePointer(b) << "\n";
-                         
+
                                  cout << "token_type: " << tokenType;
                                  if (tokenType==UMBA_TOKENIZER_TOKEN_LINEFEED)
                                  {
@@ -218,8 +218,9 @@ int main(int argc, char* argv[])
                                         cout << getTokenizerTokenStr<std::string>(tokenType);
                                      cout << ", '" << makeString(b, e) << "'";
                                  }
-                         
-                                 cout << /*", state: " << getStateStr(st) <<*/ ", in data location " << curPos.toString<std::string>() << "\n";
+
+                                 cout << /*", state: " << getStateStr(st) <<*/ ", in data location " << curPos.toString<std::string>() ;
+                                 cout << (bLineStart?"*** Line start":"") << "\n";
                              };
 
     tokenizer.unexpectedHandler = [&](InputIteratorType it, InputIteratorType itEnd, const char* srcFile, int srcLine) -> bool
@@ -240,7 +241,7 @@ int main(int argc, char* argv[])
                                  else
                                      errMarkerStr[errPos.symbolOffset] = '^';
                                  cout << "    |" << errMarkerStr << "|\n";
-                              
+
                                  if (it!=InputIteratorType())
                                  {
                                      char ch = *it;
@@ -270,12 +271,12 @@ int main(int argc, char* argv[])
                                  cout << "    |" << errMarkerStr << "|\n";
                              };
 
-    //  
+    //
     // auto reportPossibleUnknownOperatorLambda = [&](const PosCountingIterator b, const PosCountingIterator &e)
     // {
     //     cout << "Possible unknown operator: '" << makeString(b, e) << "'\n";
     // };
-    //  
+    //
     // auto reportStringLiteralMessageLambda = [&](bool bErr, const PosCountingIterator it, const std::string msg)
     // {
     //     auto errPos = it.getPosition(true); // с поиском конца строки (а вообще не надо пока, но пусть)
