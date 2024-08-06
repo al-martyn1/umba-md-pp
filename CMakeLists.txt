@@ -96,6 +96,8 @@ set(COMMON_LIBS encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
 set(JSON_YAML_LIB nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
 
 
+set(COMMON_UMBA_OPTIONS "BIGOBJ" "UTF8" "WALL" "WERR")
+
 add_executable(gen-lang-detection-tr "${SRC_ROOT}/umba-md-pp/gen-lang-detection-tr.cpp" "${headers}")
 umba_add_target_options(gen-lang-detection-tr "${UNDEFINED_VAR}" "BIGOBJ" "CONSOLE" "UTF8" )
 target_link_libraries(gen-lang-detection-tr PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${JSON_YAML_LIB}")
@@ -159,7 +161,7 @@ target_link_libraries(test_007 PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}")
 
 
 add_executable(test_008 "${SRC_ROOT}/umba-md-pp/test_008.cpp" "${headers}")
-umba_add_target_options(test_008 "BIGOBJ" "CONSOLE" "UTF8")
+umba_add_target_options(test_008 "CONSOLE" "BIGOBJ" "UTF8") # "WPERMISSIVE" "WERR"
 target_link_libraries(test_008 PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}")
 
 

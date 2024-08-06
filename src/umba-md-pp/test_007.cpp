@@ -192,7 +192,7 @@ int main(int argc, char* argv[])
     using tokenizer_char_type  = typename tokenizer_type::value_type;
     using messages_string_type = typename tokenizer_type::messages_string_type;
 
-    tokenizer.tokenHandler = [&](bool bLineStart, payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData) -> void
+    tokenizer.tokenHandler = [&](bool bLineStart, payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData, messages_string_type &errMsg) -> bool
                              {
                                  using namespace umba::iterator;
 
@@ -221,6 +221,8 @@ int main(int argc, char* argv[])
 
                                  cout << /*", state: " << getStateStr(st) <<*/ ", in data location " << curPos.toString<std::string>() ;
                                  cout << (bLineStart?"*** Line start":"") << "\n";
+
+                                 return true;
                              };
 
     tokenizer.unexpectedHandler = [&](InputIteratorType it, InputIteratorType itEnd, const char* srcFile, int srcLine) -> bool

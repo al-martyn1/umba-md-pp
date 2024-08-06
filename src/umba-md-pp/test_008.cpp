@@ -209,6 +209,7 @@ StreamType& printToken(StreamType &ss, umba::tokenizer::payload_type tokenType, 
         ss << "<span class=\"" << kindStr << "\">" << umba::escapeStringXmlHtml(umba::iterator::makeString(b, e)) << "</span>";
     }
 
+    return ss;
 }
 
 
@@ -392,21 +393,21 @@ int main(int argc, char* argv[])
 
     std::vector<TokenInfo> bufferedTokens;
 
-    tokenizer.tokenHandler = [&](bool bLineStart, payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData) -> void
+    tokenizer.tokenHandler = [&](bool bLineStart, payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData, messages_string_type &errMsg) -> bool
                              {
                                  if (tokenType==UMBA_TOKENIZER_TOKEN_FIN)
-                                     return;
+                                     return true;
 
                                  if (tokenType==UMBA_TOKENIZER_TOKEN_LINEFEED)
                                  {
                                      oss << "\n";
-                                     return;
+                                     return true;
                                  }
 
                                  if (tokenType==UMBA_TOKENIZER_TOKEN_LINE_CONTINUATION)
                                  {
                                      oss << "\\\n";
-                                     return;
+                                     return true;
                                  }
 
                                  if (tokenType==UMBA_TOKENIZER_TOKEN_IDENTIFIER)
@@ -419,6 +420,8 @@ int main(int argc, char* argv[])
                                  }
 
                                  printToken(oss, tokenType, b, e);
+
+                                 return true;
 
                                  #if 0
                                  using namespace umba::iterator;
@@ -480,6 +483,8 @@ int main(int argc, char* argv[])
                                  //cout << "State: " << getStateStr(st) << "\n";
                                  return false;
                                  #endif
+
+                                 return false;
                              };
 
     tokenizer.reportUnknownOperatorHandler = [&](InputIteratorType b, InputIteratorType e)
