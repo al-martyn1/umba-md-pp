@@ -183,6 +183,10 @@ auto cssStyle = R"--(
   color:green;
 }
 
+.pp{
+  color:green;
+}
+
 )--";
 
 
@@ -196,21 +200,96 @@ struct TokenInfo
 };
 
 
+inline
+auto makeTokenText(umba::tokenizer::payload_type tokenType, umba::iterator::TextPositionCountingIterator<char> b, umba::iterator::TextPositionCountingIterator<char> e)
+{
+    if (tokenType==UMBA_TOKENIZER_TOKEN_LINEFEED)
+    {
+        return std::string("\n");
+    }
+    
+    if (tokenType==UMBA_TOKENIZER_TOKEN_LINE_CONTINUATION)
+    {
+        return std::string("\\\n");
+    }
+
+    if (tokenType==UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_START)
+    {
+        return marty_cpp::normalizeCrLfToLf(umba::iterator::makeString(b, e));
+    }
+
+    return umba::iterator::makeString(b, e);
+}
+
+
+std::string inputFilename;
+
+
 template<typename StreamType, typename InputIteratorType>
 StreamType& printToken(StreamType &ss, umba::tokenizer::payload_type tokenType, InputIteratorType b, InputIteratorType e)
 {
-    auto kindStr = getTokenKindString<std::string>(tokenType);
+    auto kindStr   = getTokenKindString<std::string>(tokenType);
+    auto tokenText = makeTokenText(tokenType, b, e);
     if (kindStr.empty())
     {
-        ss << umba::escapeStringXmlHtml(umba::iterator::makeString(b, e));
+        ss << umba::escapeStringXmlHtml(tokenText);
     }
     else
     {
-        ss << "<span class=\"" << kindStr << "\">" << umba::escapeStringXmlHtml(umba::iterator::makeString(b, e)) << "</span>";
+        ss << "<span class=\"" << kindStr << "\">" << umba::escapeStringXmlHtml(tokenText) << "</span>";
     }
 
     return ss;
 }
+
+template<typename StreamType>
+StreamType& printToken(StreamType &ss, const TokenInfo &ti)
+{
+    printToken(ss, ti.tokenType, ti.b, ti.e);
+}
+
+template<typename StreamType>
+StreamType& printToken(StreamType &ss, const TokenInfo &ti, umba::tokenizer::payload_type tokenType)
+{
+}
+
+
+
+
+void printError(umba::tokenizer::payload_type tokenType, umba::iterator::TextPositionCountingIterator<char> it, umba::iterator::TextPositionCountingIterator<char> itEnd)
+{
+     if (it==itEnd)
+     {
+         cout << "Unexpected end of file\n";
+         return;
+     }
+
+     auto errPos = it.getPosition(true); // с поиском конца строки (а вообще не надо пока, но пусть)
+     std::string erroneousLineText = umba::iterator::makeString(it.getLineStartIterator(), it.getLineEndIterator());
+     cout << "Unexpected at " << inputFilename << ":" << errPos.toString<std::string>() << "\n";
+     cout << "Line:" << erroneousLineText << "\n";
+     auto errMarkerStr = std::string(erroneousLineText.size(), ' ');
+     if (errPos.symbolOffset>=errMarkerStr.size())
+         errMarkerStr.append(1,'^');
+     else
+         errMarkerStr[errPos.symbolOffset] = '^';
+     cout << "    |" << errMarkerStr << "|\n";
+
+     if (it!=itEnd)
+     {
+         char ch = *it;
+         cout << "ch: " << umba::escapeStringC(std::string(1,ch)) << "\n";
+     }
+}
+
+void printError(umba::tokenizer::payload_type tokenType, umba::iterator::TextPositionCountingIterator<char> it, umba::iterator::TextPositionCountingIterator<char> itEnd, const char* srcFile, int srcLine)
+{
+    printError(tokenType, it, itEnd);
+     cout << "At " << srcFile << ":" << srcLine << "\n";
+}
+
+
+
 
 
 
@@ -273,6 +352,8 @@ int main(int argc, char* argv[])
         #endif
 
         inputFiles.clear();
+        
+        // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/preprocessor.h")));
         inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/the.h")));
         // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_initializer_list.h")));
         // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_type_traits.h")));
@@ -380,7 +461,6 @@ int main(int argc, char* argv[])
 
 
 
-    std::string inputFilename;
     std::ostringstream oss;
     bool bOk = true;
 
@@ -391,32 +471,176 @@ int main(int argc, char* argv[])
     using messages_string_type = typename tokenizer_type::messages_string_type;
 
 
+    enum State
+    {
+        stNormal,
+        stWaitPreprocessorKeyword,
+        stReadPreprocessor,
+        stReadDefine
+    };
+
     std::vector<TokenInfo> bufferedTokens;
+    State st = stNormal;
+
+    auto flushBufferedTokens = [&]()
+    {
+        for(const auto &ti : bufferedTokens)
+        {
+            printToken(oss, ti);
+        }
+
+        bufferedTokens.clear();
+    };
+
+
 
     tokenizer.tokenHandler = [&](bool bLineStart, payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData, messages_string_type &errMsg) -> bool
                              {
                                  if (tokenType==UMBA_TOKENIZER_TOKEN_FIN)
-                                     return true;
-
-                                 if (tokenType==UMBA_TOKENIZER_TOKEN_LINEFEED)
                                  {
-                                     oss << "\n";
+                                     oss << "<span class=\"pp\">";
+                                     flushBufferedTokens();
+                                     oss << "</span>";
+                                     
+                                     if (st==stWaitPreprocessorKeyword)
+                                     {
+                                         // errMsg = "Unexpected '#'"
+                                         std::cout << "Unexpected EOF while reading macroprocessor directive\n";
+                                     }
+
                                      return true;
                                  }
 
-                                 if (tokenType==UMBA_TOKENIZER_TOKEN_LINE_CONTINUATION)
+                                 switch(st)
                                  {
-                                     oss << "\\\n";
+                                     case stNormal:
+                                          break;
+
+                                     case stWaitPreprocessorKeyword:
+                                     {
+                                          // UMBA_TOKENIZER_TOKEN_LINEFEED
+                                          if (tokenType==UMBA_TOKENIZER_TOKEN_SPACE || tokenType==UMBA_TOKENIZER_TOKEN_LINE_CONTINUATION)
+                                          {
+                                              bufferedTokens.emplace_back(TokenInfo{tokenType, b, e});
+                                              return true;
+                                          }
+                                          if (tokenType!=UMBA_TOKENIZER_TOKEN_IDENTIFIER)
+                                          {
+                                              std::cout << "Unexpected " << getTokenizerTokenStr<std::string>(tokenType) << "\n";
+                                              printError(tokenType, b, e);
+                                              return false;
+                                          }
+
+                                          auto kwdIt = cppPreprocessorKeywords.find(umba::iterator::makeString(b, e));
+                                          if (kwdIt==cppPreprocessorKeywords.end())
+                                          {
+                                              std::cout << "Unexpected " << getTokenizerTokenStr<std::string>(tokenType) << "\n";
+                                              printError(tokenType, b, e);
+                                              return false;
+                                          }
+
+                                          st = kwdIt->second==0 ? stReadPreprocessor : stReadDefine;
+                                          bufferedTokens.emplace_back(TokenInfo{tokenType, b, e});
+                                          return true;
+
+                                          break;
+                                     }     
+
+                                     case stReadPreprocessor:
+                                         if (tokenType==UMBA_TOKENIZER_TOKEN_IDENTIFIER)
+                                         {
+                                             if (cppPreprocessorKeywords.find(umba::iterator::makeString(b, e))!=cppPreprocessorKeywords.end())
+                                                 tokenType = UMBA_TOKENIZER_TOKEN_KEYWORD_SET2_FIRST;
+                                         }
+
+                                         bufferedTokens.emplace_back(TokenInfo{tokenType, b, e});
+
+                                         if (tokenType==UMBA_TOKENIZER_TOKEN_LINEFEED)
+                                         {
+                                             oss << "<span class=\"pp\">";
+                                             flushBufferedTokens();
+                                             oss << "</span>";
+                                             st = stNormal;
+                                         }
+                                         return true;
+
+                                     case stReadDefine:
+                                         if (tokenType==UMBA_TOKENIZER_TOKEN_IDENTIFIER)
+                                         {
+                                             if (cppPreprocessorKeywords.find(umba::iterator::makeString(b, e))!=cppPreprocessorKeywords.end())
+                                                 tokenType = UMBA_TOKENIZER_TOKEN_KEYWORD_SET2_FIRST;
+                                         }
+
+                                         bufferedTokens.emplace_back(TokenInfo{tokenType, b, e});
+
+                                         if (tokenType==UMBA_TOKENIZER_TOKEN_LINEFEED)
+                                         {
+                                             oss << "<span class=\"pp\">";
+                                             flushBufferedTokens();
+                                             oss << "</span>";
+                                             st = stNormal;
+                                         }
+                                         return true;
+
+                                 }
+
+
+                                 if (*b=='#')
+                                 {
+                                     if (st==stNormal && bLineStart)
+                                     {
+                                         bufferedTokens.emplace_back(TokenInfo{tokenType, b, e});
+                                         st = stWaitPreprocessorKeyword;
+                                         return true;
+                                     }
+
+                                     if (st==stNormal || st==stWaitPreprocessorKeyword)
+                                     {
+                                          std::cout << "Unexpected " << getTokenizerTokenStr<std::string>(tokenType) << "\n";
+                                          printError(tokenType, b, e);
+                                          return false;
+                                     }
+
+                                     bufferedTokens.emplace_back(TokenInfo{tokenType, b, e});
                                      return true;
                                  }
+
+
+
+//printError(it, itEnd, srcFile, srcLine);
+// struct TokenInfo
+// {
+//     umba::tokenizer::payload_type                        tokenType;
+//     umba::iterator::TextPositionCountingIterator<char>   b;
+//     umba::iterator::TextPositionCountingIterator<char>   e;
+// };
+
+    // if (tokenType==UMBA_TOKENIZER_TOKEN_LINEFEED)
+    // {
+    //     return "\n";
+    // }
+    //  
+    // if (tokenType==UMBA_TOKENIZER_TOKEN_LINE_CONTINUATION)
+
 
                                  if (tokenType==UMBA_TOKENIZER_TOKEN_IDENTIFIER)
                                  {
                                      auto identStr = umba::iterator::makeString(b, e);
-                                     if (cppKeywords.find(identStr)!=cppKeywords.end())
-                                         tokenType = UMBA_TOKENIZER_TOKEN_KEYWORD_SET1_FIRST;
-                                     else if (cppKeywords.find(identStr)!=cppKeywords.end())
-                                         tokenType = UMBA_TOKENIZER_TOKEN_KEYWORD_SET2_FIRST;
+
+                                     if (st==stNormal)
+                                     {
+                                         if (cppKeywords.find(identStr)!=cppKeywords.end())
+                                             tokenType = UMBA_TOKENIZER_TOKEN_KEYWORD_SET1_FIRST;
+                                         else if (cppPreprocessorKeywords.find(identStr)!=cppPreprocessorKeywords.end())
+                                             tokenType = UMBA_TOKENIZER_TOKEN_KEYWORD_SET2_FIRST;
+                                     }
+                                     else // preprocessor
+                                     {
+                                         if (cppPreprocessorKeywords.find(identStr)!=cppPreprocessorKeywords.end())
+                                             tokenType = UMBA_TOKENIZER_TOKEN_KEYWORD_SET2_FIRST;
+                                         else if (cppKeywords.find(identStr)!=cppKeywords.end())
+                                             tokenType = UMBA_TOKENIZER_TOKEN_KEYWORD_SET1_FIRST;
+                                     }
                                  }
 
                                  printToken(oss, tokenType, b, e);
@@ -456,34 +680,7 @@ int main(int argc, char* argv[])
 
     tokenizer.unexpectedHandler = [&](InputIteratorType it, InputIteratorType itEnd, const char* srcFile, int srcLine) -> bool
                              {
-                                 #if 0
-                                 if (it==itEnd)
-                                 {
-                                     cout << "Unexpected end of file";
-                                     return false;
-                                 }
-
-                                 auto errPos = it.getPosition(true); // с поиском конца строки (а вообще не надо пока, но пусть)
-                                 std::string erroneousLineText = umba::iterator::makeString(it.getLineStartIterator(), it.getLineEndIterator());
-                                 cout << "Unexpected at " << inputFilename << ":" << errPos.toString<std::string>() << "\n";
-                                 cout << "Line:" << erroneousLineText << "\n";
-                                 auto errMarkerStr = std::string(erroneousLineText.size(), ' ');
-                                 if (errPos.symbolOffset>=errMarkerStr.size())
-                                     errMarkerStr.append(1,'^');
-                                 else
-                                     errMarkerStr[errPos.symbolOffset] = '^';
-                                 cout << "    |" << errMarkerStr << "|\n";
-
-                                 if (it!=InputIteratorType())
-                                 {
-                                     char ch = *it;
-                                     cout << "ch: " << umba::escapeStringC(std::string(1,ch)) << "\n";
-                                 }
-                                 cout << "At " << srcFile << ":" << srcLine << "\n";
-                                 //cout << "State: " << getStateStr(st) << "\n";
-                                 return false;
-                                 #endif
-
+                                 printError(UMBA_TOKENIZER_TOKEN_UNEXPECTED, it, itEnd, srcFile, srcLine);
                                  return false;
                              };
 

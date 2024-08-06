@@ -1168,7 +1168,7 @@ int main(int argc, char* argv[])
             {
                 // литералы сами ловят хвостовой escape, если умеют
                 externHandlerMessage.clear();
-                auto res = pCurrentLiteralParser->parseChar(it, &nullInserter, &externHandlerMessage);
+                auto res = pCurrentLiteralParser->parseChar(it, itEnd, &nullInserter, &externHandlerMessage);
 
                 if (res==StringLiteralParsingResult::error)
                 {
