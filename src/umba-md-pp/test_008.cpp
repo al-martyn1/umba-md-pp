@@ -8,6 +8,7 @@
 #include "umba/assert.h"
 #include "umba/filename.h"
 #include "umba/filesys.h"
+#include "umba/tokenizer/token_filters.h"
 //
 #include "umba/debug_helpers.h"
 
@@ -408,15 +409,17 @@ int main(int argc, char* argv[])
         inputFiles.clear();
         
         // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/preprocessor.h")));
-        inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/the.h")));
+        // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/the.h")));
         // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_initializer_list.h")));
         // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/stl_keil_type_traits.h")));
         // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/string_plus.h")));
-        inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/rgbquad.h")));
+        // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/rgbquad.h")));
 
         // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/umba/")));
 
         // inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("_libs/marty_decimal/tests/src/regression_tests.cpp")));
+
+        inputFiles.emplace_back(umba::filename::appendPath(rootPath, std::string("tests/tokenizer/number_ull.cpp")));
 
     }
 
@@ -778,6 +781,9 @@ int main(int argc, char* argv[])
     //         errMarkerStr[errPos.symbolOffset] = '^';
     //     cout << "    |" << errMarkerStr << "|\n";
     // };
+
+    tokenizer.installTokenFilter<umba::tokenizer::filters::SimpleNumberSuffixGluing<tokenizer_type> >();
+
 
     if (inputFiles.empty())
     {
