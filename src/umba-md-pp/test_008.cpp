@@ -140,39 +140,91 @@ VSCode statements AF00DB
 */
 
 auto cssStyle = R"--(
+
+body {
+  color:#1F377F;
+}
+
 .unxp{
 }
 
 .ident{
 }
 
+/********************/
 .curly{
+  color:black;
 }
 
 .round{
+  color:black;
 }
 
 .angle{
+  color:black;
 }
 
 .square{
+  color:black;
 }
 
+.op{
+  color:black;
+  /* font-weight: bold; */
+}
+
+/********************/
+.pp{
+  color:green;
+}
+
+/********************/
+.pp .curly{
+  /*color:#004400;*/
+  /*color:#003F00;*/
+  color:#004200;
+}
+
+.pp .round{
+  color:#004200;
+}
+
+.pp .angle{
+  color:#004200;
+}
+
+.pp .square{
+  color:#004200;
+}
+
+.pp .op{
+  color:#004200;
+}
+
+.pp .num{
+  color:#004200;
+}
+
+.pp .cmnt{
+  color:#79AF79;
+}
+
+/********************/
 .cmnt{
-  color:olive;
+  //color:olive;
+  color:#808080;
   font-style: italic;
 }
 
 .num{
-}
-
-.op{
-  font-weight: bold;
+  /* color:DarkRed; */
+  /*color:#7A0000;*/
+  color:#6A0000;
 }
 
 .str{
-  color:DarkRed;
-
+  /* color:Red; */
+  color:#E21F1F;
 }
 
 .kwd1{
@@ -183,12 +235,13 @@ auto cssStyle = R"--(
   color:green;
 }
 
-.pp{
-  color:green;
-}
-
 )--";
 
+// .pp .str{
+//   /*color:#E2831F;*/
+//   color:#D3783F;
+// }
+//  
 
 
 
@@ -245,13 +298,14 @@ StreamType& printToken(StreamType &ss, umba::tokenizer::payload_type tokenType, 
 template<typename StreamType>
 StreamType& printToken(StreamType &ss, const TokenInfo &ti)
 {
-    printToken(ss, ti.tokenType, ti.b, ti.e);
+    return printToken(ss, ti.tokenType, ti.b, ti.e);
+
 }
 
-template<typename StreamType>
-StreamType& printToken(StreamType &ss, const TokenInfo &ti, umba::tokenizer::payload_type tokenType)
-{
-}
+// template<typename StreamType>
+// StreamType& printToken(StreamType &ss, const TokenInfo &ti, umba::tokenizer::payload_type tokenType)
+// {
+// }
 
 
 
