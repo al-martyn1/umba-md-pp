@@ -526,6 +526,7 @@ int main(int argc, char* argv[])
     using InputIteratorType    = typename tokenizer_type::iterator_type;
     using tokenizer_char_type  = typename tokenizer_type::value_type;
     using messages_string_type = typename tokenizer_type::messages_string_type;
+    using token_parsed_data    = typename tokenizer_type::token_parsed_data;
 
 
     enum State
@@ -551,7 +552,11 @@ int main(int argc, char* argv[])
 
 
 
-    tokenizer.tokenHandler = [&](bool bLineStart, payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData, messages_string_type &errMsg) -> bool
+    tokenizer.tokenHandler = [&]( bool bLineStart, payload_type tokenType
+                                , InputIteratorType b, InputIteratorType e
+                                , token_parsed_data parsedData // std::basic_string_view<tokenizer_char_type> parsedData
+                                , messages_string_type &errMsg
+                                ) -> bool
                              {
                                  if (tokenType==UMBA_TOKENIZER_TOKEN_FIN)
                                  {
