@@ -191,8 +191,9 @@ int main(int argc, char* argv[])
     using InputIteratorType    = typename tokenizer_type::iterator_type;
     using tokenizer_char_type  = typename tokenizer_type::value_type;
     using messages_string_type = typename tokenizer_type::messages_string_type;
+    using token_parsed_data    = typename tokenizer_type::token_parsed_data;
 
-    tokenizer.tokenHandler = [&](bool bLineStart, payload_type tokenType, InputIteratorType b, InputIteratorType e, std::basic_string_view<tokenizer_char_type> parsedData, messages_string_type &errMsg) -> bool
+    tokenizer.tokenHandler = [&](bool bLineStart, payload_type tokenType, InputIteratorType b, InputIteratorType e, token_parsed_data parsedData, messages_string_type &errMsg) -> bool
                              {
                                  using namespace umba::iterator;
 
