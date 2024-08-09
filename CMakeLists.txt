@@ -161,7 +161,7 @@ target_link_libraries(test_007 PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}")
 
 
 add_executable(test_008 "${SRC_ROOT}/umba-md-pp/test_008.cpp" "${headers}")
-umba_add_target_options(test_008 "CONSOLE" "BIGOBJ" "UTF8") # "WPERMISSIVE" "WERR"
+umba_add_target_options(test_008 "CONSOLE" "BIGOBJ" "UTF8" ) # "PEDANTIC" "WERR"
 target_link_libraries(test_008 PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}")
 
 

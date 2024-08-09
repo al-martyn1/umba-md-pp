@@ -313,6 +313,8 @@ StreamType& printToken(StreamType &ss, const TokenInfo &ti)
 
 void printError(umba::tokenizer::payload_type tokenType, umba::iterator::TextPositionCountingIterator<char> it, umba::iterator::TextPositionCountingIterator<char> itEnd)
 {
+     UMBA_USED(tokenType);
+
      if (it==itEnd)
      {
          cout << "Unexpected end of file\n";
@@ -738,6 +740,8 @@ int main(int argc, char* argv[])
                                  cout << /*", state: " << getStateStr(st) <<*/ ", in data location " << curPos.toString<std::string>() ;
                                  cout << (bLineStart?"*** Line start":"") << "\n";
                                  #endif
+                                 UMBA_USED(errMsg);
+                                 UMBA_USED(parsedData);
                              };
 
     tokenizer.unexpectedHandler = [&](InputIteratorType it, InputIteratorType itEnd, const char* srcFile, int srcLine) -> bool
@@ -749,6 +753,7 @@ int main(int argc, char* argv[])
     tokenizer.reportUnknownOperatorHandler = [&](InputIteratorType b, InputIteratorType e)
                              {
                                  //cout << "Possible unknown operator: '" << umba::iterator::makeString(b, e) << "'\n";
+                                 UMBA_USED(b); UMBA_USED(e);
                              };
 
     tokenizer.reportStringLiteralMessageHandler = [&](bool bErr, InputIteratorType it, const messages_string_type &msg)
@@ -765,6 +770,7 @@ int main(int argc, char* argv[])
                                      errMarkerStr[errPos.symbolOffset] = '^';
                                  cout << "    |" << errMarkerStr << "|\n";
                                  #endif
+                                 UMBA_USED(bErr); UMBA_USED(it); UMBA_USED(msg);
                              };
 
     //
