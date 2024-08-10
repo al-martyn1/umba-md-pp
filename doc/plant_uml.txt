@@ -1,0 +1,8 @@
+Интересная штука для построения всяких диаграмм и тп.
+Диаграмма состояний - синтаксис и особенности - https://plantuml.com/ru/state-diagram
+PlantUML img generator - https://plantuml.com/ru/command-line
+PlantUML ebnf - https://plantuml.com/ru/ebnf
+PlantUML установка - https://plantuml.com/ru/starting
+PlantUML дока по языку - https://plantuml.com/ru/guide
+
+Boost MSM PUML (там примеры FSM на пумле есть) - https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html
