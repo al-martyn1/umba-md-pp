@@ -130,6 +130,15 @@ GitHub/GitLab wiki, например.
   - якорь `(-)` - линия-разделитель, задаётся для каждого языка отдельно в произвольном количестве вариантов, для C++ это, например,
     `//---` или `/***`. Задаются только префиксы, т.е. `//------------` - это тоже линия разделитель
 
+Извлекаем фрагмент кода по сигнатуре:
+```
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
+```
+
+#!insert{nolineno,noKeepCutTags} ../umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
+
+
+
 # Стандартный конфиг
 
 #!insert{nolineno,noKeepCutTags} conf/umba-md-pp.options

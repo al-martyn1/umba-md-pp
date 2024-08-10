@@ -131,6 +131,22 @@ GitHub/GitLab wiki, например.
   - якорь `(-)` - линия-разделитель, задаётся для каждого языка отдельно в произвольном количестве вариантов, для C++ это, например,
     `//---` или `/***`. Задаются только префиксы, т.е. `//------------` - это тоже линия разделитель
 
+Извлекаем фрагмент кода по сигнатуре:
+```
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
+```
+
+!!! File not found in: 
+F:\_github\umba-tools\umba-md-pp\doc\doc
+F:\_github\umba-tools\umba-md-pp\_distr_conf\_distr_conf
+F:\_github\umba-tools\umba-md-pp\tests\snippets\tests\snippets
+F:\_github\umba-tools\umba-md-pp\src\src
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
+
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, F:\_github\umba-tools\umba-md-pp\src\src
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
+
+
 # Стандартный конфиг
 
 !!! File not found in: F:\_github\umba-tools\umba-md-pp\doc\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, F:\_github\umba-tools\umba-md-pp\src\src
