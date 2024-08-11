@@ -277,6 +277,8 @@ struct AppConfig
         marty_cpp::ELinefeedType outputLinefeed = marty_cpp::ELinefeedType::lf;
     #endif
 
+    bool                                                  verboseMode = false;
+
     std::vector<FilenameStringType>                       samplesPaths;
     FilenameStringType                                    strictPath ;
 
@@ -897,8 +899,17 @@ struct AppConfig
         return true;
     }
 
-    static
-    bool findSamplesFileImpl(const std::vector<FilenameStringType> &samplesPathsVec, FilenameStringType lookFor, FilenameStringType &foundFullFilename, std::string &foundFileText)
+    // if (appConfig.verboseMode)
+    // {
+    //     umbaLogStreamMsg << "Snippets lookup paths:\n";
+    //     for(auto p : samplesPaths)
+    //     {
+    //         umbaLogStreamMsg << "    " << umba::toUtf8(p) << "\n";
+    //     }
+    // }
+
+    // static
+    bool findSamplesFileImpl(const std::vector<FilenameStringType> &samplesPathsVec, FilenameStringType lookFor, FilenameStringType &foundFullFilename, std::string &foundFileText) const
     {
          lookFor = umba::filename::makeCanonical( lookFor, (typename FilenameStringType::value_type)'/'
                                                 , umba::string_plus::make_string<FilenameStringType>(".")
@@ -906,14 +917,38 @@ struct AppConfig
                                                 , true // keepLeadingParents
                                                 );
 
+         if (verboseMode)
+         {
+             umbaLogStreamMsg << "Looking for file: " << umba::toUtf8(lookFor) << "\n";
+         }
+
          for(auto path: samplesPathsVec)
          {
              auto fullName = umba::filename::makeCanonical(umba::filename::appendPath(path, lookFor));
+
+             if (verboseMode)
+             {
+                 
+             }
+
              if (readInputFile(fullName, foundFileText))
              {
-                  foundFullFilename = fullName;
-                  return true;
+                 if (verboseMode)
+                 {
+                     umbaLogStreamMsg << "  + Looking in: " << umba::toUtf8(path) << " (" << umba::toUtf8(fullName) << ") - ";
+                     umbaLogStreamMsg << "Found\n";
+                 }
+
+                 foundFullFilename = fullName;
+                 return true;
              }
+
+             if (verboseMode)
+             {
+                 umbaLogStreamMsg << "  - Looking in: " << umba::toUtf8(path) << " (" << umba::toUtf8(fullName) << ") - ";
+                 umbaLogStreamMsg << "Not found\n";
+             }
+
              // std::string orgText;
              // if (umba::filesys::readFile(fullName, orgText))
              // {
@@ -944,16 +979,16 @@ struct AppConfig
         return findSamplesFileUseExtraPath(lookFor, foundFullFilename, foundFileText, umba::filename::getPath(fileInsertedFrom));
     }
 
-    static
-    bool findDocFileByPath(const FilenameStringType &lookFor, std::string &foundFullFilename, std::string &foundFileText, const std::string &includedFromPath)
+    // static
+    bool findDocFileByPath(const FilenameStringType &lookFor, std::string &foundFullFilename, std::string &foundFileText, const std::string &includedFromPath) const
     {
         std::vector<FilenameStringType> docPaths;
         docPaths.emplace_back(includedFromPath);
         return findSamplesFileImpl(docPaths, lookFor, foundFullFilename, foundFileText);
     }
 
-    static
-    bool findDocFileByIncludedFromFilename(const FilenameStringType &lookFor, FilenameStringType &foundFullFilename, std::string &foundFileText, const FilenameStringType &includedFromFile)
+    //static
+    bool findDocFileByIncludedFromFilename(const FilenameStringType &lookFor, FilenameStringType &foundFullFilename, std::string &foundFileText, const FilenameStringType &includedFromFile) const
     {
         return findDocFileByPath(lookFor, foundFullFilename, foundFileText, umba::filename::getPath(includedFromFile));
     }

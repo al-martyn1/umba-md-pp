@@ -14,6 +14,9 @@
 
 // AppConfig    appConfig;
 
+//extern umba::SimpleFormatter umbaLogStreamMsg;
+
+
 template<typename StringType>
 struct ArgParser
 {
@@ -233,6 +236,25 @@ int operator()( const StringType                                &a           //!
         //     return 0;
         // }
 
+
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("verbose")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Allow overwrite existing file."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            argsParser.quet       = !boolVal;
+            appConfig.verboseMode =  boolVal;
+            return 0;
+        }
+
         else if ( opt.setParam("?MODE",true)
                || opt.isOption("overwrite") || opt.isOption('Y')
                // || opt.setParam("VAL",true)
@@ -337,7 +359,15 @@ int operator()( const StringType                                &a           //!
 
             StringType optArg;
             umba::utfToStringTypeHelper(optArg, opt.optArg);
-            if (!appConfig.addSamplesPaths(optArg, makeAbsPath(optArg)))
+
+            // auto absOptArgPath = makeAbsPath(optArg);
+            //  
+            // if (appConfig.verboseMode)
+            // {
+            //     umbaLogStreamMsg << "Option 'add-examples-path', argument: " << umba::toUtf8(optArg) << ", absolute path: " << umba::toUtf8(absOptArgPath) << ", base path: " << umba::toUtf8(getBasePath()) << "\n";
+            // }
+
+            if (!appConfig.addSamplesPaths(optArg, getBasePath()))
             {
                 LOG_ERR_OPT<<"Adding paths for examples searching failed, invalid argument: '" << optArg << "'\n";
                 return -1;

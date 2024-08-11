@@ -156,6 +156,10 @@ int main(int argc, char* argv[])
 
 int safe_main(int argc, char* argv[])
 {
+
+    // coutWriter();
+    // cerrWriter();
+
     umba::time_service::init();
 
     marty_tr::tr_set_err_handler(&trErrHandler);
@@ -367,9 +371,11 @@ int safe_main(int argc, char* argv[])
         argsParser.args.push_back("--overwrite");
         argsParser.args.push_back("--copy-images");
 
-        argsParser.args.push_back("--add-examples-path="+rootPath+".\\doc");
-        argsParser.args.push_back("--add-examples-path="+rootPath+".\\src");
-        argsParser.args.push_back("--add-examples-path="+rootPath+".\\tests\\snippets");
+        // argsParser.args.push_back("--add-examples-path="+rootPath+".\\doc");
+        // argsParser.args.push_back("--add-examples-path="+rootPath+".\\src");
+        // argsParser.args.push_back("--add-examples-path="+rootPath+".\\tests\\snippets");
+        // argsParser.args.push_back("--add-examples-path="+rootPath+"\\_distr_conf");
+        
 
         argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test,rc,_generators,_distr_conf,src,.msvc2019,boost,icons");
         argsParser.args.push_back("--batch-exclude-files=*upper_inc.md*");
@@ -434,6 +440,14 @@ int safe_main(int argc, char* argv[])
         umba::cli_tool_helpers::printNameVersion(umbaLogStreamMsg);
     }
 
+    if (appConfig.verboseMode)
+    {
+        umbaLogStreamMsg << "Snippets lookup paths:\n";
+        for(auto p : appConfig.samplesPaths)
+        {
+            umbaLogStreamMsg << "    " << umba::toUtf8(p) << "\n";
+        }
+    }
 
 
     //unsigned errCount = 0;
