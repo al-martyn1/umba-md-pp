@@ -7,7 +7,7 @@
 
 # Table test 01
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, F:\_github\umba-tools\umba-md-pp\src\src
+!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
 #!insert{fail}              table-test/table-test-01.txt
 
 First Header  | Second Header
@@ -19,7 +19,7 @@ Content Cell  | Content Cell
 
 # Table test 02
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, F:\_github\umba-tools\umba-md-pp\src\src
+!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
 #!insert{fail}              table-test/table-test-02.txt
 
 | Right | Center | Left  |
@@ -31,7 +31,7 @@ Content Cell  | Content Cell
 
 # Table test 03
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, F:\_github\umba-tools\umba-md-pp\src\src
+!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
 #!insert{fail}              table-test/table-test-03.txt
 
 | Right | Center | Left  |
@@ -43,7 +43,7 @@ Content Cell  | Content Cell
 
 # Table test 04
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, F:\_github\umba-tools\umba-md-pp\src\src
+!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
 #!insert{fail}              table-test/table-test-04.txt
 
 | Right | Center | Left  |
@@ -55,7 +55,7 @@ Content Cell  | Content Cell
 
 # Table test 05
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, F:\_github\umba-tools\umba-md-pp\src\src
+!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
 #!insert{fail}              table-test/table-test-05.txt
 
 | One    | Two | Three | Four    | Five  | Six 
