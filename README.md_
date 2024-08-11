@@ -17,6 +17,7 @@ Language   : Russian
  - [Перечень страниц (индекс документации)](pages.md)
  - [TODO](doc/todo.md)
 
+
 #!insert{no-fail,doc,raise=-1} tests/$(INSERT_DOC_FILENAME_MACRO_TEST).md_
 
 
@@ -135,7 +136,7 @@ GitHub/GitLab wiki, например.
 #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
 ```
 
-#!insert{nolineno,noKeepCutTags} ../umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
 
 
 

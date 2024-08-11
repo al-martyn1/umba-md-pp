@@ -15,6 +15,7 @@ Test number one
  - [Перечень страниц (индекс документации)](pages.md)
  - [TODO](doc/todo.md)
 
+
 ## Тест макроподстановки в именах включаемых файлов
 
 Этот файл подключен со значением макроса `INSERT_DOC_FILENAME_MACRO_TEST`, равным `by_macro2`.
@@ -156,8 +157,133 @@ StringType makeSystemFunctionCommandString(const StringType &cmd, std::vector<St
 
 # Стандартный конфиг
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{nolineno,noKeepCutTags} conf/umba-md-pp.options
+```
+# Устанавливаем русский как язык документов по умолчанию, если язык не задан тэгами,
+# не переопределён дефолтный язык где-то потом или не задан принудительно через опцию --force-document-language
+# Задание языка необходимо для доксигена, если по дефолту задать не русский, или не задавать язык, доксиген кракозяблы генерит
+--document-language=russian
+
+# External programs lookup
+--dont-lookup-for-doxygen
+--dont-lookup-for-graphviz
+
+# Common options
+--processing-options=generate-toc,title
+--set-insert-options=fail,path,filename-line-no,trim-arround
+
+# Graphviz common options
+--graphviz-output-format=svg
+--graphviz-dpi=120
+--graphviz-show-labels=true
+
+# Расширения, обрабатываемые (и сканируемые) MDPP
+# старое
+#--add-mdpp-extentions=_md,_md_,md_,_markdown,_markdown_,markdown_
+
+# новое
+--add-mdpp-extentions=_md,_md_,md_
+--add-mdpp-extentions=_mkd,_mkd_,mkd_
+--add-mdpp-extentions=_mdwn,_mdwn_,mdwn_
+--add-mdpp-extentions=_mdown,_mdown_,mdown_
+--add-mdpp-extentions=_mdtxt,_mdtxt_,mdtxt_
+--add-mdpp-extentions=_mdtext,_mdtext_,mdtext_
+--add-mdpp-extentions=_markdown,_markdown_,markdown_
+#--add-mdpp-extentions=_text,_text_,text_
+
+# Исключаем подкаталоги со следующими именами
+--batch-exclude-dirs=_md,_md_,md_
+--batch-exclude-dirs=_mkd,_mkd_,mkd_
+--batch-exclude-dirs=_mdwn,_mdwn_,mdwn_
+--batch-exclude-dirs=_mdown,_mdown_,mdown_
+--batch-exclude-dirs=_mdtxt,_mdtxt_,mdtxt_
+--batch-exclude-dirs=_mdtext,_mdtext_,mdtext_
+--batch-exclude-dirs=_markdown,_markdown_,markdown_
+#--batch-exclude-dirs=_text,_text_,text_
+
+--batch-exclude-dir=.out,.build,.git,.bat,.cmake,.msvc,.vscode,.vs,.config
+
+
+# При генерации вьювером название файла задается на основании заголовка (из тэгов или первого заголовка, или из первых строк) документа
+# Но мы придерживаемся идеи не использовать русские имена без крайней необходимости
+--processing-options=transliterate-generated-filenames
+
+# Metatags misspelling replaces and transliteration result replaces
+--meta-tag-replace=avtor:author
+--meta-tag-replace=avtory:author
+--meta-tag-replace=authors:author
+--meta-tag-replace=tegi:tags
+--meta-tag-replace=teg:tags
+--meta-tag-replace=data:date
+--meta-tag-replace=zagolovok:title
+--meta-tag-replace=kategorii:category
+--meta-tag-replace=kategoriya:category
+--meta-tag-replace=categories:category
+--meta-tag-replace=opisanie:description
+--meta-tag-replace=otmazka:disclaimer
+--meta-tag-replace=otmazki:disclaimer
+--meta-tag-replace=disclaimers:disclaimer
+--meta-tag-replace=versiya:version
+--meta-tag-replace=yazyk:language
+--meta-tag-replace=yazyk dokumenta:language
+--meta-tag-replace=otkaz ot otvetstvennosti:disclaimer
+
+# Metatags serialization
+--meta-tag-serialize=title:Title
+--meta-tag-serialize=disclaimer:Disclaimer
+--meta-tag-serialize=description:Description
+--meta-tag-serialize=author:Author
+--meta-tag-serialize=category:Category
+--meta-tag-serialize=date:Date
+--meta-tag-serialize=tags:Tags
+--meta-tag-serialize=version:Version
+--meta-tag-serialize=language:Language
+
+# Metatag types
+--meta-tag-set-type=comma-set:category,tags
+--meta-tag-set-type=comma-list:author
+--meta-tag-set-type=text-first:title,date
+--meta-tag-set-type=text-merge:disclaimer,description
+
+
+# C++
+--add-lang-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
+--add-lang-cut-prefix=C++://#!
+--add-lang-cut-prefix=C++://#$
+--add-lang-cut-prefix=C++:/*#!
+--add-lang-cut-prefix=C++:/*#$
+--add-lang-separator-prefix=C++://---
+--add-lang-separator-prefix=C++:/***
+--set-lang-block-chars=C++:{}
+--set-lang-listing-tag=C++:cpp
+
+# C
+--add-lang-file-extentions=C:.c
+--add-lang-cut-prefix=C://#!
+--add-lang-cut-prefix=C://#$
+--add-lang-cut-prefix=C:/*#!
+--add-lang-cut-prefix=C:/*#$
+--add-lang-separator-prefix=C://---
+--add-lang-separator-prefix=C:/***
+--set-lang-block-chars=C:{}
+--set-lang-listing-tag=C:cpp
+
+# Squrrel
+--add-lang-file-extentions=Squrrel:.nut,.nuts
+--add-lang-cut-prefix=Squrrel://#!
+--add-lang-cut-prefix=Squrrel://#$
+--add-lang-separator-prefix=Squrrel://---
+--set-lang-block-chars=Squrrel:{}
+--set-lang-listing-tag=Squrrel:lua
+
+# CMake
+--add-lang-file-extentions=CMake:CMakeLists.txt,.cmake
+--add-lang-cut-prefix=CMake:#//!
+--add-lang-cut-prefix=CMake:#//$
+--add-lang-separator-prefix=C++:###
+--add-lang-separator-prefix=C++:#---
+# No blocks support in CMake
+--set-lang-listing-tag=CMake:cmake
+```
 
 
 # Любите ли вы документацию так, как люблю её я?
@@ -227,48 +353,165 @@ StringType makeSystemFunctionCommandString(const StringType &cmd, std::vector<St
 
 Включаем по сигнатуре, блок, но сигнатура в одну строку при ссылке
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp\signature_test.cpp#`inline void simpleDoNothing`-{}
+```cpp
+2: inline
+3: void simpleDoNothing( int v1)
+4: {
+5:     // Первая версия, до isUrlAbsolute
+6: }
+```
 
 Включаем по сигнатуре, блок, но сигнатура в одну строку в файле
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleNothing2`-{}
+```cpp
+43: inline void simpleNothing2( char v3)
+44: {
+45:     // Третья версия, сигнатура в одну строку
+46: }
+```
 
 Включаем по сигнатуре, блок, шаблонная функция
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-{}
+```cpp
+ 9: template<typename StringType>
+10: bool isUrlAbsolute(const StringType &strUrl)
+11: {
+12:     using CharType = typename StringType::value_type;
+13: 
+14:     // looking for scheme: "protocol://..."
+15:     // "://..." - is invalid, missing protocol
+16: 
+17: 
+18:     auto colonPos = strUrl.find((CharType)':');
+19: 
+20:     if (colonPos==strUrl.npos)
+21:         return false;
+22: 
+23:     if (colonPos==0)
+24:         return false;
+25: 
+26:     if ((colonPos+1u)>=strUrl.size() || (colonPos+2u)>=strUrl.size())
+27:         return false;
+28: 
+29:     if (strUrl[colonPos+1u]==(CharType)'/' && strUrl[colonPos+2u]==(CharType)'/')
+30:         return true;
+31: 
+32:     return false;
+33: }
+```
 
 Включаем по сигнатуре, блок, нешаблонная функция, первая версия (без использования сигнатурного пути)
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleDoNothing`-{}
+```cpp
+2: inline
+3: void simpleDoNothing( int v1)
+4: {
+5:     // Первая версия, до isUrlAbsolute
+6: }
+```
 
 Включаем по сигнатуре, блок, нешаблонная функция, вторая версия (с использованием сигнатурного пути)
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`/`inline\nvoid simpleDoNothing`-{}
+```cpp
+36: inline
+37: void simpleDoNothing( char v2)
+38: {
+39:     // Вторая версия, после isUrlAbsolute
+40: }
+```
 
 Включаем по сигнатуре, шаблонная функция, до разделителя
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-(-)
+```cpp
+ 9: template<typename StringType>
+10: bool isUrlAbsolute(const StringType &strUrl)
+11: {
+12:     using CharType = typename StringType::value_type;
+13: 
+14:     // looking for scheme: "protocol://..."
+15:     // "://..." - is invalid, missing protocol
+16: 
+17: 
+18:     auto colonPos = strUrl.find((CharType)':');
+19: 
+20:     if (colonPos==strUrl.npos)
+21:         return false;
+22: 
+23:     if (colonPos==0)
+24:         return false;
+25: 
+26:     if ((colonPos+1u)>=strUrl.size() || (colonPos+2u)>=strUrl.size())
+27:         return false;
+28: 
+29:     if (strUrl[colonPos+1u]==(CharType)'/' && strUrl[colonPos+2u]==(CharType)'/')
+30:         return true;
+31: 
+32:     return false;
+33: }
+```
 
 Включаем по сигнатуре, шаблонная функция, до двух пустых строк
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-(2)
+```cpp
+ 9: template<typename StringType>
+10: bool isUrlAbsolute(const StringType &strUrl)
+11: {
+12:     using CharType = typename StringType::value_type;
+13: 
+14:     // looking for scheme: "protocol://..."
+15:     // "://..." - is invalid, missing protocol
+```
 
 Включаем по сигнатуре, от одной сигнатуры до другой
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleDoNothing`-`inline\nvoid simpleDoNothing`
+```cpp
+ 2: inline
+ 3: void simpleDoNothing( int v1)
+ 4: {
+ 5:     // Первая версия, до isUrlAbsolute
+ 6: }
+ 7: 
+ 8: //----------------------------------------------------------------------------
+ 9: template<typename StringType>
+10: bool isUrlAbsolute(const StringType &strUrl)
+11: {
+12:     using CharType = typename StringType::value_type;
+13: 
+14:     // looking for scheme: "protocol://..."
+15:     // "://..." - is invalid, missing protocol
+16: 
+17: 
+18:     auto colonPos = strUrl.find((CharType)':');
+19: 
+20:     if (colonPos==strUrl.npos)
+21:         return false;
+22: 
+23:     if (colonPos==0)
+24:         return false;
+25: 
+26:     if ((colonPos+1u)>=strUrl.size() || (colonPos+2u)>=strUrl.size())
+27:         return false;
+28: 
+29:     if (strUrl[colonPos+1u]==(CharType)'/' && strUrl[colonPos+2u]==(CharType)'/')
+30:         return true;
+31: 
+32:     return false;
+33: }
+34: 
+35: //----------------------------------------------------------------------------
+```
 
 Включаем по номерам строк
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} umba-md-pp\log.h#6-12
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
 
 
@@ -297,32 +540,32 @@ Image from out of the  hierarchy- ![Image](../upper-level-filled-96.png)
 
 // Print lines, noKeepCutTags #print_ver_all
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+```cpp
+```
 
 
 // Print lines, keepCutTags   #print_ver_all
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+```cpp
+```
 
 
 // No lines, keepCutTags   #print_ver_all
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+```cpp
+```
 
 
 // printCommitHash
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp/print_ver.h#printCommitHash
+```cpp
+```
 
 
 // printOnlyVersion
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
 
 
 ### Subtitle
@@ -338,14 +581,21 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp/print_ver.h#print_ver_all
+```cpp
+```
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
 
 ## Other Title
 
@@ -388,40 +638,40 @@ Test01
 
 !!! File not found
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+```cpp
+```
 
 
 // Print lines, keepCutTags   #print_ver_all
 
 !!! File not found
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+```cpp
+```
 
 
 // No lines, keepCutTags   #print_ver_all
 
 !!! File not found
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+```cpp
+```
 
 
 // printCommitHash
 
 !!! File not found
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp/print_ver.h#printCommitHash
+```cpp
+```
 
 
 // printOnlyVersion
 
 !!! File not found
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
 
 
 ### 3.1.1 Subtitle
@@ -440,13 +690,13 @@ todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-starte
 
 !!! File not found
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp/print_ver.h#print_ver_all
+```cpp
+```
 
 !!! File not found
 
-!!! File not found in: C:\work\github\umba-tools\umba-md-pp\doc\doc, C:\work\github\umba-tools\umba-md-pp\_distr_conf\_distr_conf, C:\work\github\umba-tools\umba-md-pp\tests\snippets\tests\snippets, C:\work\github\umba-tools\umba-md-pp\src\src
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
 
 ## 3.2 Other Title
 

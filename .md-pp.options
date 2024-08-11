@@ -1,3 +1,4 @@
+--verbose
 --graphviz-output-path=.\.doc.generated_images
 --document-language=russian
 --processing-options=no-meta-data
@@ -9,3 +10,7 @@
 #--set-var=INSERT_DOC_FILENAME_MACRO_TEST:by_macro2
 --set-var=^insert_doc_filename_macro_test:by_macro2
 
+--add-examples-path=.\doc
+--add-examples-path=.\_distr_conf
+--add-examples-path=.\tests\snippets
+--add-examples-path=.\src
