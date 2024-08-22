@@ -215,6 +215,8 @@ StringType makeSystemFunctionCommandString(const StringType &cmd, std::vector<St
 --meta-tag-replace=teg:tags
 --meta-tag-replace=data:date
 --meta-tag-replace=zagolovok:title
+--meta-tag-replace=nazvanie:title
+--meta-tag-replace=caption:title
 --meta-tag-replace=kategorii:category
 --meta-tag-replace=kategoriya:category
 --meta-tag-replace=categories:category
