@@ -403,6 +403,11 @@ HKEY regGetShellExtentionsRoot()
     #endif
 }
 
+
+//------------------------------
+// https://superuser.com/questions/266268/where-in-the-registry-does-windows-store-with-which-program-to-open-certain-file
+// https://learn.microsoft.com/en-us/windows/win32/shell/how-to-register-a-file-type-for-a-new-application
+// https://stackoverflow.com/questions/1387769/create-registry-entry-to-associate-file-extension-with-application-in-c
 //------------------------------
 inline
 std::wstring regShellExtentionHandlersRootPath()
