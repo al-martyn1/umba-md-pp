@@ -1,0 +1,4 @@
+Markdown TOC - https://github.com/ekalinin/github-markdown-toc
+  https://stackoverflow.com/questions/18244417/how-do-i-create-some-kind-of-table-of-content-in-github-wiki
+  https://github.blog/changelog/2021-04-13-table-of-contents-support-in-markdown-files/
+Anchors in Markdown - https://gist.github.com/asabaylus/3071099?permalink_comment_id=3366191
