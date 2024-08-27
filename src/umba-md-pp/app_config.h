@@ -928,7 +928,7 @@ struct AppConfig
 
              if (verboseMode)
              {
-                 
+
              }
 
              if (readInputFile(fullName, foundFileText))

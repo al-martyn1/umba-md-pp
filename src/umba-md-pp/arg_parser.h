@@ -361,7 +361,7 @@ int operator()( const StringType                                &a           //!
             umba::utfToStringTypeHelper(optArg, opt.optArg);
 
             // auto absOptArgPath = makeAbsPath(optArg);
-            //  
+            //
             // if (appConfig.verboseMode)
             // {
             //     umbaLogStreamMsg << "Option 'add-examples-path', argument: " << umba::toUtf8(optArg) << ", absolute path: " << umba::toUtf8(absOptArgPath) << ", base path: " << umba::toUtf8(getBasePath()) << "\n";

@@ -375,7 +375,7 @@ int safe_main(int argc, char* argv[])
         // argsParser.args.push_back("--add-examples-path="+rootPath+".\\src");
         // argsParser.args.push_back("--add-examples-path="+rootPath+".\\tests\\snippets");
         // argsParser.args.push_back("--add-examples-path="+rootPath+"\\_distr_conf");
-        
+
 
         argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test,rc,_generators,_distr_conf,src,.msvc2019,boost,icons");
         argsParser.args.push_back("--batch-exclude-files=*upper_inc.md*");
