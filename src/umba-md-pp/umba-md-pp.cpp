@@ -607,7 +607,9 @@ int safe_main(int argc, char* argv[])
             if (findProjectOptionsFile(curFile, projectOptionsFile))
             {
                 appConfig.setStrictPathFromFilename(projectOptionsFile);
+                argsParser.pushOptionsFileName(projectOptionsFile);
                 argsParser.parseOptionsFile(projectOptionsFile);
+                argsParser.popOptionsFileName();
             }
 
             appConfig.checkAdjustDocNumericLevels();

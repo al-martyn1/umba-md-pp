@@ -390,7 +390,9 @@ main/wmain - нужны только для MSVC/Console
     if (findProjectOptionsFile(inputFilename, projectOptionsFile))
     {
         appConfig.setStrictPathFromFilename(projectOptionsFile);
+        argsParser.pushOptionsFileName(projectOptionsFile);
         argsParser.parseOptionsFile(projectOptionsFile);
+        argsParser.popOptionsFileName();
     }
 
     // Необходимо для нормальной генерации доксигеном RTF'а

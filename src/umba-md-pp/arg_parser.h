@@ -21,26 +21,26 @@ template<typename StringType>
 struct ArgParser
 {
 
-std::stack<StringType> optFiles;
-
-
-StringType getBasePath() const
-{
-    StringType basePath;
-    if (optFiles.empty())
-        basePath = umba::filesys::getCurrentDirectory<StringType>();
-    else
-        basePath = umba::filename::getPath(optFiles.top());
-
-    return basePath;
-}
-
-
-StringType makeAbsPath( StringType p )
-{
-    //return umba::filename::makeCanonical(umba::filename::makeAbsPath( p, getBasePath() ));
-    return umba::filename::makeAbsPath( p, getBasePath() );
-}
+// std::stack<StringType> optFiles;
+//  
+//  
+// StringType getBasePath() const
+// {
+//     StringType basePath;
+//     if (optFiles.empty())
+//         basePath = umba::filesys::getCurrentDirectory<StringType>();
+//     else
+//         basePath = umba::filename::getPath(optFiles.top());
+//  
+//     return basePath;
+// }
+//  
+//  
+// StringType makeAbsPath( StringType p )
+// {
+//     //return umba::filename::makeCanonical(umba::filename::makeAbsPath( p, getBasePath() ));
+//     return umba::filename::makeAbsPath( p, getBasePath() );
+// }
 
 
 
@@ -367,7 +367,7 @@ int operator()( const StringType                                &a           //!
             //     umbaLogStreamMsg << "Option 'add-examples-path', argument: " << umba::toUtf8(optArg) << ", absolute path: " << umba::toUtf8(absOptArgPath) << ", base path: " << umba::toUtf8(getBasePath()) << "\n";
             // }
 
-            if (!appConfig.addSamplesPaths(optArg, getBasePath()))
+            if (!appConfig.addSamplesPaths(optArg, argsParser.getBasePath()))
             {
                 LOG_ERR_OPT<<"Adding paths for examples searching failed, invalid argument: '" << optArg << "'\n";
                 return -1;
@@ -876,7 +876,7 @@ int operator()( const StringType                                &a           //!
             std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
             for(auto &p: lst)
             {
-                p = makeAbsPath(p);
+                p = argsParser.makeAbsPath(p);
             }
             //appConfig.batchScanPaths.insert(appConfig.batchScanPaths.end(), lst.begin(), lst.end());
             appConfig.addBatchScanPaths(lst, false); // no recurse
@@ -900,7 +900,7 @@ int operator()( const StringType                                &a           //!
             std::vector< std::string > lst = umba::string_plus::split(opt.optArg, ',');
             for(auto &p: lst)
             {
-                p = makeAbsPath(p);
+                p = argsParser.makeAbsPath(p);
             }
             //appConfig.batchScanPaths.insert(appConfig.batchScanPaths.end(), lst.begin(), lst.end());
             appConfig.addBatchScanPaths(lst, true); // recurse
@@ -1101,7 +1101,7 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
-            appConfig.graphVizOptions.savePath = makeAbsPath(strVal);
+            appConfig.graphVizOptions.savePath = argsParser.makeAbsPath(strVal);
 
             // if (!appConfig.graphVizOptions.setTargetFormat(optArg))
             // {
@@ -1386,7 +1386,7 @@ int operator()( const StringType                                &a           //!
 
         StringType optName;
         umba::utfToStringTypeHelper(optName, opt.name);
-        auto optFileName = makeAbsPath(optName);
+        auto optFileName = argsParser.makeAbsPath(optName);
 
         if (!argsParser.quet)
         {
@@ -1395,11 +1395,9 @@ int operator()( const StringType                                &a           //!
             #endif
         }
 
-        optFiles.push(optFileName);
-
+        argsParser.pushOptionsFileName(optFileName);
         auto parseRes = argsParser.parseOptionsFile( optFileName );
-
-        optFiles.pop();
+        argsParser.popOptionsFileName();
 
         if (!parseRes)
             return -1;
@@ -1413,11 +1411,11 @@ int operator()( const StringType                                &a           //!
 
     if (inputFilename.empty())
     {
-        inputFilename = makeAbsPath(a);
+        inputFilename = argsParser.makeAbsPath(a);
     }
     else
     {
-        outputFilename = makeAbsPath(a);
+        outputFilename = argsParser.makeAbsPath(a);
     }
 
 
