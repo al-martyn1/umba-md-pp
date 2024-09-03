@@ -817,14 +817,26 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
         --endLineIdx;
     }
 
+    std::string blockCharacters = langOpts.getBlockCharacters();
+    char chBlockOpen  = 0;
+    char chBlockClose = 0;
+    if (blockCharacters.size()==2)
+    {
+        chBlockOpen  = blockCharacters[0];
+        chBlockClose = blockCharacters[1];
+    }
+
+
     std::size_t nextLookupStartIdx = 0;
     firstFoundLineIdx = (std::size_t)-1;
 
     if (tagInfo.startType==SnippetTagType::normalTag)
     {
         std::string targetFragmentTag; // Хз, зачем нам это раньше понадобилось снаружи
-        return extractCodeFragmentBySnippetTag( langOpts, lang, lines, firstFoundLineIdx, targetFragmentTag, listingNestedTagsMode, startLineIdx, tabSize);
+        return extractCodeFragmentBySnippetTag( langOpts, lang, lines, firstFoundLineIdx, targetFragmentTag, listingNestedTagsMode, startLineIdx, tabSize); // Поиск по тэгу - ищем начало и конец по тэгу и тут же выходим
     }
+
+    // Тут поиск по сигнатуре - ищем начало, не выходим
     else if (tagInfo.startType==SnippetTagType::textSignature)
     {
         #if defined(UMBA_MD_FIND_TEXT_SIGNATURE_IN_LINES_OLD_VERSION)
@@ -835,9 +847,22 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
         std::size_t foundSignatureNumLines = 0;
         firstFoundLineIdx  = findTextSignaturePathInLines(lines, tagInfo.startTagOrSignaturePath, foundSignatureNumLines, startLineIdx);
         if (firstFoundLineIdx!=(std::size_t)-1)
+        {
             nextLookupStartIdx = firstFoundLineIdx + foundSignatureNumLines;
+            // Блок начинаем искать в последней строке сигнатуры. 
+            // В плюсиках может быть ситуация, когда всё записано в одну строчку - и искомая сигнатура, и её блок кода
+            // Ну, или, как минимум, открывающая скобка при использовании K&R стиля
+            // !!! Тут бы надо предусмотреть, что в первой строке поиска надо пропустить окончание сигнатуры, но пока сойдёт и так
+            if (tagInfo.endType==SnippetTagType::block && chBlockOpen!=0)
+            {
+                if (nextLookupStartIdx>0)
+                    nextLookupStartIdx -= 1; 
+            }
+        }
         #endif
     }
+
+    // Тут поиск по номеру строки - ищем начало, не выходим
     else if (tagInfo.startType==SnippetTagType::lineNumber)
     {
         firstFoundLineIdx  = startLineIdx;
@@ -849,15 +874,6 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
     {
         firstFoundLineIdx = (std::size_t)-1;
         return std::vector<std::string>();
-    }
-
-    std::string blockCharacters = langOpts.getBlockCharacters();
-    char chBlockOpen  = 0;
-    char chBlockClose = 0;
-    if (blockCharacters.size()==2)
-    {
-        chBlockOpen  = blockCharacters[0];
-        chBlockClose = blockCharacters[1];
     }
 
     // Если у нас задан блок, но для языка блоки не заданы - ищем окончание блока как пустую строку
@@ -882,6 +898,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
         if (foundLastFragmentLineIdx!=(std::size_t)-1)
         {
             --foundLastFragmentLineIdx; // У нас начало следующего фрагмента, сдвигаем, чтобы указывало на конец предыдущего
+            // !!! - или тут надо уменьшить на размер конечной сигнатуры в строках?
         }
     }
     else if (tagInfo.endType==SnippetTagType::lineNumber)
@@ -896,7 +913,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
     {
         foundLastFragmentLineIdx = findStopPrefixInLines(lines, langOpts.getGenericCutStopPrefixes(), nextLookupStartIdx);
     }
-    else
+    else // Остался вариант, когда считываем N строк
     {
         std::size_t numLines = tagInfo.endNumber;
         if (numLines==(std::size_t)-1 || numLines<1)
