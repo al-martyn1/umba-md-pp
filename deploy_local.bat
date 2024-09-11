@@ -1,3 +1,5 @@
+@if exist "%~dp0\set_sln.bat"    @call "%~dp0\set_sln.bat"
+
 @rem %UMBA_TOOLS% - eg F:\umba-tools
 
 @if "%UMBA_TOOLS%"=="" goto UMBA_TOOLS_VAR_NOT_SET
@@ -20,8 +22,9 @@
     exit /B 1
 )
 
+copy /Y "%OUTROOTPATH%\Release\%SLN%.exe"         "%UMBA_TOOLS%\bin\"
 
-copy /Y "%OUTROOTPATH%\Release\umba-md-pp.exe"         "%UMBA_TOOLS%\bin\"
+@rem copy /Y "%OUTROOTPATH%\Release\umba-md-pp.exe"         "%UMBA_TOOLS%\bin\"
 copy /Y "%OUTROOTPATH%\Release\umba-md-pp-view.exe"    "%UMBA_TOOLS%\bin\"
 
 @xcopy /Y /S /E /I /F /R "%~dp0\_distr_conf\conf\*"               "%UMBA_TOOLS%\conf"
