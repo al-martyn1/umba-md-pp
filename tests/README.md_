@@ -149,3 +149,278 @@ GitHub/GitLab wiki, например.
 
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
+
+#// /*
+Пытаемся в графы
+
+[Node Shapes](https://graphviz.org/doc/info/shapes.html)
+
+[Undirected Graphs](https://graphviz.org/Gallery/undirected/)
+
+[Directed Graphs examples](https://graphviz.org/Gallery/directed/)
+
+[Neato Spring Graphs eamples](https://graphviz.org/Gallery/neato/)
+
+[Twopi Radial Graphs](https://graphviz.org/Gallery/twopi/)
+
+
+<graph> doc/trie.dot Trie
+<graph> doc/trie_flat.dot Flat Trie
+
+<graph            save-as=simple-er-dot>   doc\dot\test007.dot Entity relation diagram (Dot)
+
+<graph type=neato save-as=simple-er-neato> doc\dot\test007.dot Entity relation diagram (Neato)
+
+<graph type=fdp   save-as=simple-er-fdp>   doc\dot\test007.dot Entity relation diagram (FDP)
+
+<graph type=twopi save-as=simple-er-twopi> doc\dot\test007.dot Entity relation diagram (Twopi)
+
+<graph type=circo save-as=simple-er-circo> doc\dot\test007.dot Entity relation diagram (Circo)
+
+#// <graph type= save-as=simple-er> doc\dot\test007.dot Entity relation diagram ()
+
+#//     acyclic    = 0x0001 /*!< Make directed graphs acyclic. */,
+#//     bcomps     = 0x0002 /*!< Biconnected components filter for graphs. */,
+#//     ccomps     = 0x0003 /*!< Connected components filter for graphs. */,
+#//     cluster    = 0x0004 /*!< Find clusters in a graph and augment the graph with this information. */,
+#//     dijkstra   = 0x0005 /*!< Single-source distance filter. */,
+#//     gvmap      = 0x0006 /*!< Find clusters and create a geographical map highlighting clusters. */,
+#//     gvpack     = 0x0007 /*!< Merge and pack disjoint graphs. */,
+#//     mingle     = 0x0008 /*!< Fast edge bundling. */,
+#//     sccmap     = 0x0009 /*!< Extract strongly connected components of directed graphs. */,
+
+
+<graph save-as=left-to-right> !Left to right graph flow
+digraph G{
+ rankdir=LR;
+ node[color="red",fontsize=14];
+ edge[color="darkgreen",fontcolor="blue",fontsize=12];
+ OPEN[shape="rectangle",style="filled",fillcolor="lightgrey"];
+ CLOSED[shape="octagon",label="Финиш"];
+ VERIFIED[shape="rectangle",style="rounded"];
+ OPEN->RESOLVED->VERIFIED->CLOSED;
+ OPEN->CLOSED[style="bold"];
+ VERIFIED->OPEN[label="обнаружены ошибки",style="dashed",arrowhead="dot"];
+}
+</graph>
+
+<graph rtf-target-format=emf> doc\dot\test001.dot A-B Graph
+
+<graph scale=0.5> doc\dot\test004.dot Vinse
+
+<graph save-as=life> !Life flow
+ digraph G{ 
+  Рождение->Юность->Зрелость->Старость->Смерть;
+  Юность->Смерть;
+  Зрелость->Смерть;
+ }
+</graph>
+
+<graph save-as=like-table rtf-target-format=emf> !Like a table
+digraph structs {
+  rankdir=HR;
+  first [shape=record,label="  x1\n all | { x21 | <f0> x22| x23} | x3" ];
+  second [shape=record,label=" x22_1 | x22_2 | x22_3"];
+  first:<f0> -> second;
+}
+</graph>
+
+<graph save-as=xhtml-genealogy> !XHTML genealogy
+ digraph G {
+     rankdir=LR;
+            SGML [URL="SGML"];
+            HTML [URL="HTML"];
+            XML [URL="XML"];
+            XHTML [URL="http://www.w3schools.com/xhtml/"];
+    SGML->HTML;
+    SGML->XML;
+    HTML->XHTML;
+    XML->XHTML;
+    SGML->XHTML[color="red",fontcolor="blue",label="ссылка на Google",URL="http://www.google.com"];
+}
+</graph>
+
+<graph save-as=subgraph-cluster-sample> !Subgraph (cluster) sample
+digraph G {
+  rankdir=LR;
+  subgraph cluster0 {
+       node [style=filled,color=white];
+       style=filled;
+       color=lightgrey;
+       a0;
+       a1
+       label = "process #1";
+  }
+  subgraph cluster1 {
+       node [style=filled];
+       b0;
+       label = "process #2";
+       color=blue
+  }
+  start -> a0;
+  start -> b0;
+  a0 -> a1 -> end;
+  b0 -> end;
+}
+</graph>
+
+
+<graph save-as=node-shapes-digraph_R> !Node Shapes - digraph R
+digraph R {
+  rankdir=LR
+  node [style=rounded]
+  node1 [shape=box]
+  node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
+  node3 [shape=record, label="{ a | b | c }"]
+
+  node1 -> node2 -> node3
+}
+</graph>
+
+<graph save-as=node-shapes-digraph_structs> !Node Shapes - digraph structs
+digraph structs {
+    node [shape=record];
+    struct1 [label="<f0> left|<f1> mid\ dle|<f2> right"];
+    struct2 [label="<f0> one|<f1> two"];
+    struct3 [label="hello\nworld |{ b |{c|<here> d|e}| f}| g | h"];
+    struct1:f1 -> struct2:f0;
+    struct1:f2 -> struct3:here;
+}
+</graph>
+
+<graph save-as=node-shapes-digraph_G> !Node Shapes - digraph G
+digraph G {
+  rankdir=LR
+  node [shape=box, color=blue]
+  node1 [style=filled] 
+  node2 [style=filled, fillcolor=red] 
+  node0 -> node1 -> node2
+}
+</graph>
+
+
+#// */
+Пытаемся в картинки
+
+![Todo 1](doc/icons/todo-list-50.png)
+
+[![Todo 2](doc/icons/todo-list-50.png) TODO](doc/todo.md)
+
+
+#//  - правда, строки должны начинаться с него, и нельзя закоментировать 'хвост' строки;
+#// - правда, многострочный коментарий должен начинаться в начале строки, и заканчиваться в конце строки;
+#// - правда, они должны начинаться в первой строке файла, иначе ;
+
+
+Включаем по сигнатуре, блок, но сигнатура в одну строку при ссылке
+#!insert{lineno} cpp\signature_test.cpp#`inline void simpleDoNothing`-{}
+
+Включаем по сигнатуре, блок, но сигнатура в одну строку в файле
+#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleNothing2`-{}
+
+Включаем по сигнатуре, блок, шаблонная функция
+#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-{}
+
+Включаем по сигнатуре, блок, нешаблонная функция, первая версия (без использования сигнатурного пути)
+#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleDoNothing`-{}
+
+Включаем по сигнатуре, блок, нешаблонная функция, вторая версия (с использованием сигнатурного пути)
+#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`/`inline\nvoid simpleDoNothing`-{}
+
+Включаем по сигнатуре, шаблонная функция, до разделителя
+#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-(-)
+
+Включаем по сигнатуре, шаблонная функция, до двух пустых строк
+#!insert{lineno} cpp\signature_test.cpp#`template<typename StringType>\nbool isUrlAbsolute`-(2)
+
+Включаем по сигнатуре, от одной сигнатуры до другой
+#!insert{lineno} cpp\signature_test.cpp#`inline\nvoid simpleDoNothing`-`inline\nvoid simpleDoNothing`
+
+Включаем по номерам строк
+#!insert{lineno} umba-md-pp\log.h#6-12
+
+
+#// Справочник по аргументам командной строки
+
+#//!insert{no-fail,doc,raise=-1} umba-md-pp-help.md
+
+
+# 3 Подключенные для примера результаты тестов
+
+
+#!insert{no-fail,doc,raise=-1} ../upper_inc.md_
+#!insert{no-fail,doc,raise=-1} tests/test01.md_
+#//!insert{no-fail,doc,raise=-1} tests/test04.md_
+#//!insert{no-fail,doc,raise=-1} tests/test05.md_
+
+
+## 3.1 Title
+
+Test01
+
+// Print lines, noKeepCutTags #print_ver_all
+
+!!! File not found
+#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+
+
+// Print lines, keepCutTags   #print_ver_all
+
+!!! File not found
+#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+
+
+// No lines, keepCutTags   #print_ver_all
+
+!!! File not found
+#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print_ver_all
+
+
+// printCommitHash
+
+!!! File not found
+#!insert{lineno} cpp/print_ver.h#printCommitHash
+
+
+// printOnlyVersion
+
+!!! File not found
+#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+
+
+### 3.1.1 Subtitle
+#### Русский заголовок третьего уровня
+
+```
+lst existing
+#!insert{lineno} umba-md-pp\log.h#6-12 - this command not processed due it in listing
+```
+
+https://moonbase59.github.io/gh-toc/
+https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
+Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
+todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
+
+
+!!! File not found
+#!insert{lineno} cpp/print_ver.h#print_ver_all
+
+!!! File not found
+#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+
+## 3.2 Other Title
+
+### 3.2.1 Other Subtitle
+
+Bla-bla.
+
+  - [1 umba-md-pp - Markdown препроцессор](#user-content-1-umba-md-pp---markdown-препроцессор)
+  - [2 Основные возможности](#user-content-2-основные-возможности)
+  - [3 Подключенные для примера результаты тестов](#user-content-3-подключенные-для-примера-результаты-тестов)
+    - [3.1 Title](#user-content-31-title)
+      - [3.1.1 Subtitle](#user-content-311-subtitle)
+    - [3.2 Other Title](#user-content-32-other-title)
+      - [3.2.1 Other Subtitle](#user-content-321-other-subtitle)
+
+
+

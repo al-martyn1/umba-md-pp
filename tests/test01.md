@@ -1,38 +1,47 @@
 # Препроцессор для Markdown 01
 
+Test number one
+
 
 # Title
 
 Test01
+Link to [test02.md](test02.md_)
+Image - ![Image](img/filled-96.png)
 
-// Print lines, noKeepCutTags #print-ver-all
-
-!!! File not found in:
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
-
-
-// Print lines, keepCutTags   #print-ver-all
-
-!!! File not found in:
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+Link to document which is out of the hierarchy [upper_inc.md_](../../upper_inc.md_)
+Image from out of the  hierarchy- ![Image](../../upper-level-filled-96.png)
 
 
-// No lines, keepCutTags   #print-ver-all
 
-!!! File not found in:
-#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+// Print lines, noKeepCutTags #print_ver_all
+
+```cpp
+```
+
+
+// Print lines, keepCutTags   #print_ver_all
+
+```cpp
+```
+
+
+// No lines, keepCutTags   #print_ver_all
+
+```cpp
+```
 
 
 // printCommitHash
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#printCommitHash
+```cpp
+```
 
 
 // printOnlyVersion
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
 
 
 ## Subtitle
@@ -48,14 +57,21 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-!!! File not found in:
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#print-ver-all
+```cpp
+```
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
 
 # Other Title
 

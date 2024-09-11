@@ -1,5 +1,7 @@
 # Препроцессор для Markdown 02
 
+Test number two
+
   - [Title](#user-content-title)
     - [Subtitle](#user-content-subtitle)
       - [Русский заголовок третьего уровня](#user-content-русский-заголовок-третьего-уровня)
@@ -11,31 +13,38 @@
 
 Test02
 
-!!! File not found in:
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
-!!! File not found in:
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src, F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src, F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src, F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src, F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src, F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src, F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src, F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src, F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\_distr_conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src
 #!insert{lineno} src\umba-md-pp\log.h#6-12
 
 
-// Print lines, noKeepCutTags #print-ver-all
+// Print lines, noKeepCutTags #print_ver_all
 
-!!! File not found in:
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
-
-
-// Print lines, keepCutTags   #print-ver-all
-
-!!! File not found in:
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+```cpp
+```
 
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#printCommitHash
+// Print lines, keepCutTags   #print_ver_all
+
+```cpp
+```
 
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
+
+
+```cpp
+```
 
 ## Subtitle
 ### Русский заголовок третьего уровня
@@ -50,14 +59,21 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-!!! File not found in:
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#print-ver-all
+```cpp
+```
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
 
 # Other Title
 

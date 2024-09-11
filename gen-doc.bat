@@ -1,5 +1,6 @@
 @rem set BATCH_ROOT=--batch-output-path=C:\work\temp\mdpp-test
-@set EXCLUDE_DIRS=--batch-exclude-dir=_libs,libs,_lib,lib,tests,test,rc,_generators,_distr_conf,src,.msvc2019,boost,icons
+@rem tests,test,
+@set EXCLUDE_DIRS=--batch-exclude-dir=_libs,libs,_lib,lib,rc,_generators,_distr_conf,src,.msvc2019,boost,icons
 @set EXCLUDE=%EXCLUDE_DIRS% --batch-exclude-files=*upper_inc.md*
 @set COMMON=--verbose --overwrite --copy-images --add-examples-path=.\doc --add-examples-path=.\_distr_conf --add-examples-path=.\tests\snippets --add-examples-path=.\src
 @rem set GRAPHVIZ_OPTIONS=--graphviz-output-path=.\.doc.generated_images

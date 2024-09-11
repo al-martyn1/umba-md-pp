@@ -1,47 +1,132 @@
 # Препроцессор для Markdown 03
 
-  - [Title](#user-content-title)
-    - [Subtitle](#user-content-subtitle)
-      - [Русский заголовок третьего уровня](#user-content-русский-заголовок-третьего-уровня)
-  - [Other Title](#user-content-other-title)
-    - [Other Subtitle](#user-content-other-subtitle)
+Test number three
+
+Test number one
 
 
 # Title
 
 Test03
 
-!!! File not found in:
-#!insert{doc,raise=-2} test01.md_
 
-// Print lines, noKeepCutTags #print-ver-all
+### Title
 
-!!! File not found in:
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+Test01
+Link to [test02.md](test02.md)
+Image - ![Image](img/filled-96.png)
 
-
-// Print lines, keepCutTags   #print-ver-all
-
-!!! File not found in:
-#!insert{lineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+Link to document which is out of the hierarchy [upper_inc.md_](../../upper_inc.md)
+Image from out of the  hierarchy- ![Image](../../upper-level-filled-96.png)
 
 
-// No lines, keepCutTags   #print-ver-all
 
-!!! File not found in:
-#!insert{nolineno,noKeepCutTags} cpp/print_ver.h#print-ver-all
+// Print lines, noKeepCutTags #print_ver_all
+
+```cpp
+```
+
+
+// Print lines, keepCutTags   #print_ver_all
+
+```cpp
+```
+
+
+// No lines, keepCutTags   #print_ver_all
+
+```cpp
+```
 
 
 // printCommitHash
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#printCommitHash
+```cpp
+```
 
 
 // printOnlyVersion
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
+
+
+#### Subtitle
+##### Русский заголовок третьего уровня
+
+```
+lst existing
+#!insert{lineno} ..\src\umba-md-pp\log.h#6-12 - this command not processed due it in listing
+```
+
+https://moonbase59.github.io/gh-toc/
+https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
+Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
+todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
+
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
+
+```cpp
+```
+
+```cpp
+```
+
+### Other Title
+
+#### Other Subtitle
+
+Bla-bla.
+
+  - [Title](#user-content-title)
+      - [Title](#user-content-title-1)
+        - [Subtitle](#user-content-subtitle)
+          - [Русский заголовок третьего уровня](#user-content-русский-заголовок-третьего-уровня)
+      - [Other Title](#user-content-other-title)
+        - [Other Subtitle](#user-content-other-subtitle)
+    - [Subtitle](#user-content-subtitle-1)
+      - [Русский заголовок третьего уровня](#user-content-русский-заголовок-третьего-уровня-1)
+  - [Other Title](#user-content-other-title-1)
+    - [Other Subtitle](#user-content-other-subtitle-1)
+
+
+
+// Print lines, noKeepCutTags #print_ver_all
+
+```cpp
+```
+
+
+// Print lines, keepCutTags   #print_ver_all
+
+```cpp
+```
+
+
+// No lines, keepCutTags   #print_ver_all
+
+```cpp
+```
+
+
+// printCommitHash
+
+```cpp
+```
+
+
+// printOnlyVersion
+
+```cpp
+```
 
 
 ## Subtitle
@@ -57,14 +142,21 @@ https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-wr
 Github tips, notes, warnings and so on - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 todo's - https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#task-lists
 
-!!! File not found in:
-#!insert{lineno} ..\src\umba-md-pp\log.h#6-12
+```cpp
+ 6: // source parsing errors
+ 7: // requires std::stringr curFile, unsigned lineNo in log scope
+ 8: #define LOG_ERR                      UMBA_LOG_ERR_INPUT
+ 9: #define LOG_WARN(warnType)           UMBA_LOG_WARN_INPUT(warnType)
+10: 
+11: // options and other errors
+12: #define LOG_ERR_OPT                  UMBA_LOG_ERR
+```
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#print-ver-all
+```cpp
+```
 
-!!! File not found in:
-#!insert{lineno} cpp/print_ver.h#printOnlyVersion
+```cpp
+```
 
 # Other Title
 
