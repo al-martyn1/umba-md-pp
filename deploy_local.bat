@@ -27,7 +27,7 @@ copy /Y "%OUTROOTPATH%\Release\%SLN%.exe"         "%UMBA_TOOLS%\bin\"
 @rem copy /Y "%OUTROOTPATH%\Release\umba-md-pp.exe"         "%UMBA_TOOLS%\bin\"
 copy /Y "%OUTROOTPATH%\Release\umba-md-pp-view.exe"    "%UMBA_TOOLS%\bin\"
 
-@xcopy /Y /S /E /I /F /R "%~dp0\_distr_conf\conf\*"               "%UMBA_TOOLS%\conf"
+@xcopy /Y /S /E /I /F /R "%~dp0\conf\*"               "%UMBA_TOOLS%\conf"
 
 %UMBA_TOOLS%\bin\umba-md-pp-view.exe --register-view-handler
 

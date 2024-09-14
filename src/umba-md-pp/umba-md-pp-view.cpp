@@ -298,7 +298,7 @@ main/wmain - нужны только для MSVC/Console
 
         argsParser.args.clear();
 
-        // argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
+        // argsParser.args.push_back("@" + rootPath + "conf/conf/umba-md-pp.options");
         //
         // argsParser.args.push_back("--overwrite");
         // argsParser.args.push_back("--add-examples-path="+rootPath+"/tests/snippets");

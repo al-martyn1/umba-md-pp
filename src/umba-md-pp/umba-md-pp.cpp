@@ -342,7 +342,7 @@ int safe_main(int argc, char* argv[])
 
 
 
-        //argsParser.args.push_back("@" + rootPath + "_distr_conf/conf/umba-md-pp.options");
+        //argsParser.args.push_back("@" + rootPath + "conf/conf/umba-md-pp.options");
 
         // argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");
         // argsParser.args.push_back("--add-examples-path=" + rootPath + "src;" + rootPath + "tests\\snippets");
