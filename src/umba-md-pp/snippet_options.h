@@ -849,14 +849,14 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
         if (firstFoundLineIdx!=(std::size_t)-1)
         {
             nextLookupStartIdx = firstFoundLineIdx + foundSignatureNumLines;
-            // Блок начинаем искать в последней строке сигнатуры. 
+            // Блок начинаем искать в последней строке сигнатуры.
             // В плюсиках может быть ситуация, когда всё записано в одну строчку - и искомая сигнатура, и её блок кода
             // Ну, или, как минимум, открывающая скобка при использовании K&R стиля
             // !!! Тут бы надо предусмотреть, что в первой строке поиска надо пропустить окончание сигнатуры, но пока сойдёт и так
             if (tagInfo.endType==SnippetTagType::block && chBlockOpen!=0)
             {
                 if (nextLookupStartIdx>0)
-                    nextLookupStartIdx -= 1; 
+                    nextLookupStartIdx -= 1;
             }
         }
         #endif

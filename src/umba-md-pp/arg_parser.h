@@ -22,8 +22,8 @@ struct ArgParser
 {
 
 // std::stack<StringType> optFiles;
-//  
-//  
+//
+//
 // StringType getBasePath() const
 // {
 //     StringType basePath;
@@ -31,11 +31,11 @@ struct ArgParser
 //         basePath = umba::filesys::getCurrentDirectory<StringType>();
 //     else
 //         basePath = umba::filename::getPath(optFiles.top());
-//  
+//
 //     return basePath;
 // }
-//  
-//  
+//
+//
 // StringType makeAbsPath( StringType p )
 // {
 //     //return umba::filename::makeCanonical(umba::filename::makeAbsPath( p, getBasePath() ));
