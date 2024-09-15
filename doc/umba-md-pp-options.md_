@@ -38,7 +38,7 @@ If output_file not taken, STDOUT used.
 **--color=CLR** - Force set console output coloring.
 Allowed values: `file`/`no`/`none`, `ansi`/`term` or `cmd`/`console`/`win`/`win32`/`windows`, initial value: `<AUTO>`.
 
-**--verbose[=MODE]** - Allow overwrite existing file.
+**--verbose[=MODE]** - Verbose mode on/off.
 Flag option, allowed values: `+`/`1`/`Y(es)` or /`0`/`N(o)`/`False`, default value: TRUE.
 
 **-Y[=MODE]**,
@@ -47,7 +47,7 @@ Flag option, allowed values: `+`/`1`/`Y(es)` or /`0`/`N(o)`/`False`, default val
 
 **-L=LINEFEED**,
 **--LF=LINEFEED**,
-**--linefeed=LINEFEED** - Output linefeed. LINEFEED is one of: CR/LF/CRLF/LFCR/DETECT. Default is CRLF.
+**--linefeed=LINEFEED** - Output linefeed. LINEFEED is one of: `CR`/`LF`/`CRLF`/`LFCR`/`DETECT`.Default is `CRLF`.
 
 **-I=PATH**,
 **--add-examples-path=PATH** - Add paths list for examples searching.
@@ -111,8 +111,8 @@ Min value: `0`, max value: `4`, initial value: ` `.
 **--batch-output-root=PATH** - Set output root path for batch mode.
 
 **-X=MASK,...**,
-**--batch-exclude-files=MASK,...** - Exclude files from parsing in the batch mode. The 'MASK' parameter is a simple file mask, where '*' means any number of any chars, and '?' means exact one of any char. In addition, symbol '^' in front and/or back of the mask means that the mask will be bound to beginning/ending of the tested file name.
-Also, regular expresion syntax allowed in form '{*?regex?*}YOURREGEX'. The regular expresions supports
+**--batch-exclude-files=MASK,...** - Exclude files from parsing in the batch mode. The `MASK` parameter is a simple file mask, where `*` means any number of any chars, and `?` means exact one of any char. In addition, symbol `^` in front and/or back of the mask means that the mask will be bound to beginning/ending of the tested file name.
+Also, regular expresion syntax allowed in form `{*?regex?*}YOURREGEX`. The regular expresions supports
 See also: C++ Modified ECMA Script regular expression grammar - https://en.cppreference.com/w/cpp/regex/ecmascript.
 
 **--batch-exclude-dir=DIRNAME,...**,
@@ -156,8 +156,8 @@ Flag option, allowed values: `+`/`1`/`Y(es)` or /`0`/`N(o)`/`False`, default val
 **--gviz-dpi=DPI**,
 **--graphviz-dpi=DPI** - Set DPI for Graphviz tools output.
 
-**--gviz-output-format=DPI**,
-**--graphviz-output-format=DPI** - Set Graphviz tools output format (SVG/PNG/BMP).
+**--gviz-output-format=FORMAT**,
+**--graphviz-output-format=FORMAT** - Set Graphviz tools output format (SVG/PNG/BMP).
 
 **--gviz-output-path=DPI**,
 **--gviz-output-root=DPI**,

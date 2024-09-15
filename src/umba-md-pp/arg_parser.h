@@ -273,7 +273,7 @@ int operator()( const StringType                                &a           //!
         else if ( opt.setParam("?MODE",true)
                || opt.isOption("verbose")
                // || opt.setParam("VAL",true)
-               || opt.setDescription("Allow overwrite existing file."))
+               || opt.setDescription("Verbose mode on/off."))
         {
             if (argsParser.hasHelpOption) return 0;
 
@@ -325,11 +325,11 @@ int operator()( const StringType                                &a           //!
         else if ( opt.setParam("LINEFEED",umba::command_line::OptionType::optString)
                || opt.isOption("linefeed") || opt.isOption("LF") || opt.isOption('L')
                // || opt.setParam("VAL",true)
-               || opt.setDescription("Output linefeed. LINEFEED is one of: CR/LF/CRLF/LFCR/DETECT. "
+               || opt.setDescription("Output linefeed. LINEFEED is one of: `CR`/`LF`/`CRLF`/`LFCR`/`DETECT`."
                                      #if defined(WIN32) || defined(_WIN32)
-                                     "Default is CRLF."
+                                     "Default is `CRLF`."
                                      #else
-                                     "Default is LF."
+                                     "Default is `LF`."
                                      #endif
                                     )
                 )
@@ -867,12 +867,12 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.isOption("batch-exclude-files") || opt.isOption('X') || opt.setParam("MASK,...")
-               || opt.setDescription("Exclude files from parsing in the batch mode. The 'MASK' parameter is a simple file mask, where '*' "
-                                     "means any number of any chars, and '?' means exact one of any char. In addition, "
-                                     "symbol '^' in front and/or back of the mask means that the mask will be bound to beginning/ending "
+               || opt.setDescription("Exclude files from parsing in the batch mode. The `MASK` parameter is a simple file mask, where `*` "
+                                     "means any number of any chars, and `?` means exact one of any char. In addition, "
+                                     "symbol `^` in front and/or back of the mask means that the mask will be bound to beginning/ending "
                                      "of the tested file name.\n"
-                                     "Also, regular expresion syntax allowed in form '" +
-                                     umba::regex_helpers::getRawEcmaRegexPrefix<std::string>() + "YOURREGEX'. The regular expresions supports\n"
+                                     "Also, regular expresion syntax allowed in form `" +
+                                     umba::regex_helpers::getRawEcmaRegexPrefix<std::string>() + "YOURREGEX`. The regular expresions supports\n"
                                      "See also: C++ Modified ECMA Script regular expression grammar - https://en.cppreference.com/w/cpp/regex/ecmascript"
                                     )
                 )
@@ -1115,7 +1115,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("DPI",umba::command_line::OptionType::optString)
+        else if ( opt.setParam("FORMAT",umba::command_line::OptionType::optString)
                || opt.isOption("gviz-output-format")
                || opt.isOption("graphviz-output-format")
                || opt.setDescription("Set Graphviz tools output format (SVG/PNG/BMP)."))
