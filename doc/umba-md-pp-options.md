@@ -30,9 +30,9 @@ If output_file not taken, STDOUT used.
 **-v**,
 **--version** - Show version number.
 
-**--builtin-options-info** - Show builtin options files location.
+**--version-info** - Show version info - app name, version, host platform, build date and time.
 
-**--version-info** - Show version info.
+**--builtin-options-info** - Show builtin options files location.
 
 **--where** - Show where the executable file is.
 

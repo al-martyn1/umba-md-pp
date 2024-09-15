@@ -114,18 +114,7 @@ int operator()( const StringType                                &a           //!
             }
         }
 
-        else if (opt.isOption("builtin-options-info") || opt.setDescription("Show builtin options files location"))
-        {
-            if (argsParser.hasHelpOption) return 0;
-
-            if (!ignoreInfos)
-            {
-                argsParser.printBuiltinFileNames(std::cout);
-                return 1;
-            }
-        }
-        // builtin-options-info
-        else if (opt.isOption("version-info") || opt.setDescription("Show version info"))
+        else if (opt.isOption("version-info") || opt.setDescription("Show version info - app name, version, host platform, build date and time"))
         {
             if (argsParser.hasHelpOption) return 0;
 
@@ -140,6 +129,17 @@ int operator()( const StringType                                &a           //!
                     umba::cli_tool_helpers::printNameVersion(std::cout);
                 }
 
+                return 1;
+            }
+        }
+
+        else if (opt.isOption("builtin-options-info") || opt.setDescription("Show builtin options files location"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!ignoreInfos)
+            {
+                argsParser.printBuiltinFileNames(std::cout);
                 return 1;
             }
         }
