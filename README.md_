@@ -16,6 +16,8 @@ Language   : Russian
 
  - [Перечень страниц (индекс документации)](pages.md)
  - [TODO](doc/todo.md)
+ - [Опции командной строки](doc/umba-md-pp-options.md)
+ - [Основные исходники](doc/_sources_brief.md)
 
 
 #!insert{no-fail,doc,raise=-1} tests/$(INSERT_DOC_FILENAME_MACRO_TEST).md_

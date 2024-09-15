@@ -1,5 +1,5 @@
 /*! \file
-    \brief Утилита umba-md-pp - препроцессор для маркдауна
+    \brief Утилита umba-md-pp-view - рендерер маркдауна, использующий Doxygen и локальный просмотрщик RTF-файлов
  */
 
 // C:\Users\mag\AppData\Local\Temp\.umba-md-pp-view\

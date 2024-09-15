@@ -3,7 +3,8 @@ Brief Description for Project Sources
 
 umba-md-pp/gen-lang-detection-tr.cpp - Утилита umba-md-pp - препроцессор для маркдауна.
 umba-md-pp/test_rtf_workarounds.cpp - Тесты воркараундов/фиксов RTF, который сгенерил Doxygen.
-umba-md-pp/umba-md-pp-view.cpp   - Утилита umba-md-pp - препроцессор для маркдауна.
+umba-md-pp/umba-md-pp-view.cpp   - Утилита umba-md-pp-view - рендерер маркдауна, использующий
+                                   Doxygen и локальный просмотрщик RTF-файлов.
 umba-md-pp/umba-md-pp.cpp        - Утилита umba-md-pp - препроцессор для маркдауна.
 
 umba-md-pp/_umba-md-pp-view.rc   - 
@@ -19,6 +20,7 @@ umba-md-pp/enum_hash.h           -
 umba-md-pp/enums.h               - 
 umba-md-pp/extern_tools.h        - 
 umba-md-pp/graph_viz_options.h   - 
+umba-md-pp/image_helpers.h       - 
 umba-md-pp/language-options-database.h - 
 umba-md-pp/log.h                 - 
 umba-md-pp/md-pp-macro_helpers.h - 
@@ -29,11 +31,6 @@ umba-md-pp/processing.h          -
 umba-md-pp/processing_code_utils.h - Помогалки для processing.h.
 umba-md-pp/processing_section_utils.h - Помогалки для processing.h.
 umba-md-pp/processing_utils.h    - Помогалки для processing.h.
-umba-md-pp/rc/filled.ico         - 
-umba-md-pp/rc/icons8-������-ios-17-filled-favicons.zip - 
-umba-md-pp/rc/icons8-������-ios-17-outlined-favicons.zip - 
-umba-md-pp/rc/markdown_light.zip - 
-umba-md-pp/rc/outlined.ico       - 
 umba-md-pp/resource.h            - 
 umba-md-pp/rtf_workarounds.h     - 
 umba-md-pp/snippet_options.h     - 
