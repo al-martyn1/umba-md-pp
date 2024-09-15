@@ -1095,8 +1095,9 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("DPI",umba::command_line::OptionType::optString)
-               || opt.isOption("gviz-dpi")
                || opt.isOption("graphviz-dpi")
+               || opt.isOption("gviz-dpi")
+               || opt.isOption("gv-dpi")
                || opt.setDescription("Set DPI for Graphviz tools output."))
         {
             if (argsParser.hasHelpOption) return 0;
@@ -1116,8 +1117,9 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("FORMAT",umba::command_line::OptionType::optString)
-               || opt.isOption("gviz-output-format")
                || opt.isOption("graphviz-output-format")
+               || opt.isOption("gviz-output-format")
+               || opt.isOption("gv-output-format")
                || opt.setDescription("Set Graphviz tools output format (SVG/PNG/BMP)."))
         {
             if (argsParser.hasHelpOption) return 0;
@@ -1137,10 +1139,12 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("DPI",umba::command_line::OptionType::optString)
-               || opt.isOption("gviz-output-path")
                || opt.isOption("graphviz-output-path")
-               || opt.isOption("gviz-output-root")
                || opt.isOption("graphviz-output-root")
+               || opt.isOption("gviz-output-path")
+               || opt.isOption("gviz-output-root")
+               || opt.isOption("gv-output-path")
+               || opt.isOption("gv-output-root")
                || opt.setDescription("Set Graphviz tools output root path."))
         {
             if (argsParser.hasHelpOption) return 0;
@@ -1163,8 +1167,9 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("?MODE",true)
-               || opt.isOption("gviz-show-labels")
                || opt.isOption("graphviz-show-labels")
+               || opt.isOption("gviz-show-labels")
+               || opt.isOption("gv-show-labels")
                || opt.setDescription("Show labels on Graphviz graphs."))
         {
             if (argsParser.hasHelpOption) return 0;
@@ -1180,8 +1185,9 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("?MODE",true)
-               || opt.isOption("gviz-keep-temp-dot-files")
                || opt.isOption("graphviz-keep-temp-dot-files")
+               || opt.isOption("gviz-keep-temp-dot-files")
+               || opt.isOption("gv-keep-temp-dot-files")
                || opt.setDescription("Keep temporary dot files."))
         {
             if (argsParser.hasHelpOption) return 0;
