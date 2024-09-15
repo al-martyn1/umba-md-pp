@@ -359,6 +359,12 @@ int safe_main(int argc, char* argv[])
         //argsParser.args.push_back("--batch-scan="+rootPath);
         //argsParser.args.push_back("--batch-scan="+rootPath+"doc");
         //argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
+
+
+        argsParser.args.push_back("--md");
+        argsParser.args.push_back("--help");
+
+        #if 0
         argsParser.args.push_back("--batch-scan-recurse="+rootPath+".");
         argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test");
 
@@ -386,7 +392,7 @@ int safe_main(int argc, char* argv[])
 
 
         //argsParser.args.push_back("");
-
+        #endif
 
 
 

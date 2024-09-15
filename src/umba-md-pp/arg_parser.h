@@ -73,7 +73,7 @@ int operator()( const StringType                                &a           //!
             return -1;
         }
 
-       if (opt.isOption("quet") || opt.isOption('q') || opt.setDescription("Operate quetly"))  // . Short alias for '--verbose=quet'
+        if (opt.isOption("quet") || opt.isOption('q') || opt.setDescription("Operate quetly"))  // . Short alias for '--verbose=quet'
         {
             argsParser.quet = true;
             //appConfig.setOptQuet(true);
@@ -89,24 +89,57 @@ int operator()( const StringType                                &a           //!
         #endif
 
         else if ( opt.isBuiltinsDisableOptionMain  ()
-               || opt.setDescription( dppof + "main distribution options file '" + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::appGlobal   ) + "'"))
+               // || opt.setDescription( dppof + "main distribution options file `" + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::appGlobal   ) + "`"))
+               || opt.setDescription( dppof + "main distribution options file"))
         { } // simple skip - обработка уже сделана
 
         else if ( opt.isBuiltinsDisableOptionCustom()
-               || opt.setDescription( dppof + "custom global options file '"     + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::customGlobal) + "'"))
+               //|| opt.setDescription( dppof + "custom global options file `"     + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::customGlobal) + "`"))
+               || opt.setDescription( dppof + "custom global options file"))
         { } // simple skip - обработка уже сделана
 
         else if ( opt.isBuiltinsDisableOptionUser  ()
-               || opt.setDescription( dppof + "user local options file '"        + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::userLocal   ) + "'"))
+               //|| opt.setDescription( dppof + "user local options file `"        + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::userLocal   ) + "`"))
+               || opt.setDescription( dppof + "user local options file"))
         { } // simple skip - обработка уже сделана
 
-        else if (opt.isOption("version") || opt.isOption('v') || opt.setDescription("Show version info"))
+        else if (opt.isOption("version") || opt.isOption('v') || opt.setDescription("Show version number"))
         {
             if (argsParser.hasHelpOption) return 0;
 
             if (!ignoreInfos)
             {
                 umba::cli_tool_helpers::printOnlyVersion(std::cout);
+                return 1;
+            }
+        }
+
+        else if (opt.isOption("builtin-options-info") || opt.setDescription("Show builtin options files location"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!ignoreInfos)
+            {
+                argsParser.printBuiltinFileNames(std::cout);
+                return 1;
+            }
+        }
+        // builtin-options-info
+        else if (opt.isOption("version-info") || opt.setDescription("Show version info"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!ignoreInfos)
+            {
+                if (argsParser.getPrintHelpStyle()!=umba::command_line::PrintHelpStyle::md)
+                {
+                    umba::cli_tool_helpers::printNameVersion(std::cout);
+                }
+                else
+                {
+                    umba::cli_tool_helpers::printNameVersion(std::cout);
+                }
+
                 return 1;
             }
         }
@@ -1365,8 +1398,47 @@ int operator()( const StringType                                &a           //!
                 //printHelp();
                 }
 
+                // bool mdMode = argsParser.getPrintHelpStyle()==umba::command_line::PrintHelpStyle::md;
+                // os << indent << appFullName << " version ";
+
+//     os << appVersion << "\n";
+//     return os;
+// }
+//
+// template<typename StreamType> inline
+// StreamType& printNameVersion( StreamType &os, const std::string &indent = "" )
+// {
+//     os << indent << appFullName << " version ";
+//     printOnlyVersion(os);
+
+    // #if !defined(UMBA_PRINT_NAME_VERSION_NO_PLATFORM_ARCHITECTURE)
+    // os << umba::getAppPlatformArchitecture() <<"\n";
+    // #endif
+    //
+    // #if !defined(UMBA_PRINT_NAME_VERSION_NO_COMPILER_INFO)
+    // std::string compilerFullInfoString = umba::getCompilerNameVersionString();
+    // {
+    //     std::string compilerSimulateFullInfoString = umba::getCompilerSimulateNameVersionString();
+    //     if (!compilerSimulateFullInfoString.empty())
+    //     {
+    //         compilerFullInfoString += " (as ";
+    //         compilerFullInfoString += compilerSimulateFullInfoString;
+    //         compilerFullInfoString += ")";
+    //     }
+    // }
+    //
+    // os << "Built with " << compilerFullInfoString <<" compiler\n";
+    // #endif
+    //
+    // #if !defined(UMBA_PRINT_NAME_VERSION_NO_BUILD_DATE_TIME)
+    // os << "Built at "<< appBuildDate <<" "<< appBuildTime <<"\n";
+    // #endif
+
+                //auto helpText = opt.getHelpOptionsString();
+
                 if (pCol && pCol->isNormalPrintHelpStyle() && argsParser.argsNeedHelp.empty())
                 {
+                    //argsParser.printHelpPage( std::cout, "[OPTIONS] input_file [output_file]", "If output_file not taken, STDOUT used", helpText );
                     auto helpText = opt.getHelpOptionsString();
                     std::cout << "Usage: " << umba::toUtf8(argsParser.programLocationInfo.exeName)
                               << " [OPTIONS] input_file [output_file]\n"
@@ -1374,11 +1446,17 @@ int operator()( const StringType                                &a           //!
                               << "\nOptions:\n\n"
                               << helpText;
                               //<< " [OPTIONS] input_file [output_file]\n\nOptions:\n\n"<<helpText;
-
                 }
 
                 if (pCol) // argsNeedHelp
-                    std::cout<<pCol->makeText( 78, &argsParser.argsNeedHelp );
+                {
+                    argsParser.printHelpPage( std::cout
+                                            , "[OPTIONS] input_file [output_file]"
+                                            , "If output_file not taken, STDOUT used"
+                                            , pCol->makeText( 78, &argsParser.argsNeedHelp )
+                                            );
+                    // std::cout<<pCol->makeText( 78, &argsParser.argsNeedHelp );
+                }
 
                 return 1;
 
