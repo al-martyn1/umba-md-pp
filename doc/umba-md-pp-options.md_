@@ -76,7 +76,7 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, 
 **--set-condition-var=VAR:VAL** - Set variable valie for conditions and substitutions.
 
 **-R=NAME**,
-**--target-renderer=NAME** - Set target renderer (github/doxygen).
+**--target-renderer=NAME** - Set target renderer (`github`/`doxygen`).
 
 **--target-format=NAME** - Set target format (md/html/rtf/pdf).
 
@@ -90,14 +90,14 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, 
 **--meta-tag-serialize=TAG:SERIALIZETO** - Add meta tag name for serialization.
 
 **--meta-tag-set-type=TYPE:TAG[,TAG...]**,
-**--set-meta-tag-type=TYPE:TAG[,TAG...]** - Set meta tag type.
+**--set-meta-tag-type=TYPE:TAG[,TAG...]** - Set meta tag type (`TextFirst`/`TextReplace`/`TextMerge`/`List`/`CommaList`/`Set`/`CommaSet`).
 
-**--serialize-meta-tags=TAG[,TAG...]** - Set/append meta tag serialize list.
+**--serialize-meta-tags=TAG[,TAG...]** - Set/append meta tag serialize list. Use `+` sign at first position to append tags to list.
 
-**--numeric-sections-max-level=LEVEL** - Set max level for numeration.
+**--numeric-sections-max-level=LEVEL** - Set max level for sections numeration.
 Allowed values: `0`/`inf`/`infinite`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15` or `16`, initial value: `infinite`.
 
-**--toc-max-level=LEVEL** - Set max level for table of contents (TOC).
+**--toc-max-level=LEVEL** - Set max section level for table of contents (TOC).
 Allowed values: `0`/`inf`/`infinite`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15` or `16`, initial value: `infinite`.
 
 **--restrict-path-raise=RAISE** - Raise insert restriction path up to 4 levels max.

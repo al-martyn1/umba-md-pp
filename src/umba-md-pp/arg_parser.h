@@ -590,7 +590,7 @@ int operator()( const StringType                                &a           //!
 
         else if ( opt.setParam("NAME")
                || opt.isOption("target-renderer") || opt.isOption('R')
-               || opt.setDescription("Set target renderer (github/doxygen). "))
+               || opt.setDescription("Set target renderer (`github`/`doxygen`). "))
         {
             if (argsParser.hasHelpOption) return 0;
 
@@ -699,7 +699,7 @@ int operator()( const StringType                                &a           //!
 
         else if ( opt.setParam("TYPE:TAG[,TAG...]")
                || opt.isOption("meta-tag-set-type") || opt.isOption("set-meta-tag-type") // || opt.isOption('M')
-               || opt.setDescription("Set meta tag type."))
+               || opt.setDescription("Set meta tag type (`TextFirst`/`TextReplace`/`TextMerge`/`List`/`CommaList`/`Set`/`CommaSet`)."))
         {
             if (argsParser.hasHelpOption) return 0;
 
@@ -720,7 +720,7 @@ int operator()( const StringType                                &a           //!
 
         else if ( opt.setParam("TAG[,TAG...]")
                ||  /* opt.isOption("meta-tag-serialize") || opt.isOption("meta-tag-serialize-list") || */  opt.isOption("serialize-meta-tags") // || opt.isOption('M')
-               || opt.setDescription("Set/append meta tag serialize list."))
+               || opt.setDescription("Set/append meta tag serialize list. Use `+` sign at first position to append tags to list"))
         {
             if (argsParser.hasHelpOption) return 0;
 
@@ -744,7 +744,7 @@ int operator()( const StringType                                &a           //!
                                         "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16"
                              )
               || opt.setInitial(0) || opt.isOption("numeric-sections-max-level")
-              || opt.setDescription("Set max level for numeration")
+              || opt.setDescription("Set max level for sections numeration")
               )
         {
             if (argsParser.hasHelpOption) return 0;
@@ -768,7 +768,7 @@ int operator()( const StringType                                &a           //!
                                         "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16"
                              )
               || opt.setInitial(0) || opt.isOption("toc-max-level")
-              || opt.setDescription("Set max level for table of contents (TOC)")
+              || opt.setDescription("Set max section level for table of contents (TOC)")
               )
         {
             if (argsParser.hasHelpOption) return 0;
