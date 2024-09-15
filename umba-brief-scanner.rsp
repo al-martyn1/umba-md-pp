@@ -1,0 +1,6 @@
+--overwrite
+--exclude-files=*/rc/*
+--exclude-files=*/res/*
+--exclude-files=*/*.png
+--exclude-files=*/*.ico
+--exclude-files=*/*.zip
