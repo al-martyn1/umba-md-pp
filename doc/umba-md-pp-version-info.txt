@@ -1,0 +1,4 @@
+Umba Markdown Preprocessor version 1.0
+Windows/x86
+Built with MSVC v19.29.30154 compiler
+Built at Sep 16 2024 00:13:30
