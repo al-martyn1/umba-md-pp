@@ -23,7 +23,7 @@
 
 # Важные ссылки
 
- - [Перечень страниц (индекс документации)](pages_index.md)
+ - [Перечень страниц (индекс документации)](doc/pages_index.md)
  - [TODO](doc/todo.md)
  - [Опции командной строки](doc/umba-md-pp-options.md)
  - [Основные исходники](doc/_sources_brief.md)
