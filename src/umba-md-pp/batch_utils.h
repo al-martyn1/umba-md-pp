@@ -3,23 +3,20 @@
 
 #include "umba/filesys_scanners.h"
 //
-#include "app_config.h"
+// #include "app_config.h"
+
+//----------------------------------------------------------------------------
+struct ScanPathsEntry
+{
+    std::string        path;
+    bool               recurse = false;
+};
+
+//----------------------------------------------------------------------------
 
 
-// appConfig.mdppExtentions
-    // std::vector<std::string>                              mdppExtentions;
-    //
-    // std::string                                           batchOutputRoot;
-    // std::vector<std::string>                              batchExcludeDirs;
-    // std::vector<std::string>                              batchExcludeFilesMaskList;
-    // std::vector<std::string>                              batchScanPaths;
 
-// struct ScanPathsEntry
-// {
-//     std::string        path;
-//     bool               recurse = false;
-// };
-
+//----------------------------------------------------------------------------
 template<typename LogMsgType> inline
 void batchScanForFiles( const std::vector<ScanPathsEntry> &batchScanPaths
                       , const std::vector<std::string> &extList

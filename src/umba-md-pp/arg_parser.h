@@ -605,6 +605,23 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("NAME")
+               || opt.isOption("target-name") || opt.isOption("rendering-target-name") // || opt.isOption('R')
+               || opt.setDescription("Set target name. "))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.hasArg())
+            {
+                LOG_ERR_OPT<<"Setting target name requires argument (--target-name)\n";
+                return -1;
+            }
+
+            appConfig.renderingTargetName = opt.optArg;
+
+            return 0;
+        }
+
         else if ( opt.setParam("TAG:REPLACETO")
                || opt.isOption("meta-tag-replace") || opt.isOption('m')
                || opt.setDescription("Add meta tag name replacement."))

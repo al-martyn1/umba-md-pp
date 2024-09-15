@@ -603,13 +603,20 @@ int safe_main(int argc, char* argv[])
 
             curFile = *fileIt;
 
-            std::string projectOptionsFile;
-            if (findProjectOptionsFile(curFile, projectOptionsFile))
+            appConfig.checkFixRenderingTargetName(false /* forView */ );
+            std::vector<std::string> foundOptionsFiles;
+            findProjectOptionsFiles(curFile, appConfig.renderingTargetName, foundOptionsFiles);
+            if (!foundOptionsFiles.empty())
             {
-                appConfig.setStrictPathFromFilename(projectOptionsFile);
-                argsParser.pushOptionsFileName(projectOptionsFile);
-                argsParser.parseOptionsFile(projectOptionsFile);
-                argsParser.popOptionsFileName();
+                appConfig.setStrictPathFromFilename(foundOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
+                for(const auto& projectOptionsFile: foundOptionsFiles)
+                {
+                    appConfig.pushSamplesPaths();
+                    argsParser.pushOptionsFileName(projectOptionsFile);
+                    argsParser.parseOptionsFile(projectOptionsFile);
+                    argsParser.popOptionsFileName();
+                    appConfig.popSamplesPathsAndInsertNewAtFront();
+                }
             }
 
             appConfig.checkAdjustDocNumericLevels();
@@ -830,7 +837,7 @@ int safe_main(int argc, char* argv[])
         return 0;
 
     }
-    else
+    else // !appConfig.isBatchMode()
     {
         if (!argsParser.quet  /* && !hasHelpOption */ )
         {
@@ -897,11 +904,20 @@ int safe_main(int argc, char* argv[])
         //unsigned lineNo = 0;
 
 
-        std::string projectOptionsFile;
-        if (findProjectOptionsFile(inputFilename, projectOptionsFile))
+        appConfig.checkFixRenderingTargetName(false /* forView */ );
+        std::vector<std::string> foundOptionsFiles;
+        findProjectOptionsFiles(curFile, appConfig.renderingTargetName, foundOptionsFiles);
+        if (!foundOptionsFiles.empty())
         {
-            appConfig.setStrictPathFromFilename(projectOptionsFile);
-            argsParser.parseOptionsFile(projectOptionsFile);
+            appConfig.setStrictPathFromFilename(foundOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
+            for(const auto& projectOptionsFile: foundOptionsFiles)
+            {
+                appConfig.pushSamplesPaths();
+                argsParser.pushOptionsFileName(projectOptionsFile);
+                argsParser.parseOptionsFile(projectOptionsFile);
+                argsParser.popOptionsFileName();
+                appConfig.popSamplesPathsAndInsertNewAtFront();
+            }
         }
 
         appConfig.checkAdjustDocNumericLevels();

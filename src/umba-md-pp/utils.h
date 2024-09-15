@@ -15,6 +15,7 @@
 #include <string>
 
 
+//----------------------------------------------------------------------------
 template<typename StringType> inline
 StringType generateOutputFileNameFromInputFileName(StringType name)
 {
@@ -31,6 +32,7 @@ StringType generateOutputFileNameFromInputFileName(StringType name)
     return umba::filename::appendExt(pathFile, ext);
 }
 
+//----------------------------------------------------------------------------
 template<typename StringType> inline
 StringType tryMakeOutputFilenameFromInput(StringType name)
 {
@@ -63,27 +65,152 @@ StringType tryMakeOutputFilenameFromInput(StringType name)
 
 }
 
+//----------------------------------------------------------------------------
+/*
+    1) Ищем файл
+       $(MDFILE).md-pp.options
+       $(MDFILE).umba-md-pp.options
+       Один из этих, или все?
+
+    2) Для вьювера ищем также
+       $(MDFILE).md-pp-view.options
+       $(MDFILE).umba-md-pp-view.options
+       Причем для вьювера ищем раньше (а обрабатываться будут в обратной последовательности позже)
+       Один из этих, или все?
+
+    3) Также ищем файл
+       $(MDFILE).md-pp-$(MdPpRenderingTargetName).options
+       $(MDFILE).umba-md-pp-$(MdPpRenderingTargetName).options
+       Его ищем раньше всех (обрабатывается позже всех)
+
+       Или даже так - для вьювера RenderingTargetName выставляем как view, и тогда пп 2 и 3 прекрасно совмещаются в один
+
+    4) Теперь отрезаем от имени файла путь, и для каждого каталога в иерархии ищем файлы
+       .md-pp-$(MdPpRenderingTargetName).options
+       .umba-md-pp-$(MdPpRenderingTargetName).options
+       .md-pp.options
+       .umba-md-pp.options
+       Ищем все эти файлы, не останавливаясь, если какой-то найден
+
+       Также ищем файлы
+       .md-pp.base.options
+       .umba-md-pp.base.options
+
+       При нахождении base-файла поиск файлов опций останавливается
+
+*/
+
+inline
+void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTargetName, std::vector<std::string> &foundOptionsFiles)
+{
+    if (renderingTargetName.empty())
+       renderingTargetName = "default";
+
+    std::vector<std::string> extList;
+    extList.emplace_back(".umba-md-pp-" + renderingTargetName + ".options");
+    extList.emplace_back(".md-pp-"      + renderingTargetName + ".options");
+    extList.emplace_back(".umba-md-pp.options");
+    extList.emplace_back(".md-pp.options");
+
+    std::vector<std::string> stopList;
+    stopList.emplace_back(".umba-md-pp.base.options");
+    stopList.emplace_back(".md-pp.base.options");
+
+    // std::vector<std::string> checkNamesList;
+    // std::vector<std::string> stopNamesList;
+
+    std::vector<std::string> inputNames;
+    inputNames.emplace_back(mdFile);
+    {
+        std::string newExt = umba::filename::getExt(mdFile);
+        umba::string_plus::trim(newExt, umba::string_plus::is_one_of<char>("_"));
+        std::string name2 = umba::filename::appendExt(umba::filename::getPathFile(mdFile), newExt);
+        if (name2!=mdFile)
+            inputNames.emplace_back(name2);
+    }
+
+    foundOptionsFiles.clear();
+
+    // Проверяем опции для конкретного файла
+    for(const auto &ext : extList)
+    {
+        for(const auto &inputName : inputNames)
+        {
+            std::string testName = umba::filename::appendExt(inputName, ext);
+            if (umba::filesys::isFileReadable(testName))
+            {
+                foundOptionsFiles.emplace_back(testName);
+            }
+        }
+    }
+
+    // Проверяем опции по каталогам
+
+    std::string optPath = umba::filename::getPath(mdFile);
+
+    bool bStop = false;
+    while(!bStop)
+    {
+        for(const auto &ext : extList)
+        {
+            std::string testName = umba::filename::appendPath(optPath, ext);
+            if (umba::filesys::isFileReadable(testName))
+            {
+                foundOptionsFiles.emplace_back(testName);
+            }
+        }
+
+        for(const auto &stopExt : stopList)
+        {
+            std::string testName = umba::filename::appendPath(optPath, stopExt);
+            if (umba::filesys::isFileReadable(testName))
+            {
+                foundOptionsFiles.emplace_back(testName);
+                bStop = true;
+            }
+        }
+
+        umba::filename::stripLastPathSep(optPath);
+        std::string optPathNext = umba::filename::getPath(optPath);
+        if (optPathNext.empty() || optPathNext==optPath)
+        {
+            bStop = true;
+        }
+
+        optPath = optPathNext;
+    }
+
+    std::reverse(foundOptionsFiles.begin(), foundOptionsFiles.end()); // Обратный порядок обработки - самые последние найденные файлы обрабатываются первыми
+
+}
+
+#if 0
+//----------------------------------------------------------------------------
 inline
 bool findProjectOptionsFile(const std::string &mdFile, std::string &foundOptionsFile)
 {
     return umba::cli_tool_helpers::findProjectOptionsFile(mdFile, foundOptionsFile, std::vector<std::string>{".md-pp.options", ".umba-md-pp.options"});
 }
 
+//----------------------------------------------------------------------------
 inline
 bool findProjectOptionsFile(const std::wstring &mdFile, std::wstring &foundOptionsFile)
 {
     return umba::cli_tool_helpers::findProjectOptionsFile(mdFile, foundOptionsFile, std::vector<std::wstring>{L".md-pp.options", L".umba-md-pp.options"});
 }
 
+//----------------------------------------------------------------------------
+#endif
 
 
+//----------------------------------------------------------------------------
 inline
 std::string findGoxygenLanguageByLangTag(std::string langTag)
 {
-    auto trNullErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
-    {
-    }
-    );
+    auto trNullErrHandler = marty_tr::makeErrReportHandler( [](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
+                                                              {
+                                                              }
+                                                          );
 
     auto autoRestoreTrErrHandler = mtr::AutoRestoreErrReportHandler(mtr::tr_set_err_handler(&trNullErrHandler));
     auto autoEmptyMsgNotExist    = mtr::AutoEmptyMsgNotExist(mtr::tr_set_empty_msg_not_exist(true));
@@ -97,14 +224,15 @@ std::string findGoxygenLanguageByLangTag(std::string langTag)
 
 }
 
+//----------------------------------------------------------------------------
 inline
 std::string findLangTagByString(std::string strLang)
 {
 
-    auto trNullErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
-    {
-    }
-    );
+    auto trNullErrHandler = marty_tr::makeErrReportHandler( [](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
+                                                              {
+                                                              }
+                                                          );
 
     auto autoRestoreTrErrHandler = mtr::AutoRestoreErrReportHandler(mtr::tr_set_err_handler(&trNullErrHandler));
     auto autoEmptyMsgNotExist    = mtr::AutoEmptyMsgNotExist(mtr::tr_set_empty_msg_not_exist(true));
