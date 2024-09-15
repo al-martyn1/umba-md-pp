@@ -39,11 +39,11 @@ If output_file not taken, STDOUT used.
 Allowed values: `file`/`no`/`none`, `ansi`/`term` or `cmd`/`console`/`win`/`win32`/`windows`, initial value: `<AUTO>`.
 
 **--verbose[=MODE]** - Verbose mode on/off.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **-Y[=MODE]**,
 **--overwrite[=MODE]** - Allow overwrite existing file.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **-L=LINEFEED**,
 **--LF=LINEFEED**,
@@ -131,27 +131,27 @@ See also: C++ Modified ECMA Script regular expression grammar - https://en.cppre
 
 **--batch-split-page-index-file[=MODE]**,
 **--batch-split-pages-index-file[=MODE]** - Generate index of processed pages.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--copy-images[=MODE]**,
 **--copy-image-files[=MODE]** - Copy image files to output folder, if it taken. No effect if output path not taken (see --batch-output-root) nor single file output path folder not equal to source path.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--flatten-image-links[=MODE]** - Flatten image links: 'some/path/to/image.png' becomes to 'some_path_to_image.png'. No effect if output path not taken (see --batch-output-root) nor single file output path folder not equal to source path.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--viewer-copy-to-source[=MODE]**,
 **--viewer-copy-render-to-source-location[=MODE]** - Copy generated (rendered) file to source file location.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--viewer-copy-use-title[=MODE]**,
 **--viewer-render-copy-use-doc-title[=MODE]** - Copy generated (rendered) file to source file location with file name obtained from the document title.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--strip-ext[=MODE]**,
 **--strip-extention[=MODE]**,
 **--strip-extentions[=MODE]** - Strip supported extentions in the local links.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--gv-dpi=DPI**,
 **--gviz-dpi=DPI**,
@@ -171,21 +171,21 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, 
 **--gv-show-labels[=MODE]**,
 **--gviz-show-labels[=MODE]**,
 **--graphviz-show-labels[=MODE]** - Show labels on Graphviz graphs.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--gv-keep-temp-dot-files[=MODE]**,
 **--gviz-keep-temp-dot-files[=MODE]**,
 **--graphviz-keep-temp-dot-files[=MODE]** - Keep temporary dot files.
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--add-mdpp-extention=EXT[,EXT...]**,
 **--add-mdpp-extentions=EXT[,EXT...]** - Add file extentions of the MD-PP files.
 
 **--dont-lookup-for-doxygen[=MODE]** - Do not lookup for Doxygen (in registry).
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--dont-lookup-for-graphviz[=MODE]** - Do not lookup for Graphviz (in registry).
-Flag option, allowed values: `+`/`1`/`Y(es)`/`True` or /`-`/`0`/`N(o)`/`False`, default value: `TRUE`.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--gcc** - GCC messages format instead of MSVC format.
 
