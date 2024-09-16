@@ -1,12 +1,14 @@
 @call %~dp0.bat\setup_out_root_paths.bat
+@rem set UMBA_MD_PP=%OUTROOTPATH%\Debug\umba-md-pp
+@set UMBA_MD_PP=umba-md-pp
 
-@rem %OUTROOTPATH%\Debug\umba-md-pp         --help         > doc\umba-md-pp-options.txt
-%OUTROOTPATH%\Debug\umba-md-pp --md    --help         > doc\umba-md-pp-options.md_
-@rem %OUTROOTPATH%\Debug\umba-md-pp         --version      > doc\md_\umba-md-pp-version.txt
-%OUTROOTPATH%\Debug\umba-md-pp         --version-info > doc\umba-md-pp-version-info.txt
+@rem %UMBA_MD_PP%         --help         > doc\umba-md-pp-options.txt
+%UMBA_MD_PP% --md    --help         > doc\umba-md-pp-options.md_
+@rem %UMBA_MD_PP%         --version      > doc\md_\umba-md-pp-version.txt
+%UMBA_MD_PP%         --version-info > doc\umba-md-pp-version-info.txt
 
-@rem %OUTROOTPATH%\Debug\umba-md-pp --bash  --help > umba-md-pp-help.bash
-@rem %OUTROOTPATH%\Debug\umba-md-pp --clink --help > umba-md-pp-help.clink
+@rem %UMBA_MD_PP% --bash  --help > umba-md-pp-help.bash
+@rem %UMBA_MD_PP% --clink --help > umba-md-pp-help.clink
 
 
 
