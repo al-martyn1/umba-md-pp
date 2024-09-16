@@ -38,6 +38,7 @@
 --batch-exclude-dirs=_mdtxt,_mdtxt_,mdtxt_
 --batch-exclude-dirs=_mdtext,_mdtext_,mdtext_
 --batch-exclude-dirs=_markdown,_markdown_,markdown_
+--batch-exclude-dirs=doc.dox,doc.doxy,doc.doxygen,.dox,.doxy,.doxygen,dox,doxy,doxygen
 #--batch-exclude-dirs=_text,_text_,text_
 
 --batch-exclude-dir=.out,.build,.git,.bat,.cmake,.msvc,.vscode,.vs,.config
