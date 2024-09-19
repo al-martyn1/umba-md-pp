@@ -7,6 +7,7 @@
 #include "umba/umba.h"
 #include "umba/filename.h"
 #include "umba/filesys.h"
+#include "umba/shellapi.h"
 
 #if defined(WIN32) || defined(_WIN32)
     #include "umba/win32_utils.h"
@@ -73,17 +74,16 @@ std::wstring generateTempSubfolderNameByInputFileName(const std::wstring &name)
 }
 
 //----------------------------------------------------------------------------
-template<typename StringType> inline
-bool createTempFolder(StringType &finalPath, const StringType &inputFileName, const StringType &appName=umba::string_plus::make_string<StringType>("umba-md-pp-view"))
+bool createTempFolder(std::string &finalPath, const std::string &inputFileName, const std::string &appName="umba-md-pp-view")
 {
-    StringType tempRoot = umba::filesys::getTempFolderPath<StringType>();
+    std::string tempRoot = umba::filesys::getTempFolderPath();
     umba::filesys::createDirectory(tempRoot);
 
-    StringType umbaMdPpViewerTempRoot = umba::filename::appendPath(tempRoot, umba::string_plus::make_string<StringType>(".") + appName);
+    std::string umbaMdPpViewerTempRoot = umba::filename::appendPath(tempRoot, "." + appName);
     umba::filesys::createDirectory(umbaMdPpViewerTempRoot);
 
-    StringType generatedSimpleFolderName = generateTempSubfolderNameByInputFileName(inputFileName);
-    StringType curFileTempRoot = umba::filename::appendPath(umbaMdPpViewerTempRoot, generatedSimpleFolderName);
+    std::string generatedSimpleFolderName = generateTempSubfolderNameByInputFileName(inputFileName);
+    std::string curFileTempRoot = umba::filename::appendPath(umbaMdPpViewerTempRoot, generatedSimpleFolderName);
     finalPath = curFileTempRoot;
 
     if (!umba::filesys::createDirectory(curFileTempRoot) && !umba::filesys::isLastErrorAlreadyExists())
@@ -100,17 +100,20 @@ bool createTempFolder(StringType &finalPath, const StringType &inputFileName, co
 }
 
 //----------------------------------------------------------------------------
-template<typename StringType> inline
-bool removeTempFolder(StringType &finalPath, const StringType &appName=umba::string_plus::make_string<StringType>("umba-md-pp-view"))
+bool removeTempFolder(std::string &finalPath, const std::string &appName="umba-md-pp-view")
 {
-    StringType tempRoot = umba::filesys::getTempFolderPath<StringType>();
+    std::string tempRoot = umba::filesys::getTempFolderPath();
     //umba::filesys::createDirectory(tempRoot);
 
-    StringType umbaMdPpViewerTempRoot = umba::filename::appendPath(tempRoot, umba::string_plus::make_string<StringType>(".") + appName);
+    std::string umbaMdPpViewerTempRoot = umba::filename::appendPath(tempRoot, "." + appName);
     //umba::filesys::createDirectory(umbaMdPpViewerTempRoot);
 
     finalPath = umbaMdPpViewerTempRoot;
 
+    return umba::shellapi::deleteDirectory(umbaMdPpViewerTempRoot);
+    
+
+    #if 0
     #if defined(WIN32) || defined(_WIN32)
     if constexpr (sizeof(typename StringType::value_type)==sizeof(char))
     {
@@ -136,9 +139,7 @@ bool removeTempFolder(StringType &finalPath, const StringType &appName=umba::str
     #else
         return false;
     #endif
-
-    //return false;
-
+    #endif
 }
 
 //----------------------------------------------------------------------------
@@ -324,19 +325,9 @@ std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr, bool b
 
 //----------------------------------------------------------------------------
 inline
-void showErrorMessageBox(std::string str)
+void showErrorMessageBox(const std::string &str)
 {
-
-    #if defined(WIN32) || defined(_WIN32)
-
-        MessageBoxA( 0 // hwnd
-                   , str.c_str()
-                   , "Umba Markdown PP Viewer"
-                   , MB_OK | MB_ICONERROR
-                   );
-
-    #endif
-
+    umba::shellapi::showMessageBox(str, "Umba Markdown PP Viewer", umba::shellapi::MessageBoxKind::iconError);
 }
 
 //----------------------------------------------------------------------------
@@ -345,50 +336,29 @@ void showErrorMessageBox(std::string str)
 
 
 //------------------------------
+#if 0
 inline
 HKEY regCreateKeyHelper(HKEY hKeyRoot, const std::wstring &path, REGSAM samDesired)
 {
     return umba::win32_utils::regCreateKey(hKeyRoot, path, samDesired);
-#if 0
-    if (isWindows32OnWindows64()) // 32х-битные системы сейчас конечно уже экзотика, но на всякий случай - я же и на XP могу работать
-    {
-        samDesired |= KEY_WOW64_64KEY;
-    }
-
-    HKEY hKeyRes = 0;
-    DWORD dwDisposition = 0;
-
-    LSTATUS status = RegCreateKeyExW( hKeyRoot
-                                    , path.c_str()
-                                    , 0 // reserved
-                                    , 0 // lpClass - The user-defined class type of this key. This parameter may be ignored. This parameter can be NULL.
-                                    , REG_OPTION_NON_VOLATILE // default, 0
-                                    , samDesired
-                                    , 0 // lpSecurityAttributes
-                                    , &hKeyRes
-                                    , &dwDisposition
-                                    );
-    if (status!=ERROR_SUCCESS)
-    {
-        return 0;
-    }
-
-    return hKeyRes;
-#endif
 }
+#endif
 
 //------------------------------
+#if 0
 inline
 bool regSetValue(HKEY hKey, const std::wstring &varName, const std::wstring &value)
 {
     LSTATUS status = RegSetValueW(hKey, varName.c_str(), REG_SZ, (LPCWSTR)value.c_str(), (DWORD)(value.size()+1)*sizeof(wchar_t));
     return status==ERROR_SUCCESS;
 }
+#endif
 
 //------------------------------
 #define UMBA_PP_VIEWER_USE_HKCU
 
 //------------------------------
+#if 0
 inline
 HKEY regGetShellExtentionsRoot()
 {
@@ -402,6 +372,7 @@ HKEY regGetShellExtentionsRoot()
 
     #endif
 }
+#endif
 
 
 //------------------------------
@@ -409,6 +380,7 @@ HKEY regGetShellExtentionsRoot()
 // https://learn.microsoft.com/en-us/windows/win32/shell/how-to-register-a-file-type-for-a-new-application
 // https://stackoverflow.com/questions/1387769/create-registry-entry-to-associate-file-extension-with-application-in-c
 //------------------------------
+#if 0
 inline
 std::wstring regShellExtentionHandlersRootPath()
 {
@@ -425,7 +397,9 @@ std::wstring regShellExtentionHandlersRootPath()
 
     return regPath;
 }
+#endif
 
+#if 0
 inline
 bool regShellExtentionHandlerApplication(const std::wstring &appNameId, const std::wstring &shellVerb, const std::wstring &appCommand)
 {
@@ -465,8 +439,10 @@ bool regShellExtentionHandlerApplication(const std::wstring &appNameId, const st
 
     return res;
 }
+#endif
 
 //------------------------------
+#if 0
 inline
 bool regShellExtentionHandlerForExt(const std::wstring &appNameId, std::wstring ext)
 {
@@ -502,8 +478,10 @@ bool regShellExtentionHandlerForExt(const std::wstring &appNameId, std::wstring 
 
     return res;
 }
+#endif
 
 //------------------------------
+#if 0
 inline
 bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std::vector<std::wstring> &extList)
 {
@@ -517,12 +495,15 @@ bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std
 
     return res;
 }
+#endif
 
 //------------------------------
+#if 0
 inline
 bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std::wstring &extCommaList)
 {
     auto extList = marty_cpp::splitToLinesSimple(extCommaList, false, ',');
+
     for(auto &ext: extList)
     {
         umba::string_plus::trim(ext);
@@ -530,6 +511,7 @@ bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std
 
     return regShellExtentionHandlerForExtList(appNameId, extList);
 }
+#endif
 
 #endif
 

@@ -264,7 +264,7 @@ main/wmain - нужны только для MSVC/Console
     if (umba::isDebuggerPresent())
     {
 
-        std::string cwd = umba::filesys::getCurrentDirectory<std::string>();
+        std::string cwd = umba::filesys::getCurrentDirectory();
         std::cout << "Working Dir: " << cwd << "\n";
 
         #if (defined(WIN32) || defined(_WIN32))
