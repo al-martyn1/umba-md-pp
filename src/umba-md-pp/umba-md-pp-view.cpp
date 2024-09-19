@@ -4,6 +4,11 @@
 
 // C:\Users\mag\AppData\Local\Temp\.umba-md-pp-view\
 
+#ifndef UMBA_MD_PP_VIEW
+    #define UMBA_MD_PP_VIEW
+#endif
+
+
 // Должна быть первой
 #include "umba/umba.h"
 //---
