@@ -81,10 +81,10 @@ struct GraphVizOptions
     std::string getSavePath() const
     {
         if (savePath.empty())
-            return umba::filesys::getCurrentDirectory<std::string>();
+            return umba::filesys::getCurrentDirectory();
 
         if (!umba::filename::isAbsPath(savePath))
-            return umba::filename::appendPath(umba::filesys::getCurrentDirectory<std::string>(), savePath);
+            return umba::filename::appendPath(umba::filesys::getCurrentDirectory(), savePath);
 
         return savePath;
     }

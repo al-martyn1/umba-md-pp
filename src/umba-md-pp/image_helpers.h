@@ -180,7 +180,7 @@ bool copyDocumentImageFiles(LogStreamType & logStream, const std::map<std::strin
         const auto &srcFile = imgInfo.getSourceFilename();
         const auto &tgtFile = imgInfo.getTargetFilename();
 
-        umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(tgtFile), true /* forceCreatePath */ );
+        umba::filesys::createDirectoryEx( umba::filename::getPath(tgtFile), true /* forceCreatePath */ );
 
         logStream << "    Copying image file '" << srcFile << "' to '" << tgtFile << "'\n";
 

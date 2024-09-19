@@ -309,7 +309,7 @@ int safe_main(int argc, char* argv[])
         argsParser.args.push_back("--overwrite");
 
 
-        std::string cwd = umba::filesys::getCurrentDirectory<std::string>();
+        std::string cwd = umba::filesys::getCurrentDirectory();
         std::cout << "Working Dir: " << cwd << "\n";
 
         #if (defined(WIN32) || defined(_WIN32))
@@ -658,7 +658,7 @@ int safe_main(int argc, char* argv[])
             try
             {
 
-                umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
+                umba::filesys::createDirectoryEx( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
 
                 umba::cli_tool_helpers::writeOutput( outputFilename, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
                                                    , encoding::ToUtf8(), encoding::FromUtf8()
@@ -776,7 +776,7 @@ int safe_main(int argc, char* argv[])
 
             infoLog << "Writting page index file: " << pageIndexFileName << "\n";
 
-            umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(pageIndexFileName), true /* forceCreatePath */ );
+            umba::filesys::createDirectoryEx( umba::filename::getPath(pageIndexFileName), true /* forceCreatePath */ );
 
             umba::cli_tool_helpers::writeOutput( pageIndexFileName, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
                                                , encoding::ToUtf8(), encoding::FromUtf8()
@@ -832,7 +832,7 @@ int safe_main(int argc, char* argv[])
 
             infoLog << "Writting 'git add' file: " << gitAddBatchFileName << "\n";
 
-            umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(gitAddText), true /* forceCreatePath */ );
+            umba::filesys::createDirectoryEx( umba::filename::getPath(gitAddText), true /* forceCreatePath */ );
 
             umba::cli_tool_helpers::writeOutput( gitAddBatchFileName, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
                                                , encoding::ToUtf8(), encoding::FromUtf8()

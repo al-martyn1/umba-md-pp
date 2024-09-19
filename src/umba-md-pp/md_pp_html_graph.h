@@ -371,7 +371,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
     if (needWriteHashLines)
     {
         std::string hashFileText = marty_cpp::mergeLines(newHashFileLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
-        umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(hashFile), true /* forceCreatePath */ );
+        umba::filesys::createDirectoryEx( umba::filename::getPath(hashFile), true /* forceCreatePath */ );
         if (!umba::filesys::writeFile(hashFile, hashFileText, true /* overwrite */ ))
         {
             // Плевать на результат
@@ -388,8 +388,8 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
         umba::filesys::deleteFile(tempDotFile);
         umba::filesys::deleteFile(tempTargetFile);
 
-        umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(tempDotFile), true /* forceCreatePath */ );
-        umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(tempTargetFile), true /* forceCreatePath */ );
+        umba::filesys::createDirectoryEx( umba::filename::getPath(tempDotFile), true /* forceCreatePath */ );
+        umba::filesys::createDirectoryEx( umba::filename::getPath(tempTargetFile), true /* forceCreatePath */ );
 
         if (!umba::filesys::writeFile(tempDotFile, dotText, true /* overwrite */ ))
         {
@@ -423,7 +423,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
     if (needDotProcessing && errMsg.empty())
     {
-        umba::filesys::createDirectoryEx<std::string>( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
+        umba::filesys::createDirectoryEx( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
         if (!MoveFileExA( tempTargetFile.c_str(), outputFilename.c_str()
                         , MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH
                         )
