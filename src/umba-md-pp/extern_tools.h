@@ -1,13 +1,9 @@
 #pragma once
 
 
-#if defined(WIN32) || defined(_WIN32)
-    #include "umba/win32_utils.h"
-    #include <shellapi.h>
-#endif
-
 #include "umba/string_plus.h"
 #include "umba/utf8.h"
+#include "umba/shellapi.h"
 
 // For 'system' function
 #include <process.h>
@@ -22,6 +18,7 @@
 /*! Это нужно для того, чтобы при вызове внешних программ каждый раз не создавалась консоль - на это
     это может аффектится антивирус.
 */
+#if 0
 inline
 void allocConsole()
 {
@@ -33,6 +30,7 @@ void allocConsole()
 
 #endif
 }
+#endif
 
 //----------------------------------------------------------------------------
 
@@ -40,6 +38,7 @@ void allocConsole()
 
 
 //----------------------------------------------------------------------------
+#if 0
 template<typename StringType>
 StringType escapeCommandLineArgument(const StringType &str)
 {
@@ -67,7 +66,7 @@ StringType escapeCommandLineArgument(const StringType &str)
 
     return res;
 }
-
+#endif
 //----------------------------------------------------------------------------
 
 
@@ -75,6 +74,7 @@ StringType escapeCommandLineArgument(const StringType &str)
 
 
 //----------------------------------------------------------------------------
+#if 0
 template<typename StringType>
 StringType makeSystemFunctionCommandString(const StringType &cmd, std::vector<StringType> cmdArgs)
 {
@@ -88,9 +88,10 @@ StringType makeSystemFunctionCommandString(const StringType &cmd, std::vector<St
 
     return umba::string_plus::merge<std::string, typename std::vector<StringType>::const_iterator>( cmdArgs.begin(), cmdArgs.end(), (CharType)' '/*, [](auto s) { return s; }*/ );
 }
-
+#endif
 //----------------------------------------------------------------------------
 //! return -1 if error launching extern programm, 0 or >0 - result code of executed comman
+#if 0
 inline
 int safeSystemFunction(std::string *pErrMsg, const std::string &cmd)
 {
@@ -114,8 +115,9 @@ int safeSystemFunction(std::string *pErrMsg, const std::string &cmd)
 
     return resVal;
 }
-
+#endif
 //----------------------------------------------------------------------------
+#if 0
 inline
 int safeSystemFunction(std::wstring *pErrMsg, const std::wstring &cmd)
 {
@@ -151,14 +153,16 @@ int safeSystemFunction(std::wstring *pErrMsg, const std::wstring &cmd)
 #endif
 
 }
+#endif
 
 //----------------------------------------------------------------------------
+#if 0
 template<typename StringType>
 int safeSystemFunction(StringType *pErrMsg, const StringType &cmd, const std::vector<StringType> &cmdArgs)
 {
     return safeSystemFunction(pErrMsg, makeSystemFunctionCommandString(cmd, cmdArgs));
 }
-
+#endif
 
 // std::strerror(errno)
 

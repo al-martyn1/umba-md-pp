@@ -3,6 +3,8 @@
 #include "umba/umba.h"
 #include "umba/filename.h"
 #include "umba/filesys.h"
+#include "umba/shellapi.h"
+
 //
 #include "md_pp_html.h"
 #include "graph_viz_options.h"
@@ -267,7 +269,8 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
         return;
     }
 
-    dotLines.emplace_back("// " + makeSystemFunctionCommandString(graphvizTool, graphvizToolArgs));
+    // dotLines.emplace_back("// " + makeSystemFunctionCommandString(graphvizTool, graphvizToolArgs));
+    dotLines.emplace_back("// " + umba::shellapi::makeSystemFunctionCommandString(graphvizTool, graphvizToolArgs));
     dotLines.emplace_back(std::string());
 
     for(auto tagLine : tagLines)
@@ -411,7 +414,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
                 std::string errMsg;
                 //int resCode = system(toolCommandLine.c_str());
-                int resCode = safeSystemFunction(&errMsg, toolExeName, graphvizToolArgs);
+                int resCode = umba::shellapi::callSystem(&errMsg, toolExeName, graphvizToolArgs);
                 if (resCode!=0)
                 {
                     errMsg = "Failed to calling '" + graphvizTool + "', message: " + std::to_string(resCode) + ", command line: " + makeSystemFunctionCommandString(toolExeName, graphvizToolArgs);

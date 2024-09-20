@@ -50,11 +50,7 @@ template<typename FilenameStringType>
 struct AppConfig
 {
 
-    #if defined(WIN32) || defined(_WIN32)
-        marty_cpp::ELinefeedType outputLinefeed = marty_cpp::ELinefeedType::crlf;
-    #else
-        marty_cpp::ELinefeedType outputLinefeed = marty_cpp::ELinefeedType::lf;
-    #endif
+    marty_cpp::ELinefeedType outputLinefeed = marty_cpp::getSystemDefaultLinefeedType();
 
     bool                                                  verboseMode = false;
 
@@ -676,11 +672,7 @@ struct AppConfig
         return true;
     }
 
-    //! Добавляет пути поиска примеров
-    /*! Разделителем является спец символ:
-        - Win32 - ';' (точка с запятой, semicolon)
-        - Linux - ':' (двоеточие, colon)
-     */
+    //! Добавляет пути поиска примеров. О разделителях см. описание umba::filename::splitPathList
     bool addSamplesPaths(const FilenameStringType &pl, const FilenameStringType &basePath)
     {
         return addSamplesPaths(umba::filename::splitPathList( pl ), basePath);

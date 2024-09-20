@@ -5,12 +5,10 @@
 //#include "app_config.h"
 #include "umba/cmd_line.h"
 #include "umba/cli_tool_helpers.h"
+#include "umba/shellapi.h"
 #include "app_ver_config.h"
 
 
-#if defined(WIN32) || defined(_WIN32)
-    #include <shellapi.h>
-#endif
 
 // AppConfig    appConfig;
 
@@ -79,14 +77,12 @@ int operator()( const StringType                                &a           //!
             //appConfig.setOptQuet(true);
         }
 
-        #if defined(WIN32) || defined(_WIN32)
         else if (opt.isOption("home") || opt.setDescription("Open homepage"))
         {
             if (argsParser.hasHelpOption) return 0;
-            ShellExecuteA( 0, "open", appHomeUrl, 0, 0, SW_SHOW );
+            umba::shellapi::openUrl(appHomeUrl);
             return 1;
         }
-        #endif
 
         else if ( opt.isBuiltinsDisableOptionMain  ()
                // || opt.setDescription( dppof + "main distribution options file `" + argsParser.getBuiltinsOptFileName(umba::program_location::BuiltinOptionsLocationFlag::appGlobal   ) + "`"))
@@ -1306,25 +1302,36 @@ int operator()( const StringType                                &a           //!
             auto exeFullName      = argsParser.programLocationInfo.exeFullName;
             auto exeCanonicalName = umba::filename::makeCanonical(exeFullName);
             auto appIdName        = umba::filename::getName(exeFullName);
-            auto appIdNameWide    = umba::fromUtf8(appIdName);
+            //auto appIdNameWide    = umba::fromUtf8(appIdName);
 
-            auto exeCanonicalNameWide        = umba::fromUtf8(exeCanonicalName);
-            auto exeCanonicalNameWideEscaped = escapeCommandLineArgument(exeCanonicalNameWide);
-            auto percent1                    = L"\"%1\"";
+            //auto exeCanonicalNameWide        = umba::fromUtf8(exeCanonicalName);
+            //auto exeCanonicalNameWideEscaped = escapeCommandLineArgument(exeCanonicalNameWide);
+            auto exeCanonicalNameEscaped = escapeCommandLineArgument(exeCanonicalName);
+            auto percent1                    = "\"%1\"";
 
-            if (!regShellExtentionHandlerApplication(appIdNameWide, L"open", exeCanonicalNameWideEscaped + L" " + percent1))
+            #if defined(WIN32) || defined(_WIN32)
+
+            // if (!regShellExtentionHandlerApplication(appIdNameWide, L"open", exeCanonicalNameWideEscaped + L" " + percent1))
+            if (!umba::shellapi::win32::registerShellExtentionHandlerApplication(false/*userOnly*/, appIdName, "open", exeCanonicalNameEscaped + " " + percent1))
             {
                 LOG_ERR_OPT<<"Failed to register appid"<<"\n";
                 return -1;
             }
 
             //auto wParam = umba::fromUtf8(param);
-            auto extListCommaSepW = umba::fromUtf8(extListCommaSep);
-            if (!regShellExtentionHandlerForExtList(appIdNameWide, extListCommaSepW))
+            //auto extListCommaSepW = umba::fromUtf8(extListCommaSep);
+            //if (!regShellExtentionHandlerForExtList(false/*userOnly*/, appIdName, extListCommaSepW))
+            if (!umba::shellapi::win32::registerShellExtentionHandlerForExtentionList(false/*userOnly*/, appIdName, extListCommaSep))
             {
                 LOG_ERR_OPT<<"Failed to register appid as handler"<<"\n";
                 return -1;
             }
+
+            #else
+
+                LOG_MSG_OPT << "--register-view-handler option not supported\n";
+
+            #endif
 
             return 0;
         }
