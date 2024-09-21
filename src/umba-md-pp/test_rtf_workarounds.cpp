@@ -6,6 +6,7 @@
 #include "umba/umba.h"
 #include "umba/filename.h"
 #include "umba/filesys.h"
+#include "umba/shellapi.h"
 //---
 
 //#-sort
@@ -15,10 +16,6 @@
 
 #include "umba/debug_helpers.h"
 #include "umba/time_service.h"
-
-#if defined(_WIN32) || defined(WIN32)
-    #include "umba/winconhelpers.h"
-#endif
 
 #include "rtf_workarounds.h"
 
@@ -65,26 +62,9 @@ int safe_main(int argc, char* argv[])
 
     if (umba::isDebuggerPresent())
     {
-
-        #if (defined(WIN32) || defined(_WIN32))
-
-            if (winhelpers::isProcessHasParentOneOf({"devenv"}))
-            {
-            }
-            else if (winhelpers::isProcessHasParentOneOf({"code"}))
-            {
-                 rtfFilename = "C:\\work\\github\\umba-tools\\umba-md-pp\\tests\\README.rtf";
-            }
-            else
-            {
-                //rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
-            }
-
-            //#endif
-
-            // rootPath = umba::filename::appendPathSepCopy(rootPath);
-
-        #endif
+        std::string cwd;
+        std::string rootPath = umba::shellapi::getDebugAppRootFolder(&cwd);
+        std::cout << "Working Dir: " << cwd << "\n";
 
     }
     else

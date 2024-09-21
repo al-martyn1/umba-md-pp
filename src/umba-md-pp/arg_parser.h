@@ -1306,10 +1306,11 @@ int operator()( const StringType                                &a           //!
 
             //auto exeCanonicalNameWide        = umba::fromUtf8(exeCanonicalName);
             //auto exeCanonicalNameWideEscaped = escapeCommandLineArgument(exeCanonicalNameWide);
-            auto exeCanonicalNameEscaped = escapeCommandLineArgument(exeCanonicalName);
-            auto percent1                    = "\"%1\"";
 
             #if defined(WIN32) || defined(_WIN32)
+
+            auto exeCanonicalNameEscaped = umba::shellapi::escapeCommandLineArgument(exeCanonicalName);
+            auto percent1 = "\"%1\"";
 
             // if (!regShellExtentionHandlerApplication(appIdNameWide, L"open", exeCanonicalNameWideEscaped + L" " + percent1))
             if (!umba::shellapi::win32::registerShellExtentionHandlerApplication(false/*userOnly*/, appIdName, "open", exeCanonicalNameEscaped + " " + percent1))

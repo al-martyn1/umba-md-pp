@@ -111,47 +111,9 @@ bool removeTempFolder(std::string &finalPath, const std::string &appName="umba-m
     finalPath = umbaMdPpViewerTempRoot;
 
     return umba::shellapi::deleteDirectory(umbaMdPpViewerTempRoot);
-    
 
-    #if 0
-    #if defined(WIN32) || defined(_WIN32)
-    if constexpr (sizeof(typename StringType::value_type)==sizeof(char))
-    {
-        SHFILEOPSTRUCTA  shFileOpStruct = { 0 };
-        umbaMdPpViewerTempRoot.append(1, 0);
-        shFileOpStruct.wFunc  = FO_DELETE;
-        shFileOpStruct.pFrom  = (PCZZSTR)umbaMdPpViewerTempRoot.c_str();
-        shFileOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR;  // FOF_NOERRORUI - FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR
-
-        return SHFileOperationA(&shFileOpStruct)==0 ? true : false;
-    }
-    else
-    {
-        SHFILEOPSTRUCTW  shFileOpStruct = { 0 };
-        umbaMdPpViewerTempRoot.append(1, 0);
-        shFileOpStruct.wFunc  = FO_DELETE;
-        shFileOpStruct.pFrom  = (PCZZSTR)umbaMdPpViewerTempRoot.c_str();
-        shFileOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR;  // FOF_NOERRORUI - FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR
-
-        return SHFileOperationW(&shFileOpStruct)==0 ? true : false;
-    }
-
-    #else
-        return false;
-    #endif
-    #endif
 }
 
-//----------------------------------------------------------------------------
-inline
-marty_cpp::ELinefeedType getConfigsLinefeed()
-{
-    #if defined(WIN32) || defined(_WIN32)
-        return marty_cpp::ELinefeedType::crlf;
-    #else
-        return marty_cpp::ELinefeedType::lf;
-    #endif
-}
 
 //----------------------------------------------------------------------------
 /*
@@ -233,7 +195,7 @@ std::string generateDoxyfile(const AppConfig<FilenameStringType> &appCfg, const 
     lines.emplace_back("OUTPUT_LANGUAGE        = " + str);
 
 
-    return marty_cpp::mergeLines(lines, getConfigsLinefeed(), true  /* addTrailingNewLine */ );
+    return marty_cpp::mergeLines(lines, marty_cpp::getSystemDefaultLinefeedType(), true  /* addTrailingNewLine */ );
 }
 
 //----------------------------------------------------------------------------
@@ -260,7 +222,7 @@ std::string generateDoxygenRtfCfg(const AppConfig<FilenameStringType> &appCfg, c
         lines.emplace_back("Author = " + str);
     }
 
-    return marty_cpp::mergeLines(lines, getConfigsLinefeed(), true  /* addTrailingNewLine */ );
+    return marty_cpp::mergeLines(lines, marty_cpp::getSystemDefaultLinefeedType(), true  /* addTrailingNewLine */ );
 }
 
 //----------------------------------------------------------------------------
@@ -331,204 +293,5 @@ void showErrorMessageBox(const std::string &str)
 }
 
 //----------------------------------------------------------------------------
-#if defined(WIN32) || defined(_WIN32)
 
-
-
-//------------------------------
-#if 0
-inline
-HKEY regCreateKeyHelper(HKEY hKeyRoot, const std::wstring &path, REGSAM samDesired)
-{
-    return umba::win32_utils::regCreateKey(hKeyRoot, path, samDesired);
-}
-#endif
-
-//------------------------------
-#if 0
-inline
-bool regSetValue(HKEY hKey, const std::wstring &varName, const std::wstring &value)
-{
-    LSTATUS status = RegSetValueW(hKey, varName.c_str(), REG_SZ, (LPCWSTR)value.c_str(), (DWORD)(value.size()+1)*sizeof(wchar_t));
-    return status==ERROR_SUCCESS;
-}
-#endif
-
-//------------------------------
-#define UMBA_PP_VIEWER_USE_HKCU
-
-//------------------------------
-#if 0
-inline
-HKEY regGetShellExtentionsRoot()
-{
-    #ifdef UMBA_PP_VIEWER_USE_HKCU
-
-       return HKEY_CURRENT_USER;
-
-    #else
-
-       return HKEY_CLASSES_ROOT;
-
-    #endif
-}
-#endif
-
-
-//------------------------------
-// https://superuser.com/questions/266268/where-in-the-registry-does-windows-store-with-which-program-to-open-certain-file
-// https://learn.microsoft.com/en-us/windows/win32/shell/how-to-register-a-file-type-for-a-new-application
-// https://stackoverflow.com/questions/1387769/create-registry-entry-to-associate-file-extension-with-application-in-c
-//------------------------------
-#if 0
-inline
-std::wstring regShellExtentionHandlersRootPath()
-{
-    std::wstring regPath;
-
-    #ifdef UMBA_PP_VIEWER_USE_HKCU
-
-       regPath.append(L"Software");
-       regPath.append(L"\\Classes");
-
-    #else
-
-    #endif
-
-    return regPath;
-}
-#endif
-
-#if 0
-inline
-bool regShellExtentionHandlerApplication(const std::wstring &appNameId, const std::wstring &shellVerb, const std::wstring &appCommand)
-{
-
-    // Компьютер\HKEY_CLASSES_ROOT\md__auto_file
-    //     shell
-    //       open
-    //         command
-    //           default value: "F:\_github\umba-tools\umba-md-pp\.out\msvc2019\x86\Debug\umba-md-pp-view.exe" "%1"
-    //
-    // HKEY_CLASSES_ROOT\.md_
-    //     default value md__auto_file
-    //
-    // The nameless key is the default one - https://learn.microsoft.com/en-us/dotnet/api/microsoft.win32.registry.setvalue?view=net-8.0&redirectedfrom=MSDN#overloads
-
-    HKEY hRootKey = regGetShellExtentionsRoot();
-
-    std::wstring regPath = regShellExtentionHandlersRootPath();
-
-    if (!regPath.empty())
-        regPath.append(L"\\");
-
-    regPath.append(appNameId);
-    regPath.append(L"\\shell");
-    regPath.append(L"\\");
-    regPath.append(shellVerb);
-    regPath.append(L"\\command");
-
-    HKEY hKey = regCreateKeyHelper(hRootKey, regPath,  /* KEY_READ| */ KEY_WRITE);
-
-    if (!hKey)
-        return false;
-
-    bool res = regSetValue(hKey, L"" /* varName */ , appCommand);
-
-    RegCloseKey(hKey);
-
-    return res;
-}
-#endif
-
-//------------------------------
-#if 0
-inline
-bool regShellExtentionHandlerForExt(const std::wstring &appNameId, std::wstring ext)
-{
-
-    // HKEY_CLASSES_ROOT\.md_
-    //     default value md__auto_file
-
-    if (ext.empty())
-        return false;
-
-    if (ext.front()!=L'.')
-    {
-        ext = L"." + ext;
-    }
-
-    HKEY hRootKey = regGetShellExtentionsRoot();
-
-    std::wstring regPath = regShellExtentionHandlersRootPath();
-
-    if (!regPath.empty())
-        regPath.append(L"\\");
-
-    regPath.append(ext);
-
-    HKEY hKey = regCreateKeyHelper(hRootKey, regPath,  /* KEY_READ| */ KEY_WRITE);
-
-    if (!hKey)
-        return false;
-
-    bool res = regSetValue(hKey, L"" /* varName */ , appNameId);
-
-    RegCloseKey(hKey);
-
-    return res;
-}
-#endif
-
-//------------------------------
-#if 0
-inline
-bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std::vector<std::wstring> &extList)
-{
-    bool res = true;
-
-    for(auto ext: extList)
-    {
-        if (!regShellExtentionHandlerForExt(appNameId, ext))
-            res = false;
-    }
-
-    return res;
-}
-#endif
-
-//------------------------------
-#if 0
-inline
-bool regShellExtentionHandlerForExtList(const std::wstring &appNameId, const std::wstring &extCommaList)
-{
-    auto extList = marty_cpp::splitToLinesSimple(extCommaList, false, ',');
-
-    for(auto &ext: extList)
-    {
-        umba::string_plus::trim(ext);
-    }
-
-    return regShellExtentionHandlerForExtList(appNameId, extList);
-}
-#endif
-
-#endif
-
-
-
-
-
-/*
-RTF Ext
-
-Title           =
-Author
-Version
-
-Manager
-Subject
-Comments
-Keywords
-*/
 

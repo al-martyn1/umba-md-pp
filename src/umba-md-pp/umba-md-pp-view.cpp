@@ -268,37 +268,9 @@ main/wmain - нужны только для MSVC/Console
 
     if (umba::isDebuggerPresent())
     {
-
-        std::string cwd = umba::filesys::getCurrentDirectory();
+        std::string cwd;
+        std::string rootPath = umba::shellapi::getDebugAppRootFolder(&cwd);
         std::cout << "Working Dir: " << cwd << "\n";
-
-        #if (defined(WIN32) || defined(_WIN32))
-
-            std::string rootPath;
-
-            if (winhelpers::isProcessHasParentOneOf({"devenv"}))
-            {
-                // По умолчанию студия задаёт текущим каталогом На  уровень выше от того, где лежит бинарник
-                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
-                //argsParser.args.push_back("--batch-output-root=D:/temp/mdpp-test");
-            }
-            else if (winhelpers::isProcessHasParentOneOf({"code"}))
-            {
-                // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
-                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
-                //argsParser.args.push_back("--batch-output-root=C:/work/temp/mdpp-test");
-
-            }
-            else
-            {
-                //rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
-            }
-
-            //#endif
-
-            rootPath = umba::filename::appendPathSepCopy(rootPath);
-
-        #endif
 
 
         argsParser.args.clear();
@@ -549,15 +521,14 @@ main/wmain - нужны только для MSVC/Console
             return 7;
         }
 
-        std::wstring wDoxygenExeName = findDoxygenExecutableName<std::wstring>(appConfig.dontLookupForDoxygen);
-        std::string  doxygenExeName  = umba::toUtf8(wDoxygenExeName);
+        std::string doxygenExeName = findDoxygenExecutableName(appConfig.dontLookupForDoxygen);
         //std::string  doxygenExeNameEscaped  = escapeCommandLineArgument(doxygenExeName);
 
         #if defined(UMBA_MD_PP_VIEW_CONSOLE)
 
         {
             std::cout << "Found Doxygen: " << doxygenExeName << "\n";
-            std::string  doxygenExeNameEscaped  = escapeCommandLineArgument(doxygenExeName);
+            std::string  doxygenExeNameEscaped  = umba::shellapi::escapeCommandLineArgument(doxygenExeName);
             std::cout << "Escaped      : " << doxygenExeNameEscaped << "\n";
         }
 
@@ -565,7 +536,7 @@ main/wmain - нужны только для MSVC/Console
 
         std::string callingDoxygenErrMsg;
         //auto systemRes = system(doxygenExeNameEscaped.c_str());
-        auto systemRes = safeSystemFunction(&callingDoxygenErrMsg, doxygenExeName);
+        auto systemRes = umba::shellapi::callSystem(doxygenExeName, &callingDoxygenErrMsg);
         if (systemRes<0)
         {
             showErrorMessageBox("Failed to execute '" + doxygenExeName + "': " + callingDoxygenErrMsg);

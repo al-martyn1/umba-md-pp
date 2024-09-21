@@ -14,16 +14,13 @@
 #include "umba/debug_helpers.h"
 #include "umba/time_service.h"
 
-#if defined(_WIN32) || defined(WIN32)
-    #include "umba/winconhelpers.h"
-#endif
-
 #include <iostream>
 #include <iomanip>
 #include <string>
 // #include <filesystem>
 
 #include "umba/debug_helpers.h"
+#include "umba/shellapi.h"
 #include "umba/string_plus.h"
 #include "umba/program_location.h"
 #include "umba/scope_exec.h"
@@ -173,6 +170,8 @@ int safe_main(int argc, char* argv[])
 
     if (umba::isDebuggerPresent())
     {
+        // Misc tests goes here
+
         #if 0
 
         // std::cout << (umba::CharClassUnderlyingType)(umba::CharClass::nonprintable | umba::CharClass::punctuation) << "\n";
@@ -308,40 +307,10 @@ int safe_main(int argc, char* argv[])
         argsParser.args.clear();
         argsParser.args.push_back("--overwrite");
 
-
-        std::string cwd = umba::filesys::getCurrentDirectory();
+        std::string cwd;
+        std::string rootPath = umba::shellapi::getDebugAppRootFolder(&cwd);
         std::cout << "Working Dir: " << cwd << "\n";
-
-        #if (defined(WIN32) || defined(_WIN32))
-
-            std::string rootPath;
-
-            if (winhelpers::isProcessHasParentOneOf({"devenv"}))
-            {
-                // По умолчанию студия задаёт текущим каталогом На  уровень выше от того, где лежит бинарник
-                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
-                //argsParser.args.push_back("--batch-output-root=D:/temp/mdpp-test");
-            }
-            else if (winhelpers::isProcessHasParentOneOf({"code"}))
-            {
-                // По умолчанию VSCode задаёт текущим каталогом тот, где лежит бинарник
-                rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\..\\"));
-                //argsParser.args.push_back("--batch-output-root=C:/work/temp/mdpp-test");
-
-            }
-            else
-            {
-                //rootPath = umba::filename::makeCanonical(umba::filename::appendPath<std::string>(cwd, "..\\..\\..\\"));
-            }
-
-            //#endif
-
-            rootPath = umba::filename::appendPathSepCopy(rootPath);
-
-        #endif
-
-
-
+         
         //argsParser.args.push_back("@" + rootPath + "conf/conf/umba-md-pp.options");
 
         // argsParser.args.push_back("--set-insert-options=filename,path,filenameLineNo");

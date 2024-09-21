@@ -9,10 +9,6 @@
 #include "md_pp_html.h"
 #include "graph_viz_options.h"
 
-#if defined(WIN32) || defined(_WIN32)
-    #include "umba/win32_utils.h"
-#endif
-
 #include "extern_tools.h"
 
 // For 'system' function
@@ -409,15 +405,16 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
             // }
             // else
             {
-                std::string toolExeName     = findGraphvizToolExecutableName<std::string>(appCfg.dontLookupForGraphviz, graphvizTool);
+                std::string toolExeName     = findGraphvizToolExecutableName(appCfg.dontLookupForGraphviz, graphvizTool);
                 //std::string toolCommandLine = toolExeName + " " + graphvizToolArgs;
 
                 std::string errMsg;
                 //int resCode = system(toolCommandLine.c_str());
-                int resCode = umba::shellapi::callSystem(&errMsg, toolExeName, graphvizToolArgs);
+                int resCode = umba::shellapi::callSystem(toolExeName, graphvizToolArgs, &errMsg);
                 if (resCode!=0)
                 {
-                    errMsg = "Failed to calling '" + graphvizTool + "', message: " + std::to_string(resCode) + ", command line: " + makeSystemFunctionCommandString(toolExeName, graphvizToolArgs);
+                    errMsg = "Failed to calling '" + graphvizTool + "', message: " + std::to_string(resCode)
+                        + ", command line: " + umba::shellapi::makeSystemFunctionCommandString(toolExeName, graphvizToolArgs);
                 }
             }
         }
