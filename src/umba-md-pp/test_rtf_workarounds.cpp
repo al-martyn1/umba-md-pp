@@ -14,6 +14,7 @@
 #include "umba/char_writers.h"
 //#+sort
 
+#include "umba/app_main.h"
 #include "umba/debug_helpers.h"
 #include "umba/time_service.h"
 
@@ -26,7 +27,8 @@
 
 int safe_main(int argc, char* argv[]);
 
-int main(int argc, char* argv[])
+// int main(int argc, char* argv[])
+UMBA_APP_MAIN()
 {
     try
     {

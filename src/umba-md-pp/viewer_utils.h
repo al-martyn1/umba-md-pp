@@ -9,11 +9,6 @@
 #include "umba/filesys.h"
 #include "umba/shellapi.h"
 
-#if defined(WIN32) || defined(_WIN32)
-    #include "umba/win32_utils.h"
-    #include <shellapi.h>
-#endif
-
 #include <string>
 
 

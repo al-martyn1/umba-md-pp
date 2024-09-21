@@ -11,6 +11,7 @@
 #include "umba/char_writers.h"
 //#+sort
 
+#include "umba/app_main.h"
 #include "umba/debug_helpers.h"
 #include "umba/time_service.h"
 
@@ -65,17 +66,7 @@
 #include "marty_yaml_toml_json/json_utils.h"
 #include "marty_yaml_toml_json/yaml_json.h"
 #include "marty_yaml_toml_json/yaml_utils.h"
-
-
-
-#if defined(WIN32) || defined(_WIN32)
-
-    #define HAS_CLIPBOARD_SUPPORT 1
-    #include "umba/clipboard_win32.h"
-
-#endif
-
-
+//
 #include "app_config.h"
 #include "viewer_utils.h"
 
@@ -133,7 +124,8 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 
 int safe_main(int argc, char* argv[]);
 
-int main(int argc, char* argv[])
+//int main(int argc, char* argv[])
+UMBA_APP_MAIN()
 {
     try
     {
@@ -842,14 +834,12 @@ int safe_main(int argc, char* argv[])
 
         outputFileType = umba::cli_tool_helpers::detectFilenameType(outputFilename, false /* !bInput */);
 
-        #if defined(WIN32) || defined(_WIN32)
         if (outputFileType==umba::cli_tool_helpers::IoFileType::clipboard)
         {
             LOG_ERR_OPT << "invalid output file name"
                         << "\n";
             return 6;
         }
-        #endif
 
         if (!argsParser.quet)
         {
@@ -947,62 +937,4 @@ int safe_main(int argc, char* argv[])
 
     return 0;
 }
-
-
-#if (defined(WIN32) || defined(_WIN32)) && defined(__GNUC__)
-
-   // Fix for MinGW problem - https://sourceforge.net/p/mingw-w64/bugs/942/
-   // https://github.com/brechtsanders/winlibs_mingw/issues/106
-   // https://stackoverflow.com/questions/74999026/is-there-the-commandlinetoargva-function-in-windows-c-c-vs-2022
-
-
-   #include <winsock2.h>
-   #include <windows.h>
-   #include <shellapi.h>
-
-   int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-   {
-       UMBA_USED(hInstance);
-       UMBA_USED(hPrevInstance);
-       UMBA_USED(lpCmdLine);
-       UMBA_USED(nCmdShow);
-
-       int nArgs = 0;
-       wchar_t ** wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
-       if (!wargv)
-       {
-           return 1;
-       }
-
-       // Count the number of bytes necessary to store the UTF-8 versions of those strings
-       int n = 0;
-       for (int i = 0;  i < nArgs;  i++)
-       {
-         n += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, NULL, 0, NULL, NULL ) + 1;
-       }
-
-       // Allocate the argv[] array + all the UTF-8 strings
-       char **argv = (char**)new char*[( (nArgs + 1) * sizeof(char *) + n )];
-       if (!argv)
-       {
-           return 1;
-       }
-
-       // Convert all wargv[] --> argv[]
-       char * arg = (char *)&(argv[nArgs + 1]);
-       for (int i = 0;  i < nArgs;  i++)
-       {
-         argv[i] = arg;
-         arg += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, arg, n, NULL, NULL ) + 1;
-       }
-       argv[nArgs] = NULL;
-
-       return main(nArgs, argv);
-
-   }
-
-
-
-#endif
-
 

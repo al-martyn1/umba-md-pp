@@ -18,6 +18,7 @@
 #include "umba/char_writers.h"
 //#+sort
 
+#include "umba/app_main.h"
 #include "umba/debug_helpers.h"
 
 #include <iostream>
@@ -62,17 +63,7 @@
 #include "marty_yaml_toml_json/json_utils.h"
 #include "marty_yaml_toml_json/yaml_json.h"
 #include "marty_yaml_toml_json/yaml_utils.h"
-
-
-
-#if defined(WIN32) || defined(_WIN32)
-
-    #define HAS_CLIPBOARD_SUPPORT 1
-    #include "umba/clipboard_win32.h"
-
-#endif
-
-
+//
 #include "app_config.h"
 #include "viewer_utils.h"
 #include "extern_tools.h"
@@ -155,91 +146,8 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 );
 
 
-/*
-    У нас есть такие ситуации:
 
-    1) У нас неюникодное оконное приложение, собирается под MSVC. Есть
-       - WinMain
-       - main_impl
-
-    2) У нас юникодное оконное приложение, собирается под MSVC. Есть
-       - wWinMain
-       - wmain_impl
-
-    3) У нас неюникодное оконное приложение, собирается под GCC. Есть
-       - WinMain
-       - main_impl
-
-    4) У нас юникодное оконное приложение, собирается под GCC. Есть
-       - wWinMain
-       - wmain_impl
-
-    5) У нас неюникодное консольное приложение, собирается под MSVC. Есть
-       - main
-
-    6) У нас юникодное консольное приложение, собирается под MSVC. Есть
-       - wmain
-
-    7) У нас неюникодное консольное приложение, собирается под GCC. Есть
-       - WinMain
-       - main_impl
-
-    8) У нас юникодное консольное приложение, собирается под GCC. Есть
-       - wWinMain
-       - wmain_impl
-
-    Итого:
-
-                        UNICODE             UNICODE             UNICODE             UNICODE
-              Windows   Windows   Windows   Windows   Console   Console   Console   Console
-              MSVC      MSVC      GCC       GCC       MSVC      MSVC      GCC       GCC
-
-WinMain         +                   +                                       +
-wWinMain                  +                   +                                       +
-main_impl       +                   +                                       +
-wmain_impl                +                   +                                       +
-main                                                    +
-wmain                                                             +
-
-
-main/wmain - нужны только для MSVC/Console
-
-Вопрос: обходной путь через жопу с использованием WinMain/wWinMain нужен только для GCC или для всех, кроме MSVC?
-
-
- */
-
-
-#if defined(_MSC_VER) && defined(UMBA_MD_PP_VIEW_CONSOLE)
-
-    #define UMBA_MD_PP_VIEW_NEED_MAIN_IMPL
-    #define UMBA_MD_PP_VIEW_NEED_MAIN
-
-#endif
-
-#if defined(__GNUC__) || !defined(UMBA_MD_PP_VIEW_CONSOLE)
-
-    #define UMBA_MD_PP_VIEW_NEED_MAIN_IMPL
-    #define UMBA_MD_PP_VIEW_NEED_WINMAIN
-
-#endif
-
-
-
-//#if defined(UMBA_MD_PP_VIEW_CONSOLE)
-#if defined(UMBA_MD_PP_VIEW_NEED_MAIN_IMPL)
-
-    #ifdef TRY_UNICODE_VIEWER
-
-        int wmain_impl(int argc, wchar_t* argv[])
-
-    #else
-
-        int main_impl(int argc, char* argv[])
-
-    #endif
-
-#endif
+UMBA_APP_MAIN()
 {
 
     marty_tr::tr_set_err_handler(&trErrHandler);
@@ -270,7 +178,7 @@ main/wmain - нужны только для MSVC/Console
     {
         std::string cwd;
         std::string rootPath = umba::shellapi::getDebugAppRootFolder(&cwd);
-        std::cout << "Working Dir: " << cwd << "\n";
+        LOG_MSG_OPT << "Working Dir: " << cwd << "\n";
 
 
         argsParser.args.clear();
@@ -606,103 +514,4 @@ main/wmain - нужны только для MSVC/Console
 
     return 0;
 }
-
-
-#if defined(UMBA_MD_PP_VIEW_NEED_MAIN)
-
-    #ifdef TRY_UNICODE_VIEWER
-
-        int wmain(int argc, wchar_t* argv[])
-        {
-            return wmain_impl(argc, argv);
-        }
-
-    #else
-
-        int main(int argc, char* argv[])
-        {
-            return main_impl(argc, argv);
-        }
-
-    #endif
-
-#endif
-
-
-//#if (defined(WIN32) || defined(_WIN32)) && defined(__GNUC__)
-//#if defined(UMBA_MD_PP_VIEW_CONSOLE)
-#if defined(UMBA_MD_PP_VIEW_NEED_WINMAIN)
-
-    //#error "444"
-
-    // Fix for MinGW problem - https://sourceforge.net/p/mingw-w64/bugs/942/
-    // https://github.com/brechtsanders/winlibs_mingw/issues/106
-    // https://stackoverflow.com/questions/74999026/is-there-the-commandlinetoargva-function-in-windows-c-c-vs-2022
-
-
-    #include <winsock2.h>
-    #include <windows.h>
-    #include <shellapi.h>
-
-    #ifdef TRY_UNICODE_VIEWER
-    int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-    #else
-    int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-    #endif
-    {
-        UMBA_USED(hInstance);
-        UMBA_USED(hPrevInstance);
-        UMBA_USED(lpCmdLine);
-        UMBA_USED(nCmdShow);
-
-        int nArgs = 0;
-        wchar_t ** wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
-        if (!wargv)
-        {
-            return 1;
-        }
-
-
-        #ifdef TRY_UNICODE_VIEWER
-
-            return wmain_impl(nArgs, wargv);
-
-        #else
-
-        // Count the number of bytes necessary to store the UTF-8 versions of those strings
-        int n = 0;
-        for (int i = 0;  i < nArgs;  i++)
-        {
-          n += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, NULL, 0, NULL, NULL ) + 1;
-        }
-
-        // Allocate the argv[] array + all the UTF-8 strings
-        char **argv = (char**)new char*[( (nArgs + 1) * sizeof(char *) + n )];
-        if (!argv)
-        {
-            return 1;
-        }
-
-        // Convert all wargv[] --> argv[]
-        char * arg = (char *)&(argv[nArgs + 1]);
-        for (int i = 0;  i < nArgs;  i++)
-        {
-          argv[i] = arg;
-          arg += WideCharToMultiByte( CP_UTF8, 0, wargv[i], -1, arg, n, NULL, NULL ) + 1;
-        }
-        argv[nArgs] = NULL;
-
-        return main_impl(nArgs, argv);
-
-        #endif
-
-    }
-
-//#endif
-
-#else
-
-//#error "777"
-
-#endif
 
