@@ -676,8 +676,9 @@ std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::Langua
 //----------------------------------------------------------------------------
 struct SnippetTagInfo
 {
-    using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
-    using text_signature_vector = umba::container::small_vector<TextSignature, 4, void, options_type >;
+    // using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
+    // using text_signature_vector = umba::container::small_vector<TextSignature, 4, void, options_type >;
+    using text_signature_vector = std::vector<TextSignature>;
 
     SnippetTagType             startType               = SnippetTagType::invalid;
     std::size_t                startNumber             = 0; // line number
