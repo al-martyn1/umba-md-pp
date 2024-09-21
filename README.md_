@@ -135,10 +135,10 @@ GitHub/GitLab wiki, например.
 
 Извлекаем фрагмент кода по сигнатуре:
 ```
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)`-{}
 ```
 
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)`-{}
 
 
 

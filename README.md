@@ -147,22 +147,28 @@ GitHub/GitLab wiki, например.
 
 Извлекаем фрагмент кода по сигнатуре:
 ```
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`template<typename StringType> StringType makeSystemFunctionCommandString`-{}
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)`-{}
 ```
 
 ```cpp
-template<typename StringType>
-StringType makeSystemFunctionCommandString(const StringType &cmd, std::vector<StringType> cmdArgs)
+inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 {
-    cmdArgs.insert(cmdArgs.begin(), cmd);
-    for(auto &cmdArg : cmdArgs)
-    {
-        cmdArg = escapeCommandLineArgument(cmdArg);
-    }
+    if (dontTouchSystem)
+        return std::string();
 
-    using CharType = typename StringType::value_type;
+#if defined(WIN32) && defined(_WIN32)
 
-    return umba::string_plus::merge<std::string, typename std::vector<StringType>::const_iterator>( cmdArgs.begin(), cmdArgs.end(), (CharType)' '/*, [](auto s) { return s; }*/ );
+    std::wstring p;
+    if (!umba::win32_utils::regQueryAppInstallLocationBin(std::wstring(L"doxygen_is1"), p))
+        return std::string();
+
+    return umba::toUtf8(p);
+
+#else
+
+    return std::string();
+
+#endif
 }
 ```
 
