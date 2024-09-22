@@ -24,7 +24,10 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <sstream>
+#if defined(UMBA_EVENTS_LOG_ENABLE)
+    #include <sstream>
+#endif
+
 // #include <filesystem>
 
 #include "umba/debug_helpers.h"
@@ -146,6 +149,20 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 );
 
 
+inline 
+int logResultCode(int code)
+{
+#if defined(UMBA_EVENTS_LOG_ENABLE)
+    std::ostringstream oss;
+    oss << "Exit code : " << code << "\n";
+    oss << "Last Error: " << umba::shellapi::getErrorMessage() << "\n";
+    umba::shellapi::writeUmbaEventLogNow("exiting", oss.str());
+#endif
+
+    return code;
+}
+
+
 
 UMBA_APP_MAIN()
 {
@@ -170,10 +187,7 @@ UMBA_APP_MAIN()
                                                             )
                                                         );
 
-    //programLocationInfo = argsParser.programLocationInfo;
-
     // Force set CLI arguments while running under debugger
-
     if (umba::isDebuggerPresent())
     {
         std::string cwd;
@@ -201,7 +215,7 @@ UMBA_APP_MAIN()
 
         //argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
 
-        argsParser.args.push_back(rootPath + "/README.md_");
+        argsParser.args.push_back(rootPath + "/tests/Умба любит русские имена файлов.md_");
 
 
     }
@@ -252,12 +266,20 @@ UMBA_APP_MAIN()
     //if (!umba::filesys::readFile(inputFilename, inputFileText))
     if (!AppConfig<FilenameStringType>::readInputFile(inputFilename, inputFileText))
     {
-        LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
-                                          .arg("fileName",umba::toUtf8(inputFilename))
-                                          .toString()
-                    << "\n";
+        auto msg = umba::formatMessage("failed to read input file: '$(fileName)'")
+                                      .arg("fileName",umba::toUtf8(inputFilename))
+                                      .toString();
+                    
         //errCount++;
-        return 2;
+        LOG_ERR_OPT << msg << "\n";
+
+        #if defined(UMBA_EVENTS_LOG_ENABLE)
+            std::ostringstream oss;
+            oss << "Message : " << msg << "\n";
+            umba::shellapi::writeUmbaEventLogNow("exiting", oss.str());
+        #endif
+
+        return logResultCode(2);
     }
 
     UMBA_USED(lineNo);
@@ -341,7 +363,7 @@ UMBA_APP_MAIN()
             oss << "Error code: " << (unsigned)GetLastError();
             #endif
             showErrorMessageBox(oss.str());
-            return 3;
+            return logResultCode(3);
         }
 
         FilenameStringType mdTempFile              = umba::filename::appendPath(tempPath, umba::string_plus::make_string<FilenameStringType>("document.md"));
@@ -386,7 +408,7 @@ UMBA_APP_MAIN()
         if (!umba::filesys::writeFile(mdTempFile, resText, true /* overwrite */ ))
         {
             showErrorMessageBox("Failed to write file MD temp file: " + mdTempFile);
-            return 4;
+            return logResultCode(4);
         }
 
 
@@ -407,7 +429,7 @@ UMBA_APP_MAIN()
         if (!umba::filesys::writeFile(doxygenConfigTempFile, doxyfileData, true /* overwrite */ ))
         {
             showErrorMessageBox("Failed to write Doxyfile temp file: " + doxygenConfigTempFile);
-            return 5;
+            return logResultCode(5);
         }
 
 
@@ -419,14 +441,14 @@ UMBA_APP_MAIN()
         if (!umba::filesys::writeFile(doxygenRtfCfgTempFile, doxyRtfCfgData, true /* overwrite */ ))
         {
             showErrorMessageBox("Failed to write doxygen RTF CFG temp file: " + doxygenRtfCfgTempFile);
-            return 6;
+            return logResultCode(6);
         }
 
 
         if (!umba::filesys::setCurrentDirectory(tempPath))
         {
             showErrorMessageBox("Failed to change current directory. Can't view MD file.");
-            return 7;
+            return logResultCode(7);
         }
 
         std::string doxygenExeName = findDoxygenExecutableName(appConfig.dontLookupForDoxygen);
@@ -448,20 +470,20 @@ UMBA_APP_MAIN()
         if (systemRes<0)
         {
             showErrorMessageBox("Failed to execute '" + doxygenExeName + "': " + callingDoxygenErrMsg);
-            return 8;
+            return logResultCode(8);
         }
 
         if (!umba::filesys::isFileReadable(generatedRtfFile))
         {
             showErrorMessageBox("Can't read generated file '" + generatedRtfFile + "'");
-            return 9;
+            return logResultCode(9);
         }
 
         //!!! Fix RTF here
         if (!rtfEmbedImagesWorkaround(generatedRtfFile))
         {
             showErrorMessageBox("Failed to embed images");
-            return 10;
+            return logResultCode(10);
         }
 
 
@@ -484,29 +506,39 @@ UMBA_APP_MAIN()
             fullFinalFilenameCanonical = umba::filename::makeCanonical(umba::filename::appendPath(targetPath, umba::filename::appendExt(targetName, targetExt)));
         }
 
-        if (!MoveFileExA( generatedRtfFileCanonical.c_str(), fullFinalFilenameCanonical.c_str()
-                        , MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH
-                        )
-           )
+        // if (!MoveFileExA( generatedRtfFileCanonical.c_str(), fullFinalFilenameCanonical.c_str()
+        //                 , MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH
+        //                 )
+        //    )
         {
-            showErrorMessageBox("Failed to create final file"); // !!! Это вылезает, если предыдущая версия файла уже открыта в ворде
-            return 11;
+            using umba::shellapi::MoveFileFlags;
+            if (!umba::shellapi::moveFile(generatedRtfFileCanonical, fullFinalFilenameCanonical, MoveFileFlags::copyAllowed|MoveFileFlags::replaceExisting|MoveFileFlags::writeThrough))
+            {
+                showErrorMessageBox("Failed to create final file"); // !!! Это вылезает, если предыдущая версия файла уже открыта в ворде
+                return logResultCode(11);
+            }
         }
 
-        ShellExecuteA( 0 // HWND
-                     , "open"
-                     , fullFinalFilenameCanonical.c_str()
-                     , 0 // lpParameters
-                     , 0 // lpDirectory
-                     , SW_NORMAL
-                     );
+        if (!umba::shellapi::executeOpen(fullFinalFilenameCanonical))
+        {
+            showErrorMessageBox("Failed to open final file");
+            return logResultCode(12);
+        
+        }
+        // ShellExecuteA( 0 // HWND
+        //              , "open"
+        //              , fullFinalFilenameCanonical.c_str()
+        //              , 0 // lpParameters
+        //              , 0 // lpDirectory
+        //              , SW_NORMAL
+        //              );
 
     } // try
     catch(const std::runtime_error &e)
     {
 
         showErrorMessageBox(e.what());
-        return 12;
+        return logResultCode(13);
 
         // LOG_ERR_OPT << e.what() << "\n";
         // return 1;
