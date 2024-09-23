@@ -3,6 +3,30 @@
 PlantUML img generator - https://plantuml.com/ru/command-line
 PlantUML ebnf - https://plantuml.com/ru/ebnf
 PlantUML установка - https://plantuml.com/ru/starting
+  Java - https://www.java.com/en/download/
+  Running - https://plantuml.com/ru/running
+
+Types of Output File - https://plantuml.com/ru/command-line#458de91d76a8569c
+
+To see all stdlib icon libraries, browse to https://github.com/plantuml/plantuml-stdlib
+
 PlantUML дока по языку - https://plantuml.com/ru/guide
 
+Ditaa (DIagrams Through Ascii Art)
+  https://plantuml.com/ru/ditaa
+JCCKit is a nice and small library for creating scientific charts and plots.
+  https://plantuml.com/ru/jcckit
+Earth Day
+  https://plantuml.com/ru/xearth
+
+
+
+
 Boost MSM PUML (там примеры FSM на пумле есть) - https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html
+
+JAVA_HOME
+PLANTUML
+PLANT_UML
+PLANTUML_JAR
+
+java -jar plantuml.jar file1 file2 file3
