@@ -4,3 +4,6 @@
 [submodule ".bat"]
 	path = .bat
 	url = https://github.com/al-martyn1/.bat.git
+[submodule ".wiki"]
+	path = .wiki
+	url = https://github.com/al-martyn1/umba-md-pp.wiki.git
