@@ -153,9 +153,10 @@ inline
 int logResultCode(int code)
 {
 #if defined(UMBA_EVENTS_LOG_ENABLE)
+    auto lastErr = umba::shellapi::getLastError();
     std::ostringstream oss;
     oss << "Exit code : " << code << "\n";
-    oss << "Last Error: " << umba::shellapi::getErrorMessage() << "\n";
+    oss << "Last Error: " << umba::shellapi::getErrorMessage(lastErr) << "\n";
     umba::shellapi::writeUmbaEventLogNow("exiting", oss.str());
 #endif
 
@@ -225,7 +226,7 @@ UMBA_APP_MAIN()
     // {
         // Job completed - may be, --where option found
         if (argsParser.mustExit)
-            return 0;
+            return logResultCode(0);
 
         // if (!argsParser.quet)
         // {
@@ -233,14 +234,14 @@ UMBA_APP_MAIN()
         // }
 
         if (!argsParser.parseStdBuiltins())
-            return 1;
+            return logResultCode(1);
         if (argsParser.mustExit)
-            return 0;
+            return logResultCode(0);
 
         if (!argsParser.parse())
-            return 1;
+            return logResultCode(1);
         if (argsParser.mustExit)
-            return 0;
+            return logResultCode(0);
     // }
     // catch(const std::exception &e)
     // {
@@ -253,6 +254,20 @@ UMBA_APP_MAIN()
     //     return -1;
     // }
 
+#if defined(UMBA_EVENTS_LOG_ENABLE)
+    {
+        std::size_t nArg = 0;
+        std::ostringstream oss;
+        for(auto a : argsParser.args)
+        {
+            oss << "argv[" << nArg << "]: " << a << "\n";
+            ++nArg;
+        }
+
+        oss << "\nInput file name: " << inputFilename << "\n";
+        umba::shellapi::writeUmbaEventLogNow("startup", oss.str());
+    }
+#endif
 
 
     //unsigned errCount = 0;
@@ -267,7 +282,7 @@ UMBA_APP_MAIN()
     if (!AppConfig<FilenameStringType>::readInputFile(inputFilename, inputFileText))
     {
         auto msg = umba::formatMessage("failed to read input file: '$(fileName)'")
-                                      .arg("fileName",umba::toUtf8(inputFilename))
+                                      .arg("fileName",inputFilename)
                                       .toString();
                     
         //errCount++;
@@ -289,7 +304,7 @@ UMBA_APP_MAIN()
 
 
     //std::string
-    curFile = umba::toUtf8(inputFilename); // = fileName;
+    curFile = inputFilename; // = fileName;
     //unsigned lineNo = 0;
 
 
@@ -347,12 +362,6 @@ UMBA_APP_MAIN()
         //     umbaLogStreamMsg << "Writting output to: "<<printableOutputFilename<<"\n";
         // }
 
-        // umba::cli_tool_helpers::writeOutput( outputFilename, outputFileType
-        //                                    , encoding::ToUtf8(), encoding::FromUtf8()
-        //                                    , resText, std::string() // bomData
-        //                                    , true /* fromFile */, true /* utfSource */ , bOverwrite
-        //                                    );
-
         FilenameStringType tempPath;
         if (!createTempFolder(tempPath, inputFilename /* inputFileText */ , umba::string_plus::make_string<FilenameStringType>("umba-md-pp-view")))
         {
@@ -400,11 +409,6 @@ UMBA_APP_MAIN()
             std::cout << "Known languages: " << appConfig.getAllLangFileExtentions() << "\n";
         }
 
-        // umba::cli_tool_helpers::writeOutput( mdTempFile, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
-        //                                    , encoding::ToUtf8(), encoding::FromUtf8()
-        //                                    , resText, std::string() // bomData
-        //                                    , true /* fromFile */, true /* utfSource */ , true // bOverwrite
-        //                                    );
         if (!umba::filesys::writeFile(mdTempFile, resText, true /* overwrite */ ))
         {
             showErrorMessageBox("Failed to write file MD temp file: " + mdTempFile);
@@ -421,11 +425,6 @@ UMBA_APP_MAIN()
         std::string doxyfileData   = generateDoxyfile(appConfig, doc, mdTempFile);
         std::string doxyRtfCfgData = generateDoxygenRtfCfg(appConfig, doc);
 
-        // umba::cli_tool_helpers::writeOutput( doxygenConfigTempFile, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
-        //                                    , encoding::ToUtf8(), encoding::FromUtf8()
-        //                                    , doxyfileData, std::string() // bomData
-        //                                    , true /* fromFile */, true /* utfSource */ , true // bOverwrite
-        //                                    );
         if (!umba::filesys::writeFile(doxygenConfigTempFile, doxyfileData, true /* overwrite */ ))
         {
             showErrorMessageBox("Failed to write Doxyfile temp file: " + doxygenConfigTempFile);
@@ -433,11 +432,6 @@ UMBA_APP_MAIN()
         }
 
 
-        // umba::cli_tool_helpers::writeOutput( doxygenRtfCfgTempFile, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
-        //                                    , encoding::ToUtf8(), encoding::FromUtf8()
-        //                                    , doxyRtfCfgData, std::string() // bomData
-        //                                    , true /* fromFile */, true /* utfSource */ , true // bOverwrite
-        //                                    );
         if (!umba::filesys::writeFile(doxygenRtfCfgTempFile, doxyRtfCfgData, true /* overwrite */ ))
         {
             showErrorMessageBox("Failed to write doxygen RTF CFG temp file: " + doxygenRtfCfgTempFile);
@@ -544,6 +538,6 @@ UMBA_APP_MAIN()
         // return 1;
     }
 
-    return 0;
+    return logResultCode(0);
 }
 

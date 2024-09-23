@@ -1030,7 +1030,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
         if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
         {
             makeShureEmptyLine(resLines);
-            resLines.emplace_back("!!! File not found in: " + umba::toUtf8(appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", "))));
+            resLines.emplace_back("!!! File not found in: " + appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", ")));
             return false; // сфейлили
         }
 
@@ -1306,7 +1306,7 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
         {
             makeShureEmptyLine(resLines);
             //resLines.emplace_back("!!! File not found");
-            resLines.emplace_back("!!! File not found in: " + umba::toUtf8(appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", "))));
+            resLines.emplace_back("!!! File not found in: " + appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", ")));
         }
         return noFail;
     }

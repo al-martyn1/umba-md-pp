@@ -389,13 +389,6 @@ int operator()( const StringType                                &a           //!
             StringType optArg;
             umba::utfToStringTypeHelper(optArg, opt.optArg);
 
-            // auto absOptArgPath = makeAbsPath(optArg);
-            //
-            // if (appConfig.verboseMode)
-            // {
-            //     umbaLogStreamMsg << "Option 'add-examples-path', argument: " << umba::toUtf8(optArg) << ", absolute path: " << umba::toUtf8(absOptArgPath) << ", base path: " << umba::toUtf8(getBasePath()) << "\n";
-            // }
-
             if (!appConfig.addSamplesPaths(optArg, argsParser.getBasePath()))
             {
                 LOG_ERR_OPT<<"Adding paths for examples searching failed, invalid argument: '" << optArg << "'\n";
@@ -814,7 +807,7 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
-            appConfig.documentDefaultLanguage = umba::toUtf8(strVal);
+            appConfig.documentDefaultLanguage = strVal;
             return 0;
         }
         // else if ( opt.setParam("LINEFEED",umba::command_line::OptionType::optString)
@@ -840,7 +833,7 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
-            appConfig.documentForceLanguage = umba::toUtf8(strVal);
+            appConfig.documentForceLanguage = strVal;
             return 0;
         }
 
@@ -1334,7 +1327,7 @@ int operator()( const StringType                                &a           //!
 
             #endif
 
-            return 0;
+            return 1;
         }
 
         #endif
@@ -1454,7 +1447,7 @@ int operator()( const StringType                                &a           //!
                 {
                     //argsParser.printHelpPage( std::cout, "[OPTIONS] input_file [output_file]", "If output_file not taken, STDOUT used", helpText );
                     auto helpText = opt.getHelpOptionsString();
-                    std::cout << "Usage: " << umba::toUtf8(argsParser.programLocationInfo.exeName)
+                    std::cout << "Usage: " << argsParser.programLocationInfo.exeName
                               << " [OPTIONS] input_file [output_file]\n"
                               << "  If output_file not taken, STDOUT used\n"
                               << "\nOptions:\n\n"

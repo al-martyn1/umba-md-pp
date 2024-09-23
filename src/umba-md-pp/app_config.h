@@ -722,14 +722,6 @@ struct AppConfig
         return true;
     }
 
-    // if (appConfig.verboseMode)
-    // {
-    //     umbaLogStreamMsg << "Snippets lookup paths:\n";
-    //     for(auto p : samplesPaths)
-    //     {
-    //         umbaLogStreamMsg << "    " << umba::toUtf8(p) << "\n";
-    //     }
-    // }
 
     // static
     bool findSamplesFileImpl(const std::vector<FilenameStringType> &samplesPathsVec, FilenameStringType lookFor, FilenameStringType &foundFullFilename, std::string &foundFileText) const
@@ -742,7 +734,7 @@ struct AppConfig
 
          if (verboseMode)
          {
-             umbaLogStreamMsg << "Looking for file: " << umba::toUtf8(lookFor) << "\n";
+             umbaLogStreamMsg << "Looking for file: " << lookFor << "\n";
          }
 
          for(auto path: samplesPathsVec)
@@ -758,7 +750,7 @@ struct AppConfig
              {
                  if (verboseMode)
                  {
-                     umbaLogStreamMsg << "  + Looking in: " << umba::toUtf8(path) << " (" << umba::toUtf8(fullName) << ") - ";
+                     umbaLogStreamMsg << "  + Looking in: " << path << " (" << fullName << ") - ";
                      umbaLogStreamMsg << "Found\n";
                  }
 
@@ -768,7 +760,7 @@ struct AppConfig
 
              if (verboseMode)
              {
-                 umbaLogStreamMsg << "  - Looking in: " << umba::toUtf8(path) << " (" << umba::toUtf8(fullName) << ") - ";
+                 umbaLogStreamMsg << "  - Looking in: " << path << " (" << fullName << ") - ";
                  umbaLogStreamMsg << "Not found\n";
              }
 

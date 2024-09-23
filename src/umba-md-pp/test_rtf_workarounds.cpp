@@ -56,7 +56,7 @@ int safe_main(int argc, char* argv[])
     // marty_tr::tr_init_all_translations(tr_get_translations_json());
     //
 
-    //std::cout << "Doxygen: " << umba::toUtf8(findDoxygenExecutableName()) << "\n";
+    //std::cout << "Doxygen: " << findDoxygenExecutableName() << "\n";
 
     //using namespace umba::omanip;
 

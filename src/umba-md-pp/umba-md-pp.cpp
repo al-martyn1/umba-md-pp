@@ -155,7 +155,7 @@ int safe_main(int argc, char* argv[])
     marty_tr::tr_init_all_translations(tr_get_translations_json());
 
 
-    //std::cout << "Doxygen: " << umba::toUtf8(findDoxygenExecutableName()) << "\n";
+    //std::cout << "Doxygen: " << findDoxygenExecutableName() << "\n";
 
     using namespace umba::omanip;
 
@@ -168,14 +168,14 @@ int safe_main(int argc, char* argv[])
 
         // std::cout << (umba::CharClassUnderlyingType)(umba::CharClass::nonprintable | umba::CharClass::punctuation) << "\n";
 
-        std::string doxygenExe = umba::toUtf8(findDoxygenExecutableName());
+        std::string doxygenExe = findDoxygenExecutableName();
         std::cout << "Doxygen: " << doxygenExe << "\n";
 
         std::wstring graphvizBinPath;
         if (umba::win32_utils::regQueryAppInstallLocationBin(std::wstring(L"Graphviz"), graphvizBinPath))
         {
         }
-        std::cout << "Graphviz bin path: " << umba::toUtf8(graphvizBinPath) << "\n";
+        std::cout << "Graphviz bin path: " << graphvizBinPath << "\n";
 
 
         #endif
@@ -412,7 +412,7 @@ int safe_main(int argc, char* argv[])
         umbaLogStreamMsg << "Snippets lookup paths:\n";
         for(auto p : appConfig.samplesPaths)
         {
-            umbaLogStreamMsg << "    " << umba::toUtf8(p) << "\n";
+            umbaLogStreamMsg << "    " << p << "\n";
         }
     }
 

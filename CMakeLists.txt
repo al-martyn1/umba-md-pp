@@ -110,7 +110,7 @@ target_link_libraries(umba-md-pp PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${
 
 add_executable(umba-md-pp-view "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" "${SRC_ROOT}/umba-md-pp/_umba-md-pp-view.rc" "${headers}")
 umba_add_target_options(umba-md-pp-view "BIGOBJ" "WINDOWS" "UTF8")
-target_compile_definitions(umba-md-pp-view PRIVATE "UMBA_MD_PP_VIEW" "UMBA_EVENTS_LOG_ENABLE")
+target_compile_definitions(umba-md-pp-view PRIVATE "UMBA_MD_PP_VIEW" ) # "UMBA_EVENTS_LOG_ENABLE"
 target_link_libraries(umba-md-pp-view PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${JSON_YAML_LIB}")
 
 
