@@ -176,8 +176,136 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 # Стандартный конфиг
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\src
-#!insert{nolineno,noKeepCutTags} conf/umba-md-pp.options
+```
+# Устанавливаем русский как язык документов по умолчанию, если язык не задан тэгами,
+# не переопределён дефолтный язык где-то потом или не задан принудительно через опцию --force-document-language
+# Задание языка необходимо для доксигена, если по дефолту задать не русский, или не задавать язык, доксиген кракозяблы генерит
+--document-language=russian
+
+# External programs lookup
+--dont-lookup-for-doxygen
+--dont-lookup-for-graphviz
+
+# Common options
+--processing-options=generate-toc,title
+--set-insert-options=fail,path,filename-line-no,trim-arround
+
+# Graphviz common options
+--graphviz-output-format=svg
+--graphviz-dpi=120
+--graphviz-show-labels=true
+
+# Расширения, обрабатываемые (и сканируемые) MDPP
+# старое
+#--add-mdpp-extentions=_md,_md_,md_,_markdown,_markdown_,markdown_
+
+# новое
+--add-mdpp-extentions=_md,_md_,md_
+--add-mdpp-extentions=_mkd,_mkd_,mkd_
+--add-mdpp-extentions=_mdwn,_mdwn_,mdwn_
+--add-mdpp-extentions=_mdown,_mdown_,mdown_
+--add-mdpp-extentions=_mdtxt,_mdtxt_,mdtxt_
+--add-mdpp-extentions=_mdtext,_mdtext_,mdtext_
+--add-mdpp-extentions=_markdown,_markdown_,markdown_
+#--add-mdpp-extentions=_text,_text_,text_
+
+# Исключаем подкаталоги со следующими именами
+--batch-exclude-dirs=_md,_md_,md_
+--batch-exclude-dirs=_mkd,_mkd_,mkd_
+--batch-exclude-dirs=_mdwn,_mdwn_,mdwn_
+--batch-exclude-dirs=_mdown,_mdown_,mdown_
+--batch-exclude-dirs=_mdtxt,_mdtxt_,mdtxt_
+--batch-exclude-dirs=_mdtext,_mdtext_,mdtext_
+--batch-exclude-dirs=_markdown,_markdown_,markdown_
+--batch-exclude-dirs=doc.dox,doc.doxy,doc.doxygen,.dox,.doxy,.doxygen,dox,doxy,doxygen
+#--batch-exclude-dirs=_text,_text_,text_
+
+--batch-exclude-dir=.out,.build,.git,.bat,.cmake,.msvc,.vscode,.vs,.config
+
+
+# При генерации вьювером название файла задается на основании заголовка (из тэгов или первого заголовка, или из первых строк) документа
+# Но мы придерживаемся идеи не использовать русские имена без крайней необходимости
+--processing-options=transliterate-generated-filenames
+
+# Metatags misspelling replaces and transliteration result replaces
+--meta-tag-replace=avtor:author
+--meta-tag-replace=avtory:author
+--meta-tag-replace=authors:author
+--meta-tag-replace=tegi:tags
+--meta-tag-replace=teg:tags
+--meta-tag-replace=data:date
+--meta-tag-replace=zagolovok:title
+--meta-tag-replace=nazvanie:title
+--meta-tag-replace=caption:title
+--meta-tag-replace=kategorii:category
+--meta-tag-replace=kategoriya:category
+--meta-tag-replace=categories:category
+--meta-tag-replace=opisanie:description
+--meta-tag-replace=otmazka:disclaimer
+--meta-tag-replace=otmazki:disclaimer
+--meta-tag-replace=disclaimers:disclaimer
+--meta-tag-replace=versiya:version
+--meta-tag-replace=yazyk:language
+--meta-tag-replace=yazyk dokumenta:language
+--meta-tag-replace=otkaz ot otvetstvennosti:disclaimer
+
+# Metatags serialization
+--meta-tag-serialize=title:Title
+--meta-tag-serialize=disclaimer:Disclaimer
+--meta-tag-serialize=description:Description
+--meta-tag-serialize=author:Author
+--meta-tag-serialize=category:Category
+--meta-tag-serialize=date:Date
+--meta-tag-serialize=tags:Tags
+--meta-tag-serialize=version:Version
+--meta-tag-serialize=language:Language
+
+# Metatag types
+--meta-tag-set-type=comma-set:category,tags
+--meta-tag-set-type=comma-list:author
+--meta-tag-set-type=text-first:title,date
+--meta-tag-set-type=text-merge:disclaimer,description
+
+
+# C++
+--add-lang-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
+--add-lang-cut-prefix=C++://#!
+--add-lang-cut-prefix=C++://#$
+--add-lang-cut-prefix=C++:/*#!
+--add-lang-cut-prefix=C++:/*#$
+--add-lang-separator-prefix=C++://---
+--add-lang-separator-prefix=C++:/***
+--set-lang-block-chars=C++:{}
+--set-lang-listing-tag=C++:cpp
+
+# C
+--add-lang-file-extentions=C:.c
+--add-lang-cut-prefix=C://#!
+--add-lang-cut-prefix=C://#$
+--add-lang-cut-prefix=C:/*#!
+--add-lang-cut-prefix=C:/*#$
+--add-lang-separator-prefix=C://---
+--add-lang-separator-prefix=C:/***
+--set-lang-block-chars=C:{}
+--set-lang-listing-tag=C:cpp
+
+# Squrrel
+--add-lang-file-extentions=Squrrel:.nut,.nuts
+--add-lang-cut-prefix=Squrrel://#!
+--add-lang-cut-prefix=Squrrel://#$
+--add-lang-separator-prefix=Squrrel://---
+--set-lang-block-chars=Squrrel:{}
+--set-lang-listing-tag=Squrrel:lua
+
+# CMake
+--add-lang-file-extentions=CMake:CMakeLists.txt,.cmake
+--add-lang-cut-prefix=CMake:#//!
+--add-lang-cut-prefix=CMake:#//$
+--add-lang-separator-prefix=C++:###
+--add-lang-separator-prefix=C++:#---
+# No blocks support in CMake
+--set-lang-listing-tag=CMake:cmake
+```
 
 
 # Любите ли вы документацию так, как люблю её я?

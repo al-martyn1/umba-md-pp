@@ -144,7 +144,7 @@ GitHub/GitLab wiki, например.
 
 # Стандартный конфиг
 
-#!insert{nolineno,noKeepCutTags} conf/umba-md-pp.options
+#!insert{nolineno,noKeepCutTags} umba-md-pp.options
 
 
 # Любите ли вы документацию так, как люблю её я?
