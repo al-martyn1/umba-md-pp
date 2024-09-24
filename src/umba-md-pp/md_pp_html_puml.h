@@ -374,9 +374,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     if (needDotProcessing && errMsg.empty())
     {
         // Тут надо пройтись по tempTargetFolder и собрать все появившиеся там файлы
-
         std::vector<std::string> foundNewFiles;
-
         umba::filesys::enumerateDirectory( tempTargetFolder
                                          , [&](const std::string &fileName, const umba::filesys::FileStat &fileStat)
                                            {
