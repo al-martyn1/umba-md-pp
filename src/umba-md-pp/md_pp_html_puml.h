@@ -7,7 +7,7 @@
 
 //
 #include "md_pp_html.h"
-#include "graph_viz_options.h"
+#include "plantuml_options.h"
 
 #include "extern_tools.h"
 
@@ -26,7 +26,7 @@ namespace md {
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType>
-void updateGraphVizOptions(const AppConfig<FilenameStringType> &appCfg, const umba::html::HtmlTag &mdHtmlTag, GraphVizOptions &graphVizOptions)
+void updatePlantUmlOptions(const AppConfig<FilenameStringType> &appCfg, const umba::html::HtmlTag &mdHtmlTag, PlantUmlOptions &plantUmlOptions)
 {
     // Атрибуты:
     //   file      - имя входного файла
@@ -39,31 +39,31 @@ void updateGraphVizOptions(const AppConfig<FilenameStringType> &appCfg, const um
     if (mdHtmlTag.hasAttr("file"))
     {
         auto attrVal = mdHtmlTag.getAttrValue("file", std::string());
-        graphVizOptions.setSaveFileName(appendPath(getPath(attrVal), getName(attrVal)));
+        plantUmlOptions.setSaveFileName(appendPath(getPath(attrVal), getName(attrVal)));
     }
 
     if (mdHtmlTag.hasAttr("save-as"))
     {
         auto attrVal = mdHtmlTag.getAttrValue("save-as", std::string());
-        graphVizOptions.setSaveFileName(appendPath(getPath(attrVal), getName(attrVal)));
+        plantUmlOptions.setSaveFileName(appendPath(getPath(attrVal), getName(attrVal)));
     }
 
     if (mdHtmlTag.hasAttr("scale"))
     {
-        graphVizOptions.setScale(mdHtmlTag.getAttrValue("scale", std::string()));
+        plantUmlOptions.setScale(mdHtmlTag.getAttrValue("scale", std::string()));
     }
 
     if (mdHtmlTag.hasAttr("type"))
     {
-        graphVizOptions.setGraphType(mdHtmlTag.getAttrValue("type", std::string()));
+        plantUmlOptions.setDiagramType(mdHtmlTag.getAttrValue("type", std::string()));
     }
 
     if (appCfg.targetRenderer==TargetRenderer::doxygen)
     {
-        if (mdHtmlTag.hasAttr("rtf-dpi"))
-        {
-            graphVizOptions.setDpi(mdHtmlTag.getAttrValue("rtf-dpi", std::string()));
-        }
+        // if (mdHtmlTag.hasAttr("rtf-dpi"))
+        // {
+        //     graphVizOptions.setDpi(mdHtmlTag.getAttrValue("rtf-dpi", std::string()));
+        // }
         if (mdHtmlTag.hasAttr("rtf-target-format"))
         {
             graphVizOptions.setTargetFormat(mdHtmlTag.getAttrValue("rtf-target-format", std::string()));
@@ -74,12 +74,12 @@ void updateGraphVizOptions(const AppConfig<FilenameStringType> &appCfg, const um
 
 //----------------------------------------------------------------------------
 inline
-std::string grapvizLabelTextEscape(const std::string &text)
+std::string plantUmlLabelTextEscape(const std::string &text)
 {
     std::string res; res.reserve(text.size());
     for(auto ch : text)
     {
-        if (ch=='\\' || ch=='\"' || ch=='\n')
+        if (ch=='\\'  /* || ch=='\"' */  || ch=='\n')
             res.append(1, '\\');
         res.append(1, ch);
     }
@@ -88,14 +88,14 @@ std::string grapvizLabelTextEscape(const std::string &text)
 }
 
 //----------------------------------------------------------------------------
-int grapvizGraphGetLineType(std::string line)
+int plantUmlDiagramGetLineType(std::string line)
 {
     umba::string_plus::trim(line);
     if (line.empty())
         return 2;
-    if (umba::string_plus::starts_with_and_strip(line, "#") || umba::string_plus::starts_with_and_strip(line, "//")) // single line comment
+    if (umba::string_plus::starts_with_and_strip(line, "'")) // single line comment
         return 1;
-    if (umba::string_plus::starts_with_and_strip(line, "/*")) // multiline comment
+    if (umba::string_plus::starts_with_and_strip(line, "/'")) // multiline comment
         return -1;
 
     return 0; // not a comment line
@@ -103,15 +103,12 @@ int grapvizGraphGetLineType(std::string line)
 
 //----------------------------------------------------------------------------
 inline
-void grapvizAddGraphLabel(const std::string &labelText, std::vector<std::string> &tagLines)
+void plantUmlAddDiagramLabelScaleAndPlantTags(const std::string &labelText, unsigned scale, PlantUmlDiagramType diagramType, std::vector<std::string> &tagLines)
 {
-    if (tagLines.empty() || labelText.empty())
+    if (tagLines.empty())
         return;
 
-    const static std::string graphStr = "graph";
-
-    bool waitForBrace = false;
-    std::size_t bracePos = std::string::npos;
+    const static std::string diagramStartStr = "@start";
 
     std::size_t idx = 0;
 
@@ -119,71 +116,54 @@ void grapvizAddGraphLabel(const std::string &labelText, std::vector<std::string>
     {
         auto &line = tagLines[idx];
 
-        int gvzLineType = grapvizGraphGetLineType(line);
+        int pumlLineType = plantUmlDiagramGetLineType(line);
 
-        if (gvzLineType<0) // многостроч не умеем обрабатывать
+        if (pumlLineType<0) // многостроч не умеем обрабатывать
             return;
 
-        if (gvzLineType!=0) // single line comment or empty line
+        if (pumlLineType!=0) // single line comment or empty line
             continue;
 
-        // не пустая и не комент строка
-        if (!waitForBrace) // ещё ждём не скобку, а начало графа
+
+        bool hasStart = false;
+        std::size_t insertPos = idx; // вставляем перед текущей строкой
+        //scale
+        if (umba::string_plus::starts_with(line, diagramStartStr))
         {
-            // первая не пустая и не комент строка - тут должен начинаться граф
-            std::size_t graphPos = line.find(graphStr);
-
-            if (graphPos==line.npos) // Не нашли начало графа - что-то пошло не так
-                return;
-
-            bracePos = line.find('{', graphPos+graphStr.size());
-            waitForBrace = true;
+            hasStart = true;
+            ++insertPos; // Вставляем после текущей строки, которая @startXXX
         }
 
-        if (waitForBrace)
+        if (!labelText.empty())
         {
-            if (bracePos==std::string::npos) // на строчке с началом графа не нашли курли скобку, ищем с начала текущей
-            {
-                bracePos = line.find('{');
-            }
-
-            if (bracePos==std::string::npos)
-                continue;
-
-            // нашли скобку
-            ++bracePos; // едем дальше
-
-            bool needSemicolon = umba::html::helpers::skipSpaces(line.begin()+bracePos, line.end())!=line.end();
-
-            std::string textToInsert = " label=\"" + grapvizLabelTextEscape(labelText) + "\"" + (needSemicolon?"; ":"");
-
-            line.insert(bracePos, textToInsert);
-
-            return; // Bingo!
+            std::string textToInsert = plantUmlLabelTextEscape(labelText);
+            tagLines.insert(tagLines.begin()+insertPos, textToInsert); 
+            ++insertPos;
         }
 
+        if (scale!=100)
+        {
+            std::string scaleStr = "scale " + std::to_string(scale) + "/100";
+            tagLines.insert(tagLines.begin()+insertPos, textToInsert); 
+        }
+
+        if (!hasStart)
+        {
+            std::string diagramTypeStr = enum_serialize(diagramType);
+            tagLines.insert(tagLines.begin(), "@start"+diagramTypeStr); 
+            tagLines.insert(tagLines.end()  , "@end"+diagramTypeStr); 
+        }
+
+        return;
     } // for
-
 }
 
-
-// graph     :     [ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
-// digraph { a -> b }
-// strict graph {
-// digraph graphname {
-
-// graph {
-//   label="Vincent van Gogh Paintings"
-
-// label is escString - https://graphviz.org/docs/attr-types/escString/
-
-
 template<typename FilenameStringType>
-void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType
-                      , const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines
-                      )
+void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType
+                        , const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines
+                        )
 {
-    // Копируем опции graphVizOptions из appCfg
+    // Копируем опции plantUmlOptions из appCfg
     // Обновляем их из тэга
     // Генерируем в savePath временный файл dot, и сохраняем туда наши строки
     // Генерируем в savePath имя временного файла, удаляем его, если существует
@@ -199,46 +179,52 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
     // dot -Tsvg -s72 -o test001_72.svg test001.dot
 
-    auto graphVizOptions = appCfg.graphVizOptions;
-    updateGraphVizOptions(appCfg, mdHtmlTag, graphVizOptions);
+    auto plantUmlOptions = appCfg.plantUmlOptions;
+    updatePlantUmlOptions(appCfg, mdHtmlTag, plantUmlOptions);
 
-    auto outputFilename = graphVizOptions.generateOutputFilename(appCfg.flattenImageLinks);
-    auto tempDotFile    = graphVizOptions.generateInputDotTempFilename();
-    auto tempTargetFile = graphVizOptions.generateOutputTempFilename();
-    auto hashFile       = graphVizOptions.generateHashFilename();
+    auto outputFilename   = plantUmlOptions.generateOutputFilename(appCfg.flattenImageLinks);
+    auto tempPumlFile     = plantUmlOptions.generateInputTempFilename();
+    auto tempTargetFolder = plantUmlOptions.generateOutputTempFolderName();
+    auto hashFile         = plantUmlOptions.generateHashFilename();
 
     auto outputFilenameCanonicalForCompare = umba::filename::makeCanonicalForCompare(outputFilename);
 
 
-    std::vector<std::string> dotLines;
-
-    std::string graphvizTool;
-    std::vector<std::string> graphvizToolArgs;
-    if (!graphVizOptions.generateCommandLineArgs(appCfg, graphvizTool, graphvizToolArgs, tempDotFile, tempTargetFile))
+    std::string pumlTool;
+    std::vector<std::string> pumlToolArgs;
+    if (!plantUmlOptions.generateCommandLineArgs(appCfg, pumlTool, pumlToolArgs, tempPumlFile, tempTargetFolder))
     {
-        resLines.emplace_back("# Failed to generate DOT command line: possible unknown graph type?");
+        resLines.emplace_back("# Failed to generate PlantUML command line: possible unknown diagram type?");
         return;
     }
 
+    std::vector<std::string> pumlLines;
+
     // dotLines.emplace_back("// " + makeSystemFunctionCommandString(graphvizTool, graphvizToolArgs));
-    dotLines.emplace_back("// " + umba::shellapi::makeSystemFunctionCommandString(graphvizTool, graphvizToolArgs));
-    dotLines.emplace_back(std::string());
+    pumlLines.emplace_back("' " + umba::shellapi::makeSystemFunctionCommandString(pumlTool, pumlToolArgs));
+    pumlLines.emplace_back(std::string());
 
     for(auto tagLine : tagLines)
     {
         umba::string_plus::rtrim(tagLine); // Обрезаем справа, чтобы незначащие пробелы не
-        dotLines.emplace_back(tagLine);
+        pumlLines.emplace_back(tagLine);
     }
 
-    if (graphVizOptions.showLabels && mdHtmlTag.hasAttr("text"))
-       grapvizAddGraphLabel(mdHtmlTag.getAttrValue("text"), dotLines);
+    {
+        std::string labelText;
+        if (mdHtmlTag.hasAttr("text"))
+            labelText = mdHtmlTag.getAttrValue("text");
+        if (!graphVizOptions.showLabels)
+            labelText.clear();
+        plantUmlAddDiagramLabelScaleAndPlantTags(labelText, plantUmlOptionsscale, plantUmlOptions.diagramType, pumlLines);
+    }
 
 
-    std::string dotText    = marty_cpp::mergeLines(dotLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
-    std::size_t dotHash    = std::hash<std::string>{}(dotText);
-    std::string dotHashStr = std::to_string(dotHash);
+    std::string pumlText    = marty_cpp::mergeLines(pumlLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
+    std::size_t pumlHash    = std::hash<std::string>{}(pumlText);
+    std::string pumlHashStr = std::to_string(dotHash);
 
-    bool needDotProcessing = true;
+    bool needPumlProcessing = true;
 
     std::string hashFileText;
 
@@ -338,17 +324,24 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
     // Теперь нам надо отпроцессить
     if (needDotProcessing)
     {
+
+    // auto outputFilename   = plantUmlOptions.generateOutputFilename(appCfg.flattenImageLinks);
+    // auto tempPumlFile     = plantUmlOptions.generateInputTempFilename();
+    // auto tempTargetFolder = plantUmlOptions.generateOutputTempFolderName();
+    // auto hashFile         = plantUmlOptions.generateHashFilename();
+
         // Старые временные файлы нам не нужны, даже если остались с прошлого запуска
-        umba::filesys::deleteFile(tempDotFile);
-        umba::filesys::deleteFile(tempTargetFile);
+        umba::filesys::deleteFile(tempPumlFile);
+        //umba::filesys::deleteFile(tempTargetFile);
+        umba::shellapi::deleteDirectory(tempTargetFolder);
 
-        umba::filesys::createDirectoryEx( umba::filename::getPath(tempDotFile), true /* forceCreatePath */ );
-        umba::filesys::createDirectoryEx( umba::filename::getPath(tempTargetFile), true /* forceCreatePath */ );
+        umba::filesys::createDirectoryEx( umba::filename::getPath(tempPumlFile), true /* forceCreatePath */ );
+        umba::filesys::createDirectoryEx( tempTargetFolder, true /* forceCreatePath */ );
 
-        if (!umba::filesys::writeFile(tempDotFile, dotText, true /* overwrite */ ))
+        if (!umba::filesys::writeFile(tempPumlFile, pumlText, true /* overwrite */ ))
         {
             // hasErrorWhileGenerating = true;
-            errMsg = "Failed to write temporary DOT file";
+            errMsg = "Failed to write temporary PUML file";
         }
         else
         {
@@ -360,16 +353,18 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
             // }
             // else
             {
-                std::string toolExeName     = findGraphvizToolExecutableName(appCfg.dontLookupForGraphviz, graphvizTool);
+                //std::string toolExeName     = findGraphvizToolExecutableName(appCfg.dontLookupForGraphviz, graphvizTool);
                 //std::string toolCommandLine = toolExeName + " " + graphvizToolArgs;
+
+                
 
                 std::string errMsg;
                 //int resCode = system(toolCommandLine.c_str());
-                int resCode = umba::shellapi::callSystem(toolExeName, graphvizToolArgs, &errMsg);
+                int resCode = umba::shellapi::callSystem(pumlTool, pumlToolArgs, &errMsg);
                 if (resCode!=0)
                 {
-                    errMsg = "Failed to calling '" + graphvizTool + "', message: " + std::to_string(resCode)
-                        + ", command line: " + umba::shellapi::makeSystemFunctionCommandString(toolExeName, graphvizToolArgs);
+                    errMsg = "Failed to calling JAVA for PlantUML , message: " + std::to_string(resCode)
+                        + ", command line: " + umba::shellapi::makeSystemFunctionCommandString(pumlTool, pumlToolArgs);
                 }
             }
         }
@@ -378,6 +373,9 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
     if (needDotProcessing && errMsg.empty())
     {
+        // Тут надо пройтись по tempTargetFolder и собрать все появившиеся там файлы
+        // Разобрать имя выходного файла и для каждого найденного файла генерить выходное имя с индексом
+
         umba::filesys::createDirectoryEx( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
         using umba::shellapi::MoveFileFlags;
         if (!umba::shellapi::moveFile(tempTargetFile, outputFilename, MoveFileFlags::copyAllowed|MoveFileFlags::replaceExisting|MoveFileFlags::writeThrough))
@@ -385,6 +383,8 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
             errMsg = "Failed to copy temp file '" + tempTargetFile + "' to target file '" + outputFilename + "', error: " + std::to_string(GetLastError());
         }
     }
+
+    // Тут надо удалить tempTargetFolder со всем его содержимым
 
 
     if (!errMsg.empty())
@@ -394,8 +394,8 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
     if (errMsg.empty())
     {
-        if (!graphVizOptions.keepTempDotFiles)
-            umba::filesys::deleteFile(tempDotFile);
+        // if (!graphVizOptions.keepTempDotFiles)
+        //     umba::filesys::deleteFile(tempDotFile);
         umba::filesys::deleteFile(tempTargetFile);
     }
 

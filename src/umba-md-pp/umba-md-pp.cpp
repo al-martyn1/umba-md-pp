@@ -322,8 +322,8 @@ int safe_main(int argc, char* argv[])
         //argsParser.args.push_back("--batch-scan-recurse="+rootPath+"tests");
 
 
-        argsParser.args.push_back("--md");
-        argsParser.args.push_back("--help");
+        // argsParser.args.push_back("--md");
+        // argsParser.args.push_back("--help");
 
         #if 0
         argsParser.args.push_back("--batch-scan-recurse="+rootPath+".");
@@ -416,10 +416,8 @@ int safe_main(int argc, char* argv[])
         }
     }
 
-    umbaLogStreamMsg << "JAVA: " << appConfig.getJava() << "\n";
-    umbaLogStreamMsg << "JAVA: " << appConfig.getJava() << "\n";
-    // std::string getJava() const
-    // std::string getPlantUml() const
+    // umbaLogStreamMsg << "JAVA: " << appConfig.getJava() << "\n";
+    // umbaLogStreamMsg << "PLANTUML: " << appConfig.getPlantUml() << "\n";
 
     //unsigned errCount = 0;
 

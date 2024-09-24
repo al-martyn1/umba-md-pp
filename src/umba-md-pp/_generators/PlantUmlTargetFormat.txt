@@ -1,0 +1,16 @@
+# https://graphviz.org/docs/outputs/
+invalid,unknown=-1
+png
+svg
+eps
+// -teps:text	-eps:text	EPS 	Keeps EPS text as text (more details here)
+pdf	PDF 	Further details can be found here
+vdx	VDX 	Microsoft Visio Document
+xmi	XMI 	Further details can be found here
+scxml	SCXML 	
+html	HTML 	Alpha feature: do not use
+txt	ATXT 	ASCII art. Further details can be found here
+utxt	UTXT 	ASCII art using Unicode characters
+latex	LATEX 	Further details can be found here
+// -tlatex:nopreamble	-latex:nopreamble	LATEX 	Contains no LaTeX preamble creating a document
+// -tbraille	-braille	PNG 	Braille image [Ref. QA-4752]

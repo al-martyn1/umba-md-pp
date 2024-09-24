@@ -26,6 +26,7 @@
 #include "marty_cpp/src_normalization.h"
 //
 #include "graph_viz_options.h"
+#include "plantuml_options.h"
 //
 #include "image_helpers.h"
 #include "batch_utils.h"
@@ -63,11 +64,12 @@ struct AppConfig
     umba::md::LanguageOptionsDatabase                     languageOptionsDatabase;
 
     GraphVizOptions                                       graphVizOptions;
+    PlantUmlOptions                                       plantUmlOptions;
 
     mutable std::string                                   java;
     mutable std::string                                   javaHome;
 
-    mutable std::string                                   plantUml;
+    mutable std::string                                   plantUml; // jar
 
     //std::unordered_map<FilenameStringType, std::string>   extToLang  ;
     //std::unordered_map<std::string, LangOptions>          langOptions;
