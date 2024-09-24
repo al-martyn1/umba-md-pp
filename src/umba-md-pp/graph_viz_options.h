@@ -12,6 +12,8 @@
 #include <string>
 
 
+// GRAPHVIZ_DOT - переменная окружения, которую надо проверить до всего остального
+// аналогичные переменные надо проверять для остальных тулзей
 
 struct GraphVizOptions
 {
@@ -46,7 +48,7 @@ struct GraphVizOptions
         return std::string(numZeros, '0') + idxStr;
     }
 
-    std::string makeDotTargetFormatCliArgument() const
+    std::string makeTargetFormatCliArgument() const
     {
         //return escapeCommandLineArgument("-T" + enum_serialize(targetFormat));
         return "-T" + enum_serialize(targetFormat);
@@ -58,7 +60,8 @@ struct GraphVizOptions
         return "-Gdpi=" + std::to_string(getScaledDpi());
     }
 
-    bool generateCommandLineArgs(std::string &tool, std::vector<std::string> &args, const std::string &inputDotFile, const std::string &outputImageFile) const
+    template<typename FilenameStringType>
+    bool generateCommandLineArgs(const AppConfig<FilenameStringType> &appCfg, std::string &tool, std::vector<std::string> &args, const std::string &inputDotFile, const std::string &outputImageFile) const
     {
         //if (graphType==GraphType::dot)
         {
@@ -67,7 +70,7 @@ struct GraphVizOptions
 
             tool = enum_serialize(graphType);
 
-            args.emplace_back(makeDotTargetFormatCliArgument());
+            args.emplace_back(makeTargetFormatCliArgument());
             //args.emplace_back(makeDotDpiCliArgument());
             args.emplace_back("-o"); args.emplace_back(outputImageFile);
             args.emplace_back(inputDotFile);

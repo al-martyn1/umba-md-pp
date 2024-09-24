@@ -1109,7 +1109,7 @@ int operator()( const StringType                                &a           //!
                || opt.isOption("graphviz-output-format")
                || opt.isOption("gviz-output-format")
                || opt.isOption("gv-output-format")
-               || opt.setDescription("Set Graphviz tools output format (SVG/PNG/BMP)."))
+               || opt.setDescription("Set Graphviz tools output format (SVG/PNG)."))
         {
             if (argsParser.hasHelpOption) return 0;
 
@@ -1127,7 +1127,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("DPI",umba::command_line::OptionType::optString)
+        else if ( opt.setParam("PATH",umba::command_line::OptionType::optString)
                || opt.isOption("graphviz-output-path")
                || opt.isOption("graphviz-output-root")
                || opt.isOption("gviz-output-path")
@@ -1236,6 +1236,120 @@ int operator()( const StringType                                &a           //!
             }
 
             appConfig.dontLookupForGraphviz = boolVal;
+
+            return 0;
+        }
+
+        else if ( opt.setParam("JAVA_EXE",umba::command_line::OptionType::optString)
+               || opt.isOption("java")
+               || opt.setDescription("Set Java executable full path name."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.java = strVal;
+
+            return 0;
+        }
+
+        else if ( opt.setParam("JAVA_HOME",umba::command_line::OptionType::optString)
+               || opt.isOption("java-home")
+               || opt.setDescription("Set Java home. Java executable must exist as $(JAVA_HOME)/bin/java"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.javaHome = strVal;
+
+            return 0;
+        }
+
+        else if ( opt.setParam("PLANTUML_JAR",umba::command_line::OptionType::optString)
+               || opt.isOption("plant-uml")
+               || opt.isOption("plantuml")
+               || opt.setDescription("Set Plant UML jar full path name."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.plantUml = strVal;
+
+            return 0;
+        }
+
+        else if ( opt.setParam("FORMAT",umba::command_line::OptionType::optString)
+               || opt.isOption("plant-uml-output-format")
+               || opt.isOption("plantuml-output-format")
+               || opt.isOption("puml-output-format")
+               || opt.setDescription("Set PlantUML output format (SVG/PNG)."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.plantUmlOptions.setTargetFormat(strVal))
+            {
+                LOG_ERR_OPT<<"Setting PlantUML tools output format failed, invalid argument: '" << strVal << "' (--graphviz-output-format)\n";
+                return -1;
+            }
+            return 0;
+        }
+
+        else if ( opt.setParam("PATH",umba::command_line::OptionType::optString)
+               || opt.isOption("plant-uml-output-path")
+               || opt.isOption("plant-uml-output-root")
+               || opt.isOption("plantuml-output-path")
+               || opt.isOption("plantuml-output-root")
+               || opt.isOption("puml-output-path")
+               || opt.isOption("puml-output-root")
+               || opt.setDescription("Set PlantUML tools output root path."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.plantUmlOptions.savePath = argsParser.makeAbsPath(strVal);
+
+            return 0;
+        }
+
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("plant-uml-show-labels")
+               || opt.isOption("plantuml-show-labels")
+               || opt.isOption("puml-show-labels")
+               || opt.setDescription("Show labels on PlantUML raphs."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                return -1;
+            }
+
+            appConfig.plantUmlOptions.showLabels = boolVal;
 
             return 0;
         }

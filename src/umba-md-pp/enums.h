@@ -843,3 +843,107 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( GraphType, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( GraphType, std::map, 1 )
 
 
+enum class PlantUmlTargetFormat : std::uint32_t
+{
+    invalid                                          = (std::uint32_t)(-1),
+    unknown                                          = (std::uint32_t)(-1),
+    png                                              = 0x0000,
+    svg                                              = 0x0001,
+    eps                                              = 0x0002,
+    pdfPdfFurtherDetailsCanBeFoundHere               = 0x0003,
+    vdxVdxMicrosoftVisioDocument                     = 0x0004,
+    xmiXmiFurtherDetailsCanBeFoundHere               = 0x0005,
+    scxmlScxml                                       = 0x0006,
+    htmlHtmlAlphaFeature                             = do not use,
+    txtAtxtAsciiArtPeriodFurtherDetailsCanBeFoundHere = 0x0007,
+    utxtUtxtAsciiArtUsingUnicodeCharacters           = 0x0008,
+    latexLatexFurtherDetailsCanBeFoundHere           = 0x0009
+
+}; // enum class PlantUmlTargetFormat : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(PlantUmlTargetFormat)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PlantUmlTargetFormat, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::txtAtxtAsciiArtPeriodFurtherDetailsCanBeFoundHere , "txt-	-atxt- 	-ascii- -art-_period_ -further- -details- -can- -be- -found- -here" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::invalid                    , "invalid"                                        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::png                        , "png"                                            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::eps                        , "eps"                                            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::svg                        , "svg"                                            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::pdfPdfFurtherDetailsCanBeFoundHere , "pdf-	-pdf- 	-further- -details- -can- -be- -found- -here" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::xmiXmiFurtherDetailsCanBeFoundHere , "xmi-	-xmi- 	-further- -details- -can- -be- -found- -here" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::vdxVdxMicrosoftVisioDocument , "vdx-	-vdx- 	-microsoft- -visio- -document"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::scxmlScxml                 , "scxml-	-scxml"                                  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::htmlHtmlAlphaFeature       , "html-	-html- 	-alpha- -feature"                 );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::utxtUtxtAsciiArtUsingUnicodeCharacters , "utxt-	-utxt- 	-ascii- -art- -using- -unicode- -characters" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::latexLatexFurtherDetailsCanBeFoundHere , "latex-	-latex- 	-further- -details- -can- -be- -found- -here" );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( PlantUmlTargetFormat, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PlantUmlTargetFormat, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::txtAtxtAsciiArtPeriodFurtherDetailsCanBeFoundHere , "txt-	-atxt- 	-ascii- -art-_period_ -further- -details- -can- -be- -found- -here" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::invalid                    , "invalid"                                        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::invalid                    , "unknown"                                        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::png                        , "png"                                            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::eps                        , "eps"                                            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::svg                        , "svg"                                            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::pdfPdfFurtherDetailsCanBeFoundHere , "pdf-	-pdf- 	-further- -details- -can- -be- -found- -here" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::xmiXmiFurtherDetailsCanBeFoundHere , "xmi-	-xmi- 	-further- -details- -can- -be- -found- -here" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::vdxVdxMicrosoftVisioDocument , "vdx-	-vdx- 	-microsoft- -visio- -document"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::scxmlScxml                 , "scxml-	-scxml"                                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::htmlHtmlAlphaFeature       , "html-	-html- 	-alpha- -feature"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::utxtUtxtAsciiArtUsingUnicodeCharacters , "utxt-	-utxt- 	-ascii- -art- -using- -unicode- -characters" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::latexLatexFurtherDetailsCanBeFoundHere , "latex-	-latex- 	-further- -details- -can- -be- -found- -here" );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PlantUmlTargetFormat, std::map, 1 )
+
+
+enum class PlantUmlDiagramType : std::uint32_t
+{
+    invalid      = (std::uint32_t)(-1),
+    unknown      = (std::uint32_t)(-1),
+    uml          = 0x0000,
+    regex        = 0x0001,
+    salt         = 0x0002,
+    gantt        = 0x0003,
+    chronology   = 0x0004,
+    mindmap      = 0x0005,
+    wbs          = 0x0006,
+    json         = 0x0007,
+    yaml         = 0x0008,
+    ditaa        = 0x0009,
+    jcckit       = 0x000A
+
+}; // enum class PlantUmlDiagramType : std::uint32_t
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(PlantUmlDiagramType)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PlantUmlDiagramType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::regex        , "regex"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::invalid      , "invalid"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::gantt        , "gantt"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::salt         , "salt"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::uml          , "uml"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::chronology   , "chronology" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::wbs          , "wbs"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::mindmap      , "mindmap"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::json         , "json"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::yaml         , "yaml"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::ditaa        , "ditaa"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::jcckit       , "jcckit"     );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( PlantUmlDiagramType, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PlantUmlDiagramType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::regex        , "regex"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::invalid      , "invalid"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::invalid      , "unknown"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::gantt        , "gantt"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::salt         , "salt"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::uml          , "uml"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::chronology   , "chronology" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::wbs          , "wbs"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::mindmap      , "mindmap"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::json         , "json"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::yaml         , "yaml"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::ditaa        , "ditaa"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::jcckit       , "jcckit"     );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PlantUmlDiagramType, std::map, 1 )
+
+

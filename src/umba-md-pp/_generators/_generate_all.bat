@@ -51,5 +51,7 @@ umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% %SNIPPETOPTIONS_GEN_FLAGS% ^
     %UINT32% %HEX4% -E=MdPpTag                       -F=@MdPpTag.txt                      ^
     %UINT32% %HEX4% -E=GraphVizTargetFormat          -F=@GraphVizTargetFormat.txt         ^
     %UINT32% %HEX4% -E=GraphType                     -F=@GraphType.txt                    ^
+    %UINT32% %HEX4% -E=PlantUmlTargetFormat          -F=@PlantUmlTargetFormat.txt         ^
+    %UINT32% %HEX4% -E=PlantUmlDiagramType           -F=@PlantUmlDiagramType.txt          ^
 ..\enums.h
 

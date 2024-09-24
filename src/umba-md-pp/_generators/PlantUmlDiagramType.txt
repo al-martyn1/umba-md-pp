@@ -1,0 +1,12 @@
+invalid,unknown=-1
+uml
+regex
+salt
+gantt
+chronology
+mindmap
+wbs
+json
+yaml
+ditaa
+jcckit
