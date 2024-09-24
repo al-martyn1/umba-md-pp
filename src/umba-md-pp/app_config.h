@@ -11,6 +11,8 @@
 #include "umba/string_plus.h"
 #include "umba/id_gen.h"
 #include "umba/filename.h"
+#include "umba/filesys.h"
+#include "umba/env.h"
 #include "umba/macros.h"
 #include "umba/macro_helpers.h"
 //
@@ -61,6 +63,11 @@ struct AppConfig
     umba::md::LanguageOptionsDatabase                     languageOptionsDatabase;
 
     GraphVizOptions                                       graphVizOptions;
+
+    mutable std::string                                   java;
+    mutable std::string                                   javaHome;
+
+    mutable std::string                                   plantUml;
 
     //std::unordered_map<FilenameStringType, std::string>   extToLang  ;
     //std::unordered_map<std::string, LangOptions>          langOptions;
@@ -120,6 +127,46 @@ struct AppConfig
 
 
 
+    std::string getJava() const
+    {
+        if (!java.empty())
+            return java;
+
+        if (javaHome.empty())
+        {
+            umba::env::getVar /* <std::string> */ ("JAVA_HOME", javaHome);
+        }
+
+        if (javaHome.empty())
+            return std::string();
+
+        java = umba::filename::makeCanonical(umba::filename::appendPath(javaHome, std::string("/bin/java" UMBA_FILESYS_EXE_EXT)));
+
+        return java;
+    }
+
+    std::string getPlantUml() const
+    {
+        if (!plantUml.empty())
+            return plantUml;
+
+        if (plantUml.empty())
+        {
+            umba::env::getVar /* <std::string> */ ("PLANTUML_JAR", plantUml);
+        }
+
+        if (plantUml.empty())
+        {
+            umba::env::getVar /* <std::string> */ ("PLANTUML", plantUml);
+        }
+
+        return plantUml;
+    }
+
+    // mutable std::string                                   java;
+    // mutable std::string                                   javaHome;
+    //  
+    // mutable std::string                                   plantUml;
 
     // umba::macros::StringStringMap<std::string>            conditionVars;     // Изначально предназначалось для проверки условий, но теперь и для макроподстановок
     //

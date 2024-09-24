@@ -416,6 +416,10 @@ int safe_main(int argc, char* argv[])
         }
     }
 
+    umbaLogStreamMsg << "JAVA: " << appConfig.getJava() << "\n";
+    umbaLogStreamMsg << "JAVA: " << appConfig.getJava() << "\n";
+    // std::string getJava() const
+    // std::string getPlantUml() const
 
     //unsigned errCount = 0;
 

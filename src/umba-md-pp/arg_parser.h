@@ -1127,7 +1127,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("DPI",umba::command_line::OptionType::optString)
+        else if ( opt.setParam("PATH",umba::command_line::OptionType::optString)
                || opt.isOption("graphviz-output-path")
                || opt.isOption("graphviz-output-root")
                || opt.isOption("gviz-output-path")
@@ -1240,6 +1240,56 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("JAVA_EXE",umba::command_line::OptionType::optString)
+               || opt.isOption("java")
+               || opt.setDescription("Set Java executable full path name."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.java = strVal;
+
+            return 0;
+        }
+
+        else if ( opt.setParam("JAVA_HOME",umba::command_line::OptionType::optString)
+               || opt.isOption("java-home")
+               || opt.setDescription("Set Java home. Java executable must exist as $(JAVA_HOME)/bin/java"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.javaHome = strVal;
+
+            return 0;
+        }
+
+        else if ( opt.setParam("PLANTUML_JAR",umba::command_line::OptionType::optString)
+               || opt.isOption("plant-uml")
+               || opt.setDescription("Set Plant UML jar full path name."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.plantUml = strVal;
+
+            return 0;
+        }
 
         #if defined(UMBA_MD_PP_VIEW)
 
