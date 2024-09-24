@@ -16,6 +16,9 @@
   - [Любите ли вы документацию так, как люблю её я?](#user-content-любите-ли-вы-документацию-так-как-люблю-её-я)
 
 
+![LISP Grammar](doc/.generated_images/graph_0000.svg)
+
+
 # umba-md-pp - Markdown препроцессор
 
 **umba-md-pp** - препроцессор для подготовки документации с использованием markdown-разметки
@@ -312,4 +315,5 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
+![LISP](doc/.generated_images/graph_0001.svg)
 

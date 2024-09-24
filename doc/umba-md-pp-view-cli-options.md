@@ -160,14 +160,14 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse
 
 **--gv-output-format=FORMAT**,
 **--gviz-output-format=FORMAT**,
-**--graphviz-output-format=FORMAT** - Set Graphviz tools output format (SVG/PNG/BMP).
+**--graphviz-output-format=FORMAT** - Set Graphviz tools output format (SVG/PNG).
 
-**--gv-output-path=DPI**,
-**--gv-output-root=DPI**,
-**--gviz-output-path=DPI**,
-**--gviz-output-root=DPI**,
-**--graphviz-output-path=DPI**,
-**--graphviz-output-root=DPI** - Set Graphviz tools output root path.
+**--gv-output-path=PATH**,
+**--gv-output-root=PATH**,
+**--gviz-output-path=PATH**,
+**--gviz-output-root=PATH**,
+**--graphviz-output-path=PATH**,
+**--graphviz-output-root=PATH** - Set Graphviz tools output root path.
 
 **--gv-show-labels[=MODE]**,
 **--gviz-show-labels[=MODE]**,
@@ -186,6 +186,29 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse
 Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--dont-lookup-for-graphviz[=MODE]** - Do not lookup for Graphviz (in registry).
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
+
+**--java=JAVA_EXE** - Set Java executable full path name.
+
+**--java-home=JAVA_HOME** - Set Java home. Java executable must exist as $(JAVA_HOME)/bin/java.
+
+**--plantuml=PLANTUML_JAR**,
+**--plant-uml=PLANTUML_JAR** - Set Plant UML jar full path name.
+
+**--puml-output-format=FORMAT**,
+**--plantuml-output-format=FORMAT**,
+**--plant-uml-output-format=FORMAT** - Set PlantUML output format (SVG/PNG).
+
+**--puml-output-path=PATH**,
+**--puml-output-root=PATH**,
+**--plantuml-output-path=PATH**,
+**--plantuml-output-root=PATH**,
+**--plant-uml-output-path=PATH**,
+**--plant-uml-output-root=PATH** - Set PlantUML tools output root path.
+
+**--puml-show-labels[=MODE]**,
+**--plantuml-show-labels[=MODE]**,
+**--plant-uml-show-labels[=MODE]** - Show labels on PlantUML raphs.
 Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--remove-temp[=MODE]** - Remove application temp folder with all content.

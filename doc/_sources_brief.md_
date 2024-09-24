@@ -21,6 +21,8 @@ Title: Brief Description for Project Sources
  - **umba-md-pp/md_pp_html.h** - 
  - **umba-md-pp/md_pp_html_csv.h** - 
  - **umba-md-pp/md_pp_html_graph.h** - 
+ - **umba-md-pp/md_pp_html_puml.h** - 
+ - **umba-md-pp/plantuml_options.h** - 
  - **umba-md-pp/processing.h** - 
  - **umba-md-pp/processing_code_utils.h** - Помогалки для processing.h
  - **umba-md-pp/processing_section_utils.h** - Помогалки для processing.h

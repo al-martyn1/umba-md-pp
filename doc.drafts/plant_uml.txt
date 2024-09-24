@@ -8,7 +8,12 @@ PlantUML установка - https://plantuml.com/ru/starting
 
 Types of Output File - https://plantuml.com/ru/command-line#458de91d76a8569c
 
+Welcome to The Hitchhiker’s Guide to PlantUML! - https://crashedmind.github.io/PlantUMLHitchhikersGuide/#welcome-to-the-hitchhiker-s-guide-to-plantuml
+
 To see all stdlib icon libraries, browse to https://github.com/plantuml/plantuml-stdlib
+
+1. Create a Diagram of a Typical Network - https://crashedmind.github.io/PlantUMLHitchhikersGuide/NetworkUsersMachines/NetworkUsersMachines.html#create-a-diagram-of-a-typical-network
+
 
 PlantUML дока по языку - https://plantuml.com/ru/guide
 

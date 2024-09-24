@@ -4,6 +4,20 @@ Description: "Утилита, добавляющая некоторые возм
 Date       : April 25, 2024
 Language   : Russian
 ---
+
+#// @startebnf
+#// title LISP Grammar
+#// @endebnf
+<plant-uml type=ebnf text='LISP Grammar'>
+grammars_expression = atomic_symbol | "(", s_expression, ".", s_expression, ")" | list;
+list = "(", s_expression, { s_expression }, ")";
+atomic_symbol = letter, atom_part;
+atom_part = empty | letter, atom_part | number, atom_part;
+letter = ? a-z ?;
+number = ? 1-9 ?;
+empty = " ";
+</plant-uml>
+
 #// Russian
 #// English
 
@@ -151,3 +165,15 @@ GitHub/GitLab wiki, например.
 
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
+#// @startebnf
+#// title LISP Grammar
+#// @endebnf
+<plant-uml type=ebnf text=LISP Grammar>
+grammars_expression = atomic_symbol | "(", s_expression, ".", s_expression, ")" | list;
+list = "(", s_expression, { s_expression }, ")";
+atomic_symbol = letter, atom_part;
+atom_part = empty | letter, atom_part | number, atom_part;
+letter = ? a-z ?;
+number = ? 1-9 ?;
+empty = " ";
+</plant-uml>
