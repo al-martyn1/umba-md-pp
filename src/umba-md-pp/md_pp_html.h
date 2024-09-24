@@ -161,6 +161,51 @@ IteratorType parseTagLineExtra(std::string &filename, std::string &text, Iterato
 
 }
 
+//----------------------------------------------------------------------------
+//! Мы уже распарсили стартовый тэг, за ним может быть имя файла и заголовок
+template<typename IteratorType>
+IteratorType parseExtraPossibleFilenameAndTextToHtmlTag(umba::html::HtmlTag &parseTo, IteratorType b, IteratorType e)
+{
+    if (b==e)
+        return b;
+
+    if (*b!='>')
+        return b;
+
+    ++b;
+
+    b = umba::html::helpers::skipSpaces(b, e);
+
+    if (b==e)
+        return b;
+
+#if 0
+    std::string fileName;
+    for(; b!=e && !isWhiteSpace(*b); ++b)
+    {
+        fileName.append(1, *b);
+    }
+
+    if (!fileName.empty())
+    {
+        parseTo.addAttr("file", fileName);
+    }
+
+    return b;
+#endif
+
+    std::string filename;
+    std::string text;
+    b = parseTagLineExtra(filename, text, b, e, parseTo.hasAttr("file"));
+
+    if (!filename.empty())
+        parseTo.addAttr("file", filename);
+
+    if (!text.empty())
+        parseTo.addAttr("text", text);
+
+    return b;
+}
 
 
 // umba::html::helpers

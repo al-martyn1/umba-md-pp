@@ -4,6 +4,7 @@
 #include "umba/string_plus.h"
 #include "umba/utf8.h"
 #include "umba/shellapi.h"
+#include "umba/env.h"
 
 // For 'system' function
 #include <process.h>
@@ -82,6 +83,12 @@ inline const std::string& findGraphvizBinPath(bool dontTouchSystem)
 //----------------------------------------------------------------------------
 inline std::string findGraphvizToolExecutableName(bool dontTouchSystem, const std::string &graphvizTool)
 {
+    std::string graphvizToolUpper = umba::string_plus::toupper_copy(graphvizTool);
+
+    std::string toolExePathName; // GRAPHVIZ_DOT...
+    if (umba::env::getVar("GRAPHVIZ_"+graphvizToolUpper, toolExePathName))
+        return toolExePathName;
+
     return umba::filename::appendPath(findGraphvizBinPath(dontTouchSystem), graphvizTool+UMBA_FILESYS_EXE_EXT);
 }
 

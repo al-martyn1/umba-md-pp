@@ -32,6 +32,7 @@
 //
 #include "md_pp_html_csv.h"
 #include "md_pp_html_graph.h"
+#include "md_pp_html_puml.h"
 //
 #include <stack>
 #include <string>
@@ -68,7 +69,7 @@ TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
                         {
                             UMBA_USED(appCfg);
                             UMBA_USED(tagType);
-                            return umba::md::parsePossibleFilenameAndTextToGraphTag(mdHtmlTag, b, e);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
                         };
 
     return m;
