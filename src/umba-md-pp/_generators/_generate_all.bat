@@ -55,3 +55,6 @@ umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% %SNIPPETOPTIONS_GEN_FLAGS% ^
     %UINT32% %HEX4% -E=PlantUmlDiagramType           -F=@PlantUmlDiagramType.txt          ^
 ..\enums.h
 
+@rem Что-то пошло не так и файл генерится в текущий каталог
+if exist %~dp0enums.h copy /Y %~dp0enums.h %~dp0..\enums.h
+if exist %~dp0enums.h del %~dp0enums.h

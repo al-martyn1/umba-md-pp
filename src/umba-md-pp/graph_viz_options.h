@@ -60,8 +60,13 @@ struct GraphVizOptions
         return "-Gdpi=" + std::to_string(getScaledDpi());
     }
 
-    template<typename FilenameStringType>
-    bool generateCommandLineArgs(const AppConfig<FilenameStringType> &appCfg, std::string &tool, std::vector<std::string> &args, const std::string &inputDotFile, const std::string &outputImageFile) const
+    template<typename AppConfigType>
+    bool generateCommandLineArgs( const AppConfigType & //appCfg
+                                , std::string &tool
+                                , std::vector<std::string> &args
+                                , const std::string &inputDotFile
+                                , const std::string &outputImageFile
+                                ) const
     {
         //if (graphType==GraphType::dot)
         {
@@ -216,13 +221,10 @@ struct GraphVizOptions
         return true;
     }
 
-
     // --dot-output-root/--dot-output-path
     // dot -Tsvg -Gdpi=300 -s96 -o test001_96.svg test001.dot
 
-
-
-};
+}; // struct GraphVizOptions
 
 
 

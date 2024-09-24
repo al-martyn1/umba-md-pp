@@ -57,17 +57,28 @@ IteratorType tryParseLineToHtmlTag(umba::html::HtmlTag &parseTo, IteratorType b,
     if (!parseTo.isTag())
         return e;
 
-    typedef typename std::underlying_type<MdPpTag>::type  EnumUnderlyingType;
+    if (!parseTo.isTag()) // если инвалид, текст, или пустое имя тэга - выходим
+        return e;
 
-    EnumUnderlyingType curTagId = (EnumUnderlyingType)MdPpTag::begin;
-    for(; curTagId!=(EnumUnderlyingType)MdPpTag::end; ++curTagId)
+    MdPpTag tagId = enum_deserialize(parseTo.name, MdPpTag::invalid);
+    if (tagId!=MdPpTag::invalid)
     {
-        if (parseTo.isTag(enum_serialize((MdPpTag)curTagId)))
-        {
-            foundTag = (MdPpTag)curTagId;
-            return itRes;
-        }
+        foundTag = tagId;
+        return itRes;
     }
+
+    // Что за лажу я тут придумал?    
+    // typedef typename std::underlying_type<MdPpTag>::type  EnumUnderlyingType;
+    //  
+    // EnumUnderlyingType curTagId = (EnumUnderlyingType)MdPpTag::begin;
+    // for(; curTagId!=(EnumUnderlyingType)MdPpTag::end; ++curTagId)
+    // {
+    //     if (parseTo.isTag(enum_serialize((MdPpTag)curTagId)))
+    //     {
+    //         foundTag = (MdPpTag)curTagId;
+    //         return itRes;
+    //     }
+    // }
 
     return e;
 }

@@ -66,7 +66,7 @@ void updatePlantUmlOptions(const AppConfig<FilenameStringType> &appCfg, const um
         // }
         if (mdHtmlTag.hasAttr("rtf-target-format"))
         {
-            graphVizOptions.setTargetFormat(mdHtmlTag.getAttrValue("rtf-target-format", std::string()));
+            plantUmlOptions.setTargetFormat(mdHtmlTag.getAttrValue("rtf-target-format", std::string()));
         }
     }
 
@@ -144,7 +144,7 @@ void plantUmlAddDiagramLabelScaleAndPlantTags(const std::string &labelText, unsi
         if (scale!=100)
         {
             std::string scaleStr = "scale " + std::to_string(scale) + "/100";
-            tagLines.insert(tagLines.begin()+insertPos, textToInsert); 
+            tagLines.insert(tagLines.begin()+insertPos, scaleStr); 
         }
 
         if (!hasStart)
@@ -194,7 +194,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     std::vector<std::string> pumlToolArgs;
     if (!plantUmlOptions.generateCommandLineArgs(appCfg, pumlTool, pumlToolArgs, tempPumlFile, tempTargetFolder))
     {
-        resLines.emplace_back("# Failed to generate PlantUML command line: possible unknown diagram type?");
+        resLines.emplace_back("# Failed to generate PlantUML command line: possible unknown diagram type, or JAVA/JAVA_HOME or PLANTUML/PLANTUML_JAR environment variables not set");
         return;
     }
 
@@ -214,15 +214,15 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         std::string labelText;
         if (mdHtmlTag.hasAttr("text"))
             labelText = mdHtmlTag.getAttrValue("text");
-        if (!graphVizOptions.showLabels)
+        if (!plantUmlOptions.showLabels)
             labelText.clear();
-        plantUmlAddDiagramLabelScaleAndPlantTags(labelText, plantUmlOptionsscale, plantUmlOptions.diagramType, pumlLines);
+        plantUmlAddDiagramLabelScaleAndPlantTags(labelText, plantUmlOptions.scale, plantUmlOptions.diagramType, pumlLines);
     }
 
 
     std::string pumlText    = marty_cpp::mergeLines(pumlLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
     std::size_t pumlHash    = std::hash<std::string>{}(pumlText);
-    std::string pumlHashStr = std::to_string(dotHash);
+    std::string pumlHashStr = std::to_string(pumlHash);
 
     bool needPumlProcessing = true;
 
@@ -275,20 +275,20 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
                 hashFound = true;
 
                 // Файл - найден
-                if (hashStr==dotHashStr) // Хэш - такой же
+                if (hashStr==pumlHashStr) // Хэш - такой же
                 {
                     needWriteHashLines = false; // Обновлять не надо
                     if (umba::filesys::isPathExist(filenameStr) && umba::filesys::isPathFile(filenameStr))
                     {
-                        needDotProcessing  = false; // Ничего генерить не надо, граф не поменялся, файл на месте
+                        needPumlProcessing  = false; // Ничего генерить не надо, граф не поменялся, файл на месте
                     }
                     break; // выходим из цикла, потому как newHashFileLines не надо больше обновлять
                 }
                 else // хэш не сошелся, надо перегенерить картинку и обновить строчку хэша в файле
                 {
                     needWriteHashLines = true;
-                    needDotProcessing  = true;
-                    newHashFileLines.emplace_back(dotHashStr + " " + outputFilename); // Обновляем строчку хэша
+                    needPumlProcessing  = true;
+                    newHashFileLines.emplace_back(pumlHashStr + " " + outputFilename); // Обновляем строчку хэша
                     continue;
                 }
             }
@@ -303,9 +303,9 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
     if (!hashFound)
     {
-        newHashFileLines.emplace_back(dotHashStr + " " + outputFilename); // Добавляем строчку хэша
+        newHashFileLines.emplace_back(pumlHashStr + " " + outputFilename); // Добавляем строчку хэша
         needWriteHashLines = true;
-        needDotProcessing  = true;
+        needPumlProcessing  = true;
     }
 
     if (needWriteHashLines)
@@ -322,7 +322,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     std::string errMsg;
 
     // Теперь нам надо отпроцессить
-    if (needDotProcessing)
+    if (needPumlProcessing)
     {
 
     // auto outputFilename   = plantUmlOptions.generateOutputFilename(appCfg.flattenImageLinks);
@@ -370,8 +370,10 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         }
     }
 
+    std::vector<std::string> resultFileNames;
+    std::size_t resulFileCopyErrCount = 0;
 
-    if (needDotProcessing && errMsg.empty())
+    if (needPumlProcessing && errMsg.empty())
     {
         // Тут надо пройтись по tempTargetFolder и собрать все появившиеся там файлы
         std::vector<std::string> foundNewFiles;
@@ -387,7 +389,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
                                            }
                                          );
 
-        if (foundNewFiles.empty())                                 
+        if (foundNewFiles.empty())
         {
             errMsg = "No output files found";
         }
@@ -395,49 +397,92 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         {
             // !!!
             // Разобрать имя выходного файла и для каждого найденного файла генерить выходное имя с индексом
+
+            auto outputPathFile = umba::filename::getPathFile(outputFilename);
+            auto outputExt      = umba::filename::getExt(outputFilename);
+            std::size_t idx     = 0;
+            std::size_t numDigitsMax = 1;
+            if (foundNewFiles.size()>1000)
+                numDigitsMax = 4;
+            else if (foundNewFiles.size()>100)
+                numDigitsMax = 3;
+            else if (foundNewFiles.size()>10)
+                numDigitsMax = 2;
+
             umba::filesys::createDirectoryEx( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
-            using umba::shellapi::MoveFileFlags;
-            if (!umba::shellapi::moveFile(tempTargetFile, outputFilename, MoveFileFlags::copyAllowed|MoveFileFlags::replaceExisting|MoveFileFlags::writeThrough))
+
+            for(const auto &newTmpFile : foundNewFiles)
             {
-                errMsg = "Failed to copy temp file '" + tempTargetFile + "' to target file '" + outputFilename + "', error: " + std::to_string(GetLastError());
-            }
-        }
-    }
+                auto resultFileName = outputFilename;
+
+                std::string strIdx;
+                if (foundNewFiles.size()>1)
+                {
+                    strIdx = std::to_string(idx);
+                    if (strIdx.size()<numDigitsMax)
+                    {
+                        strIdx = std::string(numDigitsMax-strIdx.size(), '0') + strIdx;
+                    }
+
+                    resultFileName = umba::filename::appendExt(outputPathFile+"_"+strIdx, outputExt);
+                }
+
+                using umba::shellapi::MoveFileFlags;
+                if (!umba::shellapi::moveFile(newTmpFile, resultFileName, MoveFileFlags::copyAllowed|MoveFileFlags::replaceExisting|MoveFileFlags::writeThrough))
+                {
+                    //errMsg = "Failed to copy temp file '" + tempTargetFile + "' to target file '" + outputFilename + "', error: " + std::to_string(GetLastError());
+                    ++resulFileCopyErrCount;
+                }
+                else
+                {
+                    resultFileNames.emplace_back(resultFileName);
+                }
+
+            } // for(const auto &newTmpFile : foundNewFiles)
+
+        } // if (foundNewFiles.empty())
+
+    } // if (needPumlProcessing && errMsg.empty())
+
 
     // Тут надо удалить tempTargetFolder со всем его содержимым
+    umba::shellapi::deleteDirectory(tempTargetFolder);
 
+    if (errMsg.empty() && resulFileCopyErrCount)
+    {
+        errMsg = "Some errors occurs while copying files to final location";
+    }
 
     if (!errMsg.empty())
     {
         resLines.emplace_back("# " + errMsg);
     }
 
-    if (errMsg.empty())
+
+    auto docPath = umba::filename::getPath(docFilename);
+    for(const auto &resultFile : resultFileNames)
     {
-        // if (!graphVizOptions.keepTempDotFiles)
-        //     umba::filesys::deleteFile(tempDotFile);
-        umba::filesys::deleteFile(tempTargetFile);
+        std::string imgLink;
+    
+        umba::filename::makeRelPath( imgLink
+                                   , docPath
+                                   , resultFile
+                                   , '/'
+                                   , std::string(".")
+                                   , std::string("..")
+                                   , true // keepLeadingParents
+                                   , true // tryReverseRelPath
+                                   );
+    
+        if (imgLink.empty())
+        {
+            imgLink = umba::filename::getFileName(outputFilename);
+        }
+    
+        resLines.emplace_back("![" + mdHtmlTag.getAttrValue("text", "Diagram") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
+    
     }
 
-
-    std::string imgLink;
-
-    umba::filename::makeRelPath( imgLink
-                               , umba::filename::getPath(docFilename)
-                               , outputFilename
-                               , '/'
-                               , std::string(".")
-                               , std::string("..")
-                               , true // keepLeadingParents
-                               , true // tryReverseRelPath
-                               );
-
-    if (imgLink.empty())
-    {
-        imgLink = umba::filename::getFileName(outputFilename);
-    }
-
-    resLines.emplace_back("![" + mdHtmlTag.getAttrValue("text", "Graph") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
 
 }
 //----------------------------------------------------------------------------

@@ -56,9 +56,11 @@
 template<typename FilenameStringType>
 using TagLineExtraParser = std::function<std::string::const_iterator (const AppConfig<FilenameStringType>&, umba::html::HtmlTag&, MdPpTag, std::string::const_iterator, std::string::const_iterator)>;
 
+//------------------------------
 template<typename FilenameStringType>
 using TagLineExtraParsersMap = std::unordered_map<MdPpTag, TagLineExtraParser<FilenameStringType>, EnumClassHash >;
 
+//------------------------------
 template<typename FilenameStringType>
 TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
 {
@@ -71,10 +73,17 @@ TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
                             UMBA_USED(tagType);
                             return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
                         };
+    m[MdPpTag::puml ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
 
     return m;
 }
 
+//------------------------------
 template<typename FilenameStringType>
 const TagLineExtraParsersMap<FilenameStringType>& getTagLineExtraParsersMap()
 {
@@ -82,6 +91,7 @@ const TagLineExtraParsersMap<FilenameStringType>& getTagLineExtraParsersMap()
     return m;
 }
 
+//------------------------------
 template<typename FilenameStringType>
 std::string::const_iterator tagLineExtraParse(const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
 {
@@ -94,12 +104,18 @@ std::string::const_iterator tagLineExtraParse(const AppConfig<FilenameStringType
 }
 
 //----------------------------------------------------------------------------
+
+
+
+//----------------------------------------------------------------------------
 template<typename FilenameStringType>
 using TagLinesProcessor = std::function<void (const AppConfig<FilenameStringType>&, umba::html::HtmlTag&, MdPpTag, const FilenameStringType&, const std::vector<std::string>&, std::vector<std::string>&)>;
 
+//------------------------------
 template<typename FilenameStringType>
 using TagLinesProcessorsMap = std::unordered_map<MdPpTag, TagLinesProcessor<FilenameStringType>, EnumClassHash >;
 
+//------------------------------
 template<typename FilenameStringType>
 TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
 {
@@ -110,9 +126,14 @@ TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
                         {
                              return umba::md::processGraphLines(appCfg, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
+    m[MdPpTag::puml ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processDiagramLines(appCfg, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
     return m;
 }
 
+//------------------------------
 template<typename FilenameStringType>
 const TagLinesProcessorsMap<FilenameStringType>& getTagLinesProcessorsMap()
 {
@@ -120,6 +141,7 @@ const TagLinesProcessorsMap<FilenameStringType>& getTagLinesProcessorsMap()
     return m;
 }
 
+//------------------------------
 template<typename FilenameStringType>
 void tagLinesProcess(const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
 {
@@ -130,6 +152,9 @@ void tagLinesProcess(const AppConfig<FilenameStringType> &appCfg, umba::html::Ht
 
     it->second(appCfg, mdHtmlTag, tagType, docFilename, tagLines, resLines);
 }
+
+//----------------------------------------------------------------------------
+
 
 
 //----------------------------------------------------------------------------
