@@ -14,6 +14,7 @@
 --set-var=^insert_doc_filename_macro_test:by_macro2
 
 --add-examples-path=.\doc
+--add-examples-path=.\doc.drafts
 --add-examples-path=.\conf
 --add-examples-path=.\tests\snippets
 --add-examples-path=.\src
