@@ -27,8 +27,6 @@ Earth Day
 
 
 
-Boost MSM PUML (там примеры FSM на пумле есть) - https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html
-
 JAVA_HOME
 PLANTUML
 PLANT_UML
@@ -65,3 +63,17 @@ https://plantuml.com/ru/yaml                    @startyaml
 
 Ditaa - https://plantuml.com/ru/ditaa           @startditaa
 JCCKit - https://plantuml.com/ru/jcckit         @startjcckit
+
+SDL - интересно - https://plantuml.com/ru/activity-diagram-beta#sdl
+https://plantuml.com/ru/
+  Поддерживаемые UML-диаграммы
+  Поддерживаемые не-UML диаграммы
+
+Creole синтаксис - https://plantuml.com/ru/creole
+
+
+
+Boost MSM PUML (там примеры FSM на пумле есть) - https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html
+
+https://www.boost.org/doc/libs/1_86_0/libs/msm/doc/HTML/index.html
+

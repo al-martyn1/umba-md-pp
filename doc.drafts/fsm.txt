@@ -1,0 +1,20 @@
+Достучаться до небес, или FSM на шаблонах - https://habr.com/ru/articles/540984/
+Доклад Сергея Федорова про построение конечного автомата с таблицей переходов на шаблонах - https://www.youtube.com/watch?v=AnOPvP7e7cw
+Bennet Gedan
+    https://web.archive.org/web/20160517005245/http://www.gedan.net/2008/09/08/finite-state-machine-matrix-style-c-implementation
+    https://web.archive.org/web/20160808120758/http://www.gedan.net/2009/03/18/finite-state-machine-matrix-style-c-implementation-function-pointers-addon/
+
+Real-Time C++ by Christopher Kormanyos
+Practical Statecharts in C/C++ (Hierarchical State Machines in C/C++)
+  У него свой канал есть, а книга на либгене есть
+    https://www.youtube.com/channel/UCMGXFEew8I6gzjg3tWen4Gw
+    https://www.youtube.com/c/StateMachineCOM/videos
+Hierarchical State Machines in C/C++
+
+
+Qt Framework: потоки, иерархический конечный автомат, работа с USB-устройствами = QThread + QStateMaсhine + libUSB - https://habr.com/ru/articles/261955/comments/
+
+http://www.devexp.ru/2011/02/konechnye-avtomaty-v-c/
+
+Разное 
+  big Big FLOAT - https://habr.com/ru/companies/ruvds/articles/845084/
