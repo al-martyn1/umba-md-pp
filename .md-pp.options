@@ -1,4 +1,5 @@
 --verbose
+--info=+all
 --generated-output-path=.\doc\img.generated
 # --graphviz-output-path=.\doc\.generated_images
 # --plant-uml-output-path=.\doc\.generated_images
