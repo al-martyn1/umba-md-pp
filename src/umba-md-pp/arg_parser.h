@@ -6,7 +6,11 @@
 #include "umba/cmd_line.h"
 #include "umba/cli_tool_helpers.h"
 #include "umba/shellapi.h"
+#include "umba/string_plus.h"
 #include "app_ver_config.h"
+
+//
+#include "marty_cpp/src_normalization.h"
 
 
 
@@ -41,6 +45,15 @@ struct ArgParser
 // }
 
 
+inline
+std::string makeAllLogOptionsString(const std::set<std::string> &s)
+{
+    return umba::string_plus::merge<std::string, std::set<std::string>::const_iterator>( s.begin(), s.end(), ',');
+}
+
+//    auto addRemoveLogOptions = (std::unordered_map<std::string, bool>& optMap)
+
+// std::unordered_map<std::string, bool>& getWarningDisabledMap()
 
 // 0 - ok, 1 normal stop, -1 - error
 template<typename ArgsParser>
@@ -53,6 +66,9 @@ int operator()( const StringType                                &a           //!
               )
 {
     //using namespace marty::clang::helpers;
+
+    static std::set<std::string> warnOptsSet = {};
+    static std::set<std::string> infoOptsSet = {"snippet-lookup"};
 
     std::string dppof = "Don't parse predefined options from ";
 
@@ -76,6 +92,58 @@ int operator()( const StringType                                &a           //!
             argsParser.quet = true;
             //appConfig.setOptQuet(true);
         }
+
+        else if ( opt.setParam("info-type1[,+info-type2,-info-type]",umba::command_line::OptionType::optString)
+               || opt.isOption("info")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + makeAllLogOptionsString(infoOptsSet)
+                                    )
+                )
+        {
+            if (argsParser.hasHelpOption) return 0;
+        
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            std::string unknownOpt;
+            if (!umba::log::addRemoveInfoOptions(infoOptsSet, strVal, unknownOpt))
+            {
+                LOG_ERR_OPT<<"Unknown info type: '" << unknownOpt << "' (--info)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        #if 1
+        else if ( opt.setParam("warn-type1[,+warn-type2,-warn-type]",umba::command_line::OptionType::optString)
+               || opt.isOption("warning")
+               // || opt.setParam("VAL",true)
+               || opt.setDescription("Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + makeAllLogOptionsString(warnOptsSet)
+                                    )
+                )
+        {
+            if (argsParser.hasHelpOption) return 0;
+        
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            std::string unknownOpt;
+            if (!umba::log::addRemoveWarningOptions(warnOptsSet, strVal, unknownOpt))
+            {
+                LOG_ERR_OPT<<"Unknown warning type: '" << unknownOpt << "' (--warning)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+        #endif
 
         else if (opt.isOption("home") || opt.setDescription("Open homepage"))
         {
@@ -1321,7 +1389,7 @@ int operator()( const StringType                                &a           //!
                || opt.isOption("plantuml-output-root")
                || opt.isOption("puml-output-path")
                || opt.isOption("puml-output-root")
-               || opt.setDescription("Set PlantUML tools output root path."))
+               || opt.setDescription("Set PlantUML output root path."))
         {
             if (argsParser.hasHelpOption) return 0;
 
@@ -1350,6 +1418,24 @@ int operator()( const StringType                                &a           //!
             }
 
             appConfig.plantUmlOptions.showLabels = boolVal;
+
+            return 0;
+        }
+
+        else if ( opt.setParam("PATH",umba::command_line::OptionType::optString)
+               || opt.isOption("generated-output-path")
+               || opt.isOption("generated-output-root")
+               || opt.setDescription("Set output root path for generated files (same as `--graphviz-output-path=PATH --plant-uml-output-path=PATH`)."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.setGeneratedOutputRoot(argsParser.makeAbsPath(strVal));
 
             return 0;
         }

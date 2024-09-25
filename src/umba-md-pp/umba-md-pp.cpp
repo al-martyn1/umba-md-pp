@@ -105,8 +105,16 @@ AppConfig<std::string> appConfig;
 //
 std::string curFile;
 unsigned lineNo = 0;
+//bool quet        = true;
+bool verboseMode = false;
 
 #include "processing.h"
+
+
+umba::SimpleFormatter& getLogMsgStream(int  /* level */ )
+{
+    return verboseMode ? umbaLogStreamMsg : umbaLogStreamNul;
+}
 
 
 static
@@ -410,6 +418,9 @@ int safe_main(int argc, char* argv[])
         umba::cli_tool_helpers::printNameVersion(umbaLogStreamMsg);
     }
 
+    verboseMode = appConfig.verboseMode;
+
+
     if (appConfig.verboseMode)
     {
         umbaLogStreamMsg << "Snippets lookup paths:\n";
@@ -418,6 +429,7 @@ int safe_main(int argc, char* argv[])
             umbaLogStreamMsg << "    " << p << "\n";
         }
     }
+
 
     // umbaLogStreamMsg << "JAVA: " << appConfig.getJava() << "\n";
     // umbaLogStreamMsg << "PLANTUML: " << appConfig.getPlantUml() << "\n";
@@ -593,6 +605,7 @@ int safe_main(int argc, char* argv[])
 
             appConfig.checkAdjustDocNumericLevels();
             appConfig.checkTargetFormat();
+            appConfig.checkUpdateEmptyGeneratedOutputRootByFilename(curFile);
 
             Document doc;
             std::string resText     = processMdFile(appConfig, inputFileText, curFile, doc);
@@ -892,6 +905,7 @@ int safe_main(int argc, char* argv[])
 
         appConfig.checkAdjustDocNumericLevels();
         appConfig.checkTargetFormat();
+        appConfig.checkUpdateEmptyGeneratedOutputRootByFilename(inputFilename);
 
         bool differentOutputPath = umba::filename::makeCanonicalForCompare(umba::filename::getPath(outputFilename)) != umba::filename::makeCanonicalForCompare(umba::filename::getPath(inputFilename));
         appConfig.singleModeInOutPathsDifferent = differentOutputPath;

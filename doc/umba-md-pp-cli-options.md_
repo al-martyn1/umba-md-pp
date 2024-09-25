@@ -18,6 +18,10 @@ If output_file not taken, STDOUT used.
 **-q**,
 **--quet** - Operate quetly.
 
+**--info=info-type1[,+info-type2,-info-type]** - Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: snippet-lookup.
+
+**--warning=warn-type1[,+warn-type2,-warn-type]** - Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of:.
+
 **--home** - Open homepage.
 
 **--no-builtin-options** - Don't parse predefined options from main distribution options file.
@@ -203,12 +207,15 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse
 **--plantuml-output-path=PATH**,
 **--plantuml-output-root=PATH**,
 **--plant-uml-output-path=PATH**,
-**--plant-uml-output-root=PATH** - Set PlantUML tools output root path.
+**--plant-uml-output-root=PATH** - Set PlantUML output root path.
 
 **--puml-show-labels[=MODE]**,
 **--plantuml-show-labels[=MODE]**,
 **--plant-uml-show-labels[=MODE]** - Show labels on PlantUML raphs.
 Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
+
+**--generated-output-path=PATH**,
+**--generated-output-root=PATH** - Set output root path for generated files (same as `--graphviz-output-path=PATH --plant-uml-output-path=PATH`).
 
 **--gcc** - GCC messages format instead of MSVC format.
 

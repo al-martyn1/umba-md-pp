@@ -1,6 +1,8 @@
 --verbose
---graphviz-output-path=.\doc\.generated_images
---plant-uml-output-path=.\doc\.generated_images
+--info=+all
+--generated-output-path=.\doc\img.generated
+# --graphviz-output-path=.\doc\.generated_images
+# --plant-uml-output-path=.\doc\.generated_images
 --document-language=russian
 --processing-options=no-meta-data
 --processing-options=transliterate-generated-filenames

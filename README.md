@@ -14,9 +14,10 @@
   - [Вставка сниппетов](#user-content-вставка-сниппетов)
   - [Стандартный конфиг](#user-content-стандартный-конфиг)
   - [Любите ли вы документацию так, как люблю её я?](#user-content-любите-ли-вы-документацию-так-как-люблю-её-я)
+  - [PlantUML Samples](#user-content-plantuml-samples)
+  - [Boost MSM](#user-content-boost-msm)
 
 
-![LISP Grammar](doc/.generated_images/graph_0000.svg)
 
 
 # umba-md-pp - Markdown препроцессор
@@ -180,6 +181,10 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 # Стандартный конфиг
 
 ```
+# Управляем предупреждениями и сообщениями
+--info=-all
+--warning=+all
+
 # Устанавливаем русский как язык документов по умолчанию, если язык не задан тэгами,
 # не переопределён дефолтный язык где-то потом или не задан принудительно через опцию --force-document-language
 # Задание языка необходимо для доксигена, если по дефолту задать не русский, или не задавать язык, доксиген кракозяблы генерит
@@ -315,5 +320,18 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
-![LISP](doc/.generated_images/graph_0001.svg)
+
+
+# PlantUML Samples
+
+
+
+
+# Boost MSM
+
+[Boost MSM documentation](https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html)
+
+
+
+
 

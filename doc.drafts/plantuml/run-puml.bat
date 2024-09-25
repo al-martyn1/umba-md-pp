@@ -1,4 +1,20 @@
-@set RUN_CMD=%JAVA_HOME%\bin\java.exe -jar %PLANTUML_JAR%
+@if "%PLANTUML_JAR%"=="" goto CHECK_PLANTUML
+@goto PLANTUML_FOUND
+
+:CHECK_PLANTUML
+@if "%PLANTUML%"=="" goto PLANTUML_NOT_FOUND
+@set PLANTUML_JAR="%PLANTUML%"
+@goto PLANTUML_FOUND
+
+:PLANTUML_NOT_FOUND
+echo Can't find PlantUML JAR
+exit /B 1
+
+:PLANTUML_FOUND
+@set RUN_CMD=%JAVA_HOME%\bin\java.exe -jar %PLANTUML_JAR% -charset utf8
+
+%RUN_CMD% plantuml_to_fsm_tree_generator.puml
+
 %RUN_CMD% 01-sequenceDiagram.puml
 
 @rem https://plantuml.com/ru/ditaa

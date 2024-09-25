@@ -124,9 +124,14 @@ AppConfig<FilenameStringType> appConfig;
 //
 FilenameStringType curFile;
 unsigned lineNo = 0;
+bool verboseMode = false;
 
 #include "processing.h"
 
+umba::SimpleFormatter& getLogMsgStream(int  /* level */ )
+{
+    return verboseMode ? umbaLogStreamMsg : umbaLogStreamNul;
+}
 
 
 #if defined(_MSC_VER) && !(defined(CMAKE_INTDIR) || defined(CMAKE_CFG_INTDIR) || defined(CMAKE_BINARY_DIR))
@@ -306,6 +311,7 @@ UMBA_APP_MAIN()
     //std::string
     curFile = inputFilename; // = fileName;
     //unsigned lineNo = 0;
+    verboseMode = appConfig.verboseMode;
 
 
     appConfig.checkFixRenderingTargetName(false /* forView */ );
@@ -337,7 +343,12 @@ UMBA_APP_MAIN()
     appConfig.graphVizOptions.showLabels   = false;
     //appConfig.graphVizOptions.targetFormat = GraphVizTargetFormat::emf;
 
+    appConfig.plantUmlOptions.targetFormat = PlantUmlTargetFormat::png;
+    appConfig.plantUmlOptions.showLabels   = false;
+
     appConfig.singleModeInOutPathsDifferent = true; // Без проверок говорим, что входной и выходной файл - в разных каталогах (выходной в сгенерённом TEMP'е - так что ок)
+
+    appConfig.checkUpdateEmptyGeneratedOutputRootByFilename(inputFilename);
 
     bOverwrite = true;
 

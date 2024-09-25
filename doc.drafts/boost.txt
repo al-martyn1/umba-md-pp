@@ -7,6 +7,9 @@ Using boost::container::small_vector as the storage container - https://github.c
 Array-like C++ containers: Four steps of trading speed - https://www.sthu.org/blog/16-cpp-arrays/index.html
 Extended functionality: Configurable containers - https://www.boost.org/doc/libs/1_80_0/doc/html/container/configurable_containers.html
 
+Boost и CMake - http://rsdn.org/forum/cpp.applied/8776630.1
+  http://rsdn.org/forum/cpp.applied/8776672.1
+
 Полезные утилиты из STL и Boost для фронтенда - https://ps-group.github.io/compilers/frontend_utils
 
 Boost spirit - https://www.boost.org/doc/libs/master/libs/spirit/doc/html/index.html
