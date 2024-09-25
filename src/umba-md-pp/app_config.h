@@ -129,6 +129,24 @@ struct AppConfig
 
 
 
+    void setGeneratedOutputRoot(const std::string &path)
+    {
+        plantUmlOptions.savePath = path;
+        graphVizOptions.savePath = path;
+    }
+
+    void checkUpdateEmptyGeneratedOutputRootByFilename(const std::string &filename)
+    {
+        std::string filePath = umba::filename::getPath(filename);
+        std::string generatedOutputRoot = umba::filename::appendPath(filePath, std::string("img.generated"));
+
+        if (plantUmlOptions.savePath.empty())
+            plantUmlOptions.savePath = generatedOutputRoot;
+
+        if (graphVizOptions.savePath.empty())
+            graphVizOptions.savePath = generatedOutputRoot;
+    }
+
     std::string getJava() const
     {
         if (!java.empty())

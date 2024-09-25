@@ -60,10 +60,10 @@ void updatePlantUmlOptions(const AppConfig<FilenameStringType> &appCfg, const um
 
     if (appCfg.targetRenderer==TargetRenderer::doxygen)
     {
-        // if (mdHtmlTag.hasAttr("rtf-dpi"))
-        // {
-        //     graphVizOptions.setDpi(mdHtmlTag.getAttrValue("rtf-dpi", std::string()));
-        // }
+        if (mdHtmlTag.hasAttr("rtf-scale"))
+        {
+            plantUmlOptions.setScale(mdHtmlTag.getAttrValue("rtf-scale", std::string()));
+        }
         if (mdHtmlTag.hasAttr("rtf-target-format"))
         {
             plantUmlOptions.setTargetFormat(mdHtmlTag.getAttrValue("rtf-target-format", std::string()));
@@ -446,6 +446,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
 
     // Тут надо удалить tempTargetFolder со всем его содержимым
+    umba::filesys::deleteFile(tempPumlFile);
     umba::shellapi::deleteDirectory(tempTargetFolder);
 
     if (errMsg.empty() && resulFileCopyErrCount)

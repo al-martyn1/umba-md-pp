@@ -1321,7 +1321,7 @@ int operator()( const StringType                                &a           //!
                || opt.isOption("plantuml-output-root")
                || opt.isOption("puml-output-path")
                || opt.isOption("puml-output-root")
-               || opt.setDescription("Set PlantUML tools output root path."))
+               || opt.setDescription("Set PlantUML output root path."))
         {
             if (argsParser.hasHelpOption) return 0;
 
@@ -1350,6 +1350,24 @@ int operator()( const StringType                                &a           //!
             }
 
             appConfig.plantUmlOptions.showLabels = boolVal;
+
+            return 0;
+        }
+
+        else if ( opt.setParam("PATH",umba::command_line::OptionType::optString)
+               || opt.isOption("generated-output-path")
+               || opt.isOption("generated-output-root")
+               || opt.setDescription("Set output root path for generated files (same as `--graphviz-output-path=PATH --plant-uml-output-path=PATH`)."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR_OPT<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.setGeneratedOutputRoot(argsParser.makeAbsPath(strVal));
 
             return 0;
         }

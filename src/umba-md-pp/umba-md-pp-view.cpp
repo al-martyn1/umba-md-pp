@@ -337,7 +337,12 @@ UMBA_APP_MAIN()
     appConfig.graphVizOptions.showLabels   = false;
     //appConfig.graphVizOptions.targetFormat = GraphVizTargetFormat::emf;
 
+    appConfig.plantUmlOptions.targetFormat = PlantUmlTargetFormat::png;
+    appConfig.plantUmlOptions.showLabels   = false;
+
     appConfig.singleModeInOutPathsDifferent = true; // Без проверок говорим, что входной и выходной файл - в разных каталогах (выходной в сгенерённом TEMP'е - так что ок)
+
+    appConfig.checkUpdateEmptyGeneratedOutputRootByFilename(inputFilename);
 
     bOverwrite = true;
 

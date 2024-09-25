@@ -593,6 +593,7 @@ int safe_main(int argc, char* argv[])
 
             appConfig.checkAdjustDocNumericLevels();
             appConfig.checkTargetFormat();
+            appConfig.checkUpdateEmptyGeneratedOutputRootByFilename(curFile);
 
             Document doc;
             std::string resText     = processMdFile(appConfig, inputFileText, curFile, doc);
@@ -892,6 +893,7 @@ int safe_main(int argc, char* argv[])
 
         appConfig.checkAdjustDocNumericLevels();
         appConfig.checkTargetFormat();
+        appConfig.checkUpdateEmptyGeneratedOutputRootByFilename(inputFilename);
 
         bool differentOutputPath = umba::filename::makeCanonicalForCompare(umba::filename::getPath(outputFilename)) != umba::filename::makeCanonicalForCompare(umba::filename::getPath(inputFilename));
         appConfig.singleModeInOutPathsDifferent = differentOutputPath;
