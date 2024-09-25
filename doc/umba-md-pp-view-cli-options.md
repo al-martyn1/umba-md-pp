@@ -204,12 +204,15 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse
 **--plantuml-output-path=PATH**,
 **--plantuml-output-root=PATH**,
 **--plant-uml-output-path=PATH**,
-**--plant-uml-output-root=PATH** - Set PlantUML tools output root path.
+**--plant-uml-output-root=PATH** - Set PlantUML output root path.
 
 **--puml-show-labels[=MODE]**,
 **--plantuml-show-labels[=MODE]**,
 **--plant-uml-show-labels[=MODE]** - Show labels on PlantUML raphs.
 Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
+
+**--generated-output-path=PATH**,
+**--generated-output-root=PATH** - Set output root path for generated files (same as `--graphviz-output-path=PATH --plant-uml-output-path=PATH`).
 
 **--remove-temp[=MODE]** - Remove application temp folder with all content.
 Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.

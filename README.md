@@ -14,9 +14,10 @@
   - [Вставка сниппетов](#user-content-вставка-сниппетов)
   - [Стандартный конфиг](#user-content-стандартный-конфиг)
   - [Любите ли вы документацию так, как люблю её я?](#user-content-любите-ли-вы-документацию-так-как-люблю-её-я)
+  - [PlantUML Samples](#user-content-plantuml-samples)
+  - [Boost MSM](#user-content-boost-msm)
 
 
-![LISP Grammar](doc/.generated_images/graph_0000.svg)
 
 
 # umba-md-pp - Markdown препроцессор
@@ -315,5 +316,18 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
-![LISP](doc/.generated_images/graph_0001.svg)
+
+
+# PlantUML Samples
+
+
+
+
+# Boost MSM
+
+[Boost MSM documentation](https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html)
+
+
+
+
 

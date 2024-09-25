@@ -35,3 +35,33 @@ PLANT_UML
 PLANTUML_JAR
 
 java -jar plantuml.jar file1 file2 file3
+
+
+PDF на русском - https://plantuml.com/ru/guide
+Интеграция с гитлаб - https://blog.anoff.io/2018-07-31-diagrams-with-plantuml/
+Добавить опцию - как вставлять, как прямо код ```plantuml или картинкой
+VSCode плагин - PlantUML jebbs Alt+D Preview
+
+Примеры 
+https://plantuml.com/ru/sequence-diagram        @startuml
+https://plantuml.com/ru/use-case-diagram        @startuml
+https://plantuml.com/ru/class-diagram           @startuml
+https://plantuml.com/ru/activity-diagram-beta   @startuml
+https://plantuml.com/ru/component-diagram       @startuml
+https://plantuml.com/ru/state-diagram           @startuml
+https://plantuml.com/ru/object-diagram          @startuml
+https://plantuml.com/ru/deployment-diagram      @startuml
+https://plantuml.com/ru/timing-diagram          @startuml
+https://plantuml.com/ru/regex                   @startregex
+https://plantuml.com/ru/nwdiag                  @startuml
+https://plantuml.com/ru/salt                    @startsalt
+https://plantuml.com/ru/archimate-diagram       @startuml
+https://plantuml.com/ru/gantt-diagram           @startgantt
+https://plantuml.com/ru/chronology-diagram      @startchronology
+https://plantuml.com/ru/mindmap-diagram         @startmindmap
+https://plantuml.com/ru/wbs-diagram             @startwbs
+https://plantuml.com/ru/json                    @startjson
+https://plantuml.com/ru/yaml                    @startyaml
+
+Ditaa - https://plantuml.com/ru/ditaa           @startditaa
+JCCKit - https://plantuml.com/ru/jcckit         @startjcckit
