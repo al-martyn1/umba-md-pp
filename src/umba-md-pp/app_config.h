@@ -799,10 +799,11 @@ struct AppConfig
                                                 , true // keepLeadingParents
                                                 );
 
-         if (verboseMode)
-         {
-             umbaLogStreamMsg << "Looking for file: " << lookFor << "\n";
-         }
+         LOG_INFO("snippet-lookup") << "Looking for file: " << lookFor << "\n";
+         // if (verboseMode)
+         // {
+         //     umbaLogStreamMsg << "Looking for file: " << lookFor << "\n";
+         // }
 
          for(auto path: samplesPathsVec)
          {
@@ -815,21 +816,24 @@ struct AppConfig
 
              if (readInputFile(fullName, foundFileText))
              {
-                 if (verboseMode)
-                 {
-                     umbaLogStreamMsg << "  + Looking in: " << path << " (" << fullName << ") - ";
-                     umbaLogStreamMsg << "Found\n";
-                 }
+                 // if (verboseMode)
+                 // {
+                 //     umbaLogStreamMsg << "  + Looking in: " << path << " (" << fullName << ") - ";
+                 //     umbaLogStreamMsg << "Found\n";
+                 // }
+                 LOG_INFO("snippet-lookup") << "  + Looking in: " << path << " (" << fullName << ") - " << "Found\n";
 
                  foundFullFilename = fullName;
                  return true;
              }
 
-             if (verboseMode)
-             {
-                 umbaLogStreamMsg << "  - Looking in: " << path << " (" << fullName << ") - ";
-                 umbaLogStreamMsg << "Not found\n";
-             }
+             // if (verboseMode)
+             // {
+             //     umbaLogStreamMsg << "  - Looking in: " << path << " (" << fullName << ") - ";
+             //     umbaLogStreamMsg << "Not found\n";
+             // }
+
+             LOG_INFO("snippet-lookup") << "  - Looking in: " << path << " (" << fullName << ") - " << "Not found\n";
 
              // std::string orgText;
              // if (umba::filesys::readFile(fullName, orgText))
