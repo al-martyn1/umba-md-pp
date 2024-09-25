@@ -45,11 +45,11 @@ struct ArgParser
 // }
 
 
-inline
-std::string makeAllLogOptionsString(const std::set<std::string> &s)
-{
-    return umba::string_plus::merge<std::string, std::set<std::string>::const_iterator>( s.begin(), s.end(), ',');
-}
+// inline
+// std::string makeAllLogOptionsString(const std::set<std::string> &s)
+// {
+//     return umba::string_plus::merge<std::string, std::set<std::string>::const_iterator>( s.begin(), s.end(), ',');
+// }
 
 //    auto addRemoveLogOptions = (std::unordered_map<std::string, bool>& optMap)
 
@@ -67,8 +67,8 @@ int operator()( const StringType                                &a           //!
 {
     //using namespace marty::clang::helpers;
 
-    static std::set<std::string> warnOptsSet = {};
-    static std::set<std::string> infoOptsSet = {"snippet-lookup"};
+    static std::set<std::string> warnOptsSet = {"img-copy-target-exist", "same-file", "img-copy", "plant-uml"};
+    static std::set<std::string> infoOptsSet = {"snippet-lookup", "plant-uml"};
 
     std::string dppof = "Don't parse predefined options from ";
 
@@ -83,7 +83,7 @@ int operator()( const StringType                                &a           //!
 
         if (opt.name.empty())
         {
-            LOG_ERR_OPT<<"invalid (empty) option name\n";
+            LOG_ERR<<"invalid (empty) option name\n";
             return -1;
         }
 
@@ -96,7 +96,7 @@ int operator()( const StringType                                &a           //!
         else if ( opt.setParam("info-type1[,+info-type2,-info-type]",umba::command_line::OptionType::optString)
                || opt.isOption("info")
                // || opt.setParam("VAL",true)
-               || opt.setDescription("Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + makeAllLogOptionsString(infoOptsSet)
+               || opt.setDescription("Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + umba::log::makeAllWarnInfoLogOptionsString(infoOptsSet)
                                     )
                 )
         {
@@ -104,14 +104,14 @@ int operator()( const StringType                                &a           //!
         
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
             std::string unknownOpt;
             if (!umba::log::addRemoveInfoOptions(infoOptsSet, strVal, unknownOpt))
             {
-                LOG_ERR_OPT<<"Unknown info type: '" << unknownOpt << "' (--info)\n";
+                LOG_ERR<<"Unknown info type: '" << unknownOpt << "' (--info)\n";
                 return -1;
             }
 
@@ -122,7 +122,7 @@ int operator()( const StringType                                &a           //!
         else if ( opt.setParam("warn-type1[,+warn-type2,-warn-type]",umba::command_line::OptionType::optString)
                || opt.isOption("warning")
                // || opt.setParam("VAL",true)
-               || opt.setDescription("Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + makeAllLogOptionsString(warnOptsSet)
+               || opt.setDescription("Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + umba::log::makeAllWarnInfoLogOptionsString(warnOptsSet)
                                     )
                 )
         {
@@ -130,14 +130,14 @@ int operator()( const StringType                                &a           //!
         
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
             std::string unknownOpt;
             if (!umba::log::addRemoveWarningOptions(warnOptsSet, strVal, unknownOpt))
             {
-                LOG_ERR_OPT<<"Unknown warning type: '" << unknownOpt << "' (--warning)\n";
+                LOG_ERR<<"Unknown warning type: '" << unknownOpt << "' (--warning)\n";
                 return -1;
             }
 
@@ -212,7 +212,7 @@ int operator()( const StringType                                &a           //!
         {
             if (argsParser.hasHelpOption) return 0;
 
-            LOG_MSG_OPT << argsParser.programLocationInfo.exeFullName << "\n";
+            LOG_MSG << argsParser.programLocationInfo.exeFullName << "\n";
             return 0;
         }
 
@@ -242,7 +242,7 @@ int operator()( const StringType                                &a           //!
                           };
             if (!opt.getParamValue( res, errMsg, mapper ) )
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -261,7 +261,7 @@ int operator()( const StringType                                &a           //!
         //
         //     if (!opt.getParamValue(strVal,errMsg))
         //     {
-        //         LOG_ERR_OPT<<errMsg<<"\n";
+        //         LOG_ERR<<errMsg<<"\n";
         //         return -1;
         //     }
         //
@@ -285,7 +285,7 @@ int operator()( const StringType                                &a           //!
         //
         //     if (!opt.getParamValue(strVal,errMsg))
         //     {
-        //         LOG_ERR_OPT<<errMsg<<"\n";
+        //         LOG_ERR<<errMsg<<"\n";
         //         return -1;
         //     }
         //
@@ -301,7 +301,7 @@ int operator()( const StringType                                &a           //!
         //         case marty_tr::ELangTagFormat::langIdX           : break;
         //         case marty_tr::ELangTagFormat::langIdFullX       : break;
         //         default:
-        //             LOG_ERR_OPT<<"invalid LANGTAGFORMAT value: '"<<strVal<<"'"<<"\n";
+        //             LOG_ERR<<"invalid LANGTAGFORMAT value: '"<<strVal<<"'"<<"\n";
         //             return -1;
         //     }
         //
@@ -319,13 +319,13 @@ int operator()( const StringType                                &a           //!
         //
         //     if (!opt.getParamValue(intVal,errMsg))
         //     {
-        //         LOG_ERR_OPT<<errMsg<<"\n";
+        //         LOG_ERR<<errMsg<<"\n";
         //         return -1;
         //     }
         //
         //     if (intVal<0)
         //     {
-        //         LOG_ERR_OPT<<"invalid option value (--json-indent)"<<"\n";
+        //         LOG_ERR<<"invalid option value (--json-indent)"<<"\n";
         //         return -1;
         //     }
         //
@@ -343,7 +343,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(boolVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -361,7 +361,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(boolVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -378,7 +378,7 @@ int operator()( const StringType                                &a           //!
         //
         //     if (!opt.getParamValue(boolVal,errMsg))
         //     {
-        //         LOG_ERR_OPT<<errMsg<<"\n";
+        //         LOG_ERR<<errMsg<<"\n";
         //         return -1;
         //     }
         //
@@ -402,14 +402,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
             marty_cpp::ELinefeedType tmp = marty_cpp::enum_deserialize( strVal, marty_cpp::ELinefeedType::invalid );
             if (tmp== marty_cpp::ELinefeedType::invalid)
             {
-                LOG_ERR_OPT<<"Invalid linefeed option value: "<<strVal<<"\n";
+                LOG_ERR<<"Invalid linefeed option value: "<<strVal<<"\n";
                 return -1;
             }
 
@@ -432,7 +432,7 @@ int operator()( const StringType                                &a           //!
         //
         //     if (!opt.hasArg())
         //     {
-        //         LOG_ERR_OPT<<"include names mask not taken (--include-names)\n";
+        //         LOG_ERR<<"include names mask not taken (--include-names)\n";
         //         return -1;
         //     }
         //
@@ -450,7 +450,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Adding paths for examples searching requires argument (--add-examples-path)\n";
+                LOG_ERR<<"Adding paths for examples searching requires argument (--add-examples-path)\n";
                 return -1;
             }
 
@@ -459,7 +459,7 @@ int operator()( const StringType                                &a           //!
 
             if (!appConfig.addSamplesPaths(optArg, argsParser.getBasePath()))
             {
-                LOG_ERR_OPT<<"Adding paths for examples searching failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Adding paths for examples searching failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -476,14 +476,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Adding lang file extention requires argument (--add-lang-file-extention)\n";
+                LOG_ERR<<"Adding lang file extention requires argument (--add-lang-file-extention)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addLangExtentions(optArg))
             {
-                LOG_ERR_OPT<<"Adding lang file extention failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Adding lang file extention failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -499,14 +499,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Adding lang cut prefix requires argument (--add-lang-cut-prefix)\n";
+                LOG_ERR<<"Adding lang cut prefix requires argument (--add-lang-cut-prefix)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addCutPrefix(optArg))
             {
-                LOG_ERR_OPT<<"Addng lang cut prefix failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Addng lang cut prefix failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -521,14 +521,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Adding lang prefix for the separator line (--add-lang-separator-prefix)\n";
+                LOG_ERR<<"Adding lang prefix for the separator line (--add-lang-separator-prefix)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addSeparatorLinePrefix(optArg))
             {
-                LOG_ERR_OPT<<"Addng lang prefix for the separator line, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Addng lang prefix for the separator line, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -543,14 +543,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting lang block open and close characters (--set-lang-block-chars)\n";
+                LOG_ERR<<"Setting lang block open and close characters (--set-lang-block-chars)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.setBlockCharacters(optArg))
             {
-                LOG_ERR_OPT<<"Setting lang block open and close characters, invalid argument: '" << optArg << "'. Argument must be exact the pair of single open and close block characters\n";
+                LOG_ERR<<"Setting lang block open and close characters, invalid argument: '" << optArg << "'. Argument must be exact the pair of single open and close block characters\n";
                 return -1;
             }
 
@@ -565,14 +565,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting target markdown tag for the code section requires argument (--set-lang-listing-tag)\n";
+                LOG_ERR<<"Setting target markdown tag for the code section requires argument (--set-lang-listing-tag)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.setLangListingTag(optArg))
             {
-                LOG_ERR_OPT<<"Setting target markdown tag for the code section failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting target markdown tag for the code section failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -587,14 +587,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting default insert options requires argument (--set-insert-options)\n";
+                LOG_ERR<<"Setting default insert options requires argument (--set-insert-options)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.updateInsertOptions(optArg))
             {
-                LOG_ERR_OPT<<"Setting default insert options failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting default insert options failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -609,14 +609,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting processing options requires argument (--processing-options)\n";
+                LOG_ERR<<"Setting processing options requires argument (--processing-options)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.updateProcessingOptions(optArg))
             {
-                LOG_ERR_OPT<<"Setting processing options failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting processing options failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -631,14 +631,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting condition variable requires argument (--set-condition-var)\n";
+                LOG_ERR<<"Setting condition variable requires argument (--set-condition-var)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addConditionVar(optArg))
             {
-                LOG_ERR_OPT<<"Setting condition variable failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting condition variable failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -653,7 +653,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting target renderer requires argument (--target-renderer)\n";
+                LOG_ERR<<"Setting target renderer requires argument (--target-renderer)\n";
                 return -1;
             }
 
@@ -661,7 +661,7 @@ int operator()( const StringType                                &a           //!
             auto renderer = enum_deserialize(optArg, TargetRenderer::invalid);
             if (renderer==TargetRenderer::invalid)
             {
-                LOG_ERR_OPT<<"Setting target renderer failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting target renderer failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -678,7 +678,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting target format requires argument (--target-format)\n";
+                LOG_ERR<<"Setting target format requires argument (--target-format)\n";
                 return -1;
             }
 
@@ -686,7 +686,7 @@ int operator()( const StringType                                &a           //!
             auto tgFormat = enum_deserialize(optArg, TargetFormat::invalid);
             if (tgFormat==TargetFormat::invalid)
             {
-                LOG_ERR_OPT<<"Setting target format failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting target format failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -703,7 +703,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting target name requires argument (--target-name)\n";
+                LOG_ERR<<"Setting target name requires argument (--target-name)\n";
                 return -1;
             }
 
@@ -720,14 +720,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Adding meta tag name replacement requires argument (--meta-tag-replace)\n";
+                LOG_ERR<<"Adding meta tag name replacement requires argument (--meta-tag-replace)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addMetaTagReplace(optArg))
             {
-                LOG_ERR_OPT<<"Adding meta tag name replacement failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Adding meta tag name replacement failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
             return 0;
@@ -741,14 +741,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Adding meta tag name for serialization requires argument (--meta-tag-serialize)\n";
+                LOG_ERR<<"Adding meta tag name for serialization requires argument (--meta-tag-serialize)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addMetaTagSerialize(optArg))
             {
-                LOG_ERR_OPT<<"Adding meta tag name for serialization failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Adding meta tag name for serialization failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
             return 0;
@@ -762,14 +762,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting meta tag type requires argument (--meta-tag-set-type)\n";
+                LOG_ERR<<"Setting meta tag type requires argument (--meta-tag-set-type)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addMetaTagType(optArg))
             {
-                LOG_ERR_OPT<<"Setting meta tag type failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting meta tag type failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
             return 0;
@@ -783,14 +783,14 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"Setting meta tag serialize list requires argument (--meta-tag-serialize)\n";
+                LOG_ERR<<"Setting meta tag serialize list requires argument (--meta-tag-serialize)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.setMetaTagSerializeList(optArg))
             {
-                LOG_ERR_OPT<<"Setting meta tag serialize list failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting meta tag serialize list failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
             return 0;
@@ -813,7 +813,7 @@ int operator()( const StringType                                &a           //!
                           };
             if (!opt.getParamValue( numMaxLevel, errMsg, mapper ) )
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -837,7 +837,7 @@ int operator()( const StringType                                &a           //!
                           };
             if (!opt.getParamValue( numMaxLevel, errMsg, mapper ) )
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -853,7 +853,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue( szVal, errMsg ))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -871,7 +871,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -897,7 +897,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -915,7 +915,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -938,7 +938,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"exclude files mask not taken (--exclude-files)\n";
+                LOG_ERR<<"exclude files mask not taken (--exclude-files)\n";
                 return -1;
             }
 
@@ -957,7 +957,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"exclude dirs not taken (--batch-exclude-dir)\n";
+                LOG_ERR<<"exclude dirs not taken (--batch-exclude-dir)\n";
                 return -1;
             }
 
@@ -976,7 +976,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"scan dirs not taken (--batch-scan)\n";
+                LOG_ERR<<"scan dirs not taken (--batch-scan)\n";
                 return -1;
             }
 
@@ -1000,7 +1000,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR_OPT<<"scan dirs not taken (--batch-scan-recurse)\n";
+                LOG_ERR<<"scan dirs not taken (--batch-scan-recurse)\n";
                 return -1;
             }
 
@@ -1024,7 +1024,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1041,7 +1041,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1058,7 +1058,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(boolVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1075,7 +1075,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(boolVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1092,7 +1092,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(boolVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1109,7 +1109,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(boolVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1126,7 +1126,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(boolVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1143,7 +1143,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(boolVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1161,13 +1161,13 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
             if (!appConfig.graphVizOptions.setDpi(strVal))
             {
-                LOG_ERR_OPT<<"Setting DPI for Graphviz tools output failed, invalid argument: '" << strVal << "' (--graphviz-dpi)\n";
+                LOG_ERR<<"Setting DPI for Graphviz tools output failed, invalid argument: '" << strVal << "' (--graphviz-dpi)\n";
                 return -1;
             }
             return 0;
@@ -1183,13 +1183,13 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
             if (!appConfig.graphVizOptions.setTargetFormat(strVal))
             {
-                LOG_ERR_OPT<<"Setting Graphviz tools output format failed, invalid argument: '" << strVal << "' (--graphviz-output-format)\n";
+                LOG_ERR<<"Setting Graphviz tools output format failed, invalid argument: '" << strVal << "' (--graphviz-output-format)\n";
                 return -1;
             }
             return 0;
@@ -1208,7 +1208,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1216,7 +1216,7 @@ int operator()( const StringType                                &a           //!
 
             // if (!appConfig.graphVizOptions.setTargetFormat(optArg))
             // {
-            //     LOG_ERR_OPT<<"Setting Graphviz tools output format failed, invalid argument: '" << optArg << "' (--graphviz-output-path)\n";
+            //     LOG_ERR<<"Setting Graphviz tools output format failed, invalid argument: '" << optArg << "' (--graphviz-output-path)\n";
             //     return -1;
             // }
 
@@ -1269,7 +1269,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1316,7 +1316,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1333,7 +1333,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1351,7 +1351,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1370,13 +1370,13 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
             if (!appConfig.plantUmlOptions.setTargetFormat(strVal))
             {
-                LOG_ERR_OPT<<"Setting PlantUML tools output format failed, invalid argument: '" << strVal << "' (--graphviz-output-format)\n";
+                LOG_ERR<<"Setting PlantUML tools output format failed, invalid argument: '" << strVal << "' (--graphviz-output-format)\n";
                 return -1;
             }
             return 0;
@@ -1395,7 +1395,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1431,7 +1431,7 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.getParamValue(strVal,errMsg))
             {
-                LOG_ERR_OPT<<errMsg<<"\n";
+                LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
 
@@ -1475,7 +1475,7 @@ int operator()( const StringType                                &a           //!
             // {
             //     if (!opt.getParamValue(strVal,errMsg))
             //     {
-            //         LOG_ERR_OPT<<errMsg<<"\n";
+            //         LOG_ERR<<errMsg<<"\n";
             //         return -1;
             //     }
             //
@@ -1508,7 +1508,7 @@ int operator()( const StringType                                &a           //!
             // if (!regShellExtentionHandlerApplication(appIdNameWide, L"open", exeCanonicalNameWideEscaped + L" " + percent1))
             if (!umba::shellapi::win32::registerShellExtentionHandlerApplication(false/*userOnly*/, appIdName, "open", exeCanonicalNameEscaped + " " + percent1))
             {
-                LOG_ERR_OPT<<"Failed to register appid"<<"\n";
+                LOG_ERR<<"Failed to register appid"<<"\n";
                 return -1;
             }
 
@@ -1517,13 +1517,13 @@ int operator()( const StringType                                &a           //!
             //if (!regShellExtentionHandlerForExtList(false/*userOnly*/, appIdName, extListCommaSepW))
             if (!umba::shellapi::win32::registerShellExtentionHandlerForExtentionList(false/*userOnly*/, appIdName, extListCommaSep))
             {
-                LOG_ERR_OPT<<"Failed to register appid as handler"<<"\n";
+                LOG_ERR<<"Failed to register appid as handler"<<"\n";
                 return -1;
             }
 
             #else
 
-                LOG_MSG_OPT << "--register-view-handler option not supported\n";
+                LOG_MSG << "--register-view-handler option not supported\n";
 
             #endif
 
@@ -1532,7 +1532,7 @@ int operator()( const StringType                                &a           //!
 
         #endif
 
-        //LOG_MSG_OPT << argsParser.programLocationInfo.exeFullName << "\n";
+        //LOG_MSG << argsParser.programLocationInfo.exeFullName << "\n";
 
         // else if ( opt.isOption("all")
         //        || opt.setDescription("In scan mode, if no --exclude-files nor --include-files mask are taken, --all option required to confirm processing all files")
@@ -1567,7 +1567,7 @@ int operator()( const StringType                                &a           //!
             if (argsParser.hasHelpOption) return 0;
 
             //return autocomplete(opt, true);
-            return umba::command_line::autocompletionInstaller( pCol, opt, pCol->getPrintHelpStyle(), true, [&]( bool bErr ) -> decltype(auto) { return bErr ? LOG_ERR_OPT : LOG_MSG_OPT; } );
+            return umba::command_line::autocompletionInstaller( pCol, opt, pCol->getPrintHelpStyle(), true, [&]( bool bErr ) -> decltype(auto) { return bErr ? LOG_ERR : LOG_MSG; } );
         }
 
         else if ( opt.isOption("autocomplete-uninstall")
@@ -1581,7 +1581,7 @@ int operator()( const StringType                                &a           //!
             if (argsParser.hasHelpOption) return 0;
 
             //return autocomplete(opt, false);
-            return umba::command_line::autocompletionInstaller( pCol, opt, pCol->getPrintHelpStyle(), false, [&]( bool bErr ) -> decltype(auto) { return bErr ? LOG_ERR_OPT : LOG_MSG_OPT; } );
+            return umba::command_line::autocompletionInstaller( pCol, opt, pCol->getPrintHelpStyle(), false, [&]( bool bErr ) -> decltype(auto) { return bErr ? LOG_ERR : LOG_MSG; } );
         }
 
         else if (opt.isHelpStyleOption())
@@ -1674,7 +1674,7 @@ int operator()( const StringType                                &a           //!
 
         else
         {
-            LOG_ERR_OPT<<"unknown option: "<<opt.argOrg<<"\n";
+            LOG_ERR<<"unknown option: "<<opt.argOrg<<"\n";
             return -1;
         }
 
@@ -1734,7 +1734,7 @@ class CommandLineOptionCollector : public umba::command_line::CommandLineOptionC
 protected:
     virtual void onOptionDup( const std::string &opt ) override
     {
-        LOG_ERR_OPT<<"Duplicated option key - '"<<opt<<"'\n";
+        LOG_ERR<<"Duplicated option key - '"<<opt<<"'\n";
         throw std::runtime_error("Duplicated option key");
     }
 

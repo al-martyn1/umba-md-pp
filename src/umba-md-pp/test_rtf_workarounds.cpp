@@ -36,12 +36,12 @@ UMBA_APP_MAIN()
     }
     catch(const std::exception &e)
     {
-        //LOG_ERR_OPT
+        //LOG_ERR
         std::cerr << "Exception found: " << e.what() << "\n";
     }
     catch(...)
     {
-        //LOG_ERR_OPT
+        //LOG_ERR
         std::cerr << "Exception found: " << "unknown exception" << "\n";
     }
 

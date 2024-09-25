@@ -213,7 +213,7 @@ IteratorType parseExtraPossibleFilenameAndTextToHtmlTag(umba::html::HtmlTag &par
         parseTo.addAttr("file", filename);
 
     if (!text.empty())
-        parseTo.addAttr("text", text);
+        parseTo.addAttr("title", text);
 
     return b;
 }

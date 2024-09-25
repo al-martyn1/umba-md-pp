@@ -251,7 +251,7 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                 auto val = el.value();
                 //    std::string valStr = val;
                 // //std::string strVal = el.value();
-                //    LOG_MSG_OPT << "parseDocumentMetadata: " << strKey << ": " << valStr << "\n";
+                //    LOG_MSG << "parseDocumentMetadata: " << strKey << ": " << valStr << "\n";
 
                 nlohmann::detail::value_t valType = val.type();
 
@@ -283,7 +283,7 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                 if (!getJsonNodeTypeValueAsString(val, strVal))
                     continue;
 
-                //LOG_MSG_OPT << "parseDocumentMetadata: " << strKey << ": " << strVal << "\n";
+                //LOG_MSG << "parseDocumentMetadata: " << strKey << ": " << strVal << "\n";
 
                 if (tagType==MetaTagType::commaList || tagType==MetaTagType::commaSet)
                 {
@@ -297,7 +297,7 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
             }
             catch(...)
             {
-                LOG_MSG_OPT << "parseDocumentMetadata exception\n";
+                LOG_MSG << "parseDocumentMetadata exception\n";
             }
 
         }

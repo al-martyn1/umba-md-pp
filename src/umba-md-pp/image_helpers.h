@@ -145,11 +145,11 @@ bool addImageFilesForCopying( std::map<std::string, ImageFileForCopyInfo>       
             if (!imgIt->second.isSourceFilenameTheSame(imgInfo.getSourceFilenameForCompare()))
             {
                 // Вообще, такое не должно происходить
-                LOG_WARN_OPT("img-copy-tgt-exist") << "target file already added for copying, but source files are different (target file: '" << imgIt->second.getTargetFilename() << "')\n";
-                LOG_WARN_OPT("img-copy-tgt-exist") << "previosly added source file is: '" << imgIt->second.getSourceFilename() << "'\n";
-                LOG_WARN_OPT("img-copy-tgt-exist") << "added from '" << imgIt->second.getDocumentFilename() << "' ('" << imgIt->second.getImageLink() << "')\n";
-                LOG_WARN_OPT("img-copy-tgt-exist") << "current source file is: '" << imgInfo.getSourceFilename() << "'\n";
-                LOG_WARN_OPT("img-copy-tgt-exist") << "added from '" << imgInfo.getDocumentFilename() << "' ('" << imgInfo.getImageLink() << "')\n";
+                LOG_WARN("img-copy-target-exist") << "target file already added for copying, but source files are different (target file: '" << imgIt->second.getTargetFilename() << "')\n";
+                LOG_WARN("img-copy-target-exist") << "previosly added source file is: '" << imgIt->second.getSourceFilename() << "'\n";
+                LOG_WARN("img-copy-target-exist") << "added from '" << imgIt->second.getDocumentFilename() << "' ('" << imgIt->second.getImageLink() << "')\n";
+                LOG_WARN("img-copy-target-exist") << "current source file is: '" << imgInfo.getSourceFilename() << "'\n";
+                LOG_WARN("img-copy-target-exist") << "added from '" << imgInfo.getDocumentFilename() << "' ('" << imgInfo.getImageLink() << "')\n";
                 res = false;
             }
         }
@@ -189,15 +189,15 @@ bool copyDocumentImageFiles(LogStreamType & logStream, const std::map<std::strin
             DWORD err = GetLastError();
             if (err==ERROR_FILE_NOT_FOUND)
             {
-                LOG_WARN_OPT("img-copy") << "failed to copy image file: source file '" << srcFile << "' not exist\n";
+                LOG_WARN("img-copy") << "failed to copy image file: source file '" << srcFile << "' not exist\n";
             }
             else if (err==ERROR_FILE_EXISTS)
             {
-                LOG_WARN_OPT("img-copy") << "failed to copy image file: target file '" << tgtFile << "' already exist\n";
+                LOG_WARN("img-copy") << "failed to copy image file: target file '" << tgtFile << "' already exist\n";
             }
             else
             {
-                LOG_WARN_OPT("img-copy") << "failed to copy image file: error " << err << "\n";
+                LOG_WARN("img-copy") << "failed to copy image file: error " << err << "\n";
             }
 
             res = false;

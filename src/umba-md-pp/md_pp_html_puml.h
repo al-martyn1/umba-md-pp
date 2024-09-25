@@ -11,6 +11,9 @@
 
 #include "extern_tools.h"
 
+// 
+#include "log.h"
+
 // For 'system' function
 #include <process.h>
 
@@ -180,12 +183,44 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     // dot -Tsvg -s72 -o test001_72.svg test001.dot
 
     auto plantUmlOptions = appCfg.plantUmlOptions;
-    updatePlantUmlOptions(appCfg, mdHtmlTag, plantUmlOptions);
+    LOG_INFO("plant-uml") << "-----------------------------------------" << "\n";
+    LOG_INFO("plant-uml") << "PlantUML generator configuration (Global)" << "\n";
+    plantUmlOptions.logConfig();
 
+    LOG_INFO("plant-uml") << "-----------------------------------------" << "\n";
+
+    if (mdHtmlTag.hasAttr("title"))
+       LOG_INFO("plant-uml") << "Diagram: " << mdHtmlTag.getAttrValue("title", std::string()) << "\n";
+    else
+       LOG_INFO("plant-uml") << "Diagram: Anonimous Diagram" << "\n";
+
+    if (mdHtmlTag.hasAttr("file"))
+       LOG_INFO("plant-uml") << "From file: " << mdHtmlTag.getAttrValue("file", std::string()) << "\n";
+
+
+    //------------------------------
+    updatePlantUmlOptions(appCfg, mdHtmlTag, plantUmlOptions);
+    //------------------------------
+
+
+    LOG_INFO("plant-uml") << "-----------------------------------------" << "\n";
+    LOG_INFO("plant-uml") << "PlantUML generator configuration (Diagram)" << "\n";
+    plantUmlOptions.logConfig();
+
+
+    LOG_INFO("plant-uml") << "-----------------------------------------" << "\n";
     auto outputFilename   = plantUmlOptions.generateOutputFilename(appCfg.flattenImageLinks);
     auto tempPumlFile     = plantUmlOptions.generateInputTempFilename();
     auto tempTargetFolder = plantUmlOptions.generateOutputTempFolderName();
     auto hashFile         = plantUmlOptions.generateHashFilename();
+
+    LOG_INFO("plant-uml") << "Output Filename    : " << outputFilename << "\n";
+    LOG_INFO("plant-uml") << "Temp Puml File     : " << tempPumlFile<< "\n";
+    LOG_INFO("plant-uml") << "Temp Target Folder : " << tempTargetFolder << "\n";
+    LOG_INFO("plant-uml") << "Hash File          : " << hashFile << "\n";
+    // LOG_INFO("plant-uml") << "" << << "\n";
+    // LOG_INFO("plant-uml") << "" << << "\n";
+
 
     auto outputFilenameCanonicalForCompare = umba::filename::makeCanonicalForCompare(outputFilename);
 
@@ -212,8 +247,8 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
     {
         std::string labelText;
-        if (mdHtmlTag.hasAttr("text"))
-            labelText = mdHtmlTag.getAttrValue("text");
+        if (mdHtmlTag.hasAttr("title"))
+            labelText = mdHtmlTag.getAttrValue("title");
         if (!plantUmlOptions.showLabels)
             labelText.clear();
         plantUmlAddDiagramLabelScaleAndPlantTags(labelText, plantUmlOptions.scale, plantUmlOptions.diagramType, pumlLines);
@@ -480,7 +515,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
             imgLink = umba::filename::getFileName(outputFilename);
         }
     
-        resLines.emplace_back("![" + mdHtmlTag.getAttrValue("text", "Diagram") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
+        resLines.emplace_back("![" + mdHtmlTag.getAttrValue("title", "Diagram") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
     
     }
 

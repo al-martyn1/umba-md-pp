@@ -141,11 +141,11 @@ UMBA_APP_MAIN()
     }
     catch(const std::exception &e)
     {
-        LOG_ERR_OPT << "Exception found: " << e.what() << "\n";
+        LOG_ERR << "Exception found: " << e.what() << "\n";
     }
     catch(...)
     {
-        LOG_ERR_OPT << "Exception found: " << "unknown exception" << "\n";
+        LOG_ERR << "Exception found: " << "unknown exception" << "\n";
     }
 
     return 66;
@@ -402,19 +402,19 @@ int safe_main(int argc, char* argv[])
     // }
     // catch(const std::exception &e)
     // {
-    //     LOG_ERR_OPT << e.what() << "\n";
+    //     LOG_ERR << e.what() << "\n";
     //     return -1;
     // }
     // catch(const std::exception &e)
     // {
-    //     LOG_ERR_OPT << "command line arguments parsing error" << "\n";
+    //     LOG_ERR << "command line arguments parsing error" << "\n";
     //     return -1;
     // }
 
     if (!argsParser.quet  /* && !hasHelpOption */ )
     {
         //printNameVersion();
-        //LOG_MSG_OPT<<"\n";
+        //LOG_MSG<<"\n";
         umba::cli_tool_helpers::printNameVersion(umbaLogStreamMsg);
     }
 
@@ -469,7 +469,7 @@ int safe_main(int argc, char* argv[])
 
         if (foundFiles.size() != foundFilesRootFolders.size())
         {
-            LOG_ERR_OPT << "Missmatch files and folders size, something goes wrong" << "\n";
+            LOG_ERR << "Missmatch files and folders size, something goes wrong" << "\n";
             return 1;
         }
 
@@ -505,7 +505,7 @@ int safe_main(int argc, char* argv[])
             // Доп. проверка, если не совпало, то что-то очень пошло не так
             if (!umba::string_plus::starts_with_and_strip(fileRelName, fileRootPath))
             {
-                LOG_ERR_OPT << "File '" << fileFullName << "' not in it's root folder '" << fileRootPath << "' - something goes wrong" << "\n";
+                LOG_ERR << "File '" << fileFullName << "' not in it's root folder '" << fileRootPath << "' - something goes wrong" << "\n";
                 return 2;
             }
 
@@ -568,7 +568,7 @@ int safe_main(int argc, char* argv[])
             if (ext==targetExt)
             {
                 //LOG_WARN_OPT("same-file") << "source file and target file has same extention, skip processing it (output file: '" << outputFilename << "')\n";
-                LOG_WARN_OPT("same-file") << "source file and target file has same extention, skip processing it\n";
+                LOG_WARN("same-file") << "source file and target file has same extention, skip processing it\n";
                 continue;
             }
 
@@ -576,7 +576,7 @@ int safe_main(int argc, char* argv[])
             std::string inputFileText;
             if (!AppConfig<std::string>::readInputFile(*fileIt, inputFileText))
             {
-                LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
+                LOG_ERR << umba::formatMessage("failed to read input file: '$(fileName)'")
                                                   .arg("fileName",*fileIt)
                                                   .toString()
                             << "\n";
@@ -647,7 +647,7 @@ int safe_main(int argc, char* argv[])
             } // try
             catch(const std::runtime_error &e)
             {
-                LOG_ERR_OPT << e.what() << "\n";
+                LOG_ERR << e.what() << "\n";
                 return 4;
             }
 
@@ -831,7 +831,7 @@ int safe_main(int argc, char* argv[])
 
         if (inputFilename.empty())
         {
-            LOG_ERR_OPT << "input file name not taken"
+            LOG_ERR << "input file name not taken"
                         << "\n";
             return 5;
         }
@@ -854,7 +854,7 @@ int safe_main(int argc, char* argv[])
 
         if (outputFileType==umba::cli_tool_helpers::IoFileType::clipboard)
         {
-            LOG_ERR_OPT << "invalid output file name"
+            LOG_ERR << "invalid output file name"
                         << "\n";
             return 6;
         }
@@ -868,7 +868,7 @@ int safe_main(int argc, char* argv[])
         //if (!umba::filesys::readFile(inputFilename, inputFileText))
         if (!AppConfig<std::string>::readInputFile(inputFilename, inputFileText))
         {
-            LOG_ERR_OPT << umba::formatMessage("failed to read input file: '$(fileName)'")
+            LOG_ERR << umba::formatMessage("failed to read input file: '$(fileName)'")
                                               .arg("fileName",inputFilename)
                                               .toString()
                         << "\n";
@@ -946,7 +946,7 @@ int safe_main(int argc, char* argv[])
         } // try
         catch(const std::runtime_error &e)
         {
-            LOG_ERR_OPT << e.what() << "\n";
+            LOG_ERR << e.what() << "\n";
             return 8;
         }
 

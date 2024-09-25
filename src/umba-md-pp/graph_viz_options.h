@@ -8,6 +8,8 @@
 #include "utils.h"
 //
 #include "enums.h"
+// 
+#include "log.h"
 //
 #include <string>
 

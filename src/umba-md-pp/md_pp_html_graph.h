@@ -11,6 +11,9 @@
 
 #include "extern_tools.h"
 
+// 
+#include "log.h"
+
 // For 'system' function
 #include <process.h>
 
@@ -230,8 +233,8 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
         dotLines.emplace_back(tagLine);
     }
 
-    if (graphVizOptions.showLabels && mdHtmlTag.hasAttr("text"))
-       grapvizAddGraphLabel(mdHtmlTag.getAttrValue("text"), dotLines);
+    if (graphVizOptions.showLabels && mdHtmlTag.hasAttr("title"))
+       grapvizAddGraphLabel(mdHtmlTag.getAttrValue("title"), dotLines);
 
 
     std::string dotText    = marty_cpp::mergeLines(dotLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
@@ -417,7 +420,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
         imgLink = umba::filename::getFileName(outputFilename);
     }
 
-    resLines.emplace_back("![" + mdHtmlTag.getAttrValue("text", "Graph") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
+    resLines.emplace_back("![" + mdHtmlTag.getAttrValue("title", "Graph") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
 
 }
 //----------------------------------------------------------------------------

@@ -198,7 +198,7 @@ UMBA_APP_MAIN()
     {
         std::string cwd;
         std::string rootPath = umba::shellapi::getDebugAppRootFolder(&cwd);
-        LOG_MSG_OPT << "Working Dir: " << cwd << "\n";
+        LOG_MSG << "Working Dir: " << cwd << "\n";
 
 
         argsParser.args.clear();
@@ -250,12 +250,12 @@ UMBA_APP_MAIN()
     // }
     // catch(const std::exception &e)
     // {
-    //     LOG_ERR_OPT << e.what() << "\n";
+    //     LOG_ERR << e.what() << "\n";
     //     return -1;
     // }
     // catch(const std::exception &e)
     // {
-    //     LOG_ERR_OPT << "command line arguments parsing error" << "\n";
+    //     LOG_ERR << "command line arguments parsing error" << "\n";
     //     return -1;
     // }
 
@@ -291,7 +291,7 @@ UMBA_APP_MAIN()
                                       .toString();
                     
         //errCount++;
-        LOG_ERR_OPT << msg << "\n";
+        LOG_ERR << msg << "\n";
 
         #if defined(UMBA_EVENTS_LOG_ENABLE)
             std::ostringstream oss;
@@ -545,7 +545,7 @@ UMBA_APP_MAIN()
         showErrorMessageBox(e.what());
         return logResultCode(13);
 
-        // LOG_ERR_OPT << e.what() << "\n";
+        // LOG_ERR << e.what() << "\n";
         // return 1;
     }
 
