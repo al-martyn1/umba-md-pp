@@ -74,6 +74,7 @@ Creole синтаксис - https://plantuml.com/ru/creole
 
 
 Boost MSM PUML (там примеры FSM на пумле есть) - https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html
+  https://www.boost.org/doc/libs/1_86_0/libs/msm/doc/HTML/ch03s04.html
 
 https://www.boost.org/doc/libs/1_86_0/libs/msm/doc/HTML/index.html
 

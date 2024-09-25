@@ -12,9 +12,19 @@ Practical Statecharts in C/C++ (Hierarchical State Machines in C/C++)
 Hierarchical State Machines in C/C++
 
 
-Qt Framework: потоки, иерархический конечный автомат, работа с USB-устройствами = QThread + QStateMaсhine + libUSB - https://habr.com/ru/articles/261955/comments/
+Qt Framework: потоки, иерархический конечный автомат, работа с USB-устройствами = QThread + QStateMaсhine + libUSB - https://habr.com/ru/articles/261955/
+  https://habr.com/ru/articles/261955/comments/
 
 http://www.devexp.ru/2011/02/konechnye-avtomaty-v-c/
 
+http://we.easyelectronics.ru/Soft/generator-na-perl-konechnogo-avtomata-na-c.html
+
+Легковесное ядро конечного автомата с автогенератором дерева для embedded проектов - https://habr.com/ru/articles/350880/
+  https://github.com/Vadimatorik/plantuml_to_fsm_tree_generator
+
+https://github.com/jp-embedded/scxmlcc
+
 Разное 
   big Big FLOAT - https://habr.com/ru/companies/ruvds/articles/845084/
+
+ICU - http://rsdn.org/forum/cpp.applied/8722492.1
