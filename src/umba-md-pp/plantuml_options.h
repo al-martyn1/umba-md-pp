@@ -209,6 +209,8 @@ struct PlantUmlOptions
         args.emplace_back("-o");
         args.emplace_back(outputImageFolder);
         args.emplace_back(makeTargetFormatCliArgument());
+        args.emplace_back("-charset"); // У нас всё в UTF8, задаём его явно, во избежание
+        args.emplace_back("utf8");
         args.emplace_back(inputPumlFile);
         return true;
     }
