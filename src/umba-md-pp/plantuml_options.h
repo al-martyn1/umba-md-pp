@@ -198,9 +198,18 @@ struct PlantUmlOptions
         // https://plantuml.com/ru/command-line
         auto java        = appCfg.getJava();
         auto plantUmlJar = appCfg.getPlantUml();
-        if (java.empty() || plantUmlJar.empty())
-            return false;
 
+        if (java.empty())
+        {
+            LOG_WARN("plant-uml") << "Failed to generate PlantUML command line: JAVA not found\n";
+            return false;
+        }
+
+        if (plantUmlJar.empty())
+        {
+            LOG_WARN("plant-uml") << "Failed to generate PlantUML command line: PlantUML JAR not found\n";
+            return false;
+        }
         
         tool = java;
 

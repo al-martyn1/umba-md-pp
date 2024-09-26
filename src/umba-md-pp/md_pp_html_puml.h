@@ -133,6 +133,7 @@ void plantUmlAddDiagramLabelScaleAndPlantTags(const std::string &labelText, unsi
         //scale
         if (umba::string_plus::starts_with(line, diagramStartStr))
         {
+            LOG_INFO("plant-uml") << "Found '@startXXX' expression in input lines\n";
             hasStart = true;
             ++insertPos; // Вставляем после текущей строки, которая @startXXX
         }
@@ -142,19 +143,24 @@ void plantUmlAddDiagramLabelScaleAndPlantTags(const std::string &labelText, unsi
             std::string textToInsert = plantUmlLabelTextEscape(labelText);
             tagLines.insert(tagLines.begin()+insertPos, textToInsert); 
             ++insertPos;
+            LOG_INFO("plant-uml") << "Inserting label to diagram: " << textToInsert << "\n";
         }
 
         if (scale!=100)
         {
             std::string scaleStr = "scale " + std::to_string(scale) + "/100";
             tagLines.insert(tagLines.begin()+insertPos, scaleStr); 
+            LOG_INFO("plant-uml") << "Inserting scale to diagram: " << scaleStr << "\n";
         }
 
         if (!hasStart)
         {
             std::string diagramTypeStr = enum_serialize(diagramType);
-            tagLines.insert(tagLines.begin(), "@start"+diagramTypeStr); 
-            tagLines.insert(tagLines.end()  , "@end"+diagramTypeStr); 
+            auto strStart = "@start"+diagramTypeStr;
+            auto strEnd   = "@end"+diagramTypeStr;
+            tagLines.insert(tagLines.begin(), strStart); 
+            tagLines.insert(tagLines.end()  , strEnd  ); 
+            LOG_INFO("plant-uml") << "Inserting '" << strStart << "' and '" << strEnd << "' to diagram\n";
         }
 
         return;
@@ -218,8 +224,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     LOG_INFO("plant-uml") << "Temp Puml File     : " << tempPumlFile<< "\n";
     LOG_INFO("plant-uml") << "Temp Target Folder : " << tempTargetFolder << "\n";
     LOG_INFO("plant-uml") << "Hash File          : " << hashFile << "\n";
-    // LOG_INFO("plant-uml") << "" << << "\n";
-    // LOG_INFO("plant-uml") << "" << << "\n";
+    LOG_INFO("plant-uml") << "-----------------------------------------" << "\n";
 
 
     auto outputFilenameCanonicalForCompare = umba::filename::makeCanonicalForCompare(outputFilename);
@@ -254,6 +259,12 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         plantUmlAddDiagramLabelScaleAndPlantTags(labelText, plantUmlOptions.scale, plantUmlOptions.diagramType, pumlLines);
     }
 
+    LOG_INFO("plant-uml") << "------- PlantUML Diagram text" << "\n";
+    for(const auto &l : pumlLines)
+    {
+        LOG_INFO("plant-uml") << l << "\n";
+    }
+    LOG_INFO("plant-uml") << "-------" << "\n";
 
     std::string pumlText    = marty_cpp::mergeLines(pumlLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
     std::size_t pumlHash    = std::hash<std::string>{}(pumlText);
@@ -270,9 +281,11 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     if (!AppConfig<std::string>::readInputFile(hashFile, hashFileText))
     {
         needWriteHashLines = true;
+        LOG_INFO("plant-uml") << "Failed to read hash file: '" << hashFile << "'\n";
     }
     else
     {
+        LOG_INFO("plant-uml") << "Hashes readed from '" << hashFile << "'\n";
         std::vector<std::string> hashFileLines = marty_cpp::splitToLinesSimple(hashFileText);
 
         for(auto hashFileLine : hashFileLines)
@@ -338,6 +351,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
     if (!hashFound)
     {
+        LOG_INFO("plant-uml") << "Diagram hash not found, need to generate image\n";
         newHashFileLines.emplace_back(pumlHashStr + " " + outputFilename); // Добавляем строчку хэша
         needWriteHashLines = true;
         needPumlProcessing  = true;
@@ -345,6 +359,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
     if (needWriteHashLines)
     {
+        LOG_INFO("plant-uml") << "Saving hashes to '" << hashFile << "'\n";
         std::string hashFileText = marty_cpp::mergeLines(newHashFileLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
         umba::filesys::createDirectoryEx( umba::filename::getPath(hashFile), true /* forceCreatePath */ );
         if (!umba::filesys::writeFile(hashFile, hashFileText, true /* overwrite */ ))
@@ -365,18 +380,61 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     // auto tempTargetFolder = plantUmlOptions.generateOutputTempFolderName();
     // auto hashFile         = plantUmlOptions.generateHashFilename();
 
+        LOG_INFO("plant-uml") << "Deleting old temp files and folders\n";
+        LOG_INFO("plant-uml") << "Deleting file  : '" << tempPumlFile << "'\n";
         // Старые временные файлы нам не нужны, даже если остались с прошлого запуска
-        umba::filesys::deleteFile(tempPumlFile);
+        if (!umba::filesys::deleteFile(tempPumlFile))
+        {
+            auto lastErr = umba::shellapi::getLastError();
+            if (umba::filesys::isPathExist(tempPumlFile))
+            {
+                LOG_WARN("plant-uml") << "Failed to delete file: '" << tempPumlFile << "': " << umba::shellapi::getErrorMessage(lastErr) << "\n";
+            }
+        }
+        
+        LOG_INFO("plant-uml") << "Deleting folder: '" << tempTargetFolder << "'\n";
         //umba::filesys::deleteFile(tempTargetFile);
-        umba::shellapi::deleteDirectory(tempTargetFolder);
+        if (!umba::shellapi::deleteDirectory(tempTargetFolder))
+        {
+            auto lastErr = umba::shellapi::getLastError();
+            if (umba::filesys::isPathExist(tempTargetFolder))
+            {
+                LOG_WARN("plant-uml") << "Failed to delete folder: '" << tempTargetFolder << "': " << umba::shellapi::getErrorMessage(lastErr) << "\n";
+            }
+        }
 
-        umba::filesys::createDirectoryEx( umba::filename::getPath(tempPumlFile), true /* forceCreatePath */ );
-        umba::filesys::createDirectoryEx( tempTargetFolder, true /* forceCreatePath */ );
+        LOG_INFO("plant-uml") << "Creating temp files and folders\n";
+        {
+            auto tempPumlFolder = umba::filename::getPath(tempPumlFile);
+            LOG_INFO("plant-uml") << "Creating folder: '" << tempPumlFolder << "'\n";
+    
+            if (!umba::filesys::createDirectoryEx( tempPumlFolder, true /* forceCreatePath */ ))
+            {
+                auto lastErr = umba::shellapi::getLastError();
+                if (!umba::filesys::isPathExist(tempPumlFolder))
+                {
+                    LOG_WARN("plant-uml") << "Failed to creating folder: '" << tempPumlFolder << "': " << umba::shellapi::getErrorMessage(lastErr) << "\n";
+                }
+            }
+    
+            LOG_INFO("plant-uml") << "Creating folder: '" << tempTargetFolder << "'\n";
+            if (!umba::filesys::createDirectoryEx( tempTargetFolder, true /* forceCreatePath */ ))
+            {
+                auto lastErr = umba::shellapi::getLastError();
+                if (!umba::filesys::isPathExist(tempTargetFolder))
+                {
+                    LOG_WARN("plant-uml") << "Failed to creating folder: '" << tempTargetFolder << "': " << umba::shellapi::getErrorMessage(lastErr) << "\n";
+                }
+            }
+        }
 
+
+        LOG_INFO("plant-uml") << "Writing temporary PUML file: '" << tempPumlFile << "'\n";
         if (!umba::filesys::writeFile(tempPumlFile, pumlText, true /* overwrite */ ))
         {
             // hasErrorWhileGenerating = true;
             errMsg = "Failed to write temporary PUML file";
+            LOG_WARN("plant-uml") << "Failed to write temporary PUML file: '" << tempPumlFile << "'\n";
         }
         else
         {
@@ -391,15 +449,19 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
                 //std::string toolExeName     = findGraphvizToolExecutableName(appCfg.dontLookupForGraphviz, graphvizTool);
                 //std::string toolCommandLine = toolExeName + " " + graphvizToolArgs;
 
-                
+
+                std::string cmdLine = umba::shellapi::makeSystemFunctionCommandString(pumlTool, pumlToolArgs);
+
+                LOG_INFO("plant-uml") << "Calling PlantUML diagram generator, command line: " << cmdLine << "\n";
 
                 std::string errMsg;
                 //int resCode = system(toolCommandLine.c_str());
                 int resCode = umba::shellapi::callSystem(pumlTool, pumlToolArgs, &errMsg);
                 if (resCode!=0)
                 {
+                    LOG_WARN("plant-uml") << "Failed to call PlantUML diagram generator, command line: " << cmdLine << "\n";
                     errMsg = "Failed to calling JAVA for PlantUML , message: " + std::to_string(resCode)
-                        + ", command line: " + umba::shellapi::makeSystemFunctionCommandString(pumlTool, pumlToolArgs);
+                        + ", command line: " + cmdLine;
                 }
             }
         }
@@ -410,6 +472,9 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
     if (needPumlProcessing && errMsg.empty())
     {
+        LOG_INFO("plant-uml") << "-----------------------------------------" << "\n";
+        LOG_INFO("plant-uml") << "Looking for generated files\n";
+    
         // Тут надо пройтись по tempTargetFolder и собрать все появившиеся там файлы
         std::vector<std::string> foundNewFiles;
         umba::filesys::enumerateDirectory( tempTargetFolder
@@ -417,7 +482,9 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
                                            {
                                                if (fileStat.isFile())
                                                {
-                                                   foundNewFiles.emplace_back(umba::filename::appendPath(tempTargetFolder, fileName));
+                                                   auto newFile = umba::filename::appendPath(tempTargetFolder, fileName);
+                                                   foundNewFiles.emplace_back(newFile);
+                                                   LOG_INFO("plant-uml") << "Found generated file: " << newFile << "\n";
                                                }
 
                                                return true; // continue file enumeration
@@ -426,6 +493,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
         if (foundNewFiles.empty())
         {
+            LOG_WARN("plant-uml") << "No generated files found\n";
             errMsg = "No output files found";
         }
         else
@@ -444,7 +512,19 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
             else if (foundNewFiles.size()>10)
                 numDigitsMax = 2;
 
-            umba::filesys::createDirectoryEx( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
+
+            LOG_INFO("plant-uml") << "-----------------------------------------" << "\n";
+
+            auto targetFilesFolder = umba::filename::getPath(outputFilename);
+            LOG_INFO("plant-uml") << "Creating target folder: " << targetFilesFolder << "\n";
+            if (!umba::filesys::createDirectoryEx( targetFilesFolder, true /* forceCreatePath */ ))
+            {
+                auto lastErr = umba::shellapi::getLastError();
+                if (!umba::filesys::isPathExist(targetFilesFolder))
+                {
+                    LOG_WARN("plant-uml") << "Failed to create target folder: '" << targetFilesFolder << "': " << umba::shellapi::getErrorMessage(lastErr) << "\n";
+                }
+            }
 
             for(const auto &newTmpFile : foundNewFiles)
             {
@@ -462,11 +542,13 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
                     resultFileName = umba::filename::appendExt(outputPathFile+"_"+strIdx, outputExt);
                 }
 
+                LOG_INFO("plant-uml") << "Moving file to target location: " << newTmpFile << " -> " << resultFileName << "\n";
                 using umba::shellapi::MoveFileFlags;
                 if (!umba::shellapi::moveFile(newTmpFile, resultFileName, MoveFileFlags::copyAllowed|MoveFileFlags::replaceExisting|MoveFileFlags::writeThrough))
                 {
                     //errMsg = "Failed to copy temp file '" + tempTargetFile + "' to target file '" + outputFilename + "', error: " + std::to_string(GetLastError());
                     ++resulFileCopyErrCount;
+                    LOG_INFO("plant-uml") << "Failed to move file to target location: " << newTmpFile << " -> " << resultFileName << "\n";
                 }
                 else
                 {
@@ -478,11 +560,48 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         } // if (foundNewFiles.empty())
 
     } // if (needPumlProcessing && errMsg.empty())
+    else
+    {
+        if (!needPumlProcessing)
+        {
+            LOG_INFO("plant-uml") << "No need to call PlantUML generator - no changes found in diagram\n";
+        }
+        else if (!errMsg.empty())
+        {
+            LOG_INFO("plant-uml") << "PlantUML generator not called - there is some errors occured\n";
+        }
+    }
 
+            // auto lastErr = umba::shellapi::getLastError();
+            // if (umba::filesys::isPathExist(tempPumlFile))
+            // {
+            //     LOG_WARN("plant-uml") << "Failed to delete file: '" << tempPumlFile << "': " << umba::shellapi::getErrorMessage(lastErr) << "\n";
+            // }
 
+    LOG_INFO("plant-uml") << "-----------------------------------------" << "\n";
     // Тут надо удалить tempTargetFolder со всем его содержимым
-    umba::filesys::deleteFile(tempPumlFile);
-    umba::shellapi::deleteDirectory(tempTargetFolder);
+    LOG_INFO("plant-uml") << "Deleting temp files and folders\n";
+    LOG_INFO("plant-uml") << "Deleting file  : '" << tempPumlFile << "'\n";
+    // Старые временные файлы нам не нужны, даже если остались с прошлого запуска
+    if (!umba::filesys::deleteFile(tempPumlFile))
+    {
+        auto lastErr = umba::shellapi::getLastError();
+        if (umba::filesys::isPathExist(tempPumlFile))
+        {
+            LOG_WARN("plant-uml") << "Failed to delete file: '" << tempPumlFile << "': " << umba::shellapi::getErrorMessage(lastErr) << "\n";
+        }
+    }
+    
+    LOG_INFO("plant-uml") << "Deleting folder: '" << tempTargetFolder << "'\n";
+    //umba::filesys::deleteFile(tempTargetFile);
+    if (!umba::shellapi::deleteDirectory(tempTargetFolder))
+    {
+        auto lastErr = umba::shellapi::getLastError();
+        if (umba::filesys::isPathExist(tempTargetFolder))
+        {
+            LOG_WARN("plant-uml") << "Failed to delete folder: '" << tempTargetFolder << "': " << umba::shellapi::getErrorMessage(lastErr) << "\n";
+        }
+    }
 
     if (errMsg.empty() && resulFileCopyErrCount)
     {
@@ -494,11 +613,15 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         resLines.emplace_back("# " + errMsg);
     }
 
+    LOG_INFO("plant-uml") << "-----------------------------------------" << "\n";
+    LOG_INFO("plant-uml") << "Generating links\n";
 
     auto docPath = umba::filename::getPath(docFilename);
     for(const auto &resultFile : resultFileNames)
     {
         std::string imgLink;
+
+        LOG_INFO("plant-uml") << "Generating link for '" << resultFile << "'\n";
     
         umba::filename::makeRelPath( imgLink
                                    , docPath
@@ -512,13 +635,17 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     
         if (imgLink.empty())
         {
+            LOG_WARN("plant-uml") << "Failed to make relative link, using full file name: '" << resultFile << "'\n";
             imgLink = umba::filename::getFileName(outputFilename);
         }
     
-        resLines.emplace_back("![" + mdHtmlTag.getAttrValue("title", "Diagram") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
+        auto linkText = mdHtmlTag.getAttrValue("title", "Diagram");
+        LOG_INFO("plant-uml") << "Adding link, text: '" << linkText << "', link: '" << imgLink << "'\n";
+        resLines.emplace_back("![" + linkText + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
     
     }
 
+    LOG_INFO("plant-uml") << "----------------------------------------------------------------------------------" << "\n";
 
 }
 //----------------------------------------------------------------------------
