@@ -19,9 +19,9 @@ If output_file not taken, STDOUT used.
 **-q**,
 **--quet** - Operate quetly.
 
-**--info=info-type1[,+info-type2,-info-type]** - Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `plant-uml`, `snippet-lookup`.
+**--info=info-type1[,+info-type2,-info-type]** - Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `plantuml`, `snippet-lookup`.
 
-**--warning=warn-type1[,+warn-type2,-warn-type]** - Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `img-copy`, `img-copy-target-exist`, `plant-uml`, `same-file`.
+**--warning=warn-type1[,+warn-type2,-warn-type]** - Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `graphviz`, `img-copy`, `img-copy-target-exist`, `plantuml`, `same-file`.
 
 **--home** - Open homepage.
 
@@ -217,6 +217,9 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse
 
 **--generated-output-path=PATH**,
 **--generated-output-root=PATH** - Set output root path for generated files (same as `--graphviz-output-path=PATH --plant-uml-output-path=PATH`).
+
+**--clear-generation-cache[=MODE]** - Clear cached information of the generated files - force regenerate all images on next call. No other actions will be performed if this option was taken.
+Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
 
 **--gcc** - GCC messages format instead of MSVC format.
 

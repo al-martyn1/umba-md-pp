@@ -8,7 +8,7 @@ Language   : Russian
 #// @startebnf
 #// title LISP Grammar
 #// @endebnf
-<plant-uml type=ebnf text='LISP Grammar'>
+<plantuml type=ebnf text='LISP Grammar'>
 grammars_expression = atomic_symbol | "(", s_expression, ".", s_expression, ")" | list;
 list = "(", s_expression, { s_expression }, ")";
 atomic_symbol = letter, atom_part;
@@ -16,7 +16,7 @@ atom_part = empty | letter, atom_part | number, atom_part;
 letter = ? a-z ?;
 number = ? 1-9 ?;
 empty = " ";
-</plant-uml>
+</plantuml>
 
 #// Russian
 #// English
@@ -168,7 +168,7 @@ GitHub/GitLab wiki, например.
 #// @startebnf
 #// title LISP Grammar
 #// @endebnf
-<plant-uml type=ebnf text="LISP Grammar">
+<plantuml type=ebnf text="LISP Grammar">
 grammars_expression = atomic_symbol | "(", s_expression, ".", s_expression, ")" | list;
 list = "(", s_expression, { s_expression }, ")";
 atomic_symbol = letter, atom_part;
@@ -176,43 +176,43 @@ atom_part = empty | letter, atom_part | number, atom_part;
 letter = ? a-z ?;
 number = ? 1-9 ?;
 empty = " ";
-</plant-uml>
+</plantuml>
 
 
 # PlantUML Samples
 
 
-<plant-uml/> doc.drafts/plantuml/36-state-01.puml
-<plant-uml/> doc.drafts/plantuml/37-state-02.puml
-<plant-uml/> doc.drafts/plantuml/38-state-03.puml
-<plant-uml/> doc.drafts/plantuml/39-state-04.puml
-<plant-uml/> doc.drafts/plantuml/40-state-05.puml
-<plant-uml/> doc.drafts/plantuml/41-state-06.puml
-<plant-uml/> doc.drafts/plantuml/42-state-07.puml
-<plant-uml/> doc.drafts/plantuml/43-state-08.puml
-<plant-uml/> doc.drafts/plantuml/44-state-09.puml
-<plant-uml/> doc.drafts/plantuml/45-state-10.puml
-<plant-uml/> doc.drafts/plantuml/46-state-11.puml
-<plant-uml/> doc.drafts/plantuml/47-state-12.puml
-<plant-uml/> doc.drafts/plantuml/48-state-13.puml
-<plant-uml/> doc.drafts/plantuml/49-state-14.puml
-<plant-uml/> doc.drafts/plantuml/50-state-15.puml
-<plant-uml/> doc.drafts/plantuml/51-state-16.puml
-<plant-uml/> doc.drafts/plantuml/52-state-17.puml
-<plant-uml/> doc.drafts/plantuml/53-state-18.puml
-<plant-uml/> doc.drafts/plantuml/54-state-19.puml
-<plant-uml/> doc.drafts/plantuml/55-state-20.puml
-<plant-uml/> doc.drafts/plantuml/56-state-21.puml
-<plant-uml/> doc.drafts/plantuml/57-state-22.puml
-<plant-uml/> doc.drafts/plantuml/58-state-23.puml
-<plant-uml/> doc.drafts/plantuml/59-state-24.puml
-<plant-uml/> doc.drafts/plantuml/60-state-25.puml
-<plant-uml/> doc.drafts/plantuml/61-state-26.puml
-<plant-uml/> doc.drafts/plantuml/62-state-27.puml
-<plant-uml/> doc.drafts/plantuml/63-state-28.puml
-<plant-uml/> doc.drafts/plantuml/64-state-29.puml
-<plant-uml/> doc.drafts/plantuml/65-state-30.puml
-<plant-uml/> doc.drafts/plantuml/66-state-31.puml
+<plantuml/> doc.drafts/plantuml/36-state-01.puml
+<plantuml/> doc.drafts/plantuml/37-state-02.puml
+<plantuml/> doc.drafts/plantuml/38-state-03.puml
+<plantuml/> doc.drafts/plantuml/39-state-04.puml
+<plantuml/> doc.drafts/plantuml/40-state-05.puml
+<plantuml/> doc.drafts/plantuml/41-state-06.puml
+<plantuml/> doc.drafts/plantuml/42-state-07.puml
+<plantuml/> doc.drafts/plantuml/43-state-08.puml
+<plantuml/> doc.drafts/plantuml/44-state-09.puml
+<plantuml/> doc.drafts/plantuml/45-state-10.puml
+<plantuml/> doc.drafts/plantuml/46-state-11.puml
+<plantuml/> doc.drafts/plantuml/47-state-12.puml
+<plantuml/> doc.drafts/plantuml/48-state-13.puml
+<plantuml/> doc.drafts/plantuml/49-state-14.puml
+<plantuml/> doc.drafts/plantuml/50-state-15.puml
+<plantuml/> doc.drafts/plantuml/51-state-16.puml
+<plantuml/> doc.drafts/plantuml/52-state-17.puml
+<plantuml/> doc.drafts/plantuml/53-state-18.puml
+<plantuml/> doc.drafts/plantuml/54-state-19.puml
+<plantuml/> doc.drafts/plantuml/55-state-20.puml
+<plantuml/> doc.drafts/plantuml/56-state-21.puml
+<plantuml/> doc.drafts/plantuml/57-state-22.puml
+<plantuml/> doc.drafts/plantuml/58-state-23.puml
+<plantuml/> doc.drafts/plantuml/59-state-24.puml
+<plantuml/> doc.drafts/plantuml/60-state-25.puml
+<plantuml/> doc.drafts/plantuml/61-state-26.puml
+<plantuml/> doc.drafts/plantuml/62-state-27.puml
+<plantuml/> doc.drafts/plantuml/63-state-28.puml
+<plantuml/> doc.drafts/plantuml/64-state-29.puml
+<plantuml/> doc.drafts/plantuml/65-state-30.puml
+<plantuml/> doc.drafts/plantuml/66-state-31.puml
 
 
 # Boost MSM
@@ -220,7 +220,7 @@ empty = " ";
 [Boost MSM documentation](https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html)
 
 
-<plant-uml text="Sample state machine" rtf-scale="60%" >
+<plantuml text="Sample state machine" rtf-scale="60%" >
 @startuml Player
             skinparam linetype polyline
             state Player{
@@ -246,6 +246,6 @@ empty = " ";
                 Stopped : flag CDLoaded                
             }
 @enduml
-</plant-uml>
+</plantuml>
 
 
