@@ -18,6 +18,7 @@
   - [Boost MSM](#user-content-boost-msm)
 
 
+![Diagram](doc/img.generated/diagram_0000.svg)
 
 
 # umba-md-pp - Markdown препроцессор
@@ -320,11 +321,43 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
+![Diagram](doc/img.generated/diagram_0001.svg)
 
 
 # PlantUML Samples
 
 
+![Diagram](doc/img.generated/doc.drafts/plantuml/36-state-01.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/37-state-02.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/38-state-03.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/39-state-04.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/40-state-05.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/41-state-06.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/42-state-07.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/43-state-08.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/44-state-09.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/45-state-10.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/46-state-11.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/47-state-12.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/48-state-13.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/49-state-14.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/50-state-15.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/51-state-16.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/52-state-17.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/53-state-18.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/54-state-19.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/55-state-20.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/56-state-21.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/57-state-22.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/58-state-23.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/59-state-24.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/60-state-25.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/61-state-26.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/62-state-27.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/63-state-28.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/64-state-29.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/65-state-30.svg)
+![Diagram](doc/img.generated/doc.drafts/plantuml/66-state-31.svg)
 
 
 # Boost MSM
@@ -332,6 +365,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 [Boost MSM documentation](https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html)
 
 
+![Diagram](doc/img.generated/diagram_0002.svg)
 
 
 
