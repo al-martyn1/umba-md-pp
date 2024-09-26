@@ -151,6 +151,23 @@ struct GraphVizOptions
         return umba::filename::appendPath(getSavePath(), std::string("$gviz-hash$.txt"));
     }
 
+    bool deleteHashFile() const
+    {
+        bool res = true;
+        auto hashFileName = generateHashFilename();
+        if (umba::filesys::isPathExist(hashFileName))
+        {
+            LOG_INFO("graphviz") << "Delete hash file: '" << hashFileName << "'\n";
+            if (!umba::filesys::deleteFile(hashFileName))
+            {
+                res = false;
+                LOG_WARN("graphviz") << "Failed to delete hash file: '" << hashFileName << "': " << umba::shellapi::getErrorMessage(umba::shellapi::getLastError()) << "\n";
+            }
+        }
+
+        return res;
+    }
+
     void setSaveFileName(const std::string &name)
     {
         useFilenameAutogeneration = false;

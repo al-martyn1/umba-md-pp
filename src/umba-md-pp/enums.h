@@ -720,7 +720,7 @@ enum class MdPpTag : std::uint32_t
     graph      = 0x0000,
     begin      = 0x0000,
     puml       = 0x0001,
-    plantUml   = 0x0001,
+    plantuml   = 0x0001,
     diagram    = 0x0001,
     csv        = 0x0002,
     end        = 0x0003
@@ -738,15 +738,15 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MdPpTag, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "invalid"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "unknown"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csv       , "csv"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "puml"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "plant-uml" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "diagram"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "graph"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "begin"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::end       , "end"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "invalid"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "unknown"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csv       , "csv"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "puml"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "plantuml" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "diagram"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "graph"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "begin"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::end       , "end"      );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MdPpTag, std::map, 1 )
 
 

@@ -65,6 +65,7 @@ struct AppConfig
 
     GraphVizOptions                                       graphVizOptions;
     PlantUmlOptions                                       plantUmlOptions;
+    bool                                                  clearGenerationCaches = false;
 
     mutable std::string                                   java;
     mutable std::string                                   javaHome;
@@ -129,6 +130,12 @@ struct AppConfig
 
 
 
+    void doClearGenerationCaches() const
+    {
+        graphVizOptions.deleteHashFile();
+        plantUmlOptions.deleteHashFile();
+    }
+    
     void setGeneratedOutputRoot(const std::string &path)
     {
         plantUmlOptions.savePath = path;

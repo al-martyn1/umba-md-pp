@@ -1,6 +1,6 @@
 invalid,unknown=-1
 graph, begin          = 0
-puml,plantUml,diagram
+puml,plantuml,diagram
 csv
 
 end

@@ -67,8 +67,8 @@ int operator()( const StringType                                &a           //!
 {
     //using namespace marty::clang::helpers;
 
-    static std::set<std::string> warnOptsSet = {"img-copy-target-exist", "same-file", "img-copy", "plant-uml"};
-    static std::set<std::string> infoOptsSet = {"snippet-lookup", "plant-uml"};
+    static std::set<std::string> warnOptsSet = {"img-copy-target-exist", "same-file", "img-copy", "plantuml", "graphviz"};
+    static std::set<std::string> infoOptsSet = {"snippet-lookup", "plantuml"};
 
     std::string dppof = "Don't parse predefined options from ";
 
@@ -1436,6 +1436,22 @@ int operator()( const StringType                                &a           //!
             }
 
             appConfig.setGeneratedOutputRoot(argsParser.makeAbsPath(strVal));
+
+            return 0;
+        }
+
+        else if ( opt.setParam("?MODE",true)
+               || opt.isOption("clear-generation-cache")
+               || opt.setDescription("Clear cached information of the generated files - force regenerate all images on next call. No other actions will be performed if this option was taken."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(boolVal,errMsg))
+            {
+                return -1;
+            }
+
+            appConfig.clearGenerationCaches = boolVal;
 
             return 0;
         }

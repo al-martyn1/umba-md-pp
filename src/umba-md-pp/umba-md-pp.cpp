@@ -480,7 +480,10 @@ int safe_main(int argc, char* argv[])
         //     infoLog << foundFile << "\n";
         // }
 
-        umba::info_log::printSectionHeader(infoLog, "Processing found files");
+        if (!appConfig.clearGenerationCaches)
+        {
+            umba::info_log::printSectionHeader(infoLog, "Processing found files");
+        }
 
         std::string commonLang        = "English";
         bool        commonLangChanged = false    ;
@@ -512,7 +515,10 @@ int safe_main(int argc, char* argv[])
             umba::filename::stripLastPathSep(fileRootPath);
             umba::filename::stripFirstPathSep(fileRelName);
 
-            infoLog << "Processing file '" << fileRelName << "' from '" << fileRootPath << "' (" << fileFullName << ")";
+            if (!appConfig.clearGenerationCaches)
+            {
+                infoLog << "Processing file '" << fileRelName << "' from '" << fileRootPath << "' (" << fileFullName << ")";
+            }
 
             #define UMBA_MD_PP_BATCH_MODE_PROCESSING_LOG_MULTILINE
             // #if defined(UMBA_MD_PP_BATCH_MODE_PROCESSING_LOG_MULTILINE)
@@ -556,12 +562,15 @@ int safe_main(int argc, char* argv[])
 
             if (!argsParser.quet)
             {
-                #if defined(UMBA_MD_PP_BATCH_MODE_PROCESSING_LOG_MULTILINE)
-                    umbaLogStreamMsg << "\n    Writting output to: ";
-                #else
-                    umbaLogStreamMsg << " - writting output to: ";
-                #endif
-                umbaLogStreamMsg << outputFilename << "\n";
+                if (!appConfig.clearGenerationCaches)
+                {
+                    #if defined(UMBA_MD_PP_BATCH_MODE_PROCESSING_LOG_MULTILINE)
+                        umbaLogStreamMsg << "\n    Writting output to: ";
+                    #else
+                        umbaLogStreamMsg << " - writting output to: ";
+                    #endif
+                    umbaLogStreamMsg << outputFilename << "\n";
+                }
             }
 
 
@@ -601,6 +610,13 @@ int safe_main(int argc, char* argv[])
                     argsParser.popOptionsFileName();
                     appConfig.popSamplesPathsAndInsertNewAtFront();
                 }
+            }
+
+            // All options applied
+            if (appConfig.clearGenerationCaches)
+            {
+                appConfig.doClearGenerationCaches();
+                continue;
             }
 
             appConfig.checkAdjustDocNumericLevels();
@@ -653,6 +669,11 @@ int safe_main(int argc, char* argv[])
 
         } // for(; fileIt!=foundFiles.end() && folderIt!=foundFilesRootFolders.end(); ++fileIt, ++folderIt)
 
+        if (appConfig.clearGenerationCaches)
+        {
+            umbaLogStreamMsg << "Exiting - only clear caches action performed\n";
+            return 0;
+        }
 
         if (appConfig.batchOutputRoot.empty())
         {
@@ -902,6 +923,14 @@ int safe_main(int argc, char* argv[])
                 appConfig.popSamplesPathsAndInsertNewAtFront();
             }
         }
+
+        // All options applied
+        if (appConfig.clearGenerationCaches)
+        {
+            appConfig.doClearGenerationCaches();
+            return 0;
+        }
+
 
         appConfig.checkAdjustDocNumericLevels();
         appConfig.checkTargetFormat();
