@@ -7,12 +7,8 @@
 
 # Table test 01
 
-```
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell
-```
+!!! File not found in: 
+#!insert{fail}              table-test/table-test-01.txt
 
 First Header  | Second Header
 ------------- | -------------
@@ -23,12 +19,8 @@ Content Cell  | Content Cell
 
 # Table test 02
 
-```
-| Right | Center | Left  |
-| ----: | :----: | :---- |
-| 10    | 10     | 10    |
-| 1000  | 1000   | 1000  |
-```
+!!! File not found in: 
+#!insert{fail}              table-test/table-test-02.txt
 
 | Right | Center | Left  |
 | ----: | :----: | :---- |
@@ -39,12 +31,8 @@ Content Cell  | Content Cell
 
 # Table test 03
 
-```
-| Right | Center | Left  |
-| ----: | :----: | :---- |
-| 10    | 10     | 10    |
-| ^     | 1000   | 1000  |
-```
+!!! File not found in: 
+#!insert{fail}              table-test/table-test-03.txt
 
 | Right | Center | Left  |
 | ----: | :----: | :---- |
@@ -55,12 +43,8 @@ Content Cell  | Content Cell
 
 # Table test 04
 
-```
-| Right | Center | Left  |
-| ----: | :----: | :---- |
-| 10    | 10     | 10    |
-| 1000  |||
-```
+!!! File not found in: 
+#!insert{fail}              table-test/table-test-04.txt
 
 | Right | Center | Left  |
 | ----: | :----: | :---- |
@@ -71,11 +55,8 @@ Content Cell  | Content Cell
 
 # Table test 05
 
-```
-| One    | Two | Three | Four    | Five  | Six
-|---
-| Span <td colspan=3>triple  <td colspan=2>double
-```
+!!! File not found in: 
+#!insert{fail}              table-test/table-test-05.txt
 
 | One    | Two | Three | Four    | Five  | Six 
 |---

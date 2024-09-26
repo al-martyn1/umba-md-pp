@@ -19,9 +19,9 @@ If output_file not taken, STDOUT used.
 **-q**,
 **--quet** - Operate quetly.
 
-**--info=info-type1[,+info-type2,-info-type]** - Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `plantuml`, `snippet-lookup`.
+**--info=info-type1[,+info-type2,-info-type]** - Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `opt-files`, `plantuml`, `snippet-lookup`.
 
-**--warning=warn-type1[,+warn-type2,-warn-type]** - Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `graphviz`, `img-copy`, `img-copy-target-exist`, `plantuml`, `same-file`.
+**--warning=warn-type1[,+warn-type2,-warn-type]** - Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `graphviz`, `img-copy`, `img-copy-exist`, `plantuml`, `same-file`.
 
 **--home** - Open homepage.
 
