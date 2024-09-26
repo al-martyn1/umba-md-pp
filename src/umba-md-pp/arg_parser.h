@@ -23,8 +23,22 @@ template<typename StringType>
 struct ArgParser
 {
 
-    static std::set<std::string> warnOptsSet = {"img-copy-target-exist", "same-file", "img-copy", "plantuml", "graphviz"};
-    static std::set<std::string> infoOptsSet = {"snippet-lookup", "plantuml"};
+    static
+    const std::set<std::string>& getWarnOptsSet()
+    {
+        const static std::set<std::string> s = {"img-copy-target-exist", "same-file", "img-copy", "plantuml", "graphviz"};
+        return s;
+    }
+
+    static
+    const std::set<std::string>& getInfoOptsSet()
+    {
+        const static std::set<std::string> s /* = */ {"snippet-lookup", "plantuml"};
+        return s;
+    }
+
+    // constexpr const static std::set<std::string> warnOptsSet /* = */ {"img-copy-target-exist", "same-file", "img-copy", "plantuml", "graphviz"};
+    // constexpr const static std::set<std::string> infoOptsSet /* = */ {"snippet-lookup", "plantuml"};
 
 
 // std::stack<StringType> optFiles;
@@ -98,7 +112,7 @@ int operator()( const StringType                                &a           //!
         else if ( opt.setParam("info-type1[,+info-type2,-info-type]",umba::command_line::OptionType::optString)
                || opt.isOption("info")
                // || opt.setParam("VAL",true)
-               || opt.setDescription("Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + umba::log::makeAllWarnInfoLogOptionsString(infoOptsSet)
+               || opt.setDescription("Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + umba::log::makeAllWarnInfoLogOptionsString(getInfoOptsSet())
                                     )
                 )
         {
@@ -111,7 +125,7 @@ int operator()( const StringType                                &a           //!
             }
 
             std::string unknownOpt;
-            if (!umba::log::addRemoveInfoOptions(infoOptsSet, strVal, unknownOpt))
+            if (!umba::log::addRemoveInfoOptions(getInfoOptsSet(), strVal, unknownOpt))
             {
                 LOG_ERR<<"Unknown info type: '" << unknownOpt << "' (--info)\n";
                 return -1;
@@ -124,7 +138,7 @@ int operator()( const StringType                                &a           //!
         else if ( opt.setParam("warn-type1[,+warn-type2,-warn-type]",umba::command_line::OptionType::optString)
                || opt.isOption("warning")
                // || opt.setParam("VAL",true)
-               || opt.setDescription("Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + umba::log::makeAllWarnInfoLogOptionsString(warnOptsSet)
+               || opt.setDescription("Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: " + umba::log::makeAllWarnInfoLogOptionsString(getWarnOptsSet())
                                     )
                 )
         {
@@ -137,7 +151,7 @@ int operator()( const StringType                                &a           //!
             }
 
             std::string unknownOpt;
-            if (!umba::log::addRemoveWarningOptions(warnOptsSet, strVal, unknownOpt))
+            if (!umba::log::addRemoveWarningOptions(getWarnOptsSet(), strVal, unknownOpt))
             {
                 LOG_ERR<<"Unknown warning type: '" << unknownOpt << "' (--warning)\n";
                 return -1;
