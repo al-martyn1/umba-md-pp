@@ -26,18 +26,18 @@ struct ArgParser
     static
     const std::set<std::string>& getWarnOptsSet()
     {
-        const static std::set<std::string> s = {"img-copy-target-exist", "same-file", "img-copy", "plantuml", "graphviz"};
+        const static std::set<std::string> s = {"img-copy", "img-copy-exist", "same-file", "plantuml", "graphviz"};
         return s;
     }
 
     static
     const std::set<std::string>& getInfoOptsSet()
     {
-        const static std::set<std::string> s /* = */ {"snippet-lookup", "plantuml"};
+        const static std::set<std::string> s /* = */ {"snippet-lookup", "plantuml", "opt-files"};
         return s;
     }
 
-    // constexpr const static std::set<std::string> warnOptsSet /* = */ {"img-copy-target-exist", "same-file", "img-copy", "plantuml", "graphviz"};
+    // constexpr const static std::set<std::string> warnOptsSet /* = */ {"img-copy-exist", "same-file", "img-copy", "plantuml", "graphviz"};
     // constexpr const static std::set<std::string> infoOptsSet /* = */ {"snippet-lookup", "plantuml"};
 
 

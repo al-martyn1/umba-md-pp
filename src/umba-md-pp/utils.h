@@ -9,7 +9,11 @@
 #include "umba/filesys.h"
 #include "umba/string_plus.h"
 #include "umba/transliteration.h"
+//
 #include "tr/tr.h"
+//
+#include "log.h"
+
 
 //
 #include <string>
@@ -103,6 +107,35 @@ StringType tryMakeOutputFilenameFromInput(StringType name)
 inline
 void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTargetName, std::vector<std::string> &foundOptionsFiles)
 {
+    LOG_INFO("opt-files") << "-----------------------------------------" << "\n";
+    LOG_INFO("opt-files") << "Lookup for options files\n";
+    LOG_INFO("opt-files") << "Rendering target (--rendering-target-name): '" << renderingTargetName << "'\n";
+    LOG_INFO("opt-files") << "-------" << "\n";
+
+    std::string optPath = umba::filename::getPath(mdFile);
+
+    std::size_t numCheckLevels = 0;
+    {
+        std::vector<std::string> parts = umba::filename::splitPath(optPath);
+        if (parts.size()>2)
+            numCheckLevels = parts.size() - 2;
+
+        if (!numCheckLevels)
+            numCheckLevels = 1; // Хотя бы текущий уровень надо проверить
+
+        LOG_INFO("opt-files") << "Path parts:" << "\n";
+        for(auto p: parts)
+        {
+            LOG_INFO("opt-files") << "  " << p << "\n";
+        }
+
+        
+        LOG_INFO("opt-files") << "numCheckLevelsnumCheckLevels: " << numCheckLevels << "\n";
+         
+        LOG_INFO("opt-files") << "-------" << "\n";
+
+    }
+
     if (renderingTargetName.empty())
        renderingTargetName = "default";
 
@@ -140,23 +173,35 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
             if (umba::filesys::isFileReadable(testName))
             {
                 foundOptionsFiles.emplace_back(testName);
+                LOG_INFO("opt-files") << "+ Lookup for: '" << testName << "' - Found\n";
+            }
+            else
+            {
+                LOG_INFO("opt-files") << "- Lookup for: '" << testName << "' - Not found\n";
             }
         }
     }
 
     // Проверяем опции по каталогам
 
-    std::string optPath = umba::filename::getPath(mdFile);
+    
 
     bool bStop = false;
-    while(!bStop)
+    for(std::size_t i=0; !bStop && i!=numCheckLevels; ++i)
     {
+        LOG_INFO("opt-files") << "i: " << i << "\n";
+
         for(const auto &ext : extList)
         {
             std::string testName = umba::filename::appendPath(optPath, ext);
             if (umba::filesys::isFileReadable(testName))
             {
                 foundOptionsFiles.emplace_back(testName);
+                LOG_INFO("opt-files") << "+ Lookup for: '" << testName << "' - Found\n";
+            }
+            else
+            {
+                LOG_INFO("opt-files") << "- Lookup for: '" << testName << "' - Not found\n";
             }
         }
 
@@ -167,6 +212,11 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
             {
                 foundOptionsFiles.emplace_back(testName);
                 bStop = true;
+                LOG_INFO("opt-files") << "+ Lookup for (stop file): '" << testName << "' - Found\n";
+            }
+            else
+            {
+                LOG_INFO("opt-files") << "- Lookup for (stop file): '" << testName << "' - Not found\n";
             }
         }
 
@@ -181,6 +231,14 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
     }
 
     std::reverse(foundOptionsFiles.begin(), foundOptionsFiles.end()); // Обратный порядок обработки - самые последние найденные файлы обрабатываются первыми
+
+    LOG_INFO("opt-files") << "-------" << "\n";
+    LOG_INFO("opt-files") << "Option files apply order:" << "\n";
+    for(const auto &fname: foundOptionsFiles)
+    {
+        LOG_INFO("opt-files") << "  " << fname << "\n";
+    }
+    LOG_INFO("opt-files") << "-----------------------------------------" << "\n";
 
 }
 

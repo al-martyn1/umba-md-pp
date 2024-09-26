@@ -145,11 +145,11 @@ bool addImageFilesForCopying( std::map<std::string, ImageFileForCopyInfo>       
             if (!imgIt->second.isSourceFilenameTheSame(imgInfo.getSourceFilenameForCompare()))
             {
                 // Вообще, такое не должно происходить
-                LOG_WARN("img-copy-target-exist") << "target file already added for copying, but source files are different (target file: '" << imgIt->second.getTargetFilename() << "')\n";
-                LOG_WARN("img-copy-target-exist") << "previosly added source file is: '" << imgIt->second.getSourceFilename() << "'\n";
-                LOG_WARN("img-copy-target-exist") << "added from '" << imgIt->second.getDocumentFilename() << "' ('" << imgIt->second.getImageLink() << "')\n";
-                LOG_WARN("img-copy-target-exist") << "current source file is: '" << imgInfo.getSourceFilename() << "'\n";
-                LOG_WARN("img-copy-target-exist") << "added from '" << imgInfo.getDocumentFilename() << "' ('" << imgInfo.getImageLink() << "')\n";
+                LOG_WARN("img-copy-exist") << "target file already added for copying, but source files are different (target file: '" << imgIt->second.getTargetFilename() << "')\n";
+                LOG_WARN("img-copy-exist") << "previosly added source file is: '" << imgIt->second.getSourceFilename() << "'\n";
+                LOG_WARN("img-copy-exist") << "added from '" << imgIt->second.getDocumentFilename() << "' ('" << imgIt->second.getImageLink() << "')\n";
+                LOG_WARN("img-copy-exist") << "current source file is: '" << imgInfo.getSourceFilename() << "'\n";
+                LOG_WARN("img-copy-exist") << "added from '" << imgInfo.getDocumentFilename() << "' ('" << imgInfo.getImageLink() << "')\n";
                 res = false;
             }
         }
