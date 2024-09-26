@@ -275,11 +275,24 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
     std::reverse(foundOptionsFiles.begin(), foundOptionsFiles.end()); // Обратный порядок обработки - самые последние найденные файлы обрабатываются первыми
 
     LOG_INFO("opt-files") << "-------" << "\n";
-    LOG_INFO("opt-files") << "Option files apply order:" << "\n";
-    for(const auto &fname: foundOptionsFiles)
+    if (foundOptionsFiles.empty())
     {
-        LOG_INFO("opt-files") << "  " << fname << "\n";
+        LOG_INFO("opt-files") << "No option files found\n";
     }
+    else if (foundOptionsFiles.size()==1)
+    {
+        LOG_INFO("opt-files") << "Found only one option file: '" << foundOptionsFiles[0] << "'\n";
+    }
+    else
+    {
+        LOG_INFO("opt-files") << "Option files apply order:" << "\n";
+        for(const auto &fname: foundOptionsFiles)
+        {
+            LOG_INFO("opt-files") << "  " << fname << "\n";
+        }
+    }
+
+    
     LOG_INFO("opt-files") << "-----------------------------------------" << "\n";
 
 }
