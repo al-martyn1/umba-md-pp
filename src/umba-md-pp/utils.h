@@ -114,27 +114,34 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
 
     std::string optPath = umba::filename::getPath(mdFile);
 
-    std::size_t numCheckLevels = 0;
+    auto getPathLen = [](const std::string &p)
     {
-        std::vector<std::string> parts = umba::filename::splitPath(optPath);
-        if (parts.size()>2)
-            numCheckLevels = parts.size() - 2;
+        std::vector<std::string> parts = umba::filename::splitPath(p);
+        return parts.size();
+    };
 
-        if (!numCheckLevels)
-            numCheckLevels = 1; // Хотя бы текущий уровень надо проверить
-
-        LOG_INFO("opt-files") << "Path parts:" << "\n";
-        for(auto p: parts)
-        {
-            LOG_INFO("opt-files") << "  " << p << "\n";
-        }
-
-        
-        LOG_INFO("opt-files") << "numCheckLevelsnumCheckLevels: " << numCheckLevels << "\n";
-         
-        LOG_INFO("opt-files") << "-------" << "\n";
-
-    }
+    // std::vector<std::string> parts = umba::filename::splitPath(optPath);
+    //  
+    // std::size_t numCheckLevels = 0;
+    // {
+    //     if (parts.size()>2)
+    //         numCheckLevels = parts.size() - 2;
+    //  
+    //     if (!numCheckLevels)
+    //         numCheckLevels = 1; // Хотя бы текущий уровень надо проверить
+    //  
+    //     LOG_INFO("opt-files") << "Path parts:" << "\n";
+    //     for(auto p: parts)
+    //     {
+    //         LOG_INFO("opt-files") << "  " << p << "\n";
+    //     }
+    //  
+    //     
+    //     LOG_INFO("opt-files") << "numCheckLevelsnumCheckLevels: " << numCheckLevels << "\n";
+    //      
+    //     LOG_INFO("opt-files") << "-------" << "\n";
+    //  
+    // }
 
     if (renderingTargetName.empty())
        renderingTargetName = "default";
@@ -182,14 +189,49 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
         }
     }
 
+    // https://ru.wikipedia.org/wiki/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B8%D0%B9_%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3
+    // https://en.wikipedia.org/wiki/Home_directory
+    // /usr/home/<username>
+    // /user/home/<username>
+    // /home/<username>
+    // /var/users/<username>
+    // /Users/<username> - Mac
+
+    // По умолчанию - лимит два уровня до корня
+    // Обрабатываемый файл лежит в D:\work\project - тут "D:", "work" и "project" - последняя проверенная папка будет D:\work
+    // Обрабатываемый файл лежит в D:\project      - тут "D:" и "project" - последняя проверенная папка будет D:\project
+    // Лимит - 2
+
+    // !!! надо обдумать для других возможных путей
+
+    // Проект лежит в сети - надо проверить префикс, сетевой ли. В сетевом пути на первом месте - хост - он как диск в винде, так что тоже - лимит - 2
+
+    // Win32
+    // Обрабатываемый файл лежит в C:\Users\<user>
+    // В реале файл должен лежать в C:\Users\<user>\Local Bla-bla\<Documents>\Something
+
+    // Linux/Unix
+    // /usr/home/<username>
+    // /user/home/<username>
+    // /home/<username>
+    // /var/users/<username>
+
+    // Mac
+    // /Users/<username> - Mac
+
     // Проверяем опции по каталогам
 
-    
-
     bool bStop = false;
-    for(std::size_t i=0; !bStop && i!=numCheckLevels; ++i)
+    //for(std::size_t i=0; !bStop && i!=numCheckLevels; ++i)
+    while(!bStop)
     {
-        LOG_INFO("opt-files") << "i: " << i << "\n";
+        if (getPathLen(optPath)<2)
+        {
+            bStop = true;
+            continue;
+        }
+
+        //LOG_INFO("opt-files") << "i: " << i << "\n";
 
         for(const auto &ext : extList)
         {
