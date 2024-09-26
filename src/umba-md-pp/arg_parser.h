@@ -23,6 +23,10 @@ template<typename StringType>
 struct ArgParser
 {
 
+    static std::set<std::string> warnOptsSet = {"img-copy-target-exist", "same-file", "img-copy", "plantuml", "graphviz"};
+    static std::set<std::string> infoOptsSet = {"snippet-lookup", "plantuml"};
+
+
 // std::stack<StringType> optFiles;
 //
 //
@@ -67,8 +71,6 @@ int operator()( const StringType                                &a           //!
 {
     //using namespace marty::clang::helpers;
 
-    static std::set<std::string> warnOptsSet = {"img-copy-target-exist", "same-file", "img-copy", "plantuml", "graphviz"};
-    static std::set<std::string> infoOptsSet = {"snippet-lookup", "plantuml"};
 
     std::string dppof = "Don't parse predefined options from ";
 
