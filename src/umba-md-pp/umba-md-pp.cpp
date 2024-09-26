@@ -599,18 +599,19 @@ int safe_main(int argc, char* argv[])
             appConfig.checkFixRenderingTargetName(false /* forView */ );
             std::vector<std::string> foundOptionsFiles;
             findProjectOptionsFiles(curFile, appConfig.renderingTargetName, foundOptionsFiles);
-            if (!foundOptionsFiles.empty())
-            {
-                appConfig.setStrictPathFromFilename(foundOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
-                for(const auto& projectOptionsFile: foundOptionsFiles)
-                {
-                    appConfig.pushSamplesPaths();
-                    argsParser.pushOptionsFileName(projectOptionsFile);
-                    argsParser.parseOptionsFile(projectOptionsFile);
-                    argsParser.popOptionsFileName();
-                    appConfig.popSamplesPathsAndInsertNewAtFront();
-                }
-            }
+            appConfig = applyProjectOptionsFiles(appConfig, argsParser, foundOptionsFiles);
+            // if (!foundOptionsFiles.empty())
+            // {
+            //     appConfig.setStrictPathFromFilename(foundOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
+            //     for(const auto& projectOptionsFile: foundOptionsFiles)
+            //     {
+            //         appConfig.pushSamplesPaths();
+            //         argsParser.pushOptionsFileName(projectOptionsFile);
+            //         argsParser.parseOptionsFile(projectOptionsFile);
+            //         argsParser.popOptionsFileName();
+            //         appConfig.popSamplesPathsAndInsertNewAtFront();
+            //     }
+            // }
 
             // All options applied
             if (appConfig.clearGenerationCaches)
@@ -911,18 +912,19 @@ int safe_main(int argc, char* argv[])
         appConfig.checkFixRenderingTargetName(false /* forView */ );
         std::vector<std::string> foundOptionsFiles;
         findProjectOptionsFiles(curFile, appConfig.renderingTargetName, foundOptionsFiles);
-        if (!foundOptionsFiles.empty())
-        {
-            appConfig.setStrictPathFromFilename(foundOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
-            for(const auto& projectOptionsFile: foundOptionsFiles)
-            {
-                appConfig.pushSamplesPaths();
-                argsParser.pushOptionsFileName(projectOptionsFile);
-                argsParser.parseOptionsFile(projectOptionsFile);
-                argsParser.popOptionsFileName();
-                appConfig.popSamplesPathsAndInsertNewAtFront();
-            }
-        }
+        appConfig = applyProjectOptionsFiles(appConfig, argsParser, foundOptionsFiles);
+        // if (!foundOptionsFiles.empty())
+        // {
+        //     appConfig.setStrictPathFromFilename(foundOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
+        //     for(const auto& projectOptionsFile: foundOptionsFiles)
+        //     {
+        //         appConfig.pushSamplesPaths();
+        //         argsParser.pushOptionsFileName(projectOptionsFile);
+        //         argsParser.parseOptionsFile(projectOptionsFile);
+        //         argsParser.popOptionsFileName();
+        //         appConfig.popSamplesPathsAndInsertNewAtFront();
+        //     }
+        // }
 
         // All options applied
         if (appConfig.clearGenerationCaches)

@@ -184,6 +184,28 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
 
 }
 
+template<typename AppConfigType, typename ArgParserType> inline
+AppConfigType applyProjectOptionsFiles(const AppConfigType &appCfgIn, ArgParserType &argsParser, const std::vector<std::string> &projectOptionsFiles)
+{
+    AppConfigType appCfg = appCfgIn;
+
+    if (!projectOptionsFiles.empty())
+    {
+        appCfg.setStrictPathFromFilename(projectOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
+        for(const auto& projectOptionsFile: projectOptionsFiles)
+        {
+            appCfg.pushSamplesPaths();
+            argsParser.pushOptionsFileName(projectOptionsFile);
+            argsParser.parseOptionsFile(projectOptionsFile);
+            argsParser.popOptionsFileName();
+            appCfg.popSamplesPathsAndInsertNewAtFront();
+        }
+    }
+
+    return appCfg;
+
+}
+
 #if 0
 //----------------------------------------------------------------------------
 inline
