@@ -6,6 +6,7 @@
 
 #ifndef UMBA_MD_PP_VIEW
     #define UMBA_MD_PP_VIEW
+    #define UMBA_PROGRAM_LOCATION_OVERRIDEN_EXECUTABLE_NAME_FOR_CONFIGS "umba-md-pp"
 #endif
 
 
