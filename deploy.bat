@@ -1,5 +1,3 @@
-@call "%~dp0\update_md-pp-view-conf-options.bat"
-@rem ---
 @if exist "%~dp0\set_sln.bat"  @call "%~dp0\set_sln.bat"
 @if exist "%~dp0\set_sln_exes.bat"  @call "%~dp0\set_sln_exes.bat"
 @set DEPLOY_BINS=%SLN_EXES% 

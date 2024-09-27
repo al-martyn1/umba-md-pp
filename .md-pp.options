@@ -1,12 +1,12 @@
 --verbose
---info=+all
+# --info=+all,-plantuml,-opt-files
 --generated-output-path=.\doc\img.generated
 # --graphviz-output-path=.\doc\.generated_images
 # --plant-uml-output-path=.\doc\.generated_images
 --document-language=russian
 --processing-options=no-meta-data
 --processing-options=transliterate-generated-filenames
---copy-images
+# --copy-images
 # --flatten-image-links
 --viewer-copy-render-to-source-location
 #--viewer-render-copy-use-doc-title
