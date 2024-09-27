@@ -33,7 +33,7 @@ struct ArgParser
     static
     const std::set<std::string>& getInfoOptsSet()
     {
-        const static std::set<std::string> s /* = */ {"snippet-lookup", "plantuml", "opt-files"};
+        const static std::set<std::string> s /* = */ {"snippet-lookup", "plantuml", "opt-files", "config"};
         return s;
     }
 
@@ -1228,7 +1228,11 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
-            appConfig.graphVizOptions.savePath = argsParser.makeAbsPath(strVal);
+            auto path = argsParser.makeAbsPath(strVal);
+            LOG_INFO("config") << "Setting Graphviz generated images output path to          : '" << path << "'\n";
+            LOG_INFO("config") << "Previous value of Graphviz generated images output path is: '" << appConfig.graphVizOptions.savePath << "'\n";
+
+            appConfig.graphVizOptions.savePath = path;
 
             // if (!appConfig.graphVizOptions.setTargetFormat(optArg))
             // {
@@ -1415,7 +1419,11 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
-            appConfig.plantUmlOptions.savePath = argsParser.makeAbsPath(strVal);
+            auto path = argsParser.makeAbsPath(strVal);
+            LOG_INFO("config") << "Setting PlantUML generated images output path to          : '" << path << "'\n";
+            LOG_INFO("config") << "Previous value of PlantUML generated images output path is: '" << appConfig.plantUmlOptions.savePath << "'\n";
+
+            appConfig.plantUmlOptions.savePath = path;
 
             return 0;
         }
@@ -1451,7 +1459,12 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
-            appConfig.setGeneratedOutputRoot(argsParser.makeAbsPath(strVal));
+            auto path = argsParser.makeAbsPath(strVal);
+            LOG_INFO("config") << "Setting generated images output path (Graphviz/PlantUML) to: '" << path << "'\n";
+            LOG_INFO("config") << "Previous value of Graphviz generated images output path is : '" << appConfig.graphVizOptions.savePath << "'\n";
+            LOG_INFO("config") << "Previous value of PlantUML generated images output path is : '" << appConfig.plantUmlOptions.savePath << "'\n";
+
+            appConfig.setGeneratedOutputRoot(path);
 
             return 0;
         }

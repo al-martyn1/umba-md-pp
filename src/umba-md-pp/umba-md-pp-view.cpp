@@ -220,9 +220,13 @@ UMBA_APP_MAIN()
 
         #endif
 
+        argsParser.args.push_back("--info=+all,-plantuml,-opt-files");
         //argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
 
-        argsParser.args.push_back(rootPath + "/tests/Умба любит русские имена файлов.md_");
+        // argsParser.args.push_back(rootPath + "/tests/Умба любит русские имена файлов.md_");
+        argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
+        // argsParser.args.push_back("F:\\_github\\umba-tools\\umba-md-pp\\README.md_");
+        
 
 
     }
@@ -239,13 +243,27 @@ UMBA_APP_MAIN()
         //     printNameVersion();
         // }
 
+        LOG_INFO("config") << "-----------------------------------------" << "\n";
+        LOG_INFO("config") << "Processing builtin option files\n";
         if (!argsParser.parseStdBuiltins())
+        {
+            LOG_INFO("config") << "Error found in builtin option files\n";
             return logResultCode(1);
+        }
+        LOG_INFO("config") << "-----------------------------------------" << "\n";
+
         if (argsParser.mustExit)
             return logResultCode(0);
 
+        LOG_INFO("config") << "-----------------------------------------" << "\n";
+        LOG_INFO("config") << "Processing command line arguments\n";
         if (!argsParser.parse())
+        {
+            LOG_INFO("config") << "Error found while parsing command line arguments\n";
             return logResultCode(1);
+        }
+        LOG_INFO("config") << "-----------------------------------------" << "\n";
+
         if (argsParser.mustExit)
             return logResultCode(0);
     // }
@@ -319,19 +337,6 @@ UMBA_APP_MAIN()
     std::vector<std::string> foundOptionsFiles;
     findProjectOptionsFiles(curFile, appConfig.renderingTargetName, foundOptionsFiles);
     appConfig = applyProjectOptionsFiles(appConfig, argsParser, foundOptionsFiles);
-    // if (!foundOptionsFiles.empty())
-    // {
-    //     appConfig.setStrictPathFromFilename(foundOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
-    //     for(const auto& projectOptionsFile: foundOptionsFiles)
-    //     {
-    //         appConfig.pushSamplesPaths();
-    //         argsParser.pushOptionsFileName(projectOptionsFile);
-    //         argsParser.parseOptionsFile(projectOptionsFile);
-    //         argsParser.popOptionsFileName();
-    //         appConfig.popSamplesPathsAndInsertNewAtFront();
-    //     }
-    // }
-
 
     // Необходимо для нормальной генерации доксигеном RTF'а
     appConfig.targetRenderer = TargetRenderer::doxygen;
@@ -416,10 +421,10 @@ UMBA_APP_MAIN()
 
         if (!argsParser.quet)
         {
-            std::cout << "Doc Title: " << docTitle << "\n";
-            std::cout << "Generated final file name: " << finalFilename << "\n";
-            std::cout << "Generated full final file name: " << fullFinalFilename << "\n";
-            std::cout << "Known languages: " << appConfig.getAllLangFileExtentions() << "\n";
+            umbaLogStreamMsg << "Doc Title: " << docTitle << "\n";
+            umbaLogStreamMsg << "Generated final file name: " << finalFilename << "\n";
+            umbaLogStreamMsg << "Generated full final file name: " << fullFinalFilename << "\n";
+            umbaLogStreamMsg << "Known languages: " << appConfig.getAllLangFileExtentions() << "\n";
         }
 
         if (!umba::filesys::writeFile(mdTempFile, resText, true /* overwrite */ ))
@@ -464,13 +469,14 @@ UMBA_APP_MAIN()
         #if defined(UMBA_MD_PP_VIEW_CONSOLE)
 
         {
-            std::cout << "Found Doxygen: " << doxygenExeName << "\n";
-            std::string  doxygenExeNameEscaped  = umba::shellapi::escapeCommandLineArgument(doxygenExeName);
-            std::cout << "Escaped      : " << doxygenExeNameEscaped << "\n";
+            umbaLogStreamMsg << "Found Doxygen: " << doxygenExeName << "\n";
+            //std::string  doxygenExeNameEscaped  = umba::shellapi::escapeCommandLineArgument(doxygenExeName);
+            //std::cout << "Escaped      : " << doxygenExeNameEscaped << "\n";
         }
 
         #endif
 
+        umbaLogStreamMsg << "Calling Doxygen\n";
         std::string callingDoxygenErrMsg;
         //auto systemRes = system(doxygenExeNameEscaped.c_str());
         auto systemRes = umba::shellapi::callSystem(doxygenExeName, &callingDoxygenErrMsg);
@@ -480,12 +486,14 @@ UMBA_APP_MAIN()
             return logResultCode(8);
         }
 
+        umbaLogStreamMsg << "Check for Doxygen generated RTF file: '" << generatedRtfFile << "'\n";
         if (!umba::filesys::isFileReadable(generatedRtfFile))
         {
             showErrorMessageBox("Can't read generated file '" + generatedRtfFile + "'");
             return logResultCode(9);
         }
 
+        umbaLogStreamMsg << "Fix RTF\n";
         //!!! Fix RTF here
         if (!rtfEmbedImagesWorkaround(generatedRtfFile))
         {
@@ -499,6 +507,7 @@ UMBA_APP_MAIN()
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-movefileexa
 
+        umbaLogStreamMsg << "Copy file to source location\n";
         if (appConfig.viewerCopyToSourceLocation)
         {
             std::string targetPath = umba::filename::getPath(inputFilename);
@@ -526,6 +535,7 @@ UMBA_APP_MAIN()
             }
         }
 
+        umbaLogStreamMsg << "Open document\n";
         if (!umba::shellapi::executeOpen(fullFinalFilenameCanonical))
         {
             showErrorMessageBox("Failed to open final file");

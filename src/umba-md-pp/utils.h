@@ -298,9 +298,9 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
 }
 
 template<typename AppConfigType, typename ArgParserType> inline
-AppConfigType applyProjectOptionsFiles(const AppConfigType &appCfgIn, ArgParserType &argsParser, const std::vector<std::string> &projectOptionsFiles)
+AppConfigType applyProjectOptionsFiles(AppConfigType &appCfg, ArgParserType &argsParser, const std::vector<std::string> &projectOptionsFiles)
 {
-    AppConfigType appCfg = appCfgIn;
+    AppConfigType appCfgRes = appCfg;
 
     if (!projectOptionsFiles.empty())
     {
@@ -309,13 +309,19 @@ AppConfigType applyProjectOptionsFiles(const AppConfigType &appCfgIn, ArgParserT
         {
             appCfg.pushSamplesPaths();
             argsParser.pushOptionsFileName(projectOptionsFile);
+            LOG_INFO("config") << "-----------------------------------------" << "\n";
+            LOG_INFO("config") << "Processing options file: '" << projectOptionsFile << "'\n";
             argsParser.parseOptionsFile(projectOptionsFile);
+            LOG_INFO("config") << "-----------------------------------------" << "\n";
             argsParser.popOptionsFileName();
             appCfg.popSamplesPathsAndInsertNewAtFront();
         }
     }
 
-    return appCfg;
+    // Обновлялся appCfg, appCfgRes - предыдущее состояние до обновления
+    std::swap(appCfgRes, appCfg);
+    // Обменяли, теперь appCfg - исходный, appCfgRes - новый
+    return appCfgRes;
 
 }
 

@@ -144,14 +144,71 @@ struct AppConfig
 
     void checkUpdateEmptyGeneratedOutputRootByFilename(const std::string &filename)
     {
-        std::string filePath = umba::filename::getPath(filename);
+        LOG_INFO("config") << "Check generated images output path (Graphviz/PlantUML)\n";
+
+        graphVizOptions.savePath = umba::filename::makeCanonical(graphVizOptions.savePath);
+        plantUmlOptions.savePath = umba::filename::makeCanonical(plantUmlOptions.savePath);
+
+        std::string filePath = umba::filename::makeCanonical(umba::filename::getPath(filename));
         std::string generatedOutputRoot = umba::filename::appendPath(filePath, std::string("img.generated"));
 
         if (plantUmlOptions.savePath.empty())
+        {
+            LOG_INFO("config") << "PlantUML generated images output path is not set, setting it to: '" << generatedOutputRoot << "'\n";
             plantUmlOptions.savePath = generatedOutputRoot;
+        }
 
         if (graphVizOptions.savePath.empty())
+        {
+            LOG_INFO("config") << "Graphviz generated images output path is not set, setting it to: '" << generatedOutputRoot << "'\n";
             graphVizOptions.savePath = generatedOutputRoot;
+        }
+
+        #if defined(UMBA_MD_PP_VIEW)
+
+        LOG_INFO("config") << "Modify generated images output paths for viewer\n";
+        umba::filename::stripLastPathSep(plantUmlOptions.savePath);
+        umba::filename::stripLastPathSep(graphVizOptions.savePath);
+
+        // auto replaceDots = [](std::string str)
+        // {
+        //     for(auto &ch: str)
+        //     {
+        //         if (ch=='.')
+        //             ch = '_';
+        //     }
+        //  
+        //     return str;
+        // };
+
+        auto getLastPathPartsFlatten = [&](const std::string &path, std::size_t nParts)
+        {
+            std::vector<std::string> parts = umba::filename::splitPath(path);
+            if (parts.size()<nParts)
+                nParts = parts.size();
+            std::size_t nPartsDelete = parts.size() - nParts;
+
+            auto partsRes = std::vector<std::string>(parts.begin()+nPartsDelete, parts.end());
+            std::string resStr = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator>( partsRes.begin(), partsRes.end(), '_'/*, [](auto s) { return s; }*/ );
+            //return replaceDots(resStr);
+            return resStr;
+        };
+
+        // plantUmlOptions.savePath = "_view_" + getLastPathPartsFlatten(filename, 3);
+        // graphVizOptions.savePath = "_view_" + getLastPathPartsFlatten(filename, 3);
+
+        plantUmlOptions.savePath =  /* replaceDots( */ plantUmlOptions.savePath /* ) */  + ".view_" + getLastPathPartsFlatten(filename, 3);
+        graphVizOptions.savePath =  /* replaceDots( */ graphVizOptions.savePath /* ) */  + ".view_" + getLastPathPartsFlatten(filename, 3);
+
+        //std::vector<std::string> parts = umba::filename::splitPath(optPath);
+
+
+// StringType flattenPath( StringType fileName
+//                       , const StringType &currentDirAlias       = umba::filename::getNativeCurrentDirAlias<StringType>()
+//                       , const StringType &parentDirAlias        = umba::filename::getNativeParentDirAlias<StringType>()
+//                       )
+
+        #endif
     }
 
     std::string getJava() const

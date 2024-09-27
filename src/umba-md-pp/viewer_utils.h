@@ -284,7 +284,11 @@ std::wstring generateFinalFilenameFromTitle(const std::wstring &titleStr, bool b
 inline
 void showErrorMessageBox(const std::string &str)
 {
-    umba::shellapi::showMessageBox(str, "Umba Markdown PP Viewer", umba::shellapi::MessageBoxKind::iconError);
+    #if defined(UMBA_MD_PP_VIEW_CONSOLE)
+        LOG_MSG << str << "\n";
+    #else
+        umba::shellapi::showMessageBox(str, "Umba Markdown PP Viewer", umba::shellapi::MessageBoxKind::iconError);
+    #endif
 }
 
 //----------------------------------------------------------------------------

@@ -365,7 +365,7 @@ int safe_main(int argc, char* argv[])
 
         // F:\\_github\\umba-tools\\umba-md-pp
         argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
-        //argsParser.args.push_back("F:\\_github\\umba-tools\\umba-md-pp\\README.md_");
+        // argsParser.args.push_back("F:\\_github\\umba-tools\\umba-md-pp\\README.md_");
 
 
 
@@ -375,7 +375,7 @@ int safe_main(int argc, char* argv[])
         // batch-output-root
 
 
-    }
+    } // if (umba::isDebuggerPresent())
 
     //programLocationInfo = argsParser.programLocationInfo;
 
@@ -390,13 +390,27 @@ int safe_main(int argc, char* argv[])
         //     printNameVersion();
         // }
 
+        LOG_INFO("config") << "-----------------------------------------" << "\n";
+        LOG_INFO("config") << "Processing builtin option files\n";
         if (!argsParser.parseStdBuiltins())
+        {
+            LOG_INFO("config") << "Error found in builtin option files\n";
             return 1;
+        }
+        LOG_INFO("config") << "-----------------------------------------" << "\n";
+
         if (argsParser.mustExit)
             return 0;
 
+        LOG_INFO("config") << "-----------------------------------------" << "\n";
+        LOG_INFO("config") << "Processing command line arguments\n";
         if (!argsParser.parse())
+        {
+            LOG_INFO("config") << "Error found while parsing command line arguments\n";
             return 1;
+        }
+        LOG_INFO("config") << "-----------------------------------------" << "\n";
+
         if (argsParser.mustExit)
             return 0;
     // }
@@ -599,38 +613,26 @@ int safe_main(int argc, char* argv[])
             appConfig.checkFixRenderingTargetName(false /* forView */ );
             std::vector<std::string> foundOptionsFiles;
             findProjectOptionsFiles(curFile, appConfig.renderingTargetName, foundOptionsFiles);
-            appConfig = applyProjectOptionsFiles(appConfig, argsParser, foundOptionsFiles);
-            // if (!foundOptionsFiles.empty())
-            // {
-            //     appConfig.setStrictPathFromFilename(foundOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
-            //     for(const auto& projectOptionsFile: foundOptionsFiles)
-            //     {
-            //         appConfig.pushSamplesPaths();
-            //         argsParser.pushOptionsFileName(projectOptionsFile);
-            //         argsParser.parseOptionsFile(projectOptionsFile);
-            //         argsParser.popOptionsFileName();
-            //         appConfig.popSamplesPathsAndInsertNewAtFront();
-            //     }
-            // }
+            auto appConfigForFile = applyProjectOptionsFiles(appConfig, argsParser, foundOptionsFiles);
 
             // All options applied
-            if (appConfig.clearGenerationCaches)
+            if (appConfigForFile.clearGenerationCaches)
             {
-                appConfig.doClearGenerationCaches();
+                appConfigForFile.doClearGenerationCaches();
                 continue;
             }
 
-            appConfig.checkAdjustDocNumericLevels();
-            appConfig.checkTargetFormat();
-            appConfig.checkUpdateEmptyGeneratedOutputRootByFilename(curFile);
+            appConfigForFile.checkAdjustDocNumericLevels();
+            appConfigForFile.checkTargetFormat();
+            appConfigForFile.checkUpdateEmptyGeneratedOutputRootByFilename(curFile);
 
             Document doc;
-            std::string resText     = processMdFile(appConfig, inputFileText, curFile, doc);
+            std::string resText     = processMdFile(appConfigForFile, inputFileText, curFile, doc);
             std::string docTitle    = doc.getDocumentTitleAny();
-            std::string docLanguage = doc.getDocumentLanguage(appConfig);
+            std::string docLanguage = doc.getDocumentLanguage(appConfigForFile);
 
 
-            if (!appConfig.batchOutputRoot.empty() && appConfig.copyImageFiles)
+            if (!appConfigForFile.batchOutputRoot.empty() && appConfigForFile.copyImageFiles)
             {
                 addImageFilesForCopying( imagesToCopy, *fileIt, outputFilename, doc.imageFiles);
             }
@@ -653,7 +655,6 @@ int safe_main(int argc, char* argv[])
 
             try
             {
-
                 umba::filesys::createDirectoryEx( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
 
                 umba::cli_tool_helpers::writeOutput( outputFilename, umba::cli_tool_helpers::IoFileType::regularFile // outputFileType
@@ -913,18 +914,6 @@ int safe_main(int argc, char* argv[])
         std::vector<std::string> foundOptionsFiles;
         findProjectOptionsFiles(curFile, appConfig.renderingTargetName, foundOptionsFiles);
         appConfig = applyProjectOptionsFiles(appConfig, argsParser, foundOptionsFiles);
-        // if (!foundOptionsFiles.empty())
-        // {
-        //     appConfig.setStrictPathFromFilename(foundOptionsFiles[0]); // рестрикции задаем по самому первому (верхнему в файловой иерархии) файлу
-        //     for(const auto& projectOptionsFile: foundOptionsFiles)
-        //     {
-        //         appConfig.pushSamplesPaths();
-        //         argsParser.pushOptionsFileName(projectOptionsFile);
-        //         argsParser.parseOptionsFile(projectOptionsFile);
-        //         argsParser.popOptionsFileName();
-        //         appConfig.popSamplesPathsAndInsertNewAtFront();
-        //     }
-        // }
 
         // All options applied
         if (appConfig.clearGenerationCaches)
