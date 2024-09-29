@@ -221,11 +221,10 @@ UMBA_APP_MAIN()
         #endif
 
         argsParser.args.push_back("--info=+all,-plantuml,-opt-files");
-        //argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
 
         // argsParser.args.push_back(rootPath + "/tests/Умба любит русские имена файлов.md_");
-        argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
-        // argsParser.args.push_back("F:\\_github\\umba-tools\\umba-md-pp\\README.md_");
+        // argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
+        argsParser.args.push_back("F:\\_github\\umba-tools\\umba-md-pp\\README.md_");
         
 
 

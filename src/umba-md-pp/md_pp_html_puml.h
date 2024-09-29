@@ -1,6 +1,7 @@
 #pragma once
 
 #include "umba/umba.h"
+//
 #include "umba/filename.h"
 #include "umba/filesys.h"
 #include "umba/shellapi.h"
@@ -8,14 +9,10 @@
 //
 #include "md_pp_html.h"
 #include "plantuml_options.h"
-
 #include "extern_tools.h"
-
+#include "generation_cache_info.h"
 // 
 #include "log.h"
-
-// For 'system' function
-#include <process.h>
 
 
 // umba::md::
@@ -270,116 +267,46 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     std::size_t pumlHash    = std::hash<std::string>{}(pumlText);
     std::string pumlHashStr = std::to_string(pumlHash);
 
-    bool needPumlProcessing = true;
-
     std::string hashFileText;
+    std::vector<std::string> resultFileNames;
 
-    std::vector<std::string> newHashFileLines;
-    bool needWriteHashLines = true;
     bool hashFound = false;
+
+    GenerationCacheInfo      generationCacheInfo;
 
     if (!AppConfig<std::string>::readInputFile(hashFile, hashFileText))
     {
-        needWriteHashLines = true;
         LOG_INFO("plantuml") << "Failed to read hash file: '" << hashFile << "'\n";
+        generationCacheInfo.addCacheItem(pumlHashStr, outputFilenameCanonicalForCompare);
     }
     else
     {
         LOG_INFO("plantuml") << "Hashes readed from '" << hashFile << "'\n";
-        std::vector<std::string> hashFileLines = marty_cpp::splitToLinesSimple(hashFileText);
-
-        for(auto hashFileLine : hashFileLines)
+        if (!generationCacheInfo.parseCacheFileData(hashFileText))
         {
-            if (hashFound)
-            {
-                newHashFileLines.emplace_back(hashFileLine);
-                continue;
-            }
-            umba::string_plus::trim(hashFileLine);
-            if (hashFileLine.empty())
-            {
-                continue; // пропускаем пустые строки
-            }
-            if (hashFileLine[0]=='#' || hashFileLine[0]==';')
-            {
-                newHashFileLines.emplace_back(hashFileLine);
-                continue; // пропускаем коменты
-            }
-
-            std::string hashStr;
-            std::string filenameStr;
-            if (!umba::string_plus::split_to_pair(hashFileLine, hashStr, filenameStr, ' '))
-            {
-                newHashFileLines.emplace_back(hashFileLine);
-                continue; // Что-то пошло не так
-            }
-
-            umba::string_plus::trim(hashStr);
-            umba::string_plus::trim(filenameStr);
-
-            auto cmpName = umba::filename::makeCanonicalForCompare(filenameStr);
-            if (cmpName==outputFilenameCanonicalForCompare)
+            LOG_WARN("plantuml") << "Failed to parse cache file\n";
+            generationCacheInfo.addCacheItem(pumlHashStr, outputFilenameCanonicalForCompare);
+        }
+        else
+        {
+            if (generationCacheInfo.checkCacheValidOrUpdate(pumlHashStr, outputFilenameCanonicalForCompare))
             {
                 hashFound = true;
-
-                // Файл - найден
-                if (hashStr==pumlHashStr) // Хэш - такой же
-                {
-                    needWriteHashLines = false; // Обновлять не надо
-                    if (umba::filesys::isPathExist(filenameStr) && umba::filesys::isPathFile(filenameStr))
-                    {
-                        needPumlProcessing  = false; // Ничего генерить не надо, граф не поменялся, файл на месте
-                    }
-                    break; // выходим из цикла, потому как newHashFileLines не надо больше обновлять
-                }
-                else // хэш не сошелся, надо перегенерить картинку и обновить строчку хэша в файле
-                {
-                    needWriteHashLines = true;
-                    needPumlProcessing  = true;
-                    newHashFileLines.emplace_back(pumlHashStr + " " + outputFilename); // Обновляем строчку хэша
-                    continue;
-                }
             }
-            else
-            {
-                newHashFileLines.emplace_back(hashFileLine);
-            }
-
-        } // for(hashFileLine : hashFileLines)
-
+        }
     }
 
     if (!hashFound)
     {
         LOG_INFO("plantuml") << "Diagram hash not found, need to generate image\n";
-        newHashFileLines.emplace_back(pumlHashStr + " " + outputFilename); // Добавляем строчку хэша
-        needWriteHashLines = true;
-        needPumlProcessing  = true;
-    }
-
-    if (needWriteHashLines)
-    {
-        LOG_INFO("plantuml") << "Saving hashes to '" << hashFile << "'\n";
-        std::string hashFileText = marty_cpp::mergeLines(newHashFileLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
-        umba::filesys::createDirectoryEx( umba::filename::getPath(hashFile), true /* forceCreatePath */ );
-        if (!umba::filesys::writeFile(hashFile, hashFileText, true /* overwrite */ ))
-        {
-            // Плевать на результат
-        }
     }
 
     //bool hasErrorWhileGenerating = false;
     std::string errMsg;
 
     // Теперь нам надо отпроцессить
-    if (needPumlProcessing)
+    if (!hashFound)
     {
-
-    // auto outputFilename   = plantUmlOptions.generateOutputFilename(appCfg.flattenImageLinks);
-    // auto tempPumlFile     = plantUmlOptions.generateInputTempFilename();
-    // auto tempTargetFolder = plantUmlOptions.generateOutputTempFolderName();
-    // auto hashFile         = plantUmlOptions.generateHashFilename();
-
         LOG_INFO("plantuml") << "Deleting old temp files and folders\n";
         LOG_INFO("plantuml") << "Deleting file  : '" << tempPumlFile << "'\n";
         // Старые временные файлы нам не нужны, даже если остались с прошлого запуска
@@ -438,39 +365,25 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         }
         else
         {
-            // // Записать DOT файл смогли, теперь надо вызвать генерацию
-            // std::string graphvizTool, graphvizToolArgs;
-            // if (!graphVizOptions.generateCommandLine(graphvizTool, graphvizToolArgs, tempDotFile, tempTargetFile))
-            // {
-            //     errMsg = "Failed to generate DOT command line: possible unknown graph type?";
-            // }
-            // else
+            std::string cmdLine = umba::shellapi::makeSystemFunctionCommandString(pumlTool, pumlToolArgs);
+
+            LOG_INFO("plantuml") << "Calling PlantUML diagram generator, command line: " << cmdLine << "\n";
+
+            std::string errMsg;
+            //int resCode = system(toolCommandLine.c_str());
+            int resCode = umba::shellapi::callSystem(pumlTool, pumlToolArgs, &errMsg);
+            if (resCode!=0)
             {
-                //std::string toolExeName     = findGraphvizToolExecutableName(appCfg.dontLookupForGraphviz, graphvizTool);
-                //std::string toolCommandLine = toolExeName + " " + graphvizToolArgs;
-
-
-                std::string cmdLine = umba::shellapi::makeSystemFunctionCommandString(pumlTool, pumlToolArgs);
-
-                LOG_INFO("plantuml") << "Calling PlantUML diagram generator, command line: " << cmdLine << "\n";
-
-                std::string errMsg;
-                //int resCode = system(toolCommandLine.c_str());
-                int resCode = umba::shellapi::callSystem(pumlTool, pumlToolArgs, &errMsg);
-                if (resCode!=0)
-                {
-                    LOG_WARN("plantuml") << "Failed to call PlantUML diagram generator, command line: " << cmdLine << "\n";
-                    errMsg = "Failed to calling JAVA for PlantUML , message: " + std::to_string(resCode)
-                        + ", command line: " + cmdLine;
-                }
+                LOG_WARN("plantuml") << "Failed to call PlantUML diagram generator, command line: " << cmdLine << "\n";
+                errMsg = "Failed to calling JAVA for PlantUML , message: " + std::to_string(resCode)
+                    + ", command line: " + cmdLine;
             }
         }
     }
 
-    std::vector<std::string> resultFileNames;
     std::size_t resulFileCopyErrCount = 0;
 
-    if (needPumlProcessing && errMsg.empty())
+    if (!hashFound && errMsg.empty())
     {
         LOG_INFO("plantuml") << "-----------------------------------------" << "\n";
         LOG_INFO("plantuml") << "Looking for generated files\n";
@@ -562,7 +475,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     } // if (needPumlProcessing && errMsg.empty())
     else
     {
-        if (!needPumlProcessing)
+        if (hashFound)
         {
             LOG_INFO("plantuml") << "No need to call PlantUML generator - no changes found in diagram\n";
         }
@@ -572,11 +485,23 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         }
     }
 
-            // auto lastErr = umba::shellapi::getLastError();
-            // if (umba::filesys::isPathExist(tempPumlFile))
-            // {
-            //     LOG_WARN("plantuml") << "Failed to delete file: '" << tempPumlFile << "': " << umba::shellapi::getErrorMessage(lastErr) << "\n";
-            // }
+    if (!hashFound)
+    {
+        if (resultFileNames.size()>1)
+        {
+            generationCacheInfo.setCacheItem(pumlHashStr, outputFilenameCanonicalForCompare, resultFileNames);
+        }
+        
+        LOG_INFO("plantuml") << "Saving hashes to '" << hashFile << "'\n";
+        std::string hashFileText = generationCacheInfo.toString(appCfg.outputLinefeed); // marty_cpp::mergeLines(newHashFileLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */);
+        umba::filesys::createDirectoryEx( umba::filename::getPath(hashFile), true /* forceCreatePath */ );
+        if (!umba::filesys::writeFile(hashFile, hashFileText, true /* overwrite */ ))
+        {
+            // Плевать на результат
+            LOG_WARN("plantuml") << "Saving hashes to '" << hashFile << "' failed\n";
+        }
+    }
+
 
     LOG_INFO("plantuml") << "-----------------------------------------" << "\n";
     // Тут надо удалить tempTargetFolder со всем его содержимым

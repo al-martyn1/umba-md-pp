@@ -1,5 +1,6 @@
 --verbose
-# --info=+all,-plantuml,-opt-files
+--info=+all
+# --info=-plantuml,-opt-files,-snippet-lookup
 --generated-output-path=.\doc\img.generated
 # --graphviz-output-path=.\doc\.generated_images
 # --plant-uml-output-path=.\doc\.generated_images

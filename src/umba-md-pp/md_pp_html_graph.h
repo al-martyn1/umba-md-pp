@@ -4,18 +4,14 @@
 #include "umba/filename.h"
 #include "umba/filesys.h"
 #include "umba/shellapi.h"
-
 //
 #include "md_pp_html.h"
 #include "graph_viz_options.h"
-
 #include "extern_tools.h"
-
+#include "generation_cache_info.h"
 // 
 #include "log.h"
 
-// For 'system' function
-#include <process.h>
 
 
 // umba::md::
