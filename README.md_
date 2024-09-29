@@ -8,7 +8,7 @@ Language   : Russian
 #// @startebnf
 #// title LISP Grammar
 #// @endebnf
-<plantuml type=ebnf text='LISP Grammar'>
+<plantuml type=ebnf title='LISP Grammar 1'>
 grammars_expression = atomic_symbol | "(", s_expression, ".", s_expression, ")" | list;
 list = "(", s_expression, { s_expression }, ")";
 atomic_symbol = letter, atom_part;
@@ -168,7 +168,7 @@ GitHub/GitLab wiki, например.
 #// @startebnf
 #// title LISP Grammar
 #// @endebnf
-<plantuml type=ebnf text="LISP Grammar">
+<plantuml type=ebnf title="LISP Grammar 2">
 grammars_expression = atomic_symbol | "(", s_expression, ".", s_expression, ")" | list;
 list = "(", s_expression, { s_expression }, ")";
 atomic_symbol = letter, atom_part;
@@ -220,7 +220,7 @@ empty = " ";
 [Boost MSM documentation](https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html)
 
 
-<plantuml text="Sample state machine" rtf-scale="60%" >
+<plantuml title="Sample state machine" rtf-scale="60%" >
 @startuml Player
             skinparam linetype polyline
             state Player{
