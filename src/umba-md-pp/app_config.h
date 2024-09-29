@@ -191,7 +191,7 @@ struct AppConfig
             auto partsRes = std::vector<std::string>(parts.begin()+nPartsDelete, parts.end());
             std::string resStr = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator>( partsRes.begin(), partsRes.end(), '_'/*, [](auto s) { return s; }*/ );
             //return replaceDots(resStr);
-            return resStr;
+            return umba::filename::flattenPath(resStr, false); // no keep ext
         };
 
         // plantUmlOptions.savePath = "_view_" + getLastPathPartsFlatten(filename, 3);
@@ -200,13 +200,6 @@ struct AppConfig
         plantUmlOptions.savePath =  /* replaceDots( */ plantUmlOptions.savePath /* ) */  + ".view_" + getLastPathPartsFlatten(filename, 3);
         graphVizOptions.savePath =  /* replaceDots( */ graphVizOptions.savePath /* ) */  + ".view_" + getLastPathPartsFlatten(filename, 3);
 
-        //std::vector<std::string> parts = umba::filename::splitPath(optPath);
-
-
-// StringType flattenPath( StringType fileName
-//                       , const StringType &currentDirAlias       = umba::filename::getNativeCurrentDirAlias<StringType>()
-//                       , const StringType &parentDirAlias        = umba::filename::getNativeParentDirAlias<StringType>()
-//                       )
 
         #endif
     }

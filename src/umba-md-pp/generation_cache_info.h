@@ -227,8 +227,12 @@ struct GenerationCacheInfo
     {
         GenerationCacheInfoItem *pGenerationCacheInfoItem = 0;
 
+        LOG_INFO("cache") << "Check for hash '" << hashStr << "'\n";
+        LOG_INFO("cache") << "File: '" << masterFileForCmp << "'\n";
+
         if (!findCacheItem(hashStr, &pGenerationCacheInfoItem))
         {
+            LOG_INFO("cache") << "Hash not found, add new entry\n";
             addCacheItem(hashStr, masterFileForCmp);
             return false;
         }
@@ -238,6 +242,9 @@ struct GenerationCacheInfo
         // Элемент кеша найден
         if (pGenerationCacheInfoItem->masterFile!= masterFileForCmp)
         {
+            LOG_INFO("cache") << "Hash found, but file name mismatch, resetting cache entry to new file name\n";
+            LOG_INFO("cache") << "File: '" << pGenerationCacheInfoItem->masterFile << "'\n";
+
             // Но имя файла не соответствует
             pGenerationCacheInfoItem->masterFile = masterFileForCmp;
             pGenerationCacheInfoItem->files.clear(); 
@@ -250,7 +257,7 @@ struct GenerationCacheInfo
             // Нет списка реальных файлов, виртуальный файл является реальным, проверяем его
             if (!umba::filesys::isFileExist(pGenerationCacheInfoItem->masterFile))
             {
-                // Ничего обновлять не нужно
+                LOG_INFO("cache") << "Hash found, but file '" << pGenerationCacheInfoItem->masterFile << "' is missing\n";
                 return false;
             }
         }
@@ -261,11 +268,13 @@ struct GenerationCacheInfo
             if (!umba::filesys::isFileExist(f))
             {
                 // При новом запуске имена и количество файлов может изменится, но мастер файл остаётся прежним
+                LOG_INFO("cache") << "Hash found, but file '" << f << "' is missing\n";
                 pGenerationCacheInfoItem->files.clear(); 
                 return false;
             }
         }
 
+        LOG_INFO("cache") << "File is up to date: '" << masterFileForCmp << "'\n";
         return true; // Всё в порядке, кеш валиден, ничего делать не надо
     }
 
@@ -287,7 +296,7 @@ struct GenerationCacheInfo
 
     std::vector<std::string> getFileNamesByHash(const std::string &hashStr) const
     {
-        GenerationCacheInfoItem *pFoundCacheItem = 0;
+        const GenerationCacheInfoItem *pFoundCacheItem = 0;
 
         if (!findCacheItem(hashStr, &pFoundCacheItem))
             return std::vector<std::string>();

@@ -103,7 +103,13 @@ int plantUmlDiagramGetLineType(std::string line)
 
 //----------------------------------------------------------------------------
 inline
-void plantUmlAddDiagramLabelScaleAndPlantTags(const std::string &labelText, unsigned scale, PlantUmlDiagramType diagramType, std::vector<std::string> &tagLines)
+void plantUmlAddDiagramLabelScaleAndPlantTags( const std::string &labelText
+                                             , const std::string &fromFile
+                                             , const std::string &cmdLine
+                                             , unsigned scale
+                                             , PlantUmlDiagramType diagramType
+                                             , std::vector<std::string> &tagLines
+                                             )
 {
     if (tagLines.empty())
         return;
@@ -134,13 +140,29 @@ void plantUmlAddDiagramLabelScaleAndPlantTags(const std::string &labelText, unsi
             hasStart = true;
             ++insertPos; // Вставляем после текущей строки, которая @startXXX
         }
-
+        
         if (!labelText.empty())
         {
             std::string textToInsert = plantUmlLabelTextEscape(labelText);
             tagLines.insert(tagLines.begin()+insertPos, textToInsert); 
             ++insertPos;
             LOG_INFO("plantuml") << "Inserting label to diagram: " << textToInsert << "\n";
+        }
+
+        if (!fromFile.empty())
+        {
+            //std::string textToInsert = plantUmlLabelTextEscape(labelText);
+            tagLines.insert(tagLines.begin()+insertPos, "' From file: " + fromFile); 
+            ++insertPos;
+            LOG_INFO("plantuml") << "Inserting source file name to diagram: " << fromFile << "\n";
+        }
+
+        if (!cmdLine.empty())
+        {
+            //std::string textToInsert = plantUmlLabelTextEscape(labelText);
+            tagLines.insert(tagLines.begin()+insertPos, "' Command line: " + cmdLine); 
+            ++insertPos;
+            LOG_INFO("plantuml") << "Inserting command line to diagram: " << cmdLine << "\n";
         }
 
         if (scale!=100)
@@ -187,10 +209,6 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
     auto plantUmlOptions = appCfg.plantUmlOptions;
     LOG_INFO("plantuml") << "-----------------------------------------" << "\n";
-    LOG_INFO("plantuml") << "PlantUML generator configuration (Global)" << "\n";
-    plantUmlOptions.logConfig();
-
-    LOG_INFO("plantuml") << "-----------------------------------------" << "\n";
 
     if (mdHtmlTag.hasAttr("title"))
        LOG_INFO("plantuml") << "Diagram: " << mdHtmlTag.getAttrValue("title", std::string()) << "\n";
@@ -199,6 +217,15 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
     if (mdHtmlTag.hasAttr("file"))
        LOG_INFO("plantuml") << "From file: " << mdHtmlTag.getAttrValue("file", std::string()) << "\n";
+
+    LOG_INFO("plantuml") << "-----------------------------------------" << "\n";
+       
+    LOG_INFO("plantuml") << "PlantUML generator configuration (Global)" << "\n";
+    plantUmlOptions.logConfig();
+
+    //LOG_INFO("plantuml") << "-----------------------------------------" << "\n";
+
+
 
 
     //------------------------------
@@ -238,8 +265,8 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
     std::vector<std::string> pumlLines;
 
     // dotLines.emplace_back("// " + makeSystemFunctionCommandString(graphvizTool, graphvizToolArgs));
-    pumlLines.emplace_back("' " + umba::shellapi::makeSystemFunctionCommandString(pumlTool, pumlToolArgs));
-    pumlLines.emplace_back(std::string());
+    // pumlLines.emplace_back("' " + umba::shellapi::makeSystemFunctionCommandString(pumlTool, pumlToolArgs));
+    // pumlLines.emplace_back(std::string());
 
     for(auto tagLine : tagLines)
     {
@@ -251,9 +278,12 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         std::string labelText;
         if (mdHtmlTag.hasAttr("title"))
             labelText = mdHtmlTag.getAttrValue("title");
+        std::string fromFile;
+        if (mdHtmlTag.hasAttr("file"))
+            fromFile = mdHtmlTag.getAttrValue("file");
         if (!plantUmlOptions.showLabels)
             labelText.clear();
-        plantUmlAddDiagramLabelScaleAndPlantTags(labelText, plantUmlOptions.scale, plantUmlOptions.diagramType, pumlLines);
+        plantUmlAddDiagramLabelScaleAndPlantTags(labelText, fromFile, umba::shellapi::makeSystemFunctionCommandString(pumlTool, pumlToolArgs), plantUmlOptions.scale, plantUmlOptions.diagramType, pumlLines);
     }
 
     LOG_INFO("plantuml") << "------- PlantUML Diagram text" << "\n";
@@ -298,7 +328,7 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
 
     if (!hashFound)
     {
-        LOG_INFO("plantuml") << "Diagram hash not found, need to generate image\n";
+        LOG_INFO("plantuml") << "Diagram hash not found, file name mismatch or file not exist, need to generate image\n";
     }
 
     //bool hasErrorWhileGenerating = false;
@@ -485,7 +515,11 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::htm
         }
     }
 
-    if (!hashFound)
+    if (hashFound)
+    {
+        resultFileNames = generationCacheInfo.getFileNamesByHash(pumlHashStr);
+    }
+    else
     {
         if (resultFileNames.size()>1)
         {

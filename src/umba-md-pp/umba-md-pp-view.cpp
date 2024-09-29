@@ -223,8 +223,8 @@ UMBA_APP_MAIN()
         argsParser.args.push_back("--info=+all,-plantuml,-opt-files");
 
         // argsParser.args.push_back(rootPath + "/tests/Умба любит русские имена файлов.md_");
-        // argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
-        argsParser.args.push_back("F:\\_github\\umba-tools\\umba-md-pp\\README.md_");
+        argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
+        // argsParser.args.push_back("F:\\_github\\umba-tools\\umba-md-pp\\README.md_");
         
 
 
@@ -478,11 +478,15 @@ UMBA_APP_MAIN()
         umbaLogStreamMsg << "Calling Doxygen\n";
         std::string callingDoxygenErrMsg;
         //auto systemRes = system(doxygenExeNameEscaped.c_str());
-        auto systemRes = umba::shellapi::callSystem(doxygenExeName, &callingDoxygenErrMsg);
-        if (systemRes<0)
         {
-            showErrorMessageBox("Failed to execute '" + doxygenExeName + "': " + callingDoxygenErrMsg);
-            return logResultCode(8);
+            using namespace umba::shellapi;
+            auto doxygenCmd = makeSystemFunctionCommandString(doxygenExeName);
+            auto systemRes = callSystem(doxygenCmd, &callingDoxygenErrMsg);
+            if (systemRes!=0)
+            {
+                showErrorMessageBox("Failed to execute '" + doxygenCmd + "': " + callingDoxygenErrMsg);
+                return logResultCode(8);
+            }
         }
 
         umbaLogStreamMsg << "Check for Doxygen generated RTF file: '" << generatedRtfFile << "'\n";

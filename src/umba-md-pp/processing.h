@@ -804,7 +804,9 @@ std::vector<std::string> extractImageLinks( const AppConfig<FilenameStringType> 
             auto srcUrl = umba::filename::makeCanonical(url, '/', std::string("."), std::string(".."), true  /* keepLeadingParents */ );
 
             if (flattenImageLinks)
-                url = umba::filename::flattenPath(srcUrl);
+            {
+                url = umba::filename::flattenPath(srcUrl, true); // keep ext
+            }
 
             docTo.imageFiles[srcUrl] = url;
         }

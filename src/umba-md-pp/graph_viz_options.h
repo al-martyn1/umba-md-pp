@@ -127,7 +127,7 @@ struct GraphVizOptions
         name = umba::filename::appendExt(name, enum_serialize(targetFormat));
         if (flattenImageLinks)
         {
-            name = umba::filename::flattenPath(name);
+            name = umba::filename::flattenPath(name, true); // keep ext
         }
 
         return umba::filename::appendPath(getSavePath(), name);
