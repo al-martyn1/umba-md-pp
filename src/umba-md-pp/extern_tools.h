@@ -45,6 +45,14 @@ inline const std::string& findDoxygenBinPath(bool dontTouchSystem)
 //----------------------------------------------------------------------------
 inline std::string findDoxygenExecutableName(bool dontTouchSystem)
 {
+    std::string toolExePathName;
+
+    if (umba::env::getVar("MDPP_DOXYGEN", toolExePathName))
+        return toolExePathName;
+
+    if (umba::env::getVar("DOXYGEN", toolExePathName))
+        return toolExePathName;
+
     return umba::filename::appendPath(findDoxygenBinPath(dontTouchSystem), std::string("doxygen" UMBA_FILESYS_EXE_EXT) );
 }
 
@@ -86,6 +94,10 @@ inline std::string findGraphvizToolExecutableName(bool dontTouchSystem, const st
     std::string graphvizToolUpper = umba::string_plus::toupper_copy(graphvizTool);
 
     std::string toolExePathName; // GRAPHVIZ_DOT...
+
+    if (umba::env::getVar("MDPP_GRAPHVIZ_"+graphvizToolUpper, toolExePathName))
+        return toolExePathName;
+
     if (umba::env::getVar("GRAPHVIZ_"+graphvizToolUpper, toolExePathName))
         return toolExePathName;
 

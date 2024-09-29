@@ -211,6 +211,11 @@ struct AppConfig
 
         if (javaHome.empty())
         {
+            umba::env::getVar /* <std::string> */ ("MDPP_JAVA_HOME", javaHome);
+        }
+
+        if (javaHome.empty())
+        {
             umba::env::getVar /* <std::string> */ ("JAVA_HOME", javaHome);
         }
 
@@ -226,6 +231,16 @@ struct AppConfig
     {
         if (!plantUml.empty())
             return plantUml;
+
+        if (plantUml.empty())
+        {
+            umba::env::getVar /* <std::string> */ ("MDPP_PLANTUML_JAR", plantUml);
+        }
+
+        if (plantUml.empty())
+        {
+            umba::env::getVar /* <std::string> */ ("MDPP_PLANTUML", plantUml);
+        }
 
         if (plantUml.empty())
         {
