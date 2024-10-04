@@ -1,0 +1,25 @@
+How To List All Public Repositories Belonging to a User? So, to list all public repos from a user, send a 
+GET request to https://api.github.com/users/<USER-NAME>/repos , replacing <USER-NAME> with the actual user 
+from whom you want to retrieve the repositories.
+
+https://api.github.com/users/al-martyn1/repos
+
+https://www.zenrows.com/blog/wget-proxy#get-an-output-file-via-wget
+
+Connecting to 10.26.8.10:3128 ((null))
+  HTTP/1.1 301 Moved permanently
+  Accept-CH: Sec-CH-UA-Platform-Version, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA, Sec-CH-UA-Full-Version-List, Sec-CH-UA-WoW64, Sec-CH-UA-Arch, Sec-CH-UA-Bitness, Sec-CH-UA-Platform, Sec-CH-UA-Full-Version, Viewport-Width, DPR, Device-Memory, RTT, Downlink, ECT, Width
+  Cache-Control: max-age=1209600,private
+  Date: Fri, 04 Oct 2024 13:09:28 GMT
+  Location: https://ya.ru/
+  HTTP/1.0 400 Bad Request
+wget: server returned error: HTTP/1.0 400 Bad Request
+
+HTTPS_PROXY=http://10.26.8.10:3128
+HTTP_PROXY=http://10.26.8.10:3128
+
+
+wget -S -Y on https://ya.ru
+-Y - proxy
+wget --header "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0" https://ya.ru
+wget -S -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0" https://ya.ru
