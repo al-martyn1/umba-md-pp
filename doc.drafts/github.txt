@@ -4,6 +4,8 @@ from whom you want to retrieve the repositories.
 
 https://api.github.com/users/al-martyn1/repos
 
+https://docs.github.com/ru/rest/repos?apiVersion=2022-11-28
+
 https://www.zenrows.com/blog/wget-proxy#get-an-output-file-via-wget
 
 Connecting to 10.26.8.10:3128 ((null))
