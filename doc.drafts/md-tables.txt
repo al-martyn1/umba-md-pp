@@ -1,0 +1,14 @@
+Прекратите делать таблицы в Markdown - https://habr.com/ru/articles/836620/
+    Тут есть набор ссылок на стандарты маркдауна
+    AsciiDoc - оно 'semantically equivalent to DocBook'
+    Зачем DocBook, если есть DITA, если уж мы про XML-based форматы?
+    Прискорбно, что ни adoc ни rst до сих пор не завезли ни в joplin ни в obsidian.
+Нормальные таблицы в Markdown - https://habr.com/ru/articles/474826/
+MarkedText - маркдаун здорового человека - https://page.hyoo.ru/#!=6lqg5m_deygy0
+    В английской Википедии есть сравнительный обзор легковесных языков разметки - https://en.wikipedia.org/wiki/Lightweight_markup_language
+Новый облегчённый язык разметки текста на основе парных кавычек (pq) - https://habr.com/ru/articles/348218/
+WackoWiki - https://habr.com/ru/articles/348218/
+
+И для Markdown (и даже CommonMark), насколько мне известно, также нет официальной BNF/EBNF/ABNF (хотя есть неофициальные, например github.com/Domysee/MarkdownEbnf) - https://github.com/Domysee/MarkdownEbnf
+
+В ОС семейства Windows можно с помощью программы AutoHotkey назначить глобальные горячие клавиши для ввода любых спец-символов.
