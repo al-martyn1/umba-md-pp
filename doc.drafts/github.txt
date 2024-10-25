@@ -1,10 +1,12 @@
-How To List All Public Repositories Belonging to a User? So, to list all public repos from a user, send a 
+How to Use the GitHub API to List Repositories - https://stateful.com/blog/github-api-list-repositories
 GET request to https://api.github.com/users/<USER-NAME>/repos , replacing <USER-NAME> with the actual user 
 from whom you want to retrieve the repositories.
 
 https://api.github.com/users/al-martyn1/repos
 
 https://docs.github.com/ru/rest/repos?apiVersion=2022-11-28
+
+
 
 https://www.zenrows.com/blog/wget-proxy#get-an-output-file-via-wget
 
