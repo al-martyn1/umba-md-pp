@@ -46,7 +46,7 @@
 #include "umba/filename.h"
 #include "umba/format_message.h"
 #include "umba/id_gen.h"
-#include "umba/char_class.h"
+//#include "umba/char_class.h"
 
 #include "snippet_options.h"
 
