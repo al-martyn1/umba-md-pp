@@ -804,13 +804,31 @@ int safe_main(int argc, char* argv[])
             copyDocumentImageFiles(infoLog, imagesToCopy, bOverwrite, &gitAddFiles);
         }
 
+
         std::string gitAddText;
+
+        if (useBatSyntax)
+        {
+            gitAddText.append("@echo off\n"
+                              "setlocal enableextensions enabledelayedexpansion\n"
+                              "for /f \"usebackq tokens=2 delims=:\" %%i in (`chcp`) do set SAVED_CODE_PAGE=%%~i\n"
+                              "echo \"%SAVED_CODE_PAGE%\"\n"
+                              "chcp 65001\n"
+                             );
+        }
+
         for(const auto addFile : gitAddFiles)
         {
             gitAddText.append("git add \"");
             gitAddText.append(umba::filename::makeCanonical(addFile, useBatSyntax?'\\':'/'));
             gitAddText.append("\"\n");
         }
+
+        if (useBatSyntax)
+        {
+            gitAddText.append("chcp %SAVED_CODE_PAGE%\n");
+        }
+
 
 
         if (!appConfig.gitAddBatchFileName.empty())
