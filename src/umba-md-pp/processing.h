@@ -852,7 +852,10 @@ std::vector<std::string> stripLocalLinksExtentions( const AppConfig<FilenameStri
                                                   )
 {
     if (!appConfig.stripExtentions)
+    {
+        LOG_INFO("strip-extentions") << "Option is turned off\n";
         return lines;
+    }
 
     const bool stripExtentions = appConfig.stripExtentions;
     //UMBA_USED(flattenImageLinks);
@@ -860,15 +863,35 @@ std::vector<std::string> stripLocalLinksExtentions( const AppConfig<FilenameStri
     auto urlHandler = [&](std::string url, bool bImage)
     {
         if (bImage || umba::md::isUrlAbsolute(url))
+        {
+            LOG_INFO("strip-extentions") << "Image found: '" << url << "'\n";
             return url;
+        }
+
+        LOG_INFO("strip-extentions") << "Link found: '" << url << "'\n";
 
         std::string urlPath;
         std::string urlTag ;
         umba::md::splitUrlToPathAndTag(url, urlPath, urlTag);
 
+
+    // bool isSupportedExtention(std::string e) const
+    // bool isSupportedSourceExtention(std::string e) const
+
         if (stripExtentions)
         {
-            urlPath = umba::filename::getPathFile(urlPath);
+            auto ext = umba::filename::getExt(urlPath);
+            if (appConfig.isSupportedExtention(ext) || appConfig.isSupportedSourceExtention(ext))
+            {
+                LOG_INFO("strip-extentions") << "Extention supported: '" << ext << "'\n";
+                LOG_INFO("strip-extentions") << "Stripping, urlPath: '" << urlPath << "'\n";
+                urlPath = umba::filename::getPathFile(urlPath);
+                LOG_INFO("strip-extentions") << "After, urlPath: '" << urlPath << "'\n";
+            }
+            else
+            {
+                LOG_INFO("strip-extentions") << "Extention NOT supported: '" << ext << "'\n";
+            }
         }
 
         return umba::md::mergeUrlFromPathAndTag(urlPath, urlTag);

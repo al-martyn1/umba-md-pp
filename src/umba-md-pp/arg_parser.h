@@ -33,7 +33,7 @@ struct ArgParser
     static
     const std::set<std::string>& getInfoOptsSet()
     {
-        const static std::set<std::string> s /* = */ {"snippet-lookup", "plantuml", "opt-files", "config"};
+        const static std::set<std::string> s /* = */ {"snippet-lookup", "plantuml", "graphviz", "opt-files", "config", "strip-extentions"};
         return s;
     }
 
