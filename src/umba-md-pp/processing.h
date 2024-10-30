@@ -12,6 +12,7 @@
 #include "umba/null_inserter.h"
 #include "umba/macros.h"
 #include "umba/macro_helpers.h"
+#include "umba/text_utils.h"
 //
 #include "marty_yaml_toml_json/json_utils.h"
 #include "marty_yaml_toml_json/yaml_json.h"
@@ -1664,7 +1665,7 @@ std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> 
             if (appCfg.testProcessingOption(ProcessingOptions::generateToc))
             {
                 makeShureEmptyLine(resLines);
-                umba::vectorPushBack(resLines, doc.tocLines);
+                umba::vectorPushBack(resLines, doc.getTocLines());
                 makeShureEmptyLine(resLines);
                 tocAdded = true;
             }
@@ -1927,7 +1928,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
 
     if (!tocAdded && appCfg.testProcessingOption(ProcessingOptions::generateToc))
     {
-        std::vector<std::string> tmpLines = doc.tocLines;
+        std::vector<std::string> tmpLines = doc.getTocLines(); // doc.tocLines;
         //umba::vectorPushBack(tmpLines, doc.tocLines);
         makeShureEmptyLine(tmpLines);
         umba::vectorPushBack(tmpLines, resLines);

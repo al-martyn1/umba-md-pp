@@ -1,3 +1,4 @@
+--processing-options=generate-toc
 --verbose
 --info=+all
 # --info=-plantuml,-opt-files,-snippet-lookup

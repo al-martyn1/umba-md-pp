@@ -363,6 +363,9 @@ int safe_main(int argc, char* argv[])
         //argsParser.args.push_back("");
         #endif
 
+        argsParser.args.push_back("--processing-options=generate-toc");
+        
+
         // F:\\_github\\umba-tools\\umba-md-pp
         argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
         // argsParser.args.push_back("F:\\_github\\umba-tools\\umba-md-pp\\README.md_");

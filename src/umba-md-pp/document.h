@@ -1,6 +1,7 @@
 #pragma once
 
 #include "app_config.h"
+#include "umba/text_utils.h"
 //
 #include <string>
 #include <vector>
@@ -33,6 +34,10 @@ struct Document
 
     std::unordered_map<std::string, std::string>                 imageFiles; // src -> dst
 
+    std::vector<std::string> getTocLines() const
+    {
+        return umba::text_utils::textStripCommonIndentCopy(tocLines, [](char ch){ return ch==' '; });
+    }
 
     template<typename FilenameStringType>
     bool getMetaTagValueAsText(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
