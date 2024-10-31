@@ -367,10 +367,14 @@ int safe_main(int argc, char* argv[])
         
 
         // F:\\_github\\umba-tools\\umba-md-pp
-        argsParser.args.push_back("C:\\work\\github\\umba-tools\\umba-md-pp\\README.md_");
-        // argsParser.args.push_back("F:\\_github\\umba-tools\\umba-md-pp\\README.md_");
-
-
+        #if defined(__has_include)
+            #if __has_include("F:/_github/umba-tools/umba-md-pp/README.md_")
+                argsParser.args.push_back("F:/_github/umba-tools/umba-md-pp/README.md_");
+            #elif __has_include("C:/work/github/umba-tools/umba-md-pp/README.md_")
+                argsParser.args.push_back("C:/work/github/umba-tools/umba-md-pp/README.md_");
+            #endif
+        #else
+        #endif
 
         //argsParser.args.push_back("-q");
 
