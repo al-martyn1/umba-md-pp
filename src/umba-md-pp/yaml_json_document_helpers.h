@@ -13,6 +13,8 @@ std::string generateDocMetadata(const AppConfig<FilenameStringType> &appCfg, Doc
 
     // emitter << YAML::Key << "var1" << YAML::Value << "value1";
 
+    std::size_t metaTagsAddedCout = 0;
+
     std::vector<std::string>::const_iterator mtIt = appCfg.metaTagsSerializeList.begin();
     for(; mtIt!=appCfg.metaTagsSerializeList.end(); ++mtIt)
     {
@@ -30,6 +32,7 @@ std::string generateDocMetadata(const AppConfig<FilenameStringType> &appCfg, Doc
         const std::vector<std::string> &tagData = tit->second;
 
         // Имя тэга не пустое, вектор со значениями также не пуст, надо что-то выдать
+        ++metaTagsAddedCout;
 
         emitter << YAML::Key << tagSerializedName;
 
@@ -142,6 +145,9 @@ std::string generateDocMetadata(const AppConfig<FilenameStringType> &appCfg, Doc
 // };
 
     emitter << YAML::EndMap;
+
+    if (!metaTagsAddedCout)
+        return std::string();
 
     // std::ofstream ofout(file);
     // ofout << emitter.c_str();
@@ -263,7 +269,9 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
 
                 if (valType==nlohmann::detail::value_t::array)
                 {
-                    if (tagType!=MetaTagType::list && tagType!=MetaTagType::set)
+                    // Элемент списка/массива не надо разбирать, даже если он commaList или commaSet
+                    // Но добавлять надо
+                    if (tagType!=MetaTagType::list && tagType!=MetaTagType::set && tagType!=MetaTagType::commaList && tagType!=MetaTagType::commaSet)
                         continue;
 
                     for (auto vel : val.items())
@@ -287,7 +295,8 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
 
                 if (tagType==MetaTagType::commaList || tagType==MetaTagType::commaSet)
                 {
-                    umba::vectorPushBack(tagValsVec, marty_cpp::splitToLinesSimple(strVal, false, ','));
+                    // Если одиночная строка является commaList или commaSet, то надо разобрать
+                    umba::vectorPushBack(tagValsVec, splitAndTrimAndSkipEmpty(strVal, ','));
                 }
                 else
                 {

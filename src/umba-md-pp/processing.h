@@ -1965,13 +1965,16 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
     {
         // std::cout << "Write metadata\n";
         auto metadataText  = generateDocMetadata(appCfg, doc);
-        auto metadataLines = marty_cpp::splitToLinesSimple(metadataText);
-        std::vector<std::string> tmpLines;
-        tmpLines.emplace_back(std::string("---"));
-        umba::vectorPushBack(tmpLines, metadataLines);
-        tmpLines.emplace_back(std::string("---"));
-        umba::vectorPushBack(tmpLines, resLines);
-        std::swap(tmpLines, resLines);
+        if (!metadataText.empty())
+        {
+            auto metadataLines = marty_cpp::splitToLinesSimple(metadataText);
+            std::vector<std::string> tmpLines;
+            tmpLines.emplace_back(std::string("---"));
+            umba::vectorPushBack(tmpLines, metadataLines);
+            tmpLines.emplace_back(std::string("---"));
+            umba::vectorPushBack(tmpLines, resLines);
+            std::swap(tmpLines, resLines);
+        }
     }
     else
     {

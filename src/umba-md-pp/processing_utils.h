@@ -411,7 +411,7 @@ void makeShureEmptyLine(std::vector<std::string> &lines)
 {
     if (lines.empty())
     {
-        lines.emplace_back(std::string());
+        // lines.emplace_back(std::string());
     }
     else
     {

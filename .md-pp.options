@@ -1,3 +1,7 @@
+#--serialize-meta-tags=+title,author,description,date,language
+--serialize-meta-tags=-
+#--processing-options=meta-data
+#--processing-options=no-meta-data
 --processing-options=generate-toc
 --verbose
 --info=+all
@@ -6,7 +10,6 @@
 # --graphviz-output-path=.\doc\.generated_images
 # --plant-uml-output-path=.\doc\.generated_images
 --document-language=russian
---processing-options=no-meta-data
 #--processing-options=transliterate-generated-filenames
 # --copy-images
 # --flatten-image-links

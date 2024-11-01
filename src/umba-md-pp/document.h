@@ -134,7 +134,7 @@ struct Document
         if (!getMetaTagValueAsText(appCfg, tag, listDelimiter, tagText))
             return false;
 
-        std::vector<std::string> lines = marty_cpp::splitToLinesSimple(tagText, false, '\n');
+        std::vector<std::string> lines = splitAndTrimAndSkipEmpty(tagText, '\n');
         tagText = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator>( lines.begin(), lines.end(), ' ' );
         umba::string_plus::trim(tagText);
 
@@ -160,7 +160,7 @@ struct Document
         if (allTakenTitles.empty() || allTakenTitles[0].empty())
             return std::string();
 
-        std::vector<std::string> titleSplitted = marty_cpp::splitToLinesSimple(allTakenTitles[0], false, '\n');
+        std::vector<std::string> titleSplitted = splitAndTrimAndSkipEmpty(allTakenTitles[0], '\n');
         // auto returnArg = [](const std::string &str) { return str; };
         // auto res = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator, decltype(returnArg) >( titleSplitted.begin(), titleSplitted.end(), ' ', returnArg );
         // auto returnArg = [](const std::string &str) { return str; };

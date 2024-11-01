@@ -6,6 +6,8 @@
 #include "umba/macros.h"
 #include "umba/macro_helpers.h"
 //
+#include "utils.h"
+//
 #include <exception>
 #include <stdexcept>
 #include <unordered_set>
@@ -1716,7 +1718,7 @@ std::string serializeSnippetOptions(std::unordered_set<SnippetOptions> flagOptio
 inline
 SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optListStr, std::unordered_set<SnippetOptions> *pFlagOptions, std::unordered_map<SnippetOptions, int> *pIntOptions=0, const umba::macros::StringStringMap<std::string> *pCondVars=0)
 {
-    std::vector<std::string> optList = marty_cpp::splitToLinesSimple(optListStr, false, ',');
+    std::vector<std::string> optList = splitAndTrimAndSkipEmpty(optListStr, ',');
 
     //const std::unordered_map<std::string, std::string> *pCondVars
 
@@ -1832,7 +1834,7 @@ SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optList
 inline
 SnippetOptionsParsingResult deserializeProcessingOptions(const std::string &optListStr, std::unordered_set<ProcessingOptions> &flagOptions)
 {
-    std::vector<std::string> optList = marty_cpp::splitToLinesSimple(optListStr, false, ',');
+    std::vector<std::string> optList = splitAndTrimAndSkipEmpty(optListStr, ',');
 
     for(auto opt : optList)
     {

@@ -315,7 +315,6 @@ struct GenerationCacheInfo
 
 
 
-// std::vector<std::string> hashFileLines = marty_cpp::splitToLinesSimple(hashFileText);
 
 
 

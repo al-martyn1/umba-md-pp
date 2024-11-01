@@ -21,6 +21,33 @@
 
 //----------------------------------------------------------------------------
 template<typename StringType> inline
+std::vector<StringType> splitAndTrimAndSkipEmpty(const StringType &str, typename StringType::value_type ch)
+{
+    // на замену marty_cpp::splitToLinesSimple(paths, false, ',')
+
+    // return marty_cpp::splitToLinesSimple(str, false, ch);
+
+    using CharType = StringType::value_type;
+
+    auto vec = marty_cpp::splitToLinesSimple(str, false, ch);
+
+    for(auto &v : vec)
+    {
+        v = marty_cpp::simple_trim(v, [](CharType ch) { return ch==' '; });
+    }
+
+    std::vector<StringType> res; res.reserve(vec.size());
+    for(auto && v : vec)
+    {
+        if (!v.empty())
+            res.emplace_back(v);
+    }
+
+    return res;
+}
+
+//----------------------------------------------------------------------------
+template<typename StringType> inline
 StringType generateOutputFileNameFromInputFileName(StringType name)
 {
     auto pathFile = umba::filename::getPathFile(name);

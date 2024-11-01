@@ -372,7 +372,7 @@ struct AppConfig
 
     bool addBatchScanPaths(const std::string &paths, bool bRecurse)
     {
-        return addBatchScanPaths(marty_cpp::splitToLinesSimple(paths, false, ','), bRecurse);
+        return addBatchScanPaths(splitAndTrimAndSkipEmpty(paths, ','), bRecurse);
     }
 
 
@@ -462,7 +462,7 @@ struct AppConfig
 
     bool addMdppExtentions(const std::string &extListStr)
     {
-        return addMdppExtentions(marty_cpp::splitToLinesSimple(extListStr, false, ','));
+        return addMdppExtentions(splitAndTrimAndSkipEmpty(extListStr, ','));
     }
 
     FilenameStringType getSamplesPathsAsMergedString(const FilenameStringType &delim) const
@@ -549,6 +549,12 @@ struct AppConfig
         if (str.empty())
             return true;
 
+        if (str=="-")
+        {
+            metaTagsSerializeList.clear();
+            return true;
+        }
+
         if (str.front()=='+')
         {
             str.erase(0,1);
@@ -558,7 +564,7 @@ struct AppConfig
             metaTagsSerializeList.clear();
         }
 
-        auto tags = marty_cpp::splitToLinesSimple(str, false, ',');
+        auto tags = splitAndTrimAndSkipEmpty(str, ',');
 
         for(auto t: tags)
         {
@@ -585,7 +591,7 @@ struct AppConfig
 
     bool addMetaTagType(const std::string &typeStr, const std::string &tags)
     {
-        return addMetaTagType(typeStr, marty_cpp::splitToLinesSimple(tags, false, ','));
+        return addMetaTagType(typeStr, splitAndTrimAndSkipEmpty(tags, ','));
     }
 
     bool addMetaTagType(const std::string &str)
@@ -747,7 +753,7 @@ struct AppConfig
     {
         umba::string_plus::trim(nameValue);
 
-        std::vector<std::string> nameValuePair = marty_cpp::splitToLinesSimple(nameValue, false, ':');
+        std::vector<std::string> nameValuePair = splitAndTrimAndSkipEmpty(nameValue, ':');
         if (nameValuePair.empty())
             return false;
         if (nameValuePair.size()<2)
@@ -993,13 +999,13 @@ struct AppConfig
 
     bool addLangExtentions(const std::string &lang, const FilenameStringType &extList)
     {
-        std::vector<FilenameStringType> extListVec = marty_cpp::splitToLinesSimple(extList, false, (typename FilenameStringType::value_type)',');
+        std::vector<FilenameStringType> extListVec = splitAndTrimAndSkipEmpty(extList, (typename FilenameStringType::value_type)',');
         return addLangExtentions(lang, extListVec);
     }
 
     bool addLangExtentions(const std::string &langAndExts)
     {
-        std::vector<FilenameStringType> langExtsPair = marty_cpp::splitToLinesSimple(langAndExts, false, (typename FilenameStringType::value_type)':');
+        std::vector<FilenameStringType> langExtsPair = splitAndTrimAndSkipEmpty(langAndExts, (typename FilenameStringType::value_type)':');
         if (langExtsPair.size()<2)
             return false;
         return addLangExtentions(langExtsPair[0], langExtsPair[1]);

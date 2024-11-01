@@ -363,8 +363,9 @@ int safe_main(int argc, char* argv[])
         //argsParser.args.push_back("");
         #endif
 
-        argsParser.args.push_back("--processing-options=generate-toc");
-        
+        // argsParser.args.push_back("--processing-options=generate-toc");
+        argsParser.args.push_back("--serialize-meta-tags=+title,author,description,date,language");
+        argsParser.args.push_back("--processing-options=meta-data");
 
         // F:\\_github\\umba-tools\\umba-md-pp
         #if defined(__has_include)

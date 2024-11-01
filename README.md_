@@ -1,4 +1,7 @@
 ---
+Author     :
+  - Имя <name@at.domain.com>
+  - Имя2 <name2@domain.com>
 Title      : Препроцессор для Markdown
 Description: "Утилита, добавляющая некоторые возможности к Markdown"
 Date       : April 25, 2024

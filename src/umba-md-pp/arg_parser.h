@@ -632,7 +632,7 @@ int operator()( const StringType                                &a           //!
             auto optArg = opt.optArg;
             if (!appConfig.updateProcessingOptions(optArg))
             {
-                LOG_ERR<<"Setting processing options failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting processing options failed, invalid argument: '" << optArg << "' (--processing-options)\n";
                 return -1;
             }
 
@@ -654,7 +654,7 @@ int operator()( const StringType                                &a           //!
             auto optArg = opt.optArg;
             if (!appConfig.addConditionVar(optArg))
             {
-                LOG_ERR<<"Setting condition variable failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting condition variable failed, invalid argument: '" << optArg << "' (--set-condition-var)\n";
                 return -1;
             }
 
@@ -677,7 +677,7 @@ int operator()( const StringType                                &a           //!
             auto renderer = enum_deserialize(optArg, TargetRenderer::invalid);
             if (renderer==TargetRenderer::invalid)
             {
-                LOG_ERR<<"Setting target renderer failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting target renderer failed, invalid argument: '" << optArg << "' (--target-renderer)\n";
                 return -1;
             }
 
@@ -702,7 +702,7 @@ int operator()( const StringType                                &a           //!
             auto tgFormat = enum_deserialize(optArg, TargetFormat::invalid);
             if (tgFormat==TargetFormat::invalid)
             {
-                LOG_ERR<<"Setting target format failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Setting target format failed, invalid argument: '" << optArg << "' (--target-format)\n";
                 return -1;
             }
 
