@@ -27,7 +27,7 @@ std::vector<StringType> splitAndTrimAndSkipEmpty(const StringType &str, typename
 
     // return marty_cpp::splitToLinesSimple(str, false, ch);
 
-    using CharType = StringType::value_type;
+    using CharType = typename StringType::value_type;
 
     auto vec = marty_cpp::splitToLinesSimple(str, false, ch);
 
