@@ -776,7 +776,14 @@ int safe_main(int argc, char* argv[])
                 pagesIndexText.append("   - [");
                 pagesIndexText.append(thisPageTitleUtf);
                 pagesIndexText.append("](");
-                pagesIndexText.append(umba::filename::makeCanonical(it->second, '/'));
+                auto linkTarget = it->second;
+                // stripExtentions
+                // --strip-extentions
+                // LOG_INFO("strip-extentions")
+                // page-index
+                if (appConfig.stripExtentions)
+                    linkTarget = umba::filename::getPathFile(linkTarget); // не добавляем в индекс расширение
+                pagesIndexText.append(umba::filename::makeCanonical(linkTarget, '/'));
                 pagesIndexText.append(")\n");
             }
 
@@ -796,6 +803,7 @@ int safe_main(int argc, char* argv[])
             }
 
             pageIndexFileName = umba::filename::makeCanonical(pageIndexFileName);
+
 
             infoLog << "Writting page index file: " << pageIndexFileName << "\n";
 
