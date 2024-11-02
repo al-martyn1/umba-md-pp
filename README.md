@@ -18,6 +18,8 @@
 - [Boost MSM](#user-content-boost-msm)
 
 
+- URL: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
+---
 ![LISP Grammar 1](doc/img.generated/diagram_0000.svg)
 
 
@@ -198,6 +200,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 # Common options
 --processing-options=generate-toc,title
 --set-insert-options=fail,path,filename-line-no,trim-arround
+--batch-page-index-file=Index.md
 
 # Graphviz common options
 --graphviz-output-format=svg
@@ -218,7 +221,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --add-mdpp-extentions=_markdown,_markdown_,markdown_
 #--add-mdpp-extentions=_text,_text_,text_
 
-# Исключаем подкаталоги со следующими именами
+# Исключаем из сканирования в пакетном режиме подкаталоги со следующими именами
 --batch-exclude-dirs=_md,_md_,md_
 --batch-exclude-dirs=_mkd,_mkd_,mkd_
 --batch-exclude-dirs=_mdwn,_mdwn_,mdwn_
@@ -235,6 +238,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 # При генерации вьювером название файла задается на основании заголовка (из тэгов или первого заголовка, или из первых строк) документа
 # Но мы придерживаемся идеи не использовать русские имена без крайней необходимости
 --processing-options=transliterate-generated-filenames
+# --processing-options=no-transliterate-generated-filenames
 
 # Metatags misspelling replaces and transliteration result replaces
 --meta-tag-replace=avtor:author
@@ -258,7 +262,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-replace=yazyk dokumenta:language
 --meta-tag-replace=otkaz ot otvetstvennosti:disclaimer
 
-# Metatags serialization
+# Metatags serialization: CanonicalName:TargetName
 --meta-tag-serialize=title:Title
 --meta-tag-serialize=disclaimer:Disclaimer
 --meta-tag-serialize=description:Description
@@ -268,11 +272,12 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-serialize=tags:Tags
 --meta-tag-serialize=version:Version
 --meta-tag-serialize=language:Language
+--meta-tag-serialize=url:Url
 
 # Metatag types
 --meta-tag-set-type=comma-set:category,tags
 --meta-tag-set-type=comma-list:author
---meta-tag-set-type=text-first:title,date
+--meta-tag-set-type=text-first:title,date,url
 --meta-tag-set-type=text-merge:disclaimer,description
 
 
