@@ -113,6 +113,7 @@ struct AppConfig
 
     //bool                                                  batchGeneratePagesIndex = false;
     std::string                                           batchPageIndexFileName;
+    bool                                                  generatePageIndexFile         = false;
     bool                                                  batchSplitPageIndex           = false;
     bool                                                  copyImageFiles                = false;
     bool                                                  stripExtentions               = false;

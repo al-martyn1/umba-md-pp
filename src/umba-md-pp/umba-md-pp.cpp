@@ -702,7 +702,20 @@ int safe_main(int argc, char* argv[])
         std::string pageIndexTitle = marty_tr::tr("title"   , "pages-index", langTag);
         std::string noTitle        = marty_tr::tr("no-title", "pages-index", langTag);
 
-        if (!appConfig.batchPageIndexFileName.empty() && !pagesIndex.empty())
+        bool generatePageIndexFile = appConfig.generatePageIndexFile;
+        if (generatePageIndexFile)
+        {
+            if (appConfig.batchPageIndexFileName.empty())
+            {
+                LOG_WARN("page-index") << "configured to generate pages index file, but pages index file name not taken (--batch-page-index-file)\n";
+                generatePageIndexFile = false;
+            }
+        }
+
+        if (pagesIndex.empty())
+            generatePageIndexFile = false;
+
+        if (generatePageIndexFile)
         {
             for(auto it=pagesIndex.begin(); it!=pagesIndex.end(); ++it)
             {
@@ -797,7 +810,7 @@ int safe_main(int argc, char* argv[])
             if (!appConfig.gitAddBatchFileName.empty())
                 gitAddFiles.emplace_back(pageIndexFileName);
 
-        } // if (!appConfig.batchPageIndexFileName.empty() && !pagesIndex.empty())
+        } // if (generatePageIndexFile)
 
         if (!appConfig.copyImageFiles)
         {

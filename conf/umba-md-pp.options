@@ -1,10 +1,10 @@
-# Управляем предупреждениями и сообщениями
+# РЈРїСЂР°РІР»СЏРµРј РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёСЏРјРё Рё СЃРѕРѕР±С‰РµРЅРёСЏРјРё
 --info=-all
 --warning=+all
 
-# Устанавливаем русский как язык документов по умолчанию, если язык не задан тэгами,
-# не переопределён дефолтный язык где-то потом или не задан принудительно через опцию --force-document-language
-# Задание языка необходимо для доксигена, если по дефолту задать не русский, или не задавать язык, доксиген кракозяблы генерит
+# РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЂСѓСЃСЃРєРёР№ РєР°Рє СЏР·С‹Рє РґРѕРєСѓРјРµРЅС‚РѕРІ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ, РµСЃР»Рё СЏР·С‹Рє РЅРµ Р·Р°РґР°РЅ С‚СЌРіР°РјРё,
+# РЅРµ РїРµСЂРµРѕРїСЂРµРґРµР»С‘РЅ РґРµС„РѕР»С‚РЅС‹Р№ СЏР·С‹Рє РіРґРµ-С‚Рѕ РїРѕС‚РѕРј РёР»Рё РЅРµ Р·Р°РґР°РЅ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ С‡РµСЂРµР· РѕРїС†РёСЋ --force-document-language
+# Р—Р°РґР°РЅРёРµ СЏР·С‹РєР° РЅРµРѕР±С…РѕРґРёРјРѕ РґР»СЏ РґРѕРєСЃРёРіРµРЅР°, РµСЃР»Рё РїРѕ РґРµС„РѕР»С‚Сѓ Р·Р°РґР°С‚СЊ РЅРµ СЂСѓСЃСЃРєРёР№, РёР»Рё РЅРµ Р·Р°РґР°РІР°С‚СЊ СЏР·С‹Рє, РґРѕРєСЃРёРіРµРЅ РєСЂР°РєРѕР·СЏР±Р»С‹ РіРµРЅРµСЂРёС‚
 --document-language=russian
 
 # External programs lookup
@@ -14,17 +14,18 @@
 # Common options
 --processing-options=generate-toc,title
 --set-insert-options=fail,path,filename-line-no,trim-arround
+--batch-page-index-file=Index.md
 
 # Graphviz common options
 --graphviz-output-format=svg
 --graphviz-dpi=120
 --graphviz-show-labels=true
 
-# Расширения, обрабатываемые (и сканируемые) MDPP
-# старое
+# Р Р°СЃС€РёСЂРµРЅРёСЏ, РѕР±СЂР°Р±Р°С‚С‹РІР°РµРјС‹Рµ (Рё СЃРєР°РЅРёСЂСѓРµРјС‹Рµ) MDPP
+# СЃС‚Р°СЂРѕРµ
 #--add-mdpp-extentions=_md,_md_,md_,_markdown,_markdown_,markdown_
 
-# новое
+# РЅРѕРІРѕРµ
 --add-mdpp-extentions=_md,_md_,md_
 --add-mdpp-extentions=_mkd,_mkd_,mkd_
 --add-mdpp-extentions=_mdwn,_mdwn_,mdwn_
@@ -34,7 +35,7 @@
 --add-mdpp-extentions=_markdown,_markdown_,markdown_
 #--add-mdpp-extentions=_text,_text_,text_
 
-# Исключаем подкаталоги со следующими именами
+# РСЃРєР»СЋС‡Р°РµРј РёР· СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ РІ РїР°РєРµС‚РЅРѕРј СЂРµР¶РёРјРµ РїРѕРґРєР°С‚Р°Р»РѕРіРё СЃРѕ СЃР»РµРґСѓСЋС‰РёРјРё РёРјРµРЅР°РјРё
 --batch-exclude-dirs=_md,_md_,md_
 --batch-exclude-dirs=_mkd,_mkd_,mkd_
 --batch-exclude-dirs=_mdwn,_mdwn_,mdwn_
@@ -48,9 +49,10 @@
 --batch-exclude-dir=.out,.build,.git,.bat,.cmake,.msvc,.vscode,.vs,.config
 
 
-# При генерации вьювером название файла задается на основании заголовка (из тэгов или первого заголовка, или из первых строк) документа
-# Но мы придерживаемся идеи не использовать русские имена без крайней необходимости
+# РџСЂРё РіРµРЅРµСЂР°С†РёРё РІСЊСЋРІРµСЂРѕРј РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р° Р·Р°РґР°РµС‚СЃСЏ РЅР° РѕСЃРЅРѕРІР°РЅРёРё Р·Р°РіРѕР»РѕРІРєР° (РёР· С‚СЌРіРѕРІ РёР»Рё РїРµСЂРІРѕРіРѕ Р·Р°РіРѕР»РѕРІРєР°, РёР»Рё РёР· РїРµСЂРІС‹С… СЃС‚СЂРѕРє) РґРѕРєСѓРјРµРЅС‚Р°
+# РќРѕ РјС‹ РїСЂРёРґРµСЂР¶РёРІР°РµРјСЃСЏ РёРґРµРё РЅРµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЂСѓСЃСЃРєРёРµ РёРјРµРЅР° Р±РµР· РєСЂР°Р№РЅРµР№ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
 --processing-options=transliterate-generated-filenames
+# --processing-options=no-transliterate-generated-filenames
 
 # Metatags misspelling replaces and transliteration result replaces
 --meta-tag-replace=avtor:author
@@ -74,7 +76,7 @@
 --meta-tag-replace=yazyk dokumenta:language
 --meta-tag-replace=otkaz ot otvetstvennosti:disclaimer
 
-# Metatags serialization
+# Metatags serialization: CanonicalName:TargetName
 --meta-tag-serialize=title:Title
 --meta-tag-serialize=disclaimer:Disclaimer
 --meta-tag-serialize=description:Description
@@ -84,11 +86,12 @@
 --meta-tag-serialize=tags:Tags
 --meta-tag-serialize=version:Version
 --meta-tag-serialize=language:Language
+--meta-tag-serialize=url:Url
 
 # Metatag types
 --meta-tag-set-type=comma-set:category,tags
 --meta-tag-set-type=comma-list:author
---meta-tag-set-type=text-first:title,date
+--meta-tag-set-type=text-first:title,date,url
 --meta-tag-set-type=text-merge:disclaimer,description
 
 
