@@ -201,7 +201,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 # Common options
 --processing-options=generate-toc,title
 --set-insert-options=fail,path,filename-line-no,trim-arround
---batch-page-index-file=Index.md
+--batch-page-index-file=doc/Index.md
 
 # Graphviz common options
 --graphviz-output-format=svg
