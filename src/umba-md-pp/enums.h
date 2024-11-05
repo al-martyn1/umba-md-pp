@@ -639,6 +639,7 @@ enum class PreprocessorDirective : std::uint32_t
     _case                = 0x0005,
     _default             = 0x0006,
     endswitch            = 0x0007,
+    endSwitch            = 0x0007,
     caseFallthrough      = 0x0008,
     caseFt               = 0x0008,
     caseFallthroughAll   = 0x0009,
@@ -646,6 +647,7 @@ enum class PreprocessorDirective : std::uint32_t
     detailing            = 0x000A,
     _break               = 0x000B,
     enddetailing         = 0x000C,
+    endDetailing         = 0x000C,
     condIf               = 0x000D,
     condElse             = 0x000E,
     condElif             = 0x000F,
@@ -692,6 +694,8 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::_switch              , "switch"                     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::_case                , "case"                       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::endswitch            , "endswitch"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::endswitch            , "end-switch"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::endswitch            , "end_switch"                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif            , "cond-endif"                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif            , "cond_endif"                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif            , "condendif"                  );
@@ -709,6 +713,8 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::caseFallthroughAll   , "case____ft____all"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::detailing            , "detailing"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::enddetailing         , "enddetailing"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::enddetailing         , "end-detailing"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::enddetailing         , "end_detailing"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condIf               , "cond-if"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condIf               , "cond_if"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condIf               , "condif"                     );
