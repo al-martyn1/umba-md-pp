@@ -1,6 +1,17 @@
 invalid,unknown =-1
 insert
 toc
+meta
+set
+switch
+case
+default
+endswitch
+case-fallthrough,case-ft
+case-fallthrough-all,case-ft-all
+detailing
+break
+enddetailing
 condIf
 condElse
 condElif,condElseif
