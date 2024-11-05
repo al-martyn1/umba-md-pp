@@ -6,12 +6,12 @@ set
 switch
 case
 default
-endswitch
+endswitch,endSwitch
 case-fallthrough,case-ft
 case-fallthrough-all,case-ft-all
 detailing
 break
-enddetailing
+enddetailing,endDetailing
 condIf
 condElse
 condElif,condElseif

@@ -36,6 +36,7 @@ bool isPreprocessorDirectiveBase(const std::string &line)
 
 
 //----------------------------------------------------------------------------
+#if 0
 inline
 std::unordered_map<std::string, PreprocessorDirective> makePreprocessorDirectivesMap()
 {
@@ -47,6 +48,48 @@ std::unordered_map<std::string, PreprocessorDirective> makePreprocessorDirective
 
     m["#!toc"] = PreprocessorDirective::toc;
     m["#$toc"] = PreprocessorDirective::toc;
+
+    m["#!meta"] = PreprocessorDirective::meta;
+    m["#$meta"] = PreprocessorDirective::meta;
+
+    m["#!set"] = PreprocessorDirective::set;
+    m["#$set"] = PreprocessorDirective::set;
+
+    m["#!switch"] = PreprocessorDirective::_switch;
+    m["#$switch"] = PreprocessorDirective::_switch;
+
+    m["#!case"] = PreprocessorDirective::_case;
+    m["#$case"] = PreprocessorDirective::_case;
+
+    m["#!default"] = PreprocessorDirective::_default;
+    m["#$default"] = PreprocessorDirective::_default;
+
+    m["#!endswitch"] = PreprocessorDirective::endswitch;
+    m["#$endswitch"] = PreprocessorDirective::endswitch;
+    m["#!end-switch"] = PreprocessorDirective::endswitch;
+    m["#$end-switch"] = PreprocessorDirective::endswitch;
+
+    m["#!case-fallthrough"] = PreprocessorDirective::caseFallthrough;
+    m["#$case-fallthrough"] = PreprocessorDirective::caseFallthrough;
+    m["#!case-ft"] = PreprocessorDirective::caseFallthrough;
+    m["#$case-ft"] = PreprocessorDirective::caseFallthrough;
+
+    m["#!case-fallthrough-all"] = PreprocessorDirective::caseFallthroughAll;
+    m["#$case-fallthrough-all"] = PreprocessorDirective::caseFallthroughAll;
+    m["#!case-ft-all"] = PreprocessorDirective::caseFallthroughAll;
+    m["#$case-ft-all"] = PreprocessorDirective::caseFallthroughAll;
+
+    m["#!detailing"] = PreprocessorDirective::detailing;
+    m["#$detailing"] = PreprocessorDirective::detailing;
+
+    m["#!break"] = PreprocessorDirective::_break;
+    m["#$break"] = PreprocessorDirective::_break;
+
+    m["#!enddetailing"] = PreprocessorDirective::enddetailing;
+    m["#$enddetailing"] = PreprocessorDirective::enddetailing;
+    m["#!end-detailing"] = PreprocessorDirective::enddetailing;
+    m["#$end-detailing"] = PreprocessorDirective::enddetailing;
+
 
     m["#!if"] = PreprocessorDirective::condIf;
     m["#$if"] = PreprocessorDirective::condIf;
@@ -65,14 +108,16 @@ std::unordered_map<std::string, PreprocessorDirective> makePreprocessorDirective
 
     return m;
 }
-
+#endif
 //----------------------------------------------------------------------------
+#if 0
 inline
 const std::unordered_map<std::string, PreprocessorDirective>& getPreprocessorDirectivesMap()
 {
     static auto m = makePreprocessorDirectivesMap();
     return m;
 }
+#endif
 
 //----------------------------------------------------------------------------
 //! Line must be trimmed
@@ -82,8 +127,17 @@ PreprocessorDirective testLineForPreprocessorDirectiveImplHelper(std::string lin
     if (!isPreprocessorDirectiveBase(line))
         return PreprocessorDirective::unknown;
 
-    umba::string_plus::tolower(line);
+    //umba::string_plus::tolower(line);
 
+    line.erase(0, 2); // remove preprocessor directive prefix - #!/#$
+
+    auto directiveEndPos = line.find_first_of(" {([<");
+    if (directiveEndPos==line.npos)
+        return enum_deserialize(line, PreprocessorDirective::unknown);
+
+    return enum_deserialize(std::string(line, 0, directiveEndPos), PreprocessorDirective::unknown);
+
+#if 0
     auto m = getPreprocessorDirectivesMap();
 
     for(const auto &kvp : m)
@@ -99,6 +153,7 @@ PreprocessorDirective testLineForPreprocessorDirectiveImplHelper(std::string lin
     }
 
     return PreprocessorDirective::unknown;
+#endif
 }
 
 //----------------------------------------------------------------------------

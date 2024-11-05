@@ -1,6 +1,7 @@
 document.h:37
     std::vector<std::string> getTocLines() const
 
+[X]
 enums.h
     noGenerateToc                       = 0x1030,
     generateToc                         = 0x1031,
