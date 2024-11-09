@@ -19,7 +19,7 @@
 
 
 ---
-Url: Bla-bla
+URL: Bla-bla
 
 ---
 
@@ -276,7 +276,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-serialize=tags:Tags
 --meta-tag-serialize=version:Version
 --meta-tag-serialize=language:Language
---meta-tag-serialize=url:Url
+--meta-tag-serialize=url:URL
 
 # Metatag types
 --meta-tag-set-type=comma-set:category,tags
