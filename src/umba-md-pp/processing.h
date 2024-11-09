@@ -335,6 +335,15 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
                 continue;
             }
 
+            if (isMetaCommand(line))
+            {
+                if (handler(LineHandlerEvent::metaCommand, resLines, line, idx, lastLineIdx))
+                {
+                    resLines.emplace_back(line);
+                }
+                continue;
+            }
+
             if (isHeaderCommand(line))
             {
                 if (handler(LineHandlerEvent::headerCommand, resLines, line, idx, lastLineIdx))
@@ -762,6 +771,8 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
                                                   return true;
             case LineHandlerEvent::tocCommand:    checkPrintLineIfContainsPngExt(event, line);
                                                   return true;
+            case LineHandlerEvent::metaCommand:   checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
             case LineHandlerEvent::headerCommand: checkPrintLineIfContainsPngExt(event, line);
                                                   return true;
             case LineHandlerEvent::metaLine:      checkPrintLineIfContainsPngExt(event, line);
@@ -863,9 +874,21 @@ std::vector<std::string> stripLocalLinksExtentions( const AppConfig<FilenameStri
 
     auto urlHandler = [&](std::string url, bool bImage)
     {
-        if (bImage || umba::md::isUrlAbsolute(url))
+        if (stripExtentions)
+        {
+            LOG_INFO("strip-extentions") << "Option is turned off\n";
+            return url;
+        }
+
+        if (bImage)
         {
             LOG_INFO("strip-extentions") << "Image found: '" << url << "'\n";
+            return url;
+        }
+
+        if (umba::md::isUrlAbsolute(url) || umba::md::isUrlAbsoluteHostPath(url))
+        {
+            LOG_INFO("strip-extentions") << "Absolute url found: '" << url << "'\n";
             return url;
         }
 
@@ -875,24 +898,17 @@ std::vector<std::string> stripLocalLinksExtentions( const AppConfig<FilenameStri
         std::string urlTag ;
         umba::md::splitUrlToPathAndTag(url, urlPath, urlTag);
 
-
-    // bool isSupportedExtention(std::string e) const
-    // bool isSupportedSourceExtention(std::string e) const
-
-        if (stripExtentions)
+        auto ext = umba::filename::getExt(urlPath);
+        if (appConfig.isSupportedExtention(ext) || appConfig.isSupportedSourceExtention(ext))
         {
-            auto ext = umba::filename::getExt(urlPath);
-            if (appConfig.isSupportedExtention(ext) || appConfig.isSupportedSourceExtention(ext))
-            {
-                LOG_INFO("strip-extentions") << "Extention supported: '" << ext << "'\n";
-                LOG_INFO("strip-extentions") << "Stripping, urlPath: '" << urlPath << "'\n";
-                urlPath = umba::filename::getPathFile(urlPath);
-                LOG_INFO("strip-extentions") << "After, urlPath: '" << urlPath << "'\n";
-            }
-            else
-            {
-                LOG_INFO("strip-extentions") << "Extention NOT supported: '" << ext << "'\n";
-            }
+            LOG_INFO("strip-extentions") << "Extention supported: '" << ext << "'\n";
+            LOG_INFO("strip-extentions") << "Stripping, urlPath: '" << urlPath << "'\n";
+            urlPath = umba::filename::getPathFile(urlPath);
+            LOG_INFO("strip-extentions") << "After, urlPath: '" << urlPath << "'\n";
+        }
+        else
+        {
+            LOG_INFO("strip-extentions") << "Extention NOT supported: '" << ext << "'\n";
         }
 
         return umba::md::mergeUrlFromPathAndTag(urlPath, urlTag);
@@ -1680,6 +1696,88 @@ std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> 
 }
 
 //----------------------------------------------------------------------------
+template<typename FilenameStringType> inline
+std::vector<std::string> processMetaCommands(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, Document &doc, const std::vector<std::string> &lines, std::size_t &numDocMetaLinesAdded)
+{
+    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
+    {
+        if (event!=LineHandlerEvent::metaCommand)
+        {
+            return true;
+        }
+
+        std::size_t nStrip = 0;
+        if (!testLineForPreprocessorDirective(line, PreprocessorDirective::meta, &nStrip))
+            return true; // Что-то пошло не так, просто разрешаем вставить строку как есть
+
+        line.erase(0, nStrip);
+        std::vector<std::string> tags = simpleParseOptionsUnique(line);
+        std::vector<std::string> docMetaLines = doc.getDocumentMetatagsMarkdown(appCfg, tags);
+        if (!docMetaLines.empty())
+        {
+            if (!resLines.empty() && !resLines.back().empty())
+                resLines.emplace_back(std::string());
+            resLines.emplace_back("---");
+            umba::vectorPushBack(resLines, docMetaLines);
+            resLines.emplace_back(std::string());
+            resLines.emplace_back("---");
+            makeShureEmptyLine(resLines);
+        }
+
+        // auto  simpleParseOptions(std::string str)
+
+
+        // testLineForPreprocessorDirectiveImplHelper(std::string line, std::size_t *pNumCharsStrip=0)
+        //PreprocessorDirective testLineForPreprocessorDirectiveImplHelper(std::string line, std::size_t *pNumCharsStrip=0)
+        // std::vector<std::string> simpleParseOptions(std::string str)
+
+        // makeShureEmptyLine(resLines);
+        // resLines.emplace_back("---");
+        // resLines.emplace_back("**META**");
+        // resLines.emplace_back("---");
+        // makeShureEmptyLine(resLines);
+
+    // template<typename AppConfigType>
+    // std::vector<std::string> getDocumentMetatagsMarkdown(const AppConfigType &appCfg, std::vector<std::string> metaTags) const
+
+        // SnippetOptionsParsingResult parseRes = umba::md::parseSnippetInsertionCommandLine( snippetFlagsOptions, intOptions, appCfg.conditionVars
+        //                                                                                  , line, snippetFile, snippetTag
+        //                                                                                  );
+
+        // if (numTocFound==0)
+        // {
+        //     if (appCfg.testProcessingOption(ProcessingOptions::generateToc))
+        //     {
+        //         makeShureEmptyLine(resLines);
+        //         umba::vectorPushBack(resLines, doc.getTocLines());
+        //         makeShureEmptyLine(resLines);
+        //         //tocAdded = true;
+        //     }
+        // }
+
+        // std::vector<std::string> docMetaLines = doc.getDocumentMetatagsMarkdown(appCfg);
+        // if (!docMetaLines.empty())
+        // {
+        //     std::vector<std::string> tmpLines;
+        //     //tmpLines.emplace_back("**META**");
+        //     umba::vectorPushBack(tmpLines, docMetaLines);
+        //     makeShureEmptyLine(tmpLines);
+        //     tmpLines.emplace_back("---");
+        //     makeShureEmptyLine(tmpLines);
+        //     umba::vectorPushBack(tmpLines, resLines);
+        //     std::swap(tmpLines, resLines);
+        // }
+
+
+        ++numDocMetaLinesAdded;
+
+        return false;
+    };
+
+    return processLines(appCfg, curFilename, lines, handler);
+}
+
+//----------------------------------------------------------------------------
 // Ищем закрывающий символ с учетом возможной вложенности, предполагается, что первый открывающий уже пройден
 inline
 std::string::size_type findPairedChar(const std::string &line, std::string::size_type pos, const char chOpen, const char chClose)
@@ -1961,6 +2059,38 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
     }
 
 
+    std::size_t numDocMetaLinesAdded = 0;
+    resLines = processMetaCommands(appCfg, curFilename, doc, resLines, numDocMetaLinesAdded); // тут вставляем то, что задано явно
+    if ((appCfg.testProcessingOption(ProcessingOptions::insertMeta) && numDocMetaLinesAdded==0) || appCfg.testProcessingOption(ProcessingOptions::forceInsertMeta))
+    {
+        std::vector<std::string> docMetaLines = doc.getDocumentMetatagsMarkdown(appCfg);
+        if (!docMetaLines.empty())
+        {
+            std::vector<std::string> tmpLines;
+            //tmpLines.emplace_back("**META**");
+            umba::vectorPushBack(tmpLines, docMetaLines);
+            makeShureEmptyLine(tmpLines);
+            tmpLines.emplace_back("---");
+            makeShureEmptyLine(tmpLines);
+            umba::vectorPushBack(tmpLines, resLines);
+            std::swap(tmpLines, resLines);
+        }
+    }
+
+
+        // resLines.emplace_back("---");
+        // resLines.emplace_back("**META**");
+        // resLines.emplace_back("---");
+
+    //processTocCommands(appCfg, curFilename, doc, resLines, tocAdded);
+
+    // if (appCfg.testProcessingOption(ProcessingOptions::insertMeta) && !metaTitle.empty())
+    // {
+    //     std::size_t numDocMetaLinesAdded = 0;
+
+
+    // std::vector<std::string> processMetaCommands(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, Document &doc, const std::vector<std::string> &lines, std::size_t &numDocMetaLinesAdded)
+
     if (appCfg.testProcessingOption(ProcessingOptions::metaData))
     {
         // std::cout << "Write metadata\n";
@@ -1972,6 +2102,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
             tmpLines.emplace_back(std::string("---"));
             umba::vectorPushBack(tmpLines, metadataLines);
             tmpLines.emplace_back(std::string("---"));
+            tmpLines.emplace_back(std::string()); // Пустую строчку после меты вставляем
             umba::vectorPushBack(tmpLines, resLines);
             std::swap(tmpLines, resLines);
         }

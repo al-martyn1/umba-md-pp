@@ -39,6 +39,109 @@ struct Document
         return umba::text_utils::textStripCommonIndentCopy(tocLines, [](char ch){ return ch==' '; });
     }
 
+    template<typename AppConfigType>
+    std::vector<std::string> getDocumentMetatagsMarkdown(const AppConfigType &appCfg, std::vector<std::string> metaTags=std::vector<std::string>()) const
+    {
+        if (metaTags.empty())
+            metaTags = appCfg.documentMetaTagsList;
+
+        std::vector<std::string> resLines;
+
+        bool headerAdded = false;
+
+        std::vector<std::string>::const_iterator mtIt = metaTags.begin();
+        for(; mtIt!=metaTags.end(); ++mtIt)
+        {
+            std::string tagSerializedName = appCfg.serializeMetaTag(*mtIt); //!!! Тут надо подставить локализованное имя
+            if (tagSerializedName.empty())
+                continue;
+
+            std::unordered_map<std::string, std::vector<std::string> >::const_iterator tit = tagsData.find(appCfg.makeCanonicalMetaTag(*mtIt));
+            if (tit==tagsData.end())
+                continue;
+    
+            if (tit->second.empty())
+                continue;
+         
+            const std::vector<std::string> &tagData = tit->second;
+    
+            // Тут уже однозначно будет вставка
+            if (!headerAdded)
+            {
+                //!!! Тут надо добавить что-то типа хидера, или break line
+                // Или - не надо?
+
+                headerAdded = true;
+            }
+
+            resLines.emplace_back(tagSerializedName + ": Bla-bla");
+            //!!! Доделать
+
+        }
+
+        return resLines;
+    }
+
+    //  
+    //     // Имя тэга не пустое, вектор со значениями также не пуст, надо что-то выдать
+    //     ++metaTagsAddedCout;
+    //  
+    //     emitter << YAML::Key << tagSerializedName;
+    //  
+    //     MetaTagType metaTagType = appCfg.getMetaTagType(*mtIt);
+    //  
+    //     if (metaTagType==MetaTagType::textFirst) /* Simple text, allowed multiple definitions, but only first value is applied */
+    //     {
+    //         emitter << YAML::Value << tagData.front();
+    //     }
+    //     else if (metaTagType==MetaTagType::textReplace) /* Simple text, allowed multiple definitions, but only last value is applied */
+    //     {
+    //         emitter << YAML::Value << tagData.back();
+    //     }
+    //     else if (metaTagType==MetaTagType::textMerge) /* Text fragments will be merged to paras */
+    //     {
+    //         auto text = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string("\n\n") );
+    //         emitter << YAML::Value << text;
+    //     }
+    //     else if (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList)
+    //     {
+    //         emitter << YAML::BeginSeq;
+    //         for(auto tv : tagData)
+    //         {
+    //             emitter << tv;
+    //         }
+    //         emitter << YAML::EndSeq;
+    //     }
+    //     else if (metaTagType==MetaTagType::set || metaTagType==MetaTagType::commaSet)
+    //     {
+    //         std::set<std::string> s;
+    //         for(auto tv : tagData)
+    //         {
+    //             s.insert(tv);
+    //         }
+    //  
+    //         emitter << YAML::BeginSeq;
+    //         for(auto sv : s)
+    //         {
+    //             emitter << sv;
+    //         }
+    //         emitter << YAML::EndSeq;
+    //  
+    //     }
+    //     else
+    //     {
+    //         emitter << std::string();
+    //     }
+    //  
+    //     //    emitter << YAML::EndSeq;
+    //  
+
+
+
+
+
+
+
     template<typename FilenameStringType>
     bool getMetaTagValueAsText(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
     {

@@ -6,6 +6,7 @@ listingStart
 listingEnd
 insertCommand
 tocCommand
+metaCommand
 headerCommand
 metaLine
 metaStart

@@ -15,20 +15,41 @@
 
 
 //----------------------------------------------------------------------------
-//! Line must be trimmed
+//! Line must be trimmed (сейчас уже нет)
 inline
-bool isPreprocessorDirectiveBase(const std::string &line)
+bool isPreprocessorDirectiveBase(const std::string &line, std::size_t *pNumCharsStripPrefix=0)
 {
-    if (line.size()<2)
+    auto directiveStartPos = line.find_first_not_of(" \t\r\n");
+    if (directiveStartPos==line.npos) // Ничего непробельного не найдено
         return false;
 
-    if (line[0]!='#')
+    if ((directiveStartPos+2)>=line.size()) // Только префикс или даже короче
         return false;
 
-    if (line[1]!='!' && line[1]!='$')
+    if (line[directiveStartPos]!='#')
         return false;
+
+    if (line[directiveStartPos+1]!='!' && line[directiveStartPos+1]!='$')
+        return false;
+
+    if (pNumCharsStripPrefix)
+    {
+        *pNumCharsStripPrefix = directiveStartPos+2;
+    }
 
     return true;
+
+
+    // if (line.size()<2)
+    //     return false;
+    //  
+    // if (line[0]!='#')
+    //     return false;
+    //  
+    // if (line[1]!='!' && line[1]!='$')
+    //     return false;
+    //  
+    // return true;
 }
 
 //----------------------------------------------------------------------------
@@ -124,18 +145,29 @@ const std::unordered_map<std::string, PreprocessorDirective>& getPreprocessorDir
 inline
 PreprocessorDirective testLineForPreprocessorDirectiveImplHelper(std::string line, std::size_t *pNumCharsStrip=0)
 {
-    if (!isPreprocessorDirectiveBase(line))
+    std::size_t numCharsStripPrefix = 0;
+
+    if (!isPreprocessorDirectiveBase(line, &numCharsStripPrefix))
         return PreprocessorDirective::unknown;
 
     //umba::string_plus::tolower(line);
 
-    line.erase(0, 2); // remove preprocessor directive prefix - #!/#$
+    // line.erase(0, 2); // remove preprocessor directive prefix - #!/#$
+    line.erase(0, numCharsStripPrefix); // remove preprocessor directive prefix - #!/#$
 
     auto directiveEndPos = line.find_first_of(" {([<");
-    if (directiveEndPos==line.npos)
-        return enum_deserialize(line, PreprocessorDirective::unknown);
 
-    return enum_deserialize(std::string(line, 0, directiveEndPos), PreprocessorDirective::unknown);
+    std::string directiveStr = directiveEndPos==line.npos ? line : std::string(line, 0, directiveEndPos);
+    PreprocessorDirective pd = enum_deserialize(directiveStr, PreprocessorDirective::unknown);
+    if (pd!=PreprocessorDirective::unknown)
+    {
+        if (pNumCharsStrip)
+        {
+            *pNumCharsStrip = numCharsStripPrefix+directiveStr.size();
+        }
+    }
+
+    return pd;
 
 #if 0
     auto m = getPreprocessorDirectivesMap();
@@ -183,6 +215,15 @@ bool isTocCommand(std::string line)
     umba::string_plus::trim(line);
     //return (umba::string_plus::starts_with(line, ("#!toc")) || umba::string_plus::starts_with(line, ("#$toc")));
     return testLineForPreprocessorDirective(line, PreprocessorDirective::toc);
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isMetaCommand(std::string line)
+{
+    umba::string_plus::trim(line);
+    //return (umba::string_plus::starts_with(line, ("#!toc")) || umba::string_plus::starts_with(line, ("#$toc")));
+    return testLineForPreprocessorDirective(line, PreprocessorDirective::meta);
 }
 
 //----------------------------------------------------------------------------

@@ -275,7 +275,9 @@ enum class ProcessingOptions : std::uint32_t
     noTransliterateGeneratedFilenames   = 0x1080,
     transliterateGeneratedFilenames     = 0x1081,
     noInsertMeta                        = 0x1090 /*!< Don't insert metatags to document body (not to metadata) */,
-    insertMeta                          = 0x1091 /*!< Insert metatags to document body (not to metadata) */
+    insertMeta                          = 0x1091 /*!< Insert metatags to document body (not to metadata) */,
+    noForceInsertMeta                   = 0x10A0 /*!< Disable force insert meta tags to document body */,
+    forceInsertMeta                     = 0x10A1 /*!< Insert metatags to document body begining even if are already added by #!meta commands */
 
 }; // enum class ProcessingOptions : std::uint32_t
 
@@ -294,6 +296,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::strictInsert                  , "StrictInsert"                      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noMetaData                    , "NoMetaData"                        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::metaData                      , "MetaData"                          );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "NoForceInsertMeta"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::title                         , "Title"                             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "NoParseGithubAlerts"               );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts             , "ParseGithubAlerts"                 );
@@ -301,6 +304,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noInsertMeta                  , "NoInsertMeta"                      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "TransliterateGeneratedFilenames"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "InsertMeta"                        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "ForceInsertMeta"                   );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
@@ -339,6 +343,9 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData                      , "meta-data"                            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData                      , "meta_data"                            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData                      , "metadata"                             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "no-force-insert-meta"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "no_force_insert_meta"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "noforceinsertmeta"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::title                         , "title"                                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "no-parse-github-alerts"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "no_convert_github_alerts"             );
@@ -364,6 +371,9 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "insert-meta"                          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "insert_meta"                          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "insertmeta"                           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force-insert-meta"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force_insert_meta"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "forceinsertmeta"                      );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 
@@ -406,10 +416,11 @@ enum class LineHandlerEvent : std::uint32_t
     listingEnd      = 0x0004,
     insertCommand   = 0x0005,
     tocCommand      = 0x0006,
-    headerCommand   = 0x0007,
-    metaLine        = 0x0008,
-    metaStart       = 0x0009,
-    metaEnd         = 0x000A
+    metaCommand     = 0x0007,
+    headerCommand   = 0x0008,
+    metaLine        = 0x0009,
+    metaStart       = 0x000A,
+    metaEnd         = 0x000B
 
 }; // enum class LineHandlerEvent : std::uint32_t
 
@@ -425,6 +436,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingLine     , "ListingLine"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "ListingEnd"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "TocCommand"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaCommand     , "MetaCommand"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaLine        , "MetaLine"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaStart       , "MetaStart"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "MetaEnd"       );
@@ -457,6 +469,9 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "toc-command"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "toc_command"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "toccommand"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaCommand     , "meta-command"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaCommand     , "meta_command"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaCommand     , "metacommand"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaLine        , "meta-line"      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaLine        , "meta_line"      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaLine        , "metaline"       );

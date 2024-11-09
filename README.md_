@@ -6,11 +6,11 @@ Title      : Препроцессор для Markdown
 Description: "Утилита, добавляющая некоторые возможности к Markdown"
 Date       : April 25, 2024
 Language   : Russian
+URL        : https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 ---
 
----
-- URL: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
----
+#//!meta{url}
+
 #// @startebnf
 #// title LISP Grammar
 #// @endebnf

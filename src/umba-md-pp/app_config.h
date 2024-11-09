@@ -94,6 +94,10 @@ struct AppConfig
     std::unordered_map<std::string, std::string>          metaTagSerializeMap;
     std::unordered_map<std::string, MetaTagType>          metaTagTypeMap;
     std::vector<std::string>                              metaTagsSerializeList;
+    std::set<std::string>                                 metaTagsSerializeSet;
+    std::vector<std::string>                              documentMetaTagsList;
+    std::set<std::string>                                 documentMetaTagsSet;
+    //bool                                                  addDocumentMetaTags = false; // force add metatags to document body (not to document meta block)
 
     unsigned                                              numSecMaxLevel = 0;
     unsigned                                              tocMaxLevel = 0;
@@ -128,6 +132,7 @@ struct AppConfig
 
     bool                                                  dontLookupForDoxygen  = false;
     bool                                                  dontLookupForGraphviz = false;
+
 
 
 
@@ -547,16 +552,17 @@ struct AppConfig
 
     bool setMetaTagSerializeList(std::string str)
     {
+        umba::string_plus::trim(str, umba::string_plus::is_one_of<char>(" "));
+
         if (str.empty())
             return true;
 
-        if (str=="-")
+        if (str[0]=='-')
         {
             metaTagsSerializeList.clear();
-            return true;
+            str.erase(0,1);
         }
-
-        if (str.front()=='+')
+        else if (str.front()=='+')
         {
             str.erase(0,1);
         }
@@ -565,15 +571,57 @@ struct AppConfig
             metaTagsSerializeList.clear();
         }
 
+        umba::string_plus::trim(str, umba::string_plus::is_one_of<char>(" "));
+
         auto tags = splitAndTrimAndSkipEmpty(str, ',');
 
         for(auto t: tags)
         {
-            metaTagsSerializeList.emplace_back(makeCanonicalMetaTag(t));
+            auto canonicalTag = makeCanonicalMetaTag(t);
+            if (metaTagsSerializeSet.find(canonicalTag)!=metaTagsSerializeSet.end())
+                continue;
+            metaTagsSerializeList.emplace_back(canonicalTag);
         }
 
         return true;
     }
+
+    bool setDocumentMetaTagList(std::string str)
+    {
+        umba::string_plus::trim(str, umba::string_plus::is_one_of<char>(" "));
+
+        if (str.empty())
+            return true;
+
+        if (str[0]=='-')
+        {
+            metaTagsSerializeList.clear();
+            str.erase(0,1);
+        }
+        else if (str.front()=='+')
+        {
+            str.erase(0,1);
+        }
+        else
+        {
+            metaTagsSerializeList.clear();
+        }
+
+        umba::string_plus::trim(str, umba::string_plus::is_one_of<char>(" "));
+
+        auto tags = splitAndTrimAndSkipEmpty(str, ',');
+
+        for(auto t: tags)
+        {
+            auto canonicalTag = makeCanonicalMetaTag(t);
+            if (documentMetaTagsSet.find(canonicalTag)!=documentMetaTagsSet.end())
+                continue;
+            documentMetaTagsList.emplace_back(canonicalTag);
+        }
+
+        return true;
+    }
+
 
     bool addMetaTagType(const std::string &typeStr, const std::vector<std::string> &tags)
     {

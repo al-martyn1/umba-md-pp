@@ -17,4 +17,6 @@ noTransliterateGeneratedFilenames           =0x1080
 transliterateGeneratedFilenames             =0x1081
 noInsertMeta                                =0x1090 // Don't insert metatags to document body (not to metadata)
 insertMeta                                  =0x1091 // Insert metatags to document body (not to metadata)
+noForceInsertMeta                           =0x10A0 // Disable force insert meta tags to document body
+forceInsertMeta                             =0x10A1 // Insert metatags to document body begining even if are already added by #!meta commands
 

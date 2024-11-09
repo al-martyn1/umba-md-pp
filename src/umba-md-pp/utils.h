@@ -17,6 +17,7 @@
 
 //
 #include <string>
+#include <algorithm>
 
 
 //----------------------------------------------------------------------------
@@ -44,6 +45,36 @@ std::vector<StringType> splitAndTrimAndSkipEmpty(const StringType &str, typename
     }
 
     return res;
+}
+
+//----------------------------------------------------------------------------
+//! Простая функция разбора списка опций, parseSnippetTag слишком сложная, и заточена на конкретное применение
+inline
+std::vector<std::string> simpleParseOptions(std::string str)
+{
+    using ResType = std::vector<std::string>;
+
+    str = marty_cpp::simple_trim(str, [](char ch) { return ch==' '; });
+
+    if (str.size()<2)
+        return ResType(); // нет обрамляющих скобок
+
+    if (str.front()!='{' || str.back()!='}')
+        return ResType(); // нет обрамляющих скобок
+
+    str.erase(str.size()-1);
+    str.erase(0, 1);
+
+    return splitAndTrimAndSkipEmpty(str, ',');
+}
+
+//----------------------------------------------------------------------------
+//! Версия simpleParseOptions с исключением повторений
+inline
+std::vector<std::string> simpleParseOptionsUnique(const std::string &str)
+{
+    auto valsVec = simpleParseOptions(str);
+    return std::vector<std::string>(valsVec.begin(), std::unique(valsVec.begin(), valsVec.end()));
 }
 
 //----------------------------------------------------------------------------

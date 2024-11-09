@@ -2,7 +2,7 @@
 --serialize-meta-tags=-
 #--processing-options=meta-data
 #--processing-options=no-meta-data
---processing-options=generate-toc
+--processing-options=generate-toc,insert-meta
 --verbose
 --info=+all
 # --info=-plantuml,-opt-files,-snippet-lookup

@@ -1,7 +1,3 @@
-**META**
-
----
-
 # Препроцессор для Markdown
 
 Утилита, добавляющая некоторые возможности к Markdown
@@ -22,9 +18,7 @@
 - [Boost MSM](#user-content-boost-msm)
 
 
----
-- URL: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
----
+
 ![LISP Grammar 1](doc/img.generated/diagram_0000.svg)
 
 
