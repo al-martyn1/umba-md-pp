@@ -23,8 +23,6 @@
 - [Вставка сниппетов](#user-content-вставка-сниппетов)
 - [Стандартный конфиг](#user-content-стандартный-конфиг)
 - [Любите ли вы документацию так, как люблю её я?](#user-content-любите-ли-вы-документацию-так-как-люблю-её-я)
-- [GraphViz Samples](#user-content-graphviz-samples)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\doc.drafts/graphviz\test005.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggenerateddocdraftsgraphviztest005svg-error-2)
 - [PlantUML Samples](#user-content-plantuml-samples)
 - [Boost MSM](#user-content-boost-msm)
 
@@ -420,21 +418,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
 
-# GraphViz Samples
 
-![Graph](doc/img.generated/doc.drafts/graphviz/test001.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/test002.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/test003.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/test004.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\doc.drafts/graphviz\test005.svg', error: 2
-![Graph](doc/img.generated/doc.drafts/graphviz/test005.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/test006.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/test007.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/trie.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/trie_brackets.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/trie_flat.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/trie_numbers.svg)
-![Graph](doc/img.generated/doc.drafts/graphviz/trie_operators.svg)
 
 
 # PlantUML Samples

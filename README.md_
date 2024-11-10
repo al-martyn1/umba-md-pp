@@ -172,20 +172,20 @@ GitHub/GitLab wiki, например.
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
 
-# GraphViz Samples
+#// # GraphViz Samples
 
-<graph/> doc.drafts/graphviz/test001.dot
-<graph/> doc.drafts/graphviz/test002.dot
-<graph/> doc.drafts/graphviz/test003.dot
-<graph/> doc.drafts/graphviz/test004.dot
-<graph/> doc.drafts/graphviz/test005.dot
-<graph/> doc.drafts/graphviz/test006.dot
-<graph/> doc.drafts/graphviz/test007.dot
-<graph/> doc.drafts/graphviz/trie.dot
-<graph/> doc.drafts/graphviz/trie_brackets.dot
-<graph/> doc.drafts/graphviz/trie_flat.dot
-<graph/> doc.drafts/graphviz/trie_numbers.dot
-<graph/> doc.drafts/graphviz/trie_operators.dot
+#// <graph/> doc.drafts/graphviz/test001.dot
+#// <graph/> doc.drafts/graphviz/test002.dot
+#// <graph/> doc.drafts/graphviz/test003.dot
+#// <graph/> doc.drafts/graphviz/test004.dot
+#// <graph/> doc.drafts/graphviz/test005.dot
+#// <graph/> doc.drafts/graphviz/test006.dot
+#// <graph/> doc.drafts/graphviz/test007.dot
+#// <graph/> doc.drafts/graphviz/trie.dot
+#// <graph/> doc.drafts/graphviz/trie_brackets.dot
+#// <graph/> doc.drafts/graphviz/trie_flat.dot
+#// <graph/> doc.drafts/graphviz/trie_numbers.dot
+#// <graph/> doc.drafts/graphviz/trie_operators.dot
 
 
 # PlantUML Samples
