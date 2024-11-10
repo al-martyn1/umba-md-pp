@@ -25,6 +25,7 @@
 
 **URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 
+
 ---
 
 
@@ -383,12 +384,15 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 ---
 **Название**: Препроцессор для Markdown
+
 **Авторы**:
 - Имя <name@at.domain.com>
 - Имя2 <name2@domain.com>
 
 **URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
+
 **Дата**: April 25, 2024
+
 
 ---
 

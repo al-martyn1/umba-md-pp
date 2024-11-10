@@ -95,17 +95,20 @@ struct Document
             {
                 // emitter << YAML::Value << tagData.front();
                 resLines.emplace_back(tagPreparedName + " " + tagData.front());
+                resLines.emplace_back(std::string());
             }
             else if (metaTagType==MetaTagType::textReplace) /* Simple text, allowed multiple definitions, but only last value is applied */
             {
                 // emitter << YAML::Value << tagData.back();
                 resLines.emplace_back(tagPreparedName + " " + tagData.back());
+                resLines.emplace_back(std::string());
             }
             else if (metaTagType==MetaTagType::textMerge) /* Text fragments will be merged to paras */
             {
                 auto text = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string("\n\n") );
                 //emitter << YAML::Value << text;
                 resLines.emplace_back(tagPreparedName + " " + text);
+                resLines.emplace_back(std::string());
             }
             else if (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList)
             {
