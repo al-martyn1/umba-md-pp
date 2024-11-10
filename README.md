@@ -24,18 +24,7 @@
 - [Стандартный конфиг](#user-content-стандартный-конфиг)
 - [Любите ли вы документацию так, как люблю её я?](#user-content-любите-ли-вы-документацию-так-как-люблю-её-я)
 - [GraphViz Samples](#user-content-graphviz-samples)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test001.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest001svg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test002.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest002svg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test003.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest003svg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test004.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest004svg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test005.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest005svg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test006.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest006svg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test007.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest007svg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtriesvg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_brackets.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtrie_bracketssvg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_flat.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtrie_flatsvg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_numbers.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtrie_numberssvg-error-2)
-- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_operators.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtrie_operatorssvg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\doc.drafts/graphviz\test005.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggenerateddocdraftsgraphviztest005svg-error-2)
 - [PlantUML Samples](#user-content-plantuml-samples)
 - [Boost MSM](#user-content-boost-msm)
 
@@ -433,30 +422,19 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 # GraphViz Samples
 
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test001.svg', error: 2
-![Graph](doc/img.generated/test001.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test002.svg', error: 2
-![Graph](doc/img.generated/test002.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test003.svg', error: 2
-![Graph](doc/img.generated/test003.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test004.svg', error: 2
-![Graph](doc/img.generated/test004.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test005.svg', error: 2
-![Graph](doc/img.generated/test005.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test006.svg', error: 2
-![Graph](doc/img.generated/test006.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test007.svg', error: 2
-![Graph](doc/img.generated/test007.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie.svg', error: 2
-![Graph](doc/img.generated/trie.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_brackets.svg', error: 2
-![Graph](doc/img.generated/trie_brackets.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_flat.svg', error: 2
-![Graph](doc/img.generated/trie_flat.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_numbers.svg', error: 2
-![Graph](doc/img.generated/trie_numbers.svg)
-# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_operators.svg', error: 2
-![Graph](doc/img.generated/trie_operators.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/test001.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/test002.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/test003.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/test004.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\doc.drafts/graphviz\test005.svg', error: 2
+![Graph](doc/img.generated/doc.drafts/graphviz/test005.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/test006.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/test007.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/trie.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/trie_brackets.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/trie_flat.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/trie_numbers.svg)
+![Graph](doc/img.generated/doc.drafts/graphviz/trie_operators.svg)
 
 
 # PlantUML Samples
