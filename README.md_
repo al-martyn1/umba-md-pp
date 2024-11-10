@@ -178,7 +178,8 @@ GitHub/GitLab wiki, например.
 <graph/> doc.drafts/graphviz/test002.dot
 <graph/> doc.drafts/graphviz/test003.dot
 <graph/> doc.drafts/graphviz/test004.dot
-<graph/> doc.drafts/graphviz/test005.dot
+#// Там какая-то ошибка
+#// <graph/> doc.drafts/graphviz/test005.dot
 <graph/> doc.drafts/graphviz/test006.dot
 <graph/> doc.drafts/graphviz/test007.dot
 <graph/> doc.drafts/graphviz/trie.dot
