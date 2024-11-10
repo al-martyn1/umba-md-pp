@@ -9,7 +9,7 @@ Language   : Russian
 URL        : https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 ---
 
-#!meta{url}
+#!meta{author,url}
 
 #// @startebnf
 #// title LISP Grammar

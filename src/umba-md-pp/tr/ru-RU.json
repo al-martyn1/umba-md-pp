@@ -2,6 +2,24 @@
   "0419": {
     "common": {
       "Hello world!": "Hello translated world 419!"
+    },
+    "metatag-titles": {
+      "category": "Категория",
+      "tags": "Тэги",
+      "author": "Автор",
+      "title": "Название",
+      "date": "Дата",
+      "url": "URL",
+      "disclaimer": "Отказ от ответственности",
+      "description": "Описание",
+      "categorys": "Категории",
+      "tagss": "Тэги",
+      "authors": "Авторы",
+      "titles": "Название",
+      "dates": "Дата",
+      "urls": "URLs",
+      "disclaimers": "Отказ от ответственности",
+      "descriptions": "Описание"
     }
   }
 }

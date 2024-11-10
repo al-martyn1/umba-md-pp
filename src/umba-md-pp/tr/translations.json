@@ -877,6 +877,24 @@
 "Yoruba": "Yoruba",
 "Zulu": "Zulu"
 },
+"metatag-titles": {
+"author": "Author",
+"authors": "Authors",
+"category": "Category",
+"categorys": "Categories",
+"date": "Date",
+"dates": "Date",
+"description": "Description",
+"descriptions": "Description",
+"disclaimer": "Disclaimer",
+"disclaimers": "Disclaimer",
+"tags": "Tags",
+"tagss": "Tags",
+"title": "Title",
+"titles": "Title",
+"url": "URL",
+"urls": "URLs"
+},
 "natural-language-to-canonical": {
 "afrikaans": "Afrikaans",
 "albanian": "Albanian",
@@ -1753,6 +1771,24 @@
 "Yi": "И",
 "Yoruba": "Йоруба",
 "Zulu": "Зулу"
+},
+"metatag-titles": {
+"author": "Автор",
+"authors": "Авторы",
+"category": "Категория",
+"categorys": "Категории",
+"date": "Дата",
+"dates": "Дата",
+"description": "Описание",
+"descriptions": "Описание",
+"disclaimer": "Отказ от ответственности",
+"disclaimers": "Отказ от ответственности",
+"tags": "Тэги",
+"tagss": "Тэги",
+"title": "Название",
+"titles": "Название",
+"url": "URL",
+"urls": "URLs"
 },
 "pages-index": {
 "no-title": "Без заголовка",

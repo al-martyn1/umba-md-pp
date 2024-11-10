@@ -4,7 +4,7 @@
 
 /*--------------------------------------------------------*/
 
-static const char translations_json[52014] =
+static const char translations_json[52929] =
     "{\r\n"
     "\"0409\": {\r\n"
     "\"common\": {\r\n"
@@ -889,6 +889,24 @@ static const char translations_json[52014] =
     "\"Yoruba\": \"Yoruba\",\r\n"
     "\"Zulu\": \"Zulu\"\r\n"
     "},\r\n"
+    "\"metatag-titles\": {\r\n"
+    "\"author\": \"Author\",\r\n"
+    "\"authors\": \"Authors\",\r\n"
+    "\"category\": \"Category\",\r\n"
+    "\"categorys\": \"Categories\",\r\n"
+    "\"date\": \"Date\",\r\n"
+    "\"dates\": \"Date\",\r\n"
+    "\"description\": \"Description\",\r\n"
+    "\"descriptions\": \"Description\",\r\n"
+    "\"disclaimer\": \"Disclaimer\",\r\n"
+    "\"disclaimers\": \"Disclaimer\",\r\n"
+    "\"tags\": \"Tags\",\r\n"
+    "\"tagss\": \"Tags\",\r\n"
+    "\"title\": \"Title\",\r\n"
+    "\"titles\": \"Title\",\r\n"
+    "\"url\": \"URL\",\r\n"
+    "\"urls\": \"URLs\"\r\n"
+    "},\r\n"
     "\"natural-language-to-canonical\": {\r\n"
     "\"afrikaans\": \"Afrikaans\",\r\n"
     "\"albanian\": \"Albanian\",\r\n"
@@ -1772,6 +1790,24 @@ static const char translations_json[52014] =
     "\"Yoruba\": \"Йоруба\",\r\n"
     "\"Zulu\": \"Зулу\"\r\n"
     "},\r\n"
+    "\"metatag-titles\": {\r\n"
+    "\"author\": \"Автор\",\r\n"
+    "\"authors\": \"Авторы\",\r\n"
+    "\"category\": \"Категория\",\r\n"
+    "\"categorys\": \"Категории\",\r\n"
+    "\"date\": \"Дата\",\r\n"
+    "\"dates\": \"Дата\",\r\n"
+    "\"description\": \"Описание\",\r\n"
+    "\"descriptions\": \"Описание\",\r\n"
+    "\"disclaimer\": \"Отказ от ответственности\",\r\n"
+    "\"disclaimers\": \"Отказ от ответственности\",\r\n"
+    "\"tags\": \"Тэги\",\r\n"
+    "\"tagss\": \"Тэги\",\r\n"
+    "\"title\": \"Название\",\r\n"
+    "\"titles\": \"Название\",\r\n"
+    "\"url\": \"URL\",\r\n"
+    "\"urls\": \"URLs\"\r\n"
+    "},\r\n"
     "\"pages-index\": {\r\n"
     "\"no-title\": \"Без заголовка\",\r\n"
     "\"title\": \"Указатель документации\"\r\n"
@@ -1780,4 +1816,4 @@ static const char translations_json[52014] =
     "}"
     ;
 
-static const unsigned translations_json_size = 52013; /* Not including terminating zero */
+static const unsigned translations_json_size = 52928; /* Not including terminating zero */

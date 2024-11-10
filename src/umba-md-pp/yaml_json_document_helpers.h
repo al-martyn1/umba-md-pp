@@ -3,6 +3,8 @@
  */
 #pragma once
 
+#include <algorithm>
+
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
@@ -55,6 +57,17 @@ std::string generateDocMetadata(const AppConfig<FilenameStringType> &appCfg, Doc
         {
             emitter << YAML::BeginSeq;
             for(auto tv : tagData)
+            {
+                emitter << tv;
+            }
+            emitter << YAML::EndSeq;
+        }
+        else if (metaTagType==MetaTagType::uniqueList || metaTagType==MetaTagType::commaUniqueList)
+        {
+            auto tmp = tagData;
+            auto tmp2 = std::vector<std::string>(tmp.begin(), std::unique(tmp.begin(), tmp.end()));
+            emitter << YAML::BeginSeq;
+            for(auto tv : tmp2)
             {
                 emitter << tv;
             }
@@ -271,7 +284,14 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                 {
                     // Элемент списка/массива не надо разбирать, даже если он commaList или commaSet
                     // Но добавлять надо
-                    if (tagType!=MetaTagType::list && tagType!=MetaTagType::set && tagType!=MetaTagType::commaList && tagType!=MetaTagType::commaSet)
+                    //else if (metaTagType==MetaTagType::uniqueList || metaTagType==MetaTagType::commaUniqueList)
+                    if ( tagType!=MetaTagType::list 
+                      && tagType!=MetaTagType::set
+                      && tagType!=MetaTagType::commaList
+                      && tagType!=MetaTagType::commaSet
+                      && tagType!=MetaTagType::uniqueList
+                      && tagType!=MetaTagType::commaUniqueList
+                       )
                         continue;
 
                     for (auto vel : val.items())
@@ -293,7 +313,7 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
 
                 //LOG_MSG << "parseDocumentMetadata: " << strKey << ": " << strVal << "\n";
 
-                if (tagType==MetaTagType::commaList || tagType==MetaTagType::commaSet)
+                if (tagType==MetaTagType::commaList || tagType==MetaTagType::commaSet || tagType==MetaTagType::commaUniqueList)
                 {
                     // Если одиночная строка является commaList или commaSet, то надо разобрать
                     umba::vectorPushBack(tagValsVec, splitAndTrimAndSkipEmpty(strVal, ','));

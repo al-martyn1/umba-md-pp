@@ -19,7 +19,11 @@
 
 
 ---
-URL: Bla-bla
+**Авторы**:
+- Имя <name@at.domain.com>
+- Имя2 <name2@domain.com>
+
+**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 
 ---
 
@@ -280,7 +284,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 # Metatag types
 --meta-tag-set-type=comma-set:category,tags
---meta-tag-set-type=comma-list:author
+--meta-tag-set-type=comma-unique-list:author
 --meta-tag-set-type=text-first:title,date,url
 --meta-tag-set-type=text-merge:disclaimer,description
 

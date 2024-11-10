@@ -2,7 +2,9 @@
 
 #include "app_config.h"
 #include "umba/text_utils.h"
+#include "marty_tr/marty_tr.h"
 //
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -42,6 +44,10 @@ struct Document
     template<typename AppConfigType>
     std::vector<std::string> getDocumentMetatagsMarkdown(const AppConfigType &appCfg, std::vector<std::string> metaTags=std::vector<std::string>()) const
     {
+        // см generateDocMetadata
+
+        // getDocumentLanguage(const AppConfig<FilenameStringType> &appCfg) const
+
         if (metaTags.empty())
             metaTags = appCfg.documentMetaTagsList;
 
@@ -52,10 +58,6 @@ struct Document
         std::vector<std::string>::const_iterator mtIt = metaTags.begin();
         for(; mtIt!=metaTags.end(); ++mtIt)
         {
-            std::string tagSerializedName = appCfg.serializeMetaTag(*mtIt); //!!! Тут надо подставить локализованное имя
-            if (tagSerializedName.empty())
-                continue;
-
             std::unordered_map<std::string, std::vector<std::string> >::const_iterator tit = tagsData.find(appCfg.makeCanonicalMetaTag(*mtIt));
             if (tit==tagsData.end())
                 continue;
@@ -74,73 +76,82 @@ struct Document
                 headerAdded = true;
             }
 
-            resLines.emplace_back(tagSerializedName + ": Bla-bla");
-            //!!! Доделать
+
+            MetaTagType metaTagType = appCfg.getMetaTagType(*mtIt);
+
+            std::string langStr = getDocumentLanguage(appCfg);
+            std::string langId  = findLangTagByString(langStr);
+            std::string tagId  = *mtIt;
+            if (tagData.size()>1 && (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList || metaTagType==MetaTagType::uniqueList || metaTagType==MetaTagType::commaUniqueList || metaTagType==MetaTagType::set || metaTagType==MetaTagType::commaSet))
+                tagId += "s";
+            std::string tagSerializedName = marty_tr::tr(tagId, "metatag-titles", langId);
+            //appCfg.serializeMetaTag(*mtIt); //!!! Тут надо подставить локализованное имя
+            if (tagSerializedName.empty())
+                continue;
+
+            std::string tagPreparedName = "**" + tagSerializedName + "**:";
+            
+            if (metaTagType==MetaTagType::textFirst) /* Simple text, allowed multiple definitions, but only first value is applied */
+            {
+                // emitter << YAML::Value << tagData.front();
+                resLines.emplace_back(tagPreparedName + " " + tagData.front());
+            }
+            else if (metaTagType==MetaTagType::textReplace) /* Simple text, allowed multiple definitions, but only last value is applied */
+            {
+                // emitter << YAML::Value << tagData.back();
+                resLines.emplace_back(tagPreparedName + " " + tagData.back());
+            }
+            else if (metaTagType==MetaTagType::textMerge) /* Text fragments will be merged to paras */
+            {
+                auto text = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string("\n\n") );
+                //emitter << YAML::Value << text;
+                resLines.emplace_back(tagPreparedName + " " + text);
+            }
+            else if (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList)
+            {
+                resLines.emplace_back(tagPreparedName);
+                for(auto tv : tagData)
+                {
+                    resLines.emplace_back("- " + tv);
+                }
+                resLines.emplace_back(std::string());
+            }
+            else if (metaTagType==MetaTagType::uniqueList || metaTagType==MetaTagType::commaUniqueList)
+            {
+                resLines.emplace_back(tagPreparedName);
+                auto tmp = tagData;
+                auto tmp2 = std::vector<std::string>(tmp.begin(), std::unique(tmp.begin(), tmp.end()));
+                for(auto tv : tmp2)
+                {
+                    resLines.emplace_back("- " + tv);
+                }
+                resLines.emplace_back(std::string());
+            }
+            else if (metaTagType==MetaTagType::set || metaTagType==MetaTagType::commaSet)
+            {
+                resLines.emplace_back(tagPreparedName);
+                std::set<std::string> s;
+                for(auto tv : tagData)
+                {
+                    s.insert(tv);
+                }
+
+                for(auto sv : s)
+                {
+                    resLines.emplace_back("- " + sv);
+                }
+                resLines.emplace_back(std::string());
+            }
+            else
+            {
+                // emitter << std::string();
+            }
+
 
         }
 
         return resLines;
     }
-
-    //  
-    //     // Имя тэга не пустое, вектор со значениями также не пуст, надо что-то выдать
-    //     ++metaTagsAddedCout;
-    //  
-    //     emitter << YAML::Key << tagSerializedName;
-    //  
-    //     MetaTagType metaTagType = appCfg.getMetaTagType(*mtIt);
-    //  
-    //     if (metaTagType==MetaTagType::textFirst) /* Simple text, allowed multiple definitions, but only first value is applied */
-    //     {
-    //         emitter << YAML::Value << tagData.front();
-    //     }
-    //     else if (metaTagType==MetaTagType::textReplace) /* Simple text, allowed multiple definitions, but only last value is applied */
-    //     {
-    //         emitter << YAML::Value << tagData.back();
-    //     }
-    //     else if (metaTagType==MetaTagType::textMerge) /* Text fragments will be merged to paras */
-    //     {
-    //         auto text = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), std::string("\n\n") );
-    //         emitter << YAML::Value << text;
-    //     }
-    //     else if (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList)
-    //     {
-    //         emitter << YAML::BeginSeq;
-    //         for(auto tv : tagData)
-    //         {
-    //             emitter << tv;
-    //         }
-    //         emitter << YAML::EndSeq;
-    //     }
-    //     else if (metaTagType==MetaTagType::set || metaTagType==MetaTagType::commaSet)
-    //     {
-    //         std::set<std::string> s;
-    //         for(auto tv : tagData)
-    //         {
-    //             s.insert(tv);
-    //         }
-    //  
-    //         emitter << YAML::BeginSeq;
-    //         for(auto sv : s)
-    //         {
-    //             emitter << sv;
-    //         }
-    //         emitter << YAML::EndSeq;
-    //  
-    //     }
-    //     else
-    //     {
-    //         emitter << std::string();
-    //     }
-    //  
-    //     //    emitter << YAML::EndSeq;
-    //  
-
-
-
-
-
-
 
     template<typename FilenameStringType>
     bool getMetaTagValueAsText(const AppConfig<FilenameStringType> &appCfg, std::string tag, std::string listDelimiter, std::string &tagText) const
@@ -176,6 +187,13 @@ struct Document
         else if (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList)
         {
             tagText = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tagData.begin(), tagData.end(), listDelimiter );
+            return true;
+        }
+        else if (metaTagType==MetaTagType::uniqueList || metaTagType==MetaTagType::commaUniqueList)
+        {
+            auto tmp = tagData;
+            auto tmp2 = std::vector<std::string>(tmp.begin(), std::unique(tmp.begin(), tmp.end()));
+            tagText = umba::string_plus::merge< std::string, std::vector<std::string>::const_iterator >( tmp2.begin(), tmp2.end(), listDelimiter );
             return true;
         }
         else if (metaTagType==MetaTagType::set || metaTagType==MetaTagType::commaSet)
@@ -326,6 +344,33 @@ struct Document
         return "en-US";
 
     }
+
+    // template<typename FilenameStringType>
+    // std::string getDocumentLanguage(const AppConfig<FilenameStringType> &appCfg) const
+    // {
+    //     if (!appCfg.documentForceLanguage.empty())
+    //     {
+    //         return appCfg.documentForceLanguage;
+    //     }
+    //  
+    //     std::string lang;
+    //     if (getMetaTagValueAsSingleLineText(appCfg, "lanuage", ",", lang))
+    //     {
+    //         return lang;
+    //     }
+    //  
+    //     if (!appCfg.documentDefaultLanguage.empty())
+    //     {
+    //         return appCfg.documentDefaultLanguage;
+    //     }
+    //  
+    //     return "en-US";
+    //  
+    // }
+
+
+    
+
 
 }; // struct Document
 

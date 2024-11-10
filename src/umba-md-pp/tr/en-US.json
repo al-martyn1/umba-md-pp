@@ -2,6 +2,24 @@
   "0409": {
     "common": {
       "Hello world!": "Hello translated world 409!"
+    },
+    "metatag-titles": {
+      "category": "Category",
+      "tags": "Tags",
+      "author": "Author",
+      "title": "Title",
+      "date": "Date",
+      "url": "URL",
+      "disclaimer": "Disclaimer",
+      "description": "Description",
+      "categorys": "Categories",
+      "tagss": "Tags",
+      "authors": "Authors",
+      "titles": "Title",
+      "dates": "Date",
+      "urls": "URLs",
+      "disclaimers": "Disclaimer",
+      "descriptions": "Description"
     }
   }
 }
