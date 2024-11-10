@@ -150,7 +150,7 @@ struct AppConfig
 
     void checkUpdateEmptyGeneratedOutputRootByFilename(const std::string &filename)
     {
-        LOG_INFO("config") << "Check generated images output path (Graphviz/PlantUML)\n";
+        LOG_INFO("config") << "Check for generated images output path (Graphviz/PlantUML/etc...)\n";
 
         graphVizOptions.savePath = umba::filename::makeCanonical(graphVizOptions.savePath);
         plantUmlOptions.savePath = umba::filename::makeCanonical(plantUmlOptions.savePath);

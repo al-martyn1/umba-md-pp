@@ -1516,7 +1516,7 @@ int operator()( const StringType                                &a           //!
             }
 
             auto path = argsParser.makeAbsPath(strVal);
-            LOG_INFO("config") << "Setting generated images output path (Graphviz/PlantUML) to: '" << path << "'\n";
+            LOG_INFO("config") << "Setting generated images output path (Graphviz/PlantUML/etc/...) to: '" << path << "'\n";
             LOG_INFO("config") << "Previous value of Graphviz generated images output path is : '" << appConfig.graphVizOptions.savePath << "'\n";
             LOG_INFO("config") << "Previous value of PlantUML generated images output path is : '" << appConfig.plantUmlOptions.savePath << "'\n";
 
