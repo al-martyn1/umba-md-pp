@@ -12,7 +12,6 @@
 
 Утилита, добавляющая некоторые возможности к Markdown
 
-- [umba-md-pp - Markdown препроцессор](#user-content-umba-md-pp---markdown-препроцессор)
 - [Важные ссылки](#user-content-важные-ссылки)
   - [Тест макроподстановки в именах включаемых файлов](#user-content-тест-макроподстановки-в-именах-включаемых-файлов)
 - [Основные возможности](#user-content-основные-возможности)
@@ -24,6 +23,19 @@
 - [Вставка сниппетов](#user-content-вставка-сниппетов)
 - [Стандартный конфиг](#user-content-стандартный-конфиг)
 - [Любите ли вы документацию так, как люблю её я?](#user-content-любите-ли-вы-документацию-так-как-люблю-её-я)
+- [GraphViz Samples](#user-content-graphviz-samples)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test001.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest001svg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test002.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest002svg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test003.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest003svg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test004.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest004svg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test005.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest005svg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test006.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest006svg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test007.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtest007svg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtriesvg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_brackets.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtrie_bracketssvg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_flat.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtrie_flatsvg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_numbers.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtrie_numberssvg-error-2)
+- [Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_operators.svg', error: 2](#user-content-failed-to-copy-temp-file-f_githubumba-toolsumba-md-ppdocimggeneratedtempsvg-to-target-file-f_githubumba-toolsumba-md-ppdocimggeneratedtrie_operatorssvg-error-2)
 - [PlantUML Samples](#user-content-plantuml-samples)
 - [Boost MSM](#user-content-boost-msm)
 
@@ -41,10 +53,6 @@
 
 
 
-# umba-md-pp - Markdown препроцессор
-
-**umba-md-pp** - препроцессор для подготовки документации с использованием markdown-разметки
-простого текста.
 
 # Важные ссылки
 
@@ -255,10 +263,10 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 # Будем называть это "голубятня", "чердак", "loft"
 # В голубятне лежат не обрабатываемые в пакетном режиме файлы, предназначенные для подключения
 # в файлы документов. Например, мы хотим создать книгу, и публиковать её как отдельные документы,
-# так и как книга в сборе. Тогда мы создаём на чердаке главы книги, а в обрабатываемом каталоге
+# так и как книга в сборе. Тогда мы создаём в голубятне главы книги, а в обрабатываемом каталоге
 # аналогичные файлы, единственное действие в которых - подключение соответствующих файлов из голубятни.
 # Также в обрабатываемом каталоге мы создаём файл TheBook.md_, в который подключаем все главы
-# из голубятни.
+# из голубятни, для сборки всех глав в единый документ.
 # Также библиотеки/модули могут содержать свою голубятню, в которой хранятся различные документы,
 # включаемые как в документацию по данной библиотеке/модулю, но также и предназначенне для включения
 # в конечную документацию по продукту, который создаёт пользователь библиотеки/модуля.
@@ -282,11 +290,11 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 # --processing-options=no-transliterate-generated-filenames
 
 # Ошибки и опечатки в именах тэгов, а также поддержа русскоязычных тэгов
-# Тэги в секции метаданных могут указываться на английском и русском языке, а также во множественнов числе,
+# Тэги в секции метаданных могут указываться на английском и русском языке, а также во множественном числе,
 # например:
 # Author, Authors, Автор, Авторы
 # Имя тэга транслитерируется, потом приводится к нижнему регистру, после этого начинают работу правила
-# meta-tag-replace
+# 'meta-tag-replace' для приведения имён тэгов к каноническому виду.
 --meta-tag-replace=avtor:author
 --meta-tag-replace=avtory:author
 --meta-tag-replace=authors:author
@@ -337,8 +345,8 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 # ```
 # Author: Name1 <address1@domain.net>, Name2 <address2@domain.com>
 # ```
-# При этом автор(ы) основного документа должны идти первыми, а авторы использованных поддокументов
-# идут в порядке подключения поддокументов и их порядка там.
+# При этом автор(ы) основного документа будут идти первыми, а авторы использованных поддокументов
+# идут в порядке подключения поддокументов и их порядка там (не зависит от способа оформления метатега).
 # Для этого мы устанавливаем тип тэга как comma-unique-list - список, однострочное значение разделяется
 # запятой, без повторяющихся значений.
 #
@@ -422,11 +430,38 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
-![LISP Grammar 2](doc/img.generated/diagram_0000.svg)
+
+# GraphViz Samples
+
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test001.svg', error: 2
+![Graph](doc/img.generated/test001.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test002.svg', error: 2
+![Graph](doc/img.generated/test002.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test003.svg', error: 2
+![Graph](doc/img.generated/test003.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test004.svg', error: 2
+![Graph](doc/img.generated/test004.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test005.svg', error: 2
+![Graph](doc/img.generated/test005.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test006.svg', error: 2
+![Graph](doc/img.generated/test006.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\test007.svg', error: 2
+![Graph](doc/img.generated/test007.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie.svg', error: 2
+![Graph](doc/img.generated/trie.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_brackets.svg', error: 2
+![Graph](doc/img.generated/trie_brackets.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_flat.svg', error: 2
+![Graph](doc/img.generated/trie_flat.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_numbers.svg', error: 2
+![Graph](doc/img.generated/trie_numbers.svg)
+# Failed to copy temp file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\$temp$.svg' to target file 'F:\_github\umba-tools\umba-md-pp\doc\img.generated\trie_operators.svg', error: 2
+![Graph](doc/img.generated/trie_operators.svg)
 
 
 # PlantUML Samples
 
+![LISP Grammar 2](doc/img.generated/diagram_0000.svg)
 
 ![Diagram](doc/img.generated/doc.drafts/plantuml/36-state-01.svg)
 ![Diagram](doc/img.generated/doc.drafts/plantuml/37-state-02.svg)
