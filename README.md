@@ -202,34 +202,36 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 # Стандартный конфиг
 
 ```
+# Формат файла опций/ответов (response file)
+# В одной строке - только одна опция
+# Коментарии начинаются с символа '#' или символа ';'
+# Коментарии допустимы только в начале строки
+
+
 # Управляем предупреждениями и сообщениями
---info=-all
 --warning=+all
+--info=-all
 
 # Устанавливаем русский как язык документов по умолчанию, если язык не задан тэгами,
 # не переопределён дефолтный язык где-то потом или не задан принудительно через опцию --force-document-language
 # Задание языка необходимо для доксигена, если по дефолту задать не русский, или не задавать язык, доксиген кракозяблы генерит
 --document-language=russian
 
-# External programs lookup
+# Поиск внешних программ
 --dont-lookup-for-doxygen
 --dont-lookup-for-graphviz
 
-# Common options
+# Базовые опции
 --processing-options=generate-toc,title
 --set-insert-options=fail,path,filename-line-no,trim-arround
 --batch-page-index-file=doc/Index.md
 
-# Graphviz common options
+# Базовые опции для Graphviz
 --graphviz-output-format=svg
 --graphviz-dpi=120
 --graphviz-show-labels=true
 
 # Расширения, обрабатываемые (и сканируемые) MDPP
-# старое
-#--add-mdpp-extentions=_md,_md_,md_,_markdown,_markdown_,markdown_
-
-# новое
 --add-mdpp-extentions=_md,_md_,md_
 --add-mdpp-extentions=_mkd,_mkd_,mkd_
 --add-mdpp-extentions=_mdwn,_mdwn_,mdwn_
@@ -239,7 +241,17 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --add-mdpp-extentions=_markdown,_markdown_,markdown_
 #--add-mdpp-extentions=_text,_text_,text_
 
-# Исключаем из сканирования в пакетном режиме подкаталоги со следующими именами
+# Исключаем из сканирования в пакетном режиме подкаталоги со следующими именами.
+# Будем называть это "голубятня", "чердак", "loft"
+# В голубятне лежат не обрабатываемые в пакетном режиме файлы, предназначенные для подключения
+# в файлы документов. Например, мы хотим создать книгу, и публиковать её как отдельные документы,
+# так и как книга в сборе. Тогда мы создаём на чердаке главы книги, а в обрабатываемом каталоге
+# аналогичные файлы, единственное действие в которых - подключение соответствующих файлов из голубятни.
+# Также в обрабатываемом каталоге мы создаём файл TheBook.md_, в который подключаем все главы
+# из голубятни.
+# Также библиотеки/модули могут содержать свою голубятню, в которой хранятся различные документы,
+# включаемые как в документацию по данной библиотеке/модулю, но также и предназначенне для включения
+# в конечную документацию по продукту, который создаёт пользователь библиотеки/модуля.
 --batch-exclude-dirs=_md,_md_,md_
 --batch-exclude-dirs=_mkd,_mkd_,mkd_
 --batch-exclude-dirs=_mdwn,_mdwn_,mdwn_
@@ -258,7 +270,10 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --processing-options=transliterate-generated-filenames
 # --processing-options=no-transliterate-generated-filenames
 
-# Metatags misspelling replaces and transliteration result replaces
+# Ошибки и опечатки в именах тэгов, а также поддержа русскоязычных тэгов
+# Тэги в секции метаданных могут указываться на английском и русском языке, а также во множественнов числе, например:
+# Author, Authors, Автор, Авторы
+# Имя тэга транслитерируется, потом приводится к нижнему регистру, после этого начинают работу правила meta-tag-replace
 --meta-tag-replace=avtor:author
 --meta-tag-replace=avtory:author
 --meta-tag-replace=authors:author
@@ -280,7 +295,9 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-replace=yazyk dokumenta:language
 --meta-tag-replace=otkaz ot otvetstvennosti:disclaimer
 
-# Metatags serialization: CanonicalName:TargetName
+# Сериализация метатегов
+# Метатеги исходного документа могут сохраняться в результирующий документ в секцию метатэгов
+# Тут задаются правила сериализации канонических имён метатегов
 --meta-tag-serialize=title:Title
 --meta-tag-serialize=disclaimer:Disclaimer
 --meta-tag-serialize=description:Description
@@ -292,12 +309,58 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-serialize=language:Language
 --meta-tag-serialize=url:URL
 
-# Metatag types
+# Типы метатегов
+# Метатеги в результирующий документ собираются из всех включенных документов, а также из внешних диаграмм graphviz и PlantUML
+# Метатеги записываются в формате YAML, но есть исключения. Так, списки, например, список авторов
+# в каноническом виде должен быть записан так:
+# ```
+# Author:
+#   - Name1 <address1@domain.net>
+#   - Name2 <address2@domain.com>
+# ```
+#
+# Но для упрощения список авторов может быть записан и через запятую:
+# ```
+# Author: Name1 <address1@domain.net>, Name2 <address2@domain.com>
+# ```
+# При этом автор(ы) основного документа должны идти первыми, а авторы использованных поддокументов
+# идут в порядке подключения поддокументов и их порядка там.
+# Для этого мы устанавливаем тип тэга как comma-unique-list - список, однострочное значение разделяется запятой, без повторяющихся значений.
+#
+# Возможные значения:
+#
+# text-first - текст, используется только первое значение.
+#
+# text-replace, text-last - текст, используется только последнее значение.
+#
+# text, text-merge - текст, используется всё найденное, вставляется группой параграфов.
+#
+# list - список значений, доступная форма записи - только в виде списка YAML.
+#
+# unique-list - список значений, аналогично list.
+#               В отличие от list, повторяющиеся значения удаляются.
+#
+# comma-list - список значений, в виде списка YAML или одной строкой, со значениями, разделяемыми запятой.
+#              Порядок - по мере обнаружения тэгов.
+#
+# comma-unique-list, unique-comma-list - список значений, в виде списка YAML или одной строкой, со значениями,
+#              разделяемыми запятой. В отличие от comma-list, повторяющиеся значения удаляются.
+#
+# set - набор уникальных значений, отсортированных лексикографически.
+#             Доступная форма записи - только в виде списка YAML.
+#             При сортировке не учитываются национальные особенности.
+#
+# comma-set - аналогично set, но значения могут быть заданы одной строкой, через запятую.
+#
+# При генерации результирующего документа метатеги форматируются строко в формате YAML
+#
 --meta-tag-set-type=comma-set:category,tags
 --meta-tag-set-type=comma-unique-list:author
 --meta-tag-set-type=text-first:title,date,url
 --meta-tag-set-type=text-merge:disclaimer,description
 
+
+# Настройки для листингов различных языков программирования
 
 # C++
 --add-lang-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
