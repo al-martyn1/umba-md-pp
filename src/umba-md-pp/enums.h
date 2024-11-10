@@ -277,7 +277,9 @@ enum class ProcessingOptions : std::uint32_t
     noInsertMeta                        = 0x1090 /*!< Don't insert metatags to document body (not to metadata) */,
     insertMeta                          = 0x1091 /*!< Insert metatags to document body (not to metadata) */,
     noForceInsertMeta                   = 0x10A0 /*!< Disable force insert meta tags to document body */,
-    forceInsertMeta                     = 0x10A1 /*!< Insert metatags to document body begining even if are already added by #!meta commands */
+    forceInsertMeta                     = 0x10A1 /*!< Insert metatags to document body begining even if are already added by #!meta commands */,
+    noDocumentMetaTitle                 = 0x10B0 /*!< Don't add 'Document information' title */,
+    documentMetaTitle                   = 0x10B1 /*!< Add 'Document information' title to meta tags section */
 
 }; // enum class ProcessingOptions : std::uint32_t
 
@@ -303,8 +305,10 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTransliterateGeneratedFilenames , "NoTransliterateGeneratedFilenames" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noInsertMeta                  , "NoInsertMeta"                      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "TransliterateGeneratedFilenames"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::documentMetaTitle             , "DocumentMetaTitle"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "InsertMeta"                        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "ForceInsertMeta"                   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "NoDocumentMetaTitle"               );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
@@ -368,12 +372,18 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterate-generated-filenames"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterate_generated_filenames"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterategeneratedfilenames"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::documentMetaTitle             , "document-meta-title"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::documentMetaTitle             , "document_meta_title"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::documentMetaTitle             , "documentmetatitle"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "insert-meta"                          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "insert_meta"                          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "insertmeta"                           );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force-insert-meta"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force_insert_meta"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "forceinsertmeta"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "no-document-meta-title"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "no_document_meta_title"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "nodocumentmetatitle"                  );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 
@@ -529,7 +539,8 @@ enum class MetaTagType : std::uint32_t
     set               = 0x0005 /*!< Normal set */,
     commaSet          = 0x0006 /*!< Set, but can be represented as simple text with comma separated items */,
     uniqueList        = 0x0007 /*!< Normal unique list */,
-    commaUniqueList   = 0x0008 /*!< Unique list, but can be represented as simple text with comma separated items */
+    commaUniqueList   = 0x0008 /*!< Unique list, but can be represented as simple text with comma separated items */,
+    uniqueCommaList   = 0x0008 /*!< Unique list, but can be represented as simple text with comma separated items */
 
 }; // enum class MetaTagType : std::uint32_t
 
@@ -575,9 +586,12 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::uniqueList        , "unique-list"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::uniqueList        , "unique_list"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::uniqueList        , "uniquelist"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "unique-comma-list" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "comma-unique-list" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "comma_unique_list" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "unique_comma_list" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "commauniquelist"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "uniquecommalist"   );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MetaTagType, std::map, 1 )
 
 

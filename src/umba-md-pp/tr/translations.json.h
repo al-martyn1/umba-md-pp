@@ -4,7 +4,7 @@
 
 /*--------------------------------------------------------*/
 
-static const char translations_json[52929] =
+static const char translations_json[53051] =
     "{\r\n"
     "\"0409\": {\r\n"
     "\"common\": {\r\n"
@@ -900,6 +900,7 @@ static const char translations_json[52929] =
     "\"descriptions\": \"Description\",\r\n"
     "\"disclaimer\": \"Disclaimer\",\r\n"
     "\"disclaimers\": \"Disclaimer\",\r\n"
+    "\"metatag-section-title\": \"Document information\",\r\n"
     "\"tags\": \"Tags\",\r\n"
     "\"tagss\": \"Tags\",\r\n"
     "\"title\": \"Title\",\r\n"
@@ -1801,6 +1802,7 @@ static const char translations_json[52929] =
     "\"descriptions\": \"Описание\",\r\n"
     "\"disclaimer\": \"Отказ от ответственности\",\r\n"
     "\"disclaimers\": \"Отказ от ответственности\",\r\n"
+    "\"metatag-section-title\": \"Информация о документе\",\r\n"
     "\"tags\": \"Тэги\",\r\n"
     "\"tagss\": \"Тэги\",\r\n"
     "\"title\": \"Название\",\r\n"
@@ -1816,4 +1818,4 @@ static const char translations_json[52929] =
     "}"
     ;
 
-static const unsigned translations_json_size = 52928; /* Not including terminating zero */
+static const unsigned translations_json_size = 53050; /* Not including terminating zero */

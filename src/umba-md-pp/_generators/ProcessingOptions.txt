@@ -19,4 +19,6 @@ noInsertMeta                                =0x1090 // Don't insert metatags to 
 insertMeta                                  =0x1091 // Insert metatags to document body (not to metadata)
 noForceInsertMeta                           =0x10A0 // Disable force insert meta tags to document body
 forceInsertMeta                             =0x10A1 // Insert metatags to document body begining even if are already added by #!meta commands
+noDocumentMetaTitle                         =0x10B0 // Don't add 'Document information' title
+documentMetaTitle                           =0x10B1 // Add 'Document information' title to meta tags section
 

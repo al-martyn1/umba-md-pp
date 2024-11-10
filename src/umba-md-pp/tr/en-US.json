@@ -4,6 +4,7 @@
       "Hello world!": "Hello translated world 409!"
     },
     "metatag-titles": {
+      "metatag-section-title": "Document information",
       "category": "Category",
       "tags": "Tags",
       "author": "Author",

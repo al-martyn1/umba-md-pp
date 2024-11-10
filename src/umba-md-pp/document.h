@@ -2,6 +2,7 @@
 
 #include "app_config.h"
 #include "umba/text_utils.h"
+#include "umba/string_plus.h"
 #include "marty_tr/marty_tr.h"
 //
 #include <algorithm>
@@ -51,6 +52,33 @@ struct Document
         if (metaTags.empty())
             metaTags = appCfg.documentMetaTagsList;
 
+        bool addMetaTitle = appCfg.testProcessingOption(ProcessingOptions::documentMetaTitle);
+        {
+            std::vector<std::string> metaTagsTmp;
+            for(auto t : metaTags)
+            {
+                auto optId = enum_deserialize(t, ProcessingOptions::invalid);
+                if (optId==ProcessingOptions::noDocumentMetaTitle)
+                {
+                    addMetaTitle = false;
+                }
+                else if (optId==ProcessingOptions::documentMetaTitle)
+                {
+                    addMetaTitle = true;
+                }
+                else
+                {
+                    metaTagsTmp.emplace_back(t);
+                }
+            }
+
+            swap(metaTags, metaTagsTmp);
+        }
+
+        std::string langStr = getDocumentLanguage(appCfg);
+        std::string langId  = findLangTagByString(langStr);
+
+
         std::vector<std::string> resLines;
 
         bool headerAdded = false;
@@ -79,8 +107,6 @@ struct Document
 
             MetaTagType metaTagType = appCfg.getMetaTagType(*mtIt);
 
-            std::string langStr = getDocumentLanguage(appCfg);
-            std::string langId  = findLangTagByString(langStr);
             std::string tagId  = *mtIt;
             if (tagData.size()>1 && (metaTagType==MetaTagType::list || metaTagType==MetaTagType::commaList || metaTagType==MetaTagType::uniqueList || metaTagType==MetaTagType::commaUniqueList || metaTagType==MetaTagType::set || metaTagType==MetaTagType::commaSet))
                 tagId += "s";
@@ -150,7 +176,16 @@ struct Document
                 // emitter << std::string();
             }
 
+        }
 
+        if (addMetaTitle && !resLines.empty())
+        {
+            std::string title = marty_tr::tr("metatag-section-title", "metatag-titles", langId);
+            std::vector<std::string> tmpLines;
+            tmpLines.emplace_back("**" + title + "**");
+            tmpLines.emplace_back(std::string());
+            umba::vectorPushBack(tmpLines, resLines);
+            swap(tmpLines, resLines);
         }
 
         return resLines;

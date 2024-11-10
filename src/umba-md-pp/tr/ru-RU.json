@@ -4,6 +4,7 @@
       "Hello world!": "Hello translated world 419!"
     },
     "metatag-titles": {
+      "metatag-section-title": "Информация о документе",
       "category": "Категория",
       "tags": "Тэги",
       "author": "Автор",

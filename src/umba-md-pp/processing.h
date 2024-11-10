@@ -1719,7 +1719,7 @@ std::vector<std::string> processMetaCommands(const AppConfig<FilenameStringType>
                 resLines.emplace_back(std::string());
             resLines.emplace_back("---");
             umba::vectorPushBack(resLines, docMetaLines);
-            resLines.emplace_back(std::string());
+            //resLines.emplace_back(std::string());
             resLines.emplace_back("---");
             makeShureEmptyLine(resLines);
         }
