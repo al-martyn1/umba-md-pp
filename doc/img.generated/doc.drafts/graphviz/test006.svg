@@ -9,13 +9,13 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 178)">
 <title>G</title>
 <polygon fill="white" stroke="none" points="-4,4 -4,-178 337,-178 337,4 -4,4"/>
-<g id="clust1" class="cluster"><title>cluster0</title>
-<polygon fill="lightgrey" stroke="lightgrey" points="86,-91 86,-166 251,-166 251,-91 86,-91"/>
-<text text-anchor="middle" x="168.5" y="-150.8" font-family="Times New Roman,serif" font-size="14.00">process #1</text>
-</g>
 <g id="clust2" class="cluster"><title>cluster1</title>
 <polygon fill="none" stroke="blue" points="82,-8 82,-83 161,-83 161,-8 82,-8"/>
 <text text-anchor="middle" x="121.5" y="-67.8" font-family="Times New Roman,serif" font-size="14.00">process #2</text>
+</g>
+<g id="clust1" class="cluster"><title>cluster0</title>
+<polygon fill="lightgrey" stroke="lightgrey" points="86,-91 86,-166 251,-166 251,-91 86,-91"/>
+<text text-anchor="middle" x="168.5" y="-150.8" font-family="Times New Roman,serif" font-size="14.00">process #1</text>
 </g>
 <!-- a0 -->
 <g id="node1" class="node"><title>a0</title>
