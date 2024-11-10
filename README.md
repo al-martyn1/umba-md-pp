@@ -38,7 +38,7 @@
 ---
 
 
-![LISP Grammar 1](doc/img.generated/diagram_0000.svg)
+
 
 
 # umba-md-pp - Markdown препроцессор
@@ -422,7 +422,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
-![LISP Grammar 2](doc/img.generated/diagram_0001.svg)
+![LISP Grammar 2](doc/img.generated/diagram_0000.svg)
 
 
 # PlantUML Samples
@@ -466,7 +466,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 [Boost MSM documentation](https://www.boost.org/doc/libs/1_85_0/libs/msm/doc/HTML/ch03s04.html)
 
 
-![Sample state machine](doc/img.generated/diagram_0002.svg)
+![Sample state machine](doc/img.generated/diagram_0001.svg)
 
 
 ---

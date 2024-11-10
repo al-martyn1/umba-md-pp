@@ -14,15 +14,16 @@ URL        : https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 #// @startebnf
 #// title LISP Grammar
 #// @endebnf
-<plantuml type=ebnf title='LISP Grammar 1'>
-grammars_expression = atomic_symbol | "(", s_expression, ".", s_expression, ")" | list;
-list = "(", s_expression, { s_expression }, ")";
-atomic_symbol = letter, atom_part;
-atom_part = empty | letter, atom_part | number, atom_part;
-letter = ? a-z ?;
-number = ? 1-9 ?;
-empty = " ";
-</plantuml>
+
+#// <plantuml type=ebnf title='LISP Grammar 1'>
+#// grammars_expression = atomic_symbol | "(", s_expression, ".", s_expression, ")" | list;
+#// list = "(", s_expression, { s_expression }, ")";
+#// atomic_symbol = letter, atom_part;
+#// atom_part = empty | letter, atom_part | number, atom_part;
+#// letter = ? a-z ?;
+#// number = ? 1-9 ?;
+#// empty = " ";
+#// </plantuml>
 
 #// Russian
 #// English
