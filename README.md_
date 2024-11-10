@@ -172,9 +172,9 @@ GitHub/GitLab wiki, например.
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
 
-#// # GraphViz Samples
+# GraphViz Samples
 
-#// <graph/> doc.drafts/graphviz/test001.dot
+<graph/> doc.drafts/graphviz/test001.dot
 #// <graph/> doc.drafts/graphviz/test002.dot
 #// <graph/> doc.drafts/graphviz/test003.dot
 #// <graph/> doc.drafts/graphviz/test004.dot

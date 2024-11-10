@@ -23,6 +23,7 @@
 - [Вставка сниппетов](#user-content-вставка-сниппетов)
 - [Стандартный конфиг](#user-content-стандартный-конфиг)
 - [Любите ли вы документацию так, как люблю её я?](#user-content-любите-ли-вы-документацию-так-как-люблю-её-я)
+- [GraphViz Samples](#user-content-graphviz-samples)
 - [PlantUML Samples](#user-content-plantuml-samples)
 - [Boost MSM](#user-content-boost-msm)
 
@@ -418,7 +419,9 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 Думаю ещё сделать всяких штук типа эпиграфов, и тп.
 
 
+# GraphViz Samples
 
+![Graph](doc/img.generated/doc.drafts/graphviz/test001.svg)
 
 
 # PlantUML Samples
