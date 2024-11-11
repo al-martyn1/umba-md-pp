@@ -635,7 +635,7 @@ int safe_main(int argc, char* argv[])
             appConfigForFile.checkUpdateEmptyGeneratedOutputRootByFilename(curFile);
 
             Document doc;
-            std::string resText     = processMdFile(appConfigForFile, inputFileText, curFile, doc);
+            std::string resText     = processMdFile(appConfigForFile, doc, inputFileText, curFile);
             std::string docTitle    = doc.getDocumentTitleAny();
             std::string docLanguage = doc.getDocumentLanguage(appConfigForFile);
 
@@ -979,7 +979,7 @@ int safe_main(int argc, char* argv[])
 
 
         Document doc;
-        std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
+        std::string resText  = processMdFile(appConfig, doc, inputFileText, inputFilename);
         //std::string docTitle = doc.getDocumentTitleAny();
 
         try

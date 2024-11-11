@@ -110,7 +110,7 @@ std::string::const_iterator tagLineExtraParse(const AppConfig<FilenameStringType
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType>
-using TagLinesProcessor = std::function<void (const AppConfig<FilenameStringType>&, umba::html::HtmlTag&, MdPpTag, const FilenameStringType&, const std::vector<std::string>&, std::vector<std::string>&)>;
+using TagLinesProcessor = std::function<void (const AppConfig<FilenameStringType>&, Document&, umba::html::HtmlTag&, MdPpTag, const FilenameStringType&, const std::vector<std::string>&, std::vector<std::string>&)>;
 
 //------------------------------
 template<typename FilenameStringType>
@@ -123,13 +123,13 @@ TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
     //TODO: !!! Набить процессоры для graph/csv
     TagLinesProcessorsMap<FilenameStringType> m;
 
-    m[MdPpTag::graph] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+    m[MdPpTag::graph] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
                         {
-                             return umba::md::processGraphLines(appCfg, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                             return umba::md::processGraphLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
-    m[MdPpTag::puml ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+    m[MdPpTag::puml ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
                         {
-                             return umba::md::processDiagramLines(appCfg, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                             return umba::md::processDiagramLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
     return m;
 }
@@ -144,14 +144,14 @@ const TagLinesProcessorsMap<FilenameStringType>& getTagLinesProcessorsMap()
 
 //------------------------------
 template<typename FilenameStringType>
-void tagLinesProcess(const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+void tagLinesProcess(const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
 {
     auto &m = const_cast< TagLinesProcessorsMap<FilenameStringType>& >(getTagLinesProcessorsMap<FilenameStringType>());
     auto it = m.find(tagType);
     if (it==m.end())
         return;
 
-    it->second(appCfg, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+    it->second(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
 }
 
 //----------------------------------------------------------------------------
@@ -166,12 +166,12 @@ void tagLinesProcess(const AppConfig<FilenameStringType> &appCfg, umba::html::Ht
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType>
-std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType &curFilename, Document &resDoc);
+std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document &resDoc, std::string fileText, const FilenameStringType &curFilename);
 
 //----------------------------------------------------------------------------
 //! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
 template<typename LineHandler, typename FilenameStringType> inline
-std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, const std::vector<std::string> &lines, LineHandler handler)
+std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines, LineHandler handler)
 {
     std::vector<std::string> resLines; resLines.reserve(lines.size());
 
@@ -291,7 +291,7 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
                         --idx;
                 }
 
-                tagLinesProcess(appCfg, mdHtmlTag, foundTagType, curFilename, tagLines, resLines);
+                tagLinesProcess(appCfg, doc, mdHtmlTag, foundTagType, curFilename, tagLines, resLines);
 
                 continue;
             }
@@ -407,7 +407,7 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
 
 //----------------------------------------------------------------------------
 template<typename HeaderLineHandler, typename FilenameStringType> inline
-std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
+std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
@@ -425,13 +425,13 @@ std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> 
         return false;
     };
 
-    return processLines(appCfg, curFilename, lines, handler);
+    return processLines(appCfg, doc, curFilename, lines, handler);
 
 }
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, const std::vector<std::string> &lines, int raiseVal)
+std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines, int raiseVal)
 {
     // Ограничиваем изменение разумной величиной
     if (raiseVal>3)
@@ -479,7 +479,7 @@ std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCf
         return true;
     };
 
-    return processHeaderLines(appCfg, curFilename, lines, raiseHeader);
+    return processHeaderLines(appCfg, doc, curFilename, lines, raiseHeader);
 }
 
 //----------------------------------------------------------------------------
@@ -551,9 +551,9 @@ std::string generateSectionNumberImpl(std::size_t lvl, const int *sectionCounter
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
 std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringType> &appCfg
+                                             , Document                            &docTo
                                              , const FilenameStringType            &curFilename
                                              , const std::vector<std::string>      &lines
-                                             , Document                            &docTo
                                              , bool                                updateDocInfo
                                              , bool                                updateHeader
                                              , bool                                numerateSections
@@ -657,7 +657,7 @@ std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringTyp
         return true;
     };
 
-    return processHeaderLines(appCfg, curFilename, lines, processSectionNumber);
+    return processHeaderLines(appCfg, docTo, curFilename, lines, processSectionNumber);
 }
 
 
@@ -749,7 +749,7 @@ void checkPrintLineIfContainsPngExt(LineHandlerEvent event, const std::string &l
 //----------------------------------------------------------------------------
 // For substitutions|data collection on text lines
 template<typename LineHandler, typename FilenameStringType> inline
-std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, const std::vector<std::string> &lines, LineHandler simpleHandler)
+std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringType> &appCfg, Document& doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines, LineHandler simpleHandler)
 {
     auto processLinesHandler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
@@ -786,7 +786,7 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
         return true;
     };
 
-    return processLines(appCfg, curFilename, lines, processLinesHandler);
+    return processLines(appCfg, doc, curFilename, lines, processLinesHandler);
 }
 
 //----------------------------------------------------------------------------
@@ -827,7 +827,7 @@ std::vector<std::string> extractImageLinks( const AppConfig<FilenameStringType> 
     };
 
     return
-    processTextLinesSimple( appCfg, curFilename, lines
+    processTextLinesSimple( appCfg, docTo, curFilename, lines
                           , [&](const std::string &line)
                             {
                                 //TODO: !!! Надо бы сделать какой-то null_insert_iterator и null_inserter
@@ -915,7 +915,7 @@ std::vector<std::string> stripLocalLinksExtentions( const AppConfig<FilenameStri
     };
 
     return
-    processTextLinesSimple( appCfg, curFilename, lines
+    processTextLinesSimple( appCfg, docTo, curFilename, lines
                           , [&](const std::string &line)
                             {
                                 std::string res;
@@ -1132,7 +1132,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
     std::unordered_map<SnippetOptions, int>::const_iterator raiseOptIt = intOptions.find(SnippetOptions::raise);
     if (raiseOptIt!=intOptions.end() && raiseOptIt->second!=0)
     {
-        processedDocLines = raiseHeaders(appCfg, curFilename, processedDocLines, raiseOptIt->second);
+        processedDocLines = raiseHeaders(appCfg, docTo, curFilename, processedDocLines, raiseOptIt->second);
     }
 
     auto curFilePath      = umba::filename::getPath(curFilename);
@@ -1197,7 +1197,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
     std::cout << "--- Transform\n";
     #endif
 
-    processedDocLines = processTextLinesSimple( appCfg, curFilename, processedDocLines
+    processedDocLines = processTextLinesSimple( appCfg, docTo, curFilename, processedDocLines
                                               , [&](const std::string &line)
                                                 {
                                                     #if defined(LOG_PROCESSING_TRANSFORM_BEFORE_AFTER)
@@ -1632,7 +1632,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
 
     };
 
-    return processLines(appCfg, curFilename, lines, handler);
+    return processLines(appCfg, docTo, curFilename, lines, handler);
 }
 
 // //----------------------------------------------------------------------------
@@ -1663,7 +1663,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, Document &doc, const std::vector<std::string> &lines, bool &tocAdded)
+std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines, bool &tocAdded)
 {
     std::size_t numTocFound = 0;
 
@@ -1692,12 +1692,12 @@ std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> 
         return false;
     };
 
-    return processLines(appCfg, curFilename, lines, handler);
+    return processLines(appCfg, doc, curFilename, lines, handler);
 }
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> processMetaCommands(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, Document &doc, const std::vector<std::string> &lines, std::size_t &numDocMetaLinesAdded)
+std::vector<std::string> processMetaCommands(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines, std::size_t &numDocMetaLinesAdded)
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
@@ -1774,7 +1774,7 @@ std::vector<std::string> processMetaCommands(const AppConfig<FilenameStringType>
         return false;
     };
 
-    return processLines(appCfg, curFilename, lines, handler);
+    return processLines(appCfg, doc, curFilename, lines, handler);
 }
 
 //----------------------------------------------------------------------------
@@ -1962,7 +1962,7 @@ std::string updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, const F
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, const FilenameStringType &curFilename, Document &doc, const std::vector<std::string> &lines)
+std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines)
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
@@ -1975,12 +1975,12 @@ std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &ap
         return true;
     };
 
-    return processLines(appCfg, curFilename, lines, handler);
+    return processLines(appCfg, doc, curFilename, lines, handler);
 }
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::string fileText, const FilenameStringType &curFilename, Document &resDoc)
+std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document &resDoc, std::string fileText, const FilenameStringType &curFilename)
 {
     //fileText = marty_cpp::normalizeCrLfToLf(fileText);
     std::vector<std::string> lines = marty_cpp::splitToLinesSimple(fileText);
@@ -2007,7 +2007,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
                                      || appCfg.targetRenderer==TargetRenderer::gitlab
                                       ;
 
-    resLines = generateSecionsExtra( appCfg, curFilename, resLines, doc
+    resLines = generateSecionsExtra( appCfg, doc, curFilename, resLines
                                    , true // update doc info
                                    , true // update header
                                    , appCfg.testProcessingOption(ProcessingOptions::numericSections) // нужно или нет реально генерить номера секций
@@ -2015,14 +2015,14 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
                                    , generateSecIds // needSpecialIdInSectionHeader
                                    );
 
-    resLines = updateInDocRefs(appCfg, curFilename, doc, resLines);
+    resLines = updateInDocRefs(appCfg, doc, curFilename, resLines);
 
     resLines = extractImageLinks(appCfg, doc, resLines, curFilename );
     resLines = stripLocalLinksExtentions(appCfg, doc, resLines, curFilename );
 
 
     bool tocAdded = false;
-    resLines = processTocCommands(appCfg, curFilename, doc, resLines, tocAdded);
+    resLines = processTocCommands(appCfg, doc, curFilename, resLines, tocAdded);
 
     if (!tocAdded && appCfg.testProcessingOption(ProcessingOptions::generateToc))
     {
@@ -2060,7 +2060,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, std::stri
 
 
     std::size_t numDocMetaLinesAdded = 0;
-    resLines = processMetaCommands(appCfg, curFilename, doc, resLines, numDocMetaLinesAdded); // тут вставляем то, что задано явно
+    resLines = processMetaCommands(appCfg, doc, curFilename, resLines, numDocMetaLinesAdded); // тут вставляем то, что задано явно
     if ((appCfg.testProcessingOption(ProcessingOptions::insertMeta) && numDocMetaLinesAdded==0) || appCfg.testProcessingOption(ProcessingOptions::forceInsertMeta))
     {
         std::vector<std::string> docMetaLines = doc.getDocumentMetatagsMarkdown(appCfg);

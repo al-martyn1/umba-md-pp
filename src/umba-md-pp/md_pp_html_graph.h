@@ -9,6 +9,7 @@
 #include "graph_viz_options.h"
 #include "extern_tools.h"
 #include "generation_cache_info.h"
+#include "document.h"
 // 
 #include "log.h"
 
@@ -178,8 +179,13 @@ void grapvizAddGraphLabel(const std::string &labelText, std::vector<std::string>
 
 
 template<typename FilenameStringType>
-void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType
-                      , const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines
+void processGraphLines( const AppConfig<FilenameStringType> &appCfg
+                      , Document &doc // Сюда вставляем метаданные, если читаем из внешнего файла, и они там есть
+                      , umba::html::HtmlTag &mdHtmlTag
+                      , MdPpTag tagType
+                      , const FilenameStringType &docFilename
+                      , const std::vector<std::string> &tagLines
+                      , std::vector<std::string> &resLines
                       )
 {
     // Копируем опции graphVizOptions из appCfg
@@ -247,6 +253,17 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg, umba::html:
 
     if (!AppConfig<std::string>::readInputFile(hashFile, hashFileText))
     {
+
+        // if (event==LineHandlerEvent::documentEnd)
+        // {
+        //     if (!metadataLines.empty())
+        //     {
+        //         std::string metadataText = marty_cpp::mergeLines(metadataLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
+        //         docTo.collectedMetadataTexts.emplace_back(metadataText);
+        //         metadataLines.clear();
+        //     }
+        // }
+
         needWriteHashLines = true;
     }
     else

@@ -11,6 +11,7 @@
 #include "plantuml_options.h"
 #include "extern_tools.h"
 #include "generation_cache_info.h"
+#include "document.h"
 // 
 #include "log.h"
 
@@ -193,8 +194,13 @@ void plantUmlAddDiagramLabelScaleAndPlantTags( const std::string &labelText
 }
 
 template<typename FilenameStringType>
-void processDiagramLines( const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType
-                        , const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines
+void processDiagramLines( const AppConfig<FilenameStringType> &appCfg
+                        , Document &doc // Сюда вставляем метаданные, если читаем из внешнего файла, и они там есть
+                        , umba::html::HtmlTag &mdHtmlTag
+                        , MdPpTag tagType
+                        , const FilenameStringType &docFilename
+                        , const std::vector<std::string> &tagLines
+                        , std::vector<std::string> &resLines
                         )
 {
     // Копируем опции plantUmlOptions из appCfg
