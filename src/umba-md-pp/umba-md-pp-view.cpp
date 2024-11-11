@@ -407,7 +407,7 @@ UMBA_APP_MAIN()
 
 
         Document doc;
-        std::string resText  = processMdFile(appConfig, inputFileText, inputFilename, doc);
+        std::string resText  = processMdFile(appConfig, doc, inputFileText, inputFilename);
         std::string docTitle = doc.getDocumentTitleAny();
 
         FilenameStringType finalFilename           = generateFinalFilenameFromTitle(docTitle, appConfig.testProcessingOption(ProcessingOptions::transliterateGeneratedFilenames));
