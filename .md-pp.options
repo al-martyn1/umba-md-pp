@@ -2,7 +2,7 @@
 --serialize-meta-tags=-
 #--processing-options=meta-data
 #--processing-options=no-meta-data
---processing-options=generate-toc,force-insert-meta,document-meta-title
+--processing-options=generate-toc,meta-data,force-insert-meta,document-meta-title
 --document-meta-tags=author,url
 --verbose
 --info=+all

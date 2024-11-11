@@ -2057,12 +2057,19 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document 
         umba::vectorPushBack(tmpLines, resLines);
         std::swap(tmpLines, resLines);
     }
+    else
+    {
+        //LOG_INFO("plantuml") << "Inserting label to diagram: " << textToInsert << "\n";
+    }
 
 
     std::size_t numDocMetaLinesAdded = 0;
     resLines = processMetaCommands(appCfg, doc, curFilename, resLines, numDocMetaLinesAdded); // тут вставляем то, что задано явно
+
     if ((appCfg.testProcessingOption(ProcessingOptions::insertMeta) && numDocMetaLinesAdded==0) || appCfg.testProcessingOption(ProcessingOptions::forceInsertMeta))
     {
+        LOG_INFO("meta-tags") << "Inserting meta data to document text\n";
+
         std::vector<std::string> docMetaLines = doc.getDocumentMetatagsMarkdown(appCfg);
         if (!docMetaLines.empty())
         {
@@ -2075,6 +2082,14 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document 
             umba::vectorPushBack(tmpLines, resLines);
             std::swap(tmpLines, resLines);
         }
+    }
+    else
+    {
+        LOG_INFO("meta-tags") << "Skip inserting meta data to document text, "
+                              << "insert-meta: " << (appCfg.testProcessingOption(ProcessingOptions::insertMeta) ? "true" : "false") << ", "
+                              << "added meta-tags: " << numDocMetaLinesAdded << ", "
+                              << "force-insert-meta: " << (appCfg.testProcessingOption(ProcessingOptions::forceInsertMeta) ? "true" : "false") // << ", "
+                              << "\n";
     }
 
 
@@ -2093,10 +2108,13 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document 
 
     if (appCfg.testProcessingOption(ProcessingOptions::metaData))
     {
+        LOG_INFO("meta-tags") << "Adding meta-tags as document meta info\n";
+
         // std::cout << "Write metadata\n";
         auto metadataText  = generateDocMetadata(appCfg, doc);
         if (!metadataText.empty())
         {
+            
             auto metadataLines = marty_cpp::splitToLinesSimple(metadataText);
             std::vector<std::string> tmpLines;
             tmpLines.emplace_back(std::string("---"));
@@ -2106,9 +2124,14 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document 
             umba::vectorPushBack(tmpLines, resLines);
             std::swap(tmpLines, resLines);
         }
+        else
+        {
+            LOG_INFO("meta-tags") << "Meta data is empty, nothing to add\n";
+        }
     }
     else
     {
+        LOG_INFO("meta-tags") << "Skip adding meta-tags as document meta info\n";
         //std::cout << "Write metadata NOT turned ON\n";
     }
     //std::string generateDocMetadata(const AppConfig &appCfg, Document &doc)

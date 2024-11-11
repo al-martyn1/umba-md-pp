@@ -1,6 +1,8 @@
 #pragma once
 
 #include "app_config.h"
+//
+#include "umba/container_utility.h"
 #include "umba/text_utils.h"
 #include "umba/string_plus.h"
 #include "marty_tr/marty_tr.h"
