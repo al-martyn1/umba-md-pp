@@ -279,7 +279,9 @@ enum class ProcessingOptions : std::uint32_t
     noForceInsertMeta                   = 0x10A0 /*!< Disable force insert meta tags to document body */,
     forceInsertMeta                     = 0x10A1 /*!< Insert metatags to document body begining even if are already added by #!meta commands */,
     noDocumentMetaTitle                 = 0x10B0 /*!< Don't add 'Document information' title */,
-    documentMetaTitle                   = 0x10B1 /*!< Add 'Document information' title to meta tags section */
+    documentMetaTitle                   = 0x10B1 /*!< Add 'Document information' title to meta tags section */,
+    noMetaDataSubst                     = 0x10C0 /*!< Don't perform macro substitutions on metatags text */,
+    metaDataSubst                       = 0x10C1 /*!< Perform macro substitutions on metatags text */
 
 }; // enum class ProcessingOptions : std::uint32_t
 
@@ -308,7 +310,9 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::documentMetaTitle             , "DocumentMetaTitle"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "InsertMeta"                        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "ForceInsertMeta"                   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "NoMetaDataSubst"                   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "NoDocumentMetaTitle"               );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::metaDataSubst                 , "MetaDataSubst"                     );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
@@ -381,9 +385,15 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force-insert-meta"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force_insert_meta"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "forceinsertmeta"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "no-meta-data-subst"                   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "no_meta_data_subst"                   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "nometadatasubst"                      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "no-document-meta-title"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "no_document_meta_title"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "nodocumentmetatitle"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaDataSubst                 , "meta-data-subst"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaDataSubst                 , "meta_data_subst"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaDataSubst                 , "metadatasubst"                        );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 

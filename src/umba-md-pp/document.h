@@ -54,6 +54,7 @@ struct Document
         if (metaTags.empty())
             metaTags = appCfg.documentMetaTagsList;
 
+        // Добавлять ли в текст документа заголовок метасекции "Document Information"/"Информация о документе"
         bool addMetaTitle = appCfg.testProcessingOption(ProcessingOptions::documentMetaTitle);
         {
             std::vector<std::string> metaTagsTmp;

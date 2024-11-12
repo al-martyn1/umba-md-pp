@@ -787,7 +787,7 @@ struct AppConfig
 
         if (umba::string_plus::starts_with_and_strip(name, "^"))
         {
-            conditionVars[name]                                 = value;
+            conditionVars[name]                                      = value;
             conditionVars["^"+umba::string_plus::toupper_copy(name)] = value;
         }
         else
@@ -802,13 +802,18 @@ struct AppConfig
     {
         umba::string_plus::trim(nameValue);
 
-        std::vector<std::string> nameValuePair = splitAndTrimAndSkipEmpty(nameValue, ':');
-        if (nameValuePair.empty())
-            return false;
-        if (nameValuePair.size()<2)
-            return addConditionVar(nameValue,std::string());
-        else
-            return addConditionVar(nameValuePair[0],nameValuePair[1]);
+        const static std::string sep = std::string(":");
+        std::string first, second;
+        umba::string_plus::split_to_pair( nameValue, first, second, sep);
+        //std::vector<std::string> nameValuePair = splitAndTrimAndSkipEmpty(nameValue, ':');
+        // if (nameValuePair.empty())
+        //     return false;
+        // if (nameValuePair.size()<2)
+        //     return addConditionVar(nameValue,std::string());
+        // else
+        //     return addConditionVar(nameValuePair[0],nameValuePair[1]);
+
+        return addConditionVar(first,second);
     }
 
     bool updateInsertOptions(const std::string &opts)

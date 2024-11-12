@@ -241,7 +241,23 @@ bool getJsonNodeTypeValueAsString(const JsonNodeType &j, std::string &resVal)
 template<typename FilenameStringType> inline
 void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document &doc)
 {
-    for(const auto &metaText : doc.collectedMetadataTexts)
+    auto collectedMetadataTexts = doc.collectedMetadataTexts;
+
+    // Тут мы делаем подстановку макросов, если она задана
+    if ((appCfg.testProcessingOption(ProcessingOptions::metaDataSubst)))
+    {
+        using namespace umba::macros;
+
+        for(auto &metaText : collectedMetadataTexts)
+        {
+            metaText = substMacros( metaText
+                                  , umba::md::MacroTextFromMapOrEnvRef(appCfg.conditionVars, false /* !envAllowed */ )
+                                  , smf_KeepUnknownVars // | smf_uppercaseNames // !!! Надо заморачиваться с регистром? Если надо, то тогда при добавлении всё в upper case и кондишены надо подправить
+                                  );
+        }
+    }
+
+    for(const auto &metaText : collectedMetadataTexts)
     {
         std::string errMsg;
         std::string tmpJson;

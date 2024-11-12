@@ -2115,7 +2115,6 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document 
         //LOG_INFO("plantuml") << "Inserting label to diagram: " << textToInsert << "\n";
     }
 
-
     std::size_t numDocMetaLinesAdded = 0;
     resLines = processMetaCommands(appCfg, doc, curFilename, resLines, numDocMetaLinesAdded); // тут вставляем то, что задано явно
 
