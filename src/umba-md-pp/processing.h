@@ -96,7 +96,7 @@ const TagLineExtraParsersMap<FilenameStringType>& getTagLineExtraParsersMap()
 template<typename FilenameStringType>
 std::string::const_iterator tagLineExtraParse(const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
 {
-    auto &m = const_cast< TagLineExtraParsersMap<FilenameStringType>& >(getTagLineExtraParsersMap<FilenameStringType>());
+    const auto &m = const_cast< TagLineExtraParsersMap<FilenameStringType>& >(getTagLineExtraParsersMap<FilenameStringType>());
     auto it = m.find(tagType);
     if (it==m.end())
         return e;
@@ -146,7 +146,7 @@ const TagLinesProcessorsMap<FilenameStringType>& getTagLinesProcessorsMap()
 template<typename FilenameStringType>
 void tagLinesProcess(const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
 {
-    auto &m = const_cast< TagLinesProcessorsMap<FilenameStringType>& >(getTagLinesProcessorsMap<FilenameStringType>());
+    const auto &m = const_cast< TagLinesProcessorsMap<FilenameStringType>& >(getTagLinesProcessorsMap<FilenameStringType>());
     auto it = m.find(tagType);
     if (it==m.end())
         return;
@@ -157,6 +157,41 @@ void tagLinesProcess(const AppConfig<FilenameStringType> &appCfg, Document& doc,
 //----------------------------------------------------------------------------
 
 
+
+//----------------------------------------------------------------------------
+// Для соответствующего тэга возвращает строчку с single-line comment префиксом
+// Если формат файла не поддерживает коментарии, то увы, метаданных там не может быть
+using TagLinesCommentStartMap = std::unordered_map<MdPpTag, std::string, EnumClassHash >;
+
+//------------------------------
+inline
+TagLinesCommentStartMap makeTagLinesCommentStartMap()
+{
+    TagLinesCommentStartMap m;
+    m[MdPpTag::graph] = "//";
+    m[MdPpTag::puml ] = "'";
+    return m;
+}
+
+//------------------------------
+inline
+const TagLinesCommentStartMap& getTagLinesCommentStartMap()
+{
+    static auto m = makeTagLinesCommentStartMap();
+    return m;
+}
+
+//------------------------------
+inline
+std::string getTagLinesCommentStart(MdPpTag tagType)
+{
+    const auto &m = getTagLinesCommentStartMap();
+    auto it = m.find(tagType);
+    if (it==m.end())
+        return std::string();
+
+    return it->second;
+}
 
 //----------------------------------------------------------------------------
 
@@ -251,13 +286,15 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
             }
 
             umba::html::HtmlTag mdHtmlTag;
-            MdPpTag foundTagType = MdPpTag::invalid;
-            auto it = umba::md::tryParseLineToHtmlTag(mdHtmlTag, line.begin(), line.end(), foundTagType);
-            if (foundTagType!=MdPpTag::invalid && !mdHtmlTag.isCloseTag())
+            MdPpTag foundMdPpTagType = MdPpTag::invalid;
+            auto it = umba::md::tryParseLineToHtmlTag(mdHtmlTag, line.begin(), line.end(), foundMdPpTagType);
+            if (foundMdPpTagType!=MdPpTag::invalid && !mdHtmlTag.isCloseTag())
             {
-                tagLineExtraParse(appCfg, mdHtmlTag, foundTagType, it, line.end());
+                tagLineExtraParse(appCfg, mdHtmlTag, foundMdPpTagType, it, line.end());
 
                 std::vector<std::string> tagLines;
+
+                bool externFile = false;
 
                 if (mdHtmlTag.hasAttr("file"))
                 {
@@ -271,6 +308,7 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
                     else
                     {
                         tagLines = marty_cpp::splitToLinesSimple(foundFileText);
+                        externFile = true;
                     }
                 }
                 else
@@ -282,7 +320,7 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
                         MdPpTag foundEndTagType = MdPpTag::invalid;
                         line = lines[idx];
                         auto it2 = umba::md::tryParseLineToHtmlTag(mdHtmlTagEnd, line.begin(), line.end(), foundEndTagType);
-                        if (foundTagType==foundEndTagType && mdHtmlTagEnd.isCloseTag())
+                        if (foundMdPpTagType==foundEndTagType && mdHtmlTagEnd.isCloseTag())
                             break;
                         tagLines.emplace_back(lines[idx]);
                     }
@@ -291,7 +329,22 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
                         --idx;
                 }
 
-                tagLinesProcess(appCfg, doc, mdHtmlTag, foundTagType, curFilename, tagLines, resLines);
+                if (externFile && foundMdPpTagType!=MdPpTag::invalid)
+                {
+                    // Тут надо выцепить мету из строк внешнего файла 
+                    auto commentPrefix = getTagLinesCommentStart(foundMdPpTagType);
+                    if (!commentPrefix.empty())
+                    {
+                        auto metaLines = extractMetaLinesFromDocument(tagLines, commentPrefix);
+                        if (!metaLines.empty())
+                        {
+                            std::string metadataText = marty_cpp::mergeLines(metaLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
+                            doc.collectedMetadataTexts.emplace_back(metadataText);
+                        }
+                    }
+                }
+
+                tagLinesProcess(appCfg, doc, mdHtmlTag, foundMdPpTagType, curFilename, tagLines, resLines);
 
                 continue;
             }

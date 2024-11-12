@@ -237,9 +237,6 @@ void processDiagramLines( const AppConfig<FilenameStringType> &appCfg
 
     //LOG_INFO("plantuml") << "-----------------------------------------" << "\n";
 
-
-
-
     //------------------------------
     updatePlantUmlOptions(appCfg, mdHtmlTag, plantUmlOptions);
     //------------------------------

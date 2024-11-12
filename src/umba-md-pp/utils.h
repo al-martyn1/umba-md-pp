@@ -18,7 +18,79 @@
 //
 #include <string>
 #include <algorithm>
+#include <iterator>
 
+
+//----------------------------------------------------------------------------
+template<typename StringType> inline
+std::vector<StringType> extractMetaLinesFromDocument(std::vector<StringType> &docLines, const StringType &linePrefix=StringType())
+{
+    using CharType = typename StringType::value_type;
+
+    std::vector<StringType> resVec;
+
+    if (docLines.empty())
+        return resVec;
+
+    std::vector<StringType>::const_iterator it = docLines.begin();
+
+    const StringType metaSep = linePrefix + StringType(3,(CharType)'-');
+
+    if (umba::string_plus::rtrim_copy(*it)!=metaSep)
+        return resVec;
+
+    auto rmStartIt = it;
+    //auto itPrev = it;
+    ++it;
+
+    //StringType lastRtrimmedLine;
+
+    for(; it!=docLines.end(); ++it /* , ++prevIt */ )
+    {
+        //lastRtrimmedLine = umba::string_plus::rtrim_copy(*it);
+        StringType rtrimmedLine = umba::string_plus::rtrim_copy(*it);
+
+        // Перво-наперво проверяем на metaSep
+        if (rtrimmedLine==metaSep)
+        {
+            // нашли разделитель окончания метатегов
+            auto copyStartIt = rmStartIt; copyStartIt++; // копируем без стартового metaSep
+            std::copy(copyStartIt, it, std::back_inserter(resVec)); // текущую строку не копируем, поэтому используем it
+
+            // При необходимости удаляем префикс
+            if (!linePrefix.empty())
+            {
+                for(auto &s : resVec)
+                {
+                    umba::string_plus::rtrim(s);
+                    s.erase(0,linePrefix.size());
+                }
+            }
+
+            ++it; // удаляем, включая конечный metaSep.
+            docLines.erase(rmStartIt, it);
+
+            // Скопировали в вектор метастрок и удалили префикс, если было надо
+            // Удалили в исходном списке строки метаданных, включая стартовый и завершающий metaSep
+            // Можно возвращать результат
+
+            return resVec;
+        }
+
+        // Тут надо проверить, строка должна начинаться с префикса, если он задан
+        // Если префикс задан, но строка не начинается с него - что-то пошло не так
+        if (!linePrefix.empty() && !umba::string_plus::starts_with(rtrimmedLine, linePrefix))
+        {
+            //return resVec; // Возвращаем пустой результат, ничего не удаляя в исходном векторе строк
+            break;
+        }
+
+        // Тут тупо фигачим дальше в поисках конца метасекции или некондиционной строки, которая этот поиск прерывает
+    }
+
+    // Дошли до конца вектора, но окончания метасекции так и не нашли 
+    return resVec; // Возвращаем пустой результат, ничего не удаляя в исходном векторе строк
+}
 
 //----------------------------------------------------------------------------
 template<typename StringType> inline
