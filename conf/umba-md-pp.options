@@ -103,6 +103,7 @@
 --meta-tag-replace=yazyk:language
 --meta-tag-replace=yazyk dokumenta:language
 --meta-tag-replace=otkaz ot otvetstvennosti:disclaimer
+--meta-tag-replace=generators:generator
 
 # Сериализация метатегов
 # Метатеги исходного документа могут сохраняться в результирующий документ в секцию метатэгов
@@ -117,6 +118,7 @@
 --meta-tag-serialize=version:Version
 --meta-tag-serialize=language:Language
 --meta-tag-serialize=url:URL
+--meta-tag-serialize=generator:Generator
 
 # Типы метатегов
 # Метатеги в результирующий документ собираются из всех включенных документов,

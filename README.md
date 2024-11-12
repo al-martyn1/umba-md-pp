@@ -5,6 +5,7 @@ Author:
   - Имя2 <name2@domain.com>
   - HelloFromDot <ehlo@dot.org>
   - HelloFromPuml <ehlo@puml.org>
+Generator: Test Generator
 URL: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 ---
 
@@ -318,6 +319,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-replace=yazyk:language
 --meta-tag-replace=yazyk dokumenta:language
 --meta-tag-replace=otkaz ot otvetstvennosti:disclaimer
+--meta-tag-replace=generators:generator
 
 # Сериализация метатегов
 # Метатеги исходного документа могут сохраняться в результирующий документ в секцию метатэгов
@@ -332,6 +334,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-serialize=version:Version
 --meta-tag-serialize=language:Language
 --meta-tag-serialize=url:URL
+--meta-tag-serialize=generator:Generator
 
 # Типы метатегов
 # Метатеги в результирующий документ собираются из всех включенных документов,

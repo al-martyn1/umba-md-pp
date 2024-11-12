@@ -1,4 +1,5 @@
 //---
 //Author: HelloFromDot <ehlo@dot.org>
+//Generator: Test Generator
 //---
 digraph { a -> b }
