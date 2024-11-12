@@ -243,7 +243,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --dont-lookup-for-graphviz
 
 # Базовые опции
---processing-options=generate-toc,title
+--processing-options=generate-toc,title,meta-data-subst
 --set-insert-options=fail,path,filename-line-no,trim-arround
 --batch-page-index-file=doc/Index.md
 
