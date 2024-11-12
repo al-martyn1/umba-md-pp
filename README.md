@@ -3,6 +3,8 @@
 **Авторы**:
 - Имя <name@at.domain.com>
 - Имя2 <name2@domain.com>
+- HelloFromDot <ehlo@dot.org>
+- HelloFromPuml <ehlo@puml.org>
 
 **URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 
@@ -33,6 +35,8 @@
 **Авторы**:
 - Имя <name@at.domain.com>
 - Имя2 <name2@domain.com>
+- HelloFromDot <ehlo@dot.org>
+- HelloFromPuml <ehlo@puml.org>
 
 **URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 
@@ -486,6 +490,8 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 **Авторы**:
 - Имя <name@at.domain.com>
 - Имя2 <name2@domain.com>
+- HelloFromDot <ehlo@dot.org>
+- HelloFromPuml <ehlo@puml.org>
 
 **URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 

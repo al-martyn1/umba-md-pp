@@ -1,3 +1,6 @@
+'---
+'Author: HelloFromPuml <ehlo@puml.org>
+'---
 @startuml
 
 [*] --> State1
