@@ -4,7 +4,7 @@
 
 /*--------------------------------------------------------*/
 
-static const char translations_json[53051] =
+static const char translations_json[53348] =
     "{\r\n"
     "\"0409\": {\r\n"
     "\"common\": {\r\n"
@@ -892,6 +892,8 @@ static const char translations_json[53051] =
     "\"metatag-titles\": {\r\n"
     "\"author\": \"Author\",\r\n"
     "\"authors\": \"Authors\",\r\n"
+    "\"brief\": \"Brief\",\r\n"
+    "\"briefs\": \"Brief\",\r\n"
     "\"category\": \"Category\",\r\n"
     "\"categorys\": \"Categories\",\r\n"
     "\"date\": \"Date\",\r\n"
@@ -900,7 +902,10 @@ static const char translations_json[53051] =
     "\"descriptions\": \"Description\",\r\n"
     "\"disclaimer\": \"Disclaimer\",\r\n"
     "\"disclaimers\": \"Disclaimer\",\r\n"
+    "\"generator\": \"Generator\",\r\n"
+    "\"generators\": \"Generators\",\r\n"
     "\"metatag-section-title\": \"Document information\",\r\n"
+    "\"tag\": \"Tags\",\r\n"
     "\"tags\": \"Tags\",\r\n"
     "\"tagss\": \"Tags\",\r\n"
     "\"title\": \"Title\",\r\n"
@@ -1794,6 +1799,8 @@ static const char translations_json[53051] =
     "\"metatag-titles\": {\r\n"
     "\"author\": \"Автор\",\r\n"
     "\"authors\": \"Авторы\",\r\n"
+    "\"brief\": \"Краткое описание\",\r\n"
+    "\"briefs\": \"Краткое описание\",\r\n"
     "\"category\": \"Категория\",\r\n"
     "\"categorys\": \"Категории\",\r\n"
     "\"date\": \"Дата\",\r\n"
@@ -1802,7 +1809,10 @@ static const char translations_json[53051] =
     "\"descriptions\": \"Описание\",\r\n"
     "\"disclaimer\": \"Отказ от ответственности\",\r\n"
     "\"disclaimers\": \"Отказ от ответственности\",\r\n"
+    "\"generator\": \"Генератор\",\r\n"
+    "\"generators\": \"Генераторы\",\r\n"
     "\"metatag-section-title\": \"Информация о документе\",\r\n"
+    "\"tag\": \"Тэги\",\r\n"
     "\"tags\": \"Тэги\",\r\n"
     "\"tagss\": \"Тэги\",\r\n"
     "\"title\": \"Название\",\r\n"
@@ -1818,4 +1828,4 @@ static const char translations_json[53051] =
     "}"
     ;
 
-static const unsigned translations_json_size = 53050; /* Not including terminating zero */
+static const unsigned translations_json_size = 53347; /* Not including terminating zero */

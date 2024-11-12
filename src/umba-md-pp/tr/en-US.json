@@ -6,21 +6,26 @@
     "metatag-titles": {
       "metatag-section-title": "Document information",
       "category": "Category",
-      "tags": "Tags",
-      "author": "Author",
-      "title": "Title",
-      "date": "Date",
-      "url": "URL",
-      "disclaimer": "Disclaimer",
-      "description": "Description",
       "categorys": "Categories",
+      "tag": "Tags",
+      "tags": "Tags",
       "tagss": "Tags",
+      "author": "Author",
       "authors": "Authors",
+      "title": "Title",
       "titles": "Title",
+      "date": "Date",
       "dates": "Date",
-      "urls": "URLs",
+      "disclaimer": "Disclaimer",
       "disclaimers": "Disclaimer",
-      "descriptions": "Description"
+      "description": "Description",
+      "descriptions": "Description",
+      "url": "URL",
+      "urls": "URLs",
+      "generator": "Generator",
+      "generators": "Generators",
+      "brief": "Brief",
+      "briefs": "Brief"
     }
   }
 }

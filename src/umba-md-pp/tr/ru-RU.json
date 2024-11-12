@@ -6,21 +6,26 @@
     "metatag-titles": {
       "metatag-section-title": "Информация о документе",
       "category": "Категория",
-      "tags": "Тэги",
-      "author": "Автор",
-      "title": "Название",
-      "date": "Дата",
-      "url": "URL",
-      "disclaimer": "Отказ от ответственности",
-      "description": "Описание",
       "categorys": "Категории",
+      "tag": "Тэги",
+      "tags": "Тэги",
       "tagss": "Тэги",
+      "author": "Автор",
       "authors": "Авторы",
+      "title": "Название",
       "titles": "Название",
+      "date": "Дата",
       "dates": "Дата",
-      "urls": "URLs",
+      "disclaimer": "Отказ от ответственности",
       "disclaimers": "Отказ от ответственности",
-      "descriptions": "Описание"
+      "description": "Описание",
+      "descriptions": "Описание",
+      "url": "URL",
+      "urls": "URLs",
+      "generator": "Генератор",
+      "generators": "Генераторы",
+      "brief": "Краткое описание",
+      "briefs": "Краткое описание"
     }
   }
 }
