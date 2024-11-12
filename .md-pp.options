@@ -3,8 +3,8 @@
 #--processing-options=meta-data
 #--processing-options=no-meta-data
 --processing-options=generate-toc,meta-data,force-insert-meta,document-meta-title,meta-data-subst
---document-meta-tags=author,url
---serialize-meta-tags=title,author,generator,url
+--document-meta-tags=brief,author,url
+--serialize-meta-tags=title,author,generator,brief,url
 --set-var=UrlBase:https://github.com/al-martyn1
 --verbose
 --info=+all

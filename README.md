@@ -6,10 +6,13 @@ Author:
   - HelloFromDot <ehlo@dot.org>
   - HelloFromPuml <ehlo@puml.org>
 Generator: Test Generator
+Description: Утилита, добавляющая некоторые возможности к Markdown
 URL: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 ---
 
 **Информация о документе**
+
+**Описание**: Утилита, добавляющая некоторые возможности к Markdown
 
 **Авторы**:
 - Имя <name@at.domain.com>
@@ -320,6 +323,8 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-replace=yazyk dokumenta:language
 --meta-tag-replace=otkaz ot otvetstvennosti:disclaimer
 --meta-tag-replace=generators:generator
+--meta-tag-replace=brief:description
+--meta-tag-replace=briefs:description
 
 # Сериализация метатегов
 # Метатеги исходного документа могут сохраняться в результирующий документ в секцию метатэгов
@@ -335,6 +340,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-serialize=language:Language
 --meta-tag-serialize=url:URL
 --meta-tag-serialize=generator:Generator
+--meta-tag-serialize=brief:Brief
 
 # Типы метатегов
 # Метатеги в результирующий документ собираются из всех включенных документов,
@@ -386,7 +392,8 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --meta-tag-set-type=comma-set:category,tags
 --meta-tag-set-type=comma-unique-list:author
 --meta-tag-set-type=text-first:title,date,url
---meta-tag-set-type=text-merge:disclaimer,description
+--meta-tag-set-type=text-merge:disclaimer,description,generator
+#,brief
 
 # Настройки для листингов различных языков программирования
 
