@@ -4,6 +4,7 @@
 #--processing-options=no-meta-data
 --processing-options=generate-toc,meta-data,force-insert-meta,document-meta-title
 --document-meta-tags=author,url
+--serialize-meta-tags=title,author,url
 --verbose
 --info=+all
 # --info=-plantuml,-opt-files,-snippet-lookup
