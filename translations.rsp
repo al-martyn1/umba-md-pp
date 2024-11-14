@@ -7,6 +7,8 @@
 --include-files=*.json^
 --exclude-files=*\.git\*
 --scan=_libs/marty_tr/_translations
---scan=src/umba-md-pp/tr
+--scan=_src/umba-md-pp/tr
 --exclude-files=*/src/umba-md-pp/tr/translations.json^
 --exclude-files=*/src/umba-md-pp/tr/test-tr.json^
+--exclude-files=*/_src/umba-md-pp/tr/translations.json^
+--exclude-files=*/_src/umba-md-pp/tr/test-tr.json^

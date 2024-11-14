@@ -25,4 +25,5 @@
 --add-examples-path=.\doc.drafts
 --add-examples-path=.\conf
 --add-examples-path=.\tests\snippets
+--add-examples-path=.\_src
 --add-examples-path=.\src
