@@ -1,15 +1,3 @@
----
-Title: Препроцессор для Markdown
-Author:
-  - Имя <name@at.domain.com>
-  - Имя2 <name2@domain.com>
-  - HelloFromDot <ehlo@dot.org>
-  - HelloFromPuml <ehlo@puml.org>
-Generator: Test Generator
-Description: Утилита, добавляющая некоторые возможности к Markdown
-URL: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
----
-
 **Информация о документе**
 
 **Описание**: Утилита, добавляющая некоторые возможности к Markdown
@@ -23,7 +11,6 @@ URL: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 **URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 
 ---
-
 
 # Препроцессор для Markdown
 

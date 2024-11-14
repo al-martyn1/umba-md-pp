@@ -1,8 +1,3 @@
----
-Title: Umba MDPP Markdown Viewer command line options
----
-
-
 # Umba MDPP Markdown Viewer command line options
 
 - [Usage](#user-content-usage)
