@@ -35,7 +35,12 @@ add_subdirectory(${LIB_ROOT}/nlohmann)    # https://json.nlohmann.me/integration
 #add_subdirectory(${LIB_ROOT}/pugixml)
 add_subdirectory(${LIB_ROOT}/sfmt)
 add_subdirectory(${LIB_ROOT}/umba)
+add_subdirectory(${LIB_ROOT}/umba_tokenizer)
 add_subdirectory(${LIB_ROOT}/yaml-cpp)
+
+set(COMMON_LIBS encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba umba_tokenizer::umba_tokenizer)
+#set(PUGIXML_LIB pugixml::pugixml marty_pugixml::marty_pugixml)
+set(JSON_YAML_LIB nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
 
 
 umba_configure_boost("STATIC_LIBS" "MULTITHREADED" "${STATIC_RUNTIME}")
@@ -76,7 +81,7 @@ endif()
 add_compile_definitions("YAML_CPP_STATIC_DEFINE")
 add_compile_definitions("USE_UMBA_LOUT_COUT")
 add_compile_definitions("UMBA_TOKENIZER_DISABLE_UMBA_TOKENIZER_GET_CHAR_CLASS_FUNCTION")
-add_compile_definitions("UMBA_TOKEN_TRIE_FIND_NEXT_BINARY_SEARCH_DISABLED")
+# add_compile_definitions("UMBA_TOKEN_TRIE_FIND_NEXT_BINARY_SEARCH_DISABLED")
 
 
 
@@ -91,38 +96,54 @@ if(WIN32) # Всё нормально, это про таргет
     list(APPEND PLATFORM_LIBS ws2_32 iphlpapi shell32)
 endif()
 
-set(COMMON_LIBS encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba)
-#set(PUGIXML_LIB pugixml::pugixml marty_pugixml::marty_pugixml)
-set(JSON_YAML_LIB nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
+
+set(LIBS_BASE                 "${PLATFORM_LIBS}" "${COMMON_LIBS}")
+set(LIBS_BASE_JSON_YAML       "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${JSON_YAML_LIB}")
+#set(LIBS_BASE_JSON_YAML_XML   "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${JSON_YAML_LIB}" "${PUGIXML_LIB}")
+#set(LIBS_BASE_XML             "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${PUGIXML_LIB}")
+
+#set(COMMON_UMBA_OPTIONS "BIGOBJ" "UTF8" "WALL" "WERR")
+set(COMMON_CON_OPTIONS "BIGOBJ" "UTF8" "CONSOLE")
+set(COMMON_GUI_OPTIONS "BIGOBJ" "UTF8" "WINDOWS")
+
+set(MD_PP_SRC "${SRC_ROOT}/umba-md-pp")
+set(SMPD_SRC  "${SRC_ROOT}/simple-drawing")
+
+#---
+
+add_executable(gen-lang-detection-tr "${MD_PP_SRC}/gen-lang-detection-tr.cpp" "${headers}")
+target_link_libraries(gen-lang-detection-tr PRIVATE "${LIBS_BASE_JSON_YAML}")
+umba_add_target_options(gen-lang-detection-tr ${COMMON_CON_OPTIONS}) # "${UNDEFINED_VAR}"
 
 
-set(COMMON_UMBA_OPTIONS "BIGOBJ" "UTF8" "WALL" "WERR")
-
-add_executable(gen-lang-detection-tr "${SRC_ROOT}/umba-md-pp/gen-lang-detection-tr.cpp" "${headers}")
-umba_add_target_options(gen-lang-detection-tr "${UNDEFINED_VAR}" "BIGOBJ" "CONSOLE" "UTF8" )
-target_link_libraries(gen-lang-detection-tr PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${JSON_YAML_LIB}")
+add_executable(umba-md-pp "${MD_PP_SRC}/umba-md-pp.cpp" "${headers}")
+target_link_libraries(umba-md-pp PRIVATE "${LIBS_BASE_JSON_YAML}")
+umba_add_target_options(umba-md-pp ${COMMON_CON_OPTIONS})
 
 
-add_executable(umba-md-pp "${SRC_ROOT}/umba-md-pp/umba-md-pp.cpp" "${headers}")
-umba_add_target_options(umba-md-pp "BIGOBJ" "CONSOLE" "UTF8")
-target_link_libraries(umba-md-pp PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${JSON_YAML_LIB}")
-
-
-add_executable(umba-md-pp-view "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" "${SRC_ROOT}/umba-md-pp/_umba-md-pp-view.rc" "${headers}")
-umba_add_target_options(umba-md-pp-view "BIGOBJ" "WINDOWS" "UTF8")
+add_executable(umba-md-pp-view "${MD_PP_SRC}/umba-md-pp-view.cpp" "${MD_PP_SRC}/_umba-md-pp-view.rc" "${headers}")
+target_link_libraries(umba-md-pp-view PRIVATE "${LIBS_BASE_JSON_YAML}")
+umba_add_target_options(umba-md-pp-view ${COMMON_GUI_OPTIONS})
 target_compile_definitions(umba-md-pp-view PRIVATE "UMBA_MD_PP_VIEW" ) # "UMBA_EVENTS_LOG_ENABLE"
-target_link_libraries(umba-md-pp-view PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${JSON_YAML_LIB}")
 
 
-add_executable(umba-md-pp-view-console "${SRC_ROOT}/umba-md-pp/umba-md-pp-view.cpp" "${SRC_ROOT}/umba-md-pp/_umba-md-pp-view.rc" "${headers}")
-umba_add_target_options(umba-md-pp-view-console "BIGOBJ" "CONSOLE" "UTF8")
+add_executable(umba-md-pp-view-console "${MD_PP_SRC}/umba-md-pp-view.cpp" "${MD_PP_SRC}/_umba-md-pp-view.rc" "${headers}")
+target_link_libraries(umba-md-pp-view-console PRIVATE "${LIBS_BASE_JSON_YAML}")
+umba_add_target_options(umba-md-pp-view-console ${COMMON_CON_OPTIONS})
 target_compile_definitions(umba-md-pp-view-console PRIVATE "UMBA_MD_PP_VIEW" "UMBA_MD_PP_VIEW_CONSOLE")
-target_link_libraries(umba-md-pp-view-console PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}" "${JSON_YAML_LIB}")
 
 
-add_executable(test_rtf_workarounds "${SRC_ROOT}/umba-md-pp/test_rtf_workarounds.cpp" "${headers}")
-umba_add_target_options(test_rtf_workarounds "BIGOBJ" "CONSOLE" "UTF8")
-target_link_libraries(test_rtf_workarounds PRIVATE "${PLATFORM_LIBS}" "${COMMON_LIBS}")
+add_executable(test_rtf_workarounds "${MD_PP_SRC}/test_rtf_workarounds.cpp" "${headers}")
+target_link_libraries(test_rtf_workarounds PRIVATE "${LIBS_BASE}")
+umba_add_target_options(test_rtf_workarounds ${COMMON_CON_OPTIONS})
+
+#---
+
+add_executable(smpd-test-001 "${SMPD_SRC}/smpd-test-001.cpp" "${headers}")
+target_link_libraries(smpd-test-001 PRIVATE "${LIBS_BASE}")
+umba_add_target_options(smpd-test-001 ${COMMON_CON_OPTIONS})
+
+
 
 
 #https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements
