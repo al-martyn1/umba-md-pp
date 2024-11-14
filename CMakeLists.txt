@@ -113,7 +113,7 @@ set(SMPD_SRC  "${SRC_ROOT}/simple-drawing")
 
 add_executable(gen-lang-detection-tr "${MD_PP_SRC}/gen-lang-detection-tr.cpp" "${headers}")
 target_link_libraries(gen-lang-detection-tr PRIVATE "${LIBS_BASE_JSON_YAML}")
-umba_add_target_options(gen-lang-detection-tr ${COMMON_CON_OPTIONS}) # "${UNDEFINED_VAR}"
+umba_add_target_options(gen-lang-detection-tr ${COMMON_CON_OPTIONS}) # "${UNDEFINED_VAR}" # https://stackoverflow.com/questions/38117708/turn-list-into-arguments-for-cmake-function
 
 
 add_executable(umba-md-pp "${MD_PP_SRC}/umba-md-pp.cpp" "${headers}")
