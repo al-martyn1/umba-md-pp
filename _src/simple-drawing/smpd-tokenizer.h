@@ -79,10 +79,10 @@ makeTokenizerBuilderProtogen()
                           //.addOperator(make_string<StringType>("+"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_ADDITION                      )
                           //.addOperator(make_string<StringType>("-"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_SUBTRACTION                   )
                           //.addOperator(make_string<StringType>("*"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_MULTIPLICATION                )
-                          .addOperator(make_string<StringType>("/"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_DIVISION                      )
+                          //.addOperator(make_string<StringType>("/"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_DIVISION                      )
                           //.addOperator(make_string<StringType>("%"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_MODULO                        )
                           //.addOperator(make_string<StringType>("++" ), UMBA_TOKENIZER_TOKEN_OPERATOR_INCREMENT                     )
-                          .addOperator(make_string<StringType>("--" ), UMBA_TOKENIZER_TOKEN_OPERATOR_DECREMENT                     )
+                          //.addOperator(make_string<StringType>("--" ), UMBA_TOKENIZER_TOKEN_OPERATOR_DECREMENT                     )
                           //.addOperator(make_string<StringType>("==" ), UMBA_TOKENIZER_TOKEN_OPERATOR_EQUAL                         )
                           //.addOperator(make_string<StringType>("!=" ), UMBA_TOKENIZER_TOKEN_OPERATOR_NOT_EQUAL                     )
                           //.addOperator(make_string<StringType>(">"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_GREATER                       )
@@ -99,7 +99,7 @@ makeTokenizerBuilderProtogen()
                           //.addOperator(make_string<StringType>("^"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_BITWISE_XOR                   )
                           //.addOperator(make_string<StringType>("<<" ), UMBA_TOKENIZER_TOKEN_OPERATOR_BITWISE_SHIFT_LEFT            )
                           //.addOperator(make_string<StringType>(">>" ), UMBA_TOKENIZER_TOKEN_OPERATOR_BITWISE_SHIFT_RIGHT           )
-                          .addOperator(make_string<StringType>("="  ), UMBA_TOKENIZER_TOKEN_OPERATOR_ASSIGNMENT                    )
+                          //.addOperator(make_string<StringType>("="  ), UMBA_TOKENIZER_TOKEN_OPERATOR_ASSIGNMENT                    )
                           //.addOperator(make_string<StringType>("+=" ), UMBA_TOKENIZER_TOKEN_OPERATOR_ADDITION_ASSIGNMENT           )
                           //.addOperator(make_string<StringType>("-=" ), UMBA_TOKENIZER_TOKEN_OPERATOR_SUBTRACTION_ASSIGNMENT        )
                           //.addOperator(make_string<StringType>("*=" ), UMBA_TOKENIZER_TOKEN_OPERATOR_MULTIPLICATION_ASSIGNMENT     )
@@ -116,8 +116,8 @@ makeTokenizerBuilderProtogen()
                           //.addOperator(make_string<StringType>(".*" ), UMBA_TOKENIZER_TOKEN_OPERATOR_POINTER_TO_MEMBER_OF_OBJECT   )
                           //.addOperator(make_string<StringType>(":"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_TERNARY_ALTERNATIVE           )
                           //.addOperator(make_string<StringType>("?"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_TERNARY_CONDITIONAL           )
-                          .addOperator(make_string<StringType>("::" ), UMBA_TOKENIZER_TOKEN_OPERATOR_SCOPE_RESOLUTION              )
-                          .addOperator(make_string<StringType>(";"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_EXPRESSION_END                )
+                          //.addOperator(make_string<StringType>("::" ), UMBA_TOKENIZER_TOKEN_OPERATOR_SCOPE_RESOLUTION              )
+                          //.addOperator(make_string<StringType>(";"  ), UMBA_TOKENIZER_TOKEN_OPERATOR_EXPRESSION_END                )
                           //.addOperator( )
 
                           .template addStringLiteralParser<CppStringLiteralParser>( UMBA_TOKENIZER_TOKEN_STRING_LITERAL
@@ -156,6 +156,7 @@ typename TokenizerBuilder::tokenizer_type makeTokenizerProtogen(TokenizerBuilder
 
     // !!! Фильтры, установленные позже, отрабатывают раньше
 
+    #if 0
     tokenizer.template installTokenFilter<IdentifierToKeywordConversionFilter>( UMBA_TOKENIZER_TOKEN_IDENTIFIER
                                                                               , PROTOGEN_TOKEN_AREA
                                                                               , std::unordered_map<string_type, umba::tokenizer::payload_type>
@@ -192,10 +193,10 @@ typename TokenizerBuilder::tokenizer_type makeTokenizerProtogen(TokenizerBuilder
                                                                                 //, {""          ,        }
                                                                                 }
                                                                               );
+    #endif
 
-
-    tokenizer.template installTokenFilter<umba::tokenizer::filters::DblSquareBracketOpenComposingFilter <tokenizer_type> >();
-    tokenizer.template installTokenFilter<umba::tokenizer::filters::DblSquareBracketCloseComposingFilter<tokenizer_type> >();
+    // tokenizer.template installTokenFilter<umba::tokenizer::filters::DblSquareBracketOpenComposingFilter <tokenizer_type> >();
+    // tokenizer.template installTokenFilter<umba::tokenizer::filters::DblSquareBracketCloseComposingFilter<tokenizer_type> >();
 
     // tokenizer.template installTokenFilter<RawCharsCollectingFilter>();
 
