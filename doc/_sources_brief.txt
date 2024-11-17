@@ -7,7 +7,7 @@ simple-drawing/css_style.h       -
 simple-drawing/smpd-test-001.cpp - Делаем для теста раскраску Protogen кода в HTML и вывод
                                    потокенно в текст.
 simple-drawing/smpd-tokenizer.h  - Токенизатор/лексер для protogen'а.
-simple-drawing/smpd-tokens.h     - Определение токенов, специфичных для  protogen'а.
+simple-drawing/smpd-tokens.h     - Определение токенов, специфичных для simple drawing.
 simple-drawing/utils.h           - 
 umba-md-pp/_tmp.cpp              - 
 umba-md-pp/_umba-md-pp-view.rc   - 
