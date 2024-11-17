@@ -341,6 +341,7 @@ UMBA_APP_MAIN()
     appConfig.targetRenderer = TargetRenderer::doxygen;
     appConfig.targetFormat   = TargetFormat::rtf;
     appConfig.updateProcessingOptions("title");
+    appConfig.updateProcessingOptions("no-meta-data");
     appConfig.updateProcessingOptions("convert-github-alerts");
     appConfig.copyImageFiles    = true;
     appConfig.flattenImageLinks = true;
