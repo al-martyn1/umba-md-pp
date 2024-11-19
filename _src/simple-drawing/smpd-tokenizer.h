@@ -129,6 +129,34 @@ makeTokenizerBuilderProtogen()
 
                           ;
 
+    auto addMultiLenOperator = [&]( const std::string &tokenStartStr, bool bPrepend
+                                  , auto firstTokenId, auto lastTokenId
+                                  )
+    {
+        auto strBase = make_string<StringType>(tokenStartStr);
+        std::size_t nAdd = 0; // 2;
+        for(auto tokenId=firstTokenId; tokenId<=lastTokenId; ++tokenId, ++nAdd)
+        {
+            auto additionStr = StringType(nAdd, (typename StringType::value_type)'-');
+            if (bPrepend)
+                tokenizerBuilder.addOperator(additionStr+strBase, tokenId);
+            else
+                tokenizerBuilder.addOperator(strBase+additionStr, tokenId);
+        }
+    };
+
+    addMultiLenOperator("-\\", true , SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_TOP     , SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_TOP_LAST    );
+    addMultiLenOperator("-/" , true , SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_BOTTOM  , SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_BOTTOM_LAST );
+    addMultiLenOperator("/-" , false, SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_TOP    , SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_TOP_LAST   );
+    addMultiLenOperator("\\-", false, SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_BOTTOM , SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_BOTTOM_LAST);
+    addMultiLenOperator("<-" , false, SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT         , SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_LAST        );
+    addMultiLenOperator("->" , true , SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT        , SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_LAST       );
+    addMultiLenOperator("|^-", false, SMPD_TOKEN_OPERATOR_CALLOUT_TO_TOP          , SMPD_TOKEN_OPERATOR_CALLOUT_TO_TOP_LAST         );
+    addMultiLenOperator("|-" , false, SMPD_TOKEN_OPERATOR_CALLOUT_TO_BOTTOM       , SMPD_TOKEN_OPERATOR_CALLOUT_TO_BOTTOM_LAST      );
+    addMultiLenOperator(".-" , false, SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_RIGHT  , SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_RIGHT_LAST );
+    addMultiLenOperator("-." , true , SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_LEFT   , SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_LEFT_LAST  );
+
+
     return tokenizerBuilder;
 
 }
@@ -144,6 +172,8 @@ typename TokenizerBuilder::tokenizer_type makeTokenizerProtogen(TokenizerBuilder
     using SimpleSequenceComposingFilter       = umba::tokenizer::filters::SimpleSequenceComposingFilter<tokenizer_type>;
     using IdentifierToKeywordConversionFilter = umba::tokenizer::filters::IdentifierToKeywordConversionFilter<tokenizer_type>;
     using RawCharsCollectingFilter            = umba::tokenizer::filters::RawCharsCollectingFilter<tokenizer_type>;
+    using TokenRangeConversionFilter          = umba::tokenizer::filters::TokenRangeConversionFilter<tokenizer_type>;
+
 
     auto tokenizer = builder.makeTokenizer();
     tokenizer.tokenHandler = tokenHandler;
@@ -152,6 +182,22 @@ typename TokenizerBuilder::tokenizer_type makeTokenizerProtogen(TokenizerBuilder
     auto options = tokenizer.getOptions();
     options.unclassifiedCharsRaw = false;
     tokenizer.setOptions(options);
+
+    auto addMultiLenOperatorFilter = [&](auto firstTokenId, auto lastTokenId)
+    {
+        tokenizer.template installTokenFilter<TokenRangeConversionFilter>(firstTokenId, lastTokenId-firstTokenId+1, firstTokenId);
+    };
+
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_TOP     , SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_TOP_LAST    );
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_BOTTOM  , SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_BOTTOM_LAST );
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_TOP    , SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_TOP_LAST   );
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_BOTTOM , SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_BOTTOM_LAST);
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT         , SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_LAST        );
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT        , SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_LAST       );
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_TO_TOP          , SMPD_TOKEN_OPERATOR_CALLOUT_TO_TOP_LAST         );
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_TO_BOTTOM       , SMPD_TOKEN_OPERATOR_CALLOUT_TO_BOTTOM_LAST      );
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_RIGHT  , SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_RIGHT_LAST );
+    addMultiLenOperatorFilter(SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_LEFT   , SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_LEFT_LAST  );
 
 
     // !!! Фильтры, установленные позже, отрабатывают раньше

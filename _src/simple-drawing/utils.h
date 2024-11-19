@@ -10,6 +10,9 @@
 #include "marty_cpp/src_normalization.h"
 
 //
+#include "smpd-tokens.h"
+
+//
 #include <iostream>
 
 
@@ -113,29 +116,40 @@ StringType getTokenNameString(umba::tokenizer::payload_type p)
 {
     switch(p)
     {
-        case UMBA_TOKENIZER_TOKEN_UNEXPECTED                                  : return umba::string_plus::make_string<StringType>("unxp");
-        case UMBA_TOKENIZER_TOKEN_LINEFEED                                    : return umba::string_plus::make_string<StringType>("");
-        case UMBA_TOKENIZER_TOKEN_SPACE                                       : return umba::string_plus::make_string<StringType>("");
-        case UMBA_TOKENIZER_TOKEN_TAB                                         : return umba::string_plus::make_string<StringType>("");
-        case UMBA_TOKENIZER_TOKEN_IDENTIFIER                                  : return umba::string_plus::make_string<StringType>("ident");
-        case UMBA_TOKENIZER_TOKEN_SEMIALPHA                                   : return umba::string_plus::make_string<StringType>("");
+        case UMBA_TOKENIZER_TOKEN_UNEXPECTED                                  : return umba::string_plus::make_string<StringType>("name unxp");
+        case UMBA_TOKENIZER_TOKEN_LINEFEED                                    : return umba::string_plus::make_string<StringType>("name LF");
+        case UMBA_TOKENIZER_TOKEN_SPACE                                       : return umba::string_plus::make_string<StringType>("name SPACE");
+        case UMBA_TOKENIZER_TOKEN_TAB                                         : return umba::string_plus::make_string<StringType>("name TAB");
+        case UMBA_TOKENIZER_TOKEN_IDENTIFIER                                  : return umba::string_plus::make_string<StringType>("name ident");
+        case UMBA_TOKENIZER_TOKEN_SEMIALPHA                                   : return umba::string_plus::make_string<StringType>("name SEMIALPHA");
         // https://en.wikipedia.org/wiki/Bracket
-        case UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_OPEN                          : return umba::string_plus::make_string<StringType>("curly");
-        case UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_CLOSE                         : return umba::string_plus::make_string<StringType>("curly");
-        case UMBA_TOKENIZER_TOKEN_ROUND_BRACKET_OPEN                          : return umba::string_plus::make_string<StringType>("round");
-        case UMBA_TOKENIZER_TOKEN_ROUND_BRACKET_CLOSE                         : return umba::string_plus::make_string<StringType>("round");
-        case UMBA_TOKENIZER_TOKEN_ANGLE_BRACKET_OPEN                          : return umba::string_plus::make_string<StringType>("angle");
-        case UMBA_TOKENIZER_TOKEN_ANGLE_BRACKET_CLOSE                         : return umba::string_plus::make_string<StringType>("angle");
-        case UMBA_TOKENIZER_TOKEN_SQUARE_BRACKET_OPEN                         : return umba::string_plus::make_string<StringType>("square");
-        case UMBA_TOKENIZER_TOKEN_SQUARE_BRACKET_CLOSE                        : return umba::string_plus::make_string<StringType>("square");
-        case UMBA_TOKENIZER_TOKEN_DBLSQUARE_BRACKET_OPEN                      : return umba::string_plus::make_string<StringType>("dblsquare");
-        case UMBA_TOKENIZER_TOKEN_DBLSQUARE_BRACKET_CLOSE                     : return umba::string_plus::make_string<StringType>("dblsquare");
-        case UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_START           : return umba::string_plus::make_string<StringType>("cmnt");
-        case UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_END             : return umba::string_plus::make_string<StringType>("cmnt");
-        case UMBA_TOKENIZER_TOKEN_CTRL_CC_PP_START                            : return umba::string_plus::make_string<StringType>("pp");
-        case UMBA_TOKENIZER_TOKEN_CTRL_CC_PP_END                              : return umba::string_plus::make_string<StringType>("pp");
+        case UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_OPEN                          : return umba::string_plus::make_string<StringType>("name curly");
+        case UMBA_TOKENIZER_TOKEN_CURLY_BRACKET_CLOSE                         : return umba::string_plus::make_string<StringType>("name curly");
+        case UMBA_TOKENIZER_TOKEN_ROUND_BRACKET_OPEN                          : return umba::string_plus::make_string<StringType>("name round");
+        case UMBA_TOKENIZER_TOKEN_ROUND_BRACKET_CLOSE                         : return umba::string_plus::make_string<StringType>("name round");
+        case UMBA_TOKENIZER_TOKEN_ANGLE_BRACKET_OPEN                          : return umba::string_plus::make_string<StringType>("name angle");
+        case UMBA_TOKENIZER_TOKEN_ANGLE_BRACKET_CLOSE                         : return umba::string_plus::make_string<StringType>("name angle");
+        case UMBA_TOKENIZER_TOKEN_SQUARE_BRACKET_OPEN                         : return umba::string_plus::make_string<StringType>("name square");
+        case UMBA_TOKENIZER_TOKEN_SQUARE_BRACKET_CLOSE                        : return umba::string_plus::make_string<StringType>("name square");
+        case UMBA_TOKENIZER_TOKEN_DBLSQUARE_BRACKET_OPEN                      : return umba::string_plus::make_string<StringType>("name dblsquare");
+        case UMBA_TOKENIZER_TOKEN_DBLSQUARE_BRACKET_CLOSE                     : return umba::string_plus::make_string<StringType>("name dblsquare");
+        case UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_START           : return umba::string_plus::make_string<StringType>("name cmnt");
+        case UMBA_TOKENIZER_TOKEN_OPERATOR_MULTI_LINE_COMMENT_END             : return umba::string_plus::make_string<StringType>("name cmnt");
+        case UMBA_TOKENIZER_TOKEN_CTRL_CC_PP_START                            : return umba::string_plus::make_string<StringType>("name pp");
+        case UMBA_TOKENIZER_TOKEN_CTRL_CC_PP_END                              : return umba::string_plus::make_string<StringType>("name pp");
 
-        case UMBA_TOKENIZER_TOKEN_RAW_CHAR                                    : return umba::string_plus::make_string<StringType>("raw");
+        case UMBA_TOKENIZER_TOKEN_RAW_CHAR                                    : return umba::string_plus::make_string<StringType>("name raw");
+
+        case SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_TOP    : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_TOP    ");
+        case SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_BOTTOM : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_BOTTOM ");
+        case SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_TOP   : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_TOP   ");
+        case SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_BOTTOM: return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT_BOTTOM");
+        case SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT        : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT        ");
+        case SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT       : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_RIGHT       ");
+        case SMPD_TOKEN_OPERATOR_CALLOUT_TO_TOP         : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_TOP         ");
+        case SMPD_TOKEN_OPERATOR_CALLOUT_TO_BOTTOM      : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_BOTTOM      ");
+        case SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_RIGHT : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_RIGHT ");
+        case SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_LEFT  : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_SHELF_TO_LEFT  ");
 
 
         // case : return umba::string_plus::make_string<StringType>("");
@@ -144,8 +158,6 @@ StringType getTokenNameString(umba::tokenizer::payload_type p)
         // case : return umba::string_plus::make_string<StringType>("");
         // case : return umba::string_plus::make_string<StringType>("");
         // case : return umba::string_plus::make_string<StringType>("");
-
-
 
 
         //case : return umba::string_plus::make_string<StringType>("");
@@ -154,49 +166,49 @@ StringType getTokenNameString(umba::tokenizer::payload_type p)
             if (p>=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_LAST)
             {
                 if (p&UMBA_TOKENIZER_TOKEN_FLOAT_FLAG)
-                    return umba::string_plus::make_string<StringType>("num");
+                    return umba::string_plus::make_string<StringType>("name num");
                 else
-                    return umba::string_plus::make_string<StringType>("num");
+                    return umba::string_plus::make_string<StringType>("name num");
             }
 
             if (p>=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_FIRST && p<=UMBA_TOKENIZER_TOKEN_OPERATOR_SINGLE_LINE_COMMENT_LAST)
-                return umba::string_plus::make_string<StringType>("cmnt");
+                return umba::string_plus::make_string<StringType>("name cmnt sngl");
 
             //if (p>=UMBA_TOKENIZER_TOKEN_NUMBER_USER_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_NUMBER_USER_LITERAL_LAST)
             if (p>=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_NUMBER_LITERAL_LAST)
-                return umba::string_plus::make_string<StringType>("num");
+                return umba::string_plus::make_string<StringType>("name num");
 
             if (p>=UMBA_TOKENIZER_TOKEN_OPERATOR_FIRST && p<=UMBA_TOKENIZER_TOKEN_OPERATOR_LAST)
-                return umba::string_plus::make_string<StringType>("op");
+                return umba::string_plus::make_string<StringType>("name op");
 
             if (p>=UMBA_TOKENIZER_TOKEN_STRING_LITERAL_FIRST && p<=UMBA_TOKENIZER_TOKEN_STRING_LITERAL_LAST)
-                return umba::string_plus::make_string<StringType>("str");
+                return umba::string_plus::make_string<StringType>("name str");
 
             if (p>=UMBA_TOKENIZER_TOKEN_KEYWORD_SET1_FIRST && p<=UMBA_TOKENIZER_TOKEN_KEYWORD_SET1_LAST)
-                return umba::string_plus::make_string<StringType>("kwd1");
+                return umba::string_plus::make_string<StringType>("name kwd1");
 
             if (p>=UMBA_TOKENIZER_TOKEN_KEYWORD_SET2_FIRST && p<=UMBA_TOKENIZER_TOKEN_KEYWORD_SET2_LAST)
-                return umba::string_plus::make_string<StringType>("kwd2");
+                return umba::string_plus::make_string<StringType>("name kwd2");
 
             if (p>=UMBA_TOKENIZER_TOKEN_KEYWORD_SET3_FIRST && p<=UMBA_TOKENIZER_TOKEN_KEYWORD_SET3_LAST)
-                return umba::string_plus::make_string<StringType>("kwd3");
+                return umba::string_plus::make_string<StringType>("name kwd3");
 
             if (p>=UMBA_TOKENIZER_TOKEN_KEYWORD_SET4_FIRST && p<=UMBA_TOKENIZER_TOKEN_KEYWORD_SET4_LAST)
-                return umba::string_plus::make_string<StringType>("kwd4");
+                return umba::string_plus::make_string<StringType>("name kwd4");
 
             if (p>=UMBA_TOKENIZER_TOKEN_KEYWORD_SET5_FIRST && p<=UMBA_TOKENIZER_TOKEN_KEYWORD_SET5_LAST)
-                return umba::string_plus::make_string<StringType>("kwd5");
+                return umba::string_plus::make_string<StringType>("name kwd5");
 
             if (p>=UMBA_TOKENIZER_TOKEN_KEYWORD_SET6_FIRST && p<=UMBA_TOKENIZER_TOKEN_KEYWORD_SET6_LAST)
-                return umba::string_plus::make_string<StringType>("kwd6");
+                return umba::string_plus::make_string<StringType>("name kwd6");
 
             if (p>=UMBA_TOKENIZER_TOKEN_KEYWORD_SET7_FIRST && p<=UMBA_TOKENIZER_TOKEN_KEYWORD_SET7_LAST)
-                return umba::string_plus::make_string<StringType>("kwd7");
+                return umba::string_plus::make_string<StringType>("name kwd7");
 
             if (p>=UMBA_TOKENIZER_TOKEN_KEYWORD_SET8_FIRST && p<=UMBA_TOKENIZER_TOKEN_KEYWORD_SET8_LAST)
-                return umba::string_plus::make_string<StringType>("kwd8");
+                return umba::string_plus::make_string<StringType>("name kwd8");
 
-            return umba::string_plus::make_string<StringType>("");
+            return umba::string_plus::make_string<StringType>("name UNKNOWN");
     }
 }
 
