@@ -1,0 +1,1 @@
+@if exist %~dp0*.log @del /Q %~dp0*.log

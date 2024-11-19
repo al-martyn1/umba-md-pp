@@ -1,0 +1,1 @@
+@call smpd-test-001_html.bat > smpd-test-001_html.log 2>&1

@@ -1,0 +1,1 @@
+@if exist %~dp0*.html @del /Q %~dp0*.html

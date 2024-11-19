@@ -1,0 +1,1 @@
+@if exist %~dp0*.txt @del /Q %~dp0*.txt
