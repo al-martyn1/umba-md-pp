@@ -772,7 +772,7 @@ int operator()( const StringType                                &a           //!
 
         else if ( opt.setParam("TYPE:TAG[,TAG...]")
                || opt.isOption("meta-tag-set-type") || opt.isOption("set-meta-tag-type") // || opt.isOption('M')
-               || opt.setDescription("Set meta tag type (`TextFirst`/`TextReplace`/`TextMerge`/`List`/`CommaList`/`Set`/`CommaSet`/`UniqueList`/`UniqueCommaList`)."))
+               || opt.setDescription("Set meta tag type (`TextFirst`/`TextReplace`/`TextMerge`/`List`/`CommaList`/`Set`/`CommaSet`/`UniqueList`/`UniqueCommaList`/`RootOnly`)."))
         {
             if (argsParser.hasHelpOption) return 0;
 

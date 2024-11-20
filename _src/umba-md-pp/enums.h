@@ -554,35 +554,34 @@ enum class MetaTagType : std::uint32_t
     textLast          = 0x0001 /*!< Simple text, allowed multiple definitions, but only last value is applied */,
     text              = 0x0002 /*!< Text fragments will be merged to paras */,
     textMerge         = 0x0002 /*!< Text fragments will be merged to paras */,
-    list              = 0x0003 /*!< Normal list */,
-    commaList         = 0x0004 /*!< List, but can be represented as simple text with comma separated items */,
-    set               = 0x0005 /*!< Normal set */,
-    commaSet          = 0x0006 /*!< Set, but can be represented as simple text with comma separated items */,
-    uniqueList        = 0x0007 /*!< Normal unique list */,
-    commaUniqueList   = 0x0008 /*!< Unique list, but can be represented as simple text with comma separated items */,
-    uniqueCommaList   = 0x0008 /*!< Unique list, but can be represented as simple text with comma separated items */
+    rootOnly          = 0x0003 /*!< Only the value from the root document is used */,
+    list              = 0x0004 /*!< Normal list */,
+    commaList         = 0x0005 /*!< List, but can be represented as simple text with comma separated items */,
+    set               = 0x0006 /*!< Normal set */,
+    commaSet          = 0x0007 /*!< Set, but can be represented as simple text with comma separated items */,
+    uniqueList        = 0x0008 /*!< Normal unique list */,
+    commaUniqueList   = 0x0009 /*!< Unique list, but can be represented as simple text with comma separated items */,
+    uniqueCommaList   = 0x0009 /*!< Unique list, but can be represented as simple text with comma separated items */
 
 }; // enum class MetaTagType : std::uint32_t
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(MetaTagType)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MetaTagType, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::commaSet          , "CommaSet"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::commaList         , "CommaList"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::invalid           , "Invalid"         );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textFirst         , "TextFirst"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textReplace       , "TextReplace"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::text              , "Text"            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::rootOnly          , "RootOnly"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::list              , "List"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::set               , "Set"             );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::commaSet          , "CommaSet"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::uniqueList        , "UniqueList"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::commaUniqueList   , "CommaUniqueList" );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MetaTagType, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaSet          , "comma-set"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaSet          , "comma_set"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaSet          , "commaset"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaList         , "comma-list"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaList         , "comma_list"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaList         , "commalist"         );
@@ -601,8 +600,14 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text              , "text"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text              , "text-merge"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text              , "text_merge"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::rootOnly          , "root-only"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::rootOnly          , "root_only"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::rootOnly          , "rootonly"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::list              , "list"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::set               , "set"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaSet          , "comma-set"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaSet          , "comma_set"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaSet          , "commaset"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::uniqueList        , "unique-list"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::uniqueList        , "unique_list"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::uniqueList        , "uniquelist"        );

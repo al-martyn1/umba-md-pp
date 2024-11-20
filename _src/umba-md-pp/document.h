@@ -120,7 +120,7 @@ struct Document
 
             std::string tagPreparedName = "**" + tagSerializedName + "**:";
             
-            if (metaTagType==MetaTagType::textFirst) /* Simple text, allowed multiple definitions, but only first value is applied */
+            if (metaTagType==MetaTagType::textFirst || metaTagType==MetaTagType::rootOnly) /* Simple text, allowed multiple definitions, but only first value is applied */
             {
                 // emitter << YAML::Value << tagData.front();
                 resLines.emplace_back(tagPreparedName + " " + tagData.front());

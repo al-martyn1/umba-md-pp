@@ -351,6 +351,8 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 #
 # Возможные значения:
 #
+# root-only - текст, используется только значение из корневого элемента.
+#
 # text-first - текст, используется только первое значение.
 #
 # text-replace, text-last - текст, используется только последнее значение.
@@ -374,11 +376,14 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 #
 # comma-set - аналогично set, но значения могут быть заданы одной строкой, через запятую.
 #
-# При генерации результирующего документа метатеги форматируются строко в формате YAML
+# При генерации результирующего документа метатеги форматируются в строки в формате YAML
+#
+# !!! Не стоит менять базовые настройки, рекомендуется только дополнять их для своих метатегов
 #
 --meta-tag-set-type=comma-set:category,tags
 --meta-tag-set-type=comma-unique-list:author
---meta-tag-set-type=text-first:title,date,url
+--meta-tag-set-type=text-first:title,date
+--meta-tag-set-type=root-only:url
 --meta-tag-set-type=text-merge:disclaimer,description,generator
 #,brief
 

@@ -524,8 +524,8 @@ int safe_main(int argc, char* argv[])
         for(; fileIt!=foundFiles.end() && folderIt!=foundFilesRootFolders.end(); ++fileIt, ++folderIt)
         {
             auto fileRootPath = *folderIt;
-            auto fileFullName = *fileIt  ;
             auto fileRelName  = fileFullName;
+            auto fileFullName = *fileIt  ;
 
             // Доп. проверка, если не совпало, то что-то очень пошло не так
             if (!umba::string_plus::starts_with_and_strip(fileRelName, fileRootPath))
@@ -536,6 +536,24 @@ int safe_main(int argc, char* argv[])
 
             umba::filename::stripLastPathSep(fileRootPath);
             umba::filename::stripFirstPathSep(fileRelName);
+
+            {
+                auto documentRelFileName = appConfig.stripExtentions
+                                         ? umba::filename::getPathFile(fileRelName)
+                                         : fileRelName
+                                         ;
+                documentRelFileName = umba::filename::makeCanonical(documentRelFileName, '/');
+                appConfig.addConditionVar("__DocumentRelFileName", documentRelFileName);
+                // Нужно добавлять __DocumentBaseUrl - это переменная, которую задаёт пользователь, но она имеет системное значение
+            }
+
+            //     if (appConfig.stripExtentions)
+            //         linkTarget = umba::filename::getPathFile(linkTarget); // не добавляем в индекс расширение
+            // // appConfig.addConditionVar("__DocumentRelFileName", umba::filename::makeCanonical(fileRelName, '/'))
+            // // // bool addConditionVar(std::string name, std::string value)
+            // // // Работает только в batch-режиме
+
+
 
             if (!appConfig.clearGenerationCaches)
             {

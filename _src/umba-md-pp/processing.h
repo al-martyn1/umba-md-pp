@@ -1124,10 +1124,11 @@ struct UmbaMdLinksUrlCoutPrinter
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
 std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringType> &appCfg
-                                               , Document &docTo
-                                               , const std::vector<std::string> &lines
-                                               , const FilenameStringType &curFilename
+                                               , Document                            &docTo
+                                               , const std::vector<std::string>      &lines
+                                               , const FilenameStringType            &curFilename
                                                , const std::unordered_set<FilenameStringType> &alreadyIncludedDocs
+                                               , bool                                rootDocument = false
                                                );
 
 //----------------------------------------------------------------------------
@@ -1178,6 +1179,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
     std::vector<std::string> processedDocLines = parseMarkdownFileLines( appCfg, docTo, docLines, foundFullFilename
                                                                        , umba::updatedSet(alreadyIncludedDocs
                                                                        , foundFullFilenameCanonical, true /* bAddKey */ ) /* alreadyIncludedDocsCopy */
+                                                                       // false - not root document
                                                                        );
 
 
@@ -1549,6 +1551,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
                                                , const std::vector<std::string>      &lines
                                                , const FilenameStringType            &curFilename
                                                , const std::unordered_set<FilenameStringType> &alreadyIncludedDocs
+                                               , bool                                rootDocument
                                                )
 {
     std::vector<std::string> metadataLines;
@@ -1573,6 +1576,15 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
         {
             if (!metadataLines.empty())
             {
+                if (rootDocument)
+                {
+                    //!!! JSON-META
+                    // У нас универсальный парсер YAML/JSON
+                    // и мета данные могут быть в формате JSON
+                    // При вставке в JSON могут быть проблемы
+                    metadataLines.emplace_back("___root_document: 1");
+                }
+
                 std::string metadataText = marty_cpp::mergeLines(metadataLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
                 docTo.collectedMetadataTexts.emplace_back(metadataText);
                 metadataLines.clear();
@@ -2039,7 +2051,7 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document 
     std::vector<std::string> lines = marty_cpp::splitToLinesSimple(fileText);
 
     Document doc;
-    std::vector<std::string> resLines = parseMarkdownFileLines(appCfg, doc, lines, curFilename, std::unordered_set<FilenameStringType>()/*alreadyIncludedDocs*/);
+    std::vector<std::string> resLines = parseMarkdownFileLines(appCfg, doc, lines, curFilename, std::unordered_set<FilenameStringType>()/*alreadyIncludedDocs*/, true /*rootDocument*/);
 
     // Генерировать идентификаторы секций нужно, если у нас целевой рендерер - доксиген, и явно задано генерировать ID секций, или генерировать "Содержание"
     // Для генерации "Содержания" для гитхаба ID секций генерировать не нужно

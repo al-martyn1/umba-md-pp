@@ -2,6 +2,7 @@ invalid,unknown=-1
 textFirst                = 0    // Simple text, allowed multiple definitions, but only first value is applied
 textReplace,textLast            // Simple text, allowed multiple definitions, but only last value is applied
 text,textMerge                  // Text fragments will be merged to paras
+rootOnly                        // Only the value from the root document is used
 list                            // Normal list
 commaList                       // List, but can be represented as simple text with comma separated items
 set                             // Normal set

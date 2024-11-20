@@ -42,7 +42,7 @@ std::string generateDocMetadata(const AppConfig<FilenameStringType> &appCfg, Doc
 
         MetaTagType metaTagType = appCfg.getMetaTagType(*mtIt);
 
-        if (metaTagType==MetaTagType::textFirst) /* Simple text, allowed multiple definitions, but only first value is applied */
+        if (metaTagType==MetaTagType::textFirst || metaTagType==MetaTagType::rootOnly) /* Simple text, allowed multiple definitions, but only first value is applied */
         {
             emitter << YAML::Value << tagData.front();
         }
@@ -245,7 +245,13 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
 {
     auto collectedMetadataTexts = doc.collectedMetadataTexts;
 
+    // rootOnly - в collectedMetadataTexts при обработке корневого документа надо добавить
+    // специальный метатэг ___root_document: 1 в виде текста,
+    // а тут мы должны просто выцепить это значение и сделать пометку, а там видно будет
+
     // Тут мы делаем подстановку макросов, если она задана
+    // Теперь так нельзя
+    #if 0
     if ((appCfg.testProcessingOption(ProcessingOptions::metaDataSubst)))
     {
         using namespace umba::macros;
@@ -258,6 +264,20 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                                   );
         }
     }
+    #endif
+
+    auto substMetaMacros = [&](const std::string &text, bool forceSubst)
+    {
+        if (!appCfg.testProcessingOption(ProcessingOptions::metaDataSubst) || !forceSubst)
+            return text;
+
+        using namespace umba::macros;
+        return substMacros( metaText
+                          , umba::md::MacroTextFromMapOrEnvRef(appCfg.conditionVars, false /* !envAllowed */ )
+                          , smf_KeepUnknownVars // | smf_uppercaseNames // !!! Надо заморачиваться с регистром? Если надо, то тогда при добавлении всё в upper case и кондишены надо подправить
+                          );
+    };
+
 
     for(const auto &metaText : collectedMetadataTexts)
     {
@@ -273,19 +293,39 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
         if (jType!=nlohmann::detail::value_t::object)
             continue;
 
+        bool rootDocument = false;
 
         for (auto el : j.items())
         {
             try
             {
                 std::string strKey = el.key();
+                if (strKey=="___root_document") // Проверяем только наличие тэга
+                {
+                    rootDocument = true;
+                    continue;
+                }
+
                 strKey = appCfg.makeCanonicalMetaTag(strKey);
                 std::vector<std::string> &tagValsVec = doc.tagsData[strKey];
 
                 MetaTagType tagType = appCfg.getMetaTagType(strKey);
 
-
                 auto val = el.value();
+
+                if (tagType==MetaTagType::rootOnly) // одиночное значение, допустимое только в корневом документе
+                {
+                    if (!rootDocument)
+                        continue;
+
+                    // тут надо сделать подстановку безусловно - rootOnly тэги типа URL могут всегда содержать макросы
+                    val = substMetaMacros(val, true);
+                }
+                else
+                {
+                    val = substMetaMacros(val, false);
+                }
+                
                 //    std::string valStr = val;
                 // //std::string strVal = el.value();
                 //    LOG_MSG << "parseDocumentMetadata: " << strKey << ": " << valStr << "\n";
@@ -336,7 +376,7 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                     // Если одиночная строка является commaList или commaSet, то надо разобрать
                     umba::vectorPushBack(tagValsVec, splitAndTrimAndSkipEmpty(strVal, ','));
                 }
-                else
+                else // MetaTagType::rootOnly элементы тоже сюда попадают
                 {
                     tagValsVec.emplace_back(strVal);
                 }
