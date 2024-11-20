@@ -3,6 +3,8 @@
  */
 #pragma once
 
+#include "md-pp-macro_helpers.h"
+
 #include <algorithm>
 
 
