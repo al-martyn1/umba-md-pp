@@ -23,4 +23,6 @@ noDocumentMetaTitle                         =0x10B0 // Don't add 'Document infor
 documentMetaTitle                           =0x10B1 // Add 'Document information' title to meta tags section
 noMetaDataSubst                             =0x10C0 // Don't perform macro substitutions on metatags text
 metaDataSubst                               =0x10C1 // Perform macro substitutions on metatags text
+noAutoUrl                                   =0x10D0 // Don't perform auto URL (metatag) generation
+autoUrl                                     =0x10D1 // Perform auto URL (metatag) generation
 
