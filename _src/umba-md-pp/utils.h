@@ -32,7 +32,7 @@ std::vector<StringType> extractMetaLinesFromDocument(std::vector<StringType> &do
     if (docLines.empty())
         return resVec;
 
-    std::vector<StringType>::const_iterator it = docLines.begin();
+    typename std::vector<StringType>::const_iterator it = docLines.begin();
 
     const StringType metaSep = linePrefix + StringType(3,(CharType)'-');
 
