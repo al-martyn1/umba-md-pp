@@ -524,8 +524,8 @@ int safe_main(int argc, char* argv[])
         for(; fileIt!=foundFiles.end() && folderIt!=foundFilesRootFolders.end(); ++fileIt, ++folderIt)
         {
             auto fileRootPath = *folderIt;
-            auto fileRelName  = fileFullName;
             auto fileFullName = *fileIt  ;
+            auto fileRelName  = fileFullName;
 
             // Доп. проверка, если не совпало, то что-то очень пошло не так
             if (!umba::string_plus::starts_with_and_strip(fileRelName, fileRootPath))

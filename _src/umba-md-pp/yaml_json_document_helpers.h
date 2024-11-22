@@ -223,6 +223,34 @@ bool getJsonNodeTypeValueAsString(const JsonNodeType &j, std::string &resVal)
 
 }
 
+//----------------------------------------------------------------------------
+template<typename AppCfgT> inline
+std::string pdmSubstMetaMacros(const AppCfgT &appCfg, const std::string &text, bool forceSubst)
+{
+    if (!appCfg.testProcessingOption(ProcessingOptions::metaDataSubst) || !forceSubst)
+        return text;
+
+    using namespace umba::macros;
+    return substMacros( text
+                      , umba::md::MacroTextFromMapOrEnvRef(appCfg.conditionVars, false /* !envAllowed */ )
+                      , smf_KeepUnknownVars // | smf_uppercaseNames // !!! Надо заморачиваться с регистром? Если надо, то тогда при добавлении всё в upper case и кондишены надо подправить
+                      );
+}
+
+//----------------------------------------------------------------------------
+template<typename AppCfgT> inline
+std::vector<std::string> pdmSubstMetaMacros(const AppCfgT &appCfg, const std::vector<std::string> &textVec, bool forceSubst)
+{
+    std::vector<std::string> res; res.reserve(textVec.size());
+    for(const auto &text : textVec)
+    {
+        res.emplace_back(pdmSubstMetaMacros(appCfg, text, forceSubst));
+    }
+
+    return res;
+}
+
+//----------------------------------------------------------------------------
 // enum class value_t : std::uint8_t
 // {
 //     null,             ///< null value
@@ -237,9 +265,6 @@ bool getJsonNodeTypeValueAsString(const JsonNodeType &j, std::string &resVal)
 //     discarded         ///< discarded by the parser callback function
 // };
 
-
-
-//----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
 void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document &doc)
 {
@@ -266,18 +291,6 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
     }
     #endif
 
-    auto substMetaMacros = [&](const std::string &text, bool forceSubst)
-    {
-        if (!appCfg.testProcessingOption(ProcessingOptions::metaDataSubst) || !forceSubst)
-            return text;
-
-        using namespace umba::macros;
-        return substMacros( metaText
-                          , umba::md::MacroTextFromMapOrEnvRef(appCfg.conditionVars, false /* !envAllowed */ )
-                          , smf_KeepUnknownVars // | smf_uppercaseNames // !!! Надо заморачиваться с регистром? Если надо, то тогда при добавлении всё в upper case и кондишены надо подправить
-                          );
-    };
-
 
     for(const auto &metaText : collectedMetadataTexts)
     {
@@ -295,7 +308,8 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
 
         bool rootDocument = false;
 
-        for (auto el : j.items())
+        // Перво-наперво ищем признак корневого элемента
+        for(auto el : j.items())
         {
             try
             {
@@ -303,7 +317,21 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                 if (strKey=="___root_document") // Проверяем только наличие тэга
                 {
                     rootDocument = true;
-                    continue;
+                    break;
+                }
+            }
+            catch(...)
+            {}
+        }
+
+        for(auto el : j.items())
+        {
+            try
+            {
+                std::string strKey = el.key();
+                if (strKey=="___root_document")
+                {
+                    continue; // этот тэг технический, пропускаем
                 }
 
                 strKey = appCfg.makeCanonicalMetaTag(strKey);
@@ -313,17 +341,22 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
 
                 auto val = el.value();
 
-                if (tagType==MetaTagType::rootOnly) // одиночное значение, допустимое только в корневом документе
+                bool forceSubst = false;
+
+                if (tagType==MetaTagType::rootOnly) // Одиночное значение, допустимое только в корневом документе?
                 {
-                    if (!rootDocument)
+                    if (!rootDocument) // Найден не в корневом документе? Пропускаем
                         continue;
 
                     // тут надо сделать подстановку безусловно - rootOnly тэги типа URL могут всегда содержать макросы
-                    val = substMetaMacros(val, true);
+                    // val - это не строка
+                    // val = substMetaMacros(val, true);
+                    forceSubst = true;
                 }
                 else
                 {
-                    val = substMetaMacros(val, false);
+                    // val - это не строка
+                    //val = substMetaMacros(val, false);
                 }
                 
                 //    std::string valStr = val;
@@ -359,7 +392,8 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                         if (!getJsonNodeTypeValueAsString(jVel, strVal))
                             continue;
 
-                        tagValsVec.emplace_back(strVal);
+                        // tagValsVec.emplace_back(strVal);
+                        tagValsVec.emplace_back(pdmSubstMetaMacros(appCfg, strVal, forceSubst));
                     }
 
                     continue;
@@ -374,11 +408,11 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                 if (tagType==MetaTagType::commaList || tagType==MetaTagType::commaSet || tagType==MetaTagType::commaUniqueList)
                 {
                     // Если одиночная строка является commaList или commaSet, то надо разобрать
-                    umba::vectorPushBack(tagValsVec, splitAndTrimAndSkipEmpty(strVal, ','));
+                    umba::vectorPushBack(tagValsVec, pdmSubstMetaMacros(appCfg, splitAndTrimAndSkipEmpty(strVal, ','), forceSubst));
                 }
                 else // MetaTagType::rootOnly элементы тоже сюда попадают
                 {
-                    tagValsVec.emplace_back(strVal);
+                    tagValsVec.emplace_back(pdmSubstMetaMacros(appCfg, strVal, forceSubst));
                 }
 
             }
@@ -390,6 +424,24 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
         }
 
     }
+
+    if (appCfg.testProcessingOption(ProcessingOptions::autoUrl))
+    {
+        auto cvIt = appCfg.conditionVars.find("__DocumentBaseUrl");
+        if (cvIt!=appCfg.conditionVars.end())
+        {
+            auto urlCanonicalTagName = appCfg.makeCanonicalMetaTag("url");
+            auto tgIt = doc.tagsData.find(urlCanonicalTagName);
+            if (tgIt==doc.tagsData.end()) // тэга URL нету
+            {
+                doc.tagsData[urlCanonicalTagName].emplace_back(pdmSubstMetaMacros(appCfg, "$(__DocumentBaseUrl)/$(__DocumentRelFileName)", true /* forceSubst */ ));
+            }
+        }
+    }
+    // strKey = appCfg.makeCanonicalMetaTag(strKey);
+    // std::vector<std::string> &tagValsVec = doc.tagsData[strKey];
+    //  
+    // MetaTagType tagType = appCfg.getMetaTagType(strKey);
 
 }
 
