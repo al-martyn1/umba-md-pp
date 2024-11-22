@@ -1,3 +1,9 @@
+**Информация о документе**
+
+**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main//doc/umba-md-pp-view-cli-options.md_
+
+---
+
 # Umba MDPP Markdown Viewer command line options
 
 - [Usage](#user-content-usage)

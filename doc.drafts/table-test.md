@@ -1,3 +1,9 @@
+**Информация о документе**
+
+**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main//doc.drafts/table-test.md_
+
+---
+
 - [Table test 01](#user-content-table-test-01)
 - [Table test 02](#user-content-table-test-02)
 - [Table test 03](#user-content-table-test-03)

@@ -6,7 +6,6 @@ Title      : Препроцессор для Markdown
 Description: "Утилита, добавляющая некоторые возможности к Markdown"
 Date       : April 25, 2024
 Language   : Russian
-URL        : $(UrlBase)/umba-md-pp/blob/main/README.md
 ---
 
 #!meta{no-document-meta-title,author,url}
