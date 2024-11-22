@@ -316,6 +316,7 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                 std::string strKey = el.key();
                 if (strKey=="___root_document") // Проверяем только наличие тэга
                 {
+                    LOG_INFO("auto-url") << "Current document is root document\n";
                     rootDocument = true;
                     break;
                 }
@@ -427,15 +428,75 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
 
     if (appCfg.testProcessingOption(ProcessingOptions::autoUrl))
     {
+        LOG_INFO("auto-url") << "Found 'auto-url' processing option\n";
+
         auto cvIt = appCfg.conditionVars.find("__DocumentBaseUrl");
         if (cvIt!=appCfg.conditionVars.end())
         {
+            LOG_INFO("auto-url") << "Found '__DocumentBaseUrl' var\n";
+
             auto urlCanonicalTagName = appCfg.makeCanonicalMetaTag("url");
+            LOG_INFO("auto-url") << "URL tag canonical name: '" << urlCanonicalTagName << "'\n";
             auto tgIt = doc.tagsData.find(urlCanonicalTagName);
             if (tgIt==doc.tagsData.end()) // тэга URL нету
             {
+                LOG_INFO("auto-url") << "URL tag not taken in document, adding auto-generated value\n";
+
+                // auto simpleSubst = [&](const std::string &text)
+                // {
+                //     using namespace umba::macros;
+                //     return substMacros( text
+                //                       , umba::md::MacroTextFromMapOrEnvRef(appCfg.conditionVars, false /* !envAllowed */ )
+                //                       , smf_KeepUnknownVars // | smf_uppercaseNames // !!! Надо заморачиваться с регистром? Если надо, то тогда при добавлении всё в upper case и кондишены надо подправить
+                //                       );
+                // };
+
+                auto
+                tmpIt = appCfg.conditionVars.find("__DocumentBaseUrl");
+                if (tmpIt==appCfg.conditionVars.end())
+                {
+                    LOG_INFO("auto-url") << "'__DocumentBaseUrl' variable not found\n";
+                }
+                else
+                {
+                    LOG_INFO("auto-url") << "Found '__DocumentBaseUrl' variable\n";
+                }
+
+                tmpIt = appCfg.conditionVars.find("__DocumentRelFileName");
+                if (tmpIt==appCfg.conditionVars.end())
+                {
+                    LOG_INFO("auto-url") << "'__DocumentRelFileName' variable not found\n";
+                }
+                else
+                {
+                    LOG_INFO("auto-url") << "Found '__DocumentRelFileName' variable\n";
+                }
+
+
+// template<typename AppCfgT> inline
+// std::string pdmSubstMetaMacros(const AppCfgT &appCfg, const std::string &text, bool forceSubst)
+// {
+//     if (!appCfg.testProcessingOption(ProcessingOptions::metaDataSubst) || !forceSubst)
+//         return text;
+//  
+//     using namespace umba::macros;
+//     return substMacros( text
+//                       , umba::md::MacroTextFromMapOrEnvRef(appCfg.conditionVars, false /* !envAllowed */ )
+//                       , smf_KeepUnknownVars // | smf_uppercaseNames // !!! Надо заморачиваться с регистром? Если надо, то тогда при добавлении всё в upper case и кондишены надо подправить
+//                       );
+// }
+
+
                 doc.tagsData[urlCanonicalTagName].emplace_back(pdmSubstMetaMacros(appCfg, "$(__DocumentBaseUrl)/$(__DocumentRelFileName)", true /* forceSubst */ ));
             }
+            else
+            {
+                LOG_INFO("auto-url") << "URL tag found in document, do nothing\n";
+            }
+        }
+        else
+        {
+            LOG_INFO("auto-url") << "'__DocumentBaseUrl' var not found\n";
         }
     }
     // strKey = appCfg.makeCanonicalMetaTag(strKey);
