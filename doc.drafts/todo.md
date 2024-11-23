@@ -9,7 +9,6 @@
 
 - [Приоритетные направления](#user-content-приоритетные-направления)
 - [Важные задачи в библиотеках](#user-content-важные-задачи-в-библиотеках)
-- [Философия](#user-content-философия)
 - [TODO List](#user-content-todo-list)
   - [DocumentID](#user-content-documentid)
   - [Директивы UMBA-MD-PP](#user-content-директивы-umba-md-pp)
@@ -59,12 +58,6 @@
       Используем UMBA_FILESYS_UTF_SYSAPI_HAS_WIDE_VERSION для определения того, есть ли wide версия API.
 - [ ] Рыбоконь - научить выводить в MD
 - [X] Brief Scanner - научить выводить в MD
-
-
-# Философия
-
-- [ ] Запилить тему про систематизацию знаний. Привет, велкин. Систематизировать знания можно и нужно.
-      Систематизация знаний - это то, что отличает homo sapience от других homo и других sapience.
 
 
 # TODO List
