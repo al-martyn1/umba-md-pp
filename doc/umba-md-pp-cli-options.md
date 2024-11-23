@@ -25,7 +25,7 @@ If output_file not taken, STDOUT used.
 **-q**,
 **--quet** - Operate quetly.
 
-**--info=info-type1[,+info-type2,-info-type]** - Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `config`, `graphviz`, `opt-files`, `page-index`, `plantuml`, `snippet-lookup`, `strip-extentions`.
+**--info=info-type1[,+info-type2,-info-type]** - Make info messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `auto-url`, `config`, `graphviz`, `meta-tags`, `opt-files`, `page-index`, `plantuml`, `snippet-lookup`, `strip-extentions`.
 
 **--warning=warn-type1[,+warn-type2,-warn-type]** - Make warning messages enabled/disabled, '+' (or nothing) - enable message, '-' - disable it. Type is one of: `graphviz`, `img-copy`, `img-copy-exist`, `plantuml`, `same-file`.
 
@@ -98,12 +98,16 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse
 **--meta-tag-replace=TAG:REPLACETO** - Add meta tag name replacement.
 
 **-M=TAG:SERIALIZETO**,
-**--meta-tag-serialize=TAG:SERIALIZETO** - Add meta tag name for serialization.
+**--meta-tag-serialize=TAG:SERIALIZETO**,
+**--meta-tag-serialize-as=TAG:SERIALIZETO** - Add meta tag name for serialization.
 
 **--meta-tag-set-type=TYPE:TAG[,TAG...]**,
-**--set-meta-tag-type=TYPE:TAG[,TAG...]** - Set meta tag type (`TextFirst`/`TextReplace`/`TextMerge`/`List`/`CommaList`/`Set`/`CommaSet`).
+**--set-meta-tag-type=TYPE:TAG[,TAG...]** - Set meta tag type (`TextFirst`/`TextReplace`/`TextMerge`/`List`/`CommaList`/`Set`/`CommaSet`/`UniqueList`/`UniqueCommaList`/`RootOnly`).
 
-**--serialize-meta-tags=TAG[,TAG...]** - Set/append meta tag serialize list. Use `+` sign at first position to append tags to list.
+**--serialize-meta-tags=TAG[,TAG...]**,
+**--meta-tag-serialize-list=TAG[,TAG...]** - Set/append meta tag serialize list to add to meta section. Use `+` sign at first position to append tags to list.
+
+**--document-meta-tags=TAG[,TAG...]** - Set/append list of meta tags to add to document body/text. Use `+` sign at first position to append tags to list.
 
 **--numeric-sections-max-level=LEVEL** - Set max level for sections numeration.
 Allowed values: `0`/`inf`/`infinite`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15` or `16`, initial value: `infinite`.
