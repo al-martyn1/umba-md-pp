@@ -1373,7 +1373,8 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
             filename.append(std::to_string(filenameLineNo));
         }
 
-        resLines.emplace_back(filename); // !!! Какое-то оформление надо
+        static const std::string bold = "**";
+        resLines.emplace_back(bold+filename+bold); // !!! Какое-то оформление надо
     }
 
     std::string listingLangTag;
