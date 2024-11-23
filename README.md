@@ -177,7 +177,7 @@ GitHub/GitLab wiki, например.
 #!insert{nolineno,noKeepCutTags,filename,path,filename-line-no} umba-md-pp/for_tag_test.cpp#TEST_TAG
 ```
 
-umba-md-pp/for_tag_test.cpp:3
+**umba-md-pp/for_tag_test.cpp:3**
 ```cpp
 void test()
 {
@@ -212,7 +212,7 @@ enum class SnippetOptions : std::uint32_t
     noKeepCutTags      = 0x1070 /*!< Don't keep nested cut tags/markers */,
     keepCutTags        = 0x1071 /*!< Keep nested cut tags/markers */,
     noFilenameLineNo   = 0x1080 /*!< Do not add line number to filename before liting */,
-    filenameLineNo     = 0x1081 /*!< Add line number to filename before liting */,
+    filenameLineNo     = 0x1081 /*!< Add line number to filename before listing */,
     noSnippetOptions   = 0x1090 /*!< Do not add actual snippet options line before listing */,
     snippetOptions     = 0x1091 /*!< Add actual snippet options line before listing */,
     noTrimArround      = 0x10A0 /*!< Do not trim empty lines before and after listing */,
