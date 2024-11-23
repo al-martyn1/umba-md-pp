@@ -368,6 +368,8 @@ int safe_main(int argc, char* argv[])
         argsParser.args.push_back("--processing-options=meta-data");
 
         // F:\\_github\\umba-tools\\umba-md-pp
+        #if 0
+
         #if defined(__has_include)
             #if __has_include("F:/_github/umba-tools/umba-md-pp/README.md_")
                 argsParser.args.push_back("F:/_github/umba-tools/umba-md-pp/README.md_");
@@ -376,6 +378,14 @@ int safe_main(int argc, char* argv[])
             #endif
         #else
         #endif
+
+        #endif
+
+        argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test,rc,_generators,conf,_distr_conf,doxy,src,_src,.msvc2019,boost,icons");
+        argsParser.args.push_back("--overwrite");
+        argsParser.args.push_back("--copy-images");
+        argsParser.args.push_back("--batch-scan-recurse="+rootPath);
+
 
         //argsParser.args.push_back("-q");
 
@@ -537,16 +547,6 @@ int safe_main(int argc, char* argv[])
             umba::filename::stripLastPathSep(fileRootPath);
             umba::filename::stripFirstPathSep(fileRelName);
 
-            {
-                auto documentRelFileName = appConfig.stripExtentions
-                                         ? umba::filename::getPathFile(fileRelName)
-                                         : fileRelName
-                                         ;
-                documentRelFileName = umba::filename::makeCanonical(documentRelFileName, '/');
-                appConfig.addConditionVar("__DocumentRelFileName", documentRelFileName);
-                // Нужно добавлять __DocumentBaseUrl - это переменная, которую задаёт пользователь, но она имеет системное значение
-            }
-
             //     if (appConfig.stripExtentions)
             //         linkTarget = umba::filename::getPathFile(linkTarget); // не добавляем в индекс расширение
             // // appConfig.addConditionVar("__DocumentRelFileName", umba::filename::makeCanonical(fileRelName, '/'))
@@ -595,6 +595,22 @@ int safe_main(int argc, char* argv[])
                 targetRelName   = umba::filename::appendExt(umba::filename::getPathFile(fileRelName), targetExt);
                 outputFilename  = umba::filename::appendPath(appConfig.batchOutputRoot, targetRelName);
             }
+
+            {
+                //!!!
+                //fileRelName
+                auto 
+                documentRelFileName = umba::filename::replaceExtention(fileRelName, targetExt);
+                documentRelFileName = appConfig.stripExtentions
+                                    ? umba::filename::getPathFile(documentRelFileName)
+                                    : documentRelFileName
+                                    ;
+                documentRelFileName = umba::filename::makeCanonical(documentRelFileName, '/');
+                appConfig.addConditionVar("__DocumentRelFileName", documentRelFileName);
+                // Нужно добавлять __DocumentBaseUrl - это переменная, которую задаёт пользователь, но она имеет системное значение
+            }
+
+
 
             // infoLog << "'" << outputFilename << "'" << "\n";
 

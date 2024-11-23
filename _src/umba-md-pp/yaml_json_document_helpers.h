@@ -462,6 +462,13 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                     LOG_INFO("auto-url") << "Found '__DocumentBaseUrl' variable\n";
                 }
 
+                std::string baseUrl = tmpIt->second;
+                if (baseUrl.empty())
+                {
+                    LOG_INFO("auto-url") << "'__DocumentBaseUrl' was found, but empty\n";
+                }
+
+
                 tmpIt = appCfg.conditionVars.find("__DocumentRelFileName");
                 if (tmpIt==appCfg.conditionVars.end())
                 {
@@ -472,22 +479,23 @@ void parseDocumentMetadata(const AppConfig<FilenameStringType> &appCfg, Document
                     LOG_INFO("auto-url") << "Found '__DocumentRelFileName' variable\n";
                 }
 
+                std::string documentRelFileName = tmpIt->second;
+                if (documentRelFileName.empty())
+                {
+                    LOG_INFO("auto-url") << "'__DocumentRelFileName' was found, but empty\n";
+                }
 
-// template<typename AppCfgT> inline
-// std::string pdmSubstMetaMacros(const AppCfgT &appCfg, const std::string &text, bool forceSubst)
-// {
-//     if (!appCfg.testProcessingOption(ProcessingOptions::metaDataSubst) || !forceSubst)
-//         return text;
-//  
-//     using namespace umba::macros;
-//     return substMacros( text
-//                       , umba::md::MacroTextFromMapOrEnvRef(appCfg.conditionVars, false /* !envAllowed */ )
-//                       , smf_KeepUnknownVars // | smf_uppercaseNames // !!! Надо заморачиваться с регистром? Если надо, то тогда при добавлении всё в upper case и кондишены надо подправить
-//                       );
-// }
+                if (baseUrl.empty() || documentRelFileName.empty())
+                {
+                    LOG_INFO("auto-url") << "URL tag not added automatically\n";
+                }
+                else
+                {
+                    std::string docUrl = umba::filename::appendPath(baseUrl, documentRelFileName, '/');
+                    // doc.tagsData[urlCanonicalTagName].emplace_back(pdmSubstMetaMacros(appCfg, "$(__DocumentBaseUrl)/$(__DocumentRelFileName)", true /* forceSubst */ ));
+                    doc.tagsData[urlCanonicalTagName].emplace_back(docUrl);
+                }
 
-
-                doc.tagsData[urlCanonicalTagName].emplace_back(pdmSubstMetaMacros(appCfg, "$(__DocumentBaseUrl)/$(__DocumentRelFileName)", true /* forceSubst */ ));
             }
             else
             {
