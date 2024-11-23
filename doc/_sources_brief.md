@@ -1,6 +1,6 @@
 **Информация о документе**
 
-**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main//doc/_sources_brief.md_
+**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/doc/_sources_brief.md
 
 ---
 

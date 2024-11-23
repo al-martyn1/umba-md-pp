@@ -8,7 +8,7 @@
 - HelloFromDot <ehlo@dot.org>
 - HelloFromPuml <ehlo@puml.org>
 
-**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main//README.md_
+**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 
 ---
 
@@ -39,7 +39,7 @@
 - HelloFromDot <ehlo@dot.org>
 - HelloFromPuml <ehlo@puml.org>
 
-**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main//README.md_
+**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 
 ---
 
@@ -560,7 +560,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 - HelloFromDot <ehlo@dot.org>
 - HelloFromPuml <ehlo@puml.org>
 
-**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main//README.md_
+**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/README.md
 
 **Дата**: April 25, 2024
 
