@@ -172,6 +172,61 @@ GitHub/GitLab wiki, например.
 - якорь `(-)` - линия-разделитель, задаётся для каждого языка отдельно в произвольном количестве вариантов, для C++ это, например,
   `//---` или `/***`. Задаются только префиксы, т.е. `//------------` - это тоже линия разделитель
 
+Извлекаем фрагмент кода по тэгу фрагмента:
+```
+#!insert{nolineno,noKeepCutTags,filename,path,filename-line-no} umba-md-pp/for_tag_test.cpp#TEST_TAG
+```
+
+umba-md-pp/for_tag_test.cpp:3
+```cpp
+void test()
+{
+}
+```
+
+```
+#!insert{nolineno,noKeepCutTags} umba-md-pp/enums.h#SnippetOptions
+```
+
+```cpp
+enum class SnippetOptions : std::uint32_t
+{
+    invalid            = (std::uint32_t)(-1) /*!<  */,
+    unknown            = (std::uint32_t)(-1) /*!<  */,
+    noLineNo           = 0x1010 /*!< Do not add line numbers to generated listing */,
+    lineNo             = 0x1011 /*!< Add line numbers to generated listing */,
+    noTrim             = 0x1020 /*!< Do not trim left inserted code */,
+    noTrimLeft         = 0x1020 /*!< Do not trim left inserted code */,
+    trim               = 0x1021 /*!< Trim left inserted code */,
+    trimLeft           = 0x1021 /*!< Trim left inserted code */,
+    noTag              = 0x1030 /*!< Do not add language tag */,
+    noLangTag          = 0x1030 /*!< Do not add language tag */,
+    tag                = 0x1031 /*!< Add language tag */,
+    langTag            = 0x1031 /*!< Add language tag */,
+    noFilename         = 0x1040 /*!< Do not add filename to listing */,
+    filename           = 0x1041 /*!< Add filename to listing */,
+    noPath             = 0x1050 /*!< Do not add full path to filename (filename option) */,
+    path               = 0x1051 /*!< Add full path to filename (filename option) */,
+    noFail             = 0x1060 /*!< If insertion file not found, don't add insert command text to result - used for C++ __has_include emulation. If there is some other failures occurs (such invalif options), wrong line will be always inserted */,
+    fail               = 0x1061 /*!< If insertion file not found, add insert command text to result. If there is some other failures occurs (such invalif options), wrong line will be always inserted. Default is set in basic configs */,
+    noKeepCutTags      = 0x1070 /*!< Don't keep nested cut tags/markers */,
+    keepCutTags        = 0x1071 /*!< Keep nested cut tags/markers */,
+    noFilenameLineNo   = 0x1080 /*!< Do not add line number to filename before liting */,
+    filenameLineNo     = 0x1081 /*!< Add line number to filename before liting */,
+    noSnippetOptions   = 0x1090 /*!< Do not add actual snippet options line before listing */,
+    snippetOptions     = 0x1091 /*!< Add actual snippet options line before listing */,
+    noTrimArround      = 0x10A0 /*!< Do not trim empty lines before and after listing */,
+    trimArround        = 0x10A1 /*!< Trim empty lines before and after listing */,
+    noDoc              = 0x10F0 /*!< -doc */,
+    doc                = 0x10F1 /*!< Insert as external document, or as snippet otherwise */,
+    raise              = 0x2011 /*!< Numeric option */
+
+}; // enum
+```
+
+
+
+
 Извлекаем фрагмент кода по сигнатуре:
 ```
 #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)`-{}

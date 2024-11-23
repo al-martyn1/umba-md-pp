@@ -152,6 +152,22 @@ GitHub/GitLab wiki, например.
 - якорь `(-)` - линия-разделитель, задаётся для каждого языка отдельно в произвольном количестве вариантов, для C++ это, например,
   `//---` или `/***`. Задаются только префиксы, т.е. `//------------` - это тоже линия разделитель
 
+Извлекаем фрагмент кода по тэгу фрагмента:
+```
+#!insert{nolineno,noKeepCutTags,filename,path,filename-line-no} umba-md-pp/for_tag_test.cpp#TEST_TAG
+```
+
+#!insert{nolineno,noKeepCutTags,filename,path,filename-line-no} umba-md-pp/for_tag_test.cpp#TEST_TAG
+
+```
+#!insert{nolineno,noKeepCutTags} umba-md-pp/enums.h#SnippetOptions
+```
+
+#!insert{nolineno,noKeepCutTags} umba-md-pp/enums.h#SnippetOptions
+
+
+
+
 Извлекаем фрагмент кода по сигнатуре:
 ```
 #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)`-{}
