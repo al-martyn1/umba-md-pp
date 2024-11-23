@@ -24,6 +24,7 @@
  - **umba-md-pp/enum_hash.h** - 
  - **umba-md-pp/enums.h** - 
  - **umba-md-pp/extern_tools.h** - 
+ - **umba-md-pp/for_tag_test.cpp** - 
  - **umba-md-pp/gen-lang-detection-tr.cpp** - Утилита umba-md-pp - препроцессор для маркдауна
  - **umba-md-pp/generation_cache_info.h** - 
  - **umba-md-pp/graph_viz_options.h** - 

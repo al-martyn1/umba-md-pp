@@ -11,16 +11,17 @@
 
 
 
+//#!SnippetOptions
 enum class SnippetOptions : std::uint32_t
 {
     invalid            = (std::uint32_t)(-1) /*!<  */,
     unknown            = (std::uint32_t)(-1) /*!<  */,
-    noLineNo           = 0x1010 /*!< [x] Do not add line numbers to generated listing */,
-    lineNo             = 0x1011 /*!< [x] Add line numbers to generated listing */,
-    noTrim             = 0x1020 /*!< [x] Do not trim left inserted code */,
-    noTrimLeft         = 0x1020 /*!< [x] Do not trim left inserted code */,
-    trim               = 0x1021 /*!< [x] Trim left inserted code */,
-    trimLeft           = 0x1021 /*!< [x] Trim left inserted code */,
+    noLineNo           = 0x1010 /*!< Do not add line numbers to generated listing */,
+    lineNo             = 0x1011 /*!< Add line numbers to generated listing */,
+    noTrim             = 0x1020 /*!< Do not trim left inserted code */,
+    noTrimLeft         = 0x1020 /*!< Do not trim left inserted code */,
+    trim               = 0x1021 /*!< Trim left inserted code */,
+    trimLeft           = 0x1021 /*!< Trim left inserted code */,
     noTag              = 0x1030 /*!< Do not add language tag */,
     noLangTag          = 0x1030 /*!< Do not add language tag */,
     tag                = 0x1031 /*!< Add language tag */,
@@ -29,21 +30,22 @@ enum class SnippetOptions : std::uint32_t
     filename           = 0x1041 /*!< Add filename to listing */,
     noPath             = 0x1050 /*!< Do not add full path to filename (filename option) */,
     path               = 0x1051 /*!< Add full path to filename (filename option) */,
-    noFail             = 0x1060 /*!< [x] If insertion file not found, don't add insert command text to result - used for C++ __has_include emulation. If there is some other failures occurs (such invalif options), wrong line will be always inserted */,
-    fail               = 0x1061 /*!< [x] If insertion file not found, add insert command text to result. If there is some other failures occurs (such invalif options), wrong line will be always inserted. Default is set in basic configs */,
-    noKeepCutTags      = 0x1070 /*!< [x] Don't keep nested cut tags/markers */,
-    keepCutTags        = 0x1071 /*!< [x] Keep nested cut tags/markers */,
+    noFail             = 0x1060 /*!< If insertion file not found, don't add insert command text to result - used for C++ __has_include emulation. If there is some other failures occurs (such invalif options), wrong line will be always inserted */,
+    fail               = 0x1061 /*!< If insertion file not found, add insert command text to result. If there is some other failures occurs (such invalif options), wrong line will be always inserted. Default is set in basic configs */,
+    noKeepCutTags      = 0x1070 /*!< Don't keep nested cut tags/markers */,
+    keepCutTags        = 0x1071 /*!< Keep nested cut tags/markers */,
     noFilenameLineNo   = 0x1080 /*!< Do not add line number to filename before liting */,
-    filenameLineNo     = 0x1081 /*!< Add line number to filename before liting */,
+    filenameLineNo     = 0x1081 /*!< Add line number to filename before listing */,
     noSnippetOptions   = 0x1090 /*!< Do not add actual snippet options line before listing */,
     snippetOptions     = 0x1091 /*!< Add actual snippet options line before listing */,
     noTrimArround      = 0x10A0 /*!< Do not trim empty lines before and after listing */,
     trimArround        = 0x10A1 /*!< Trim empty lines before and after listing */,
     noDoc              = 0x10F0 /*!< -doc */,
-    doc                = 0x10F1 /*!< +doc */,
+    doc                = 0x10F1 /*!< Insert as external document, or as snippet otherwise */,
     raise              = 0x2011 /*!< Numeric option */
 
-}; // enum class SnippetOptions : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(SnippetOptions)
 
@@ -147,6 +149,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetOptions, std::map, 1 )
 
 
+//#!SnippetOptionsParsingResult
 enum class SnippetOptionsParsingResult : std::uint32_t
 {
     invalid          = (std::uint32_t)(-1) /*!<  */,
@@ -155,7 +158,8 @@ enum class SnippetOptionsParsingResult : std::uint32_t
     ok               = 0x0001 /*!< Parsing ok, conditions met */,
     okButCondition   = 0x0002 /*!< Parsing ok, but conditions not met */
 
-}; // enum class SnippetOptionsParsingResult : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(SnippetOptionsParsingResult)
 
@@ -177,6 +181,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptionsParsingResult, std::map, 1
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetOptionsParsingResult, std::map, 1 )
 
 
+//#!ConditionOperators
 enum class ConditionOperators : std::uint32_t
 {
     invalid        = (std::uint32_t)(-1) /*!<  */,
@@ -188,7 +193,8 @@ enum class ConditionOperators : std::uint32_t
     greater        = 0x0004 /*!< > */,
     less           = 0x0005 /*!< < */
 
-}; // enum class ConditionOperators : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(ConditionOperators)
 
@@ -220,6 +226,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ConditionOperators, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ConditionOperators, std::map, 1 )
 
 
+//#!ListingNestedTagsMode
 enum class ListingNestedTagsMode : std::uint32_t
 {
     invalid     = (std::uint32_t)(-1) /*!<  */,
@@ -229,7 +236,8 @@ enum class ListingNestedTagsMode : std::uint32_t
     empty       = 0x0002 /*!< replace lines with tags with empty lines */,
     emptyLine   = 0x0002 /*!< replace lines with tags with empty lines */
 
-}; // enum class ListingNestedTagsMode : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(ListingNestedTagsMode)
 
@@ -252,6 +260,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ListingNestedTagsMode, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ListingNestedTagsMode, std::map, 1 )
 
 
+//#!ProcessingOptions
 enum class ProcessingOptions : std::uint32_t
 {
     invalid                             = (std::uint32_t)(-1) /*!<  */,
@@ -285,7 +294,8 @@ enum class ProcessingOptions : std::uint32_t
     noAutoUrl                           = 0x10D0 /*!< Don't perform auto URL (metatag) generation */,
     autoUrl                             = 0x10D1 /*!< Perform auto URL (metatag) generation */
 
-}; // enum class ProcessingOptions : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(ProcessingOptions)
 
@@ -407,6 +417,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 
+//#!TargetRenderer
 enum class TargetRenderer : std::uint32_t
 {
     invalid   = (std::uint32_t)(-1) /*!<  */,
@@ -415,7 +426,8 @@ enum class TargetRenderer : std::uint32_t
     doxygen   = 0x0001 /*!<  */,
     gitlab    = 0x0002 /*!<  */
 
-}; // enum class TargetRenderer : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(TargetRenderer)
 
@@ -435,6 +447,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( TargetRenderer, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( TargetRenderer, std::map, 1 )
 
 
+//#!LineHandlerEvent
 enum class LineHandlerEvent : std::uint32_t
 {
     invalid         = (std::uint32_t)(-1) /*!<  */,
@@ -452,7 +465,8 @@ enum class LineHandlerEvent : std::uint32_t
     metaStart       = 0x000A /*!<  */,
     metaEnd         = 0x000B /*!<  */
 
-}; // enum class LineHandlerEvent : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(LineHandlerEvent)
 
@@ -514,6 +528,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( LineHandlerEvent, std::map, 1 )
 
 
+//#!PreprocessorParsingState
 enum class PreprocessorParsingState : std::uint32_t
 {
     invalid   = (std::uint32_t)(-1) /*!<  */,
@@ -523,7 +538,8 @@ enum class PreprocessorParsingState : std::uint32_t
     meta      = 0x0002 /*!<  */,
     comment   = 0x0003 /*!<  */
 
-}; // enum class PreprocessorParsingState : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(PreprocessorParsingState)
 
@@ -545,6 +561,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorParsingState, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PreprocessorParsingState, std::map, 1 )
 
 
+//#!MetaTagType
 enum class MetaTagType : std::uint32_t
 {
     invalid           = (std::uint32_t)(-1) /*!<  */,
@@ -563,7 +580,8 @@ enum class MetaTagType : std::uint32_t
     commaUniqueList   = 0x0009 /*!< Unique list, but can be represented as simple text with comma separated items */,
     uniqueCommaList   = 0x0009 /*!< Unique list, but can be represented as simple text with comma separated items */
 
-}; // enum class MetaTagType : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(MetaTagType)
 
@@ -620,6 +638,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MetaTagType, std::map, 1 )
 
 
+//#!TargetFormat
 enum class TargetFormat : std::uint32_t
 {
     invalid     = (std::uint32_t)(-1) /*!<  */,
@@ -630,7 +649,8 @@ enum class TargetFormat : std::uint32_t
     rtf         = 0x1001 /*!<  */,
     pdf         = 0x1002 /*!<  */
 
-}; // enum class TargetFormat : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(TargetFormat)
 
@@ -654,6 +674,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( TargetFormat, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( TargetFormat, std::map, 1 )
 
 
+//#!BacktickProcessingState
 enum class BacktickProcessingState : std::uint32_t
 {
     normal                           = 0x0000 /*!<  */,
@@ -662,7 +683,8 @@ enum class BacktickProcessingState : std::uint32_t
     readDblBacktickEnclosed          = 0x0003 /*!<  */,
     readDblBacktickEnclosedWaitEnd   = 0x0004 /*!<  */
 
-}; // enum class BacktickProcessingState : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(BacktickProcessingState)
 
@@ -691,6 +713,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( BacktickProcessingState, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( BacktickProcessingState, std::map, 1 )
 
 
+//#!PreprocessorDirective
 enum class PreprocessorDirective : std::uint32_t
 {
     invalid              = (std::uint32_t)(-1) /*!<  */,
@@ -718,7 +741,8 @@ enum class PreprocessorDirective : std::uint32_t
     condElseif           = 0x000F /*!<  */,
     condEndif            = 0x0010 /*!<  */
 
-}; // enum class PreprocessorDirective : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(PreprocessorDirective)
 
@@ -791,6 +815,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PreprocessorDirective, std::map, 1 )
 
 
+//#!SnippetTagType
 enum class SnippetTagType : std::uint32_t
 {
     invalid             = (std::uint32_t)(-1) /*!<  */,
@@ -802,7 +827,8 @@ enum class SnippetTagType : std::uint32_t
     genericStopMarker   = 0x0004 /*!< Allowed for end only */,
     stopOnEmptyLines    = 0x0005 /*!< Allowed for end only */
 
-}; // enum class SnippetTagType : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(SnippetTagType)
 
@@ -838,6 +864,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetTagType, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetTagType, std::map, 1 )
 
 
+//#!MdPpTag
 enum class MdPpTag : std::uint32_t
 {
     invalid    = (std::uint32_t)(-1) /*!<  */,
@@ -850,7 +877,8 @@ enum class MdPpTag : std::uint32_t
     csv        = 0x0002 /*!<  */,
     end        = 0x0003 /*!<  */
 
-}; // enum class MdPpTag : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(MdPpTag)
 
@@ -875,6 +903,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MdPpTag, std::map, 1 )
 
 
+//#!GraphVizTargetFormat
 enum class GraphVizTargetFormat : std::uint32_t
 {
     invalid   = (std::uint32_t)(-1) /*!<  */,
@@ -887,7 +916,8 @@ enum class GraphVizTargetFormat : std::uint32_t
     jpeg      = 0x0004 /*!<  */,
     gif       = 0x0005 /*!<  */
 
-}; // enum class GraphVizTargetFormat : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(GraphVizTargetFormat)
 
@@ -914,6 +944,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( GraphVizTargetFormat, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( GraphVizTargetFormat, std::map, 1 )
 
 
+//#!GraphType
 enum class GraphType : std::uint32_t
 {
     invalid    = (std::uint32_t)(-1) /*!<  */,
@@ -933,7 +964,8 @@ enum class GraphType : std::uint32_t
     twopi      = 0x000C /*!<  */,
     circo      = 0x000D /*!<  */
 
-}; // enum class GraphType : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(GraphType)
 
@@ -975,6 +1007,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( GraphType, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( GraphType, std::map, 1 )
 
 
+//#!PlantUmlTargetFormat
 enum class PlantUmlTargetFormat : std::uint32_t
 {
     invalid   = (std::uint32_t)(-1) /*!<  */,
@@ -991,7 +1024,8 @@ enum class PlantUmlTargetFormat : std::uint32_t
     utxt      = 0x0009 /*!< UTXT  ASCII art using Unicode characters */,
     latex     = 0x000A /*!< LATEX Further details can be found here */
 
-}; // enum class PlantUmlTargetFormat : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(PlantUmlTargetFormat)
 
@@ -1027,6 +1061,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PlantUmlTargetFormat, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PlantUmlTargetFormat, std::map, 1 )
 
 
+//#!PlantUmlDiagramType
 enum class PlantUmlDiagramType : std::uint32_t
 {
     invalid      = (std::uint32_t)(-1) /*!<  */,
@@ -1044,7 +1079,8 @@ enum class PlantUmlDiagramType : std::uint32_t
     ditaa        = 0x000A /*!<  */,
     jcckit       = 0x000B /*!<  */
 
-}; // enum class PlantUmlDiagramType : std::uint32_t
+}; // enum 
+//#!
 
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(PlantUmlDiagramType)
 

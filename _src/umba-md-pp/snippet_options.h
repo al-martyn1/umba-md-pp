@@ -835,7 +835,10 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
 
     if (tagInfo.startType==SnippetTagType::normalTag)
     {
-        std::string targetFragmentTag; // Хз, зачем нам это раньше понадобилось снаружи
+        if (tagInfo.startTagOrSignaturePath.empty())
+            return std::vector<std::string>();
+
+        std::string targetFragmentTag = tagInfo.startTagOrSignaturePath[0].normalizedSignature;
         return extractCodeFragmentBySnippetTag( langOpts, lang, lines, firstFoundLineIdx, targetFragmentTag, listingNestedTagsMode, startLineIdx, tabSize); // Поиск по тэгу - ищем начало и конец по тэгу и тут же выходим
     }
 
