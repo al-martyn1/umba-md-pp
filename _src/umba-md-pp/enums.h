@@ -292,7 +292,9 @@ enum class ProcessingOptions : std::uint32_t
     noMetaDataSubst                     = 0x10C0 /*!< Don't perform macro substitutions on metatags text */,
     metaDataSubst                       = 0x10C1 /*!< Perform macro substitutions on metatags text */,
     noAutoUrl                           = 0x10D0 /*!< Don't perform auto URL (metatag) generation */,
-    autoUrl                             = 0x10D1 /*!< Perform auto URL (metatag) generation */
+    autoUrl                             = 0x10D1 /*!< Perform auto URL (metatag) generation */,
+    noTodo                              = 0x10E0 /*!< Don't perform TODO collecting */,
+    todo                                = 0x10E1 /*!< Perform TODO collecting */
 
 }; // enum 
 //#!
@@ -327,6 +329,8 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "NoForceInsertMeta"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::metaDataSubst                 , "MetaDataSubst"                     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::autoUrl                       , "AutoUrl"                           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTodo                        , "NoTodo"                            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::todo                          , "Todo"                              );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
@@ -414,6 +418,10 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::autoUrl                       , "auto-url"                             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::autoUrl                       , "auto_url"                             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::autoUrl                       , "autourl"                              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTodo                        , "no-todo"                              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTodo                        , "no_todo"                              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTodo                        , "notodo"                               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::todo                          , "todo"                                 );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 

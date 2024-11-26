@@ -25,4 +25,6 @@ noMetaDataSubst                             =0x10C0 // Don't perform macro subst
 metaDataSubst                               =0x10C1 // Perform macro substitutions on metatags text
 noAutoUrl                                   =0x10D0 // Don't perform auto URL (metatag) generation
 autoUrl                                     =0x10D1 // Perform auto URL (metatag) generation
+noTodo                                      =0x10E0 // Don't perform TODO collecting
+todo                                        =0x10E1 // Perform TODO collecting
 
