@@ -1843,6 +1843,14 @@ SnippetOptionsParsingResult deserializeProcessingOptions(const std::string &optL
     {
         umba::string_plus::trim(opt);
 
+        if (opt.empty())
+            continue;
+
+        if (opt[0]=='-')
+        {
+            opt = "no" + opt;
+        }
+
         auto optId = enum_deserialize(opt, ProcessingOptions::invalid);
         if (optId==ProcessingOptions::invalid)
         {
