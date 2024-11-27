@@ -1851,6 +1851,17 @@ SnippetOptionsParsingResult deserializeProcessingOptions(const std::string &optL
             opt = "no" + opt;
         }
 
+        {
+            std::string tmp; tmp.reserve(opt.size());
+            for(auto ch: opt)
+            {
+                if (ch!='-')
+                    tmp.append(1, ch);
+            }
+
+            opt.swap(tmp);
+        }
+
         auto optId = enum_deserialize(opt, ProcessingOptions::invalid);
         if (optId==ProcessingOptions::invalid)
         {
