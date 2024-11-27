@@ -136,14 +136,14 @@
 
 ## Сайдбар и футер
 
-- [] GitHub и GitLab поддерживают `_Sidebar.md`. 
+- [ ] GitHub и GitLab поддерживают `_Sidebar.md`. 
      В [доке](https://docs.github.com/ru/communities/documenting-your-project-with-wikis/creating-a-footer-or-sidebar-for-your-wiki)
      GitHub'а приведен пример с большой буквой. В [доке](https://docs.gitlab.com/ee/user/project/wiki/) по GitLab имя аналогичное, 
      но с маленькой буквы. Тем не менее, GitLab поддерживает имя файла сайдбара и с большой буквы (проверил). Формат файла зависит 
      от расширения, `.md` - это обычный маркдаун.
-- [] Футер. GitHub поддерживает `_Footer.md`. GitLab - "The wiki functionality in GitLab is based on Gollum 4.x" - Gollum вроде 
+- [ ] Футер. GitHub поддерживает `_Footer.md`. GitLab - "The wiki functionality in GitLab is based on Gollum 4.x" - Gollum вроде 
      поддерживает футеры (надо проверить). 
-- [] Генерацию сайдбаров делаем так: создаем в папке файл с именем `.sidebar`. В нем - упрощённый синтаксис, разрешены заголовки 
+- [ ] Генерацию сайдбаров делаем так: создаем в папке файл с именем `.sidebar`. В нем - упрощённый синтаксис, разрешены заголовки 
      `#` и элементы списка `-`. Продолжение элемента на следующей строке не поддерживается. Если не было встречено заголовка, то 
      список не сворачивается. Если был заголовок, то он становится содержимым `<details>/<summary>`. Элементы списка добавляются 
      как `LI` в `UL` в теле `<details>`.
