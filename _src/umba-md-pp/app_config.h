@@ -86,8 +86,8 @@ struct AppConfig
                                                                                // Так, мы можем генерить документы по месту, а можем в отдельную папочку для github wiki
                                                                                // И в другую папочку, для своего сайта, например.
                                                                                // И везде могут понадобится отдельные опции
-                                                                               // Также заведем переменную MdPpRenderingTargetName - её можно использовать в условных включениях, например,
-                                                                               // или для включения различных для каждого выходгого типа файлов.
+                                                                               // Также заведем переменную MdPpRenderingTargetName - её можно использовать в условных включениях, 
+                                                                               // например, или для включения различных для каждого выходгого типа файлов.
                                                                                // По умолчанию будет строка default
 
     std::unordered_map<std::string, std::string>          metaTagReplaceMap;
@@ -114,6 +114,11 @@ struct AppConfig
     std::vector<std::string>                              batchExcludeFilesMaskList;
     //std::vector<std::string>                              batchScanPaths;
     std::vector<ScanPathsEntry>                           batchScanPaths;
+
+
+    std::vector<std::string>                              todoScanPaths;
+    std::vector<std::string>                              todoFileNames;
+
 
     //bool                                                  batchGeneratePagesIndex = false;
     std::string                                           batchPageIndexFileName;
