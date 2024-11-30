@@ -19,6 +19,7 @@
     - [Переменные и условные операторы](#user-content-переменные-и-условные-операторы)
     - [Switch](#user-content-switch)
     - [Detailing](#user-content-detailing)
+    - [Checklist](#user-content-checklist)
     - [Switch/Detailing/If](#user-content-switchdetailingif)
   - [Метаданные документов](#user-content-метаданные-документов)
     - [#!meta - вставка метатегов в документ в виде текста](#user-content-meta---вставка-метатегов-в-документ-в-виде-текста)
@@ -208,6 +209,13 @@
       `break(brief)`. Далее - стандартное описание, завершаем директивой `break(standard)` - вроде бы то, что именно, что нужно.
 - [ ] `detailing`. Ссылки про уровень детализации: 
       https://en.wikipedia.org/wiki/Level_of_detail, https://en.wikipedia.org/wiki/Level_of_detail_(writing)
+
+
+### Checklist
+
+- [ ] `checklist`. Перечисление/список фрагментов документа, которые мы хотим включить в результирующий документ.
+- [ ] `checklist`. Задаём переменную `NNN` со всеми вариантами - `AA|BB|CC|DD`
+- [ ] `checklist`. В чек-листе используем директиву `check{AA}`/`check{BB}` и тп. Если чек срабатыает, то вставляем соотв. фрагмент.
 
 
 ### Switch/Detailing/If
