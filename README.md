@@ -61,7 +61,6 @@
 Этот файл подключен со значением макроса `INSERT_DOC_FILENAME_MACRO_TEST`, равным `by_macro2`.
 
 
-<!-- -->
 > #--serialize-meta-tags=+title,author,description,date,language
 > --serialize-meta-tags=-
 > #--processing-options=meta-data
@@ -95,6 +94,14 @@
 > --add-examples-path=.\tests\snippets
 > --add-examples-path=.\_src
 > --add-examples-path=.\src
+
+<!-- -->
+
+> ```
+> Sample generic listing
+> ```
+
+<!-- -->
 
 
 # Основные возможности

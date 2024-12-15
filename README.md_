@@ -43,6 +43,8 @@ Language   : Russian
 
 #!insert{quote} .md-pp.options
 
+#!insert{quote} tests/test.lst
+
 
 # Основные возможности
 
