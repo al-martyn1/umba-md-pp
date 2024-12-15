@@ -40,8 +40,12 @@ enum class SnippetOptions : std::uint32_t
     snippetOptions     = 0x1091 /*!< Add actual snippet options line before listing */,
     noTrimArround      = 0x10A0 /*!< Do not trim empty lines before and after listing */,
     trimArround        = 0x10A1 /*!< Trim empty lines before and after listing */,
-    noDoc              = 0x10F0 /*!< -doc */,
-    doc                = 0x10F1 /*!< Insert as external document, or as snippet otherwise */,
+    noDoc              = 0x10B0 /*!< -doc */,
+    doc                = 0x10B1 /*!< Insert as external document, or as snippet otherwise */,
+    noQuote            = 0x10C0 /*!< -quote */,
+    noQuot             = 0x10C0 /*!< -quote */,
+    quote              = 0x10C1 /*!< Insert as blockquote */,
+    quot               = 0x10C1 /*!< Insert as blockquote */,
     raise              = 0x2011 /*!< Numeric option */
 
 }; // enum 
@@ -52,6 +56,7 @@ MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(SnippetOptions)
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::snippetOptions     , "SnippetOptions"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::invalid            , "Invalid"          );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::quote              , "Quote"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noLineNo           , "NoLineNo"         );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFilename         , "NoFilename"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::lineNo             , "LineNo"           );
@@ -61,6 +66,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::trim               , "Trim"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::tag                , "Tag"              );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::filename           , "Filename"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noQuote            , "NoQuote"          );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::path               , "Path"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "NoFilenameLineNo" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFail             , "NoFail"           );
@@ -82,6 +88,8 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::snippetOptions     , "snippetoptions"      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::invalid            , "invalid"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::invalid            , "unknown"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::quote              , "quote"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::quote              , "quot"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "no-line-no"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "no_line_no"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "nolineno"            );
@@ -115,6 +123,12 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "lang-tag"            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "lang_tag"            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filename           , "filename"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquot"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quote"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quote"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quot"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquote"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quot"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::path               , "path"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "no-filename-line-no" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "no_filename_line_no" );

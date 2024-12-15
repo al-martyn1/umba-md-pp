@@ -1279,6 +1279,259 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
 }
 
 //----------------------------------------------------------------------------
+inline
+std::vector<std::string> trimAround(std::vector<std::string> &lines, std::size_t *pFirstLineIdx=0)
+{
+    std::size_t firstLineIdx = 0;
+    if (pFirstLineIdx)
+        firstLineIdx = *pFirstLineIdx;
+
+    std::vector<std::string>::const_iterator itNonEmptyFirst = lines.begin();
+    for(
+       ; itNonEmptyFirst!=lines.end()
+       ; ++itNonEmptyFirst, ++firstLineIdx
+       )
+    {
+        auto l = *itNonEmptyFirst;
+        umba::string_plus::trim(l);
+        if (!l.empty())
+            break;
+    }
+
+    // Удаляем пустые строки в начале блока
+    lines.erase(lines.begin(), itNonEmptyFirst);
+
+
+    std::vector<std::string>::const_iterator itNonEmptyLast = lines.begin();
+    for(std::vector<std::string>::const_iterator it=itNonEmptyLast; it!=lines.end(); ++it)
+    {
+        auto l = *it;
+        umba::string_plus::trim(l);
+        if (!l.empty())
+        {
+            itNonEmptyLast = it;
+        }
+    }
+
+    if (itNonEmptyLast!=lines.end())
+    {
+        ++itNonEmptyLast;
+        lines.erase(itNonEmptyLast, lines.end());
+    }
+
+    if (pFirstLineIdx)
+        *pFirstLineIdx = firstLineIdx;
+
+    return lines;
+}
+
+    // if (trimArround)
+    // {
+    //     lines = trimAround(lines);
+    // }
+
+
+//----------------------------------------------------------------------------
+inline
+std::string escapeQuoteStartChars(const std::string &l, const std::string &charsForEscape)
+{
+    std::string res; res.reserve(l.size());
+
+    std::string::const_iterator it = l.begin();
+    for(; it!=l.end(); ++it)
+    //for(auto &&ch : l)
+    {
+        auto ch = *it;
+
+        if (ch==' ')
+        {
+            res.append(1, ch);
+            continue;
+        }
+
+        // non-space found
+        auto pos = charsForEscape.find(ch);
+        if (pos!=charsForEscape.npos)
+        {
+            res.append(1, '\\');
+        }
+
+        res.append(it, l.end());
+
+        return res;
+    }
+
+    return res;
+}
+
+//----------------------------------------------------------------------------
+template<typename FilenameStringType> inline
+bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
+                , std::vector<std::string> &resLines
+                , const std::string        &insertCommandLine
+                , const std::string        &curFilename
+                , const std::string        &snippetFile
+                , const std::string        &snippetTag
+                , const std::unordered_set<SnippetOptions>      &snippetFlagsOptions
+                , const std::unordered_map<SnippetOptions, int> &intOptions
+                )
+{
+    // bool fTrimLeft              = true; //  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimLeft)      ;
+    // bool fTrimArround           = true; //  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimArround)   ;
+
+    bool noFail = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
+
+    std::string foundFullFilename;
+    std::string foundFileText;
+    // auto findRes = appCfg.findSamplesFile(snippetFile, foundFullFilename, foundFileText /* , curFilename */ );
+    auto findRes = appCfg.findDocFileByIncludedFromFilename(snippetFile, foundFullFilename, foundFileText, curFilename);
+    if (!findRes) // document not found
+    {
+        if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail))
+        {
+            makeShureEmptyLine(resLines);
+            resLines.emplace_back("!!! File not found in: " + appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", ")));
+            return false; // сфейлили
+        }
+
+        return true; // делаем вид, что всё хорошо
+    }
+
+    // if (!findRes)
+    // {
+    //     // если noFail, возвращаем true, что не включит оригинальную строку в результат для сигнализации автору об ошибке
+    //     if (!noFail)
+    //     {
+    //         makeShureEmptyLine(resLines);
+    //         //resLines.emplace_back("!!! File not found");
+    //         resLines.emplace_back("!!! File not found in: " + appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", ")));
+    //     }
+    //     return noFail;
+    // }
+
+    std::vector<std::string> quoteFileLines = marty_cpp::splitToLinesSimple(foundFileText);
+    std::vector<std::string> insertLines; insertLines.reserve(quoteFileLines.size()+2);
+
+    std::vector<std::string>
+    listingLines =
+    #if 0
+                 prepareSnippetLines( appCfg, snippetsFileLines
+                                    , snippetFile, 0u // firstLineIdx
+                                    , fTrimLeft
+                                    , fTrimArround
+                                    , fAddLineNumbers
+                                    , fAddFilename
+                                    , fAddFilenameOnly
+                                    , fAddFilenameLineNumber
+                                    );
+    #endif
+    // = quoteFileLines;
+    trimAround(quoteFileLines);
+
+    listingLines = trimLeadingSpaces(listingLines, true);
+
+    for(auto &l : listingLines)
+    {
+        //l.insert(0, "> ");
+        l = "> " + escapeQuoteStartChars(l, "#`>") + "<br/>";
+    }
+
+    makeShureEmptyLine(resLines);
+    umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
+    makeShureEmptyLine(resLines);
+    resLines.emplace_back("<!-- -->");
+    return true; // всё хорошо, не включит исходную строку
+
+}
+
+#if 0
+template<typename FilenameStringType> inline
+bool insertQuote( const AppConfig<FilenameStringType>           &appCfg
+                , Document                                      &docTo
+                , std::vector<std::string>                      &resLines
+                , const std::string                             &insertCommandLine
+                , const std::string                             &curFilename         // currently processed file
+                , const std::string                             &docFile             // file for insertion
+                , const std::unordered_set<SnippetOptions>      &snippetFlagsOptions
+                , const std::unordered_map<SnippetOptions, int> &intOptions
+                , const std::unordered_set<std::string>         &alreadyIncludedDocs
+                )
+{
+    lines = trimLeadingSpaces(lines, bTrimLeft);
+
+    if (trimArround)
+    {
+        lines = trimAround(lines);
+    }
+
+    std::size_t filenameLineNo = firstLineIdx+1;
+
+    if (addLineNumbers)
+    {
+        std::size_t lastLineIdx = firstLineIdx + lines.size();
+        ++firstLineIdx;
+
+        std::size_t numDigits = 0;
+        std::size_t lastLineIdxRest = lastLineIdx;
+        while(lastLineIdxRest>0)
+        {
+            ++numDigits;
+            lastLineIdxRest /= 10u;
+        }
+
+        for( auto &l : lines)
+        {
+            std::string lineNoStr = std::to_string(firstLineIdx++);
+            std::string fullLineNoStr = std::string(numDigits-lineNoStr.size(), ' ');
+            fullLineNoStr.append(lineNoStr);
+            fullLineNoStr.append(1u, ':');
+            fullLineNoStr.append(1u, ' ');
+            l = fullLineNoStr + l;
+        }
+    }
+
+    std::vector<std::string> resLines;
+
+    std::string lang = appCfg.getLangByFilename(snippetFilename);
+
+    if (addFilename)
+    {
+        std::string filename = umba::filename::normalizePathSeparators(snippetFilename, '/');
+        if (addFilenameOnly)
+        {
+            filename = umba::filename::getFileName(filename);
+        }
+        if (addFilenameLineNumber)
+        {
+            filename.append(1u,':');
+            filename.append(std::to_string(filenameLineNo));
+        }
+
+        static const std::string bold = "**";
+        resLines.emplace_back(bold+filename+bold); // !!! Какое-то оформление надо
+    }
+
+    std::string listingLangTag;
+    if (!lang.empty())
+    {
+        listingLangTag = appCfg.getLangListingTag(lang);
+    }
+
+    std::string lstStart = std::string(3u,'`');
+    std::string lstEnd   = lstStart;
+    if (!listingLangTag.empty())
+    {
+        lstStart.append(listingLangTag); //TODO: !!! Нужно добавить обрамление
+    }
+
+    resLines.emplace_back(lstStart);
+    umba::vectorPushBack(resLines, lines);
+    resLines.emplace_back(lstEnd);
+
+    return resLines;
+}
+#endif
+//----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
 std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType>            &appCfg
                                             , std::vector<std::string>   lines
@@ -1296,38 +1549,7 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
 
     if (trimArround)
     {
-        std::vector<std::string>::const_iterator itNonEmptyFirst = lines.begin();
-        for(
-           ; itNonEmptyFirst!=lines.end()
-           ; ++itNonEmptyFirst, ++firstLineIdx
-           )
-        {
-            auto l = *itNonEmptyFirst;
-            umba::string_plus::trim(l);
-            if (!l.empty())
-                break;
-        }
-
-        // Удаляем пустые строки в начале блока
-        lines.erase(lines.begin(), itNonEmptyFirst);
-
-
-        std::vector<std::string>::const_iterator itNonEmptyLast = lines.begin();
-        for(std::vector<std::string>::const_iterator it=itNonEmptyLast; it!=lines.end(); ++it)
-        {
-            auto l = *it;
-            umba::string_plus::trim(l);
-            if (!l.empty())
-            {
-                itNonEmptyLast = it;
-            }
-        }
-
-        if (itNonEmptyLast!=lines.end())
-        {
-            ++itNonEmptyLast;
-            lines.erase(itNonEmptyLast, lines.end());
-        }
+        lines = trimAround(lines, &firstLineIdx);
     }
 
     std::size_t filenameLineNo = firstLineIdx+1;
@@ -1670,7 +1892,18 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
                                      );
         }
 
-        if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::doc))
+
+        if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::quote))
+        {
+            return !insertQuote( appCfg, resLines, line // insertCommandLine
+                               , curFilename
+                               , snippetFile            // file from wich code fragment will be cutted
+                               , snippetTag
+                               , snippetFlagsOptions
+                               , intOptions
+                               );
+        }
+        else if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::doc))
         {
             // если фейл, и insertDoc возвращает false, то возвращаем true для вставки текущей строки, пусть автор документа разбирается,
             // в чем он накосячил, увидев такой выхлоп в виде заголовка с '!'
