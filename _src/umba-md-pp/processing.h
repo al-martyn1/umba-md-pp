@@ -1367,6 +1367,8 @@ std::string escapeQuoteStartChars(const std::string &l, const std::string &chars
 inline
 std::string makePreForQuoteLine(bool *pPreAdded, const std::string &l, bool pre, bool lpre)
 {
+    pre = false;
+
     if (pPreAdded)
         *pPreAdded = false;
 
@@ -1457,6 +1459,14 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
     listingLines = trimAround(quoteFileLines);
 
     listingLines = trimLeadingSpaces(listingLines, true);
+
+    if (!lpre && !pre)
+    {
+        std::vector<std::string> tmp;
+        tmp.emplace_back("<pre>");
+        tmp.insert(tmp.end(), listingLines.begin(), listingLines.end());
+        tmp.emplace_back("</pre>");
+    }
 
     for(auto &l : listingLines)
     {
