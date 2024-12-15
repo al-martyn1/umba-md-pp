@@ -41,7 +41,7 @@ Language   : Russian
 
 #!insert{no-fail,doc,raise=-1} tests/$(INSERT_DOC_FILENAME_MACRO_TEST).md_
 
-#!insert{no-fail,quote} .md-pp.options
+#!insert{quote} .md-pp.options
 
 
 # Основные возможности
