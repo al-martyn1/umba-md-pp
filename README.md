@@ -62,6 +62,7 @@
 
 
 
+
 # Основные возможности
 
 Основная идея была в том, чтобы писать и хранить документацию по софтовым проектам непосредственно в проекте,
@@ -217,8 +218,10 @@ enum class SnippetOptions : std::uint32_t
     snippetOptions     = 0x1091 /*!< Add actual snippet options line before listing */,
     noTrimArround      = 0x10A0 /*!< Do not trim empty lines before and after listing */,
     trimArround        = 0x10A1 /*!< Trim empty lines before and after listing */,
-    noDoc              = 0x10F0 /*!< -doc */,
-    doc                = 0x10F1 /*!< Insert as external document, or as snippet otherwise */,
+    noDoc              = 0x10B0 /*!< -doc */,
+    doc                = 0x10B1 /*!< Insert as external document, or as snippet otherwise */,
+    noQuote            = 0x10C0 /*!< -quote */,
+    quote              = 0x10C1 /*!< Insert as blockquote */,
     raise              = 0x2011 /*!< Numeric option */
 
 }; // enum
