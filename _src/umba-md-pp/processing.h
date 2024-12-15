@@ -1339,7 +1339,6 @@ std::string escapeQuoteStartChars(const std::string &l, const std::string &chars
 
     std::string::const_iterator it = l.begin();
     for(; it!=l.end(); ++it)
-    //for(auto &&ch : l)
     {
         auto ch = *it;
 
@@ -1365,6 +1364,51 @@ std::string escapeQuoteStartChars(const std::string &l, const std::string &chars
 }
 
 //----------------------------------------------------------------------------
+inline
+std::string makePreForQuoteLine(bool *pPreAdded, const std::string &l, bool pre, bool lpre)
+{
+    if (pPreAdded)
+        *pPreAdded = false;
+
+    if (pre)
+    {
+        if (pPreAdded)
+            *pPreAdded = true;
+
+        return "<tt>" + l + "</tt>";
+    }
+
+    if (!lpre)
+        return l;
+
+    std::string res; res.reserve(l.size()+16u);
+    std::string::const_iterator it = l.begin();
+    for(; it!=l.end(); ++it)
+    {
+        if (*it==' ')
+        {
+            if (res.empty())
+            {
+                res = "<tt>";
+                if (pPreAdded)
+                    *pPreAdded = true;
+            }
+            res.append(1, *it);
+            continue;
+        }
+
+        // не пробел
+        if (!res.empty())
+            res.append("</tt>"); // если не пусто - закрываем tt
+
+        res.append(it, l.end());
+        return res;
+    }
+
+    return res;
+}
+
+//----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
 bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
                 , std::vector<std::string> &resLines
@@ -1379,7 +1423,16 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
     // bool fTrimLeft              = true; //  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimLeft)      ;
     // bool fTrimArround           = true; //  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimArround)   ;
 
-    bool noFail = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
+    // noPre              = 0x10D0 /*!< -pre */,
+    // pre                = 0x10D1 /*!< pre for inserted quote lines */,
+    // noLpre             = 0x10E0 /*!< -lpre */,
+    // noLeadingPre       = 0x10E0 /*!< -lpre */,
+    // lpre               = 0x10E1 /*!< only leading pre for inserted quote lines */,
+    // leadingPre         = 0x10E1 /*!< only leading pre for inserted quote lines */,
+
+    // bool noFail = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
+    bool pre    = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::pre);
+    bool lpre   = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lpre);
 
     std::string foundFullFilename;
     std::string foundFileText;
@@ -1397,43 +1450,26 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
         return true; // делаем вид, что всё хорошо
     }
 
-    // if (!findRes)
-    // {
-    //     // если noFail, возвращаем true, что не включит оригинальную строку в результат для сигнализации автору об ошибке
-    //     if (!noFail)
-    //     {
-    //         makeShureEmptyLine(resLines);
-    //         //resLines.emplace_back("!!! File not found");
-    //         resLines.emplace_back("!!! File not found in: " + appCfg.getSamplesPathsAsMergedString(umba::string_plus::make_string<FilenameStringType>(", ")));
-    //     }
-    //     return noFail;
-    // }
-
     std::vector<std::string> quoteFileLines = marty_cpp::splitToLinesSimple(foundFileText);
     std::vector<std::string> insertLines; insertLines.reserve(quoteFileLines.size()+2);
 
     std::vector<std::string>
-    listingLines =
-    #if 0
-                 prepareSnippetLines( appCfg, snippetsFileLines
-                                    , snippetFile, 0u // firstLineIdx
-                                    , fTrimLeft
-                                    , fTrimArround
-                                    , fAddLineNumbers
-                                    , fAddFilename
-                                    , fAddFilenameOnly
-                                    , fAddFilenameLineNumber
-                                    );
-    #endif
-    // = quoteFileLines;
-    trimAround(quoteFileLines);
+    listingLines = trimAround(quoteFileLines);
 
     listingLines = trimLeadingSpaces(listingLines, true);
 
     for(auto &l : listingLines)
     {
-        //l.insert(0, "> ");
-        l = "> " + escapeQuoteStartChars(l, "#`>") + "<br/>";
+        // нам нужно заэскейпить решетку и бэктики, или что-то ещё, но если не было pre
+
+        bool preAdded = false;
+        l = makePreForQuoteLine(&preAdded, l, pre, lpre);
+        if (!preAdded)
+        {
+            l = escapeQuoteStartChars(l, "#`><");
+        }
+
+        l = "> " + l + "<br/>";
     }
 
     makeShureEmptyLine(resLines);

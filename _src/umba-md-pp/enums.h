@@ -46,6 +46,12 @@ enum class SnippetOptions : std::uint32_t
     noQuot             = 0x10C0 /*!< -quote */,
     quote              = 0x10C1 /*!< Insert as blockquote */,
     quot               = 0x10C1 /*!< Insert as blockquote */,
+    noPre              = 0x10D0 /*!< -pre */,
+    pre                = 0x10D1 /*!< pre for inserted quote lines */,
+    noLpre             = 0x10E0 /*!< -lpre */,
+    noLeadingPre       = 0x10E0 /*!< -lpre */,
+    lpre               = 0x10E1 /*!< only leading pre for inserted quote lines */,
+    leadingPre         = 0x10E1 /*!< only leading pre for inserted quote lines */,
     raise              = 0x2011 /*!< Numeric option */
 
 }; // enum 
@@ -77,8 +83,12 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "NoSnippetOptions" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noTrimArround      , "NoTrimArround"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::trimArround        , "TrimArround"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::lpre               , "Lpre"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noDoc              , "NoDoc"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::doc                , "Doc"              );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noPre              , "NoPre"            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::pre                , "Pre"              );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noLpre             , "NoLpre"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::raise              , "Raise"            );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( SnippetOptions, std::map, 1 )
 
@@ -155,10 +165,24 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trim-arround"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trim_arround"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trimarround"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lpre               , "lpre"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lpre               , "leading-pre"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lpre               , "leading_pre"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lpre               , "leadingpre"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "no-doc"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "no_doc"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "nodoc"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::doc                , "doc"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no-pre"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no_pre"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "nopre"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "pre"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLpre             , "no-lpre"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLpre             , "no_lpre"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLpre             , "nolpre"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLpre             , "no-leading-pre"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLpre             , "no_leading_pre"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLpre             , "noleadingpre"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::raise              , "raise"               );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetOptions, std::map, 1 )
 

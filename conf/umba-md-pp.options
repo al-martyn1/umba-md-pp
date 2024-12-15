@@ -28,7 +28,7 @@
 --dont-lookup-for-graphviz
 
 # Базовые опции
---processing-options=generate-toc,title,meta-data-subst
+--processing-options=generate-toc,title,meta-data-subst,pre
 --set-insert-options=fail,path,filename-line-no,trim-arround
 --batch-page-index-file=doc/Index.md
 
