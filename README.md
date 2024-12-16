@@ -97,9 +97,11 @@
 
 <!-- -->
 
+> <pre>
 > \```<br/>
-> Sample generic listing<br/>
+>    Sample generic listing<br/>
 > \```<br/>
+> </pre>
 
 <!-- -->
 
@@ -265,6 +267,14 @@ enum class SnippetOptions : std::uint32_t
     noQuot             = 0x10C0 /*!< -quote */,
     quote              = 0x10C1 /*!< Insert as blockquote */,
     quot               = 0x10C1 /*!< Insert as blockquote */,
+    noPre              = 0x10D0 /*!< -pre */,
+    noQuotePre         = 0x10D0 /*!< -pre */,
+    noQuotPre          = 0x10D0 /*!< -pre */,
+    noQpre             = 0x10D0 /*!< -pre */,
+    pre                = 0x10D1 /*!< pre for inserted quote lines */,
+    quotePre           = 0x10D1 /*!< pre for inserted quote lines */,
+    quotPre            = 0x10D1 /*!< pre for inserted quote lines */,
+    qPre               = 0x10D1 /*!< pre for inserted quote lines */,
     raise              = 0x2011 /*!< Numeric option */
 
 }; // enum
@@ -336,7 +346,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 # Базовые опции
 --processing-options=generate-toc,title,meta-data-subst
---set-insert-options=fail,path,filename-line-no,trim-arround
+--set-insert-options=fail,path,filename-line-no,trim-arround,pre
 --batch-page-index-file=doc/Index.md
 
 # Базовые опции для Graphviz
