@@ -61,47 +61,47 @@
 Этот файл подключен со значением макроса `INSERT_DOC_FILENAME_MACRO_TEST`, равным `by_macro2`.
 
 
-> \#--serialize-meta-tags=+title,author,description,date,language<br/>
-> --serialize-meta-tags=-<br/>
-> \#--processing-options=meta-data<br/>
-> \#--processing-options=no-meta-data<br/>
-> --processing-options=generate-toc,force-insert-meta,document-meta-title,meta-data-subst<br/>
-> \# --processing-options=meta-data<br/>
-> --processing-options=no-meta-data<br/>
-> --document-meta-tags=brief,author,url<br/>
-> --serialize-meta-tags=title,author,generator,brief,url<br/>
-> ; --set-var=UrlBase:https://github.com/al-martyn1<br/>
-> --processing-options=auto-url<br/>
-> --set-var=__DocumentBaseUrl:https://github.com/al-martyn1/umba-md-pp/blob/main/<br/>
-> --verbose<br/>
-> --info=+all<br/>
-> \# --info=-plantuml,-opt-files,-snippet-lookup<br/>
-> --generated-output-path=.\doc\img.generated<br/>
-> \# --graphviz-output-path=.\doc\.generated_images<br/>
-> \# --plant-uml-output-path=.\doc\.generated_images<br/>
-> --document-language=russian<br/>
-> \#--processing-options=transliterate-generated-filenames<br/>
-> \# --copy-images<br/>
-> \# --flatten-image-links<br/>
-> --viewer-copy-render-to-source-location<br/>
-> \#--viewer-render-copy-use-doc-title<br/>
-> \#--set-var=INSERT_DOC_FILENAME_MACRO_TEST:by_macro2<br/>
-> --set-var=^insert_doc_filename_macro_test:by_macro2<br/>
-> <br/>
-> --add-examples-path=.\doc<br/>
-> --add-examples-path=.\doc.drafts<br/>
-> --add-examples-path=.\conf<br/>
-> --add-examples-path=.\tests\snippets<br/>
-> --add-examples-path=.\_src<br/>
-> --add-examples-path=.\src<br/>
+> \#--serialize-meta-tags=+title,author,description,date,language
+> --serialize-meta-tags=-
+> \#--processing-options=meta-data
+> \#--processing-options=no-meta-data
+> --processing-options=generate-toc,force-insert-meta,document-meta-title,meta-data-subst
+> \# --processing-options=meta-data
+> --processing-options=no-meta-data
+> --document-meta-tags=brief,author,url
+> --serialize-meta-tags=title,author,generator,brief,url
+> ; --set-var=UrlBase:https://github.com/al-martyn1
+> --processing-options=auto-url
+> --set-var=__DocumentBaseUrl:https://github.com/al-martyn1/umba-md-pp/blob/main/
+> --verbose
+> --info=+all
+> \# --info=-plantuml,-opt-files,-snippet-lookup
+> --generated-output-path=.\doc\img.generated
+> \# --graphviz-output-path=.\doc\.generated_images
+> \# --plant-uml-output-path=.\doc\.generated_images
+> --document-language=russian
+> \#--processing-options=transliterate-generated-filenames
+> \# --copy-images
+> \# --flatten-image-links
+> --viewer-copy-render-to-source-location
+> \#--viewer-render-copy-use-doc-title
+> \#--set-var=INSERT_DOC_FILENAME_MACRO_TEST:by_macro2
+> --set-var=^insert_doc_filename_macro_test:by_macro2
+> 
+> --add-examples-path=.\doc
+> --add-examples-path=.\doc.drafts
+> --add-examples-path=.\conf
+> --add-examples-path=.\tests\snippets
+> --add-examples-path=.\_src
+> --add-examples-path=.\src
 
 <!-- -->
 
 > <pre>
-> ```<br/>
->  # comment line<br/>
->    Sample generic listing<br/>
-> ```<br/>
+> ```
+>  # comment line
+>    Sample generic listing
+> ```
 > </pre>
 
 <!-- -->
