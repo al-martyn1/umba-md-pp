@@ -1,4 +1,8 @@
 ```
  # comment line
    Sample generic listing
+   template<typename T> std::string f(T<A> &ta)
+   {
+       return std::string("abra-shvabra'");
+   }
 ```
