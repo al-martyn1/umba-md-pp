@@ -98,14 +98,14 @@
 <!-- -->
 
 > <pre>
-> ```
->  # comment line
->    Sample generic listing
->    template&lt;typename T&gt; std::string f(T&lt;A&gt; &amp;ta)
->    {
->        return std::string(&quot;abra-shvabra&apos;&quot;);
->    }
-> ```
+```
+ # comment line
+   Sample generic listing
+   template&lt;typename T&gt; std::string f(T&lt;A&gt; &amp;ta)
+   {
+       return std::string(&quot;abra-shvabra&apos;&quot;);
+   }
+```
 > </pre>
 
 <!-- -->
