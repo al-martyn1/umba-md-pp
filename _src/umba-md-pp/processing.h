@@ -31,6 +31,8 @@
 //
 #include "enum_hash.h"
 //
+#include "utils.h"
+//
 #include "md_pp_html_csv.h"
 #include "md_pp_html_graph.h"
 #include "md_pp_html_puml.h"
@@ -1458,6 +1460,7 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
         }
         else
         {
+            l = simpleHtmlEscape(l);
             // l = escapeQuoteStartChars(l, "#`><");
         }
 

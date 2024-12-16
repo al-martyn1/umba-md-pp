@@ -23,6 +23,28 @@
 
 //----------------------------------------------------------------------------
 template<typename StringType> inline
+StringType simpleHtmlEscape(const StringType &str)
+{
+    StringType res; res.reserve(str.size()+16);
+
+    for(auto ch: str)
+    {
+        switch((char)ch)
+        {
+            case '<' : res.append(umba::string::make_string<StringType>("&lt;"  )); break;
+            case '>' : res.append(umba::string::make_string<StringType>("&gt;"  )); break;
+            case '&' : res.append(umba::string::make_string<StringType>("&amp;" )); break;
+            case '\"': res.append(umba::string::make_string<StringType>("&quot;")); break;
+            case '\'': res.append(umba::string::make_string<StringType>("&apos;")); break;
+            default  : res.append(1, ch);
+        }
+    }
+
+    return res;
+}
+
+//----------------------------------------------------------------------------
+template<typename StringType> inline
 std::vector<StringType> extractMetaLinesFromDocument(std::vector<StringType> &docLines, const StringType &linePrefix=StringType())
 {
     using CharType = typename StringType::value_type;
