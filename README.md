@@ -98,9 +98,10 @@
 <!-- -->
 
 > <pre>
-> \```<br/>
+> ```<br/>
+>  # comment line<br/>
 >    Sample generic listing<br/>
-> \```<br/>
+> ```<br/>
 > </pre>
 
 <!-- -->
