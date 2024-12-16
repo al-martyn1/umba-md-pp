@@ -1457,14 +1457,13 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
         if (!pre)
         {
             l = escapeQuoteStartChars(l, "#`><");
+            l = "> " + l;
         }
         else
         {
             l = simpleHtmlEscape(l);
             // l = escapeQuoteStartChars(l, "#`><");
         }
-
-        l = "> " + l;
 
         // Для pre не надо вставлять принудительный перевод строки 
         // Но может, оно нужно когда-то иногда, если нет pre?
@@ -1475,9 +1474,11 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
     if (pre)
     {
         std::vector<std::string> tmp; tmp.reserve(listingLines.size()+2);
-        tmp.emplace_back("> <pre>");
+        // tmp.emplace_back("> <pre>");
+        tmp.emplace_back("<pre>");
         tmp.insert(tmp.end(), listingLines.begin(), listingLines.end());
-        tmp.emplace_back("> </pre>");
+        // tmp.emplace_back("> </pre>");
+        tmp.emplace_back("</pre>");
         swap(tmp, listingLines);
     }
 
