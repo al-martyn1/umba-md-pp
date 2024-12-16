@@ -97,7 +97,7 @@
 
 <!-- -->
 
-> <pre>
+<pre>
 ```
  # comment line
    Sample generic listing
@@ -106,7 +106,7 @@
        return std::string(&quot;abra-shvabra&apos;&quot;);
    }
 ```
-> </pre>
+</pre>
 
 <!-- -->
 
