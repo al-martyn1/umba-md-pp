@@ -6,7 +6,11 @@
 //----------------------------------------------------------------------------
 #include "enums.h"
 //
+#include "umba/the.h"
+#include "umba/parse_utils.h"
+//
 #include <unordered_map>
+
 
 
 //----------------------------------------------------------------------------
@@ -205,7 +209,15 @@ bool isInsertCommand(std::string line)
 {
     umba::string_plus::trim(line);
     // return (umba::string_plus::starts_with(line, ("#!insert")) || umba::string_plus::starts_with(line, ("#$insert")));
-    return testLineForPreprocessorDirective(line, PreprocessorDirective::insert);
+    //return testLineForPreprocessorDirective(line, PreprocessorDirective::insert);
+
+    return umba::TheValue(testLineForPreprocessorDirectiveImplHelper(line))
+                .oneOf( PreprocessorDirective::insert 
+                      , PreprocessorDirective::snippet
+                      , PreprocessorDirective::doc    
+                      , PreprocessorDirective::quote  
+                      , PreprocessorDirective::pre    
+                      );
 }
 
 //----------------------------------------------------------------------------

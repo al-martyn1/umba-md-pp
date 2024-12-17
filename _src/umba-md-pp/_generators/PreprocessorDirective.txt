@@ -1,5 +1,9 @@
 invalid,unknown =-1
-insert
+insert     // generalized version
+snippet,code
+doc
+quote,quot
+pre
 toc
 meta
 set
