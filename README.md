@@ -97,6 +97,21 @@
 
 <!-- -->
 
+quote
+
+> \```
+>  \# comment line
+>    Sample generic listing
+>    template<typename T> std::string f(T<A> &ta)
+>    {
+>        return std::string("abra-shvabra'");
+>    }
+> \```
+
+<!-- -->
+
+pre
+
 <pre>
 ```
  # comment line
@@ -107,6 +122,21 @@
    }
 ```
 </pre>
+
+<!-- -->
+
+quote,pre
+
+> <pre>
+> ```
+>  # comment line
+>    Sample generic listing
+>    template&lt;typename T&gt; std::string f(T&lt;A&gt; &amp;ta)
+>    {
+>        return std::string(&quot;abra-shvabra&apos;&quot;);
+>    }
+> ```
+> </pre>
 
 <!-- -->
 
@@ -273,13 +303,7 @@ enum class SnippetOptions : std::uint32_t
     quote              = 0x10C1 /*!< Insert as blockquote */,
     quot               = 0x10C1 /*!< Insert as blockquote */,
     noPre              = 0x10D0 /*!< -pre */,
-    noQuotePre         = 0x10D0 /*!< -pre */,
-    noQuotPre          = 0x10D0 /*!< -pre */,
-    noQpre             = 0x10D0 /*!< -pre */,
-    pre                = 0x10D1 /*!< pre for inserted quote lines */,
-    quotePre           = 0x10D1 /*!< pre for inserted quote lines */,
-    quotPre            = 0x10D1 /*!< pre for inserted quote lines */,
-    qPre               = 0x10D1 /*!< pre for inserted quote lines */,
+    pre                = 0x10D1 /*!< pre itself or for inserted quote lines */,
     raise              = 0x2011 /*!< Numeric option */
 
 }; // enum
@@ -351,7 +375,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 # Базовые опции
 --processing-options=generate-toc,title,meta-data-subst
---set-insert-options=fail,path,filename-line-no,trim-arround,pre
+--set-insert-options=fail,path,filename-line-no,trim-arround
 --batch-page-index-file=doc/Index.md
 
 # Базовые опции для Graphviz

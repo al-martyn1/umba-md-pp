@@ -43,6 +43,13 @@ Language   : Russian
 
 #!insert{quote,no-pre} .md-pp.options
 
+quote
+#!insert{quote} tests/test.lst
+
+pre
+#!insert{pre} tests/test.lst
+
+quote,pre
 #!insert{quote,pre} tests/test.lst
 
 
