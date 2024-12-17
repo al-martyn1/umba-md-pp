@@ -1426,6 +1426,7 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
                 )
 {
     bool pre    = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::pre);
+    bool quote  = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::quote);
 
     std::string foundFullFilename;
     std::string foundFileText;
@@ -1454,16 +1455,18 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
     for(auto &l : listingLines)
     {
         // нам нужно заэскейпить решетку и бэктики, или что-то ещё
-        if (!pre)
+        if (pre)
         {
-            l = escapeQuoteStartChars(l, "#`><");
-            l = "> " + l;
+            l = simpleHtmlEscape(l);
         }
         else
         {
-            l = simpleHtmlEscape(l);
-            // l = escapeQuoteStartChars(l, "#`><");
+            l = escapeQuoteStartChars(l, "#`");
         }
+
+        if (quote)
+           l = "> " + l;
+
 
         // Для pre не надо вставлять принудительный перевод строки 
         // Но может, оно нужно когда-то иногда, если нет pre?
@@ -1474,11 +1477,9 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
     if (pre)
     {
         std::vector<std::string> tmp; tmp.reserve(listingLines.size()+2);
-        // tmp.emplace_back("> <pre>");
-        tmp.emplace_back("<pre>");
+        tmp.emplace_back(quote ? "> <pre>" : "<pre>");
         tmp.insert(tmp.end(), listingLines.begin(), listingLines.end());
-        // tmp.emplace_back("> </pre>");
-        tmp.emplace_back("</pre>");
+        tmp.emplace_back(quote ? "> </pre>" : "</pre>");
         swap(tmp, listingLines);
     }
 
@@ -1940,7 +1941,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
         }
 
 
-        if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::quote))
+        if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::quote) || umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::pre))
         {
             return !insertQuote( appCfg, resLines, line // insertCommandLine
                                , curFilename

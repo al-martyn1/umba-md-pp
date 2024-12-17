@@ -30,8 +30,8 @@ noQuote,noQuot                     = 0x10C0 // -quote
 quote,quot                         = 0x10C1 // Insert as blockquote
 
 #
-noPre,noQuotePre,noQuotPre,noQPre  = 0x10D0 // -pre
-pre,quotePre,quotPre,qPre          = 0x10D1 // pre for inserted quote lines
+noPre                              = 0x10D0 // -pre
+pre                                = 0x10D1 // pre itself or for inserted quote lines
 
 #
 raise                              = 0x2011 // Numeric option

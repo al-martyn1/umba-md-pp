@@ -16,6 +16,7 @@
   - [Сайдбар и футер](#user-content-сайдбар-и-футер)
   - [Processing Options (--processing-options)](#user-content-processing-options---processing-options)
   - [Директивы UMBA-MD-PP](#user-content-директивы-umba-md-pp)
+    - [Включение произвольных текстов](#user-content-включение-произвольных-текстов)
     - [Переменные и условные операторы](#user-content-переменные-и-условные-операторы)
     - [Switch](#user-content-switch)
     - [Detailing](#user-content-detailing)
@@ -158,6 +159,14 @@
 
 
 ## Директивы UMBA-MD-PP
+
+
+### Включение произвольных текстов
+
+- [X] `#!insert{quote}` - включаем файл и оформляем как blockquote.
+- [X] `#!insert{quote,pre}` - включаем файл и оформляем как блок `pre`.
+- [ ] `#!insert{quote,pre}` - для `pre` надо иметь возможность удалять строки с тройными бэктиками в начале, если они 
+      располагаются первой и последней строкой. А зачем?
 
 
 ### Переменные и условные операторы

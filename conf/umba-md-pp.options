@@ -29,7 +29,7 @@
 
 # Базовые опции
 --processing-options=generate-toc,title,meta-data-subst
---set-insert-options=fail,path,filename-line-no,trim-arround,pre
+--set-insert-options=fail,path,filename-line-no,trim-arround
 --batch-page-index-file=doc/Index.md
 
 # Базовые опции для Graphviz

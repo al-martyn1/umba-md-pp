@@ -47,13 +47,7 @@ enum class SnippetOptions : std::uint32_t
     quote              = 0x10C1 /*!< Insert as blockquote */,
     quot               = 0x10C1 /*!< Insert as blockquote */,
     noPre              = 0x10D0 /*!< -pre */,
-    noQuotePre         = 0x10D0 /*!< -pre */,
-    noQuotPre          = 0x10D0 /*!< -pre */,
-    noQpre             = 0x10D0 /*!< -pre */,
-    pre                = 0x10D1 /*!< pre for inserted quote lines */,
-    quotePre           = 0x10D1 /*!< pre for inserted quote lines */,
-    quotPre            = 0x10D1 /*!< pre for inserted quote lines */,
-    qPre               = 0x10D1 /*!< pre for inserted quote lines */,
+    pre                = 0x10D1 /*!< pre itself or for inserted quote lines */,
     raise              = 0x2011 /*!< Numeric option */
 
 }; // enum 
@@ -170,27 +164,9 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "nodoc"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::doc                , "doc"                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no-pre"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no-quot-pre"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "noquotpre"           );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no_pre"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no_quote_pre"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "nopre"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no-quote-pre"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "noquotepre"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no_quot_pre"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no-qpre"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no_qpre"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "noqpre"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "quot_pre"            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "pre"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "quote-pre"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "quotpre"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "quote_pre"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "quot-pre"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "quotepre"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "q-pre"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "q_pre"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "qpre"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::raise              , "raise"               );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetOptions, std::map, 1 )
 
