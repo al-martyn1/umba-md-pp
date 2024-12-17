@@ -43,14 +43,20 @@ Language   : Russian
 
 #!insert{quote,no-pre} .md-pp.options
 
+code
+#!code tests/test.lst
+
 quote
-#!insert{quote} tests/test.lst
+#!quote tests/test.lst
 
 pre
-#!insert{pre} tests/test.lst
+#!pre tests/test.lst
 
 quote,pre
-#!insert{quote,pre} tests/test.lst
+#!quote{pre} tests/test.lst
+
+doc
+#!doc tests/test.lst
 
 
 # Основные возможности

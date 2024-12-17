@@ -97,6 +97,11 @@
 
 <!-- -->
 
+code
+
+!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\doc.drafts, F:\_github\umba-tools\umba-md-pp\conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\_src, F:\_github\umba-tools\umba-md-pp\src
+#!code tests/test.lst
+
 quote
 
 > \```
@@ -139,6 +144,17 @@ quote,pre
 > </pre>
 
 <!-- -->
+
+doc
+
+```
+ # comment line
+   Sample generic listing
+   template<typename T> std::string f(T<A> &ta)
+   {
+       return std::string("abra-shvabra'");
+   }
+```
 
 
 # Основные возможности
