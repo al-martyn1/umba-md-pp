@@ -309,7 +309,8 @@ int safe_main(int argc, char* argv[])
 
         std::string cwd;
         std::string rootPath = umba::shellapi::getDebugAppRootFolder(&cwd);
-        std::cout << "Working Dir: " << cwd << "\n";
+        std::cout << "App Root Path: " << rootPath << "\n";
+        std::cout << "Working Dir  : " << cwd << "\n";
          
         //argsParser.args.push_back("@" + rootPath + "conf/conf/umba-md-pp.options");
 
