@@ -790,7 +790,7 @@ int safe_main(int argc, char* argv[])
                 std::string thisPageTitleUtf = umba::toUtf8(it->first);
                 if (!thisPageTitleUtf.empty())
                 {
-                    std::size_t firstCharLen = marty_utf::getNumberOfBytesUtf8(thisPageTitleUtf[0]);
+                    std::size_t firstCharLen = marty_utf::getNumberOfBytesUtf8((marty_utf::utf8_char_t)thisPageTitleUtf[0]);
                     if (firstCharLen<=thisPageTitleUtf.size())
                     {
                         std::string titleFirstLetter = std::string(thisPageTitleUtf, 0, firstCharLen);

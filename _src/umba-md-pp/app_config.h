@@ -199,7 +199,7 @@ struct AppConfig
                 nParts = parts.size();
             std::size_t nPartsDelete = parts.size() - nParts;
 
-            auto partsRes = std::vector<std::string>(parts.begin()+nPartsDelete, parts.end());
+            auto partsRes = std::vector<std::string>(parts.begin()+ std::ptrdiff_t(nPartsDelete), parts.end());
             std::string resStr = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator>( partsRes.begin(), partsRes.end(), '_'/*, [](auto s) { return s; }*/ );
             //return replaceDots(resStr);
             return umba::filename::flattenPath(resStr, false); // no keep ext
@@ -895,11 +895,11 @@ struct AppConfig
     }
 
     static
-    bool readInputFile(const std::string &inputFilename, std::string &inputFileText)
+    bool readInputFile(const std::string &a_inputFilename, std::string &inputFileText)
     {
         std::string inputFileTextOrg;
 
-        if (!umba::filesys::readFile(inputFilename, inputFileTextOrg))
+        if (!umba::filesys::readFile(a_inputFilename, inputFileTextOrg))
         {
             return false;
         }
@@ -911,11 +911,11 @@ struct AppConfig
     }
 
     static
-    bool readInputFile(const std::wstring &inputFilename, std::string &inputFileText)
+    bool readInputFile(const std::wstring &a_inputFilename, std::string &inputFileText)
     {
         std::string inputFileTextOrg;
 
-        if (!umba::filesys::readFile(inputFilename, inputFileTextOrg))
+        if (!umba::filesys::readFile(a_inputFilename, inputFileTextOrg))
         {
             return false;
         }

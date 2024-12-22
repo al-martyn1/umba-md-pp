@@ -513,6 +513,8 @@ std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::Langua
                                                         //, bool                        trimLeadingSpaces_a = true
                                                         )
 {
+    UMBA_USED(lang);
+
     marty_cpp::expandTabsToSpaces(lines, tabSize);
 
     if (targetFragmentTag.empty() || lines.empty())
@@ -944,7 +946,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
         break;
     }
 
-    return std::vector<std::string>(lines.begin()+firstFoundLineIdx, lines.begin()+(foundLastFragmentLineIdx+1u));
+    return std::vector<std::string>(lines.begin()+ std::ptrdiff_t(firstFoundLineIdx), lines.begin()+ std::ptrdiff_t(foundLastFragmentLineIdx+1u));
 }
 
 
@@ -1936,6 +1938,7 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
 
     auto updateFlagsByDirective = [&]()
     {
+        #include "umba/warnings/push_disable_enumerator_not_handled.h"
         switch(pd)
         {
             case PreprocessorDirective::snippet: // Снипет - вставляет снипет, если заданы уточняющие/модифицирующие опций - удаляем их, если они там были
@@ -1974,6 +1977,7 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
             // }
             //  
         }
+        #include "umba/warnings/pop.h"
 
     }; // updateFlagsByDirective
 

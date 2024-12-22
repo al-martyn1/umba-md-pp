@@ -449,6 +449,7 @@ std::size_t getListLevel(const std::string &line)
 inline
 std::string trimListLine(const std::string &line)
 {
+    UMBA_USED(line);
     //TODO: !!! Доделать
     return std::string();
 }

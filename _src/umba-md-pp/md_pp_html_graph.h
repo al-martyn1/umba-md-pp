@@ -153,7 +153,7 @@ void grapvizAddGraphLabel(const std::string &labelText, std::vector<std::string>
             // нашли скобку
             ++bracePos; // едем дальше
 
-            bool needSemicolon = umba::html::helpers::skipSpaces(line.begin()+bracePos, line.end())!=line.end();
+            bool needSemicolon = umba::html::helpers::skipSpaces(line.begin()+std::ptrdiff_t(bracePos), line.end())!=line.end();
 
             std::string textToInsert = " label=\"" + grapvizLabelTextEscape(labelText) + "\"" + (needSemicolon?"; ":"");
 
@@ -207,12 +207,12 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg
     auto graphVizOptions = appCfg.graphVizOptions;
     updateGraphVizOptions(appCfg, mdHtmlTag, graphVizOptions);
 
-    auto outputFilename = graphVizOptions.generateOutputFilename(appCfg.flattenImageLinks);
+    auto outputFilenameLocalVar = graphVizOptions.generateOutputFilename(appCfg.flattenImageLinks);
     auto tempDotFile    = graphVizOptions.generateInputDotTempFilename();
     auto tempTargetFile = graphVizOptions.generateOutputTempFilename();
     auto hashFile       = graphVizOptions.generateHashFilename();
 
-    auto outputFilenameCanonicalForCompare = umba::filename::makeCanonicalForCompare(outputFilename);
+    auto outputFilenameCanonicalForCompare = umba::filename::makeCanonicalForCompare(outputFilenameLocalVar);
 
 
     std::vector<std::string> dotLines;
@@ -318,7 +318,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg
                 {
                     needWriteHashLines = true;
                     needDotProcessing  = true;
-                    newHashFileLines.emplace_back(dotHashStr + " " + outputFilename); // Обновляем строчку хэша
+                    newHashFileLines.emplace_back(dotHashStr + " " + outputFilenameLocalVar); // Обновляем строчку хэша
                     continue;
                 }
             }
@@ -333,16 +333,16 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg
 
     if (!hashFound)
     {
-        newHashFileLines.emplace_back(dotHashStr + " " + outputFilename); // Добавляем строчку хэша
+        newHashFileLines.emplace_back(dotHashStr + " " + outputFilenameLocalVar); // Добавляем строчку хэша
         needWriteHashLines = true;
         needDotProcessing  = true;
     }
 
     if (needWriteHashLines)
     {
-        std::string hashFileText = marty_cpp::mergeLines(newHashFileLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
+        std::string hashFileTextTmp = marty_cpp::mergeLines(newHashFileLines, appCfg.outputLinefeed, true  /* addTrailingNewLine */ );
         umba::filesys::createDirectoryEx( umba::filename::getPath(hashFile), true /* forceCreatePath */ );
-        if (!umba::filesys::writeFile(hashFile, hashFileText, true /* overwrite */ ))
+        if (!umba::filesys::writeFile(hashFile, hashFileTextTmp, true /* overwrite */ ))
         {
             // Плевать на результат
         }
@@ -379,7 +379,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg
                 std::string toolExeName     = findGraphvizToolExecutableName(appCfg.dontLookupForGraphviz, graphvizTool);
                 //std::string toolCommandLine = toolExeName + " " + graphvizToolArgs;
 
-                std::string errMsg;
+                //std::string errMsg;
                 //int resCode = system(toolCommandLine.c_str());
                 int resCode = umba::shellapi::callSystem(toolExeName, graphvizToolArgs, &errMsg);
                 if (resCode!=0)
@@ -394,11 +394,11 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg
 
     if (needDotProcessing && errMsg.empty())
     {
-        umba::filesys::createDirectoryEx( umba::filename::getPath(outputFilename), true /* forceCreatePath */ );
+        umba::filesys::createDirectoryEx( umba::filename::getPath(outputFilenameLocalVar), true /* forceCreatePath */ );
         using umba::shellapi::MoveFileFlags;
-        if (!umba::shellapi::moveFile(tempTargetFile, outputFilename, MoveFileFlags::copyAllowed|MoveFileFlags::replaceExisting|MoveFileFlags::writeThrough))
+        if (!umba::shellapi::moveFile(tempTargetFile, outputFilenameLocalVar, MoveFileFlags::copyAllowed|MoveFileFlags::replaceExisting|MoveFileFlags::writeThrough))
         {
-            errMsg = "Failed to copy temp file '" + tempTargetFile + "' to target file '" + outputFilename + "', error: " + std::to_string(GetLastError());
+            errMsg = "Failed to copy temp file '" + tempTargetFile + "' to target file '" + outputFilenameLocalVar + "', error: " + std::to_string(GetLastError());
         }
     }
 
@@ -420,7 +420,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg
 
     umba::filename::makeRelPath( imgLink
                                , umba::filename::getPath(docFilename)
-                               , outputFilename
+                               , outputFilenameLocalVar
                                , '/'
                                , std::string(".")
                                , std::string("..")
@@ -430,7 +430,7 @@ void processGraphLines( const AppConfig<FilenameStringType> &appCfg
 
     if (imgLink.empty())
     {
-        imgLink = umba::filename::getFileName(outputFilename);
+        imgLink = umba::filename::getFileName(outputFilenameLocalVar);
     }
 
     resLines.emplace_back("![" + mdHtmlTag.getAttrValue("title", "Graph") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");

@@ -466,6 +466,9 @@ std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> 
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
+        UMBA_USED(lastLineIdx);
+        UMBA_USED(idx);
+
         if (event!=LineHandlerEvent::headerCommand)
         {
             return true;
@@ -808,6 +811,9 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
 {
     auto processLinesHandler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
+        UMBA_USED(lastLineIdx);
+        UMBA_USED(idx);
+
         switch(event)
         {
             case LineHandlerEvent::normalLine:    checkPrintLineIfContainsPngExt(event, line);
@@ -836,7 +842,11 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
                                                   return true;
             case LineHandlerEvent::metaEnd:       checkPrintLineIfContainsPngExt(event, line);
                                                   return true;
+
+            case LineHandlerEvent::unknown:       return true;
+
             //case LineHandlerEvent:::
+
         }
         return true;
     };
@@ -1004,12 +1014,16 @@ struct CoutPrinter
 
 
 //----------------------------------------------------------------------------
+// !!! Не понятно, с чего этот варнинг вылезает, надо разобраться
+#include "umba/warnings/push_disable_def_ctor_implicitly_deleted.h"
 struct UmbaMdLinksUrlCoutPrinter
 {
 
+    //UMBA_RULE_OF_FIVE_DEFAULT(UmbaMdLinksUrlCoutPrinter);
+
     std::string    &filePathIncludedFrom;
     std::string    &filePathIncluded    ;
-    std::string    indent;
+    std::string    indent               ;
 
     std::string operator()(const std::string &line) const
     {
@@ -1082,11 +1096,11 @@ struct UmbaMdLinksUrlCoutPrinter
 
         umba::md::transformMarkdownLinksUrlString(std::back_inserter(res), line.begin(), line.end(), urlHandler);
         return res;
-
     }
 
-}; // struct UmbaMdLinksUrlCoutPrinter
 
+}; // struct UmbaMdLinksUrlCoutPrinter
+#include "umba/warnings/pop.h"
 
 // inline
 // void testTransformMarkdownLinksUrlString(const std::string &input)
@@ -1742,6 +1756,9 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
 
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
+        UMBA_USED(lastLineIdx);
+        UMBA_USED(idx);
+        
         if (event==LineHandlerEvent::documentEnd)
         {
             if (!metadataLines.empty())
@@ -1931,6 +1948,9 @@ std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> 
 
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
+        UMBA_USED(lastLineIdx);
+        UMBA_USED(idx);
+
         if (event!=LineHandlerEvent::tocCommand)
         {
             return true;
@@ -1961,6 +1981,9 @@ std::vector<std::string> processMetaCommands(const AppConfig<FilenameStringType>
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
+        UMBA_USED(lastLineIdx);
+        UMBA_USED(idx);
+        
         if (event!=LineHandlerEvent::metaCommand)
         {
             return true;
@@ -2226,6 +2249,9 @@ std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &ap
 {
     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
     {
+        UMBA_USED(lastLineIdx);
+        UMBA_USED(idx);
+
         if (event!=LineHandlerEvent::normalLine)
         {
             return true;

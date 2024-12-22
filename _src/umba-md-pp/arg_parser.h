@@ -85,6 +85,7 @@ int operator()( const StringType                                &a           //!
 {
     //using namespace marty::clang::helpers;
 
+    UMBA_USED(fBuiltin);
 
     std::string dppof = "Don't parse predefined options from ";
 

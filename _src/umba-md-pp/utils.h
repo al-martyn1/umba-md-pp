@@ -502,6 +502,7 @@ std::string findGoxygenLanguageByLangTag(std::string langTag)
 {
     auto trNullErrHandler = marty_tr::makeErrReportHandler( [](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
                                                               {
+                                                                  UMBA_USED(what); UMBA_USED(msg); UMBA_USED(catId); UMBA_USED(langId);
                                                               }
                                                           );
 
@@ -524,6 +525,7 @@ std::string findLangTagByString(std::string strLang)
 
     auto trNullErrHandler = marty_tr::makeErrReportHandler( [](marty_tr::MsgNotFound what, const std::string& msg, const std::string& catId, const std::string& langId)
                                                               {
+                                                                  UMBA_USED(what); UMBA_USED(msg); UMBA_USED(catId); UMBA_USED(langId);
                                                               }
                                                           );
 

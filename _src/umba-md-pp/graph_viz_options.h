@@ -84,7 +84,7 @@ struct GraphVizOptions
             return true;
         }
 
-        return false;
+        //return false;
     }
 
 

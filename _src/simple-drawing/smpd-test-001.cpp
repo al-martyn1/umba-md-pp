@@ -158,7 +158,7 @@ UMBA_MAIN()
     std::ostringstream oss;
     //auto &oss = std::cout;
     bool bOk = true;
-    bool inPreprocessor = false;
+    // bool inPreprocessor = false;
 
     auto tokenHandler =     [&]( auto &tokenizer
                                , bool bLineStart, payload_type tokenType
@@ -168,6 +168,8 @@ UMBA_MAIN()
                                ) -> bool
                             {
                                 UMBA_USED(parsedData);
+                                UMBA_USED(errMsg);
+                                UMBA_USED(tokenizer);
 
                                 if (tokenType==UMBA_TOKENIZER_TOKEN_CTRL_FIN || tokenType==UMBA_TOKENIZER_TOKEN_CTRL_RST)
                                 {
@@ -194,6 +196,7 @@ UMBA_MAIN()
     // Но надо брать не [it,itEnd), а только it
     tokenizer.unexpectedHandler = [&](auto &tokenizer, InputIteratorType it, InputIteratorType itEnd, const char* srcFile, int srcLine) -> bool
                              {
+                                 UMBA_USED(tokenizer);
                                  printError(std::cout, inputFilename, UMBA_TOKENIZER_TOKEN_UNEXPECTED, it, itEnd, srcFile, srcLine);
                                  return false;
                              };
@@ -201,13 +204,13 @@ UMBA_MAIN()
     tokenizer.reportUnknownOperatorHandler = [&](auto &tokenizer, InputIteratorType b, InputIteratorType e)
                              {
                                  //std::cout << "Possible unknown operator: '" << umba::iterator::makeString(b, e) << "'\n";
-                                 UMBA_USED(b); UMBA_USED(e);
+                                 UMBA_USED(tokenizer); UMBA_USED(b); UMBA_USED(e);
                              };
 
     tokenizer.reportStringLiteralMessageHandler = [&](auto &tokenizer, bool bErr, InputIteratorType it, const messages_string_type &msg)
                              {
                                  //std::cout << "String: '" << umba::iterator::makeString(it) << "': " << msg << "\n";
-                                 UMBA_USED(bErr); UMBA_USED(it); UMBA_USED(msg);
+                                 UMBA_USED(tokenizer); UMBA_USED(bErr); UMBA_USED(it); UMBA_USED(msg);
                              };
 
 

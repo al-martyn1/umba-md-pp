@@ -15,7 +15,7 @@
 
 struct SectionInfo
 {
-    unsigned        sectionLevel = 0;
+    std::size_t     sectionLevel = 0;
     std::string     originalTitle   ;
     std::string     sectionNumber   ; //
     std::string     fullTitle       ; // with section number
@@ -296,8 +296,8 @@ struct Document
         if (!getMetaTagValueAsText(appCfg, tag, listDelimiter, tagText))
             return false;
 
-        std::vector<std::string> lines = splitAndTrimAndSkipEmpty(tagText, '\n');
-        tagText = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator>( lines.begin(), lines.end(), ' ' );
+        std::vector<std::string> linesTmp = splitAndTrimAndSkipEmpty(tagText, '\n');
+        tagText = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator>( linesTmp.begin(), linesTmp.end(), ' ' );
         umba::string_plus::trim(tagText);
 
         return true;

@@ -32,7 +32,7 @@ bool rtfReadBinaryFileToHexString(const std::string &imgFilename, std::string &h
 
     for(auto b: fileData)
     {
-        hexData.append(1, rtfHalfByteToHex(b>>4));
+        hexData.append(1, rtfHalfByteToHex((std::uint8_t)(unsigned)(b>>4)));
         hexData.append(1, rtfHalfByteToHex(b));
 
     }
@@ -101,7 +101,7 @@ bool rtfEmbedImagesWorkaround(const std::string &rtfFilename)
 
     // {\*\fldinst  INCLUDEPICTURE "doc_icons_todo-list-50.png" \\d \\*MERGEFORMAT}
     static const std::string textToFind = "{\\*\\fldinst  INCLUDEPICTURE ";
-    std::size_t startPos = 0;
+    //std::size_t startPos = 0;
 
     std::size_t findPos = rtfData.find(textToFind);
 

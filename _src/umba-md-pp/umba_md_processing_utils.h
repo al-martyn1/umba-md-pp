@@ -234,6 +234,7 @@ void testTransformMarkdownText(const std::string &input)
 
     auto handler = [](auto out, auto b, auto e, BacktickProcessingState st, bool inBackticks)
     {
+        UMBA_USED(st);
         if (b!=e)
         {
             if (inBackticks)
@@ -386,6 +387,8 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
     auto linkDetector = [&callHandler](OutputIterator out, InputIterator b, InputIterator e, BacktickProcessingState bktpsSt, bool inBackticks)
 #endif
     {
+        UMBA_USED(bktpsSt);
+
         auto doNormal = [&]()
         {
             auto ch = *b;
@@ -426,6 +429,8 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
 
         auto doReadText = [&](bool readImageLink)
         {
+            UMBA_USED(readImageLink);
+
             auto ch = *b;
 
             if (!inBackticks)
@@ -458,6 +463,8 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
 
         auto doWaitLink = [&](bool readImageLink)
         {
+            UMBA_USED(readImageLink);
+
             auto ch = *b;
 
             if (ch==(value_type)'(')
@@ -562,6 +569,7 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
                 }
                 break;
 
+                case stWaitLinkLink: [[falltrough]]; // !!! Не понятно, что за состояние, и почему я его не обработал
                 case stWaitLink:
                 {
                     doWaitLink(bImageLink);
@@ -644,6 +652,7 @@ void testTransformMarkdownLinksUrlString(const std::string &input)
 
     auto handler = [](std::string url, bool bImage)
     {
+        UMBA_USED(bImage);
         std::cout << "URL: " << url << "\n";
         if (isUrlAbsolute(url))
         {

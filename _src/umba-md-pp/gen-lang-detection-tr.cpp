@@ -102,6 +102,7 @@ auto trErrHandler = marty_tr::makeErrReportHandler([](marty_tr::MsgNotFound what
 {
     using umba::lout;
     using namespace umba::omanip;
+    UMBA_USED(what); UMBA_USED(msg); UMBA_USED(catId); UMBA_USED(langId);
 
     // std::cerr << "---\n";
     // std::cerr << "Translation not found(" << marty_tr::to_string(what) << "): [" << langId << ":" << catId << "] - " << msg << "\n";
@@ -139,6 +140,8 @@ std::string jsonEscape(const std::string &str)
 //int main(int argc, char* argv[])
 UMBA_APP_MAIN()
 {
+    UMBA_USED(argc); UMBA_USED(argv);
+
     marty_tr::tr_set_err_handler(&trErrHandler);
     marty_tr::tr_init_all_translations(tr_get_translations_json());
 
