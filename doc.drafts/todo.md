@@ -92,7 +92,7 @@
 |umba-fsm|X|||
 |umba-hcp|X|||
 |umba-make-headers||||
-|umba-md-pp|X|||
+|umba-md-pp|X|X|X|
 |umba-pretty-headers|CMake not required|||
 |umba-roboconf|X|||
 |umba-sort-headers||||
