@@ -2,7 +2,7 @@
     \brief Утилита umba-md-pp-view - рендерер маркдауна, использующий Doxygen и локальный просмотрщик RTF-файлов
  */
 
-// C:\Users\mag\AppData\Local\Temp\.umba-md-pp-view\
+// C:\Users\mag\AppData\Local\Temp\.umba-md-pp-view
 
 #ifndef UMBA_MD_PP_VIEW
     #define UMBA_MD_PP_VIEW

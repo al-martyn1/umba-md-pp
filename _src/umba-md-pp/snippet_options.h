@@ -173,7 +173,7 @@ std::size_t findTextSignatureInLines(const std::vector<std::string> &lines, cons
     auto makeSingleTestLineFromDeque = [&]()
     {
         std::string res;
-        for(const auto l: curTestLinesQue)
+        for(const auto &l: curTestLinesQue)
             res.append(l);
         return res;
     };
@@ -374,7 +374,7 @@ std::size_t findStopPrefixInLines(const std::vector<std::string> &lines, const s
     for(; curLineIdx!=lines.size(); ++curLineIdx)
     {
         std::string trimmedLine = umba::string_plus::trim_copy(lines[curLineIdx]);
-        for(const auto p : stopPrefixes)
+        for(const auto &p : stopPrefixes)
         {
             if (umba::string_plus::starts_with(trimmedLine, p))
             {

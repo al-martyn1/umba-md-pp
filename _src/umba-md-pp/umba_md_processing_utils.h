@@ -78,7 +78,7 @@ StringType makeUrlPathCanonical(StringType urlPath)
     {
         if (urlPath[colonPos]==(CharType)':')
         {
-            if ((colonPos+1u)<urlPath.size() || (colonPos+2u)<urlPath.size() && urlPath[colonPos+1u]==(CharType)'/' && urlPath[colonPos+2u]==(CharType)'/')
+            if ((colonPos+1u)<urlPath.size() || ((colonPos+2u)<urlPath.size() && urlPath[colonPos+1u]==(CharType)'/' && urlPath[colonPos+2u]==(CharType)'/'))
             {
                 pos = colonPos+3; // символ, следующий за "://", пропускаем протокольную часть
                 break;
@@ -569,7 +569,7 @@ OutputIterator transformMarkdownLinksUrlIterator(OutputIterator out, InputIterat
                 }
                 break;
 
-                case stWaitLinkLink: [[falltrough]]; // !!! Не понятно, что за состояние, и почему я его не обработал
+                case stWaitLinkLink: [[fallthrough]]; // !!! Не понятно, что за состояние, и почему я его не обработал
                 case stWaitLink:
                 {
                     doWaitLink(bImageLink);

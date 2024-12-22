@@ -881,7 +881,7 @@ int safe_main(int argc, char* argv[])
                              );
         }
 
-        for(const auto addFile : gitAddFiles)
+        for(const auto &addFile : gitAddFiles)
         {
             gitAddText.append("git add \"");
             gitAddText.append(umba::filename::makeCanonical(addFile, useBatSyntax?'\\':'/'));

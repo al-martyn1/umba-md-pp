@@ -228,7 +228,7 @@ UMBA_MAIN()
     #endif
 
 
-    for(const auto fn: inputFiles)
+    for(const auto &fn: inputFiles)
     {
         inputFilename = fn;
 

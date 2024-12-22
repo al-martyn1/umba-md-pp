@@ -115,7 +115,7 @@ struct GenerationCacheInfo
         if (!pFoundCacheItem)
             return false;
 
-        *pFoundCacheItem = GenerationCacheInfoItem{hash, fileName};
+        *pFoundCacheItem = GenerationCacheInfoItem{ hash, fileName, {} };
 
         return true;
     }
@@ -139,7 +139,7 @@ struct GenerationCacheInfo
         if (findCacheItem(hash))
             return false;
 
-        items.emplace_back(GenerationCacheInfoItem{hash, fileName});
+        items.emplace_back(GenerationCacheInfoItem{ hash, fileName, {} });
 
         return true;
     }
@@ -159,7 +159,7 @@ struct GenerationCacheInfo
         if (replaceCacheItem(hash, fileName))
             return true;
 
-        items.emplace_back(GenerationCacheInfoItem{hash, fileName});
+        items.emplace_back(GenerationCacheInfoItem{ hash, fileName, {} });
 
         return true;
     }
@@ -213,7 +213,7 @@ struct GenerationCacheInfo
             }
             else
             {
-                items.emplace_back(GenerationCacheInfoItem{hashStr, filenameStr});
+                items.emplace_back(GenerationCacheInfoItem{ hashStr, filenameStr, {} });
             }
 
         } // for(auto l : hashFileLines)

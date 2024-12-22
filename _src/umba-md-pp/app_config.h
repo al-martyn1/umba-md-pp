@@ -490,7 +490,7 @@ struct AppConfig
 
         std::set<std::string> langs = languageOptionsDatabase.getLanguages();
 
-        for(const auto l: langs)
+        for(const auto &l: langs)
         {
             std::vector<std::string> langExtsPair;
             langExtsPair.emplace_back(l);

@@ -109,7 +109,7 @@ public:
     {
         umba::string_plus::trim(line);
 
-        for(const auto p : m_cutPrefixes)
+        for(const auto &p : m_cutPrefixes)
         {
             if (umba::string_plus::starts_with(line, p))
             {
@@ -126,7 +126,7 @@ public:
     {
         umba::string_plus::trim(line);
 
-        for(const auto p : m_genericCutStopPrefixes)
+        for(const auto &p : m_genericCutStopPrefixes)
         {
             if (umba::string_plus::starts_with(line, p))
                 return true;

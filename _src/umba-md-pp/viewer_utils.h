@@ -61,7 +61,7 @@ std::wstring generateTempSubfolderNameByInputFileName(const std::wstring &name)
     //umba::filename::getFileName(name);
     for(auto &ch: nameNoPath)
     {
-        if (ch==L'.' || ch==L'\\' || ch==L'/' || (ch>=0 && ch<=L' '))
+        if (ch==L'.' || ch==L'\\' || ch==L'/' || (/*ch>=0 &&*/ ch<=L' '))
             ch = L'_';
     }
 

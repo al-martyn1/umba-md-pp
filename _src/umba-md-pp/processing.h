@@ -321,7 +321,7 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
                         umba::html::HtmlTag mdHtmlTagEnd;
                         MdPpTag foundEndTagType = MdPpTag::invalid;
                         line = lines[idx];
-                        auto it2 = umba::md::tryParseLineToHtmlTag(mdHtmlTagEnd, line.begin(), line.end(), foundEndTagType);
+                        // auto it2 = umba::md::tryParseLineToHtmlTag(mdHtmlTagEnd, line.begin(), line.end(), foundEndTagType);
                         if (foundMdPpTagType==foundEndTagType && mdHtmlTagEnd.isCloseTag())
                             break;
                         tagLines.emplace_back(lines[idx]);
