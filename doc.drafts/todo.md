@@ -76,27 +76,6 @@
       Используем UMBA_FILESYS_UTF_SYSAPI_HAS_WIDE_VERSION для определения того, есть ли wide версия API.
 - [ ] Рыбоконь - научить выводить в MD
 - [X] Brief Scanner - научить выводить в MD
-- [ ] TODO в MD-PP - сканирование todo.md_ файлов и сканирование сорцов на предмет различных заметок.
-- [ ] `umba-wizardry` - переделать с питона на плюсы и доделать, что там не доделано.
-- [ ] Armapan для GCC/MSVC
-- [ ] Токенизер - пофиксить баги, рассмотреть все мутные места
-- [ ] "Генератор протоколов". Почитать про парсеры.<br/>
-      https://rsdn.org/forum/java/8868362.1 <br/>
-      https://mihailromanov.github.io/docs/tutorials/ <br/>
-      https://habr.com/ru/companies/haulmont/articles/341402/ <br/>
-      https://github.com/area9innovation/flow9 <br/>
-      PEG - [Грамматика, разбирающая выражение](https://ru.wikipedia.org/wiki/%D0%93%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0,_%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D1%8E%D1%89%D0%B0%D1%8F_%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5) <br/>
-      packrat-парсер - https://en.wikipedia.org/wiki/Packrat_parser
-      https://intuit.ru/studies/courses/562/418/lecture/9562 <br/>
-      [Терминальный символ](https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB) <br/>
-      [Формальная грамматика](https://ru.wikipedia.org/wiki/%D0%A4%D0%BE%D1%80%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0) <br/>
-      Структурный дизайн - https://habr.com/ru/companies/jugru/articles/858418/ <br/>
-      CS164: Programming Languages and Compilers - http://www.infocobuild.com/education/audio-video-courses/computer-science/CS164-Spring2012-Berkeley/lecture-01.html <br/>
-- [ ] Разобраться с генератором сайтов Jekkyl
-- [ ] Начать делать себе сайт, с описаниями различных своих тулз; со своими заметками, ссылками и прочим.
-- [ ] Перетащить в гит наработки для HEX-файлов
-- [ ] Разбор и оптимизация obj-файлов (под ARM, оптимизация кода шаблонов)
-- [ ] Вытащить на гитхаб либу, в которой я делал дизасм MSC-51, сделать на её базе либу для арм, с анализом цепочек выполнения и их скорости, а в идеале потом - эмулятор.
 
 
 # Buddy-проекты
@@ -232,6 +211,26 @@
       большой TODO по проекту, с другой стороны, после сборки всё в одном файле.
 - [ ] Сайдбар. Пока не особо нужно, надо начать пилить доку, и смотреть, что и как там с вики будет получаться.
 - [ ] Собственно, дока по препроцессору. Пора бы уже начинать пилить.
+- [ ] `umba-wizardry` - переделать с питона на плюсы и доделать, что там не доделано.
+- [ ] Armapan для GCC/MSVC. Завести Armapan на гитхаб. Обновить до нынешних либ.
+- [ ] Токенизер - пофиксить баги, рассмотреть все мутные места
+- [ ] "Генератор протоколов". Почитать про парсеры.<br/>
+      https://rsdn.org/forum/java/8868362.1 <br/>
+      https://mihailromanov.github.io/docs/tutorials/ <br/>
+      https://habr.com/ru/companies/haulmont/articles/341402/ <br/>
+      https://github.com/area9innovation/flow9 <br/>
+      PEG - [Грамматика, разбирающая выражение](https://ru.wikipedia.org/wiki/%D0%93%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0,_%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D1%8E%D1%89%D0%B0%D1%8F_%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5) <br/>
+      packrat-парсер - https://en.wikipedia.org/wiki/Packrat_parser
+      https://intuit.ru/studies/courses/562/418/lecture/9562 <br/>
+      [Терминальный символ](https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB) <br/>
+      [Формальная грамматика](https://ru.wikipedia.org/wiki/%D0%A4%D0%BE%D1%80%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0) <br/>
+      Структурный дизайн - https://habr.com/ru/companies/jugru/articles/858418/ <br/>
+      CS164: Programming Languages and Compilers - http://www.infocobuild.com/education/audio-video-courses/computer-science/CS164-Spring2012-Berkeley/lecture-01.html <br/>
+- [ ] Разобраться с генератором сайтов Jekkyl
+- [ ] Начать делать себе сайт, с описаниями различных своих тулз; со своими заметками, ссылками и прочим.
+- [ ] Перетащить в гит наработки для HEX-файлов
+- [ ] Разбор и оптимизация obj-файлов (под ARM, оптимизация кода шаблонов)
+- [ ] Вытащить на гитхаб либу, в которой я делал дизасм MSC-51, сделать на её базе либу для арм, с анализом цепочек выполнения и их скорости, а в идеале потом - эмулятор.
 
 Надо подумать, что нам нужно в первую очередь.
 
