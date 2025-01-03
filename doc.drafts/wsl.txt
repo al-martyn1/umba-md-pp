@@ -1,0 +1,6 @@
+Установка Linux в Windows с помощью WSL - https://learn.microsoft.com/ru-ru/windows/wsl/install
+Настройка среды разработки WSL - https://learn.microsoft.com/ru-ru/windows/wsl/setup/environment
+Начало работы с Visual Studio Code с подсистема Windows для Linux - https://learn.microsoft.com/ru-ru/windows/wsl/tutorials/wsl-vscode
+Начало работы с Git на подсистема Windows для Linux - https://learn.microsoft.com/ru-ru/windows/wsl/tutorials/wsl-git
+How to access Windows files from Linux in WSL? - https://askubuntu.com/questions/1442124/how-to-access-windows-files-from-linux-in-wsl
+Accessing WSL files in Windows, and vice versa - https://ling123labs.com/posts/WSL-files-in-Windows-and-vice-versa/
