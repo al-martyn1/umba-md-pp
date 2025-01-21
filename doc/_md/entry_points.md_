@@ -3,71 +3,9 @@ Title: Brief Description for Project Sources
 Generator: Umba Brief Scanner
 ---
 
-- `_libs/marty_cpp/examples/01_normalization_and_tabs.cpp` - Тестируем cEscapeString, нормализацию CR LF, нормализацию trailing spaces, condenseSpacesToTabs, normalizeIndents
-- `_libs/marty_cpp/examples/02_enum_generator.cpp` - Тестирование генератора enum'ов marty_cpp::enum_generate_
-- `_libs/marty_cpp/examples/03_sort_includes.cpp` - Тестируем sort_includes.
-- `_libs/marty_decimal/tests/src/safe_main.h` - 
-- `_libs/marty_tr/make_translation_en-US.h` - 
-- `_libs/nlohmann/test/cmake_add_subdirectory/project/main.cpp` - 
-- `_libs/nlohmann/test/cmake_fetch_content2/project/main.cpp` - 
-- `_libs/nlohmann/test/cmake_fetch_content/project/main.cpp` - 
-- `_libs/nlohmann/test/cmake_import/project/main.cpp` - 
-- `_libs/nlohmann/test/cmake_import_minver/project/main.cpp` - 
-- `_libs/nlohmann/test/cmake_target_include_directories/project/main.cpp` - 
-- `_libs/nlohmann/test/cuda_example/json_cuda.cu` - 
-- `_libs/nlohmann/test/src/fuzzer-driver_afl.cpp` - 
-- `_libs/nlohmann/test/thirdparty/Fuzzer/FuzzerMain.cpp` - 
-- `_libs/nlohmann/test/thirdparty/Fuzzer/afl/afl_driver.cpp` - 
-- `_libs/nlohmann/test/thirdparty/Fuzzer/standalone/StandaloneFuzzTargetMain.c` - 
-- `_libs/nlohmann/test/thirdparty/doctest/doctest.h` - 
-- `_libs/nlohmann/third_party/macro_builder/main.cpp` - 
-- `_libs/umba/CMakeCCompilerId.c` - 
-- `_libs/umba/CMakeCXXCompilerId.cpp` - 
-- `_libs/umba/app_main.h` - 
-- `_libs/umba/compiler_id_cpp.h` - 
-- `_libs/umba/internal/winstrerrorname.cxx` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googlemock/test/gmock-spec-builders_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googlemock/test/gmock_output_test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googlemock/test/gmock_stress_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/samples/sample10_unittest.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/samples/sample9_unittest.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-break-on-failure-unittest_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-catch-exceptions-test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-color-test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-death-test_ex_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-env-var-test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-failfast-unittest_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-filter-unittest_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-global-environment-unittest_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-list-tests-unittest_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-listener-test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-output-test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-param-test-invalid-name1-test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-param-test-invalid-name2-test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-param-test-test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-shuffle-test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-throw-on-failure-test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/googletest-uninitialized-test_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest-unittest-api_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_assert_by_exception_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_environment_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_list_output_unittest_.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_no_test_unittest.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_premature_exit_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_repeat_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_skip_in_environment_setup_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_stress_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_test_macro_stack_footprint_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_throw_on_failure_ex_test.cc` - 
-- `_libs/yaml-cpp/test/gtest-1.11.0/googletest/test/gtest_xml_output_unittest_.cc` - 
-- `_libs/yaml-cpp/test/main.cpp` - 
-- `_libs/yaml-cpp/util/api.cpp` - 
-- `_libs/yaml-cpp/util/parse.cpp` - 
-- `_libs/yaml-cpp/util/read.cpp` - 
-- `_libs/yaml-cpp/util/sandbox.cpp` - 
-- `_src/simple-drawing/smpd-test-001.cpp` - Делаем для теста раскраску Protogen кода в HTML и вывод потокенно в текст
-- `_src/umba-md-pp/gen-lang-detection-tr.cpp` - Утилита umba-md-pp - препроцессор для маркдауна
-- `_src/umba-md-pp/test_rtf_workarounds.cpp` - Тесты воркараундов/фиксов RTF, который сгенерил Doxygen
-- `_src/umba-md-pp/umba-md-pp-view.cpp` - Утилита umba-md-pp-view - рендерер маркдауна, использующий Doxygen и локальный просмотрщик RTF-файлов
-- `_src/umba-md-pp/umba-md-pp.cpp` - Утилита umba-md-pp - препроцессор для маркдауна
-- `tests/snippets/cpp/useless.cpp` - 
+- `smpd-test-001.cpp` - Делаем для теста раскраску Protogen кода в HTML и вывод потокенно в текст
+- `gen-lang-detection-tr.cpp` - Утилита umba-md-pp - препроцессор для маркдауна
+- `test_rtf_workarounds.cpp` - Тесты воркараундов/фиксов RTF, который сгенерил Doxygen
+- `umba-md-pp-view.cpp` - Утилита umba-md-pp-view - рендерер маркдауна, использующий Doxygen и локальный просмотрщик RTF-файлов
+- `umba-md-pp.cpp` - Утилита umba-md-pp - препроцессор для маркдауна
+- `useless.cpp` - 

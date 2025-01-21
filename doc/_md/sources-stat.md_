@@ -1,4 +1,4 @@
-cloc|github.com/AlDanial/cloc v 2.02  T=2.51 s (117.8 files/s, 14082.4 lines/s)
+cloc|github.com/AlDanial/cloc v 2.02  T=2.08 s (140.7 files/s, 16627.2 lines/s)
 --- | ---
 
 File|blank|comment|code
@@ -17,12 +17,12 @@ File|blank|comment|code
 .\_src\umba-md-pp\md_pp_html_puml.h|111|50|464
 .\_src\umba-md-pp\umba_md_processing_utils.h|141|97|452
 .\_src\umba-md-pp\utils.h|161|135|449
-.\doc\_md\_found-notes.md|175|0|372
 .\_src\umba-md-pp\processing_utils.h|115|73|348
 .\doc.drafts\bred.txt|186|0|341
 .\_src\umba-md-pp\umba-md-pp-view.cpp|144|93|333
 .\_src\umba-md-pp\yaml_json_document_helpers.h|81|120|318
-.\doc\_md\_found-todos.md|173|0|313
+.\doc\_md\sources-stat-by-percent.txt|1|0|318
+.\doc\_md\sources-stat.txt|1|0|317
 .\_src\umba-md-pp\document.h|75|39|304
 .\doc\img.generated\doc.drafts\graphviz\trie_operators.svg|0|25|284
 .\_src\simple-drawing\utils.h|83|24|280
@@ -32,7 +32,6 @@ File|blank|comment|code
 .\_src\umba-md-pp\generation_cache_info.h|78|21|222
 .\doc\img.generated\doc.drafts\graphviz\trie.svg|0|56|222
 .\_src\umba-md-pp\md_pp_html_graph.h|93|142|209
-.\doc\_md\_found-warnings.md|109|0|207
 .\_src\umba-md-pp\plantuml_options.h|52|51|200
 .\_src\umba-md-pp\gen-lang-detection-tr.cpp|78|23|195
 .\_src\umba-md-pp\language-options-database.h|76|5|194
@@ -45,11 +44,11 @@ File|blank|comment|code
 .\_src\umba-md-pp\tr\doxygen-language.json|39|0|170
 .\_src\umba-md-pp\image_helpers.h|43|6|165
 .\doc\umba-md-pp-view-cli-options.md|85|0|164
+.\doc\umba-md-pp-view-console-cli-options.md|85|0|164
 .\doc\img.generated\doc.drafts\graphviz\trie_flat.svg|0|15|162
 .\doc\umba-md-pp-cli-options.md|83|0|161
 .\_src\umba-md-pp\md_pp_html.h|66|37|146
 .\_src\umba-md-pp\rtf_workarounds.h|44|11|144
-.\doc\_md\_found-attentions.md|73|0|136
 .\umba-md-pp-msvc2019.sln|1|1|135
 .\_src\simple-drawing\smpd-tokenizer.h|63|75|133
 .\_src\umba-md-pp\processing_section_utils.h|42|42|127
@@ -109,7 +108,6 @@ File|blank|comment|code
 .\doc.drafts\plantuml\25-bnf-14.puml|0|0|25
 .\doc.drafts\rtf-smp\ud-inc\unidoc\html\code.css|7|0|25
 .\.msvc\umba_qt_common.props|5|0|24
-.\doc\_md\_found-see-also.md|19|0|24
 .\_src\umba-md-pp\rc\brand-book.txt|10|0|23
 .\doc.drafts\links.txt|7|0|23
 .\.msvc2019\readme.txt|7|0|22
@@ -143,8 +141,6 @@ File|blank|comment|code
 .\.msvc\umba_target_lib_static.props|3|0|17
 .\doc.drafts\plantuml\46-state-11.puml|5|0|17
 .\doc.drafts\rtf.txt|5|0|17
-.\doc\_md\_found-undones.md|27|0|17
-.\_precommit.bat|4|0|16
 .\_src\umba-md-pp\_generators\PlantUmlTargetFormat.txt|0|0|16
 .\_src\umba-md-pp\_generators\umba-enum-gen-options.txt|5|0|16
 .\_src\umba-md-pp\app_ver_config.h|4|0|16
@@ -171,6 +167,7 @@ File|blank|comment|code
 .\.msvc\umba_common.props|9|5|12
 .\.msvc\umba_local_common_prjdirs.props|6|0|12
 .\.msvc2019\umba_prjdefs.props|3|1|12
+.\_precommit.bat|3|0|12
 .\doc.drafts\md-tables.txt|2|0|12
 .\_src\umba-md-pp\_generators\MetaTagType.txt|1|0|11
 .\_src\umba-md-pp\enum_hash.h|3|1|11
@@ -184,6 +181,7 @@ File|blank|comment|code
 .\doc.drafts\plantuml\21-bnf-10.puml|0|0|10
 .\doc.drafts\plantuml\45-state-10.puml|2|0|10
 .\doc.drafts\plantuml\52-state-17.puml|4|0|10
+.\doc\Index.md|0|0|10
 .\_src\umba-md-pp\log.h|5|3|9
 .\_src\umba-md-pp\umba_md_html_utils.h|12|3|9
 .\doc.drafts\plantuml\03-ditaa-02a.puml|0|0|9
@@ -199,7 +197,6 @@ File|blank|comment|code
 .\doc.drafts\plantuml\18-bnf-07.puml|0|0|8
 .\doc.drafts\plantuml\36-state-01.puml|3|3|8
 .\doc.drafts\trie.bat|4|2|8
-.\doc\Index.md|0|0|8
 .\.msvc\umba_3dp_nlohman.props|2|0|7
 .\.msvc\umba_stdcpp14.props|2|0|7
 .\.msvc\umba_stdcpp17.props|2|0|7
@@ -209,6 +206,7 @@ File|blank|comment|code
 .\doc.drafts\operartors.txt|1|0|7
 .\doc.drafts\plantuml\19-bnf-08.puml|0|0|7
 .\doc.drafts\plantuml\54-state-19.puml|0|0|7
+.\_gen-doc.bat|2|0|6
 .\_src\umba-md-pp\_generators\TargetFormat.txt|2|0|6
 .\_src\umba-md-pp\config.h|12|12|6
 .\_src\umba-md-pp\md_pp_html_csv.h|10|3|6
@@ -251,7 +249,6 @@ File|blank|comment|code
 .\doc.drafts\plantuml\01-sequenceDiagram.puml|0|0|3
 .\doc.drafts\plantuml\12-bnf-01.puml|0|0|3
 .\doc.drafts\table-test\table-test-05.txt|0|0|3
-.\_gen-doc.bat|0|0|2
 .\_start_msvc.bat|0|0|2
 .\_update_debug_conf.bat|0|0|2
 .\doc.drafts\boost\build_b2.bat|0|0|2
@@ -300,24 +297,24 @@ File|blank|comment|code
 .\doc\img.generated\doc.drafts\plantuml\66-state-31.svg|0|0|1
 .\set_sln.bat|0|0|1
 --------|--------|--------|--------
-SUM:|5927|3198|26268
-cloc|github.com/AlDanial/cloc v 2.02  T=2.51 s (117.8 files/s, 14082.4 lines/s)
+SUM:|5439|3198|26000
+cloc|github.com/AlDanial/cloc v 2.02  T=2.08 s (140.7 files/s, 16627.2 lines/s)
 --- | ---
 
 Language|files|blank|comment|code
 :-------|-------:|-------:|-------:|-------:
 C/C++ Header|40|3214|2423|12806
 JSON|9|78|0|3287
-Markdown|12|1082|4|2638
-Text|50|489|0|1869
+Text|52|491|0|2504
+Markdown|7|591|4|1735
 C++|8|618|365|1667
 SVG|45|0|190|1263
 PlantUML|64|91|4|1093
 XML|30|125|71|635
 CSS|6|115|78|500
-DOS Batch|29|52|6|305
+DOS Batch|29|53|6|305
 Visual Studio Solution|1|1|1|135
 CMake|1|54|39|67
 Windows Resource File|1|8|17|3
 --------|--------|--------|--------|--------
-SUM:|296|5927|3198|26268
+SUM:|293|5439|3198|26000

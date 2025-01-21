@@ -1,4 +1,4 @@
-github.com/AlDanial/cloc v 2.02  T=2.22 s (133.1 files/s, 15917.7 lines/s)
+github.com/AlDanial/cloc v 2.02  T=2.09 s (139.5 files/s, 16396.3 lines/s)
 ----------------------------------------------------------------------------------------------------------------
 File                                                                       blank %      comment %           code
 ----------------------------------------------------------------------------------------------------------------
@@ -16,12 +16,11 @@ File                                                                       blank
 .\_src\umba-md-pp\md_pp_html_puml.h                                          17.76           8.00            464
 .\_src\umba-md-pp\umba_md_processing_utils.h                                 20.43          14.06            452
 .\_src\umba-md-pp\utils.h                                                    21.61          18.12            449
-.\doc\_md\_found-notes.md                                                    31.99           0.00            372
 .\_src\umba-md-pp\processing_utils.h                                         21.46          13.62            348
 .\doc.drafts\bred.txt                                                        35.29           0.00            341
 .\_src\umba-md-pp\umba-md-pp-view.cpp                                        25.26          16.32            333
 .\_src\umba-md-pp\yaml_json_document_helpers.h                               15.61          23.12            318
-.\doc\_md\_found-todos.md                                                    35.60           0.00            313
+.\doc\_md\sources-stat.txt                                                    0.31           0.00            317
 .\_src\umba-md-pp\document.h                                                 17.94           9.33            304
 .\doc\img.generated\doc.drafts\graphviz\trie_operators.svg                    0.00           8.09            284
 .\_src\simple-drawing\utils.h                                                21.45           6.20            280
@@ -31,7 +30,6 @@ File                                                                       blank
 .\_src\umba-md-pp\generation_cache_info.h                                    24.30           6.54            222
 .\doc\img.generated\doc.drafts\graphviz\trie.svg                              0.00          20.14            222
 .\_src\umba-md-pp\md_pp_html_graph.h                                         20.95          31.98            209
-.\doc\_md\_found-warnings.md                                                 34.49           0.00            207
 .\_src\umba-md-pp\plantuml_options.h                                         17.16          16.83            200
 .\_src\umba-md-pp\gen-lang-detection-tr.cpp                                  26.35           7.77            195
 .\_src\umba-md-pp\language-options-database.h                                27.64           1.82            194
@@ -44,11 +42,11 @@ File                                                                       blank
 .\_src\umba-md-pp\tr\doxygen-language.json                                   18.66           0.00            170
 .\_src\umba-md-pp\image_helpers.h                                            20.09           2.80            165
 .\doc\umba-md-pp-view-cli-options.md                                         34.14           0.00            164
+.\doc\umba-md-pp-view-console-cli-options.md                                 34.14           0.00            164
 .\doc\img.generated\doc.drafts\graphviz\trie_flat.svg                         0.00           8.47            162
 .\doc\umba-md-pp-cli-options.md                                              34.02           0.00            161
 .\_src\umba-md-pp\md_pp_html.h                                               26.51          14.86            146
 .\_src\umba-md-pp\rtf_workarounds.h                                          22.11           5.53            144
-.\doc\_md\_found-attentions.md                                               34.93           0.00            136
 .\umba-md-pp-msvc2019.sln                                                     0.73           0.73            135
 .\_src\simple-drawing\smpd-tokenizer.h                                       23.25          27.68            133
 .\_src\umba-md-pp\processing_section_utils.h                                 19.91          19.91            127
@@ -109,7 +107,6 @@ File                                                                       blank
 .\doc.drafts\plantuml\25-bnf-14.puml                                          0.00           0.00             25
 .\doc.drafts\rtf-smp\ud-inc\unidoc\html\code.css                             21.88           0.00             25
 .\.msvc\umba_qt_common.props                                                 17.24           0.00             24
-.\doc\_md\_found-see-also.md                                                 44.19           0.00             24
 .\_src\umba-md-pp\rc\brand-book.txt                                          30.30           0.00             23
 .\doc.drafts\links.txt                                                       23.33           0.00             23
 .\.msvc\umba_3dp_jinja2cpp.props                                             23.08          20.51             22
@@ -143,8 +140,6 @@ File                                                                       blank
 .\.msvc\umba_target_lib_static.props                                         15.00           0.00             17
 .\doc.drafts\plantuml\46-state-11.puml                                       22.73           0.00             17
 .\doc.drafts\rtf.txt                                                         22.73           0.00             17
-.\doc\_md\_found-undones.md                                                  61.36           0.00             17
-.\_precommit.bat                                                             20.00           0.00             16
 .\_src\umba-md-pp\_generators\PlantUmlTargetFormat.txt                        0.00           0.00             16
 .\_src\umba-md-pp\_generators\umba-enum-gen-options.txt                      23.81           0.00             16
 .\_src\umba-md-pp\app_ver_config.h                                           20.00           0.00             16
@@ -170,6 +165,7 @@ File                                                                       blank
 .\.msvc\umba_common.props                                                    34.62          19.23             12
 .\.msvc\umba_local_common_prjdirs.props                                      33.33           0.00             12
 .\.msvc2019\umba_prjdefs.props                                               18.75           6.25             12
+.\_precommit.bat                                                             20.00           0.00             12
 .\doc.drafts\md-tables.txt                                                   14.29           0.00             12
 .\_src\umba-md-pp\_generators\MetaTagType.txt                                 8.33           0.00             11
 .\_src\umba-md-pp\enum_hash.h                                                20.00           6.67             11
@@ -183,6 +179,7 @@ File                                                                       blank
 .\doc.drafts\plantuml\21-bnf-10.puml                                          0.00           0.00             10
 .\doc.drafts\plantuml\45-state-10.puml                                       16.67           0.00             10
 .\doc.drafts\plantuml\52-state-17.puml                                       28.57           0.00             10
+.\doc\Index.md                                                                0.00           0.00             10
 .\_src\umba-md-pp\log.h                                                      29.41          17.65              9
 .\_src\umba-md-pp\umba_md_html_utils.h                                       50.00          12.50              9
 .\doc.drafts\plantuml\03-ditaa-02a.puml                                       0.00           0.00              9
@@ -198,7 +195,6 @@ File                                                                       blank
 .\doc.drafts\plantuml\18-bnf-07.puml                                          0.00           0.00              8
 .\doc.drafts\plantuml\36-state-01.puml                                       21.43          21.43              8
 .\doc.drafts\trie.bat                                                        28.57          14.29              8
-.\doc\Index.md                                                                0.00           0.00              8
 .\.msvc\umba_3dp_nlohman.props                                               22.22           0.00              7
 .\.msvc\umba_stdcpp14.props                                                  22.22           0.00              7
 .\.msvc\umba_stdcpp17.props                                                  22.22           0.00              7
@@ -208,6 +204,7 @@ File                                                                       blank
 .\doc.drafts\operartors.txt                                                  12.50           0.00              7
 .\doc.drafts\plantuml\19-bnf-08.puml                                          0.00           0.00              7
 .\doc.drafts\plantuml\54-state-19.puml                                        0.00           0.00              7
+.\_gen-doc.bat                                                               25.00           0.00              6
 .\_src\umba-md-pp\_generators\TargetFormat.txt                               25.00           0.00              6
 .\_src\umba-md-pp\config.h                                                   40.00          40.00              6
 .\_src\umba-md-pp\md_pp_html_csv.h                                           52.63          15.79              6
@@ -250,7 +247,6 @@ File                                                                       blank
 .\doc.drafts\plantuml\01-sequenceDiagram.puml                                 0.00           0.00              3
 .\doc.drafts\plantuml\12-bnf-01.puml                                          0.00           0.00              3
 .\doc.drafts\table-test\table-test-05.txt                                     0.00           0.00              3
-.\_gen-doc.bat                                                                0.00           0.00              2
 .\_start_msvc.bat                                                             0.00           0.00              2
 .\_update_debug_conf.bat                                                      0.00           0.00              2
 .\doc.drafts\boost\build_b2.bat                                               0.00           0.00              2
@@ -299,7 +295,7 @@ File                                                                       blank
 .\doc\img.generated\doc.drafts\plantuml\66-state-31.svg                       0.00           0.00              1
 .\set_sln.bat                                                                 0.00           0.00              1
 ----------------------------------------------------------------------------------------------------------------
-SUM:                                                                         16.75           8.95          26298
+SUM:                                                                         15.85           9.23          25712
 ----------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------
@@ -307,17 +303,17 @@ Language                          files        blank %      comment %           
 ------------------------------------------------------------------------------------
 C/C++ Header                         40          17.43          13.14          12806
 JSON                                  9           2.32           0.00           3287
-Markdown                             12          29.05           0.11           2638
-Text                                 50          20.74           0.00           1869
+Text                                 51          18.31           0.00           2186
+Markdown                              7          25.36           0.17           1735
 C++                                   8          23.32          13.77           1667
 SVG                                  45           0.00          13.08           1263
 PlantUML                             64           7.66           0.34           1093
 XML                                  30          15.04           4.93            665
 CSS                                   6          16.59          11.26            500
-DOS Batch                            29          14.33           1.65            305
+DOS Batch                            29          14.56           1.65            305
 Visual Studio Solution                1           0.73           0.73            135
 CMake                                 1          33.75          24.38             67
 Windows Resource File                 1          28.57          60.71              3
 ------------------------------------------------------------------------------------
-SUM:                                296          16.75           8.95          26298
+SUM:                                292          15.85           9.23          25712
 ------------------------------------------------------------------------------------
