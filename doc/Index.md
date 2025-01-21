@@ -1,9 +1,10 @@
 # Указатель документации
-   - [Brief Description for Project Sources](doc/_sources_brief.md)
    - [Table test 01](doc.drafts/table-test.md)
    - [Umba MDPP Markdown Viewer command line options](doc/umba-md-pp-view-cli-options.md)
    - [Umba MDPP Markdown Viewer command line options](doc/umba-md-pp-view-console-cli-options.md)
    - [Umba Markdown Preprocessor command line options](doc/umba-md-pp-cli-options.md)
    - [Известные проблемы и TODO](doc.drafts/todo.md)
+   - [Исходные тексты](doc/Исходные тексты.md)
    - [Препроцессор для Markdown](README.md)
    - [Скопировать данный файл на уровень выше.](upper_inc.md)
+   - [Списки замечаний в исходном коде](doc/Списки замечаний в исходном коде.md)
