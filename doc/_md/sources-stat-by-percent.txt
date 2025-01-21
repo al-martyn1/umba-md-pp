@@ -1,4 +1,4 @@
-github.com/AlDanial/cloc v 2.02  T=2.09 s (139.5 files/s, 16396.3 lines/s)
+github.com/AlDanial/cloc v 2.02  T=1.55 s (190.8 files/s, 22397.2 lines/s)
 ----------------------------------------------------------------------------------------------------------------
 File                                                                       blank %      comment %           code
 ----------------------------------------------------------------------------------------------------------------
@@ -19,8 +19,9 @@ File                                                                       blank
 .\_src\umba-md-pp\processing_utils.h                                         21.46          13.62            348
 .\doc.drafts\bred.txt                                                        35.29           0.00            341
 .\_src\umba-md-pp\umba-md-pp-view.cpp                                        25.26          16.32            333
+.\doc\_md\sources-stat.txt                                                    0.31           0.00            322
 .\_src\umba-md-pp\yaml_json_document_helpers.h                               15.61          23.12            318
-.\doc\_md\sources-stat.txt                                                    0.31           0.00            317
+.\doc\_md\sources-stat-by-percent.txt                                         0.31           0.00            318
 .\_src\umba-md-pp\document.h                                                 17.94           9.33            304
 .\doc\img.generated\doc.drafts\graphviz\trie_operators.svg                    0.00           8.09            284
 .\_src\simple-drawing\utils.h                                                21.45           6.20            280
@@ -91,6 +92,7 @@ File                                                                       blank
 .\doc.drafts\plantuml\08-JCCKit-02.puml                                       0.00           0.00             37
 .\doc.drafts\rtf-smp\ud-inc\unidoc\html\forms.css                            15.91           0.00             37
 .\doc\img.generated\doc.drafts\graphviz\test004.svg                           0.00          16.67             35
+.\doc\_md\_found-attentions.md                                               35.29           0.00             33
 .\_src\umba-md-pp\_generators\SnippetOptions.txt                             13.51           0.00             32
 .\_src\umba-md-pp\tr\en-US.json                                               0.00           0.00             31
 .\_src\umba-md-pp\tr\ru-RU.json                                               0.00           0.00             31
@@ -140,6 +142,8 @@ File                                                                       blank
 .\.msvc\umba_target_lib_static.props                                         15.00           0.00             17
 .\doc.drafts\plantuml\46-state-11.puml                                       22.73           0.00             17
 .\doc.drafts\rtf.txt                                                         22.73           0.00             17
+.\doc\_md\_found-notes.md                                                    15.00           0.00             17
+.\doc\_md\_found-todos.md                                                    32.00           0.00             17
 .\_src\umba-md-pp\_generators\PlantUmlTargetFormat.txt                        0.00           0.00             16
 .\_src\umba-md-pp\_generators\umba-enum-gen-options.txt                      23.81           0.00             16
 .\_src\umba-md-pp\app_ver_config.h                                           20.00           0.00             16
@@ -295,7 +299,7 @@ File                                                                       blank
 .\doc\img.generated\doc.drafts\plantuml\66-state-31.svg                       0.00           0.00              1
 .\set_sln.bat                                                                 0.00           0.00              1
 ----------------------------------------------------------------------------------------------------------------
-SUM:                                                                         15.85           9.23          25712
+SUM:                                                                         15.74           9.12          26102
 ----------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------
@@ -303,8 +307,8 @@ Language                          files        blank %      comment %           
 ------------------------------------------------------------------------------------
 C/C++ Header                         40          17.43          13.14          12806
 JSON                                  9           2.32           0.00           3287
-Text                                 51          18.31           0.00           2186
-Markdown                              7          25.36           0.17           1735
+Text                                 52          16.37           0.00           2509
+Markdown                             10          25.56           0.16           1802
 C++                                   8          23.32          13.77           1667
 SVG                                  45           0.00          13.08           1263
 PlantUML                             64           7.66           0.34           1093
@@ -315,5 +319,5 @@ Visual Studio Solution                1           0.73           0.73           
 CMake                                 1          33.75          24.38             67
 Windows Resource File                 1          28.57          60.71              3
 ------------------------------------------------------------------------------------
-SUM:                                292          15.85           9.23          25712
+SUM:                                296          15.74           9.12          26102
 ------------------------------------------------------------------------------------

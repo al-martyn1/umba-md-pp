@@ -1,4 +1,4 @@
-cloc|github.com/AlDanial/cloc v 2.02  T=2.08 s (140.7 files/s, 16627.2 lines/s)
+cloc|github.com/AlDanial/cloc v 2.02  T=1.48 s (199.8 files/s, 23447.9 lines/s)
 --- | ---
 
 File|blank|comment|code
@@ -20,9 +20,9 @@ File|blank|comment|code
 .\_src\umba-md-pp\processing_utils.h|115|73|348
 .\doc.drafts\bred.txt|186|0|341
 .\_src\umba-md-pp\umba-md-pp-view.cpp|144|93|333
+.\doc\_md\sources-stat-by-percent.txt|1|0|322
+.\doc\_md\sources-stat.txt|1|0|322
 .\_src\umba-md-pp\yaml_json_document_helpers.h|81|120|318
-.\doc\_md\sources-stat-by-percent.txt|1|0|318
-.\doc\_md\sources-stat.txt|1|0|317
 .\_src\umba-md-pp\document.h|75|39|304
 .\doc\img.generated\doc.drafts\graphviz\trie_operators.svg|0|25|284
 .\_src\simple-drawing\utils.h|83|24|280
@@ -93,6 +93,7 @@ File|blank|comment|code
 .\doc.drafts\plantuml\08-JCCKit-02.puml|0|0|37
 .\doc.drafts\rtf-smp\ud-inc\unidoc\html\forms.css|7|0|37
 .\doc\img.generated\doc.drafts\graphviz\test004.svg|0|7|35
+.\doc\_md\_found-attentions.md|18|0|33
 .\_src\umba-md-pp\_generators\SnippetOptions.txt|5|0|32
 .\_src\umba-md-pp\tr\en-US.json|0|0|31
 .\_src\umba-md-pp\tr\ru-RU.json|0|0|31
@@ -141,6 +142,8 @@ File|blank|comment|code
 .\.msvc\umba_target_lib_static.props|3|0|17
 .\doc.drafts\plantuml\46-state-11.puml|5|0|17
 .\doc.drafts\rtf.txt|5|0|17
+.\doc\_md\_found-notes.md|3|0|17
+.\doc\_md\_found-todos.md|8|0|17
 .\_src\umba-md-pp\_generators\PlantUmlTargetFormat.txt|0|0|16
 .\_src\umba-md-pp\_generators\umba-enum-gen-options.txt|5|0|16
 .\_src\umba-md-pp\app_ver_config.h|4|0|16
@@ -297,16 +300,16 @@ File|blank|comment|code
 .\doc\img.generated\doc.drafts\plantuml\66-state-31.svg|0|0|1
 .\set_sln.bat|0|0|1
 --------|--------|--------|--------
-SUM:|5439|3198|26000
-cloc|github.com/AlDanial/cloc v 2.02  T=2.08 s (140.7 files/s, 16627.2 lines/s)
+SUM:|5468|3198|26076
+cloc|github.com/AlDanial/cloc v 2.02  T=1.48 s (199.8 files/s, 23447.9 lines/s)
 --- | ---
 
 Language|files|blank|comment|code
 :-------|-------:|-------:|-------:|-------:
 C/C++ Header|40|3214|2423|12806
 JSON|9|78|0|3287
-Text|52|491|0|2504
-Markdown|7|591|4|1735
+Text|52|491|0|2513
+Markdown|10|620|4|1802
 C++|8|618|365|1667
 SVG|45|0|190|1263
 PlantUML|64|91|4|1093
@@ -317,4 +320,4 @@ Visual Studio Solution|1|1|1|135
 CMake|1|54|39|67
 Windows Resource File|1|8|17|3
 --------|--------|--------|--------|--------
-SUM:|293|5439|3198|26000
+SUM:|296|5468|3198|26076
