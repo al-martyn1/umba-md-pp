@@ -203,6 +203,7 @@ mermaid packet diagram. Но - нужно уметь в байты, а не то
 
 - [ ] Визуализация данных `JSON` - https://plantuml.com/ru/json
 - [ ] Визуализация данных `YAML` - https://plantuml.com/ru/yaml
+- [ ] Визуализация линкерных скриптов GCC. Генератор линкерных скриптов (глянуть) - http://visualgdb.com/tools/LinkerScriptGenerator
 - [ ] Язык для рисования. Хорошо бы сделать, он нужен.
 - [ ] Язык для описания пакетов протоколов. Стырить мармаидный синтаксис, сделать совместимым. Мармаид нам не годится, 
       они рисует в браузере. Хорошо бы сделать, он нужен. https://mermaid.js.org/
@@ -219,13 +220,25 @@ mermaid packet diagram. Но - нужно уметь в байты, а не то
       https://mihailromanov.github.io/docs/tutorials/ <br/>
       https://habr.com/ru/companies/haulmont/articles/341402/ <br/>
       https://github.com/area9innovation/flow9 <br/>
-      PEG - [Грамматика, разбирающая выражение](https://ru.wikipedia.org/wiki/%D0%93%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0,_%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D1%8E%D1%89%D0%B0%D1%8F_%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5) <br/>
-      packrat-парсер - https://en.wikipedia.org/wiki/Packrat_parser
-      https://intuit.ru/studies/courses/562/418/lecture/9562 <br/>
       [Терминальный символ](https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB) <br/>
       [Формальная грамматика](https://ru.wikipedia.org/wiki/%D0%A4%D0%BE%D1%80%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0) <br/>
       Структурный дизайн - https://habr.com/ru/companies/jugru/articles/858418/ <br/>
       CS164: Programming Languages and Compilers - http://www.infocobuild.com/education/audio-video-courses/computer-science/CS164-Spring2012-Berkeley/lecture-01.html <br/>
+      PEG - [Грамматика, разбирающая выражение](https://ru.wikipedia.org/wiki/%D0%93%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0,_%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D1%8E%D1%89%D0%B0%D1%8F_%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5),
+      [Parsing expression grammar](https://en.wikipedia.org/wiki/Parsing_expression_grammar)<br/>
+      packrat-парсер - https://en.wikipedia.org/wiki/Packrat_parser
+      https://intuit.ru/studies/courses/562/418/lecture/9562 <br/>
+      Переводы статей Guido van Rossum: 
+      - [PEG парсеры](https://habr.com/ru/articles/471860/)
+      - [Реализация PEG парсера](https://habr.com/ru/post/471862/)
+      - [Генерация PEG парсера](https://habr.com/ru/post/471864/)
+      - [Визуализация работы PEG парсера](https://habr.com/ru/post/471866/)
+      - [Леворекурсивные PEG грамматики](https://habr.com/ru/articles/471986/)
+      - [Добавление экшенов в грамматику PEG](https://habr.com/ru/post/471988/)
+      - [Мета-грамматика для PEG парсера](https://habr.com/ru/post/471990/)
+      - [Реализация остальных возможностей PEG](https://habr.com/ru/post/471992/)
+      - [PEG на Core Developer Sprint](https://habr.com/ru/post/471994/)
+
 - [ ] Разобраться с генератором сайтов Jekyll
 - [ ] Начать делать себе сайт, с описаниями различных своих тулз; со своими заметками, ссылками и прочим.
 - [ ] Перетащить в гит наработки для HEX-файлов
