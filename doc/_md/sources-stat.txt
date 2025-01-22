@@ -1,4 +1,4 @@
-github.com/AlDanial/cloc v 2.02  T=1.73 s (171.5 files/s, 20123.0 lines/s)
+github.com/AlDanial/cloc v 2.02  T=2.35 s (126.1 files/s, 14801.3 lines/s)
 ----------------------------------------------------------------------------------------------------------------
 File                                                                         blank        comment           code
 ----------------------------------------------------------------------------------------------------------------
@@ -19,9 +19,9 @@ File                                                                         bla
 .\_src\umba-md-pp\processing_utils.h                                           115             73            348
 .\doc.drafts\bred.txt                                                          186              0            341
 .\_src\umba-md-pp\umba-md-pp-view.cpp                                          144             93            333
+.\doc\_md\sources-stat-by-percent.txt                                            1              0            322
+.\doc\_md\sources-stat.txt                                                       1              0            322
 .\_src\umba-md-pp\yaml_json_document_helpers.h                                  81            120            318
-.\doc\_md\sources-stat-by-percent.txt                                            1              0            318
-.\doc\_md\sources-stat.txt                                                       1              0            317
 .\_src\umba-md-pp\document.h                                                    75             39            304
 .\doc\img.generated\doc.drafts\graphviz\trie_operators.svg                       0             25            284
 .\_src\simple-drawing\utils.h                                                   83             24            280
@@ -299,7 +299,7 @@ File                                                                         bla
 .\doc\img.generated\doc.drafts\plantuml\66-state-31.svg                          0              0              1
 .\set_sln.bat                                                                    0              0              1
 ----------------------------------------------------------------------------------------------------------------
-SUM:                                                                          5468           3198          26067
+SUM:                                                                          5468           3198          26076
 ----------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------
@@ -307,7 +307,7 @@ Language                          files          blank        comment           
 ------------------------------------------------------------------------------------
 C/C++ Header                         40           3214           2423          12806
 JSON                                  9             78              0           3287
-Text                                 52            491              0           2504
+Text                                 52            491              0           2513
 Markdown                             10            620              4           1802
 C++                                   8            618            365           1667
 SVG                                  45              0            190           1263
@@ -319,5 +319,5 @@ Visual Studio Solution                1              1              1           
 CMake                                 1             54             39             67
 Windows Resource File                 1              8             17              3
 ------------------------------------------------------------------------------------
-SUM:                                296           5468           3198          26067
+SUM:                                296           5468           3198          26076
 ------------------------------------------------------------------------------------

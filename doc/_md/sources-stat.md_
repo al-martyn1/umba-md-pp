@@ -1,4 +1,4 @@
-cloc|github.com/AlDanial/cloc v 2.02  T=1.48 s (199.8 files/s, 23447.9 lines/s)
+cloc|github.com/AlDanial/cloc v 2.02  T=2.07 s (142.7 files/s, 16748.1 lines/s)
 --- | ---
 
 File|blank|comment|code
@@ -301,7 +301,7 @@ File|blank|comment|code
 .\set_sln.bat|0|0|1
 --------|--------|--------|--------
 SUM:|5468|3198|26076
-cloc|github.com/AlDanial/cloc v 2.02  T=1.48 s (199.8 files/s, 23447.9 lines/s)
+cloc|github.com/AlDanial/cloc v 2.02  T=2.07 s (142.7 files/s, 16748.1 lines/s)
 --- | ---
 
 Language|files|blank|comment|code
