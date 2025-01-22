@@ -99,7 +99,7 @@ int grapvizGraphGetLineType(std::string line)
         return -1;
 
     return 0; // not a comment line
-};
+}
 
 //----------------------------------------------------------------------------
 inline
