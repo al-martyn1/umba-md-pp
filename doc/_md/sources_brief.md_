@@ -5,9 +5,6 @@ Generator: Umba Brief Scanner
 
 
 
-- `LICENSE` - 
-- `README.rtf` - 
-
 # _src/simple-drawing
 
 - `check-points.h` - 
@@ -69,12 +66,6 @@ Generator: Umba Brief Scanner
 - `viewer_utils.h` - 
 - `yaml_json_document_helpers.h` - Помогалки для YAML/JSON
 
-- `help.rtf` - 
-
-# tests/simple-drawing
-
-- `test01.smpd` - 
-
 # tests/snippets/cpp
 
 - `bad.cpp` - 
@@ -82,12 +73,6 @@ Generator: Umba Brief Scanner
 - `signature_test.cpp` - 
 - `useless.cpp` - 
 
-# tests
-
-- `test.lst` - 
-
 # tests/tokenizer
 
 - `number_ull.cpp` - 
-
-- `umba-md-pp-help.rtf` - 
