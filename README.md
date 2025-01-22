@@ -18,6 +18,7 @@
 
 - [Важные ссылки](#user-content-важные-ссылки)
   - [Тест макроподстановки в именах включаемых файлов](#user-content-тест-макроподстановки-в-именах-включаемых-файлов)
+- [comment line](#user-content-comment-line)
 - [Основные возможности](#user-content-основные-возможности)
 - [Пакетный режим](#user-content-пакетный-режим)
 - [Локальная утилита просмотра .md_ и .md файлов](#user-content-локальная-утилита-просмотра-md_-и-md-файлов)
@@ -88,6 +89,7 @@
 > \#--set-var=INSERT_DOC_FILENAME_MACRO_TEST:by_macro2
 > --set-var=^insert_doc_filename_macro_test:by_macro2
 > 
+> --add-examples-path=.
 > --add-examples-path=.\doc
 > --add-examples-path=.\doc.drafts
 > --add-examples-path=.\conf
@@ -99,8 +101,16 @@
 
 code
 
-!!! File not found in: F:\_github\umba-tools\umba-md-pp\doc, F:\_github\umba-tools\umba-md-pp\doc.drafts, F:\_github\umba-tools\umba-md-pp\conf, F:\_github\umba-tools\umba-md-pp\tests\snippets, F:\_github\umba-tools\umba-md-pp\_src, F:\_github\umba-tools\umba-md-pp\src
-#!code tests/test.lst
+```
+```
+# comment line
+   Sample generic listing
+   template<typename T> std::string f(T<A> &ta)
+   {
+       return std::string("abra-shvabra'");
+   }
+```
+```
 
 quote
 
