@@ -228,6 +228,8 @@ mermaid packet diagram. Но - нужно уметь в байты, а не то
       [Parsing expression grammar](https://en.wikipedia.org/wiki/Parsing_expression_grammar)<br/>
       packrat-парсер - https://en.wikipedia.org/wiki/Packrat_parser
       https://intuit.ru/studies/courses/562/418/lecture/9562 <br/>
+      [The Parsing Expression Grammar Template Library (PEGTL) is a zero-dependency C++ header-only parser combinator library](https://github.com/taocpp/PEGTL)
+      [A linear-time C++17 PEG parser generator supporting memoization, left-recursion and context-dependent grammars.](https://github.com/TheLartians/PEGParser)
       Переводы статей Guido van Rossum: 
       - [PEG парсеры](https://habr.com/ru/articles/471860/)
       - [Реализация PEG парсера](https://habr.com/ru/post/471862/)
