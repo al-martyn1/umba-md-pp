@@ -283,7 +283,7 @@ UMBA_MAIN()
 
             if (bOk)
             {
-                bOk = tokenizer.tokenizeFinalize(itEnd);
+                bOk = tokenizer.tokenizeFinalize(it, itEnd);
             }
 
             //if (bOk)

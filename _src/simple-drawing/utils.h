@@ -44,7 +44,7 @@ StringType getTokenKindString(umba::tokenizer::payload_type p)
         case UMBA_TOKENIZER_TOKEN_CTRL_CC_PP_START                            : return umba::string_plus::make_string<StringType>("pp");
         case UMBA_TOKENIZER_TOKEN_CTRL_CC_PP_END                              : return umba::string_plus::make_string<StringType>("pp");
 
-        case UMBA_TOKENIZER_TOKEN_RAW_CHAR                                    : return umba::string_plus::make_string<StringType>("raw");
+        case UMBA_TOKENIZER_TOKEN_RAW_DATA                                    : return umba::string_plus::make_string<StringType>("raw");
         case UMBA_TOKENIZER_TOKEN_PLANTUML_COLOR                              : return umba::string_plus::make_string<StringType>("clr");
         
 
@@ -138,7 +138,7 @@ StringType getTokenNameString(umba::tokenizer::payload_type p)
         case UMBA_TOKENIZER_TOKEN_CTRL_CC_PP_START                            : return umba::string_plus::make_string<StringType>("name pp");
         case UMBA_TOKENIZER_TOKEN_CTRL_CC_PP_END                              : return umba::string_plus::make_string<StringType>("name pp");
 
-        case UMBA_TOKENIZER_TOKEN_RAW_CHAR                                    : return umba::string_plus::make_string<StringType>("name raw");
+        case UMBA_TOKENIZER_TOKEN_RAW_DATA                                    : return umba::string_plus::make_string<StringType>("name raw");
 
         case SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_TOP    : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_TOP    ");
         case SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_BOTTOM : return umba::string_plus::make_string<StringType>("name SMPD_TOKEN_OPERATOR_CALLOUT_TO_LEFT_BOTTOM ");

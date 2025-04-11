@@ -171,7 +171,7 @@ typename TokenizerBuilder::tokenizer_type makeTokenizerProtogen(TokenizerBuilder
 
     using SimpleSequenceComposingFilter       = umba::tokenizer::filters::SimpleSequenceComposingFilter<tokenizer_type>;
     using IdentifierToKeywordConversionFilter = umba::tokenizer::filters::IdentifierToKeywordConversionFilter<tokenizer_type>;
-    using RawCharsCollectingFilter            = umba::tokenizer::filters::RawCharsCollectingFilter<tokenizer_type>;
+    using RawCharsCollectingFilter            = umba::tokenizer::filters::UnclassifiedCharsCollectingFilter<tokenizer_type>;
     using TokenRangeConversionFilter          = umba::tokenizer::filters::TokenRangeConversionFilter<tokenizer_type>;
 
 
@@ -180,7 +180,7 @@ typename TokenizerBuilder::tokenizer_type makeTokenizerProtogen(TokenizerBuilder
 
 
     auto options = tokenizer.getOptions();
-    options.unclassifiedCharsRaw = false;
+    options.allowUnclassifiedChars = false;
     tokenizer.setOptions(options);
 
     auto addMultiLenOperatorFilter = [&](auto firstTokenId, auto lastTokenId)

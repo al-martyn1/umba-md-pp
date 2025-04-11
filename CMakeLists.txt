@@ -29,6 +29,7 @@ include_directories(${LIB_ROOT})
 add_subdirectory(${LIB_ROOT}/encoding)
 add_subdirectory(${LIB_ROOT}/marty_cpp)
 # add_subdirectory(${LIB_ROOT}/marty_pugixml)
+add_subdirectory(${LIB_ROOT}/marty_format)
 add_subdirectory(${LIB_ROOT}/marty_tr)
 add_subdirectory(${LIB_ROOT}/marty_yaml_toml_json)
 add_subdirectory(${LIB_ROOT}/nlohmann)    # https://json.nlohmann.me/integration/cmake/#external
@@ -38,7 +39,7 @@ add_subdirectory(${LIB_ROOT}/umba)
 add_subdirectory(${LIB_ROOT}/umba_tokenizer)
 add_subdirectory(${LIB_ROOT}/yaml-cpp)
 
-set(COMMON_LIBS encoding::encoding marty_cpp::marty_cpp sfmt::sfmt umba::umba umba_tokenizer::umba_tokenizer)
+set(COMMON_LIBS encoding::encoding marty::cpp sfmt::sfmt umba::umba umba::tokenizer marty::format)
 #set(PUGIXML_LIB pugixml::pugixml marty_pugixml::marty_pugixml)
 set(JSON_YAML_LIB nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
 
