@@ -10,6 +10,34 @@ Language   : Russian
 
 #!meta{no-document-meta-title,author,url}
 
+<arg-list title="Spec:|:Lang:|:Description">
+
+- other
+a
+b
+c
+d
+e
+
+|f|
+
+- some
+
+- `none`
+`P`/`C`
+As `'s'`.
+-`'s'`
+ `P`/`C`
+ Prints string
+-`'?'`
+ `C`
+ Prints escaped string.
+
+ See later "Escaping"
+
+</arg-list>
+
+
 #// @startebnf
 #// title LISP Grammar
 #// @endebnf

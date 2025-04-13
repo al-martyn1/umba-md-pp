@@ -27,6 +27,7 @@
 //
 #include "graph_viz_options.h"
 #include "plantuml_options.h"
+#include "arg_list_options.h"
 //
 #include "image_helpers.h"
 #include "batch_utils.h"
@@ -65,6 +66,7 @@ struct AppConfig
 
     GraphVizOptions                                       graphVizOptions;
     PlantUmlOptions                                       plantUmlOptions;
+    ArgListOptions                                        argListOptions ;
     bool                                                  clearGenerationCaches = false;
 
     mutable std::string                                   java;

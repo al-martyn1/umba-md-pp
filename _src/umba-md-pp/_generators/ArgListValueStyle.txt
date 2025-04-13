@@ -1,0 +1,6 @@
+invalid,unknown=-1
+normal
+bold
+italic
+boldItalic,italicBold
+backtick

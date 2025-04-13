@@ -2,5 +2,6 @@ invalid,unknown=-1
 graph, begin          = 0
 puml,plantuml,diagram
 csv
+argList
 
 end

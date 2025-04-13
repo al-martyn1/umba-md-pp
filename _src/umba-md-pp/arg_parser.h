@@ -1224,6 +1224,65 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("STYLE",umba::command_line::OptionType::optString)
+               || opt.isOption("arg-list-value-style")
+               || opt.setDescription("Set default value style for <arg-list> tag values. Available values are `normal`, `bold`, `italic`, `bold-italic`, `italic-bold` and `backtick`"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.argListOptions.setListValueStyle(strVal))
+            {
+                LOG_ERR<<"Setting value style for <arg-list> tag failed, invalid argument: '" << strVal << "' (--arg-list-value-style)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("TYPE",umba::command_line::OptionType::optString)
+               || opt.isOption("arg-list-type")
+               || opt.setDescription("Set default type for <arg-list> tag. Available values are `table` and `text`"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.argListOptions.setListType(strVal))
+            {
+                LOG_ERR<<"Setting type for <arg-list> tag failed, invalid argument: '" << strVal << "' (--arg-list-type)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("TITLE",umba::command_line::OptionType::optString)
+               || opt.isOption("arg-list-title")
+               || opt.setDescription("Set default titles for <arg-list> tag in table mode."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.argListOptions.setListTitle(strVal, true /* bReplaceCommas запятые заменяем на символ пайпа */ );
+
+            return 0;
+        }
+
         else if ( opt.setParam("DPI",umba::command_line::OptionType::optString)
                || opt.isOption("graphviz-dpi")
                || opt.isOption("gviz-dpi")

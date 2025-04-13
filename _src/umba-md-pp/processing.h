@@ -36,6 +36,7 @@
 #include "md_pp_html_csv.h"
 #include "md_pp_html_graph.h"
 #include "md_pp_html_puml.h"
+#include "md_pp_html_arg_list.h"
 //
 #include <stack>
 #include <string>
@@ -77,6 +78,12 @@ TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
                             return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
                         };
     m[MdPpTag::puml ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+    m[MdPpTag::argList ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
                         {
                             UMBA_USED(appCfg);
                             UMBA_USED(tagType);
@@ -133,6 +140,10 @@ TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
                         {
                              return umba::md::processDiagramLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
+    m[MdPpTag::argList ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
     return m;
 }
 
@@ -172,6 +183,7 @@ TagLinesCommentStartMap makeTagLinesCommentStartMap()
     TagLinesCommentStartMap m;
     m[MdPpTag::graph] = "//";
     m[MdPpTag::puml ] = "'";
+    m[MdPpTag::argList ] = "'";
     return m;
 }
 
@@ -321,7 +333,10 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
                         umba::html::HtmlTag mdHtmlTagEnd;
                         MdPpTag foundEndTagType = MdPpTag::invalid;
                         line = lines[idx];
-                        // auto it2 = umba::md::tryParseLineToHtmlTag(mdHtmlTagEnd, line.begin(), line.end(), foundEndTagType);
+                        if (isSingleLineComment(line))
+                            continue;
+                        // auto it2 = 
+                        umba::md::tryParseLineToHtmlTag(mdHtmlTagEnd, line.begin(), line.end(), foundEndTagType);
                         if (foundMdPpTagType==foundEndTagType && mdHtmlTagEnd.isCloseTag())
                             break;
                         tagLines.emplace_back(lines[idx]);

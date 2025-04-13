@@ -28,3 +28,5 @@ setext - https://en.wikipedia.org/wiki/Setext
 textile - https://en.wikipedia.org/wiki/Textile_(markup_language)
 reStructuredText - https://en.wikipedia.org/wiki/ReStructuredText
 
+
+Markdown Editor 2 - https://marketplace.visualstudio.com/items?itemName=MadsKristensen.MarkdownEditor2

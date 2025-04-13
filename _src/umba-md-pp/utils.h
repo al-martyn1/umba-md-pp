@@ -4,12 +4,16 @@
 
 #pragma once
 
+//
+#include "enums.h"
 
+//
 #include "umba/filename.h"
 #include "umba/filesys.h"
 #include "umba/string_plus.h"
 #include "umba/transliteration.h"
 //
+
 #include "tr/tr.h"
 //
 #include "log.h"
@@ -20,6 +24,89 @@
 #include <algorithm>
 #include <iterator>
 
+
+//----------------------------------------------------------------------------
+inline
+bool isMdBackticked(const std::string &str)
+{
+    return str.size()>1 && str.front()=='`' && str.back()=='`';
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isMdBold(const std::string &str)
+{
+    return str.size()>3 && str[0]=='*' && str[1]=='*' && str[str.size()-1]=='*' && str[str.size()-2]=='*';
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isMdItalic(const std::string &str)
+{
+    return str.size()>1 && str.front()=='*' && str.back()=='*';
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isMdBoldItalic(const std::string &str)
+{
+    return str.size()>5 && str[0]=='*' && str[1]=='*' && str[2]=='*' && str[str.size()-1]=='*' && str[str.size()-2]=='*' && str[str.size()-3]=='*';
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isMdSimpleDecorated(const std::string &str)
+{
+    return isMdBackticked(str) || isMdBold(str) || isMdItalic(str) || isMdBoldItalic(str);
+}
+
+//----------------------------------------------------------------------------
+inline
+char mdGetSimpleDecorationChar(ArgListValueStyle valueStyle)
+{
+    switch(valueStyle)
+    {
+        case ArgListValueStyle::unknown   : return 0;
+        case ArgListValueStyle::normal    : return 0;
+        case ArgListValueStyle::bold      : return '*';
+        case ArgListValueStyle::italic    : return '*';
+        case ArgListValueStyle::boldItalic: return '*';
+        case ArgListValueStyle::backtick  : return '`';
+        //case ArgListValueStyle::: return std::string("") + str + std::string("");
+        default: return 0;
+    }
+}
+
+//----------------------------------------------------------------------------
+//! Если декорация есть, возвращает неизменную строку, иначе - добавляет заданную декорацию
+inline
+std::string mdSimpleDecorate(const std::string &str, ArgListValueStyle valueStyle)
+{
+    // Bold - **
+    // Italic - *
+    // Bold and Italic - ***
+
+    // normal
+    // bold
+    // italic
+    // boldItalic,italicBold
+    // backtick
+
+    if (isMdSimpleDecorated(str))
+        return str;
+
+    switch(valueStyle)
+    {
+        case ArgListValueStyle::unknown   : return str;
+        case ArgListValueStyle::normal    : return str;
+        case ArgListValueStyle::bold      : return std::string("**" ) + str + std::string("**");
+        case ArgListValueStyle::italic    : return std::string("*"  ) + str + std::string("*" );
+        case ArgListValueStyle::boldItalic: return std::string("***") + str + std::string("***");
+        case ArgListValueStyle::backtick  : return std::string("`"  ) + str + std::string("`");
+        //case ArgListValueStyle::: return std::string("") + str + std::string("");
+        default: return str;
+    }
+}
 
 //----------------------------------------------------------------------------
 template<typename StringType> inline
