@@ -100,29 +100,59 @@ std::string argListEscape(const std::string &str, char chEscape)
 }
 
 //----------------------------------------------------------------------------
-// ArgListType                 argListType = ArgListType::unknown;
+inline
+std::string argListDecorateValueSingleItem(std::string str, ArgListValueStyle valueStyle, ArgListType argListType)
+{
+    umba::string_plus::trim(str);
+    if (str.empty())
+        return str;
+
+    if (!isMdSimpleDecorated(str))
+    {
+        if (argListType==ArgListType::table)
+            str = argListEscape(str, '|');
+        else // if (argListType==ArgListType::text)
+            str = argListEscape(str, '*');
+    }
+
+    return mdSimpleDecorate(str, valueStyle);
+
+}
+//----------------------------------------------------------------------------
+
+
 inline
 std::string argListDecorateValue(std::string str, ArgListValueStyle valueStyle, ArgListType argListType)
 {
+    umba::string_plus::trim(str);
+    if (str==",")
+        return argListDecorateValueSingleItem(str, valueStyle, argListType);
+
     auto strVec = marty_cpp::splitToLinesSimple(str, false, ',');
 
     std::vector<std::string> resVec;
 
     for(auto v: strVec)
     {
-        umba::string_plus::trim(v);
-        if (v.empty())
+        auto decorated = argListDecorateValueSingleItem(v, valueStyle, argListType);
+        if (decorated.empty())
             continue;
 
-        if (!isMdSimpleDecorated(v))
-        {
-            if (argListType==ArgListType::table)
-                v = argListEscape(v, '|');
-            else // if (argListType==ArgListType::text)
-                v = argListEscape(v, '*');
-        }
-        
-        resVec.emplace_back(mdSimpleDecorate(v, valueStyle));
+        resVec.emplace_back(decorated);
+
+        // umba::string_plus::trim(v);
+        // if (v.empty())
+        //     continue;
+        //  
+        // if (!isMdSimpleDecorated(v))
+        // {
+        //     if (argListType==ArgListType::table)
+        //         v = argListEscape(v, '|');
+        //     else // if (argListType==ArgListType::text)
+        //         v = argListEscape(v, '*');
+        // }
+        //  
+        // resVec.emplace_back(mdSimpleDecorate(v, valueStyle));
     }
     
     std::string resStr; resStr.reserve(str.size());

@@ -4,4 +4,4 @@ bold
 italic
 boldItalic,italicBold
 backtick
-backtickQuote,backtickQuotes
+backtickQuote,backtickQuoted,backtickQuotes
