@@ -1202,14 +1202,16 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ArgListType, std::map, 1 )
 //#!ArgListValueStyle
 enum class ArgListValueStyle : std::uint32_t
 {
-    invalid      = (std::uint32_t)(-1) /*!<  */,
-    unknown      = (std::uint32_t)(-1) /*!<  */,
-    normal       = 0x0000 /*!<  */,
-    bold         = 0x0001 /*!<  */,
-    italic       = 0x0002 /*!<  */,
-    boldItalic   = 0x0003 /*!<  */,
-    italicBold   = 0x0003 /*!<  */,
-    backtick     = 0x0004 /*!<  */
+    invalid          = (std::uint32_t)(-1) /*!<  */,
+    unknown          = (std::uint32_t)(-1) /*!<  */,
+    normal           = 0x0000 /*!<  */,
+    bold             = 0x0001 /*!<  */,
+    italic           = 0x0002 /*!<  */,
+    boldItalic       = 0x0003 /*!<  */,
+    italicBold       = 0x0003 /*!<  */,
+    backtick         = 0x0004 /*!<  */,
+    backtickQuote    = 0x0005 /*!<  */,
+    backtickQuotes   = 0x0005 /*!<  */
 
 }; // enum 
 //#!
@@ -1217,23 +1219,26 @@ enum class ArgListValueStyle : std::uint32_t
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(ArgListValueStyle)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ArgListValueStyle, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::invalid      , "invalid"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::boldItalic   , "bold-italic" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::normal       , "normal"      );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::bold         , "bold"        );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::italic       , "italic"      );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::backtick     , "backtick"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::invalid         , "invalid"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::boldItalic      , "bold-italic"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::normal          , "normal"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::bold            , "bold"           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::italic          , "italic"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::backtick        , "backtick"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ArgListValueStyle::backtickQuote   , "backtick-quote" );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ArgListValueStyle, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ArgListValueStyle, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::invalid      , "invalid"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::invalid      , "unknown"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::boldItalic   , "bold-italic" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::boldItalic   , "italic-bold" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::normal       , "normal"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::bold         , "bold"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::italic       , "italic"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtick     , "backtick"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::invalid         , "invalid"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::invalid         , "unknown"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::boldItalic      , "bold-italic"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::boldItalic      , "italic-bold"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::normal          , "normal"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::bold            , "bold"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::italic          , "italic"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtick        , "backtick"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtickQuote   , "backtick-quote"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtickQuote   , "backtick-quotes" );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ArgListValueStyle, std::map, 1 )
 
 

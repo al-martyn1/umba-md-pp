@@ -217,9 +217,19 @@
 --add-lang-file-extentions=CMake:CMakeLists.txt,.cmake
 --add-lang-cut-prefix=CMake:#//!
 --add-lang-cut-prefix=CMake:#//$
---add-lang-separator-prefix=C++:###
---add-lang-separator-prefix=C++:#---
+--add-lang-separator-prefix=CMake:###
+--add-lang-separator-prefix=CMake:#---
 # No blocks support in CMake
 # --set-lang-block-chars=
 --set-lang-listing-tag=CMake:cmake
+
+# Txt - plain text as code
+--add-lang-file-extentions=Txt:.txt,.log
+--add-lang-cut-prefix=Txt://#!
+--add-lang-cut-prefix=Txt://#$
+--add-lang-separator-prefix=Txt://---
+--add-lang-separator-prefix=Txt:---
+# No blocks support in CMake
+# --set-lang-block-chars=Txt:
+--set-lang-listing-tag=Txt:txt
 

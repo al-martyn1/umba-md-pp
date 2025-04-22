@@ -66,12 +66,13 @@ char mdGetSimpleDecorationChar(ArgListValueStyle valueStyle)
 {
     switch(valueStyle)
     {
-        case ArgListValueStyle::unknown   : return 0;
-        case ArgListValueStyle::normal    : return 0;
-        case ArgListValueStyle::bold      : return '*';
-        case ArgListValueStyle::italic    : return '*';
-        case ArgListValueStyle::boldItalic: return '*';
-        case ArgListValueStyle::backtick  : return '`';
+        case ArgListValueStyle::unknown       : return 0;
+        case ArgListValueStyle::normal        : return 0;
+        case ArgListValueStyle::bold          : return '*';
+        case ArgListValueStyle::italic        : return '*';
+        case ArgListValueStyle::boldItalic    : return '*';
+        case ArgListValueStyle::backtick      : return '`';
+        case ArgListValueStyle::backtickQuotes: return '`';
         //case ArgListValueStyle::: return std::string("") + str + std::string("");
         default: return 0;
     }
@@ -97,12 +98,13 @@ std::string mdSimpleDecorate(const std::string &str, ArgListValueStyle valueStyl
 
     switch(valueStyle)
     {
-        case ArgListValueStyle::unknown   : return str;
-        case ArgListValueStyle::normal    : return str;
-        case ArgListValueStyle::bold      : return std::string("**" ) + str + std::string("**");
-        case ArgListValueStyle::italic    : return std::string("*"  ) + str + std::string("*" );
-        case ArgListValueStyle::boldItalic: return std::string("***") + str + std::string("***");
-        case ArgListValueStyle::backtick  : return std::string("`"  ) + str + std::string("`");
+        case ArgListValueStyle::unknown       : return str;
+        case ArgListValueStyle::normal        : return str;
+        case ArgListValueStyle::bold          : return std::string("**" ) + str + std::string("**");
+        case ArgListValueStyle::italic        : return std::string("*"  ) + str + std::string("*" );
+        case ArgListValueStyle::boldItalic    : return std::string("***") + str + std::string("***");
+        case ArgListValueStyle::backtick      : return std::string("`"  ) + str + std::string("`");
+        case ArgListValueStyle::backtickQuotes: return std::string("`'"  ) + str + std::string("'`");
         //case ArgListValueStyle::: return std::string("") + str + std::string("");
         default: return str;
     }
