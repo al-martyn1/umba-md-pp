@@ -918,16 +918,18 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetTagType, std::map, 1 )
 //#!MdPpTag
 enum class MdPpTag : std::uint32_t
 {
-    invalid    = (std::uint32_t)(-1) /*!<  */,
-    unknown    = (std::uint32_t)(-1) /*!<  */,
-    graph      = 0x0000 /*!<  */,
-    begin      = 0x0000 /*!<  */,
-    puml       = 0x0001 /*!<  */,
-    plantuml   = 0x0001 /*!<  */,
-    diagram    = 0x0001 /*!<  */,
-    csv        = 0x0002 /*!<  */,
-    argList    = 0x0003 /*!<  */,
-    end        = 0x0004 /*!<  */
+    invalid     = (std::uint32_t)(-1) /*!<  */,
+    unknown     = (std::uint32_t)(-1) /*!<  */,
+    graph       = 0x0000 /*!<  */,
+    begin       = 0x0000 /*!<  */,
+    puml        = 0x0001 /*!<  */,
+    plantuml    = 0x0001 /*!<  */,
+    diagram     = 0x0001 /*!<  */,
+    csv         = 0x0002 /*!<  */,
+    argList     = 0x0003 /*!<  */,
+    valList     = 0x0004 /*!<  */,
+    valueList   = 0x0004 /*!<  */,
+    end         = 0x0005 /*!<  */
 
 }; // enum 
 //#!
@@ -940,20 +942,23 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csv       , "csv"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::puml      , "puml"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::graph     , "graph"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::valList   , "val-list" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::end       , "end"      );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MdPpTag, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "invalid"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "unknown"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList   , "arg-list" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csv       , "csv"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "puml"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "plantuml" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "diagram"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "graph"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "begin"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::end       , "end"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "invalid"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "unknown"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList   , "arg-list"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csv       , "csv"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "puml"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "plantuml"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "diagram"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "graph"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "begin"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList   , "val-list"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList   , "value-list" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::end       , "end"        );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MdPpTag, std::map, 1 )
 
 
@@ -1211,6 +1216,7 @@ enum class ArgListValueStyle : std::uint32_t
     italicBold       = 0x0003 /*!<  */,
     backtick         = 0x0004 /*!<  */,
     backtickQuote    = 0x0005 /*!<  */,
+    backtickQuoted   = 0x0005 /*!<  */,
     backtickQuotes   = 0x0005 /*!<  */
 
 }; // enum 
@@ -1237,6 +1243,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ArgListValueStyle, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::bold            , "bold"            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::italic          , "italic"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtick        , "backtick"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtickQuote   , "backtick-quoted" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtickQuote   , "backtick-quote"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtickQuote   , "backtick-quotes" );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ArgListValueStyle, std::map, 1 )

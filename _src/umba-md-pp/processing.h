@@ -89,6 +89,12 @@ TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
                             UMBA_USED(tagType);
                             return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
                         };
+    m[MdPpTag::valList ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
 
     return m;
 }
@@ -144,6 +150,10 @@ TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
                         {
                              return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
+    m[MdPpTag::valList ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processValListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
     return m;
 }
 
@@ -184,6 +194,7 @@ TagLinesCommentStartMap makeTagLinesCommentStartMap()
     m[MdPpTag::graph] = "//";
     m[MdPpTag::puml ] = "'";
     m[MdPpTag::argList ] = "'";
+    m[MdPpTag::valList ] = "'";
     return m;
 }
 

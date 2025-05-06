@@ -169,7 +169,7 @@ std::string argListDecorateValue(std::string str, ArgListValueStyle valueStyle, 
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType>
-void processArgListLines( const AppConfig<FilenameStringType> &appCfg
+void processArgListLinesImpl( ArgListOptions argListOptions
                       , Document &doc // Сюда вставляем метаданные, если читаем из внешнего файла, и они там есть
                       , umba::html::HtmlTag &mdHtmlTag
                       , MdPpTag tagType
@@ -179,8 +179,7 @@ void processArgListLines( const AppConfig<FilenameStringType> &appCfg
                       )
 {
 
-    auto argListOptions = appCfg.argListOptions;
-    updateArgListOptions(appCfg, mdHtmlTag, argListOptions);
+    // auto argListOptions = appCfg.argListOptions;
 
     if (argListOptions.argListType==ArgListType::unknown)
         argListOptions.argListType = ArgListType::table;
@@ -415,7 +414,41 @@ void processArgListLines( const AppConfig<FilenameStringType> &appCfg
     // resLines.emplace_back("![" + mdHtmlTag.getAttrValue("title", "Graph") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
 
 }
+
 //----------------------------------------------------------------------------
+template<typename FilenameStringType>
+void processArgListLines( const AppConfig<FilenameStringType> &appCfg
+                      , Document &doc // Сюда вставляем метаданные, если читаем из внешнего файла, и они там есть
+                      , umba::html::HtmlTag &mdHtmlTag
+                      , MdPpTag tagType
+                      , const FilenameStringType &docFilename
+                      , const std::vector<std::string> &tagLines
+                      , std::vector<std::string> &resLines
+                      )
+{
+    auto argListOptions = appCfg.argListOptions;
+    updateArgListOptions(appCfg, mdHtmlTag, argListOptions);
+    processArgListLinesImpl(argListOptions, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+}
+
+//----------------------------------------------------------------------------
+template<typename FilenameStringType>
+void processValListLines( const AppConfig<FilenameStringType> &appCfg
+                      , Document &doc // Сюда вставляем метаданные, если читаем из внешнего файла, и они там есть
+                      , umba::html::HtmlTag &mdHtmlTag
+                      , MdPpTag tagType
+                      , const FilenameStringType &docFilename
+                      , const std::vector<std::string> &tagLines
+                      , std::vector<std::string> &resLines
+                      )
+{
+    auto argListOptions = appCfg.valListOptions;
+    updateArgListOptions(appCfg, mdHtmlTag, argListOptions);
+    processArgListLinesImpl(argListOptions, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+}
+
+
+
 
 } // namespace md
 } // namespace umba

@@ -1226,7 +1226,7 @@ int operator()( const StringType                                &a           //!
 
         else if ( opt.setParam("STYLE",umba::command_line::OptionType::optString)
                || opt.isOption("arg-list-value-style")
-               || opt.setDescription("Set default value style for <arg-list> tag values. Available values are `normal`, `bold`, `italic`, `bold-italic`, `italic-bold` and `backtick`"))
+               || opt.setDescription("Set default value style for <arg-list> tag values. Available values are `normal`, `bold`, `italic`, `bold-italic`, `italic-bold`, `backtick` and `backtick-quote`"))
         {
             if (argsParser.hasHelpOption) return 0;
 
@@ -1279,6 +1279,65 @@ int operator()( const StringType                                &a           //!
             }
 
             appConfig.argListOptions.setListTitle(strVal, true /* bReplaceCommas запятые заменяем на символ пайпа */ );
+
+            return 0;
+        }
+
+        else if ( opt.setParam("STYLE",umba::command_line::OptionType::optString)
+               || opt.isOption("val-list-value-style")
+               || opt.setDescription("Set default value style for <val-list> tag values. Available values are `normal`, `bold`, `italic`, `bold-italic`, `italic-bold`, `backtick` and `backtick-quote`"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.valListOptions.setListValueStyle(strVal))
+            {
+                LOG_ERR<<"Setting value style for <val-list> tag failed, invalid argument: '" << strVal << "' (--val-list-value-style)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("TYPE",umba::command_line::OptionType::optString)
+               || opt.isOption("val-list-type")
+               || opt.setDescription("Set default type for <val-list> tag. Available values are `table` and `text`"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            if (!appConfig.valListOptions.setListType(strVal))
+            {
+                LOG_ERR<<"Setting type for <val-list> tag failed, invalid argument: '" << strVal << "' (--val-list-type)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("TITLE",umba::command_line::OptionType::optString)
+               || opt.isOption("val-list-title")
+               || opt.setDescription("Set default titles for <val-list> tag in table mode."))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.getParamValue(strVal,errMsg))
+            {
+                LOG_ERR<<errMsg<<"\n";
+                return -1;
+            }
+
+            appConfig.valListOptions.setListTitle(strVal, true /* bReplaceCommas запятые заменяем на символ пайпа */ );
 
             return 0;
         }

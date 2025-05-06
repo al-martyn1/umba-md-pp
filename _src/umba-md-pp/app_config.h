@@ -67,6 +67,7 @@ struct AppConfig
     GraphVizOptions                                       graphVizOptions;
     PlantUmlOptions                                       plantUmlOptions;
     ArgListOptions                                        argListOptions ;
+    ArgListOptions                                        valListOptions ;
     bool                                                  clearGenerationCaches = false;
 
     mutable std::string                                   java;
