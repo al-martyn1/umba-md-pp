@@ -229,7 +229,8 @@
 --add-lang-cut-prefix=Txt://#$
 --add-lang-separator-prefix=Txt://---
 --add-lang-separator-prefix=Txt:---
-# No blocks support in CMake
+# No blocks support in Txt
 # --set-lang-block-chars=Txt:
---set-lang-listing-tag=Txt:txt
+# No lang tag for Txt
+# --set-lang-listing-tag=Txt:txt
 
