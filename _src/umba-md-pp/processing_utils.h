@@ -211,10 +211,11 @@ bool isInsertCommand(std::string line)
     // return (umba::string_plus::starts_with(line, ("#!insert")) || umba::string_plus::starts_with(line, ("#$insert")));
     //return testLineForPreprocessorDirective(line, PreprocessorDirective::insert);
 
-    return umba::TheValue(testLineForPreprocessorDirectiveImplHelper(line))
+    return UMBA_THE_VALUE(testLineForPreprocessorDirectiveImplHelper(line))
                 .oneOf( PreprocessorDirective::insert 
                       , PreprocessorDirective::snippet
                       , PreprocessorDirective::doc    
+                      , PreprocessorDirective::subsection
                       , PreprocessorDirective::quote  
                       , PreprocessorDirective::pre    
                       );

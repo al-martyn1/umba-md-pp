@@ -1928,6 +1928,7 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
     if (!umba::TheValue(pd).oneOf( PreprocessorDirective::insert 
                                  , PreprocessorDirective::snippet
                                  , PreprocessorDirective::doc    
+                                 , PreprocessorDirective::subsection
                                  , PreprocessorDirective::quote  
                                  , PreprocessorDirective::pre    
                                  )
@@ -1944,6 +1945,7 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
             case PreprocessorDirective::snippet: // Снипет - вставляет снипет, если заданы уточняющие/модифицирующие опций - удаляем их, если они там были
             {
                 snippetFlagsOptions.erase(SnippetOptions::doc);
+                snippetFlagsOptions.erase(SnippetOptions::subsection);
                 snippetFlagsOptions.erase(SnippetOptions::quote);
                 snippetFlagsOptions.erase(SnippetOptions::pre);
                 break;
@@ -1957,9 +1959,19 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
                 break;
             }
 
+            case PreprocessorDirective::subsection:
+            {
+                snippetFlagsOptions.erase(SnippetOptions::quote);
+                snippetFlagsOptions.erase(SnippetOptions::pre);
+                snippetFlagsOptions.insert(SnippetOptions::doc);
+                snippetFlagsOptions.insert(SnippetOptions::subsection);
+                break;
+            }
+
             case PreprocessorDirective::quote:
             {
                 snippetFlagsOptions.erase(SnippetOptions::doc);
+                snippetFlagsOptions.erase(SnippetOptions::subsection);
                 snippetFlagsOptions.insert(SnippetOptions::quote);
                 break;
             }
@@ -1967,6 +1979,7 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
             case PreprocessorDirective::pre:
             {
                 snippetFlagsOptions.erase(SnippetOptions::doc);
+                snippetFlagsOptions.erase(SnippetOptions::subsection);
                 snippetFlagsOptions.insert(SnippetOptions::pre);
                 break;
             }
@@ -1980,6 +1993,14 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
         #include "umba/warnings/pop.h"
 
     }; // updateFlagsByDirective
+
+
+    // Если задана опция subsection, автоматом добавляем опцию doc
+    std::unordered_set<SnippetOptions>::const_iterator soIt = snippetFlagsOptions.find(SnippetOptions::subsection);
+    if (soIt!=snippetFlagsOptions.end())
+    {
+        snippetFlagsOptions.insert(SnippetOptions::doc);
+    }
 
     // if (!umba::string_plus::starts_with_and_strip(line, ("#!insert")) && !umba::string_plus::starts_with_and_strip(line, ("#$insert")))
     //     return SnippetOptionsParsingResult::fail;

@@ -1,5 +1,7 @@
 invalid,unknown                    = -1
 
+# Flag ON/OFF options
+
 noLineNo                           = 0x1010 // Do not add line numbers to generated listing
 lineNo                             = 0x1011 // Add line numbers to generated listing
 noTrim,noTrimLeft                  = 0x1020 // Do not trim left inserted code
@@ -33,5 +35,11 @@ quote,quot                         = 0x10C1 // Insert as blockquote
 noPre                              = 0x10D0 // -pre
 pre                                = 0x10D1 // pre itself or for inserted quote lines
 
-#
-raise                              = 0x2011 // Numeric option
+
+# Flag only ON options
+
+subsection,subsec                  = 0x10E1 // Insert document as subsection - adjust section levels to current insertion pos
+
+# Numeric options
+
+raise                              = 0x2011 // Raise section levels in included document up to RISE level
