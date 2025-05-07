@@ -23,5 +23,3 @@ $*$.*
 /tests/test_006/*.txt
 tmp*.txt
 /.set_msvc.bat
-/.set_sln.bat
-/.set_sln_exes.bat
