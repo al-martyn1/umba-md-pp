@@ -383,10 +383,15 @@ int safe_main(int argc, char* argv[])
 
         #endif
 
-        argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test,rc,_generators,conf,_distr_conf,doxy,src,_src,.msvc2019,boost,icons");
+        argsParser.args.push_back("--batch-exclude-dir=_libs,libs,_lib,lib,tests,test,rc,_generators,_enums,conf,_distr_conf,doxy,src,_src,.msvc2019,boost,icons");
         argsParser.args.push_back("--overwrite");
         argsParser.args.push_back("--copy-images");
         argsParser.args.push_back("--batch-scan-recurse="+rootPath);
+        argsParser.args.push_back("--document-language=ru-RU");
+        argsParser.args.push_back("--batch-scan-recurse="+rootPath+"/_libs/marty_format");
+        //argsParser.args.push_back("");
+        //argsParser.args.push_back("");
+        
 
 
         //argsParser.args.push_back("-q");

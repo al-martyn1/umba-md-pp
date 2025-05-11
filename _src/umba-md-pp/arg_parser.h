@@ -931,7 +931,8 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
-            strVal = marty_tr::tr_fix_lang_tag_format(strVal);
+            strVal = findLangTagByString(strVal);
+            strVal = marty_tr::tr_fix_lang_tag_format(strVal, marty_tr::ELangTagFormat::langTag);
             marty_tr::tr_set_def_lang(strVal);
 
             appConfig.addConditionVar("Lang", strVal);
@@ -962,7 +963,8 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
-            strVal = marty_tr::tr_fix_lang_tag_format(strVal);
+            strVal = findLangTagByString(strVal);
+            strVal = marty_tr::tr_fix_lang_tag_format(strVal, marty_tr::ELangTagFormat::langTag);
             marty_tr::tr_set_def_lang(strVal);
 
             appConfig.addConditionVar("Lang", strVal);
