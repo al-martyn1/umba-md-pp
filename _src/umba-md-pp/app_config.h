@@ -107,7 +107,7 @@ struct AppConfig
 
     std::size_t                                           restrictPathRaise = 0;
 
-    std::string                                           documentDefaultLanguage;
+    std::string                                           documentDefaultLanguage = "en-US";
     std::string                                           documentForceLanguage;
 
     std::vector<std::string>                              mdppExtentions;
@@ -142,7 +142,10 @@ struct AppConfig
     bool                                                  dontLookupForGraphviz = false;
 
 
-
+    AppConfig()
+    {
+        addConditionVar("Lang", "en-US");
+    }
 
     void doClearGenerationCaches() const
     {

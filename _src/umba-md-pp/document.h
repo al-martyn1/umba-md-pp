@@ -372,7 +372,7 @@ struct Document
         }
 
         std::string lang;
-        if (getMetaTagValueAsSingleLineText(appCfg, "lanuage", ",", lang))
+        if (getMetaTagValueAsSingleLineText(appCfg, "language", ",", lang))
         {
             return lang;
         }

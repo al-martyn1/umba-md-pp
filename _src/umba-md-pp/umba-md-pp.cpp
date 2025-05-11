@@ -36,6 +36,7 @@
 
 //
 #include "marty_utf/utf.h"
+#include "marty_tr/marty_tr.h"
 
 //
 #include "encoding/encoding.h"
@@ -673,6 +674,7 @@ int safe_main(int argc, char* argv[])
             std::string resText     = processMdFile(appConfigForFile, doc, inputFileText, curFile);
             std::string docTitle    = doc.getDocumentTitleAny();
             std::string docLanguage = doc.getDocumentLanguage(appConfigForFile);
+            docLanguage = marty_tr::tr_fix_lang_tag_format(docLanguage);
 
 
             if (!appConfigForFile.batchOutputRoot.empty() && appConfigForFile.copyImageFiles)
@@ -733,6 +735,7 @@ int safe_main(int argc, char* argv[])
         std::string langTag = findLangTagByString(commonLang);
         if (langTag.empty())
             langTag = "en";
+        langTag = marty_tr::tr_fix_lang_tag_format(langTag);
 
         std::string pageIndexTitle = marty_tr::tr("title"   , "pages-index", langTag);
         std::string noTitle        = marty_tr::tr("no-title", "pages-index", langTag);

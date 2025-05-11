@@ -931,6 +931,11 @@ int operator()( const StringType                                &a           //!
                 return -1;
             }
 
+            strVal = marty_tr::tr_fix_lang_tag_format(strVal);
+            marty_tr::tr_set_def_lang(strVal);
+
+            appConfig.addConditionVar("Lang", strVal);
+
             appConfig.documentDefaultLanguage = strVal;
             return 0;
         }
@@ -956,6 +961,11 @@ int operator()( const StringType                                &a           //!
                 LOG_ERR<<errMsg<<"\n";
                 return -1;
             }
+
+            strVal = marty_tr::tr_fix_lang_tag_format(strVal);
+            marty_tr::tr_set_def_lang(strVal);
+
+            appConfig.addConditionVar("Lang", strVal);
 
             appConfig.documentForceLanguage = strVal;
             return 0;
