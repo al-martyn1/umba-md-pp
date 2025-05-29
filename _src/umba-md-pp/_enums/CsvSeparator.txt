@@ -1,0 +1,13 @@
+// CSV separator sign enumeration
+
+invalid,unknown=-1 //!
+
+none   = 0         //!
+
+auto,detect        // Autodetect CSV field separator
+comma
+semicolon
+colon
+hash,number
+verticalBar,bar
+tab

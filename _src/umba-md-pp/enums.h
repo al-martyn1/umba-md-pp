@@ -65,17 +65,16 @@ MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(SnippetOptions)
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::snippetOptions     , "SnippetOptions"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::invalid            , "Invalid"          );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFilename         , "NoFilename"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::quote              , "Quote"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noLineNo           , "NoLineNo"         );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFilename         , "NoFilename"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::lineNo             , "LineNo"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noTag              , "NoTag"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noTrim             , "NoTrim"           );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noPath             , "NoPath"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::trim               , "Trim"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::tag                , "Tag"              );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::filename           , "Filename"         );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noQuote            , "NoQuote"          );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noPath             , "NoPath"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::path               , "Path"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "NoFilenameLineNo" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFail             , "NoFail"           );
@@ -83,11 +82,12 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noKeepCutTags      , "NoKeepCutTags"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::keepCutTags        , "KeepCutTags"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "FilenameLineNo"   );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "NoSnippetOptions" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noTrimArround      , "NoTrimArround"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "NoSnippetOptions" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::trimArround        , "TrimArround"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noDoc              , "NoDoc"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::doc                , "Doc"              );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noQuote            , "NoQuote"          );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noPre              , "NoPre"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::pre                , "Pre"              );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::subsection         , "Subsection"       );
@@ -100,14 +100,14 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::snippetOptions     , "snippetoptions"      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::invalid            , "invalid"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::invalid            , "unknown"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "no-filename"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "no_filename"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "nofilename"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::quote              , "quote"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::quote              , "quot"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "no-line-no"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "no_line_no"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "nolineno"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "no-filename"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "no_filename"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "nofilename"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lineNo             , "line-no"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lineNo             , "line_no"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lineNo             , "lineno"              );
@@ -123,9 +123,6 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no_trim"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "notrim"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no-trim-left"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "no-path"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "no_path"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "nopath"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trim"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trim-left"           );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trim_left"           );
@@ -135,12 +132,9 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "lang-tag"            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "lang_tag"            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filename           , "filename"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquot"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quote"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quote"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quot"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquote"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quot"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "no-path"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "no_path"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "nopath"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::path               , "path"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "no-filename-line-no" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "no_filename_line_no" );
@@ -158,12 +152,12 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "filename-line-no"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "filename_line_no"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "filenamelineno"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "no-snippet-options"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "no_snippet_options"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "nosnippetoptions"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrimArround      , "no-trim-arround"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrimArround      , "no_trim_arround"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrimArround      , "notrimarround"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "no-snippet-options"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "no_snippet_options"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "nosnippetoptions"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trim-arround"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trim_arround"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trimarround"         );
@@ -171,6 +165,12 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "no_doc"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "nodoc"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::doc                , "doc"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquot"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quote"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quote"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quot"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquote"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quot"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no-pre"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no_pre"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "nopre"               );
@@ -336,8 +336,9 @@ MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(ProcessingOptions)
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::generateSectionId             , "GenerateSectionId"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::invalid                       , "Invalid"                           );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "NoGenerateToc"                     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noNumericSections             , "NoNumericSections"                 );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "NoGenerateToc"                     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTitle                       , "NoTitle"                           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::generateToc                   , "GenerateToc"                       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::numericSections               , "NumericSections"                   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noGenerateSectionId           , "NoGenerateSectionId"               );
@@ -345,24 +346,23 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::strictInsert                  , "StrictInsert"                      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noMetaData                    , "NoMetaData"                        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::metaData                      , "MetaData"                          );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "ForceInsertMeta"                   );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTitle                       , "NoTitle"                           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "NoForceInsertMeta"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::title                         , "Title"                             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "NoParseGithubAlerts"               );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "NoMetaDataSubst"                   );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "NoDocumentMetaTitle"               );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts             , "ParseGithubAlerts"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTransliterateGeneratedFilenames , "NoTransliterateGeneratedFilenames" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noAutoUrl                     , "NoAutoUrl"                         );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "TransliterateGeneratedFilenames"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noInsertMeta                  , "NoInsertMeta"                      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "TransliterateGeneratedFilenames"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::todo                          , "Todo"                              );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::documentMetaTitle             , "DocumentMetaTitle"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "InsertMeta"                        );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "NoForceInsertMeta"                 );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "ForceInsertMeta"                   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "NoMetaDataSubst"                   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "NoDocumentMetaTitle"               );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::metaDataSubst                 , "MetaDataSubst"                     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::autoUrl                       , "AutoUrl"                           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::noTodo                        , "NoTodo"                            );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( ProcessingOptions::todo                          , "Todo"                              );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
@@ -371,12 +371,15 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateSectionId             , "generatesectionid"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::invalid                       , "invalid"                              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::invalid                       , "unknown"                              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "no-generate-toc"                      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "no_generate_toc"                      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "nogeneratetoc"                        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noNumericSections             , "no-numeric-sections"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noNumericSections             , "no_numeric_sections"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noNumericSections             , "nonumericsections"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "no-generate-toc"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "no_generate_toc"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noGenerateToc                 , "nogeneratetoc"                        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle                       , "no-title"                             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle                       , "no_title"                             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle                       , "notitle"                              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc                   , "generate-toc"                         );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc                   , "generate_toc"                         );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::generateToc                   , "generatetoc"                          );
@@ -398,12 +401,9 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData                      , "meta-data"                            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData                      , "meta_data"                            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaData                      , "metadata"                             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force-insert-meta"                    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force_insert_meta"                    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "forceinsertmeta"                      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle                       , "no-title"                             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle                       , "no_title"                             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTitle                       , "notitle"                              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "no-force-insert-meta"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "no_force_insert_meta"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "noforceinsertmeta"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::title                         , "title"                                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "no-parse-github-alerts"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "no_convert_github_alerts"             );
@@ -411,12 +411,6 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "noparsegithubalerts"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "no-convert-github-alerts"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noParseGithubAlerts           , "noconvertgithubalerts"                );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "no-meta-data-subst"                   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "no_meta_data_subst"                   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "nometadatasubst"                      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "no-document-meta-title"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "no_document_meta_title"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "nodocumentmetatitle"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts             , "convert_github_alerts"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts             , "convertgithubalerts"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::parseGithubAlerts             , "parse-github-alerts"                  );
@@ -429,21 +423,28 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noAutoUrl                     , "no-auto-url"                          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noAutoUrl                     , "no_auto_url"                          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noAutoUrl                     , "noautourl"                            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterate-generated-filenames"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterate_generated_filenames"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterategeneratedfilenames"      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noInsertMeta                  , "no-insert-meta"                       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noInsertMeta                  , "no_insert_meta"                       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noInsertMeta                  , "noinsertmeta"                         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterate-generated-filenames"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterate_generated_filenames"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::transliterateGeneratedFilenames , "transliterategeneratedfilenames"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::todo                          , "todo"                                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::documentMetaTitle             , "document-meta-title"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::documentMetaTitle             , "document_meta_title"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::documentMetaTitle             , "documentmetatitle"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "insert-meta"                          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "insert_meta"                          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::insertMeta                    , "insertmeta"                           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "no-force-insert-meta"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "no_force_insert_meta"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noForceInsertMeta             , "noforceinsertmeta"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force-insert-meta"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "force_insert_meta"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::forceInsertMeta               , "forceinsertmeta"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "no-meta-data-subst"                   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "no_meta_data_subst"                   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noMetaDataSubst               , "nometadatasubst"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "no-document-meta-title"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "no_document_meta_title"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noDocumentMetaTitle           , "nodocumentmetatitle"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaDataSubst                 , "meta-data-subst"                      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaDataSubst                 , "meta_data_subst"                      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::metaDataSubst                 , "metadatasubst"                        );
@@ -453,7 +454,6 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ProcessingOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTodo                        , "no-todo"                              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTodo                        , "no_todo"                              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::noTodo                        , "notodo"                               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ProcessingOptions::todo                          , "todo"                                 );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ProcessingOptions, std::map, 1 )
 
 
@@ -517,13 +517,13 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::headerCommand   , "HeaderCommand" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::documentEnd     , "DocumentEnd"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingStart    , "ListingStart"  );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "MetaEnd"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingLine     , "ListingLine"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::listingEnd      , "ListingEnd"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::tocCommand      , "TocCommand"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaCommand     , "MetaCommand"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaLine        , "MetaLine"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaStart       , "MetaStart"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "MetaEnd"       );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( LineHandlerEvent, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
@@ -544,9 +544,6 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingStart    , "listing-start"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingStart    , "listing_start"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingStart    , "listingstart"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "meta-end"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "meta_end"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "metaend"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingLine     , "listing-line"   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingLine     , "listing_line"   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::listingLine     , "listingline"    );
@@ -565,6 +562,9 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaStart       , "meta-start"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaStart       , "meta_start"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaStart       , "metastart"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "meta-end"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "meta_end"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "metaend"        );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( LineHandlerEvent, std::map, 1 )
 
 
@@ -631,12 +631,12 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MetaTagType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textFirst         , "TextFirst"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::textReplace       , "TextReplace"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::text              , "Text"            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::commaUniqueList   , "CommaUniqueList" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::rootOnly          , "RootOnly"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::list              , "List"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::set               , "Set"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::commaSet          , "CommaSet"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::uniqueList        , "UniqueList"      );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MetaTagType::commaUniqueList   , "CommaUniqueList" );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MetaTagType, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
@@ -658,6 +658,12 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text              , "text"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text              , "text-merge"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::text              , "text_merge"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "unique-comma-list" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "comma-unique-list" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "comma_unique_list" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "unique_comma_list" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "commauniquelist"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "uniquecommalist"   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::rootOnly          , "root-only"         );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::rootOnly          , "root_only"         );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::rootOnly          , "rootonly"          );
@@ -669,12 +675,6 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MetaTagType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::uniqueList        , "unique-list"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::uniqueList        , "unique_list"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::uniqueList        , "uniquelist"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "unique-comma-list" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "comma-unique-list" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "comma_unique_list" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "unique_comma_list" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "commauniquelist"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MetaTagType::commaUniqueList   , "uniquecommalist"   );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MetaTagType, std::map, 1 )
 
 
@@ -770,9 +770,9 @@ enum class PreprocessorDirective : std::uint32_t
     toc                  = 0x0006 /*!<  */,
     meta                 = 0x0007 /*!<  */,
     set                  = 0x0008 /*!<  */,
-    _switch              = 0x0009 /*!<  */,
-    _case                = 0x000A /*!<  */,
-    _default             = 0x000B /*!<  */,
+    switch_              = 0x0009 /*!<  */,
+    case_                = 0x000A /*!<  */,
+    default_             = 0x000B /*!<  */,
     endswitch            = 0x000C /*!<  */,
     endSwitch            = 0x000C /*!<  */,
     caseFallthrough      = 0x000D /*!<  */,
@@ -780,7 +780,7 @@ enum class PreprocessorDirective : std::uint32_t
     caseFallthroughAll   = 0x000E /*!<  */,
     caseFtAll            = 0x000E /*!<  */,
     detailing            = 0x000F /*!<  */,
-    _break               = 0x0010 /*!<  */,
+    break_               = 0x0010 /*!<  */,
     enddetailing         = 0x0011 /*!<  */,
     endDetailing         = 0x0011 /*!<  */,
     condIf               = 0x0012 /*!<  */,
@@ -799,22 +799,22 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::invalid              , "Invalid"                  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::pre                  , "Pre"                      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::snippet              , "Snippet"                  );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::_break               , "Break"                    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::toc                  , "Toc"                      );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condEndif            , "CondEndif"                );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::doc                  , "Doc"                      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::subsection           , "Subsection"               );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::quote                , "Quote"                    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condElse             , "CondElse"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::meta                 , "Meta"                     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::set                  , "Set"                      );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::_switch              , "Switch"                   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::switch_              , "Switch"                   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::case_                , "Case"                     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::default_             , "Default"                  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::endswitch            , "Endswitch"                );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::_case                , "Case"                     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::_default             , "Default"                  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condEndif            , "CondEndif"                );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::caseFallthrough      , "Case___Fallthrough"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::caseFallthroughAll   , "Case___Fallthrough___All" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::detailing            , "Detailing"                );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::break_               , "Break"                    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::enddetailing         , "Enddetailing"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condIf               , "CondIf"                   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condElif             , "CondElif"                 );
@@ -827,11 +827,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::pre                  , "pre"                        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::snippet              , "snippet"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::snippet              , "code"                       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::_break               , "break"                      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::toc                  , "toc"                        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif            , "cond-endif"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif            , "cond_endif"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif            , "condendif"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::doc                  , "doc"                        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::subsection           , "subsection"                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::subsection           , "subsec"                     );
@@ -842,12 +838,15 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElse             , "condelse"                   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::meta                 , "meta"                       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::set                  , "set"                        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::_switch              , "switch"                     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::switch_              , "switch"                     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::case_                , "case"                       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::default_             , "default"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::endswitch            , "endswitch"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::endswitch            , "end-switch"                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::endswitch            , "end_switch"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::_case                , "case"                       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::_default             , "default"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif            , "cond-endif"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif            , "cond_endif"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condEndif            , "condendif"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::caseFallthrough      , "case---fallthrough"         );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::caseFallthrough      , "case____fallthrough"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::caseFallthrough      , "case___fallthrough"         );
@@ -861,6 +860,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::caseFallthroughAll   , "case___fallthrough___all"   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::caseFallthroughAll   , "case____ft____all"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::detailing            , "detailing"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::break_               , "break"                      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::enddetailing         , "enddetailing"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::enddetailing         , "end-detailing"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::enddetailing         , "end_detailing"              );
@@ -935,7 +935,7 @@ enum class MdPpTag : std::uint32_t
     puml        = 0x0001 /*!<  */,
     plantuml    = 0x0001 /*!<  */,
     diagram     = 0x0001 /*!<  */,
-    csv         = 0x0002 /*!<  */,
+    csvTable    = 0x0002 /*!<  */,
     argList     = 0x0003 /*!<  */,
     valList     = 0x0004 /*!<  */,
     valueList   = 0x0004 /*!<  */,
@@ -947,28 +947,28 @@ enum class MdPpTag : std::uint32_t
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(MdPpTag)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::invalid   , "invalid"  );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::argList   , "arg-list" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csv       , "csv"      );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::puml      , "puml"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::graph     , "graph"    );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::valList   , "val-list" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::end       , "end"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::invalid    , "invalid"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::argList    , "arg-list"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::puml       , "puml"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::graph      , "graph"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csvTable   , "csv-table" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::valList    , "val-list"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::end        , "end"       );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MdPpTag, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "invalid"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid   , "unknown"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList   , "arg-list"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csv       , "csv"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "puml"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "plantuml"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml      , "diagram"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "graph"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph     , "begin"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList   , "val-list"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList   , "value-list" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::end       , "end"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid    , "invalid"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid    , "unknown"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList    , "arg-list"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml       , "puml"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml       , "plantuml"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml       , "diagram"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph      , "graph"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph      , "begin"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csvTable   , "csv-table"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList    , "val-list"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList    , "value-list" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::end        , "end"        );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MdPpTag, std::map, 1 )
 
 
@@ -1046,12 +1046,12 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( GraphType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::mingle     , "mingle"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::dijkstra   , "dijkstra" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::bcomps     , "bcomps"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::sccmap     , "sccmap"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::gvmap      , "gvmap"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::twopi      , "twopi"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::ccomps     , "ccomps"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::cluster    , "cluster"  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::gvpack     , "gvpack"   );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::sccmap     , "sccmap"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::neato      , "neato"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( GraphType::fdp        , "fdp"      );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( GraphType, std::map, 1 )
@@ -1065,12 +1065,12 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( GraphType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::mingle     , "mingle"   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::dijkstra   , "dijkstra" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::bcomps     , "bcomps"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::sccmap     , "sccmap"   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::gvmap      , "gvmap"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::twopi      , "twopi"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::ccomps     , "ccomps"   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::cluster    , "cluster"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::gvpack     , "gvpack"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::sccmap     , "sccmap"   );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::neato      , "neato"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( GraphType::fdp        , "fdp"      );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( GraphType, std::map, 1 )
@@ -1104,9 +1104,9 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PlantUmlTargetFormat, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::png       , "png"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::eps       , "eps"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::svg       , "svg"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::pdf       , "pdf"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::xmi       , "xmi"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::vdx       , "vdx"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::pdf       , "pdf"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::html      , "html"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::txt       , "txt"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlTargetFormat::utxt      , "utxt"    );
@@ -1120,9 +1120,9 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PlantUmlTargetFormat, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::png       , "png"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::eps       , "eps"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::svg       , "svg"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::pdf       , "pdf"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::xmi       , "xmi"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::vdx       , "vdx"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::pdf       , "pdf"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::html      , "html"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::txt       , "txt"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlTargetFormat::utxt      , "utxt"    );
@@ -1162,11 +1162,11 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PlantUmlDiagramType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::ebnf         , "ebnf"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::chronology   , "chronology" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::mindmap      , "mindmap"    );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::jcckit       , "jcckit"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::wbs          , "wbs"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::json         , "json"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::yaml         , "yaml"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::ditaa        , "ditaa"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PlantUmlDiagramType::jcckit       , "jcckit"     );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( PlantUmlDiagramType, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PlantUmlDiagramType, std::map, 1 )
@@ -1179,11 +1179,11 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PlantUmlDiagramType, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::ebnf         , "ebnf"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::chronology   , "chronology" );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::mindmap      , "mindmap"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::jcckit       , "jcckit"     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::wbs          , "wbs"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::json         , "json"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::yaml         , "yaml"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::ditaa        , "ditaa"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PlantUmlDiagramType::jcckit       , "jcckit"     );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PlantUmlDiagramType, std::map, 1 )
 
 
@@ -1257,5 +1257,175 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( ArgListValueStyle, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtickQuote   , "backtick-quote"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( ArgListValueStyle::backtickQuote   , "backtick-quotes" );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( ArgListValueStyle, std::map, 1 )
+
+
+//#!TableCellAlignment
+enum class TableCellAlignment : std::uint32_t
+{
+    invalid   = (std::uint32_t)(-1) /*!< ! */,
+    unknown   = (std::uint32_t)(-1) /*!< ! */,
+    none      = 0x0000 /*!< ! */,
+    left      = 0x0001 /*!< Align left */,
+    right     = 0x0002 /*!< Align right */,
+    center    = 0x0003 /*!< Align center */,
+    width     = 0x0004 /*!< Align width - align to both sides */
+
+}; // enum 
+//#!
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(TableCellAlignment)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( TableCellAlignment, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TableCellAlignment::left      , "left"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TableCellAlignment::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TableCellAlignment::none      , "none"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TableCellAlignment::right     , "right"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TableCellAlignment::center    , "center"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( TableCellAlignment::width     , "width"   );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( TableCellAlignment, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( TableCellAlignment, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TableCellAlignment::left      , "left"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TableCellAlignment::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TableCellAlignment::invalid   , "unknown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TableCellAlignment::none      , "none"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TableCellAlignment::right     , "right"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TableCellAlignment::center    , "center"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( TableCellAlignment::width     , "width"   );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( TableCellAlignment, std::map, 1 )
+
+
+
+/*! CSV quotation mark enumeration */
+//#!CsvQuot
+enum class CsvQuot : std::uint32_t
+{
+    invalid    = (std::uint32_t)(-1) /*!< ! */,
+    unknown    = (std::uint32_t)(-1) /*!< ! */,
+    none       = 0x0000 /*!< ! */,
+    auto_      = 0x0001 /*!< Autodetect CSV quotation sign */,
+    detect     = 0x0001 /*!< Autodetect CSV quotation sign */,
+    quot       = 0x0002 /*!<  */,
+    apos       = 0x0003 /*!<  */,
+    backtick   = 0x0004 /*!<  */,
+    tick       = 0x0004 /*!<  */
+
+}; // enum 
+//#!
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(CsvQuot)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( CsvQuot, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvQuot::quot       , "quot"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvQuot::invalid    , "invalid"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvQuot::auto_      , "auto"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvQuot::none       , "none"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvQuot::apos       , "apos"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvQuot::backtick   , "backtick" );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( CsvQuot, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( CsvQuot, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvQuot::quot       , "quot"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvQuot::invalid    , "invalid"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvQuot::invalid    , "unknown"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvQuot::auto_      , "auto"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvQuot::auto_      , "detect"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvQuot::none       , "none"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvQuot::apos       , "apos"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvQuot::backtick   , "backtick" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvQuot::backtick   , "tick"     );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( CsvQuot, std::map, 1 )
+
+
+
+/*! CSV separator sign enumeration */
+//#!CsvSeparator
+enum class CsvSeparator : std::uint32_t
+{
+    invalid       = (std::uint32_t)(-1) /*!< ! */,
+    unknown       = (std::uint32_t)(-1) /*!< ! */,
+    none          = 0x0000 /*!< ! */,
+    auto_         = 0x0001 /*!< Autodetect CSV field separator */,
+    detect        = 0x0001 /*!< Autodetect CSV field separator */,
+    comma         = 0x0002 /*!<  */,
+    semicolon     = 0x0003 /*!<  */,
+    colon         = 0x0004 /*!<  */,
+    hash          = 0x0005 /*!<  */,
+    number        = 0x0005 /*!<  */,
+    verticalBar   = 0x0006 /*!<  */,
+    bar           = 0x0006 /*!<  */,
+    tab           = 0x0007 /*!<  */
+
+}; // enum 
+//#!
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(CsvSeparator)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( CsvSeparator, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvSeparator::comma         , "comma"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvSeparator::invalid       , "invalid"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvSeparator::auto_         , "auto"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvSeparator::none          , "none"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvSeparator::semicolon     , "semicolon"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvSeparator::verticalBar   , "vertical-bar" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvSeparator::colon         , "colon"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvSeparator::hash          , "hash"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvSeparator::tab           , "tab"          );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( CsvSeparator, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( CsvSeparator, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::comma         , "comma"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::invalid       , "invalid"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::invalid       , "unknown"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::auto_         , "auto"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::auto_         , "detect"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::none          , "none"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::semicolon     , "semicolon"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::verticalBar   , "vertical-bar" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::verticalBar   , "bar"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::colon         , "colon"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::hash          , "hash"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::hash          , "number"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvSeparator::tab           , "tab"          );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( CsvSeparator, std::map, 1 )
+
+
+//#!CsvTitle
+enum class CsvTitle : std::uint32_t
+{
+    invalid   = (std::uint32_t)(-1) /*!< ! */,
+    unknown   = (std::uint32_t)(-1) /*!< ! */,
+    none      = 0x0000 /*!< ! */,
+    use       = 0x0001 /*!< Use title from CSV file (firts line threated as title). Missing value (none) threated as `use` */,
+    no        = 0x0002 /*!< CSV file has no title, use taken title or empty title */,
+    ignore    = 0x0003 /*!< Ignore title from CSV file and use taken title or empty title */,
+    merge     = 0x0004 /*!< Merge align and title from `title` attr and CSV file (alignment also used from `title` attribute) */,
+    align     = 0x0005 /*!< Merge align only from `title` attr, but use title from CSV file */
+
+}; // enum 
+//#!
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(CsvTitle)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( CsvTitle, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvTitle::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvTitle::ignore    , "ignore"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvTitle::none      , "none"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvTitle::use       , "use"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvTitle::no        , "no"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvTitle::merge     , "merge"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CsvTitle::align     , "align"   );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( CsvTitle, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( CsvTitle, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvTitle::invalid   , "invalid" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvTitle::invalid   , "unknown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvTitle::ignore    , "ignore"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvTitle::none      , "none"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvTitle::use       , "use"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvTitle::no        , "no"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvTitle::merge     , "merge"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CsvTitle::align     , "align"   );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( CsvTitle, std::map, 1 )
 
 

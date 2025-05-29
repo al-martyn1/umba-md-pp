@@ -26,6 +26,93 @@
 
 
 //----------------------------------------------------------------------------
+//! Проверяет, состоит ли строка из единственного символа, и возвращает количество повторений, или 0, если строка пуста или в ней содержаться разные символы 
+inline
+std::size_t isSingleCharString(const std::string &str, char *pCh)
+{
+    if (str.empty())
+        return 0u;
+
+    char ch = str[0];
+    for(auto strCh : str)
+    {
+        if (strCh!=ch)
+            return 0u;
+    }
+
+    if (pCh)
+       *pCh = ch;
+
+    return str.size();
+}
+
+//----------------------------------------------------------------------------
+// Extarct TableCellAlignment from title string
+inline
+TableCellAlignment extractTableCellAlignment(std::string &str)
+{
+    umba::string_plus::trim(str);
+
+    if (str.empty())
+        return TableCellAlignment::none;
+
+    bool bLeft  = false;
+    bool bRight = false;
+    // bool bEq    = false;
+
+    if (str.front()==':')
+    {
+        bLeft = true;
+        str.erase(0, 1);
+        if (str.empty())
+            return TableCellAlignment::left;
+    }
+
+    if (str.back()==':')
+    {
+        bRight = true;
+        str.erase(str.size()-1, 1);
+        if (str.empty())
+            return TableCellAlignment::center;
+    }
+
+    if (bLeft && bRight && str.front()=='=')
+    {
+        // bEq = true;
+        str.erase(0, 1);
+        umba::string_plus::trim(str);
+        return TableCellAlignment::width;
+    }
+
+    umba::string_plus::trim(str);
+
+    if (bLeft && bRight)
+        return TableCellAlignment::center;
+
+    if (!bLeft && !bRight)
+        return TableCellAlignment::none;
+
+    return bLeft ? TableCellAlignment::left : TableCellAlignment::right;
+}
+
+//----------------------------------------------------------------------------
+inline
+std::string makeMdTableSeparator(TableCellAlignment tca)
+{
+    switch(tca)
+    {
+        case TableCellAlignment::invalid: return std::string(":---");
+        //case TableCellAlignment::unknown: return std::string("---");
+        case TableCellAlignment::none   : return std::string(":---");
+        case TableCellAlignment::left   : return std::string(":---");
+        case TableCellAlignment::right  : return std::string("---:");
+        case TableCellAlignment::center : return std::string(":---:");
+        case TableCellAlignment::width  : return std::string(":---:");
+        default: return std::string(":---");
+    }
+}
+
+//----------------------------------------------------------------------------
 inline
 bool isMdBackticked(const std::string &str)
 {

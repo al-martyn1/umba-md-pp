@@ -14,8 +14,6 @@
 #include <string>
 
 
-// GRAPHVIZ_DOT - переменная окружения, которую надо проверить до всего остального
-// аналогичные переменные надо проверять для остальных тулзей
 
 struct ArgListOptions
 {
@@ -46,7 +44,7 @@ struct ArgListOptions
     }
 
     void setListTitle( std::string titleStr
-                     , bool bReplaceCommas=false // запятые заменяем на символ пайпа только при обработке арзумента командной строки - там с символом пайпа могут быть проблемы
+                     , bool bReplaceCommas=false // запятые заменяем на символ пайпа только при обработке аргумента командной строки - там с символом пайпа могут быть проблемы
                      )
     {
         umba::string_plus::trim(titleStr);

@@ -26,6 +26,7 @@ set PREFIX=git@%BASE%:%ACC%
 :DO_CLONE
 @git clone --recurse-submodules %PREFIX%/umba_mm_mod_encodings.git   %~dp0\encoding
 @git clone --recurse-submodules %PREFIX%/marty_cpp.git               %~dp0\marty_cpp
+@git clone --recurse-submodules %PREFIX%/marty_csv.git               %~dp0\marty_csv
 @git clone --recurse-submodules %PREFIX%/marty_decimal.git           %~dp0\marty_decimal
 @git clone --recurse-submodules %PREFIX%/marty_format.git            %~dp0\marty_format
 @git clone --recurse-submodules %PREFIX%/marty_tr.git                %~dp0\marty_tr

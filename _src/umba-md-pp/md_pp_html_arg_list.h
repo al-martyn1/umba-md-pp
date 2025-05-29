@@ -252,6 +252,9 @@ void processArgListLinesImpl( ArgListOptions argListOptions
 
         for(auto &t : title)
         {
+            TableCellAlignment tableCellAlignment = extractTableCellAlignment(t);
+
+            #if 0
             bool bStart = false;
             bool bEnd   = false;
 
@@ -277,8 +280,11 @@ void processArgListLinesImpl( ArgListOptions argListOptions
             strSep.append("-------");
             if (bEnd)
                 strSep.append(1, ':');
-            
-            titleSep.emplace_back(strSep);
+            #endif
+
+            titleSep.emplace_back(makeMdTableSeparator(tableCellAlignment));
+            // if (t.empty())
+            //     t = "-";
         }
 
         {

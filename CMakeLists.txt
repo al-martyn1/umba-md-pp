@@ -28,6 +28,7 @@ include_directories(${LIB_ROOT})
 
 add_subdirectory(${LIB_ROOT}/encoding)
 add_subdirectory(${LIB_ROOT}/marty_cpp)
+add_subdirectory(${LIB_ROOT}/marty_csv)
 # add_subdirectory(${LIB_ROOT}/marty_pugixml)
 add_subdirectory(${LIB_ROOT}/marty_format)
 add_subdirectory(${LIB_ROOT}/marty_tr)
@@ -39,7 +40,7 @@ add_subdirectory(${LIB_ROOT}/umba)
 add_subdirectory(${LIB_ROOT}/umba_tokenizer)
 add_subdirectory(${LIB_ROOT}/yaml-cpp)
 
-set(COMMON_LIBS encoding::encoding marty::cpp sfmt::sfmt umba::umba umba::tokenizer marty::format)
+set(COMMON_LIBS encoding::encoding marty::cpp marty::csv sfmt::sfmt umba::umba umba::tokenizer marty::format)
 #set(PUGIXML_LIB pugixml::pugixml marty_pugixml::marty_pugixml)
 set(JSON_YAML_LIB nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
 

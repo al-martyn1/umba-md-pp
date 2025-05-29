@@ -1,0 +1,7 @@
+invalid,unknown=-1 //!
+none   = 0         //!
+use                // Use title from CSV file (firts line threated as title). Missing value (none) threated as `use`
+no                 // CSV file has no title, use taken title or empty title
+ignore             // Ignore title from CSV file and use taken title or empty title
+merge              // Merge align and title from `title` attr and CSV file (alignment also used from `title` attribute)
+align              // Merge align only from `title` attr, but use title from CSV file

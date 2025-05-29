@@ -1,0 +1,6 @@
+invalid,unknown=-1 //!
+none   = 0         //!
+left               // Align left
+right              // Align right
+center             // Align center
+width              // Align width - align to both sides

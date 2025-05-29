@@ -1,0 +1,10 @@
+// CSV quotation mark enumeration
+
+invalid,unknown=-1 //!
+
+none   = 0         //!
+
+auto,detect        // Autodetect CSV quotation sign
+quot
+apos
+backtick,tick
