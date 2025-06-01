@@ -1395,11 +1395,11 @@ enum class CsvTitle : std::uint32_t
 {
     invalid   = (std::uint32_t)(-1) /*!< ! */,
     unknown   = (std::uint32_t)(-1) /*!< ! */,
-    none      = 0x0000 /*!< ! */,
-    use       = 0x0001 /*!< Use title from CSV file (firts line threated as title). Missing value (none) threated as `use` */,
+    none      = 0x0000 /*!< ! Same as `no` */,
+    use       = 0x0001 /*!< Use title from CSV file (firts line threated as title). */,
     no        = 0x0002 /*!< CSV file has no title, use taken title or empty title */,
     ignore    = 0x0003 /*!< Ignore title from CSV file and use taken title or empty title */,
-    merge     = 0x0004 /*!< Merge align and title from `title` attr and CSV file (alignment also used from `title` attribute) */,
+    merge     = 0x0004 /*!< Merge align and title from `title` attr and CSV file (alignment also used from `title` attribute). Missed value threated as `merge`. */,
     align     = 0x0005 /*!< Merge align only from `title` attr, but use title from CSV file */
 
 }; // enum 

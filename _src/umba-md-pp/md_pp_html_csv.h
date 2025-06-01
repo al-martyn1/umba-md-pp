@@ -17,6 +17,9 @@
 
 #include "marty_csv/marty_csv.h"
 
+//
+#include <sstream>
+
 
 // umba::md::
 namespace umba {
@@ -51,8 +54,26 @@ void updateCsvTableOptions(const AppConfig<FilenameStringType> &appCfg, const um
 
     if (mdHtmlTag.hasAttr("title"))
     {
-        csvTableOptions.setListTitle(mdHtmlTag.getAttrValue("title", std::string()));
+        csvTableOptions.setTitle(mdHtmlTag.getAttrValue("title", std::string()));
     }
+
+    if (mdHtmlTag.hasAttr("strict"))
+    {
+        auto strictStr = umba::string_plus::tolower_copy(mdHtmlTag.getAttrValue("strict", std::string()));
+        if (strictStr.empty())
+        {
+            csvTableOptions.strict = true;
+        }
+        else if (strictStr=="t" || strictStr=="true" || strictStr=="1" || strictStr=="y")
+        {
+            csvTableOptions.strict = true;
+        }
+        else
+        {
+            csvTableOptions.strict = false;
+        }
+    }
+
 
     if (mdHtmlTag.hasAttr("sep") || mdHtmlTag.hasAttr("separator"))
     {
@@ -73,19 +94,35 @@ void updateCsvTableOptions(const AppConfig<FilenameStringType> &appCfg, const um
             {
                 case CsvSeparator::invalid     : csvTableOptions.charSep = 0; // detect, но наверное надо доложить об ошибке
                 // case CsvSeparator::unknown     : csvTableOptions.charSep = 0; // аналогично invalid
+                                                 break;
                 
                 case CsvSeparator::none        : csvTableOptions.charSep = 0; // разделитель не задан, детектим
+                                                 break;
+                
                 case CsvSeparator::auto_       : csvTableOptions.charSep = 0; // разделитель не задан, детектим
                 // case CsvSeparator::detect  : // аналогично строке выше
+                                                 break;
+                
 
                 case CsvSeparator::comma       : csvTableOptions.charSep = ',';
+                                                 break;
+                
                 case CsvSeparator::semicolon   : csvTableOptions.charSep = ';';
+                                                 break;
+                
                 case CsvSeparator::colon       : csvTableOptions.charSep = ':';
+                                                 break;
+                
                 case CsvSeparator::hash        : csvTableOptions.charSep = '#';
                 //case CsvSeparator::number      : // аналогично строке выше
+                                                 break;
+                
                 case CsvSeparator::verticalBar : csvTableOptions.charSep = '|';
                 // case CsvSeparator::bar         : // аналогично строке выше
+                                                 break;
+                
                 case CsvSeparator::tab         : csvTableOptions.charSep = '\t';
+                                                 break;
 
                 default                        : csvTableOptions.charSep = 0; // detect
             }
@@ -98,106 +135,110 @@ void updateCsvTableOptions(const AppConfig<FilenameStringType> &appCfg, const um
 
         if (quotStr.size()==1)
         {
-            csvTableOptions.charQuot = sepStr[0];
+            csvTableOptions.charQuot = quotStr[0];
         }
-        else if (sepStr.empty())
+        else if (quotStr.empty())
         {
             csvTableOptions.charQuot = '\"'; // разделитель не задан, используем quot
         }
         else
         {
-            auto eSep = enum_deserialize(sepStr, CsvQuot::invalid);
+            auto eSep = enum_deserialize(quotStr, CsvQuot::invalid);
             switch(eSep)
             {
                 case CsvQuot::invalid : csvTableOptions.charQuot = 0;
                 // case CsvQuot::unknown : // аналогично invalid
-                case CsvQuot::none    : csvTableOptions.charQuot = '\"';
+                                        break;
+                
+                case CsvQuot::none    : csvTableOptions.charQuot = 0;
+                                        break;
+                
                 case CsvQuot::auto_   : csvTableOptions.charQuot = 0;
                 // case CsvQuot::detect : // аналогично строке выше
+                                        break;
+                
                 case CsvQuot::quot    : csvTableOptions.charQuot = '\"';
+                                        break;
+                
                 case CsvQuot::apos    : csvTableOptions.charQuot = '\'';
+                                        break;
+                
                 case CsvQuot::backtick: csvTableOptions.charQuot = '`';
                 // case CsvQuot::tick    : // аналогично строке выше
+                                        break;
+                
 
                 default               : csvTableOptions.charQuot = '\"'; // default char
             }
-
+        }
     }
 
-// enum class CsvQuot : std::uint32_t
-// {
-//     quot       = 0x0002 /*!<  */,
-//     apos       = 0x0003 /*!<  */,
-//     backtick   = 0x0004 /*!<  */,
-//     tick       = 0x0004 /*!<  */
-//  
-// }; // enum 
+    if (!mdHtmlTag.hasAttr("csv-title"))
+    {
+        if (csvTableOptions.title.empty())
+            csvTableOptions.сsvTitle = CsvTitle::use;
+        else
+            csvTableOptions.сsvTitle = CsvTitle::merge;
+    }
+    else
+    {
+        auto сsvTitleStr = mdHtmlTag.getAttrValue("csv-title", std::string());
+
+        if (сsvTitleStr.empty())
+        {
+            // Если заголовок не пустой, мержим его с заголовком из CSV с приоритетом из атрибута title
+            if (csvTableOptions.title.empty())
+                csvTableOptions.сsvTitle = CsvTitle::use;
+            else
+                csvTableOptions.сsvTitle = CsvTitle::merge;
+        }
+        else
+        {
+            auto eTitle = enum_deserialize(сsvTitleStr, CsvTitle::invalid);
+
+            if (eTitle==CsvTitle::invalid)
+            {
+                if (csvTableOptions.title.empty())
+                    csvTableOptions.сsvTitle = CsvTitle::use;
+                else
+                    csvTableOptions.сsvTitle = CsvTitle::merge;
+            }
+            else if (eTitle==CsvTitle::none)
+            {
+                csvTableOptions.сsvTitle = CsvTitle::no;
+            }
+            else
+            {
+                csvTableOptions.сsvTitle = eTitle;
+            }
+        }
+    }
 
 
-    // if (mdHtmlTag.hasAttr("sep") || mdHtmlTag.hasAttr("separator"))
-    // {
-    //     auto sepStr = mdHtmlTag.getAttrValue(mdHtmlTag.hasAttr("sep") ? "sep" : "separator", std::string());
-    //     if (sepStr.size()==1)
-    //     {
-    //         csvTableOptions.charSep = sepStr[0];
-    //     }
-    //     else if (sepStr.empty())
-    //     {
-    //         csvTableOptions.charSep = 0; // разделитель не задан, детектим
-    //     }
-    //     else
-    //     {
-    //         auto eSep = enum_deserialize(sepStr, CsvSeparator::invalid);
-    //         switch(eSep)
-    //         {
-    //             case CsvSeparator::invalid  : csvTableOptions.charSep = 0; // detect, но наверное надо доложить об ошибке
-    //             case CsvSeparator::none     : csvTableOptions.charSep = 0; // разделитель не задан, детектим
-    //             case CsvSeparator::auto_    : csvTableOptions.charSep = 0; // разделитель не задан, детектим
-    //             // case CsvSeparator::detect  : // аналогично строке выше
-    //             case CsvSeparator::quot     : csvTableOptions.charSep = '\"';
-    //             case CsvSeparator::apos     : csvTableOptions.charSep = '\'';
-    //             case CsvSeparator::backtick : csvTableOptions.charSep = '`';
-    //             // case CsvSeparator::tick     : // аналогично строке выше
-    //             default: csvTableOptions.charSep = '\"';
-    //         }
-    //     }
-    // }
+    if (mdHtmlTag.hasAttr("multi-csv"))
+    {
+        auto sepStr = mdHtmlTag.getAttrValue("multi-csv", std::string());
 
+        if (sepStr.empty())
+            sepStr = "<<<--->>>";
+            //sepStr = "-------";
 
-//     std::vector<std::string>         title;
-//  
-//     std::vector<TableCellAlignment>  colAlignments;
-//  
-//     CsvTitle      = CsvTitle::none; //! Способ формирования заголовка таблицы
-//     char charSep  = 0;
-//     char charQuot = 0;
-//  
-//     // csv-title
-//     // sep  - none/auto, comma, semicolon, colon, hash, bar/vertical-bar, tab
-//     // quot - none/auto, quot, apos, tick/backtick
-//  
-//  
-//  
-// // enum class CsvTitle : std::uint32_t
-// // {
-// //     invalid   = (std::uint32_t)(-1) /*!< ! */,
-// //     unknown   = (std::uint32_t)(-1) /*!< ! */,
-// //     none      = 0x0000 /*!< ! */,
-// //     use       = 0x0001 /*!< Use title from CSV file (firts line threated as title). Missing value (none) threated as `use` */,
-// //     no        = 0x0002 /*!< CSV file has no title, use taken title or empty title */,
-// //     ignore    = 0x0003 /*!< Ignore title from CSV file and use taken title or empty title */,
-// //     merge     = 0x0004 /*!< Merge align and title from `title` attr and CSV file (alignment also used from `title` attribute) */,
-// //     align     = 0x0005 /*!< Merge align only from `title` attr, but use title from CSV file */
-// //  
-// // }; // enum 
+        csvTableOptions.multiTableSeparator = sepStr;
+    }
 
-
+    if (mdHtmlTag.hasAttr("multi-title"))
+    {
+        csvTableOptions.setMultiTitle(mdHtmlTag.getAttrValue("multi-title", std::string()));
+        // Если задан `multi-title`, но не задан `multi-csv`, то задаём для `multi-csv` дефолтный разделитель
+        if (csvTableOptions.multiTableSeparator.empty())
+            csvTableOptions.multiTableSeparator = "<<<--->>>";
+    }
 
 }
 
 //----------------------------------------------------------------------------
 inline
-std::string csvTableEscape(const std::string &str, char chEscape)
+std::string csvTableEscape(const std::string &str)
 {
     std::string res; res.reserve(str.size());
 
@@ -207,24 +248,14 @@ std::string csvTableEscape(const std::string &str, char chEscape)
 
     for(auto ch: str)
     {
-        if (ch==chEscape)
+        if (ch=='|' || ch=='*' || ch=='(' || ch==')')
         {
-            if (ch=='*')
-            {
-                // res.append("&#42;");
-                res.append(1, '\\');
-                res.append(1, ch);
-            }
-            else if (ch=='|')
-            {
-                // res.append("&#124;");
-                res.append(1, '\\');
-                res.append(1, ch);
-            }
-            else
-            {
-                res.append(1, ch);
-            }
+            res.append(1, '\\');
+            res.append(1, ch);
+        }
+        else if (ch=='\n')
+        {
+            res.append("<br/><br/>");
         }
         else
         {
@@ -310,12 +341,248 @@ void processCsvTableLinesImpl( CsvTableOptions csvTableOptions
     // if (argListOptions.argListValueStyle==ArgListValueStyle::unknown)
     //     argListOptions.argListValueStyle = ArgListValueStyle::bold;
 
-    auto title = csvTableOptions.title;
-    while(title.size()<2)
-        title.emplace_back(std::string());
+    // auto title = csvTableOptions.title;
+    // while(title.size()<2)
+    //     title.emplace_back(std::string());
 
     //std::vector<std::string> argListLines;
 
+    bool bMulti = false;
+
+    std::vector<std::string> tablesSingleLine;
+    if (!csvTableOptions.multiTableSeparator.empty())
+    {
+        bMulti = true;
+    }
+
+    {
+        std::string curTable; curTable.reserve(tagLines.size()/2);
+
+        for(std::size_t lineIdx=0u; lineIdx!=tagLines.size(); ++lineIdx)
+        {
+            const auto &l = tagLines[lineIdx];
+
+            if (lineIdx==(tagLines.size()-1) && l.empty())
+                 break;
+
+            if (!bMulti)
+            {
+                curTable.append(1, '\n');
+                curTable.append(l);
+                continue;
+            }
+
+            // Сначала проверяем, не начинается ли строка с разделителя таблиц, и только потом удаляем пробелы и проверяем точно
+            // Это для того, чтобы не делать trim для каждой строки
+            // И да, разделитель должен быть в начале строки, а вот пробелы в конце - опциональны
+            if (umba::string_plus::starts_with(l, csvTableOptions.multiTableSeparator) && umba::string_plus::ltrim_copy(l)==csvTableOptions.multiTableSeparator)
+            //if (l==csvTableOptions.multiTableSeparator)
+            {
+                tablesSingleLine.push_back(curTable);
+                curTable.clear();
+                continue;
+            }
+
+            curTable.append(1, '\n');
+            curTable.append(l);
+        }
+
+        if (!curTable.empty())
+            tablesSingleLine.push_back(curTable);
+    }
+
+    char charSepCfg  = csvTableOptions.charSep ;
+    char charQuotCfg = csvTableOptions.charQuot;
+
+    // if (charSep==0 || charQuot==0)
+    {
+        // Детектим кавычки и/или разделители для всех таблиц сразу. Или нет? Могут быть разными?
+        // Но количество полей может быть разным, а значит - разное матожидание и дисперсия символов,
+        // и разделитель будет продетекчен неверно
+    }
+
+    static const std::string seps  = "\t;,:|#";
+    static const std::string quots = "\"\'`";
+
+    for(std::size_t csvIdx=0u; csvIdx!=tablesSingleLine.size(); ++csvIdx )
+    {
+        const auto &csv = tablesSingleLine[csvIdx];
+
+        char charSep  = charSepCfg ;
+        char charQuot = charQuotCfg;
+
+        if (charQuot==0)
+        {
+            charQuot = marty::csv::detectQuotes(csv, seps, quots);
+            if (charQuot==0)
+                charQuot = '\"';
+        }
+
+        if (charSep==0)
+        {
+            charSep = marty::csv::detectSeparators(csv.begin(), csv.end(), seps, charQuot);
+            if (charSep==0)
+                charSep = ';';
+        }
+
+        resLines.push_back(std::string());
+
+        if (bMulti)
+        {
+            auto multiTitle = umba::string_plus::ltrim_copy(csvTableOptions.getMultiTitle(csvIdx));
+            if (!multiTitle.empty())
+            {
+                if (multiTitle.back()!='.' && multiTitle.back()!='!' && multiTitle.back()!='?' && multiTitle.back()!=':' && multiTitle.back()!=';')
+                    multiTitle.push_back(':');
+                resLines.push_back(multiTitle);
+                resLines.push_back(std::string());
+            }
+        }
+
+        // marty::csv::ParseResult 
+        auto parseResult = marty::csv::parse(csv, charSep, charQuot, csvTableOptions.strict);
+
+        bool bGood = true;
+        if (!parseResult.errors.empty())
+        {
+            if (csvTableOptions.strict)
+                bGood = false;
+        }
+        
+        if (!bGood)
+        {
+            resLines.push_back(std::string("```"));
+            for(const auto &err : parseResult.errors)
+            {
+                std::ostringstream oss;
+                marty::csv::printError(oss, err);
+                resLines.push_back(oss.str());
+            }
+            resLines.push_back(std::string("```"));
+        }
+        else if (parseResult.data.empty())
+        {
+            resLines.push_back(std::string("```"));
+            resLines.push_back(std::string("No data"));
+            resLines.push_back(std::string("```"));
+        }
+        else // Тут выводим таблицу
+        {
+            // Для начала надо найти макс количество колонок
+            // std::vector<std::vector<std::string>> data;
+            std::size_t maxSize = 0;
+            for(const auto &l : parseResult.data)
+            {
+                if (maxSize<l.size())
+                    maxSize = l.size();
+            }
+
+            std::vector<std::string>        title;
+            std::vector<TableCellAlignment> colAligns;
+
+            auto csvIt = parseResult.data.begin();
+
+            const auto сsvTitle = csvTableOptions.сsvTitle;
+
+            if (сsvTitle==CsvTitle::none || сsvTitle==CsvTitle::no)
+            {
+                // В CVS-файле нет заголовка
+                // Используем title из атрибутов
+                for(std::size_t colIdx=0u; colIdx!=maxSize; ++colIdx)
+                {
+                    title.push_back(csvTableOptions.getTitle(colIdx));
+                    colAligns.push_back(csvTableOptions.getColAlignment(colIdx));
+                }
+            }
+            else if (сsvTitle==CsvTitle::ignore)
+            {
+                // Игнорируем заголовок из CVS-файла
+                // Пропускаем строку CVS-файла
+                // Используем title из атрибутов
+                for(std::size_t colIdx=0u; colIdx!=maxSize; ++colIdx)
+                {
+                    title.push_back(csvTableOptions.getTitle(colIdx));
+                    colAligns.push_back(csvTableOptions.getColAlignment(colIdx));
+                }
+
+                ++csvIt; // Пропускаем строку CVS-файла с заголовком
+            }
+            else if (сsvTitle==CsvTitle::use) // Использовать только CSV заголовок
+            {
+                for(std::size_t colIdx=0u; colIdx!=maxSize; ++colIdx)
+                {
+                    title.push_back(csvTableOptions.getVectorValueAt(*csvIt, colIdx, std::string()));
+                    colAligns.push_back(TableCellAlignment::left);
+                }
+
+                ++csvIt; // Пропускаем строку CVS-файла с заголовком
+            }
+            else if (сsvTitle==CsvTitle::merge)
+            {
+                for(std::size_t colIdx=0u; colIdx!=maxSize; ++colIdx)
+                {
+                    auto t = csvTableOptions.getTitle(colIdx);
+                    // Если в заданном title пропуск - используем заголовок из CVS
+                    if (t.empty())
+                        t = csvTableOptions.getVectorValueAt(*csvIt, colIdx, std::string());
+                    title.push_back(t);
+                    colAligns.push_back(csvTableOptions.getColAlignment(colIdx)); // Выравнивание берём из заголовка в атрибуте title
+                }
+
+                ++csvIt; // Пропускаем строку CVS-файла с заголовком
+            }
+            else if (сsvTitle==CsvTitle::align)
+            {
+                for(std::size_t colIdx=0u; colIdx!=maxSize; ++colIdx)
+                {
+                    title.push_back(csvTableOptions.getVectorValueAt(*csvIt, colIdx, std::string())); // Заголовок из CVS
+                    colAligns.push_back(csvTableOptions.getColAlignment(colIdx)); // Выравнивание берём из заголовка в атрибуте title
+                }
+
+                ++csvIt; // Пропускаем строку CVS-файла с заголовком
+            }
+
+            // Если почему-то заголовки не получились нормально сформировать
+            while(title.size()<maxSize)
+                title.push_back(std::string());
+
+            while(colAligns.size()<maxSize)
+                colAligns.push_back(TableCellAlignment::left);
+
+            std::string tmpLine = std::string(1, '|');
+            //auto initTmpLine = [&]() { tmpLine.assign(1, '|'); };
+            //auto closeCell   = [&]() { tmpLine.append(1, '|'); };
+            auto addCell     = [&](const std::string &c) { tmpLine.append(csvTableEscape(c)); tmpLine.append(1, '|'); };
+            auto addLine     = [&]() { resLines.push_back(tmpLine); tmpLine.assign(1, '|'); };
+
+            for(const auto &t : title)
+                addCell(t);
+            addLine();
+            
+            for(const auto &ca : colAligns)
+                addCell(makeMdTableSeparatorCell(ca));
+            addLine();
+
+            for(; csvIt!=parseResult.data.end(); ++csvIt)
+            {
+                const auto & rowCells = *csvIt;
+                for(std::size_t colIdx=0u; colIdx!=maxSize; ++colIdx)
+                {
+                    addCell(csvTableOptions.getVectorValueAt(rowCells, colIdx, std::string()));
+                }
+                addLine();
+            }
+
+        } // else // Тут выводим таблицу
+
+        resLines.push_back(std::string());
+
+    } // for(std::size_t csvIdx=0u; csvIdx!=tablesSingleLine.size(); ++csvIdx )
+
+
+// csvTableEscape(const std::string &str)
+
+    #if 0
     std::vector< std::vector<std::string> > tableLines;
     std::vector<std::string> curTableLine;
 
@@ -537,6 +804,7 @@ void processCsvTableLinesImpl( CsvTableOptions csvTableOptions
 
 
     // resLines.emplace_back("![" + mdHtmlTag.getAttrValue("title", "Graph") + "](" + umba::filename::makeCanonical(imgLink, '/') + ")");
+    #endif
 
 }
 

@@ -76,11 +76,17 @@ TableCellAlignment extractTableCellAlignment(std::string &str)
             return TableCellAlignment::center;
     }
 
+    char titleCh = 0;
+    if (isSingleCharString(str, &titleCh) && titleCh=='-')
+        str.clear();
+
     if (bLeft && bRight && str.front()=='=')
     {
         // bEq = true;
         str.erase(0, 1);
         umba::string_plus::trim(str);
+        // if (isSingleCharString(str, &titleCh) && titleCh=='=')
+        //     str.clear();
         return TableCellAlignment::width;
     }
 
@@ -97,7 +103,7 @@ TableCellAlignment extractTableCellAlignment(std::string &str)
 
 //----------------------------------------------------------------------------
 inline
-std::string makeMdTableSeparator(TableCellAlignment tca)
+std::string makeMdTableSeparatorCell(TableCellAlignment tca)
 {
     switch(tca)
     {

@@ -107,12 +107,18 @@ std::string argListDecorateValueSingleItem(std::string str, ArgListValueStyle va
     if (str.empty())
         return str;
 
+    // Если не декорировано
     if (!isMdSimpleDecorated(str))
     {
         if (argListType==ArgListType::table)
-            str = argListEscape(str, '|');
+        {
+            if (valueStyle==ArgListValueStyle::normal) // Декорации не будет - надо защитить табличный разделитель
+                str = argListEscape(str, '|');
+        }
         else // if (argListType==ArgListType::text)
+        {
             str = argListEscape(str, '*');
+        }
     }
 
     return mdSimpleDecorate(str, valueStyle);
@@ -282,7 +288,7 @@ void processArgListLinesImpl( ArgListOptions argListOptions
                 strSep.append(1, ':');
             #endif
 
-            titleSep.emplace_back(makeMdTableSeparator(tableCellAlignment));
+            titleSep.emplace_back(makeMdTableSeparatorCell(tableCellAlignment));
             // if (t.empty())
             //     t = "-";
         }
