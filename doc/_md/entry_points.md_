@@ -3,6 +3,11 @@ Title: Brief Description for Project Sources
 Generator: Umba Brief Scanner
 ---
 
+- `marty_format_types.h` - Типы для marty::format
+- `gcvt_test.cpp` - 
+- `std_format_tests_hex.cpp` - 
+- `std_format_tests_hex_generate.cpp` - 
+- `std_to_chars_tests.cpp` - 
 - `smpd-test-001.cpp` - Делаем для теста раскраску Protogen кода в HTML и вывод потокенно в текст
 - `gen-lang-detection-tr.cpp` - Утилита umba-md-pp - препроцессор для маркдауна
 - `test_rtf_workarounds.cpp` - Тесты воркараундов/фиксов RTF, который сгенерил Doxygen

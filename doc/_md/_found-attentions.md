@@ -20,13 +20,13 @@ Generator: Umba Brief Scanner
 - `[_src/umba-md-pp/document.h:104]`
   Тут надо добавить что-то типа хидера, или break line Или - не надо?
 
-- `[_src/umba-md-pp/processing.h:1017]`
+- `[_src/umba-md-pp/processing.h:1078]`
   Не понятно, с чего этот варнинг вылезает, надо разобраться
 
-- `[_src/umba-md-pp/processing.h:1574]`
+- `[_src/umba-md-pp/processing.h:1661]`
   Какое-то оформление надо
 
-- `[_src/umba-md-pp/processing.h:1782]`
+- `[_src/umba-md-pp/processing.h:1871]`
   JSON-META У нас универсальный парсер YAML/JSON и мета данные могут быть в
   формате JSON При вставке в JSON могут быть проблемы
 
@@ -46,6 +46,6 @@ Generator: Umba Brief Scanner
 - `[_src/umba-md-pp/umba_md_processing_utils.h:572]`
   Не понятно, что за состояние, и почему я его не обработал
 
-- `[_src/umba-md-pp/utils.h:357]`
+- `[_src/umba-md-pp/utils.h:539]`
   надо обдумать для других возможных путей
 

@@ -4,11 +4,11 @@
 
 ---
 
-- [Table test 01](#user-content-table-test-01)
-- [Table test 02](#user-content-table-test-02)
-- [Table test 03](#user-content-table-test-03)
-- [Table test 04](#user-content-table-test-04)
-- [Table test 05](#user-content-table-test-05)
+- [Table test 01](#table-test-01)
+- [Table test 02](#table-test-02)
+- [Table test 03](#table-test-03)
+- [Table test 04](#table-test-04)
+- [Table test 05](#table-test-05)
 
 
 # Table test 01

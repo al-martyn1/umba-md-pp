@@ -6,8 +6,8 @@
 
 # Umba MDPP Markdown Viewer command line options
 
-- [Usage](#user-content-usage)
-- [Options](#user-content-options)
+- [Usage](#usage)
+- [Options](#options)
 
 
 # Usage

@@ -7,49 +7,43 @@
 # Известные проблемы и TODO
 
 
-- [Приоритетные направления](#user-content-приоритетные-направления)
-- [Важные задачи в MD PP, библиотеках и прочих программах](#user-content-важные-задачи-в-md-pp-библиотеках-и-прочих-программах)
-- [Buddy-проекты](#user-content-buddy-проекты)
-  - [umba-hide (umba-hide-dot-files)](#user-content-umba-hide-umba-hide-dot-files)
-  - [umba-modify-user-env (umue)](#user-content-umba-modify-user-env-umue)
-  - [umba-enum-gen](#user-content-umba-enum-gen)
-  - [umba-cl-msg](#user-content-umba-cl-msg)
-  - [umba-brief-scanner](#user-content-umba-brief-scanner)
-- [Направление движения](#user-content-направление-движения)
-- [TODO List](#user-content-todo-list)
-  - [Сборка TODO](#user-content-сборка-todo)
-  - [DocumentID](#user-content-documentid)
-  - [Сайдбар и футер](#user-content-сайдбар-и-футер)
-  - [Processing Options (--processing-options)](#user-content-processing-options---processing-options)
-  - [Директивы UMBA-MD-PP](#user-content-директивы-umba-md-pp)
-    - [Включение произвольных текстов](#user-content-включение-произвольных-текстов)
-    - [Переменные и условные операторы](#user-content-переменные-и-условные-операторы)
-    - [Switch](#user-content-switch)
-    - [Detailing](#user-content-detailing)
-    - [Checklist](#user-content-checklist)
-    - [Switch/Detailing/If](#user-content-switchdetailingif)
-  - [Метаданные документов](#user-content-метаданные-документов)
-    - [#!meta - вставка метатегов в документ в виде текста](#user-content-meta---вставка-метатегов-в-документ-в-виде-текста)
-    - [Auto-URL - автоматическая генерация метатега URL](#user-content-auto-url---автоматическая-генерация-метатега-url)
-    - [Метаданые во внешних файлах Graphviz и PlantUML](#user-content-метаданые-во-внешних-файлах-graphviz-и-plantuml)
-  - [Simple Drawing](#user-content-simple-drawing)
-  - [Командная строка и .md-pp.options файлы опций](#user-content-командная-строка-и-md-ppoptions-файлы-опций)
-  - [Снипеты](#user-content-снипеты)
-    - [Извлечение снипетов из кода](#user-content-извлечение-снипетов-из-кода)
-    - [Включение снипетов в документ](#user-content-включение-снипетов-в-документ)
-    - [Автоформатирование снипетов](#user-content-автоформатирование-снипетов)
-  - [Графы (DOT)](#user-content-графы-dot)
-  - [Таблицы](#user-content-таблицы)
-  - [Макроподстановки](#user-content-макроподстановки)
-  - [Свои расширения Markdown](#user-content-свои-расширения-markdown)
-  - [Поддержка фич GitHub flavored markdown для доксигена (и не только)](#user-content-поддержка-фич-github-flavored-markdown-для-доксигена-и-не-только)
-  - [Обработка ссылок на внешние документы и картинки](#user-content-обработка-ссылок-на-внешние-документы-и-картинки)
-  - [Вьювер](#user-content-вьювер)
-  - [Язык и его определение](#user-content-язык-и-его-определение)
-  - [Имена входных и выходных файлов](#user-content-имена-входных-и-выходных-файлов)
-  - [batch-режим](#user-content-batch-режим)
-  - [Разное](#user-content-разное)
-  - [Баги](#user-content-баги)
+- [Приоритетные направления](#приоритетные-направления)
+- [Важные задачи в MD PP, библиотеках и прочих программах](#важные-задачи-в-md-pp-библиотеках-и-прочих-программах)
+- [Направление движения](#направление-движения)
+- [TODO List](#todo-list)
+  - [Сборка TODO](#сборка-todo)
+  - [DocumentID](#documentid)
+  - [Сайдбар и футер](#сайдбар-и-футер)
+  - [Processing Options (--processing-options)](#processing-options---processing-options)
+  - [Директивы UMBA-MD-PP](#директивы-umba-md-pp)
+    - [Включение произвольных текстов](#включение-произвольных-текстов)
+    - [Переменные и условные операторы](#переменные-и-условные-операторы)
+    - [Switch](#switch)
+    - [Detailing](#detailing)
+    - [Checklist](#checklist)
+    - [Switch/Detailing/If](#switchdetailingif)
+  - [Метаданные документов](#метаданные-документов)
+    - [#!meta - вставка метатегов в документ в виде текста](#meta---вставка-метатегов-в-документ-в-виде-текста)
+    - [Auto-URL - автоматическая генерация метатега URL](#auto-url---автоматическая-генерация-метатега-url)
+    - [Метаданые во внешних файлах Graphviz и PlantUML](#метаданые-во-внешних-файлах-graphviz-и-plantuml)
+  - [Simple Drawing](#simple-drawing)
+  - [Командная строка и .md-pp.options файлы опций](#командная-строка-и-md-ppoptions-файлы-опций)
+  - [Снипеты](#снипеты)
+    - [Извлечение снипетов из кода](#извлечение-снипетов-из-кода)
+    - [Включение снипетов в документ](#включение-снипетов-в-документ)
+    - [Автоформатирование снипетов](#автоформатирование-снипетов)
+  - [Графы (DOT)](#графы-dot)
+  - [Таблицы](#таблицы)
+  - [Макроподстановки](#макроподстановки)
+  - [Свои расширения Markdown](#свои-расширения-markdown)
+  - [Поддержка фич GitHub flavored markdown для доксигена (и не только)](#поддержка-фич-github-flavored-markdown-для-доксигена-и-не-только)
+  - [Обработка ссылок на внешние документы и картинки](#обработка-ссылок-на-внешние-документы-и-картинки)
+  - [Вьювер](#вьювер)
+  - [Язык и его определение](#язык-и-его-определение)
+  - [Имена входных и выходных файлов](#имена-входных-и-выходных-файлов)
+  - [batch-режим](#batch-режим)
+  - [Разное](#разное)
+  - [Баги](#баги)
 
 
 # Приоритетные направления
@@ -78,154 +72,6 @@
 - [X] Brief Scanner - научить выводить в MD
 
 
-# Buddy-проекты
-
-**Таблица готовности buddy-проектов**
-
-|Проект|CMake Ready|WERR MSVC Ready|WERR GCC Ready|
-|:---  |:---       |:---:|:---:|
-|umba-2c||||
-|umba-brief-scanner|X|X|X|
-|umba-cl-msg|X|X|X|
-|umba-dll-proxy-gen||||
-|umba-enum-gen|X|X|X|
-|umba-fsm|X|||
-|umba-hcp|X|||
-|umba-make-headers||||
-|umba-md-pp|X|X|X|
-|umba-pretty-headers|CMake not required|||
-|umba-roboconf|X|||
-|umba-sort-headers||||
-|umba-subst-macros|X|||
-|umba-tabtool||||
-|umba-tr||||
-
-
-## umba-hide (umba-hide-dot-files)
-
-Сканирует текущий каталог и все файлы и каталоги, имена которых начинаются с точки, делает скрытыми.
-Используется виндовый атрибут `hidden`.
-
-- [ ] Интеграция с Windows Shell API - в проводнике мы в контекстном меню `Umba Hide` можем делать
-      `Hide dot files here`, `Unhide dot files here`,
-      `Show hidden files (global)`, `Hide hidden files (global)`.
-      Это идеал.
-
-- [X] `-h`/`--hide[=true|false]` - по этой опции производится прятание `.dot` файлов и каталогов - все `.dot` 
-      файлы и каталоги делаются видимыми или нет.
-
-- [X] `-u`/`--unhide` - аналог `--hide=false`.
-
-- [X] `--dot-char` - задаём символ-префикс, им может быть, например, '_' - для того, чтобы спрятать чердаки `_md`.
-
-- [X] `--recurse` - рекурсивная обработка.
-
-- [X] `--open` - открывается указанный или текущий каталог в проводнике.
-
-- [X] `-s`/`--shell-hide[=true|false]` - в проводнике включается режим "не отображать скрытые файлы и папки".
-
-- [ ] --make-self-alias[=NAME] - делает хардлинк на себя с именем NAME. Хардлинк - софт линки в винде 
-      запрещены почему-то. Если NAME не задано, то используем `uhdf` (первоначальное название утилиты - 
-      `umba-hide`, а сокращение и линк, соответственно `uh` - это веселее, но слишком коротко и подвержено 
-      опасности коллизий и случайного набора).
-      Оригинальное имя - `umba-hide`.
-      `NAME=very` - `uh` (very short).
-      `NAME=short` - `uhdf` (default).
-      `NAME=long` - `umba-hide-dot-files`.
-
-
-## umba-modify-user-env (umue)
-
-Тулза для задания переменных окружения текущего пользователя (под винду, пока, а там видно будет).
-
-- [X] `--add[-var]=VAR:VALUE` - добавляет переменную, или фейлится, если переменная есть.
-
-- [X] `--update[-var]=VAR:VALUE` - изменяет переменную, или фейлится, если переменной нет.
-
-- [X] `--add-or-update[-var]=VAR:VALUE` - добавляет или изменяет переменную.
-
-- [X] `--modify[-var]=VAR:VALUE` - алиас для опции `--add-or-update[-var]`.
-
-- [X] `--path-modify` - модифицирует переменную PATH. Модифицирует символы '/' в символы '\' 
-      (в винде, и наоборот в других системах). Поверяет, нет ли уже такого пути в PATH, при этом каждый 
-      элемент PATH канонизируется по слешам, и проверка производится без учета регистра (винда) для двух
-      вариантов - со слэшем на конце и без него.
-
-- [ ] `--make-self-alias[=NAME]` - делает хардлинк на себя с именем NAME. Хардлинк - софт линки в винде 
-      запрещены почему-то. Если NAME не задано, то используем `umue`.
-
-
-## umba-enum-gen
-
-- [ ] Когда у нас ничего нет для генерации, кроме голенького enum, нам не надо вставлять макрос про то,
-      является ли enum флаговым или обычным.
-
-- [ ] Если у нас голенький enum, но enum class, нам нужны определения из `cstdint`.
-
-
-## umba-cl-msg
-
-- [ ] сделать разбор опций командной строки и добавить возможность добавлять типы для замены при помощи опций.
-      Примеры: 
-          `std::basic_string<char,std::char_traits<char>,std::allocator<char>>`          -> `std::string`;
-          `std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t>>` -> `std::wstring`;
-          `std::__cxx11::basic_string<char>` -> `std::string`.
-
-
-## umba-brief-scanner
-
-- [X] Сделать сканирование плюсовых сорцов на наличие маркеров TODO/UNDONE/NOTE
-  (UNDONE - 1) noun отменено 2) adjective незаконченный).
-  Можно добавлять свои, например, ATTENTION/ATTE
-  Можно добавлять алиасы: ATTE->ATTENTION, !!!->ATTENTION
-
-- [X] Сохранение коллекции тудушек и остального - либо в явно заданный каталог, и тогда там создаются файлы
-  todo-auto.md_, undone-auto.md_, note-auto.md_, содержищие все найденные заметки, либо такой набор создаётся
-  в каждом каталоге с сорцами. Если задаём `--notes-output-path=PATH` (`--todo-output-path`) - то сохраняем все файлы в данном каталоге.
-
-- [X] `--notes-filename=TYPE:NAME` (`--todo-filename`) - задает имя файла для заметок типа `TYPE`, без расширения.
-
-- [X] `--notes-filename-ext=EXT` (`--todo-filename-ext`) - задаем расширение для всех файлов заметок.
-
-- [X] `--notes-marker=TYPE:NAME` - стартовые маркеры: `TODO`, `ATT`, `ATTE`, `ATTENTION`, `NOTE`, `UNDONE`, `!!!`. Последнее
-      используем как алиас для ATTENTION, если идёт в начале, но эта комбинация может использоваться и в сочетании с другим 
-      маркером для упрощения протстого текстового поиска, поэтому добавляем её в обрезаемые
-
-- [X] `--notes-strip=TEXT` - обрезаем текст любой заметки спереди. Сюда будут добавлены: `:`, `!!!`, `-`.
-
-- [X] В тудушке или другой заметке может быть признак маркера [ ]/[X] - он переносится в результирующий файл.
-
-- [X] `--notes-add-check=reset,TYPE1,TYPE2,all` - `reset` - сбрасывает для всех, потом - добавляем по одному, 
-      `all` - установить для всех. Работает только для уже добавленных типов заметок.
-
-- [X] `--notes-keep-check=reset,TYPE1,TYPE2,all` - если в заметке в сорцах есть маркер, то переносим его вместе со значением.
-      Работает только для уже добавленных типов заметок.
-
-- [X] Заметки разных типов могут помещаться в один файл. `--notes-single-output=todo` - все заметки помещаем в файл `todo` (-S?).
-
-- [X] `--notes-single-output-title=TYPE:TITLE` - задаёт текст 'заголовка' для заметок, когда они помещаются в один файл.
-
-- [X] `--notes-single-output-title-format=[$(TITLE)]` - формат 'заголовка' заметок, когда они помещаются в один файл.
-
-- [X] `--notes-source-info-format='$(FILE):$(LINE)'` - format информации о расположении заметки в исходных текстах.
-
-- [ ] Выходной тип используется такой же, как и для списка описаний. (Хм... Забыл, о чем это).
-
-- [X] Если у нас многострочный коммент, в нем не может быть несколько заметок.
-
-- [X] Если у нас одноострочный коммент, то заметка может продолжаться в следующем однострочном комменте. 
-      Прерывается пустой строкой.
-
-- [X] Но, если у нас одноострочный коммент, то в следующем однострочном комменте может быть новая заметка.
-
-- [X] Храним как список заметок. Заметка содержит тип, текст, наличие и значение маркера, имя исходного файла и строка.
-
-- [X] Сохраняем эти списки заметок в мапах, где ключем идёт имя каталога, в котором расположен файл с заметкой.
-
-- [X] При формировании выходных файлов, если генеация идёт в один общий файл в `output` каталоге, имена папок используются, как заголовки.
-
-
-
 
 # Направление движения
 
@@ -252,47 +98,15 @@ mermaid packet diagram. Но - нужно уметь в байты, а не то
 - [ ] Визуализация данных `YAML` - https://plantuml.com/ru/yaml
 - [ ] Визуализация линкерных скриптов GCC. Генератор линкерных скриптов (глянуть) - http://visualgdb.com/tools/LinkerScriptGenerator
 - [ ] Язык для рисования. Хорошо бы сделать, он нужен.
-- [ ] Язык для описания пакетов протоколов. Стырить мармаидный синтаксис, сделать совместимым. Мармаид нам не годится, 
+- [X] Язык для описания пакетов протоколов. Стырить мармаидный синтаксис, сделать совместимым. Мармаид нам не годится, 
       они рисует в браузере. Хорошо бы сделать, он нужен. https://mermaid.js.org/
       Packet diagram - https://mermaid.js.org/syntax/packet.html#examples
 - [ ] Сборка TODO - поиск среди исходников файлов TODO и формирование единого TODO. Фича полезная. Не нужно вести один 
       большой TODO по проекту, с другой стороны, после сборки всё в одном файле.
 - [ ] Сайдбар. Пока не особо нужно, надо начать пилить доку, и смотреть, что и как там с вики будет получаться.
 - [ ] Собственно, дока по препроцессору. Пора бы уже начинать пилить.
-- [ ] `umba-wizardry` - переделать с питона на плюсы и доделать, что там не доделано.
-- [ ] Armapan для GCC/MSVC. Завести Armapan на гитхаб. Обновить до нынешних либ.
-- [ ] Токенизер - пофиксить баги, рассмотреть все мутные места
-- [ ] "Генератор протоколов". Почитать про парсеры.<br/>
-      https://rsdn.org/forum/java/8868362.1 <br/>
-      https://mihailromanov.github.io/docs/tutorials/ <br/>
-      https://habr.com/ru/companies/haulmont/articles/341402/ <br/>
-      https://github.com/area9innovation/flow9 <br/>
-      [Терминальный символ](https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB) <br/>
-      [Формальная грамматика](https://ru.wikipedia.org/wiki/%D0%A4%D0%BE%D1%80%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0) <br/>
-      Структурный дизайн - https://habr.com/ru/companies/jugru/articles/858418/ <br/>
-      CS164: Programming Languages and Compilers - http://www.infocobuild.com/education/audio-video-courses/computer-science/CS164-Spring2012-Berkeley/lecture-01.html <br/>
-      PEG - [Грамматика, разбирающая выражение](https://ru.wikipedia.org/wiki/%D0%93%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0,_%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D1%8E%D1%89%D0%B0%D1%8F_%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5),
-      [Parsing expression grammar](https://en.wikipedia.org/wiki/Parsing_expression_grammar)<br/>
-      packrat-парсер - https://en.wikipedia.org/wiki/Packrat_parser
-      https://intuit.ru/studies/courses/562/418/lecture/9562 <br/>
-      [The Parsing Expression Grammar Template Library (PEGTL) is a zero-dependency C++ header-only parser combinator library](https://github.com/taocpp/PEGTL)
-      [A linear-time C++17 PEG parser generator supporting memoization, left-recursion and context-dependent grammars.](https://github.com/TheLartians/PEGParser)
-      Переводы статей Guido van Rossum: 
-      - [PEG парсеры](https://habr.com/ru/articles/471860/)
-      - [Реализация PEG парсера](https://habr.com/ru/post/471862/)
-      - [Генерация PEG парсера](https://habr.com/ru/post/471864/)
-      - [Визуализация работы PEG парсера](https://habr.com/ru/post/471866/)
-      - [Леворекурсивные PEG грамматики](https://habr.com/ru/articles/471986/)
-      - [Добавление экшенов в грамматику PEG](https://habr.com/ru/post/471988/)
-      - [Мета-грамматика для PEG парсера](https://habr.com/ru/post/471990/)
-      - [Реализация остальных возможностей PEG](https://habr.com/ru/post/471992/)
-      - [PEG на Core Developer Sprint](https://habr.com/ru/post/471994/)
-
 - [ ] Разобраться с генератором сайтов Jekyll
 - [ ] Начать делать себе сайт, с описаниями различных своих тулз; со своими заметками, ссылками и прочим.
-- [ ] Перетащить в гит наработки для HEX-файлов
-- [ ] Разбор и оптимизация obj-файлов (под ARM, оптимизация кода шаблонов)
-- [ ] Вытащить на гитхаб либу, в которой я делал дизасм MSC-51, сделать на её базе либу для арм, с анализом цепочек выполнения и их скорости, а в идеале потом - эмулятор.
 
 Надо подумать, что нам нужно в первую очередь.
 
