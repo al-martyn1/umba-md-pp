@@ -192,6 +192,7 @@
 --add-lang-separator-prefix=C++://---
 --add-lang-separator-prefix=C++:/***
 --set-lang-block-chars=C++:{}
+--set-lang-statement-separator=C++:;
 --set-lang-listing-tag=C++:cpp
 
 # C
@@ -203,6 +204,7 @@
 --add-lang-separator-prefix=C://---
 --add-lang-separator-prefix=C:/***
 --set-lang-block-chars=C:{}
+--set-lang-statement-separator=C++:;
 --set-lang-listing-tag=C:cpp
 
 # Squrrel

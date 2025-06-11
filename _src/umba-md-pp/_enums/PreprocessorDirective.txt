@@ -1,6 +1,7 @@
 invalid,unknown =-1
 insert     // generalized version
 snippet,code
+prototype
 doc
 subsection,subsec
 quote,quot

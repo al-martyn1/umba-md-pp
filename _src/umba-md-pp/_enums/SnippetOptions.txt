@@ -35,10 +35,16 @@ quote,quot                         = 0x10C1 // Insert as blockquote
 noPre                              = 0x10D0 // -pre
 pre                                = 0x10D1 // pre itself or for inserted quote lines
 
+#
+noProtodoc,noPdoc                  = 0x10E0 // -protodoc
+protodoc,pdoc                      = 0x10E1 // Generate documentation for prototype
+
 
 # Flag only ON options
 
-subsection,subsec                  = 0x10E1 // Insert document as subsection - adjust section levels to current insertion pos
+subsection,subsec                  = 0x1811 // Insert document as subsection - adjust section levels to current insertion pos
+prototype                          = 0x1821 // Extract prototype from code snippet
+
 
 # Numeric options
 

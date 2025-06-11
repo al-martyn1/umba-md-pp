@@ -214,6 +214,7 @@ bool isInsertCommand(std::string line)
     return UMBA_THE_VALUE(testLineForPreprocessorDirectiveImplHelper(line))
                 .oneOf( PreprocessorDirective::insert 
                       , PreprocessorDirective::snippet
+                      , PreprocessorDirective::prototype
                       , PreprocessorDirective::doc    
                       , PreprocessorDirective::subsection
                       , PreprocessorDirective::quote  

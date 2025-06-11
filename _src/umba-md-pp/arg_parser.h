@@ -574,6 +574,28 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+        else if ( opt.setParam("LANG:{}")
+               || opt.isOption("set-lang-statement-separator")
+               || opt.setDescription("Set lang statement separator, like \";\" (semicolon) for C/C++"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.hasArg())
+            {
+                LOG_ERR<<"Setting lang statement separator (--set-lang-statement-separator)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.setStatementSeparator(optArg))
+            {
+                LOG_ERR<<"Setting lang statement separator, invalid argument: '" << optArg << "'.\n"; // Argument must be exact the pair of single open and close block characters\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
         else if ( opt.setParam("LANG:TAG")
                || opt.isOption("set-lang-listing-tag") || opt.isOption('T')
                || opt.setDescription("Set target markdown tag for the code section"))

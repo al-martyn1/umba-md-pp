@@ -1586,7 +1586,7 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
 
 
     makeShureEmptyLine(resLines);
-    umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
+    umba::vectorPushBack(resLines, listingLines);
     makeShureEmptyLine(resLines);
     resLines.emplace_back("<!-- -->");
     return true; // всё хорошо, не включит исходную строку
@@ -1595,18 +1595,38 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
 
 //----------------------------------------------------------------------------
 template<typename FilenameStringType> inline
-std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType>            &appCfg
-                                            , std::vector<std::string>   lines
-                                            , std::string                snippetFilename
-                                            , std::size_t                firstLineIdx
-                                            , bool                       bTrimLeft
-                                            , bool                       trimArround
-                                            , bool                       addLineNumbers
-                                            , bool                       addFilename
-                                            , bool                       addFilenameOnly
-                                            , bool                       addFilenameLineNumber
+std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType>  &appCfg
+                                            , std::vector<std::string>             lines
+                                            , const umba::md::LanguageOptions      &langOpts
+                                            , const std::string                    &lang
+                                            , std::string                          snippetFilename
+                                            , std::size_t                          firstLineIdx
+                                            , bool                                 bTrimLeft
+                                            , bool                                 trimArround
+                                            , bool                                 addLineNumbers
+                                            , bool                                 addFilename
+                                            , bool                                 addFilenameOnly
+                                            , bool                                 addFilenameLineNumber
+                                            , bool                                 bPrototype
+                                            , bool                                 bProtodoc
                                             )
 {
+    UMBA_ARG_USED(bPrototype);
+    UMBA_ARG_USED(bProtodoc );
+    UMBA_ARG_USED(langOpts  );
+    UMBA_ARG_USED(lang      );
+
+
+    if (bPrototype)
+    {
+        addLineNumbers        = false;
+        addFilename           = false;
+        addFilenameOnly       = false;
+        addFilenameLineNumber = false;
+        bTrimLeft             = true ;
+        trimArround           = true ;
+    }
+
     lines = trimLeadingSpaces(lines, bTrimLeft);
 
     if (trimArround)
@@ -1642,7 +1662,7 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
 
     std::vector<std::string> resLines;
 
-    std::string lang = appCfg.getLangByFilename(snippetFilename);
+    // std::string lang = appCfg.getLangByFilename(snippetFilename);
 
     if (addFilename)
     {
@@ -1732,12 +1752,18 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
     std::vector<std::string> insertLines; insertLines.reserve(snippetsFileLines.size());
     std::size_t firstLineIdx = 0;
 
+    bool bPrototype = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::prototype);
+    bool bProtodoc = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::protodoc);
+
     std::string lang = appCfg.getLangByFilename(foundFullFilename);
+    const auto& langOpts = appCfg.languageOptionsDatabase.getLanguageOptions(lang);
+
 
     if (snippetTag.empty()) // Вставляем файл целиком
     {
         std::vector<std::string>
         listingLines = prepareSnippetLines( appCfg, snippetsFileLines
+                                          , langOpts, lang
                                           , snippetFile, 0u // firstLineIdx
                                           , fTrimLeft
                                           , fTrimArround
@@ -1745,6 +1771,8 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
                                           , fAddFilename
                                           , fAddFilenameOnly
                                           , fAddFilenameLineNumber
+                                          , false // !prototype
+                                          , false // !protodoc
                                           );
         makeShureEmptyLine(resLines);
         umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
@@ -1770,18 +1798,25 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
         listingNestedTagsMode = ListingNestedTagsMode::emptyLine;
     }
 
+// std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::LanguageOptions         &langOpts
+//                                                             , const std::string                       &lang
+//                                                             , bool                                    bPrototype
+
     //std::vector<std::string> snippetLines = extractCodeFragmentBySnippetTag(appCfg.languageOptionsDatabase.getLanguageOptions(lang), lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 0, 4u /* tabSize */ );
-    std::vector<std::string> snippetLines = umba::md::extractCodeFragmentBySnippetTagInfo( appCfg.languageOptionsDatabase.getLanguageOptions(lang)
+    std::vector<std::string> snippetLines = umba::md::extractCodeFragmentBySnippetTagInfo( langOpts
                                                                                          , lang
+                                                                                         , bPrototype
                                                                                          , snippetsFileLines
                                                                                          , snippetTagInfo
                                                                                          , firstLineIdx
                                                                                          , listingNestedTagsMode
                                                                                          , 4u // tabSize
                                                                                          );
+
     // Если snippetLines пуст и firstLineIdx==-1, то это ошибка
     std::vector<std::string>
     listingLines = prepareSnippetLines( appCfg, snippetLines
+                                      , langOpts, lang
                                       , snippetFile, firstLineIdx
                                       , fTrimLeft
                                       , fTrimArround
@@ -1789,7 +1824,10 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
                                       , fAddFilename
                                       , fAddFilenameOnly
                                       , fAddFilenameLineNumber
+                                      , bPrototype
+                                      , bProtodoc
                                       );
+
     makeShureEmptyLine(resLines);
     umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформление сделал
     return true; // всё хорошо, не включит исходную строку

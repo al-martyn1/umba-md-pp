@@ -53,8 +53,13 @@ enum class SnippetOptions : std::uint32_t
     quot               = 0x10C1 /*!< Insert as blockquote */,
     noPre              = 0x10D0 /*!< -pre */,
     pre                = 0x10D1 /*!< pre itself or for inserted quote lines */,
-    subsection         = 0x10E1 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
-    subsec             = 0x10E1 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
+    noProtodoc         = 0x10E0 /*!< -protodoc */,
+    noPdoc             = 0x10E0 /*!< -protodoc */,
+    protodoc           = 0x10E1 /*!< Generate documentation for prototype */,
+    pdoc               = 0x10E1 /*!< Generate documentation for prototype */,
+    subsection         = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
+    subsec             = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
+    prototype          = 0x1821 /*!< Extract prototype from code snippet */,
     raise              = 0x2011 /*!< Raise section levels in included document up to RISE level */
 
 }; // enum 
@@ -90,7 +95,10 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noQuote            , "NoQuote"          );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noPre              , "NoPre"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::pre                , "Pre"              );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noProtodoc         , "NoProtodoc"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::protodoc           , "Protodoc"         );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::subsection         , "Subsection"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::prototype          , "Prototype"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::raise              , "Raise"            );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( SnippetOptions, std::map, 1 )
 
@@ -175,8 +183,17 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no_pre"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "nopre"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "pre"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no-protodoc"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no_protodoc"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "noprotodoc"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no-pdoc"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no_pdoc"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "nopdoc"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::protodoc           , "protodoc"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::protodoc           , "pdoc"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsection"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsec"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototype          , "prototype"           );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::raise              , "raise"               );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetOptions, std::map, 1 )
 
@@ -761,33 +778,34 @@ enum class PreprocessorDirective : std::uint32_t
     insert               = 0x0000 /*!< generalized version */,
     snippet              = 0x0001 /*!<  */,
     code                 = 0x0001 /*!<  */,
-    doc                  = 0x0002 /*!<  */,
-    subsection           = 0x0003 /*!<  */,
-    subsec               = 0x0003 /*!<  */,
-    quote                = 0x0004 /*!<  */,
-    quot                 = 0x0004 /*!<  */,
-    pre                  = 0x0005 /*!<  */,
-    toc                  = 0x0006 /*!<  */,
-    meta                 = 0x0007 /*!<  */,
-    set                  = 0x0008 /*!<  */,
-    switch_              = 0x0009 /*!<  */,
-    case_                = 0x000A /*!<  */,
-    default_             = 0x000B /*!<  */,
-    endswitch            = 0x000C /*!<  */,
-    endSwitch            = 0x000C /*!<  */,
-    caseFallthrough      = 0x000D /*!<  */,
-    caseFt               = 0x000D /*!<  */,
-    caseFallthroughAll   = 0x000E /*!<  */,
-    caseFtAll            = 0x000E /*!<  */,
-    detailing            = 0x000F /*!<  */,
-    break_               = 0x0010 /*!<  */,
-    enddetailing         = 0x0011 /*!<  */,
-    endDetailing         = 0x0011 /*!<  */,
-    condIf               = 0x0012 /*!<  */,
-    condElse             = 0x0013 /*!<  */,
-    condElif             = 0x0014 /*!<  */,
-    condElseif           = 0x0014 /*!<  */,
-    condEndif            = 0x0015 /*!<  */
+    prototype            = 0x0002 /*!<  */,
+    doc                  = 0x0003 /*!<  */,
+    subsection           = 0x0004 /*!<  */,
+    subsec               = 0x0004 /*!<  */,
+    quote                = 0x0005 /*!<  */,
+    quot                 = 0x0005 /*!<  */,
+    pre                  = 0x0006 /*!<  */,
+    toc                  = 0x0007 /*!<  */,
+    meta                 = 0x0008 /*!<  */,
+    set                  = 0x0009 /*!<  */,
+    switch_              = 0x000A /*!<  */,
+    case_                = 0x000B /*!<  */,
+    default_             = 0x000C /*!<  */,
+    endswitch            = 0x000D /*!<  */,
+    endSwitch            = 0x000D /*!<  */,
+    caseFallthrough      = 0x000E /*!<  */,
+    caseFt               = 0x000E /*!<  */,
+    caseFallthroughAll   = 0x000F /*!<  */,
+    caseFtAll            = 0x000F /*!<  */,
+    detailing            = 0x0010 /*!<  */,
+    break_               = 0x0011 /*!<  */,
+    enddetailing         = 0x0012 /*!<  */,
+    endDetailing         = 0x0012 /*!<  */,
+    condIf               = 0x0013 /*!<  */,
+    condElse             = 0x0014 /*!<  */,
+    condElif             = 0x0015 /*!<  */,
+    condElseif           = 0x0015 /*!<  */,
+    condEndif            = 0x0016 /*!<  */
 
 }; // enum 
 //#!
@@ -799,10 +817,11 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::invalid              , "Invalid"                  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::pre                  , "Pre"                      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::snippet              , "Snippet"                  );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::toc                  , "Toc"                      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::prototype            , "Prototype"                );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::doc                  , "Doc"                      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::subsection           , "Subsection"               );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::quote                , "Quote"                    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::toc                  , "Toc"                      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::condElse             , "CondElse"                 );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::meta                 , "Meta"                     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorDirective::set                  , "Set"                      );
@@ -827,12 +846,13 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorDirective, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::pre                  , "pre"                        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::snippet              , "snippet"                    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::snippet              , "code"                       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::toc                  , "toc"                        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::prototype            , "prototype"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::doc                  , "doc"                        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::subsection           , "subsection"                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::subsection           , "subsec"                     );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::quote                , "quote"                      );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::quote                , "quot"                       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::toc                  , "toc"                        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElse             , "cond-else"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElse             , "cond_else"                  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorDirective::condElse             , "condelse"                   );

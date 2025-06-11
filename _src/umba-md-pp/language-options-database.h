@@ -39,6 +39,7 @@ protected:
     std::unordered_set<std::string>                                    m_genericCutStopPrefixes; // For C++ it can be "//---", for plain C: /*** - separator line, or both of them
 
     std::string                                                        m_blockPair;
+    std::string                                                        m_statementSeparator; // expression/statement terminator/separator
 
 
 public:
@@ -91,6 +92,22 @@ public:
     std::string getBlockCharacters() const
     {
         return m_blockPair;
+    }
+
+    bool setStatementSeparator(const std::string &statementSeparator)
+    {
+        auto ssUpper = umba::string_plus::toupper_copy(statementSeparator);
+        if (ssUpper=="<LF>" || ssUpper=="<NL>")
+            m_statementSeparator = "\n";
+        else
+            m_statementSeparator = statementSeparator;
+
+        return true;
+    }
+
+    std::string getStatementSeparator() const
+    {
+        return m_statementSeparator;
     }
 
     bool addCutPrefix(const std::string &p)
@@ -229,6 +246,29 @@ public:
     {
         return m_languageOptions[lang].getBlockCharacters();
     }
+
+    bool setStatementSeparator(const std::string &lang, const std::string &statementSeparator)
+    {
+        return m_languageOptions[lang].setStatementSeparator(statementSeparator);
+    }
+
+    std::string getStatementSeparator(const std::string &lang)
+    {
+        return m_languageOptions[lang].getStatementSeparator();
+    }
+
+    // bool setStatementSeparator(const std::string &statementSeparator)
+    // {
+    //     m_statementSeparator = statementSeparator;
+    //     return true;
+    // }
+    //  
+    // std::string getStatementSeparator() const
+    // {
+    //     return m_statementSeparator;
+    // }
+
+
 
     bool setListingTagForBackendGenerator(const std::string &lang, const std::string &tag, const std::string &backend=std::string())
     {

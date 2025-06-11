@@ -792,6 +792,7 @@ struct SnippetTagInfo
 inline
 std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::LanguageOptions         &langOpts
                                                             , const std::string                       &lang
+                                                            , bool                                    bPrototype
                                                             , std::vector<std::string>                lines
                                                             , SnippetTagInfo                          tagInfo
                                                             , std::size_t                             &firstFoundLineIdx
@@ -800,6 +801,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
                                                             , std::size_t                             tabSize // =4u
                                                             )
 {
+    UMBA_ARG_USED(bPrototype);
     // tagInfo на валидность не проверяем, считаем, что он валидный
 
     // Человечий номер (с 1) превращаем в машинный (с 0)
@@ -1927,6 +1929,7 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
     auto pd = testLineForPreprocessorDirectiveImplHelper(line, &directiveNumCharsStrip);
     if (!umba::TheValue(pd).oneOf( PreprocessorDirective::insert 
                                  , PreprocessorDirective::snippet
+                                 , PreprocessorDirective::prototype
                                  , PreprocessorDirective::doc    
                                  , PreprocessorDirective::subsection
                                  , PreprocessorDirective::quote  
@@ -1951,11 +1954,25 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
                 break;
             }
 
+            case PreprocessorDirective::prototype: // Снипет - вставляет прототип функции из снипета, если заданы уточняющие/модифицирующие опций - удаляем их, если они там были
+            {
+                snippetFlagsOptions.erase(SnippetOptions::doc);
+                snippetFlagsOptions.erase(SnippetOptions::subsection);
+                snippetFlagsOptions.erase(SnippetOptions::quote);
+                snippetFlagsOptions.erase(SnippetOptions::pre);
+
+                snippetFlagsOptions.insert(SnippetOptions::prototype);
+
+                break;
+            }
+
             case PreprocessorDirective::doc:
             {
                 snippetFlagsOptions.erase(SnippetOptions::quote);
                 snippetFlagsOptions.erase(SnippetOptions::pre);
+
                 snippetFlagsOptions.insert(SnippetOptions::doc);
+
                 break;
             }
 
@@ -1963,8 +1980,10 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
             {
                 snippetFlagsOptions.erase(SnippetOptions::quote);
                 snippetFlagsOptions.erase(SnippetOptions::pre);
+
                 snippetFlagsOptions.insert(SnippetOptions::doc);
                 snippetFlagsOptions.insert(SnippetOptions::subsection);
+
                 break;
             }
 
@@ -1972,7 +1991,9 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
             {
                 snippetFlagsOptions.erase(SnippetOptions::doc);
                 snippetFlagsOptions.erase(SnippetOptions::subsection);
+
                 snippetFlagsOptions.insert(SnippetOptions::quote);
+
                 break;
             }
 
@@ -1980,7 +2001,9 @@ SnippetOptionsParsingResult parseSnippetInsertionCommandLine( std::unordered_set
             {
                 snippetFlagsOptions.erase(SnippetOptions::doc);
                 snippetFlagsOptions.erase(SnippetOptions::subsection);
+
                 snippetFlagsOptions.insert(SnippetOptions::pre);
+
                 break;
             }
 

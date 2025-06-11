@@ -1145,7 +1145,6 @@ struct AppConfig
 
     bool setBlockCharacters(const std::string &lang, const std::string &blockPair)
     {
-        //langOptions[lang].cutPrefix = cutPrefix;
         return languageOptionsDatabase.setBlockCharacters(lang, blockPair);
     }
 
@@ -1158,6 +1157,22 @@ struct AppConfig
         }
 
         return setBlockCharacters(lang, blockPair);
+    }
+
+    bool setStatementSeparator(const std::string &lang, const std::string &statementSeparator)
+    {
+        return languageOptionsDatabase.setStatementSeparator(lang, statementSeparator);
+    }
+
+    bool setStatementSeparator(const std::string &langStatementSeparator)
+    {
+        std::string lang, statementSeparator;
+        if (!umba::string_plus::split_to_pair(langStatementSeparator, lang, statementSeparator, ':'))
+        {
+            return false;
+        }
+
+        return setStatementSeparator(lang, statementSeparator);
     }
 
 
