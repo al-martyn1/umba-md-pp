@@ -1,234 +1,12 @@
 #pragma once
 
-#include "app_config.h"
-#include "document.h"
-//
-#include "marty_cpp/src_normalization.h"
-
-#include "umba/transliteration.h"
-#include "umba/id_gen.h"
-#include "umba/container_utility.h"
-#include "umba/parse_utils.h"
-#include "umba/null_inserter.h"
-#include "umba/macros.h"
-#include "umba/macro_helpers.h"
-#include "umba/text_utils.h"
-//
-#include "marty_yaml_toml_json/json_utils.h"
-#include "marty_yaml_toml_json/yaml_json.h"
-#include "marty_yaml_toml_json/yaml_utils.h"
-
-//
-#include "umba_md_processing_utils.h"
-//
-#include "processing_code_utils.h"
-//
-#include "processing_section_utils.h"
-
-#include "processing_utils.h"
-//
-#include "yaml-cpp/yaml.h"
-//
-#include "enum_hash.h"
-//
-#include "utils.h"
-//
-#include "md_pp_html_csv.h"
-#include "md_pp_html_graph.h"
-#include "md_pp_html_puml.h"
-#include "md_pp_html_arg_list.h"
-//
-#include <stack>
-#include <string>
-#include <utility>
-#include <sstream>
-#include <utility>
-#include <algorithm>
-#include <iomanip>
-#include <unordered_map>
-#include <functional>
-
-
-//
-#include "yaml_json_document_helpers.h"
-#include "md-pp-macro_helpers.h"
+#include "processing_includes.h"
 //
 #include "config.h"
-
-
-//----------------------------------------------------------------------------
-template<typename FilenameStringType>
-using TagLineExtraParser = std::function<std::string::const_iterator (const AppConfig<FilenameStringType>&, umba::html::HtmlTag&, MdPpTag, std::string::const_iterator, std::string::const_iterator)>;
-
-//------------------------------
-template<typename FilenameStringType>
-using TagLineExtraParsersMap = std::unordered_map<MdPpTag, TagLineExtraParser<FilenameStringType>, EnumClassHash >;
-
-//------------------------------
-template<typename FilenameStringType>
-TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
-{
-    //TODO: !!! Набить парсеры для graph/csv
-    TagLineExtraParsersMap<FilenameStringType> m;
-
-    m[MdPpTag::graph] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
-                        {
-                            UMBA_USED(appCfg);
-                            UMBA_USED(tagType);
-                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
-                        };
-    m[MdPpTag::puml ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
-                        {
-                            UMBA_USED(appCfg);
-                            UMBA_USED(tagType);
-                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
-                        };
-    m[MdPpTag::argList ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
-                        {
-                            UMBA_USED(appCfg);
-                            UMBA_USED(tagType);
-                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
-                        };
-    m[MdPpTag::valList ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
-                        {
-                            UMBA_USED(appCfg);
-                            UMBA_USED(tagType);
-                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
-                        };
-    m[MdPpTag::csvTable] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
-                        {
-                            UMBA_USED(appCfg);
-                            UMBA_USED(tagType);
-                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
-                        };
-
-    return m;
-}
-
-//------------------------------
-template<typename FilenameStringType>
-const TagLineExtraParsersMap<FilenameStringType>& getTagLineExtraParsersMap()
-{
-    static auto m = makeTagLineExtraParsersMap<FilenameStringType>();
-    return m;
-}
-
-//------------------------------
-template<typename FilenameStringType>
-std::string::const_iterator tagLineExtraParse(const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
-{
-    const auto &m = const_cast< TagLineExtraParsersMap<FilenameStringType>& >(getTagLineExtraParsersMap<FilenameStringType>());
-    auto it = m.find(tagType);
-    if (it==m.end())
-        return e;
-
-    return it->second(appCfg, mdHtmlTag, tagType, b, e);
-}
-
-//----------------------------------------------------------------------------
-
-
-
-//----------------------------------------------------------------------------
-template<typename FilenameStringType>
-using TagLinesProcessor = std::function<void (const AppConfig<FilenameStringType>&, Document&, umba::html::HtmlTag&, MdPpTag, const FilenameStringType&, const std::vector<std::string>&, std::vector<std::string>&)>;
-
-//------------------------------
-template<typename FilenameStringType>
-using TagLinesProcessorsMap = std::unordered_map<MdPpTag, TagLinesProcessor<FilenameStringType>, EnumClassHash >;
-
-//------------------------------
-template<typename FilenameStringType>
-TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
-{
-    //TODO: !!! Набить процессоры для graph/csv
-    TagLinesProcessorsMap<FilenameStringType> m;
-
-    m[MdPpTag::graph] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
-                        {
-                             return umba::md::processGraphLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
-                        };
-    m[MdPpTag::puml ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
-                        {
-                             return umba::md::processDiagramLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
-                        };
-    m[MdPpTag::argList ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
-                        {
-                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
-                        };
-    m[MdPpTag::valList ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
-                        {
-                             return umba::md::processValListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
-                        };
-    m[MdPpTag::csvTable ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
-                        {
-                             return umba::md::processCsvTableLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
-                        };
-    return m;
-}
-
-//------------------------------
-template<typename FilenameStringType>
-const TagLinesProcessorsMap<FilenameStringType>& getTagLinesProcessorsMap()
-{
-    static auto m = makeTagLinesProcessorsMap<FilenameStringType>();
-    return m;
-}
-
-//------------------------------
-template<typename FilenameStringType>
-void tagLinesProcess(const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
-{
-    const auto &m = const_cast< TagLinesProcessorsMap<FilenameStringType>& >(getTagLinesProcessorsMap<FilenameStringType>());
-    auto it = m.find(tagType);
-    if (it==m.end())
-        return;
-
-    it->second(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
-}
-
-//----------------------------------------------------------------------------
-
-
-
-//----------------------------------------------------------------------------
-// Для соответствующего тэга возвращает строчку с single-line comment префиксом
-// Если формат файла не поддерживает коментарии, то увы, метаданных там не может быть
-using TagLinesCommentStartMap = std::unordered_map<MdPpTag, std::string, EnumClassHash >;
-
-//------------------------------
-inline
-TagLinesCommentStartMap makeTagLinesCommentStartMap()
-{
-    TagLinesCommentStartMap m;
-    m[MdPpTag::graph] = "//";
-    m[MdPpTag::puml ] = "'";
-    m[MdPpTag::argList ] = "'";
-    m[MdPpTag::valList ] = "'";
-    return m;
-}
-
-//------------------------------
-inline
-const TagLinesCommentStartMap& getTagLinesCommentStartMap()
-{
-    static auto m = makeTagLinesCommentStartMap();
-    return m;
-}
-
-//------------------------------
-inline
-std::string getTagLinesCommentStart(MdPpTag tagType)
-{
-    const auto &m = getTagLinesCommentStartMap();
-    auto it = m.find(tagType);
-    if (it==m.end())
-        return std::string();
-
-    return it->second;
-}
-
-//----------------------------------------------------------------------------
+//
+#include "md_pp_tags.h"
+//
+#include "md/processing.h"
 
 
 //MdPpTag foundTagType = MdPpTag::invalid;
@@ -238,410 +16,6 @@ std::string getTagLinesCommentStart(MdPpTag tagType)
 template<typename FilenameStringType>
 std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document &resDoc, std::string fileText, const FilenameStringType &curFilename);
 
-//----------------------------------------------------------------------------
-//! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
-template<typename LineHandler, typename FilenameStringType> inline
-std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines, LineHandler handler)
-{
-    std::vector<std::string> resLines; resLines.reserve(lines.size());
-
-    if (lines.empty())
-        return resLines;
-
-    std::size_t lastLineIdx = lines.size()-1;
-
-    PreprocessorParsingState state = PreprocessorParsingState::normal;
-
-    //for(auto line: lines)
-    for(std::size_t idx=0u; idx!=lines.size(); ++idx)
-    {
-        std::string line = lines[idx];
-
-
-        if (state==PreprocessorParsingState::listing) // listing mode
-        {
-            if (isListingCommand(line))
-            {
-                state = PreprocessorParsingState::normal;
-                if (handler(LineHandlerEvent::listingEnd, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-            }
-            else
-            {
-                if (handler(LineHandlerEvent::listingLine, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-            }
-        }
-
-
-        else if (state==PreprocessorParsingState::meta) // meta mode
-        {
-            if (isMetaEndCommand(line))
-            {
-                state = PreprocessorParsingState::normal;
-                if (handler(LineHandlerEvent::metaEnd, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-            }
-            else
-            {
-                if (handler(LineHandlerEvent::metaLine, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-            }
-        }
-
-
-        else if (state==PreprocessorParsingState::comment) // comment mode
-        {
-            if (isMultiLineCommentEnd(line))
-                state = PreprocessorParsingState::normal; // Больше ничего не делаем, строка всё ещё от комента
-        }
-
-
-        else if (state==PreprocessorParsingState::normal) // normal mode
-        {
-            if (isSingleLineComment(line))
-            {
-                // Пропускаем коменты
-                continue;
-            }
-
-            if (isMultiLineCommentStart(line))
-            {
-                // Пропускаем многострочные коменты
-                state = PreprocessorParsingState::comment;
-                continue;
-            }
-
-            umba::html::HtmlTag mdHtmlTag;
-            MdPpTag foundMdPpTagType = MdPpTag::invalid;
-            auto it = umba::md::tryParseLineToHtmlTag(mdHtmlTag, line.begin(), line.end(), foundMdPpTagType);
-            if (foundMdPpTagType!=MdPpTag::invalid && !mdHtmlTag.isCloseTag())
-            {
-                tagLineExtraParse(appCfg, mdHtmlTag, foundMdPpTagType, it, line.end());
-
-                std::vector<std::string> tagLines;
-
-                bool externFile = false;
-
-                if (mdHtmlTag.hasAttr("file"))
-                {
-                    // read file here
-                    std::string foundFullFilename;
-                    std::string foundFileText;
-                    auto findRes = appCfg.findDocFileByIncludedFromFilename(mdHtmlTag.getAttrValue("file"), foundFullFilename, foundFileText, curFilename);
-                    if (!findRes) // document not found
-                    {
-                    }
-                    else
-                    {
-                        tagLines = marty_cpp::splitToLinesSimple(foundFileText);
-                        externFile = true;
-                    }
-                }
-                else
-                {
-                    // collect lines here
-                    for(++idx; idx!=lines.size(); ++idx)
-                    {
-                        umba::html::HtmlTag mdHtmlTagEnd;
-                        MdPpTag foundEndTagType = MdPpTag::invalid;
-                        line = lines[idx];
-                        if (isSingleLineComment(line))
-                            continue;
-                        // auto it2 = 
-                        umba::md::tryParseLineToHtmlTag(mdHtmlTagEnd, line.begin(), line.end(), foundEndTagType);
-                        if (foundMdPpTagType==foundEndTagType && mdHtmlTagEnd.isCloseTag())
-                            break;
-                        tagLines.emplace_back(lines[idx]);
-                    }
-
-                    if (idx==lines.size())
-                        --idx;
-                }
-
-                if (externFile && foundMdPpTagType!=MdPpTag::invalid)
-                {
-                    // Тут надо выцепить мету из строк внешнего файла 
-                    auto commentPrefix = getTagLinesCommentStart(foundMdPpTagType);
-                    if (!commentPrefix.empty())
-                    {
-                        auto metaLines = extractMetaLinesFromDocument(tagLines, commentPrefix);
-                        if (!metaLines.empty())
-                        {
-                            std::string metadataText = marty_cpp::mergeLines(metaLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
-                            doc.collectedMetadataTexts.emplace_back(metadataText);
-                        }
-                    }
-                }
-
-                tagLinesProcess(appCfg, doc, mdHtmlTag, foundMdPpTagType, curFilename, tagLines, resLines);
-
-                continue;
-            }
-
-
-            if (isListingCommand(line))
-            {
-                state = PreprocessorParsingState::listing;
-                if (handler(LineHandlerEvent::listingStart, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (isMetaStartCommand(line) && idx==0) // metadata allowed only at the beginning of the file
-            {
-                state = PreprocessorParsingState::meta;
-                if (handler(LineHandlerEvent::metaStart, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (isInsertCommand(line))
-            {
-                if (handler(LineHandlerEvent::insertCommand, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (isTocCommand(line))
-            {
-                if (handler(LineHandlerEvent::tocCommand, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (isMetaCommand(line))
-            {
-                if (handler(LineHandlerEvent::metaCommand, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (isHeaderCommand(line))
-            {
-                if (handler(LineHandlerEvent::headerCommand, resLines, line, idx, lastLineIdx))
-                {
-                    resLines.emplace_back(line);
-                }
-                continue;
-            }
-
-            if (handler(LineHandlerEvent::normalLine, resLines, line, idx, lastLineIdx))
-            {
-                resLines.emplace_back(line);
-            }
-        }
-
-        else
-        {
-            // Something goes wrong
-        }
-    }
-
-    std::string finalLine;
-    handler(LineHandlerEvent::documentEnd, resLines, finalLine, 0 /* idx */ , lastLineIdx);
-
-    return resLines;
-}
-
-//----------------------------------------------------------------------------
-// std::vector<std::string> collectMetadataLines(const AppConfig &appCfg, const std::vector<std::string> &lines, std::vector<std::string> &metadataLines)
-// {
-//     auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
-//     {
-//         if (event==LineHandlerEvent::metaStart || event==LineHandlerEvent::metaEnd)
-//         {
-//             return false; // prevent to add this line to result lines
-//         }
-//         else if (event==LineHandlerEvent::metaLine)
-//         {
-//             metadataLines.emplace_back(line);
-//             return false; // prevent to add this line to result lines
-//         }
-//         else
-//         {
-//             return true; // allow line to be added to output
-//         }
-//     };
-//
-//     return processLines(appCfg, lines, handler);
-// }
-//
-// //----------------------------------------------------------------------------
-// std::vector<std::string> collectMetadataToText(const AppConfig &appCfg, const std::vector<std::string> &lines, std::string &metadataText)
-// {
-//     std::vector<std::string> metadataLines;
-//     std::vector<std::string> resLines = collectMetadataLines(appCfg, lines, metadataLines);
-//
-//     metadataText = marty_cpp::mergeLines(resLines, marty_cpp::ELinefeedType::lf, true  /* addTrailingNewLine */ );
-//
-//     return resLines;
-// }
-
-//----------------------------------------------------------------------------
-template<typename HeaderLineHandler, typename FilenameStringType> inline
-std::vector<std::string> processHeaderLines(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines, HeaderLineHandler headerHandler)
-{
-    auto handler = [&](LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
-    {
-        UMBA_USED(lastLineIdx);
-        UMBA_USED(idx);
-
-        if (event!=LineHandlerEvent::headerCommand)
-        {
-            return true;
-        }
-
-        if (headerHandler(line))
-        {
-            //resLines.emplace_back(line);
-            return true;
-        }
-
-        return false;
-    };
-
-    return processLines(appCfg, doc, curFilename, lines, handler);
-
-}
-
-//----------------------------------------------------------------------------
-template<typename FilenameStringType> inline
-std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines, int raiseVal)
-{
-    // Ограничиваем изменение разумной величиной
-    if (raiseVal>3)
-        raiseVal = 3;
-    if (raiseVal<-3)
-        raiseVal = -3;
-
-    if (!raiseVal)
-         return lines;
-
-    auto raiseHeader = [&](std::string &line) -> bool
-    {
-        std::string levelStr;
-        std::string headerText;
-
-        if (!splitHeaderLine(line, levelStr, headerText))
-            return true;
-
-        std::size_t newHeaderSize = levelStr.size();
-
-        int rv = raiseVal;
-
-        if (rv<0)
-        {
-            rv = -rv;
-            newHeaderSize += (std::size_t)rv;
-        }
-        else
-        {
-            if (rv<=(int)newHeaderSize)
-            {
-                newHeaderSize -= (std::size_t)rv;
-            }
-            else
-            {
-                newHeaderSize = 0;
-            }
-        }
-
-        if (newHeaderSize==0)
-           newHeaderSize = 1;
-
-        line = std::string(newHeaderSize, '#') + std::string(1u, ' ') + headerText;
-
-        return true;
-    };
-
-    return processHeaderLines(appCfg, doc, curFilename, lines, raiseHeader);
-}
-
-//----------------------------------------------------------------------------
-template<typename FilenameStringType> inline
-int findHeadersTopLevel(const AppConfig<FilenameStringType> &appCfg, Document &doc, const FilenameStringType &curFilename, const std::vector<std::string> &lines)
-{
-    int topLevel = 65535;
-
-    auto findHeadersTopLevelLambda = [&](std::string &line) -> bool
-    {
-        std::string levelStr;
-        std::string headerText;
-
-        if (!splitHeaderLine(line, levelStr, headerText))
-            return false; // don't add line to result
-
-        int curHeaderLevel = int(levelStr.size());
-        topLevel = std::min(topLevel, curHeaderLevel);
-
-        return false;
-    };
-
-    processHeaderLines(appCfg, doc, curFilename, lines, findHeadersTopLevelLambda);
-
-    return topLevel==65535 ? -1 : topLevel;
-}
-
-//----------------------------------------------------------------------------
-#if 0
-inline
-std::vector<std::string> generateSectionIds(const AppConfig &appCfg, const std::vector<std::string> &lines)
-{
-    std::unordered_map<std::string, std::size_t> usedIds;
-
-    auto processSectionHeader = [&](std::string &line) -> bool
-    {
-        std::size_t headerLevel = 0;
-        std::string headerText;
-
-        std::string id = generateSectionId(appCfg, line, &headerLevel, &headerText);
-        if (headerLevel==0 || id.empty())
-            return true;
-
-        ++usedIds[id];
-
-        if (usedIds[id]>1)
-        {
-            auto n = usedIds[id];
-            id.append(1,'-');
-            id.append(std::to_string(n-1));
-        }
-
-        line = std::string(headerLevel, '#') + std::string(1u,' ') + headerText + std::string(" {#") + id + std::string("}");
-
-        return true;
-    };
-
-    return processHeaderLines(appCfg, lines, processSectionHeader);
-}
-#endif
-//----------------------------------------------------------------------------
-    // resLines = generateSecionsExtra( appCfg, resLines, docTo
-                                   // , true // update doc info
-                                   // , true // update title
-    //                                , appCfg.testProcessingOption(ProcessingOptions::numericSections) // нужно или нет реально генерить номера секций
-    //                                );
-
-    // std::vector<std::string> tocLines;
 
 //----------------------------------------------------------------------------
 const std::size_t maxSectionLevelsTotal = 64;
@@ -776,75 +150,8 @@ std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringTyp
         return true;
     };
 
-    return processHeaderLines(appCfg, docTo, curFilename, lines, processSectionNumber);
+    return umba::md::processHeaderLines(appCfg, docTo, curFilename, lines, processSectionNumber);
 }
-
-
-
-//----------------------------------------------------------------------------
-#if 0
-inline
-std::vector<std::string> generateTocLines(const AppConfig &appCfg, const std::vector<std::string> &lines)
-{
-    std::unordered_map<std::string, std::size_t> usedIds;
-
-    std::vector<std::string> tocLines;
-
-    auto processSectionHeader = [&](std::string &line) -> bool
-    {
-        std::string levelStr;
-        std::string headerText;
-
-        if (!splitHeaderLine(line, levelStr, headerText))
-            return false;
-
-        std::size_t headerLevel = 0;
-        std::string id = generateSectionId(appCfg, line, &headerLevel);
-
-        if (!headerLevel)
-            return false; // нам не надо в целевой вектор ничего добавлять
-
-        std::string tocLine = std::string(headerLevel*2u /* +2u */ , ' ');
-        tocLine.append("- ");
-
-        if (id.empty())
-        {
-            // Generate simple text entry
-            tocLine.append(headerText);
-            tocLines.emplace_back(tocLine);
-            return false;
-        }
-
-        ++usedIds[id];
-
-        if (usedIds[id]>1)
-        {
-            auto n = usedIds[id];
-            id.append(1,'-');
-            id.append(std::to_string(n-1));
-        }
-
-        tocLine.append("[");
-        tocLine.append(headerText);
-        tocLine.append("](#");
-        tocLine.append(id);
-        tocLine.append(")");
-        tocLines.emplace_back(tocLine);
-
-        return false;
-    };
-
-    processHeaderLines(appCfg, lines, processSectionHeader);
-
-    return tocLines;
-}
-#endif
-
-
-// //! LineHandler: bool handler(LineHandlerEvent event, std::vector<std::string> &resLines, std::string &line, std::size_t idx, std::size_t lastLineIdx)
-// template<typename LineHandler, typename FilenameStringType> inline
-// std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCfg, const std::vector<std::string> &lines, LineHandler handler)
-// {
 
 //----------------------------------------------------------------------------
 inline
@@ -912,7 +219,7 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
         return true;
     };
 
-    return processLines(appCfg, doc, curFilename, lines, processLinesHandler);
+    return umba::md::processLines(appCfg, doc, curFilename, lines, processLinesHandler);
 }
 
 //----------------------------------------------------------------------------
@@ -1266,7 +573,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
     std::unordered_set<SnippetOptions>::const_iterator subsectionOptIt = snippetFlagsOptions.find(SnippetOptions::subsection);
     if (subsectionOptIt!=snippetFlagsOptions.end())
     {
-        int docHdrLevel = findHeadersTopLevel(appCfg, docTo, foundFullFilename, docLines);
+        int docHdrLevel = umba::md::findHeadersTopLevel(appCfg, docTo, foundFullFilename, docLines);
         if (docHdrLevel>0) // В документе есть заголовки
         {
             int targetSubsecHdrLevel = curHeaderLevel+1;
@@ -1290,7 +597,7 @@ bool insertDoc( const AppConfig<FilenameStringType>           &appCfg
 
     if (iRaise!=0)
     {
-        processedDocLines = raiseHeaders(appCfg, docTo, curFilename, processedDocLines, iRaise);
+        processedDocLines = umba::md::raiseHeaders(appCfg, docTo, curFilename, processedDocLines, iRaise);
     }
 
     auto curFilePath      = umba::filename::getPath(curFilename);
@@ -2046,7 +1353,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
 
     };
 
-    return processLines(appCfg, docTo, curFilename, lines, handler);
+    return umba::md::processLines(appCfg, docTo, curFilename, lines, handler);
 }
 
 // //----------------------------------------------------------------------------
@@ -2109,7 +1416,7 @@ std::vector<std::string> processTocCommands(const AppConfig<FilenameStringType> 
         return false;
     };
 
-    return processLines(appCfg, doc, curFilename, lines, handler);
+    return umba::md::processLines(appCfg, doc, curFilename, lines, handler);
 }
 
 //----------------------------------------------------------------------------
@@ -2194,7 +1501,7 @@ std::vector<std::string> processMetaCommands(const AppConfig<FilenameStringType>
         return false;
     };
 
-    return processLines(appCfg, doc, curFilename, lines, handler);
+    return umba::md::processLines(appCfg, doc, curFilename, lines, handler);
 }
 
 //----------------------------------------------------------------------------
@@ -2398,7 +1705,7 @@ std::vector<std::string> updateInDocRefs(const AppConfig<FilenameStringType> &ap
         return true;
     };
 
-    return processLines(appCfg, doc, curFilename, lines, handler);
+    return umba::md::processLines(appCfg, doc, curFilename, lines, handler);
 }
 
 //----------------------------------------------------------------------------
