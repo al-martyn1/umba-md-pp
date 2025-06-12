@@ -23,18 +23,18 @@ Generator: Umba Brief Scanner
 - `[_src/umba-md-pp/processing.h:1078]`
   Не понятно, с чего этот варнинг вылезает, надо разобраться
 
-- `[_src/umba-md-pp/processing.h:1661]`
+- `[_src/umba-md-pp/processing.h:1681]`
   Какое-то оформление надо
 
-- `[_src/umba-md-pp/processing.h:1871]`
+- `[_src/umba-md-pp/processing.h:1916]`
   JSON-META У нас универсальный парсер YAML/JSON и мета данные могут быть в
   формате JSON При вставке в JSON могут быть проблемы
 
-- `[_src/umba-md-pp/snippet_options.h:864]`
+- `[_src/umba-md-pp/snippet_options.h:883]`
   Тут бы надо предусмотреть, что в первой строке поиска надо пропустить окончание
   сигнатуры, но пока сойдёт и так
 
-- `[_src/umba-md-pp/snippet_options.h:910]`
+- `[_src/umba-md-pp/snippet_options.h:930]`
   - или тут надо уменьшить на размер конечной сигнатуры в строках?
 
 - `[_src/umba-md-pp/umba-md-pp-view.cpp:501]`

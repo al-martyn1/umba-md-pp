@@ -687,8 +687,17 @@ enum class SnippetOptions : std::uint32_t
     quot               = 0x10C1 /*!< Insert as blockquote */,
     noPre              = 0x10D0 /*!< -pre */,
     pre                = 0x10D1 /*!< pre itself or for inserted quote lines */,
-    subsection         = 0x10E1 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
-    subsec             = 0x10E1 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
+    noProtodoc         = 0x10E0 /*!< -protodoc */,
+    noPdoc             = 0x10E0 /*!< -protodoc */,
+    protodoc           = 0x10E1 /*!< Generate documentation for prototype */,
+    pdoc               = 0x10E1 /*!< Generate documentation for prototype */,
+    noFormat           = 0x10F0 /*!< -format */,
+    noFmt              = 0x10F0 /*!< -format */,
+    format             = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
+    fmt                = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
+    subsection         = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
+    subsec             = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
+    prototype          = 0x1821 /*!< Extract prototype from code snippet */,
     raise              = 0x2011 /*!< Raise section levels in included document up to RISE level */
 
 }; // enum
@@ -696,10 +705,39 @@ enum class SnippetOptions : std::uint32_t
 
 
 
+Извлекаем фрагмент кода по сигнатуре (прототип, задаём конечным маркером ';'):
+```
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
+```
+
+```cpp
+inline std::string findDoxygenBinPathImpl(bool dontTouchSystem);
+```
+
+
+Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype):
+```
+#!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+```
+
+```cpp
+inline std::string findDoxygenBinPathImpl(bool dontTouchSystem);
+```
+
+
+Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype, с форматированием):
+```
+#!prototype{fmt} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+```
+
+```cpp
+inline std::string findDoxygenBinPathImpl(bool dontTouchSystem);
+```
+
 
 Извлекаем фрагмент кода по сигнатуре:
 ```
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)`-{}
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}
 ```
 
 ```cpp
@@ -723,7 +761,6 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 #endif
 }
 ```
-
 
 
 # Стандартный конфиг
@@ -923,6 +960,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --add-lang-separator-prefix=C++://---
 --add-lang-separator-prefix=C++:/***
 --set-lang-block-chars=C++:{}
+--set-lang-statement-separator=C++:;
 --set-lang-listing-tag=C++:cpp
 
 # C
@@ -934,6 +972,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 --add-lang-separator-prefix=C://---
 --add-lang-separator-prefix=C:/***
 --set-lang-block-chars=C:{}
+--set-lang-statement-separator=C++:;
 --set-lang-listing-tag=C:cpp
 
 # Squrrel

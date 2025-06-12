@@ -4,11 +4,19 @@ Generator: Umba Brief Scanner
 
 # _libs/marty_format/impl
 
-- [ ] `[_libs/marty_format/impl/internal_processFormatValuesImpl.h:847]`
+- [ ] `[_libs/marty_format/impl/internal_processFormatValuesImpl.h:437]`
+  Если есть BigInt, то форматируем через него, если у нас "целый" форматный
+  символ
+
+- [ ] `[_libs/marty_format/impl/internal_processFormatValuesImpl.h:442]`
+  Если BigInt'а нет, то форматируем через std::uint64_t getAsUint64() const, не
+  забывая про знак
+
+- [ ] `[_libs/marty_format/impl/internal_processFormatValuesImpl.h:1275]`
   Если задано сделать escape для строки то надо сделать escape, но не длиннее,
   чем макс ширина
 
-- [ ] `[_libs/marty_format/impl/internal_processFormatValuesImpl.h:859]`
+- [ ] `[_libs/marty_format/impl/internal_processFormatValuesImpl.h:1287]`
   Тут используем UTF итераторы явно, если нам не нужен UTF, надо будет обрубить
   эту возможность
 
@@ -29,9 +37,9 @@ Generator: Umba Brief Scanner
 - [ ] `[_src/umba-md-pp/processing.h:959]`
   Надо бы сделать какой-то null_insert_iterator и null_inserter
 
-- [ ] `[_src/umba-md-pp/processing.h:1674]`
+- [ ] `[_src/umba-md-pp/processing.h:1694]`
   Нужно добавить обрамление
 
-- [ ] `[_src/umba-md-pp/processing_utils.h:454]`
+- [ ] `[_src/umba-md-pp/processing_utils.h:455]`
   Доделать
 

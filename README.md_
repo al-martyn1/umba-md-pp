@@ -243,14 +243,36 @@ GitHub/GitLab wiki, например.
 
 
 
+Извлекаем фрагмент кода по сигнатуре (прототип, задаём конечным маркером ';'):
+```
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
+```
+
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
+
+
+Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype):
+```
+#!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+```
+
+#!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+
+
+Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype, с форматированием):
+```
+#!prototype{fmt} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+```
+
+#!prototype{fmt} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+
 
 Извлекаем фрагмент кода по сигнатуре:
 ```
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)`-{}
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}
 ```
 
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)`-{}
-
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}
 
 
 # Стандартный конфиг

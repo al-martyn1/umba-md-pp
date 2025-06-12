@@ -3,6 +3,8 @@ Title: Brief Description for Project Sources
 Generator: Umba Brief Scanner
 ---
 
+- `mul-speed-test-impl.cpp` - Сравниваем варианты умножения marty::BigInt на скорость
+- `op-tests-impl.cpp` - Тестим операторы marty::BigInt
 - `marty_format_types.h` - Типы для marty::format
 - `gcvt_test.cpp` - 
 - `std_format_tests_hex.cpp` - 
