@@ -61,6 +61,10 @@ enum class SnippetOptions : std::uint32_t
     noFmt              = 0x10F0 /*!< -format */,
     format             = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
     fmt                = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
+    noClass            = 0x1100 /*!< -class */,
+    noCls              = 0x1100 /*!< -class */,
+    class_             = 0x1101 /*!< class option for prototype extraction. */,
+    cls                = 0x1101 /*!< class option for prototype extraction. */,
     subsection         = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
     subsec             = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
     prototype          = 0x1821 /*!< Extract prototype from code snippet */,
@@ -103,6 +107,8 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFormat           , "NoFormat"         );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::protodoc           , "Protodoc"         );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::format             , "Format"           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noClass            , "NoClass"          );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::class_             , "Class"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::subsection         , "Subsection"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::prototype          , "Prototype"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::raise              , "Raise"            );
@@ -205,6 +211,14 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::protodoc           , "pdoc"                );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::format             , "format"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::format             , "fmt"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no-class"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no_cls"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no_class"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "nocls"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "noclass"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no-cls"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::class_             , "class"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::class_             , "cls"                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsection"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsec"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototype          , "prototype"           );

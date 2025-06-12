@@ -43,6 +43,10 @@ protodoc,pdoc                      = 0x10E1 // Generate documentation for protot
 noFormat,noFmt                     = 0x10F0 // -format
 format,fmt                         = 0x10F1 // format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is
 
+#
+noClass,noCls                      = 0x1100 // -class
+class,cls                          = 0x1101 // class option for prototype extraction. 
+
 
 # Flag only ON options
 
