@@ -39,6 +39,10 @@ pre                                = 0x10D1 // pre itself or for inserted quote 
 noProtodoc,noPdoc                  = 0x10E0 // -protodoc
 protodoc,pdoc                      = 0x10E1 // Generate documentation for prototype
 
+#
+noFormat,noFmt                     = 0x10F0 // -format
+format,fmt                         = 0x10F1 // format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is
+
 
 # Flag only ON options
 

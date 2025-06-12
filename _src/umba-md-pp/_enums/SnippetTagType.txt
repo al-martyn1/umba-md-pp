@@ -2,6 +2,8 @@ invalid,unknown=-1
 normalTag         = 0 // Allowed for start/end
 lineNumber            // Allowed for start/end
 textSignature         // Allowed for start/end - end signature not included to code snippet
-block                 // Allowed for end only - signals that we need to cat code block in block symbols
+block                 // Allowed for end only - signals that we need to cut code block in block symbols
+blockOrSeparator      // Allowed for end only - signals that we need to cut code block or stops on statement separator
+statementSeparator    // Allowed for end only - stops on statement separator or on block open symbol
 genericStopMarker     // Allowed for end only
 stopOnEmptyLines      // Allowed for end only

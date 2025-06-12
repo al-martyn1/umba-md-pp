@@ -57,6 +57,10 @@ enum class SnippetOptions : std::uint32_t
     noPdoc             = 0x10E0 /*!< -protodoc */,
     protodoc           = 0x10E1 /*!< Generate documentation for prototype */,
     pdoc               = 0x10E1 /*!< Generate documentation for prototype */,
+    noFormat           = 0x10F0 /*!< -format */,
+    noFmt              = 0x10F0 /*!< -format */,
+    format             = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
+    fmt                = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
     subsection         = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
     subsec             = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
     prototype          = 0x1821 /*!< Extract prototype from code snippet */,
@@ -96,7 +100,9 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noPre              , "NoPre"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::pre                , "Pre"              );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noProtodoc         , "NoProtodoc"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFormat           , "NoFormat"         );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::protodoc           , "Protodoc"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::format             , "Format"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::subsection         , "Subsection"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::prototype          , "Prototype"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::raise              , "Raise"            );
@@ -189,8 +195,16 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no-pdoc"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no_pdoc"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "nopdoc"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "no_fmt"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "no-format"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "no-fmt"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "no_format"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "noformat"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "nofmt"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::protodoc           , "protodoc"            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::protodoc           , "pdoc"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::format             , "format"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::format             , "fmt"                 );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsection"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsec"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototype          , "prototype"           );
@@ -899,14 +913,16 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PreprocessorDirective, std::map, 1 )
 //#!SnippetTagType
 enum class SnippetTagType : std::uint32_t
 {
-    invalid             = (std::uint32_t)(-1) /*!<  */,
-    unknown             = (std::uint32_t)(-1) /*!<  */,
-    normalTag           = 0x0000 /*!< Allowed for start/end */,
-    lineNumber          = 0x0001 /*!< Allowed for start/end */,
-    textSignature       = 0x0002 /*!< Allowed for start/end - end signature not included to code snippet */,
-    block               = 0x0003 /*!< Allowed for end only - signals that we need to cat code block in block symbols */,
-    genericStopMarker   = 0x0004 /*!< Allowed for end only */,
-    stopOnEmptyLines    = 0x0005 /*!< Allowed for end only */
+    invalid              = (std::uint32_t)(-1) /*!<  */,
+    unknown              = (std::uint32_t)(-1) /*!<  */,
+    normalTag            = 0x0000 /*!< Allowed for start/end */,
+    lineNumber           = 0x0001 /*!< Allowed for start/end */,
+    textSignature        = 0x0002 /*!< Allowed for start/end - end signature not included to code snippet */,
+    block                = 0x0003 /*!< Allowed for end only - signals that we need to cut code block in block symbols */,
+    blockOrSeparator     = 0x0004 /*!< Allowed for end only - signals that we need to cut code block or stops on statement separator */,
+    statementSeparator   = 0x0005 /*!< Allowed for end only - stops on statement separator or on block open symbol */,
+    genericStopMarker    = 0x0006 /*!< Allowed for end only */,
+    stopOnEmptyLines     = 0x0007 /*!< Allowed for end only */
 
 }; // enum 
 //#!
@@ -914,34 +930,42 @@ enum class SnippetTagType : std::uint32_t
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(SnippetTagType)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetTagType, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines    , "StopOnEmptyLines"  );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::genericStopMarker   , "GenericStopMarker" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::invalid             , "Invalid"           );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::block               , "Block"             );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::normalTag           , "NormalTag"         );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::lineNumber          , "LineNumber"        );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::textSignature       , "TextSignature"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::genericStopMarker    , "GenericStopMarker"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::invalid              , "Invalid"            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::blockOrSeparator     , "BlockOrSeparator"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::block                , "Block"              );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::normalTag            , "NormalTag"          );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::lineNumber           , "LineNumber"         );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::textSignature        , "TextSignature"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::statementSeparator   , "StatementSeparator" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines     , "StopOnEmptyLines"   );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( SnippetTagType, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetTagType, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines    , "stop-on-empty-lines" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines    , "stop_on_empty_lines" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines    , "stoponemptylines"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::genericStopMarker   , "generic-stop-marker" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::genericStopMarker   , "generic_stop_marker" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::genericStopMarker   , "genericstopmarker"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::invalid             , "invalid"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::invalid             , "unknown"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::block               , "block"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::normalTag           , "normal-tag"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::normalTag           , "normal_tag"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::normalTag           , "normaltag"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::lineNumber          , "line-number"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::lineNumber          , "line_number"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::lineNumber          , "linenumber"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::textSignature       , "text-signature"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::textSignature       , "text_signature"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::textSignature       , "textsignature"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::genericStopMarker    , "generic-stop-marker" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::genericStopMarker    , "generic_stop_marker" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::genericStopMarker    , "genericstopmarker"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::invalid              , "invalid"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::invalid              , "unknown"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::blockOrSeparator     , "block-or-separator"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::blockOrSeparator     , "block_or_separator"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::blockOrSeparator     , "blockorseparator"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::block                , "block"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::normalTag            , "normal-tag"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::normalTag            , "normal_tag"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::normalTag            , "normaltag"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::lineNumber           , "line-number"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::lineNumber           , "line_number"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::lineNumber           , "linenumber"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::textSignature        , "text-signature"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::textSignature        , "text_signature"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::textSignature        , "textsignature"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::statementSeparator   , "statement-separator" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::statementSeparator   , "statement_separator" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::statementSeparator   , "statementseparator"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines     , "stop-on-empty-lines" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines     , "stop_on_empty_lines" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetTagType::stopOnEmptyLines     , "stoponemptylines"    );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetTagType, std::map, 1 )
 
 

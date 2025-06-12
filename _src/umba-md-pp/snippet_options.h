@@ -325,7 +325,7 @@ std::size_t findTextSignatureInLines(const std::vector<std::string> &lines, cons
 //----------------------------------------------------------------------------
 //! Возвращает номер строки, в которой найден закрывающий блок символ, или (std::size_t)-1
 inline
-std::size_t findBlockInLines(const std::vector<std::string> &lines, char blockCharOpen, char blockCharClose, std::size_t startLine=(std::size_t)-1)
+std::size_t findBlockInLines(const std::vector<std::string> &lines, char blockCharOpen, char blockCharClose, const std::string &stSep, std::size_t startLine=(std::size_t)-1)
 {
     if (startLine==(std::size_t)-1)
         startLine = 0;
@@ -335,12 +335,29 @@ std::size_t findBlockInLines(const std::vector<std::string> &lines, char blockCh
 
     std::size_t openCount = 0;
     std::size_t curLineIdx = startLine;
+
+    // Если блочные символы разные - второй или нулевой, или закрывающий, то второй - нулевой маркерит остановится на первом
+    // Если оба одинаковые - они скорее всего нулевые, и это не то
+    bool stopOnOpenBlock = blockCharOpen!=blockCharClose && blockCharClose==0;
+
+    if (stSep=="\n") // Если у нас символ разделитель - перевод строки, то у нас только одна строка влезает всегда, и блок символы не используются
+        return curLineIdx;
+
     for(; curLineIdx!=lines.size(); ++curLineIdx)
     {
+        if (!stSep.empty() && openCount==0)
+        {
+            auto sepPos = lines[curLineIdx].find(stSep);
+            if (sepPos!=lines[curLineIdx].npos)
+               return curLineIdx;
+        }
+
         for(auto ch : lines[curLineIdx])
         {
             if (ch==blockCharOpen)
             {
+                if (stopOnOpenBlock)
+                    return curLineIdx;
                 ++openCount;
             }
             else if (ch==blockCharClose)
@@ -888,12 +905,13 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
     }
 
     // Если у нас задан блок, но для языка блоки не заданы - ищем окончание блока как пустую строку
-    if ((tagInfo.endType==SnippetTagType::block && chBlockOpen==0) || tagInfo.endType==SnippetTagType::invalid)
+    if (((tagInfo.endType==SnippetTagType::block || tagInfo.endType==SnippetTagType::blockOrSeparator) && chBlockOpen==0) || tagInfo.endType==SnippetTagType::invalid)
     {
         tagInfo.endType   = SnippetTagType::stopOnEmptyLines;
         tagInfo.endNumber = 1;
     }
 
+    bool stripOpenBlockFromLastLine = false;
 
     std::size_t foundLastFragmentLineIdx = (std::size_t)-1;
 
@@ -918,7 +936,19 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
     }
     else if (tagInfo.endType==SnippetTagType::block)
     {
-        foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, nextLookupStartIdx);
+        foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, std::string(), nextLookupStartIdx);
+    }
+    else if (tagInfo.endType==SnippetTagType::blockOrSeparator)
+    {
+        foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, langOpts.getStatementSeparator(), nextLookupStartIdx);
+    }
+    else if (tagInfo.endType==SnippetTagType::statementSeparator)
+    {
+        // Мы хотим остановится на сепараторе, если это прототип, 
+        // или, для извлечения прототипа мы хотим извлечь всё до начала блока
+        // И нам надо удалить символ начала блока
+        stripOpenBlockFromLastLine = true;
+        foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, 0 /* chBlockClose */, langOpts.getStatementSeparator(), nextLookupStartIdx);
     }
     else if (tagInfo.endType==SnippetTagType::genericStopMarker)
     {
@@ -948,7 +978,59 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
         break;
     }
 
-    return std::vector<std::string>(lines.begin()+ std::ptrdiff_t(firstFoundLineIdx), lines.begin()+ std::ptrdiff_t(foundLastFragmentLineIdx+1u));
+    // stripOpenBlockFromLastLine = true;
+
+    std::vector<std::string> resLines; resLines.reserve(foundLastFragmentLineIdx+1u - firstFoundLineIdx);
+    for(auto idx=firstFoundLineIdx; idx<=foundLastFragmentLineIdx; ++idx)
+    {
+        if (idx==foundLastFragmentLineIdx && stripOpenBlockFromLastLine && chBlockOpen!=0)
+        {
+            auto openBlockPos = lines[idx].find(chBlockOpen);
+            if (openBlockPos==lines[idx].npos)
+            {
+                resLines.push_back(lines[idx]);
+            }
+            else
+            {
+                auto line = std::string(lines[idx], 0, openBlockPos);
+                // Если в результате удаления символа открытия блока 
+                // строка стала пустой, то не добавляем её
+                if (!umba::string_plus::trim_copy(line).empty()) 
+                    resLines.push_back(line);
+            }
+        }
+        else
+        {
+            resLines.push_back(lines[idx]);
+        }
+    }
+
+
+    // else if (tagInfo.endType==SnippetTagType::statementSeparator)
+    // {
+    //     // Мы хотим остановится на сепараторе, если это прототип, 
+    //     // или, для извлечения прототипа мы хотим извлечь всё до начала блока
+    //     // И нам надо удалить символ начала блока
+    //     stripOpenBlockFromLastLine = true;
+    //     foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, 0 /* chBlockClose */, langOpts.getStatementSeparator(), nextLookupStartIdx);
+
+    if (tagInfo.endType==SnippetTagType::statementSeparator && !resLines.empty())
+    {
+        // Мы остановились по терминатору выражений или по открытию блока
+        // Блочный символ уже отрезан
+        // Надо проверить, есть ли терминатор, и добавить его, если его нет
+        // результирующий набор строк не пуст, так что проверяем последнюю строку
+
+        auto &lastLine = resLines.back();
+        umba::string_plus::rtrim(lastLine);
+        umba::string_plus::ends_with_and_strip(lastLine, langOpts.getStatementSeparator());
+        umba::string_plus::rtrim(lastLine);
+        lastLine.append(langOpts.getStatementSeparator());
+    }
+
+    return resLines;
+
+    // return std::vector<std::string>(lines.begin()+ std::ptrdiff_t(firstFoundLineIdx), lines.begin()+ std::ptrdiff_t(foundLastFragmentLineIdx+1u));
 }
 
 
@@ -1204,6 +1286,8 @@ Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parse
         stParseStart          ,
         stParseNumber         , // NNN
         stParseBrace          , // {}
+        stParseBrace2         , // {}
+        //stParseBrace3         , // {};
         stParseStopWait       , // (-/N)
         // stParseStopMarker     , // (----)
         stParseStopLinesNumber, // (NNN)
@@ -1240,6 +1324,11 @@ Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parse
                 // {
                 //     return b;
                 // }
+                else if (*b==';')
+                {
+                    parseToSnippetTagInfo.endType = SnippetTagType::statementSeparator;
+                    return b;
+                }
                 else if (*b=='{')
                 {
                     parseToSnippetTagInfo.endType = SnippetTagType::block;
@@ -1262,6 +1351,7 @@ Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parse
             }
             break;
 
+
             case stParseNumber         :
             {
                 if (*b>='0' && *b<='9')
@@ -1276,11 +1366,25 @@ Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parse
             }
             break;
 
+
             case stParseBrace          :
             {
+                if (*b=='}')
+                    st = stParseBrace2; // SnippetTagType::block; уже установлен
+                else
+                    return b;
+            }
+            break;
+
+
+            case stParseBrace2          :
+            {
+                if (*b==';') // SnippetTagType::block; уже установлен, меняем на blockOrSeparator, если обнаружен semicolon
+                    parseToSnippetTagInfo.endType = SnippetTagType::blockOrSeparator;
                 return b;
             }
             break;
+
 
             case stParseStopWait       :
             {
@@ -1317,6 +1421,7 @@ Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parse
             }
             break;
 
+
             case stParseSignature      :
             {
                 parseToSnippetTagInfo.endType = SnippetTagType::textSignature;
@@ -1341,6 +1446,7 @@ Iterator parseSnippetTagSecondPart(Iterator b, Iterator e, SnippetTagInfo &parse
         case stParseStart          :        break;
         case stParseNumber         :        break;
         case stParseBrace          :        break;
+        case stParseBrace2         :        break;
 
         case stParseStopWait       :
         {

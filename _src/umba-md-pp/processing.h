@@ -1704,12 +1704,12 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
 //----------------------------------------------------------------------------
 //! Возвращает true, если всё хорошо и исходную строку не надо вставлять
 template<typename FilenameStringType> inline
-bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
-                  , std::vector<std::string> &resLines
-                  , const std::string        &insertCommandLine
-                  , const std::string        &curFilename
-                  , const std::string        &snippetFile
-                  , const std::string        &snippetTag
+bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
+                  , std::vector<std::string>                      &resLines
+                  , const std::string                             &insertCommandLine
+                  , const std::string                             &curFilename
+                  , const std::string                             &snippetFile
+                  , const std::string                             &snippetTag
                   , const std::unordered_set<SnippetOptions>      &snippetFlagsOptions
                   , const std::unordered_map<SnippetOptions, int> &intOptions
                   )
@@ -1753,9 +1753,9 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
     std::size_t firstLineIdx = 0;
 
     bool bPrototype = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::prototype);
-    bool bProtodoc = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::protodoc);
+    bool bProtodoc  = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::protodoc);
 
-    std::string lang = appCfg.getLangByFilename(foundFullFilename);
+    std::string lang     = appCfg.getLangByFilename(foundFullFilename);
     const auto& langOpts = appCfg.languageOptionsDatabase.getLanguageOptions(lang);
 
 
@@ -1787,6 +1787,11 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
         return false;
     }
 
+    if (bPrototype)
+    {
+        snippetTagInfo.endType = SnippetTagType::statementSeparator;
+    }
+
     ListingNestedTagsMode listingNestedTagsMode = ListingNestedTagsMode::remove;
 
     if (umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::keepCutTags))
@@ -1803,6 +1808,8 @@ bool insertSnippet( const AppConfig<FilenameStringType>          &appCfg
 //                                                             , bool                                    bPrototype
 
     //std::vector<std::string> snippetLines = extractCodeFragmentBySnippetTag(appCfg.languageOptionsDatabase.getLanguageOptions(lang), lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 0, 4u /* tabSize */ );
+    // 
+    // 
     std::vector<std::string> snippetLines = umba::md::extractCodeFragmentBySnippetTagInfo( langOpts
                                                                                          , lang
                                                                                          , bPrototype
