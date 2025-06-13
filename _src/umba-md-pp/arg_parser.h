@@ -484,23 +484,23 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("LANG:EXT[,EXT...]")
-               || opt.isOption("add-lang-file-extention")
-               || opt.isOption("add-lang-file-extentions")
+               || opt.isOption("add-code-file-extention")
+               || opt.isOption("add-code-file-extentions")
                || opt.isOption('E')
-               || opt.setDescription("Add file extention for the lang for lang detection"))
+               || opt.setDescription("Add file extention for the code for lang detection"))
         {
             if (argsParser.hasHelpOption) return 0;
 
             if (!opt.hasArg())
             {
-                LOG_ERR<<"Adding lang file extention requires argument (--add-lang-file-extention)\n";
+                LOG_ERR<<"Adding code file extention requires argument (--add-code-file-extention)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addLangExtentions(optArg))
             {
-                LOG_ERR<<"Adding lang file extention failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Adding code file extention failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -508,22 +508,22 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("LANG:PREFIX")
-               || opt.isOption("add-lang-cut-prefix")
+               || opt.isOption("add-code-cut-prefix")
                || opt.isOption('P')
-               || opt.setDescription("Add prefix for the cut labels in the lang files"))
+               || opt.setDescription("Add prefix for the cut labels in the code files"))
         {
             if (argsParser.hasHelpOption) return 0;
 
             if (!opt.hasArg())
             {
-                LOG_ERR<<"Adding lang cut prefix requires argument (--add-lang-cut-prefix)\n";
+                LOG_ERR<<"Adding code cut prefix requires argument (--add-code-cut-prefix)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addCutPrefix(optArg))
             {
-                LOG_ERR<<"Addng lang cut prefix failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Addng code cut prefix failed, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -531,21 +531,21 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("LANG:PREFIX")
-               || opt.isOption("add-lang-separator-prefix")
+               || opt.isOption("add-code-separator-prefix")
                || opt.setDescription("Add lang prefix for the separator line"))
         {
             if (argsParser.hasHelpOption) return 0;
 
             if (!opt.hasArg())
             {
-                LOG_ERR<<"Adding lang prefix for the separator line (--add-lang-separator-prefix)\n";
+                LOG_ERR<<"Adding prefix for the separator line (--add-code-separator-prefix)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.addSeparatorLinePrefix(optArg))
             {
-                LOG_ERR<<"Addng lang prefix for the separator line, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Addng prefix for the separator line, invalid argument: '" << optArg << "'\n";
                 return -1;
             }
 
@@ -553,21 +553,21 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("LANG:{}")
-               || opt.isOption("set-lang-block-chars")
-               || opt.setDescription("Set lang block open and close characters, like \"{}\" for C/C++"))
+               || opt.isOption("set-code-block-chars")
+               || opt.setDescription("Set code block open and close characters, like \"{}\" for C/C++"))
         {
             if (argsParser.hasHelpOption) return 0;
 
             if (!opt.hasArg())
             {
-                LOG_ERR<<"Setting lang block open and close characters (--set-lang-block-chars)\n";
+                LOG_ERR<<"Setting code block open and close characters (--set-code-block-chars)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.setBlockCharacters(optArg))
             {
-                LOG_ERR<<"Setting lang block open and close characters, invalid argument: '" << optArg << "'. Argument must be exact the pair of single open and close block characters\n";
+                LOG_ERR<<"Setting code block open and close characters, invalid argument: '" << optArg << "'. Argument must be exact the pair of single open and close block characters\n";
                 return -1;
             }
 
@@ -575,21 +575,21 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("LANG:{}")
-               || opt.isOption("set-lang-statement-separator")
-               || opt.setDescription("Set lang statement separator, like \";\" (semicolon) for C/C++"))
+               || opt.isOption("set-code-statement-separator")
+               || opt.setDescription("Set code statement separator, like \";\" (semicolon) for C/C++"))
         {
             if (argsParser.hasHelpOption) return 0;
 
             if (!opt.hasArg())
             {
-                LOG_ERR<<"Setting lang statement separator (--set-lang-statement-separator)\n";
+                LOG_ERR<<"Setting code statement separator (--set-code-statement-separator)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
             if (!appConfig.setStatementSeparator(optArg))
             {
-                LOG_ERR<<"Setting lang statement separator, invalid argument: '" << optArg << "'.\n"; // Argument must be exact the pair of single open and close block characters\n";
+                LOG_ERR<<"Setting code statement separator, invalid argument: '" << optArg << "'.\n"; // Argument must be exact the pair of single open and close block characters\n";
                 return -1;
             }
 
@@ -597,14 +597,14 @@ int operator()( const StringType                                &a           //!
         }
 
         else if ( opt.setParam("LANG:TAG")
-               || opt.isOption("set-lang-listing-tag") || opt.isOption('T')
+               || opt.isOption("set-code-listing-tag") || opt.isOption('T')
                || opt.setDescription("Set target markdown tag for the code section"))
         {
             if (argsParser.hasHelpOption) return 0;
 
             if (!opt.hasArg())
             {
-                LOG_ERR<<"Setting target markdown tag for the code section requires argument (--set-lang-listing-tag)\n";
+                LOG_ERR<<"Setting target markdown tag for the code section requires argument (--set-code-listing-tag)\n";
                 return -1;
             }
 

@@ -16,7 +16,7 @@
 #include "umba/macros.h"
 #include "umba/macro_helpers.h"
 //
-#include "language-options-database.h"
+#include "code-options-database.h"
 //
 //#include "umba/regex_helpers.h"
 //
@@ -62,7 +62,7 @@ struct AppConfig
     std::vector<FilenameStringType>                       samplesPaths;
     FilenameStringType                                    strictPath  ;
 
-    umba::md::LanguageOptionsDatabase                     languageOptionsDatabase;
+    umba::md::CodeOptionsDatabase                         codeOptionsDatabase;
 
     GraphVizOptions                                       graphVizOptions;
     PlantUmlOptions                                       plantUmlOptions;
@@ -494,14 +494,14 @@ struct AppConfig
     {
         std::vector<FilenameStringType> topList;
 
-        std::set<std::string> langs = languageOptionsDatabase.getLanguages();
+        std::set<std::string> langs = codeOptionsDatabase.getLanguages();
 
         for(const auto &l: langs)
         {
             std::vector<std::string> langExtsPair;
             langExtsPair.emplace_back(l);
 
-            umba::md::LanguageOptions langOpt = languageOptionsDatabase.getLanguageOptions(l);
+            umba::md::CodeOptions langOpt = codeOptionsDatabase.getCodeOptions(l);
             const auto &extsSet = langOpt.getLanguageExtentions();
             langExtsPair.emplace_back(umba::string_plus::merge< std::string, typename std::set<std::string>::const_iterator >( extsSet.begin(), extsSet.end(), umba::string_plus::make_string<std::string>(extListDelim) ));
             topList.emplace_back(umba::string_plus::make_string<FilenameStringType>(umba::string_plus::merge< std::string, typename std::vector<std::string>::const_iterator >( langExtsPair.begin(), langExtsPair.end(), umba::string_plus::make_string<std::string>(langDelim) )));
@@ -1036,7 +1036,7 @@ struct AppConfig
     */
 
     //----------------------------------------------------------------------------
-    // Option helpers for --add-lang-file-extention=cpp:cpp,cxx,c++,cc,h,hpp,h++
+    // Option helpers for --add-code-file-extention=cpp:cpp,cxx,c++,cc,h,hpp,h++
 
     bool addLangExtentions(std::string lang, const std::vector<FilenameStringType> &extList)
     {
@@ -1054,7 +1054,7 @@ struct AppConfig
 
             //extToLang[ext] = lang;
 
-            languageOptionsDatabase.addLanguageExtention(lang, ext);
+            codeOptionsDatabase.addLanguageExtention(lang, ext);
 
             ++cnt;
         }
@@ -1094,7 +1094,7 @@ struct AppConfig
 
         return it->second;
         */
-        return languageOptionsDatabase.findLanguageByFilename(umba::string_plus::make_string<std::string>(fileName));
+        return codeOptionsDatabase.findLanguageByFilename(umba::string_plus::make_string<std::string>(fileName));
     }
 
     // std::string getLangByFilename(const FilenameStringType &name) const
@@ -1106,11 +1106,11 @@ struct AppConfig
 
 
     //----------------------------------------------------------------------------
-    // --set-lang-cut-prefix=nut,//!#
+    // --set-code-cut-prefix=nut,//!#
     bool addCutPrefix(const std::string &lang, const std::string &cutPrefix)
     {
         //langOptions[lang].cutPrefix = cutPrefix;
-        languageOptionsDatabase.addCutPrefix(lang, cutPrefix);
+        codeOptionsDatabase.addCutPrefix(lang, cutPrefix);
         return true;
     }
 
@@ -1128,7 +1128,7 @@ struct AppConfig
     bool addSeparatorLinePrefix(const std::string &lang, const std::string &sepPrefix)
     {
         //langOptions[lang].cutPrefix = cutPrefix;
-        languageOptionsDatabase.addGenericCutStopPrefix(lang, sepPrefix);
+        codeOptionsDatabase.addGenericCutStopPrefix(lang, sepPrefix);
         return true;
     }
 
@@ -1145,7 +1145,7 @@ struct AppConfig
 
     bool setBlockCharacters(const std::string &lang, const std::string &blockPair)
     {
-        return languageOptionsDatabase.setBlockCharacters(lang, blockPair);
+        return codeOptionsDatabase.setBlockCharacters(lang, blockPair);
     }
 
     bool setBlockCharacters(const std::string &langBlockPair)
@@ -1161,7 +1161,7 @@ struct AppConfig
 
     bool setStatementSeparator(const std::string &lang, const std::string &statementSeparator)
     {
-        return languageOptionsDatabase.setStatementSeparator(lang, statementSeparator);
+        return codeOptionsDatabase.setStatementSeparator(lang, statementSeparator);
     }
 
     bool setStatementSeparator(const std::string &langStatementSeparator)
@@ -1188,10 +1188,10 @@ struct AppConfig
 
 
     //----------------------------------------------------------------------------
-    // --set-lang-listing-tag=nut,sq
+    // --set-code-listing-tag=nut,sq
     bool setLangListingTag(const std::string &lang, const std::string &listingTag, const std::string &backend=std::string())
     {
-        languageOptionsDatabase.setListingTagForBackendGenerator(lang, listingTag, backend);
+        codeOptionsDatabase.setListingTagForBackendGenerator(lang, listingTag, backend);
         //langOptions[lang].listingTag = listingTag;
         return true;
     }
@@ -1216,7 +1216,7 @@ struct AppConfig
         // }
         // return it->second.listingTag;
 
-        return languageOptionsDatabase.getListingTagForBackendGenerator(lang, backend);
+        return codeOptionsDatabase.getListingTagForBackendGenerator(lang, backend);
     }
 
 
@@ -1242,8 +1242,8 @@ struct AppConfig
 // inline wchar_t toUpper( wchar_t ch )  { return (wchar_t)(isLower(ch) ? ch-L'a'+L'A' : ch); }
 
 // --cut-options=lineno,notrim,notag
-// --set-lang-cut-prefix=nut,//!#
-// --set-lang-code-suffix=nut,nut
+// --set-code-cut-prefix=nut,//!#
+// --set-code-code-suffix=nut,nut
 
     // std::unordered_map<std::string, std::string>          extToLang  ;
     // std::unordered_map<std::string, LangOptions>          langOptions;

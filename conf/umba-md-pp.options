@@ -184,55 +184,55 @@
 # Настройки для листингов различных языков программирования
 
 # C++
---add-lang-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
---add-lang-cut-prefix=C++://#!
---add-lang-cut-prefix=C++://#$
---add-lang-cut-prefix=C++:/*#!
---add-lang-cut-prefix=C++:/*#$
---add-lang-separator-prefix=C++://---
---add-lang-separator-prefix=C++:/***
---set-lang-block-chars=C++:{}
---set-lang-statement-separator=C++:;
---set-lang-listing-tag=C++:cpp
+--add-code-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
+--add-code-cut-prefix=C++://#!
+--add-code-cut-prefix=C++://#$
+--add-code-cut-prefix=C++:/*#!
+--add-code-cut-prefix=C++:/*#$
+--add-code-separator-prefix=C++://---
+--add-code-separator-prefix=C++:/***
+--set-code-block-chars=C++:{}
+--set-code-statement-separator=C++:;
+--set-code-listing-tag=C++:cpp
 
 # C
---add-lang-file-extentions=C:.c
---add-lang-cut-prefix=C://#!
---add-lang-cut-prefix=C://#$
---add-lang-cut-prefix=C:/*#!
---add-lang-cut-prefix=C:/*#$
---add-lang-separator-prefix=C://---
---add-lang-separator-prefix=C:/***
---set-lang-block-chars=C:{}
---set-lang-statement-separator=C++:;
---set-lang-listing-tag=C:cpp
+--add-code-file-extentions=C:.c
+--add-code-cut-prefix=C://#!
+--add-code-cut-prefix=C://#$
+--add-code-cut-prefix=C:/*#!
+--add-code-cut-prefix=C:/*#$
+--add-code-separator-prefix=C://---
+--add-code-separator-prefix=C:/***
+--set-code-block-chars=C:{}
+--set-code-statement-separator=C++:;
+--set-code-listing-tag=C:cpp
 
 # Squrrel
---add-lang-file-extentions=Squrrel:.nut,.nuts
---add-lang-cut-prefix=Squrrel://#!
---add-lang-cut-prefix=Squrrel://#$
---add-lang-separator-prefix=Squrrel://---
---set-lang-block-chars=Squrrel:{}
---set-lang-listing-tag=Squrrel:lua
+--add-code-file-extentions=Squrrel:.nut,.nuts
+--add-code-cut-prefix=Squrrel://#!
+--add-code-cut-prefix=Squrrel://#$
+--add-code-separator-prefix=Squrrel://---
+--set-code-block-chars=Squrrel:{}
+--set-code-listing-tag=Squrrel:lua
 
 # CMake
---add-lang-file-extentions=CMake:CMakeLists.txt,.cmake
---add-lang-cut-prefix=CMake:#//!
---add-lang-cut-prefix=CMake:#//$
---add-lang-separator-prefix=CMake:###
---add-lang-separator-prefix=CMake:#---
+--add-code-file-extentions=CMake:CMakeLists.txt,.cmake
+--add-code-cut-prefix=CMake:#//!
+--add-code-cut-prefix=CMake:#//$
+--add-code-separator-prefix=CMake:###
+--add-code-separator-prefix=CMake:#---
 # No blocks support in CMake
-# --set-lang-block-chars=
---set-lang-listing-tag=CMake:cmake
+# --set-code-block-chars=
+--set-code-listing-tag=CMake:cmake
 
 # Txt - plain text as code
---add-lang-file-extentions=Txt:.txt,.log
---add-lang-cut-prefix=Txt://#!
---add-lang-cut-prefix=Txt://#$
---add-lang-separator-prefix=Txt://---
---add-lang-separator-prefix=Txt:---
+--add-code-file-extentions=Txt:.txt,.log
+--add-code-cut-prefix=Txt://#!
+--add-code-cut-prefix=Txt://#$
+--add-code-separator-prefix=Txt://---
+--add-code-separator-prefix=Txt:---
 # No blocks support in Txt
-# --set-lang-block-chars=Txt:
+# --set-code-block-chars=Txt:
 # No lang tag for Txt
-# --set-lang-listing-tag=Txt:txt
+# --set-code-listing-tag=Txt:txt
 

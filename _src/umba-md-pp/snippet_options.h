@@ -25,7 +25,7 @@
 //
 #include "marty_cpp/marty_cpp.h"
 //
-#include "language-options-database.h"
+#include "code-options-database.h"
 
 //----------------------------------------------------------------------------
 
@@ -519,7 +519,7 @@ bool extractCodeTagFromLine(std::string line, const std::string &tagPrefix, std:
 
 //----------------------------------------------------------------------------
 inline
-std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::LanguageOptions         &langOpts
+std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::CodeOptions             &langOpts
                                                         , const std::string                       &lang
                                                         , std::vector<std::string>                lines
                                                         , std::size_t                             &firstFoundLineIdx
@@ -546,7 +546,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::Langua
     if (startLine>=lines.size())
         return std::vector<std::string>();
 
-    //const auto &langOpts = languageOptionsDatabase.getLanguageOptions(lang);
+    //const auto &langOpts = codeOptionsDatabase.getCodeOptions(lang);
     //return langOpts.isCodeTagLine(line, pTagPrefix);
 
 
@@ -807,7 +807,7 @@ struct SnippetTagInfo
 
 //----------------------------------------------------------------------------
 inline
-std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::LanguageOptions         &langOpts
+std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::CodeOptions             &langOpts
                                                             , const std::string                       &lang
                                                             , bool                                    bPrototype
                                                             , std::vector<std::string>                lines
@@ -1040,7 +1040,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::La
 // std::size_t findStopPrefixInLines(const std::vector<std::string> &lines, const std::unordered_set<std::string> &stopPrefixes, std::size_t startLine=(std::size_t)-1)
 // std::size_t findEmptyLinesStopInLines(const std::vector<std::string> &lines, std::size_t numEmptyLines, std::size_t startLine=(std::size_t)-1)
 
-// std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::LanguageOptions         &langOpts
+// std::vector<std::string> extractCodeFragmentBySnippetTag( const umba::md::CodeOptions         &langOpts
 //                                                         , const std::string                       &lang
 //                                                         , std::vector<std::string>                lines
 //                                                         , std::size_t                             &firstFoundLineIdx

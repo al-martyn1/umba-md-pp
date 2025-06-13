@@ -904,7 +904,7 @@ bool insertQuote( const AppConfig<FilenameStringType>          &appCfg
 template<typename FilenameStringType> inline
 std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType>  &appCfg
                                             , std::vector<std::string>             lines
-                                            , const umba::md::LanguageOptions      &langOpts
+                                            , const umba::md::CodeOptions          &langOpts
                                             , const std::string                    &lang
                                             , std::string                          snippetFilename
                                             , std::size_t                          firstLineIdx
@@ -916,12 +916,14 @@ std::vector<std::string> prepareSnippetLines( const AppConfig<FilenameStringType
                                             , bool                                 addFilenameLineNumber
                                             , bool                                 bPrototype
                                             , bool                                 bProtodoc
+                                            , bool                                 bProtoClass
                                             )
 {
-    UMBA_ARG_USED(bPrototype);
-    UMBA_ARG_USED(bProtodoc );
-    UMBA_ARG_USED(langOpts  );
-    UMBA_ARG_USED(lang      );
+    UMBA_ARG_USED(bPrototype );
+    UMBA_ARG_USED(bProtodoc  );
+    UMBA_ARG_USED(bProtoClass);
+    UMBA_ARG_USED(langOpts   );
+    UMBA_ARG_USED(lang       );
 
 
     if (bPrototype)
@@ -1059,11 +1061,12 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
     std::vector<std::string> insertLines; insertLines.reserve(snippetsFileLines.size());
     std::size_t firstLineIdx = 0;
 
-    bool bPrototype = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::prototype);
-    bool bProtodoc  = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::protodoc);
+    bool bPrototype  = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::prototype);
+    bool bProtodoc   = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::protodoc );
+    bool bProtoClass = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::class_   );
 
     std::string lang     = appCfg.getLangByFilename(foundFullFilename);
-    const auto& langOpts = appCfg.languageOptionsDatabase.getLanguageOptions(lang);
+    const auto& langOpts = appCfg.codeOptionsDatabase.getCodeOptions(lang);
 
 
     if (snippetTag.empty()) // Вставляем файл целиком
@@ -1080,6 +1083,7 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
                                           , fAddFilenameLineNumber
                                           , false // !prototype
                                           , false // !protodoc
+                                          , false // !protoClass
                                           );
         makeShureEmptyLine(resLines);
         umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформлекние сделал
@@ -1096,7 +1100,18 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
 
     if (bPrototype)
     {
-        snippetTagInfo.endType = SnippetTagType::statementSeparator;
+        if (!bProtoClass) // snippetTagInfo.endType!=SnippetTagType:: && 
+        {
+            if (snippetTagInfo.endType==SnippetTagType::unknown)
+                snippetTagInfo.endType = SnippetTagType::statementSeparator;
+        }
+        else
+        {
+            if (snippetTagInfo.endType==SnippetTagType::unknown)
+                snippetTagInfo.endType = SnippetTagType::block; // Классы извлекаем блоком
+        }
+        // snippetTagInfo.endType = SnippetTagType::statementSeparator;
+        // UMBA_ARG_USED(langOpts   );
     }
 
     ListingNestedTagsMode listingNestedTagsMode = ListingNestedTagsMode::remove;
@@ -1110,11 +1125,11 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
         listingNestedTagsMode = ListingNestedTagsMode::emptyLine;
     }
 
-// std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::LanguageOptions         &langOpts
+// std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::CodeOptions         &langOpts
 //                                                             , const std::string                       &lang
 //                                                             , bool                                    bPrototype
 
-    //std::vector<std::string> snippetLines = extractCodeFragmentBySnippetTag(appCfg.languageOptionsDatabase.getLanguageOptions(lang), lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 0, 4u /* tabSize */ );
+    //std::vector<std::string> snippetLines = extractCodeFragmentBySnippetTag(appCfg.codeOptionsDatabase.getCodeOptions(lang), lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 0, 4u /* tabSize */ );
     // 
     // 
     std::vector<std::string> snippetLines = umba::md::extractCodeFragmentBySnippetTagInfo( langOpts
@@ -1140,6 +1155,7 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
                                       , fAddFilenameLineNumber
                                       , bPrototype
                                       , bProtodoc
+                                      , bProtoClass
                                       );
 
     makeShureEmptyLine(resLines);
