@@ -640,7 +640,7 @@ GitHub/GitLab wiki, например.
 ```
 
 **umba-md-pp/for_tag_test.cpp:3**
-```cpp
+```cls-prototype-format:cc-cls-ptt-format
 void test()
 {
 }
@@ -650,7 +650,7 @@ void test()
 #!insert{nolineno,noKeepCutTags} umba-md-pp/enums.h#SnippetOptions
 ```
 
-```cpp
+```cls-prototype-format:cc-cls-ptt-format
 enum class SnippetOptions : std::uint32_t
 {
     invalid            = (std::uint32_t)(-1) /*!<  */,
@@ -695,6 +695,10 @@ enum class SnippetOptions : std::uint32_t
     noFmt              = 0x10F0 /*!< -format */,
     format             = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
     fmt                = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
+    noClass            = 0x1100 /*!< -class */,
+    noCls              = 0x1100 /*!< -class */,
+    class_             = 0x1101 /*!< class option for prototype extraction. */,
+    cls                = 0x1101 /*!< class option for prototype extraction. */,
     subsection         = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
     subsec             = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
     prototype          = 0x1821 /*!< Extract prototype from code snippet */,
@@ -705,22 +709,12 @@ enum class SnippetOptions : std::uint32_t
 
 
 
-Извлекаем фрагмент кода по сигнатуре (прототип, задаём конечным маркером ';'):
-```
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
-```
-
-```cpp
-inline std::string findDoxygenBinPathImpl(bool dontTouchSystem);
-```
-
-
 Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype):
 ```
 #!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
 ```
 
-```cpp
+```cls-prototype-format:cc-cls-ptt-format
 inline std::string findDoxygenBinPathImpl(bool dontTouchSystem);
 ```
 
@@ -730,7 +724,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem);
 #!prototype{fmt} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
 ```
 
-```cpp
+```cls-prototype-format:cc-cls-ptt-format
 inline std::string findDoxygenBinPathImpl(bool dontTouchSystem);
 ```
 
@@ -740,7 +734,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem);
 #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}
 ```
 
-```cpp
+```cls-prototype-format:cc-cls-ptt-format
 inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 {
     if (dontTouchSystem)
@@ -797,7 +791,7 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 
 # Базовые опции
 --processing-options=generate-toc,title,meta-data-subst
---set-insert-options=fail,path,filename-line-no,trim-arround
+--set-insert-options=fail,path,filename-line-no,trim-arround,format
 --batch-page-index-file=doc/Index.md
 
 # Базовые опции для Graphviz
@@ -952,57 +946,61 @@ inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 # Настройки для листингов различных языков программирования
 
 # C++
---add-lang-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
---add-lang-cut-prefix=C++://#!
---add-lang-cut-prefix=C++://#$
---add-lang-cut-prefix=C++:/*#!
---add-lang-cut-prefix=C++:/*#$
---add-lang-separator-prefix=C++://---
---add-lang-separator-prefix=C++:/***
---set-lang-block-chars=C++:{}
---set-lang-statement-separator=C++:;
---set-lang-listing-tag=C++:cpp
+--add-code-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
+--add-code-cut-prefix=C++://#!
+--add-code-cut-prefix=C++://#$
+--add-code-cut-prefix=C++:/*#!
+--add-code-cut-prefix=C++:/*#$
+--add-code-separator-prefix=C++://---
+--add-code-separator-prefix=C++:/***
+--set-code-block-chars=C++:{}
+--set-code-statement-separator=C++:;
+--set-code-listing-tag=C++:cpp
+--set-code-processing-handler=C++:fn-prototype-extract:cc-fn-ptt-extract
+--set-code-processing-handler=C++:cls-prototype-extract:cc-cls-ptt-extract
+--set-code-processing-handler=C++:fn-prototype-format:cc-fn-ptt-format
+--set-code-processing-handler=C++:cls-prototype-format:cc-cls-ptt-format
 
 # C
---add-lang-file-extentions=C:.c
---add-lang-cut-prefix=C://#!
---add-lang-cut-prefix=C://#$
---add-lang-cut-prefix=C:/*#!
---add-lang-cut-prefix=C:/*#$
---add-lang-separator-prefix=C://---
---add-lang-separator-prefix=C:/***
---set-lang-block-chars=C:{}
---set-lang-statement-separator=C++:;
---set-lang-listing-tag=C:cpp
+--add-code-file-extentions=C:.c
+--add-code-cut-prefix=C://#!
+--add-code-cut-prefix=C://#$
+--add-code-cut-prefix=C:/*#!
+--add-code-cut-prefix=C:/*#$
+--add-code-separator-prefix=C://---
+--add-code-separator-prefix=C:/***
+--set-code-block-chars=C:{}
+--set-code-statement-separator=C++:;
+--set-code-listing-tag=C:cpp
 
 # Squrrel
---add-lang-file-extentions=Squrrel:.nut,.nuts
---add-lang-cut-prefix=Squrrel://#!
---add-lang-cut-prefix=Squrrel://#$
---add-lang-separator-prefix=Squrrel://---
---set-lang-block-chars=Squrrel:{}
---set-lang-listing-tag=Squrrel:lua
+--add-code-file-extentions=Squrrel:.nut,.nuts
+--add-code-cut-prefix=Squrrel://#!
+--add-code-cut-prefix=Squrrel://#$
+--add-code-separator-prefix=Squrrel://---
+--set-code-block-chars=Squrrel:{}
+--set-code-listing-tag=Squrrel:lua
 
 # CMake
---add-lang-file-extentions=CMake:CMakeLists.txt,.cmake
---add-lang-cut-prefix=CMake:#//!
---add-lang-cut-prefix=CMake:#//$
---add-lang-separator-prefix=CMake:###
---add-lang-separator-prefix=CMake:#---
+--add-code-file-extentions=CMake:CMakeLists.txt,.cmake
+--add-code-cut-prefix=CMake:#//!
+--add-code-cut-prefix=CMake:#//$
+--add-code-separator-prefix=CMake:###
+--add-code-separator-prefix=CMake:#---
 # No blocks support in CMake
-# --set-lang-block-chars=
---set-lang-listing-tag=CMake:cmake
+# --set-code-block-chars=
+--set-code-listing-tag=CMake:cmake
 
 # Txt - plain text as code
---add-lang-file-extentions=Txt:.txt,.log
---add-lang-cut-prefix=Txt://#!
---add-lang-cut-prefix=Txt://#$
---add-lang-separator-prefix=Txt://---
---add-lang-separator-prefix=Txt:---
+--add-code-file-extentions=Txt:.txt,.log
+--add-code-cut-prefix=Txt://#!
+--add-code-cut-prefix=Txt://#$
+--add-code-separator-prefix=Txt://---
+--add-code-separator-prefix=Txt:---
 # No blocks support in Txt
-# --set-lang-block-chars=Txt:
+# --set-code-block-chars=Txt:
 # No lang tag for Txt
-# --set-lang-listing-tag=Txt:txt
+# --set-code-listing-tag=Txt:txt
 ```
 
 

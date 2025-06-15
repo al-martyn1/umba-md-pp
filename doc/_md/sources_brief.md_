@@ -92,6 +92,19 @@ Generator: Umba Brief Scanner
 - `arg_list_options.h` - 
 - `arg_parser.h` - 
 - `batch_utils.h` - 
+- `code-options-database.h` - 
+
+# _src/umba-md-pp/code-processing/cc
+
+- `simple-processing.h` - 
+
+# _src/umba-md-pp/code-processing
+
+- `simple-processing.h` - 
+- `types.h` - 
+
+# _src/umba-md-pp
+
 - `config.h` - Задаем тут конфигурационные макросы, в основном для отладки каки-то частей/нюансов. Задаём тут, чтобы не засорять проектный файл. Для релиза всё отключаем.
 - `csv_table_options.h` - 
 - `document.h` - 
@@ -103,17 +116,30 @@ Generator: Umba Brief Scanner
 - `generation_cache_info.h` - 
 - `graph_viz_options.h` - 
 - `image_helpers.h` - 
-- `language-options-database.h` - 
 - `log.h` - 
 - `md-pp-macro_helpers.h` - 
+
+# _src/umba-md-pp/md
+
+- `base_includes.h` - 
+- `processing.h` - 
+- `processing_base.h` - 
+- `processing_utils.h` - 
+
+# _src/umba-md-pp
+
 - `md_pp_html.h` - 
 - `md_pp_html_arg_list.h` - 
 - `md_pp_html_csv.h` - 
 - `md_pp_html_graph.h` - 
 - `md_pp_html_puml.h` - 
+- `md_pp_tag_utils.h` - 
+- `md_pp_tags.h` - 
+- `md_pp_tags_inner_comments.h` - 
 - `plantuml_options.h` - 
 - `processing.h` - 
 - `processing_code_utils.h` - Помогалки для processing.h
+- `processing_includes.h` - 
 - `processing_section_utils.h` - Помогалки для processing.h
 - `processing_utils.h` - Помогалки для processing.h
 - `resource.h` - 

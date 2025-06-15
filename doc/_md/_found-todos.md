@@ -24,20 +24,20 @@ Generator: Umba Brief Scanner
 
 # _src/umba-md-pp
 
-- [ ] `[_src/umba-md-pp/processing.h:71]`
+- [ ] `[_src/umba-md-pp/md_pp_tag_utils.h:21]`
   Набить парсеры для graph/csv
 
-- [ ] `[_src/umba-md-pp/processing.h:144]`
+- [ ] `[_src/umba-md-pp/md_pp_tag_utils.h:94]`
   Набить процессоры для graph/csv
 
-- [ ] `[_src/umba-md-pp/processing.h:930]`
+- [ ] `[_src/umba-md-pp/processing.h:237]`
   Надо бы ещё принудительно флэттенизировать урлы, которые выходят за пределы
   каталога с документом UMBA_USED(flattenImageLinks);
 
-- [ ] `[_src/umba-md-pp/processing.h:959]`
+- [ ] `[_src/umba-md-pp/processing.h:266]`
   Надо бы сделать какой-то null_insert_iterator и null_inserter
 
-- [ ] `[_src/umba-md-pp/processing.h:1694]`
+- [ ] `[_src/umba-md-pp/processing.h:1003]`
   Нужно добавить обрамление
 
 - [ ] `[_src/umba-md-pp/processing_utils.h:455]`

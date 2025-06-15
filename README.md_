@@ -242,14 +242,14 @@ GitHub/GitLab wiki, например.
 #!insert{nolineno,noKeepCutTags} umba-md-pp/enums.h#SnippetOptions
 
 
-
-Извлекаем фрагмент кода по сигнатуре (прототип, задаём конечным маркером ';'):
-```
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
-```
-
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
-
+#// 
+#// Извлекаем фрагмент кода по сигнатуре (прототип, задаём конечным маркером ';'):
+#// ```
+#// #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
+#// ```
+#// 
+#// #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
+#// 
 
 Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype):
 ```
