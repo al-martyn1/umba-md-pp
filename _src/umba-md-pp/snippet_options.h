@@ -66,6 +66,18 @@ namespace md {
 
 //----------------------------------------------------------------------------
 inline
+bool testFlagSnippetOption(const std::unordered_set<SnippetOptions> &flagOptions, SnippetOptions opt)
+{
+    auto baseOpt = (SnippetOptions)(((std::uint32_t)opt)|0x0001u);
+
+    if (flagOptions.find(baseOpt)!=flagOptions.end())
+        return true;
+
+    return false;
+}
+
+//----------------------------------------------------------------------------
+inline
 std::string normalizeSignatureLine(const std::string &str)
 {
     std::string res; res.reserve();
@@ -807,18 +819,18 @@ struct SnippetTagInfo
 
 //----------------------------------------------------------------------------
 inline
-std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::CodeOptions             &langOpts
-                                                            , const std::string                       &lang
-                                                            , bool                                    bPrototype
-                                                            , std::vector<std::string>                lines
-                                                            , SnippetTagInfo                          tagInfo
-                                                            , std::size_t                             &firstFoundLineIdx
-                                                            //, const std::string                       &targetFragmentTag
-                                                            , ListingNestedTagsMode                   listingNestedTagsMode
-                                                            , std::size_t                             tabSize // =4u
+std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::CodeOptions               &langOpts
+                                                            , const std::string                         &lang
+                                                            , const std::unordered_set<SnippetOptions>  &snippetFlagsOptions
+                                                            , std::vector<std::string>                  lines
+                                                            , SnippetTagInfo                            tagInfo
+                                                            , std::size_t                               &firstFoundLineIdx
+                                                            //, const std::string                         &targetFragmentTag
+                                                            , ListingNestedTagsMode                     listingNestedTagsMode
+                                                            , std::size_t                               tabSize // =4u
                                                             )
 {
-    UMBA_ARG_USED(bPrototype);
+    // UMBA_ARG_USED(bPrototype);
     // tagInfo на валидность не проверяем, считаем, что он валидный
 
     // Человечий номер (с 1) превращаем в машинный (с 0)
@@ -915,6 +927,19 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::Co
 
     std::size_t foundLastFragmentLineIdx = (std::size_t)-1;
 
+    bool bPrototype  = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::prototype);
+    bool bProtoClass = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::class_   );
+    //bool bProtodoc   = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::protodoc );
+
+
+    auto pCodeExtractor = (mdpp::code::simpleCodeLinesProcessingFnPtr)0;
+    if (bPrototype)
+    {
+        pCodeExtractor = bProtoClass ? langOpts.m_funcPrototypeExtractor : langOpts.m_classPrototypeExtractor;
+    }
+    // snippetFlagsOptions
+
+
     if (tagInfo.endType==SnippetTagType::textSignature)
     {
         // Окончание ищем по сигнатуре следующего фрагмента, и номер строки тут игнорируем
@@ -930,6 +955,13 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::Co
             // !!! - или тут надо уменьшить на размер конечной сигнатуры в строках?
         }
     }
+
+    // langOpts
+    // mdpp::code::simpleCodeLinesProcessingFnPtr                         m_funcPrototypeExtractor  = 0;
+    // mdpp::code::simpleCodeLinesProcessingFnPtr                         m_classPrototypeExtractor = 0;
+    // mdpp::code::simpleCodeLinesProcessingFnPtr                         m_funcPrototypeFormatter  = 0;
+    // mdpp::code::simpleCodeLinesProcessingFnPtr                         m_classPrototypeFormatter = 0;
+
     else if (tagInfo.endType==SnippetTagType::lineNumber)
     {
         foundLastFragmentLineIdx = endLineIdx;
@@ -940,15 +972,25 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::Co
     }
     else if (tagInfo.endType==SnippetTagType::blockOrSeparator)
     {
-        foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, langOpts.getStatementSeparator(), nextLookupStartIdx);
+        if (!pCodeExtractor)
+            foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, std::string()                   , nextLookupStartIdx);
+        else
+            foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, langOpts.getStatementSeparator(), nextLookupStartIdx);
     }
     else if (tagInfo.endType==SnippetTagType::statementSeparator)
     {
-        // Мы хотим остановится на сепараторе, если это прототип, 
-        // или, для извлечения прототипа мы хотим извлечь всё до начала блока
-        // И нам надо удалить символ начала блока
-        stripOpenBlockFromLastLine = true;
-        foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, 0 /* chBlockClose */, langOpts.getStatementSeparator(), nextLookupStartIdx);
+        if (!pCodeExtractor)
+        {
+            // Мы хотим остановится на сепараторе, если это прототип, 
+            // или, для извлечения прототипа мы хотим извлечь всё до начала блока
+            // И нам надо удалить символ начала блока
+            stripOpenBlockFromLastLine = true;
+            foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, 0 /* chBlockClose */, langOpts.getStatementSeparator(), nextLookupStartIdx);
+        }
+        else
+        {
+            foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose        , std::string()                   , nextLookupStartIdx);
+        }
     }
     else if (tagInfo.endType==SnippetTagType::genericStopMarker)
     {
@@ -2006,18 +2048,6 @@ SnippetOptionsParsingResult deserializeProcessingOptions(const std::string &optL
     }
 
     return SnippetOptionsParsingResult::ok;
-}
-
-//----------------------------------------------------------------------------
-inline
-bool testFlagSnippetOption(const std::unordered_set<SnippetOptions> &flagOptions, SnippetOptions opt)
-{
-    auto baseOpt = (SnippetOptions)(((std::uint32_t)opt)|0x0001u);
-
-    if (flagOptions.find(baseOpt)!=flagOptions.end())
-        return true;
-
-    return false;
 }
 
 //----------------------------------------------------------------------------

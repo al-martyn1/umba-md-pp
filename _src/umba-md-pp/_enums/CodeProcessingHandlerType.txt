@@ -1,0 +1,6 @@
+invalid,unknown = -1
+none            =  0
+fnPrototypeExtract,fnPrototypeExtractHandler,functionPrototypeExtract,functionPrototypeExtractHandler
+clsPrototypeExtract,clsPrototypeExtractHandler,classPrototypeExtract,classPrototypeExtractHandler
+fnPrototypeFormat,fnPrototypeFormatHandler,functionPrototypeFormat,functionPrototypeFormatHandler
+clsPrototypeFormat,clsPrototypeFormatHandler,classPrototypeFormat,classPrototypeFormatHandler

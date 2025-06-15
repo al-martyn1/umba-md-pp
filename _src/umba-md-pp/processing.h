@@ -1134,7 +1134,8 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
     // 
     std::vector<std::string> snippetLines = umba::md::extractCodeFragmentBySnippetTagInfo( langOpts
                                                                                          , lang
-                                                                                         , bPrototype
+                                                                                         , snippetFlagsOptions
+                                                                                         // , bPrototype
                                                                                          , snippetsFileLines
                                                                                          , snippetTagInfo
                                                                                          , firstLineIdx

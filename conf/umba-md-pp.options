@@ -194,6 +194,10 @@
 --set-code-block-chars=C++:{}
 --set-code-statement-separator=C++:;
 --set-code-listing-tag=C++:cpp
+--set-code-processing-handler=C++:fn-prototype-extract:cc-fn-ptt-extract
+--set-code-processing-handler=C++:cls-prototype-extract:cc-cls-ptt-extract
+--set-code-processing-handler=C++:fn-prototype-format:cc-fn-ptt-format
+--set-code-processing-handler=C++:cls-prototype-format:cc-cls-ptt-format
 
 # C
 --add-code-file-extentions=C:.c

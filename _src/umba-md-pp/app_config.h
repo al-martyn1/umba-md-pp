@@ -1186,6 +1186,11 @@ struct AppConfig
     //     return it->second.cutPrefix;
     // }
 
+    //----------------------------------------------------------------------------
+    bool setCodeProcessingHandler(const std::string &handlerLangTypeNameTriplet)
+    {
+        return codeOptionsDatabase.setCodeProcessingHandler(handlerLangTypeNameTriplet);
+    }
 
     //----------------------------------------------------------------------------
     // --set-code-listing-tag=nut,sq

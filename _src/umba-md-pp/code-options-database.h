@@ -8,6 +8,8 @@
 //
 #include "umba/filename.h"
 
+#include "code-processing/simple-processing.h"
+
 
 // umba::md::
 namespace umba {
@@ -42,6 +44,14 @@ protected:
     std::string                                                        m_statementSeparator; // expression/statement terminator/separator
 
 
+public: // members
+
+    mdpp::code::simpleCodeLinesProcessingFnPtr                         m_funcPrototypeExtractor  = 0;
+    mdpp::code::simpleCodeLinesProcessingFnPtr                         m_classPrototypeExtractor = 0;
+    mdpp::code::simpleCodeLinesProcessingFnPtr                         m_funcPrototypeFormatter  = 0;
+    mdpp::code::simpleCodeLinesProcessingFnPtr                         m_classPrototypeFormatter = 0;
+
+
 public:
 
     CodeOptions() = default;
@@ -49,6 +59,38 @@ public:
     CodeOptions& operator=(const CodeOptions &) = default;
     CodeOptions(CodeOptions &&) = default;
     CodeOptions& operator=(CodeOptions &&) = default;
+
+    bool setCodeProcessingHandler(CodeProcessingHandlerType handlerType, const std::string &handlerName)
+    {
+        auto handler = umba::mdpp::code::getSimpleProcessorFuction(handlerName);
+        if (!handler)
+            return false;
+
+        switch(handlerType)
+        {
+            case CodeProcessingHandlerType::unknown            : return false;
+            case CodeProcessingHandlerType::none               : return false;
+            case CodeProcessingHandlerType::fnPrototypeExtract : m_funcPrototypeExtractor  = handler; break;
+            case CodeProcessingHandlerType::clsPrototypeExtract: m_classPrototypeExtractor = handler; break;
+            case CodeProcessingHandlerType::fnPrototypeFormat  : m_funcPrototypeFormatter  = handler; break;
+            case CodeProcessingHandlerType::clsPrototypeFormat : m_classPrototypeFormatter = handler; break;
+        }
+
+        return true;
+    }
+
+    bool setCodeProcessingHandler(const std::string &handlerTypeStr, const std::string &handlerName)
+    {
+        return setCodeProcessingHandler(enum_deserialize(handlerTypeStr, CodeProcessingHandlerType::unknown), handlerName);
+    }
+
+    bool setCodeProcessingHandler(const std::string &handlerTypeNamePair)
+    {
+        std::string handlerTypeStr, handlerName;
+        if (!umba::string_plus::split_to_pair(handlerTypeNamePair, handlerTypeStr, handlerName, ':'))
+            return false;
+        return setCodeProcessingHandler(handlerTypeStr, handlerName);
+    }    
 
     const std::unordered_set<std::string>& getGenericCutStopPrefixes() const
     {
@@ -185,6 +227,20 @@ public:
     CodeOptionsDatabase& operator=(const CodeOptionsDatabase &) = default;
     CodeOptionsDatabase( CodeOptionsDatabase &&) = default;
     CodeOptionsDatabase& operator=(CodeOptionsDatabase &&) = default;
+
+
+    bool setCodeProcessingHandler(const std::string &lang, const std::string &handlerTypeNamePair)
+    {
+        return m_codeOptions[lang].setCodeProcessingHandler(handlerTypeNamePair);
+    }
+
+    bool setCodeProcessingHandler(const std::string &handlerLangTypeNameTriplet)
+    {
+        std::string lang, handlerTypeNamePair;
+        if (!umba::string_plus::split_to_pair(handlerLangTypeNameTriplet, lang, handlerTypeNamePair, ':'))
+            return false;
+        return setCodeProcessingHandler(lang, handlerTypeNamePair);
+    }
 
     //! Добавляет отношение Ext->Lang, при этом Ext может, на самом деле, быть двойным расширением, или даже полным именем файла - CMakeLists.txt
     bool addLanguageExtention(const std::string &lang, std::string ext)

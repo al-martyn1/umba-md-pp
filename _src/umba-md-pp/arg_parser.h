@@ -596,6 +596,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
+
         else if ( opt.setParam("LANG:TAG")
                || opt.isOption("set-code-listing-tag") || opt.isOption('T')
                || opt.setDescription("Set target markdown tag for the code section"))
@@ -617,6 +618,34 @@ int operator()( const StringType                                &a           //!
 
             return 0;
         }
+
+
+        else if ( opt.setParam("LANG:HANDLER_TYPE:HANDLER_NAME")
+               || opt.isOption("set-code-processing-handler")
+               || opt.setDescription("Set code processing handler for language `LANG`.\n"
+                                     "`HANDLER_TYPE` can be one of the: `fn-prototype-extract`, `cls-prototype-extract`, `fn-prototype-format`, `cls-prototype-format`\n"
+                                     "`HANDLER_NAME` can be one of the: `cc-fn-ptt-extract`, `cc-cls-ptt-extract`, `cc-fn-ptt-format`, `cc-cls-ptt-format`\n"
+                                    )
+                )
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.hasArg())
+            {
+                LOG_ERR<<"Setting code processing handler requires argument (--set-code-processing-handler)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.setCodeProcessingHandler(optArg))
+            {
+                LOG_ERR<<"Setting code processing handler failed, invalid argument: '" << optArg << "' (--set-code-processing-handler)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
 
         else if ( opt.setParam("OPTS")
                || opt.isOption("set-insert-options") || opt.isOption('O')

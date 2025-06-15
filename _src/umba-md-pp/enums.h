@@ -983,6 +983,98 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetTagType, std::map, 1 )
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetTagType, std::map, 1 )
 
 
+//#!CodeProcessingHandlerType
+enum class CodeProcessingHandlerType : std::uint32_t
+{
+    invalid                           = (std::uint32_t)(-1) /*!<  */,
+    unknown                           = (std::uint32_t)(-1) /*!<  */,
+    none                              = 0x0000 /*!<  */,
+    fnPrototypeExtract                = 0x0001 /*!<  */,
+    fnPrototypeExtractHandler         = 0x0001 /*!<  */,
+    functionPrototypeExtract          = 0x0001 /*!<  */,
+    functionPrototypeExtractHandler   = 0x0001 /*!<  */,
+    clsPrototypeExtract               = 0x0002 /*!<  */,
+    clsPrototypeExtractHandler        = 0x0002 /*!<  */,
+    classPrototypeExtract             = 0x0002 /*!<  */,
+    classPrototypeExtractHandler      = 0x0002 /*!<  */,
+    fnPrototypeFormat                 = 0x0003 /*!<  */,
+    fnPrototypeFormatHandler          = 0x0003 /*!<  */,
+    functionPrototypeFormat           = 0x0003 /*!<  */,
+    functionPrototypeFormatHandler    = 0x0003 /*!<  */,
+    clsPrototypeFormat                = 0x0004 /*!<  */,
+    clsPrototypeFormatHandler         = 0x0004 /*!<  */,
+    classPrototypeFormat              = 0x0004 /*!<  */,
+    classPrototypeFormatHandler       = 0x0004 /*!<  */
+
+}; // enum 
+//#!
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(CodeProcessingHandlerType)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( CodeProcessingHandlerType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "ClsPrototypeFormat"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CodeProcessingHandlerType::invalid               , "Invalid"             );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CodeProcessingHandlerType::none                  , "None"                );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "FnPrototypeExtract"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "ClsPrototypeExtract" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "FnPrototypeFormat"   );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( CodeProcessingHandlerType, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( CodeProcessingHandlerType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "cls-prototype-format"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "cls_prototype_format"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "clsprototypeformat"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "cls-prototype-format-handler"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "cls_prototype_format_handler"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "class_prototype_format"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "classprototypeformat"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "clsprototypeformathandler"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "class-prototype-format"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "class-prototype-format-handler"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "class_prototype_format_handler"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeFormat    , "classprototypeformathandler"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::invalid               , "invalid"                            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::invalid               , "unknown"                            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::none                  , "none"                               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "fnprototypeextracthandler"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "fnprototypeextract"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "fn_prototype_extract"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "fn-prototype-extract"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "fn-prototype-extract-handler"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "fn_prototype_extract_handler"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "function_prototype_extract"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "functionprototypeextract"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "functionprototypeextracthandler"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "function-prototype-extract"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "function-prototype-extract-handler" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeExtract    , "function_prototype_extract_handler" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "cls-prototype-extract"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "cls_prototype_extract"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "clsprototypeextract"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "cls-prototype-extract-handler"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "cls_prototype_extract_handler"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "class_prototype_extract"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "classprototypeextract"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "clsprototypeextracthandler"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "class-prototype-extract"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "class-prototype-extract-handler"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "class_prototype_extract_handler"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::clsPrototypeExtract   , "classprototypeextracthandler"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "fnprototypeformathandler"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "fnprototypeformat"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "fn_prototype_format"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "fn-prototype-format"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "fn-prototype-format-handler"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "fn_prototype_format_handler"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "function_prototype_format"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "functionprototypeformat"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "function-prototype-format"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "function-prototype-format-handler"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "function_prototype_format_handler"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( CodeProcessingHandlerType::fnPrototypeFormat     , "functionprototypeformathandler"     );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( CodeProcessingHandlerType, std::map, 1 )
+
+
 //#!MdPpTag
 enum class MdPpTag : std::uint32_t
 {

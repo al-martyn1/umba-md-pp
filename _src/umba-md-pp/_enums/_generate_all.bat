@@ -47,6 +47,7 @@ umba-enum-gen %GEN_OPTS% %HEX2% %TPL_OVERRIDE% %SNIPPETOPTIONS_GEN_FLAGS% ^
     %UINT32% %HEX4% -E=BacktickProcessingState       -F=@BacktickProcessingState.txt      ^
     %UINT32% %HEX4% -E=PreprocessorDirective         -F=@PreprocessorDirective.txt        ^
     %UINT32% %HEX4% -E=SnippetTagType                -F=@SnippetTagType.txt               ^
+    %UINT32% %HEX4% -E=CodeProcessingHandlerType     -F=@CodeProcessingHandlerType.txt    ^
     %SERIALIZE_HYPHEN%                                                                    ^
     %UINT32% %HEX4% -E=MdPpTag                       -F=@MdPpTag.txt                      ^
     %UINT32% %HEX4% -E=GraphVizTargetFormat          -F=@GraphVizTargetFormat.txt         ^
