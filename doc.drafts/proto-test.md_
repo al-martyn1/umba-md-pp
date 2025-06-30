@@ -1,0 +1,245 @@
+## Прототипы функций
+
+### Общие сведения
+
+#### Извлечение блоков кода
+
+Блоки кода могут извлекаться из исходных текстов проекта различными способами.
+Сейчас мы рассматриваем способ извлечения фрагмента кода по сигнатуре.
+
+##### Бэктрейс по сигнатуре
+
+Сигнатура блока кода может быть не полной. Так сделано, чтобы не нужно было задавать сигнатуры
+полностью с учетом шаблонов и коментариев, и прочего подобного. 
+Для извлечения полной сигнатуры производится бэктрейс после нахождения явно заданной сигнатуры.
+Бэктрейс производится до нахождения строки коментария, пустой строки, или закрывающей блок скобки.
+
+Бэктрейс может ломаться на коде `C++` с концептами, использующими `requires requires { ... }`.
+Этот момент требует доработки.
+Но для других языков всё в целом гораздо проще.
+
+
+#### Извлечение прототипов функций
+
+В языке `C++` функция может быть `inline`, при этом у неё нет прототипа, а есть только её тело.
+
+Функция извлечения прототипа функции из блока кода умеет извлекать прототип функции 
+как из блока кода функции,
+так и найдя отдельный прототип функции.
+В случае блока кода функции тело функции удаляется.
+
+Во многих языках нет понятия прототипа функции, но в документацию
+тело функции не должно добавляться. Функция извлечения прототипа функции
+позволяет добавить в документацию только прототип/заголовок функции даже при 
+отсутствии отдельного прототипа в коде.
+
+
+#### Стили форматирования прототипов функций
+
+При форматировании прототипов функций могут быть использованы стили:
+
+- `'msdn'`/`'ms'` - стиль, используемый в MSDN/документации Microsoft по MS API;
+
+- `'man'`/`'linux'`/`'unix'`/`'bsd'` - стиль вывода документации в формате команды `'man'`;
+
+- `'tab-man'`/`'table-man'`/... - стиль вывода документации в формате команды `'man'` с "табличным" форматированием;
+
+- `'umba'`/`'mdr'`/`'dotnut'` - оригинальный MDR стиль, схожий со стилем `'msdn'`.
+
+Оригинальные стили `'msdn'` и `'man'` не полностью копируются: так, спецификаторы
+и возвращаемое значение располагаются на отдельных строках, а не в той же строке, как
+в оригинальном формате; отступы соблюдены не совсем так же.
+
+
+#### Прототипы классов
+
+Прототипы классов - это извлечение классов целиком из исходного кода с удалением тел всех 
+`inline` функций. Актуально для `C++` классов с `inline` функциями, а также для языков,
+у которых тело функции всегда задаётся в классе и нет разделения на прототип и реализацию
+(`C#` или `PHP`, как пример).
+
+На текущий момент не реализовано.
+
+
+### Примеры форматирования прототипов функций
+
+- MSDN - [https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea)
+
+- MAN - [https://man7.org/linux/man-pages/man2/select.2.html](https://man7.org/linux/man-pages/man2/select.2.html)
+
+
+### Извлечение прототипа - директива prototype
+
+Прототип извлекается из блока, найденного по сигнатуре. Но, также, прототип может быть обнаружен в виде прототипа. Задание блока 
+для извлечения прототипа функции обычно осуществляется маркером окончания `'{}'`, 
+а задание блока или прототипа
+для извлечения прототипа функции осуществляется маркером окончания `'{};'`, 
+
+При извлечении прототипов из них могут удаляться незначащие ключевые слова/спецификаторы, такие как `'inline'` или `'WINAPI'` (в примере удаляется `'inline'`, 
+это зависит от настроек, а не закодировано жестко).
+
+```
+#!prototype{proto-fmt=FMT} tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+where FMT is one of msdn|man|umba
+```
+
+
+#// 
+#// Извлекаем фрагмент кода по сигнатуре (прототип, задаём конечным маркером ';'):
+#// ```
+#// #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
+#// ```
+#// 
+#// #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
+#// 
+
+
+
+#// Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype, из блока, вложенный шаблон):
+#// ```
+#// #!prototype tests/cc/templates/02_00_members_of_specializations.h#`template<> template<class U> void A<char>::C<U>::f()`-{}
+#// ```
+#// 
+#// #!prototype tests/cc/templates/02_00_members_of_specializations.h#`template<> template<class U> void A<char>::C<U>::f()`-{}
+
+
+## Извлекаем код по сигнатуре - makeConditionOperatorsInfoVec
+
+### Код функции полностью
+
+Директива извлечения фрагмента кода:
+```
+#!insert tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+```
+
+Код функции:
+#!insert tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+
+
+### Директива извлечения прототипа
+
+```
+#!prototype{proto-fmt=FMT} tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+where FMT is one of msdn|man|tab-man|umba
+```
+
+### Стиль MSDN
+#!prototype{proto-fmt=msdn}    tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+
+### Стиль Unix man
+#!prototype{proto-fmt=man}     tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+
+### Стиль Unix man (table)
+#!prototype{proto-fmt=tab-man} tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+
+### Стиль Umba
+#!prototype{proto-fmt=umba}    tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+
+
+
+## Функция select
+
+### Код функции
+
+#!insert tests/cc/templates/03_function_template.h#`int select`-{}
+
+### Стиль MSDN
+#!prototype{proto-fmt=msdn}    tests/cc/templates/03_function_template.h#`int select`-{};
+
+### Стиль Unix man
+#!prototype{proto-fmt=man}     tests/cc/templates/03_function_template.h#`int select`-{};
+
+### Стиль Unix man (table)
+#!prototype{proto-fmt=tab-man} tests/cc/templates/03_function_template.h#`int select`-{};
+
+### Стиль Umba
+#!prototype{proto-fmt=umba}    tests/cc/templates/03_function_template.h#`int select`-{};
+
+
+## Функция CreateFileA
+
+#!insert                    tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
+#!prototype{proto-fmt=msdn} tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
+#!prototype{proto-fmt=man}  tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
+#!prototype{proto-fmt=umba} tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
+
+
+## Функция CloseHandle
+
+#!insert                    tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+#!prototype{proto-fmt=msdn} tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+#!prototype{proto-fmt=man}  tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+#!prototype{proto-fmt=umba} tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+
+
+## Функция GetLastError
+
+#!insert                    tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+#!prototype{proto-fmt=msdn} tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+#!prototype{proto-fmt=man}  tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+#!prototype{proto-fmt=umba} tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+
+
+
+##Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype, из блока, вложенный шаблон, угловые скобки вместе):
+```
+#!prototype umba-md-pp/snippet_options.h#`const std::vector< std::pair<ConditionOperators, std::string>>& getConditionOperatorsInfoVec`-{}
+```
+
+#!prototype umba-md-pp/snippet_options.h#`const std::vector< std::pair<ConditionOperators, std::string>>& getConditionOperatorsInfoVec`-{}
+
+
+Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype, из блока, вложенный шаблон, угловые скобки раздельно):
+```
+#!prototype umba-md-pp/snippet_options.h#`std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec`-{}
+```
+
+#!prototype umba-md-pp/snippet_options.h#`std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec`-{}
+
+
+Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype, из блока, вложенный шаблон, угловые скобки раздельно, форматируем):
+```
+#!prototype{format} umba-md-pp/snippet_options.h#`std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec`-{}
+```
+
+#!prototype{format} umba-md-pp/snippet_options.h#`std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec`-{}
+
+
+Извлекаем фрагмент кода по сигнатуре (полный блок):
+```
+#!insert umba-md-pp/snippet_options.h#`std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec`-{}
+```
+
+#!insert umba-md-pp/snippet_options.h#`std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec`-{}
+
+
+Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype, из блока):
+```
+#!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}
+```
+
+#!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}
+
+
+Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype):
+```
+#!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+```
+
+#!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+
+
+Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype, с форматированием):
+```
+#!prototype{fmt} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+```
+
+#!prototype{fmt} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
+
+
+Извлекаем фрагмент кода по сигнатуре:
+```
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}
+```
+
+#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}

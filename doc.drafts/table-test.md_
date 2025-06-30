@@ -33,3 +33,32 @@
 
 #!insert{fail,doc,raise=-1} table-test/table-test-05.txt
 
+
+
+12.csv
+<csv-table> ../tests/csv/12.csv
+
+12.csv - csv-title=no
+<csv-table csv-title=no> ../tests/csv/12.csv
+
+13.csv
+<csv-table> ../tests/csv/13.csv
+
+excel_test01_comma.csv
+<csv-table> ../tests/csv/excel_test01_comma.csv
+
+excel_test01_dos.csv
+<csv-table> ../tests/csv/excel_test01_dos.csv
+
+excel_test01_semicolon.csv
+<csv-table> ../tests/csv/excel_test01_semicolon.csv
+
+excel_test01_tabs.csv
+<csv-table> ../tests/csv/excel_test01_tabs.csv
+
+excel_test01_tabs.csv - csv-title=merge title
+<csv-table csv-title=merge title="Имя|Фамилия|Возраст:|Адрес"> ../tests/csv/excel_test01_tabs.csv
+
+excel_test01_comma_semicolon_multi.csv - multi-title
+<csv-table multi-title="Первая таблица из мультитаблицы с разделителем запятая|Вторая таблица из мультитаблицы с разделителем точка с запятой"> ../tests/csv/excel_test01_comma_semicolon_multi.csv
+
