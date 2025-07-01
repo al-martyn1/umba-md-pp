@@ -202,20 +202,29 @@ where FMT is one of msdn|man|tab-man|umba
 
 Используется нумерация прототипов - опция `'frag-num'`.
 
+Директива для извлечения всех прототипов по сигнатуре выглядит так:
+
 ```
 #!prototype{frag-num}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`*-{};
 ```
 
+Но для примера будет извлекаться не более двух прототипов следующей директивой:
+
+```
+#!prototype{frag-num}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`2-{};
+```
+
+
 #// **Код**
-#// #!insert                        tests/cc/templates/03_function_template.h#`bool tokenTypeIs`*-{};
+#// #!insert                        tests/cc/templates/03_function_template.h#`bool tokenTypeIs`2-{};
 **MSDN**
-#!prototype{frag-num,proto-fmt=msdn}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`*-{};
+#!prototype{frag-num,proto-fmt=msdn}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`2-{};
 **Umba**
-#!prototype{frag-num,proto-fmt=umba}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`*-{};
+#!prototype{frag-num,proto-fmt=umba}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`2-{};
 **Man**
-#!prototype{frag-num,proto-fmt=man}      _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`*-{};
+#!prototype{frag-num,proto-fmt=man}      _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`2-{};
 **Man (table)**
-#!prototype{frag-num,proto-fmt=tab-man}  _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`*-{};
+#!prototype{frag-num,proto-fmt=tab-man}  _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`2-{};
 
 
 

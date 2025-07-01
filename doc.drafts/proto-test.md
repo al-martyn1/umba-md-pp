@@ -135,7 +135,6 @@ where FMT is one of msdn|man|umba
 Код функции:
 
 ```cpp
-// (1)
 template< typename CharType = char, // Тип символа
 typename StringType = std::string<CharType, std::char_traits<CharType>, std::allocator<CharType> > //!< Тип строки
 >
@@ -172,7 +171,6 @@ where FMT is one of msdn|man|tab-man|umba
 ### Стиль MSDN
 
 ```cpp
-// (1)
 template<
   typename CharType   = char,
   typename StringType = std::string<CharType,std::char_traits<CharType>,std::allocator<CharType>>
@@ -189,7 +187,6 @@ const = 0;
 ### Стиль Umba
 
 ```cpp
-// (1)
 template< typename CharType   = char
         , typename StringType = std::string<CharType,std::char_traits<CharType>,std::allocator<CharType>>
         >
@@ -204,7 +201,6 @@ const = 0;
 ### Стиль Unix man
 
 ```cpp
-// (1)
 template<typename CharType = char,
          typename StringType = std::string<CharType,std::char_traits<CharType>,std::allocator<CharType>>>
 std::vector<std::pair<ConditionOperators,StringType>>
@@ -217,7 +213,6 @@ const = 0;
 ### Стиль Unix man (table)
 
 ```cpp
-// (1)
 template<typename CharType   = char,
          typename StringType = std::string<CharType,std::char_traits<CharType>,std::allocator<CharType>>>
 std::vector<std::pair<ConditionOperators,StringType>>
@@ -234,7 +229,6 @@ const = 0;
 ### Код функции
 
 ```cpp
-// (1)
 inline
 int select(int nfds, fd_set *_Nullable restrict readfds,
                   fd_set *_Nullable restrict writefds,
@@ -248,7 +242,6 @@ int select(int nfds, fd_set *_Nullable restrict readfds,
 ### Стиль MSDN
 
 ```cpp
-// (1)
 int
 select(
   int            nfds,
@@ -262,7 +255,6 @@ select(
 ### Стиль Umba
 
 ```cpp
-// (1)
 int
 select( int            nfds
       , fd_set         *_Nullable restrict readfds
@@ -275,7 +267,6 @@ select( int            nfds
 ### Стиль Unix man
 
 ```cpp
-// (1)
 int
 select(int nfds,
        fd_set *_Nullable restrict readfds,
@@ -287,7 +278,6 @@ select(int nfds,
 ### Стиль Unix man (table)
 
 ```cpp
-// (1)
 int
 select(int            nfds,
        fd_set         *_Nullable restrict readfds,
@@ -302,7 +292,6 @@ select(int            nfds,
 **Код**
 
 ```cpp
-// (1)
 HANDLE CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
                    LPSECURITY_ATTRIBUTES lpSecurityAttributes,
                    DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes,
@@ -312,7 +301,6 @@ HANDLE CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
 **MSDN**
 
 ```cpp
-// (1)
 HANDLE
 CreateFileA(
   LPCSTR                lpFileName,
@@ -327,7 +315,6 @@ CreateFileA(
 **Umba**
 
 ```cpp
-// (1)
 HANDLE
 CreateFileA( LPCSTR                lpFileName
            , DWORD                 dwDesiredAccess
@@ -341,7 +328,6 @@ CreateFileA( LPCSTR                lpFileName
 **Man**
 
 ```cpp
-// (1)
 HANDLE
 CreateFileA(LPCSTR lpFileName,
             DWORD dwDesiredAccess,
@@ -354,7 +340,6 @@ CreateFileA(LPCSTR lpFileName,
 **Man (table)**
 
 ```cpp
-// (1)
 HANDLE
 CreateFileA(LPCSTR                lpFileName,
             DWORD                 dwDesiredAccess,
@@ -371,7 +356,6 @@ CreateFileA(LPCSTR                lpFileName,
 **Код**
 
 ```cpp
-// (1)
 BOOL CloseHandle(
   HANDLE hObject
 );
@@ -379,7 +363,6 @@ BOOL CloseHandle(
 **MSDN**
 
 ```cpp
-// (1)
 BOOL
 CloseHandle(
   HANDLE hObject
@@ -388,21 +371,18 @@ CloseHandle(
 **Umba**
 
 ```cpp
-// (1)
 BOOL
 CloseHandle( HANDLE hObject );
 ```
 **Man**
 
 ```cpp
-// (1)
 BOOL
 CloseHandle(HANDLE hObject);
 ```
 **Man (table)**
 
 ```cpp
-// (1)
 BOOL
 CloseHandle(HANDLE hObject);
 ```
@@ -413,34 +393,29 @@ CloseHandle(HANDLE hObject);
 **Код**
 
 ```cpp
-// (1)
 DWORD GetLastError();
 ```
 **MSDN**
 
 ```cpp
-// (1)
 DWORD
 GetLastError();
 ```
 **Umba**
 
 ```cpp
-// (1)
 DWORD
 GetLastError();
 ```
 **Man**
 
 ```cpp
-// (1)
 DWORD
 GetLastError();
 ```
 **Man (table)**
 
 ```cpp
-// (1)
 DWORD
 GetLastError();
 ```
@@ -450,9 +425,18 @@ GetLastError();
 
 Используется нумерация прототипов - опция `'frag-num'`.
 
+Директива для извлечения всех прототипов по сигнатуре выглядит так:
+
 ```
 #!prototype{frag-num}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`*-{};
 ```
+
+Но для примера будет извлекаться не более двух прототипов следующей директивой:
+
+```
+#!prototype{frag-num}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`2-{};
+```
+
 
 **MSDN**
 
@@ -468,78 +452,6 @@ bool
 tokenTypeIsNumberLiteral(
   umba::tokenizer::payload_type tokenType
 );
-
-// (3)
-bool
-tokenTypeIsStringLiteral(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (4)
-bool
-tokenTypeIsLiteral(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (5)
-bool
-tokenTypeIsAnyFqIdent(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (6)
-bool
-tokenTypeIsIdent(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (7)
-bool
-tokenTypeIsKeyword(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (8)
-bool
-tokenTypeIsIdentOrKeyword(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (9)
-bool
-tokenTypeIsOperator(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (10)
-bool
-tokenTypeIsComment(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (11)
-bool
-tokenTypeIsSingleLineComment(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (12)
-bool
-tokenTypeIsSpaceToken(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (13)
-bool
-tokenTypeIsLinefeedToken(
-  umba::tokenizer::payload_type tokenType
-);
-
-// (14)
-bool
-tokenTypeIsAnySpaceToken(
-  umba::tokenizer::payload_type tokenType
-);
 ```
 **Umba**
 
@@ -551,54 +463,6 @@ tokenTypeIsLessGreaterShift( umba::tokenizer::payload_type tokenType );
 // (2)
 bool
 tokenTypeIsNumberLiteral( umba::tokenizer::payload_type tokenType );
-
-// (3)
-bool
-tokenTypeIsStringLiteral( umba::tokenizer::payload_type tokenType );
-
-// (4)
-bool
-tokenTypeIsLiteral( umba::tokenizer::payload_type tokenType );
-
-// (5)
-bool
-tokenTypeIsAnyFqIdent( umba::tokenizer::payload_type tokenType );
-
-// (6)
-bool
-tokenTypeIsIdent( umba::tokenizer::payload_type tokenType );
-
-// (7)
-bool
-tokenTypeIsKeyword( umba::tokenizer::payload_type tokenType );
-
-// (8)
-bool
-tokenTypeIsIdentOrKeyword( umba::tokenizer::payload_type tokenType );
-
-// (9)
-bool
-tokenTypeIsOperator( umba::tokenizer::payload_type tokenType );
-
-// (10)
-bool
-tokenTypeIsComment( umba::tokenizer::payload_type tokenType );
-
-// (11)
-bool
-tokenTypeIsSingleLineComment( umba::tokenizer::payload_type tokenType );
-
-// (12)
-bool
-tokenTypeIsSpaceToken( umba::tokenizer::payload_type tokenType );
-
-// (13)
-bool
-tokenTypeIsLinefeedToken( umba::tokenizer::payload_type tokenType );
-
-// (14)
-bool
-tokenTypeIsAnySpaceToken( umba::tokenizer::payload_type tokenType );
 ```
 **Man**
 
@@ -610,54 +474,6 @@ tokenTypeIsLessGreaterShift(umba::tokenizer::payload_type tokenType);
 // (2)
 bool
 tokenTypeIsNumberLiteral(umba::tokenizer::payload_type tokenType);
-
-// (3)
-bool
-tokenTypeIsStringLiteral(umba::tokenizer::payload_type tokenType);
-
-// (4)
-bool
-tokenTypeIsLiteral(umba::tokenizer::payload_type tokenType);
-
-// (5)
-bool
-tokenTypeIsAnyFqIdent(umba::tokenizer::payload_type tokenType);
-
-// (6)
-bool
-tokenTypeIsIdent(umba::tokenizer::payload_type tokenType);
-
-// (7)
-bool
-tokenTypeIsKeyword(umba::tokenizer::payload_type tokenType);
-
-// (8)
-bool
-tokenTypeIsIdentOrKeyword(umba::tokenizer::payload_type tokenType);
-
-// (9)
-bool
-tokenTypeIsOperator(umba::tokenizer::payload_type tokenType);
-
-// (10)
-bool
-tokenTypeIsComment(umba::tokenizer::payload_type tokenType);
-
-// (11)
-bool
-tokenTypeIsSingleLineComment(umba::tokenizer::payload_type tokenType);
-
-// (12)
-bool
-tokenTypeIsSpaceToken(umba::tokenizer::payload_type tokenType);
-
-// (13)
-bool
-tokenTypeIsLinefeedToken(umba::tokenizer::payload_type tokenType);
-
-// (14)
-bool
-tokenTypeIsAnySpaceToken(umba::tokenizer::payload_type tokenType);
 ```
 **Man (table)**
 
@@ -669,54 +485,6 @@ tokenTypeIsLessGreaterShift(umba::tokenizer::payload_type tokenType);
 // (2)
 bool
 tokenTypeIsNumberLiteral(umba::tokenizer::payload_type tokenType);
-
-// (3)
-bool
-tokenTypeIsStringLiteral(umba::tokenizer::payload_type tokenType);
-
-// (4)
-bool
-tokenTypeIsLiteral(umba::tokenizer::payload_type tokenType);
-
-// (5)
-bool
-tokenTypeIsAnyFqIdent(umba::tokenizer::payload_type tokenType);
-
-// (6)
-bool
-tokenTypeIsIdent(umba::tokenizer::payload_type tokenType);
-
-// (7)
-bool
-tokenTypeIsKeyword(umba::tokenizer::payload_type tokenType);
-
-// (8)
-bool
-tokenTypeIsIdentOrKeyword(umba::tokenizer::payload_type tokenType);
-
-// (9)
-bool
-tokenTypeIsOperator(umba::tokenizer::payload_type tokenType);
-
-// (10)
-bool
-tokenTypeIsComment(umba::tokenizer::payload_type tokenType);
-
-// (11)
-bool
-tokenTypeIsSingleLineComment(umba::tokenizer::payload_type tokenType);
-
-// (12)
-bool
-tokenTypeIsSpaceToken(umba::tokenizer::payload_type tokenType);
-
-// (13)
-bool
-tokenTypeIsLinefeedToken(umba::tokenizer::payload_type tokenType);
-
-// (14)
-bool
-tokenTypeIsAnySpaceToken(umba::tokenizer::payload_type tokenType);
 ```
 
 
@@ -727,7 +495,6 @@ tokenTypeIsAnySpaceToken(umba::tokenizer::payload_type tokenType);
 ```
 
 ```cpp
-// (1)
 const
 std::vector<std::pair<ConditionOperators,std::string>>>> &
 getConditionOperatorsInfoVec();
@@ -740,7 +507,6 @@ getConditionOperatorsInfoVec();
 ```
 
 ```cpp
-// (1)
 std::vector<std::pair<ConditionOperators,std::string>>
 makeConditionOperatorsInfoVec();
 ```
@@ -763,7 +529,6 @@ Fail,FilenameLineNo,FragmentNumber,Path,TrimArround,PrototypeFormat=4
 ```
 
 ```cpp
-// (1)
 inline
 std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec() //! Создаёт вектор условных операторов
 {
@@ -784,7 +549,6 @@ std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperators
 ```
 
 ```cpp
-// (1)
 std::string
 findDoxygenBinPathImpl( bool dontTouchSystem );
 ```
@@ -796,7 +560,6 @@ findDoxygenBinPathImpl( bool dontTouchSystem );
 ```
 
 ```cpp
-// (1)
 std::string
 findDoxygenBinPathImpl( bool dontTouchSystem );
 ```
@@ -819,7 +582,6 @@ Fail,FilenameLineNo,FragmentNumber,Path,TrimArround,PrototypeFormat=4
 ```
 
 ```cpp
-// (1)
 inline std::string findDoxygenBinPathImpl(bool dontTouchSystem)
 {
     if (dontTouchSystem)
