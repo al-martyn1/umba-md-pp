@@ -17,15 +17,15 @@
   - [Код функции полностью](#код-функции-полностью)
   - [Директива извлечения прототипа](#директива-извлечения-прототипа)
   - [Стиль MSDN](#стиль-msdn)
+  - [Стиль Umba](#стиль-umba)
   - [Стиль Unix man](#стиль-unix-man)
   - [Стиль Unix man (table)](#стиль-unix-man-table)
-  - [Стиль Umba](#стиль-umba)
 - [Функция select](#функция-select)
   - [Код функции](#код-функции)
   - [Стиль MSDN](#стиль-msdn-1)
+  - [Стиль Umba](#стиль-umba-1)
   - [Стиль Unix man](#стиль-unix-man-1)
   - [Стиль Unix man (table)](#стиль-unix-man-table-1)
-  - [Стиль Umba](#стиль-umba-1)
 - [Функция CreateFileA](#функция-createfilea)
 - [Функция CloseHandle](#функция-closehandle)
 - [Функция GetLastError](#функция-getlasterror)
@@ -183,6 +183,20 @@ makeConditionOperatorsInfoVec(
 const = 0;
 ```
 
+### Стиль Umba
+
+```cpp
+template< typename CharType   = char
+        , typename StringType = std::string<CharType,std::char_traits<CharType>,std::allocator<CharType>>
+        >
+std::vector<std::pair<ConditionOperators,StringType>>
+makeConditionOperatorsInfoVec( void (__stdcall*) (const std::string<char>&) handler
+                             , StringType                                   str
+                             , const std::string<char>                      &str2   = std::string("aaa")
+                             )
+const = 0;
+```
+
 ### Стиль Unix man
 
 ```cpp
@@ -204,20 +218,6 @@ std::vector<std::pair<ConditionOperators,StringType>>
 makeConditionOperatorsInfoVec(void (__stdcall*) (const std::string<char>&) handler,
                               StringType                                   str,
                               const std::string<char>                      &str2   = std::string("aaa"))
-const = 0;
-```
-
-### Стиль Umba
-
-```cpp
-template< typename CharType   = char
-        , typename StringType = std::string<CharType,std::char_traits<CharType>,std::allocator<CharType>>
-        >
-std::vector<std::pair<ConditionOperators,StringType>>
-makeConditionOperatorsInfoVec( void (__stdcall*) (const std::string<char>&) handler
-                             , StringType                                   str
-                             , const std::string<char>                      &str2   = std::string("aaa")
-                             )
 const = 0;
 ```
 
@@ -251,6 +251,18 @@ select(
 );
 ```
 
+### Стиль Umba
+
+```cpp
+int
+select( int            nfds
+      , fd_set         *_Nullable restrict readfds
+      , fd_set         *_Nullable restrict writefds
+      , fd_set         *_Nullable restrict exceptfds
+      , struct timeval *_Nullable restrict timeout
+      );
+```
+
 ### Стиль Unix man
 
 ```cpp
@@ -273,32 +285,19 @@ select(int            nfds,
        struct timeval *_Nullable restrict timeout);
 ```
 
-### Стиль Umba
-
-```cpp
-int
-select( int            nfds
-      , fd_set         *_Nullable restrict readfds
-      , fd_set         *_Nullable restrict writefds
-      , fd_set         *_Nullable restrict exceptfds
-      , struct timeval *_Nullable restrict timeout
-      );
-```
-
 
 ## Функция CreateFileA
 
+**Код**
+
 ```cpp
-HANDLE CreateFileA(
-  LPCSTR                lpFileName,
-  DWORD                 dwDesiredAccess,
-  DWORD                 dwShareMode,
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-  DWORD                 dwCreationDisposition,
-  DWORD                 dwFlagsAndAttributes,
-  HANDLE                hTemplateFile
-);
+HANDLE CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
+                   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+                   DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes,
+                   HANDLE hTemplateFile
+                 );
 ```
+**MSDN**
 
 ```cpp
 HANDLE
@@ -312,17 +311,7 @@ CreateFileA(
   HANDLE                hTemplateFile
 );
 ```
-
-```cpp
-HANDLE
-CreateFileA(LPCSTR lpFileName,
-            DWORD dwDesiredAccess,
-            DWORD dwShareMode,
-            LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-            DWORD dwCreationDisposition,
-            DWORD dwFlagsAndAttributes,
-            HANDLE hTemplateFile);
-```
+**Umba**
 
 ```cpp
 HANDLE
@@ -335,63 +324,99 @@ CreateFileA( LPCSTR                lpFileName
            , HANDLE                hTemplateFile
            );
 ```
+**Man**
+
+```cpp
+HANDLE
+CreateFileA(LPCSTR lpFileName,
+            DWORD dwDesiredAccess,
+            DWORD dwShareMode,
+            LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+            DWORD dwCreationDisposition,
+            DWORD dwFlagsAndAttributes,
+            HANDLE hTemplateFile);
+```
+**Man (table)**
+
+```cpp
+HANDLE
+CreateFileA(LPCSTR                lpFileName,
+            DWORD                 dwDesiredAccess,
+            DWORD                 dwShareMode,
+            LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+            DWORD                 dwCreationDisposition,
+            DWORD                 dwFlagsAndAttributes,
+            HANDLE                hTemplateFile);
+```
 
 
 ## Функция CloseHandle
+
+**Код**
 
 ```cpp
 BOOL CloseHandle(
   HANDLE hObject
 );
 ```
+**MSDN**
 
 ```cpp
 BOOL
 CloseHandle(
   HANDLE hObject
-)
-;
+);
 ```
+**Umba**
 
 ```cpp
 BOOL
-CloseHandle(HANDLE hObject)
-;
+CloseHandle( HANDLE hObject );
 ```
+**Man**
 
 ```cpp
 BOOL
-CloseHandle( HANDLE hObject
-           )
-;
+CloseHandle(HANDLE hObject);
+```
+**Man (table)**
+
+```cpp
+BOOL
+CloseHandle(HANDLE hObject);
 ```
 
 
 ## Функция GetLastError
 
+**Код**
+
 ```cpp
 DWORD GetLastError();
 ```
+**MSDN**
 
 ```cpp
 DWORD
-GetLastError(
-
-)
-;
+GetLastError();
 ```
+**Umba**
 
 ```cpp
 DWORD
-GetLastError( )
-;
+GetLastError();
 ```
+**Man**
 
 ```cpp
 DWORD
-GetLastError(
-            )
-;
+GetLastError();
+```
+**Man (table)**
+
+```cpp
+DWORD
+GetLastError();
 ```
 
 
@@ -404,10 +429,7 @@ GetLastError(
 ```cpp
 const
 std::vector<std::pair<ConditionOperators,std::string>>>> &
-getConditionOperatorsInfoVec(
-
-)
-;
+getConditionOperatorsInfoVec();
 ```
 
 
@@ -418,10 +440,7 @@ getConditionOperatorsInfoVec(
 
 ```cpp
 std::vector<std::pair<ConditionOperators,std::string>>
-makeConditionOperatorsInfoVec(
-
-)
-;
+makeConditionOperatorsInfoVec();
 ```
 
 
@@ -465,8 +484,7 @@ std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperators
 std::string
 findDoxygenBinPathImpl(
   bool dontTouchSystem
-)
-;
+);
 ```
 
 
@@ -479,8 +497,7 @@ findDoxygenBinPathImpl(
 std::string
 findDoxygenBinPathImpl(
   bool dontTouchSystem
-)
-;
+);
 ```
 
 

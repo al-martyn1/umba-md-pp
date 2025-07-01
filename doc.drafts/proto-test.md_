@@ -126,14 +126,14 @@ where FMT is one of msdn|man|tab-man|umba
 ### Стиль MSDN
 #!prototype{proto-fmt=msdn}    tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
 
+### Стиль Umba
+#!prototype{proto-fmt=umba}    tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+
 ### Стиль Unix man
 #!prototype{proto-fmt=man}     tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
 
 ### Стиль Unix man (table)
 #!prototype{proto-fmt=tab-man} tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
-
-### Стиль Umba
-#!prototype{proto-fmt=umba}    tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
 
 
 
@@ -146,38 +146,56 @@ where FMT is one of msdn|man|tab-man|umba
 ### Стиль MSDN
 #!prototype{proto-fmt=msdn}    tests/cc/templates/03_function_template.h#`int select`-{};
 
+### Стиль Umba
+#!prototype{proto-fmt=umba}    tests/cc/templates/03_function_template.h#`int select`-{};
+
 ### Стиль Unix man
 #!prototype{proto-fmt=man}     tests/cc/templates/03_function_template.h#`int select`-{};
 
 ### Стиль Unix man (table)
 #!prototype{proto-fmt=tab-man} tests/cc/templates/03_function_template.h#`int select`-{};
 
-### Стиль Umba
-#!prototype{proto-fmt=umba}    tests/cc/templates/03_function_template.h#`int select`-{};
-
 
 ## Функция CreateFileA
 
-#!insert                    tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
-#!prototype{proto-fmt=msdn} tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
-#!prototype{proto-fmt=man}  tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
-#!prototype{proto-fmt=umba} tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
+**Код**
+#!insert                        tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
+**MSDN**
+#!prototype{proto-fmt=msdn}     tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
+**Umba**
+#!prototype{proto-fmt=umba}     tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
+**Man**
+#!prototype{proto-fmt=man}      tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
+**Man (table)**
+#!prototype{proto-fmt=tab-man}  tests/cc/templates/03_function_template.h#`HANDLE CreateFileA`-{};
 
 
 ## Функция CloseHandle
 
-#!insert                    tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
-#!prototype{proto-fmt=msdn} tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
-#!prototype{proto-fmt=man}  tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
-#!prototype{proto-fmt=umba} tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+**Код**
+#!insert                        tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+**MSDN**
+#!prototype{proto-fmt=msdn}     tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+**Umba**
+#!prototype{proto-fmt=umba}     tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+**Man**
+#!prototype{proto-fmt=man}      tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+**Man (table)**
+#!prototype{proto-fmt=tab-man}  tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
 
 
 ## Функция GetLastError
 
-#!insert                    tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
-#!prototype{proto-fmt=msdn} tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
-#!prototype{proto-fmt=man}  tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
-#!prototype{proto-fmt=umba} tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+**Код**
+#!insert                        tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+**MSDN**
+#!prototype{proto-fmt=msdn}     tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+**Umba**
+#!prototype{proto-fmt=umba}     tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+**Man**
+#!prototype{proto-fmt=man}      tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+**Man (table)**
+#!prototype{proto-fmt=tab-man}  tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
 
 
 
