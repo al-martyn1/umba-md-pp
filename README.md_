@@ -10,32 +10,32 @@ Language   : Russian
 
 #!meta{no-document-meta-title,author,url}
 
-<arg-list title="Spec:|:Lang:|:Description">
-
-- other
-a
-b
-c
-d
-e
-
-|f|
-
-- some
-
-- `none`
-`P`/`C`
-As `'s'`.
--`'s'`
- `P`/`C`
- Prints string
--`'?'`
- `C`
- Prints escaped string.
-
- See later "Escaping"
-
-</arg-list>
+#// <arg-list title="Spec:|:Lang:|:Description">
+#// 
+#// - other
+#// a
+#// b
+#// c
+#// d
+#// e
+#// 
+#// |f|
+#// 
+#// - some
+#// 
+#// - `none`
+#// `P`/`C`
+#// As `'s'`.
+#// -`'s'`
+#//  `P`/`C`
+#//  Prints string
+#// -`'?'`
+#//  `C`
+#//  Prints escaped string.
+#// 
+#//  See later "Escaping"
+#// 
+#// </arg-list>
 
 
 #// @startebnf
@@ -59,63 +59,36 @@ As `'s'`.
 #// 
 #// **umba-md-pp** - препроцессор для подготовки документации с использованием markdown-разметки простого текста.
 
-# Важные ссылки
-
-- [Перечень страниц (индекс документации)](doc/Index.md)
-- [TODO](doc.drafts/todo.md)
-- [Опции командной строки](doc/umba-md-pp-cli-options.md)
-- [Основные исходники](doc/_sources_brief.md)
-
-
-12.csv
-<csv-table> tests/csv/12.csv
-
-12.csv - csv-title=no
-<csv-table csv-title=no> tests/csv/12.csv
-
-13.csv
-<csv-table> tests/csv/13.csv
-
-excel_test01_comma.csv
-<csv-table> tests/csv/excel_test01_comma.csv
-
-excel_test01_dos.csv
-<csv-table> tests/csv/excel_test01_dos.csv
-
-excel_test01_semicolon.csv
-<csv-table> tests/csv/excel_test01_semicolon.csv
-
-excel_test01_tabs.csv
-<csv-table> tests/csv/excel_test01_tabs.csv
-
-excel_test01_tabs.csv - csv-title=merge title
-<csv-table csv-title=merge title="Имя|Фамилия|Возраст:|Адрес"> tests/csv/excel_test01_tabs.csv
-
-excel_test01_comma_semicolon_multi.csv - multi-title
-<csv-table multi-title="Первая таблица из мультитаблицы с разделителем запятая|Вторая таблица из мультитаблицы с разделителем точка с запятой"> tests/csv/excel_test01_comma_semicolon_multi.csv
+#// # Важные ссылки
+#// 
+#// - [Перечень страниц (индекс документации)](doc/Index.md)
+#// - [TODO](doc.drafts/todo.md)
+#// - [Опции командной строки](doc/umba-md-pp-cli-options.md)
+#// - [Основные исходники](doc/_sources_brief.md)
 
 
 
-#!subsec{fail} doc/umba-md-pp-cli-options.md_
+#// #!subsec{fail} doc/umba-md-pp-cli-options.md_
+#// 
+#// #!insert{no-fail,doc,raise=-1} tests/$(INSERT_DOC_FILENAME_MACRO_TEST).md_
+#// 
+#// #!insert{quote,no-pre} .md-pp.options
+#// 
 
-#!insert{no-fail,doc,raise=-1} tests/$(INSERT_DOC_FILENAME_MACRO_TEST).md_
+#// code
+#// #!code tests/test.lst
 
-#!insert{quote,no-pre} .md-pp.options
+#// quote
+#// #!quote tests/test.lst
 
-code
-#!code tests/test.lst
+#// pre
+#// #!pre tests/test.lst
 
-quote
-#!quote tests/test.lst
+#// quote,pre
+#// #!quote{pre} tests/test.lst
 
-pre
-#!pre tests/test.lst
-
-quote,pre
-#!quote{pre} tests/test.lst
-
-doc
-#!doc tests/test.lst
+#// doc
+#// #!doc tests/test.lst
 
 
 # Основные возможности
@@ -228,6 +201,33 @@ GitHub/GitLab wiki, например.
 - якорь `(-)` - линия-разделитель, задаётся для каждого языка отдельно в произвольном количестве вариантов, для C++ это, например,
   `//---` или `/***`. Задаются только префиксы, т.е. `//------------` - это тоже линия разделитель
 
+**MSDN**
+#!prototype{frag-num,proto-fmt=msdn,frag-start-idx=3}     tests/cc/templates/03_function_template.h#`bool tokenTypeIs`*-{};
+**Umba**
+#!prototype{frag-num,proto-fmt=umba}     tests/cc/templates/03_function_template.h#`bool tokenTypeIs`*-{};
+**Man**
+#!prototype{frag-num,proto-fmt=man}      tests/cc/templates/03_function_template.h#`bool tokenTypeIs`*-{};
+**Man (table)**
+#!prototype{frag-num,proto-fmt=tab-man}  tests/cc/templates/03_function_template.h#`bool tokenTypeIs`*-{};
+
+**MSDN**
+#!prototype{proto-fmt=msdn}     tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+**Umba**
+#!prototype{proto-fmt=umba}     tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+**Man**
+#!prototype{proto-fmt=man}      tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+**Man (table)**
+#!prototype{proto-fmt=tab-man}  tests/cc/templates/03_function_template.h#`DWORD GetLastError`-{};
+
+
+#// !insert                    tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+#// !prototype{proto-fmt=msdn} tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+#// !prototype{proto-fmt=man}  tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+#// !prototype{proto-fmt=umba} tests/cc/templates/03_function_template.h#`BOOL CloseHandle`-{};
+
+#// !prototype{proto-fmt=tab-man} tests/cc/templates/03_function_template.h#`std::vector< std::pair<ConditionOperators, StringType> > makeConditionOperatorsInfoVec`-{};
+
+
 Извлекаем фрагмент кода по тэгу фрагмента:
 ```
 #!insert{nolineno,noKeepCutTags,filename,path,filename-line-no} umba-md-pp/for_tag_test.cpp#TEST_TAG
@@ -240,39 +240,6 @@ GitHub/GitLab wiki, например.
 ```
 
 #!insert{nolineno,noKeepCutTags} umba-md-pp/enums.h#SnippetOptions
-
-
-#// 
-#// Извлекаем фрагмент кода по сигнатуре (прототип, задаём конечным маркером ';'):
-#// ```
-#// #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
-#// ```
-#// 
-#// #!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-;
-#// 
-
-Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype):
-```
-#!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
-```
-
-#!prototype umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
-
-
-Извлекаем фрагмент кода по сигнатуре (прототип, директива prototype, с форматированием):
-```
-#!prototype{fmt} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
-```
-
-#!prototype{fmt} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`
-
-
-Извлекаем фрагмент кода по сигнатуре:
-```
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}
-```
-
-#!insert{nolineno,noKeepCutTags} umba-md-pp/extern_tools.h#`inline std::string findDoxygenBinPathImpl`-{}
 
 
 # Стандартный конфиг

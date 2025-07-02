@@ -15,4 +15,6 @@ Generator: Umba Brief Scanner
 - `test_rtf_workarounds.cpp` - Тесты воркараундов/фиксов RTF, который сгенерил Doxygen
 - `umba-md-pp-view.cpp` - Утилита umba-md-pp-view - рендерер маркдауна, использующий Doxygen и локальный просмотрщик RTF-файлов
 - `umba-md-pp.cpp` - Утилита umba-md-pp - препроцессор для маркдауна
+- `00_00_explicit_full_template_specialization.h` - 
+- `00_01.h` - 
 - `useless.cpp` - 

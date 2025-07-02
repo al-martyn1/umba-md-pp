@@ -57,18 +57,33 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse
 **--add-examples-path=PATH** - Add paths list for examples searching.
 
 **-E=LANG:EXT[,EXT...]**,
-**--add-lang-file-extention=LANG:EXT[,EXT...]**,
-**--add-lang-file-extentions=LANG:EXT[,EXT...]** - Add file extention for the lang for lang detection.
+**--add-code-file-extention=LANG:EXT[,EXT...]**,
+**--add-code-file-extentions=LANG:EXT[,EXT...]** - Add file extention for the code for lang detection.
 
 **-P=LANG:PREFIX**,
-**--add-lang-cut-prefix=LANG:PREFIX** - Add prefix for the cut labels in the lang files.
+**--add-code-cut-prefix=LANG:PREFIX** - Add prefix for the cut labels in the code files.
 
-**--add-lang-separator-prefix=LANG:PREFIX** - Add lang prefix for the separator line.
+**--add-code-comment-marker=LANG:MARKER_PAIR** - Add marker for comments, signle line marker or pair in form `BEGIN|END`.
 
-**--set-lang-block-chars=LANG:{}** - Set lang block open and close characters, like "{}" for C/C++.
+**--add-code-separator-prefix=LANG:PREFIX** - Add lang prefix for the separator line.
+
+**--set-code-case-sens=LANG:CASE_SENS** - Set code case sensitivity.
+
+**--set-code-prototype-remove=LANG:KWD_COMMA_LIST** - Set code case sensitivity.
+
+**--set-code-assign-op=LANG:ASSIGN_OP**,
+**--set-code-assign-operator=LANG:ASSIGN_OP** - Set code assign operator.
+
+**--set-code-block-chars=LANG:{}** - Set code block open and close characters, like "{}" for C/C++.
+
+**--set-code-statement-separator=LANG:SEP** - Set code statement separator, like ";" (semicolon) for C/C++.
 
 **-T=LANG:TAG**,
-**--set-lang-listing-tag=LANG:TAG** - Set target markdown tag for the code section.
+**--set-code-listing-tag=LANG:TAG** - Set target markdown tag for the code section.
+
+**--set-code-processing-handler=LANG:HANDLER_TYPE:HANDLER_NAME** - Set code processing handler for language `LANG`.
+`HANDLER_TYPE` can be one of the: `fn-prototype-extract`, `cls-prototype-extract`, `fn-prototype-format`, `cls-prototype-format`
+`HANDLER_NAME` can be one of the: `cc-fn-ptt-extract`, `cc-cls-ptt-extract`, `cc-fn-ptt-format`, `cc-cls-ptt-format`.
 
 **-O=OPTS**,
 **--set-insert-options=OPTS** - Set default insert options.
@@ -164,6 +179,18 @@ Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse
 **--strip-extention[=MODE]**,
 **--strip-extentions[=MODE]** - Strip supported extentions in the local links.
 Flag option, allowed values: `+`/`1`/`Y(es)`/`T(rue)` or /`-`/`0`/`N(o)`/`F(alse)`, default value: `TRUE`.
+
+**--arg-list-value-style=STYLE** - Set default value style for <arg-list> tag values. Available values are `normal`, `bold`, `italic`, `bold-italic`, `italic-bold`, `backtick` and `backtick-quote`.
+
+**--arg-list-type=TYPE** - Set default type for <arg-list> tag. Available values are `table` and `text`.
+
+**--arg-list-title=TITLE** - Set default titles for <arg-list> tag in table mode.
+
+**--val-list-value-style=STYLE** - Set default value style for <val-list> tag values. Available values are `normal`, `bold`, `italic`, `bold-italic`, `italic-bold`, `backtick` and `backtick-quote`.
+
+**--val-list-type=TYPE** - Set default type for <val-list> tag. Available values are `table` and `text`.
+
+**--val-list-title=TITLE** - Set default titles for <val-list> tag in table mode.
 
 **--gv-dpi=DPI**,
 **--gviz-dpi=DPI**,

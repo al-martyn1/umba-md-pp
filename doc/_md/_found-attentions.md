@@ -26,15 +26,15 @@ Generator: Umba Brief Scanner
 - `[_src/umba-md-pp/processing.h:990]`
   Какое-то оформление надо
 
-- `[_src/umba-md-pp/processing.h:1240]`
+- `[_src/umba-md-pp/processing.h:1399]`
   JSON-META У нас универсальный парсер YAML/JSON и мета данные могут быть в
   формате JSON При вставке в JSON могут быть проблемы
 
-- `[_src/umba-md-pp/snippet_options.h:895]`
+- `[_src/umba-md-pp/snippet_options.h:686]`
   Тут бы надо предусмотреть, что в первой строке поиска надо пропустить окончание
   сигнатуры, но пока сойдёт и так
 
-- `[_src/umba-md-pp/snippet_options.h:955]`
+- `[_src/umba-md-pp/snippet_options.h:754]`
   - или тут надо уменьшить на размер конечной сигнатуры в строках?
 
 - `[_src/umba-md-pp/umba-md-pp-view.cpp:501]`
@@ -46,6 +46,6 @@ Generator: Umba Brief Scanner
 - `[_src/umba-md-pp/umba_md_processing_utils.h:572]`
   Не понятно, что за состояние, и почему я его не обработал
 
-- `[_src/umba-md-pp/utils.h:539]`
+- `[_src/umba-md-pp/utils.h:542]`
   надо обдумать для других возможных путей
 

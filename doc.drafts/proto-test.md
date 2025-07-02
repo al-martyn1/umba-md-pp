@@ -439,7 +439,12 @@ GetLastError();
 
 ## Извлечение всех прототипов
 
-Используется нумерация прототипов - опция `'frag-num'`.
+Используется нумерация прототипов - опция `'frag-num'` (`'fragment-number'`).
+
+Нумерация извлечённых прототипов используется для того, чтобы можно было в последующем описании
+ссылаться на конкретный прототип/перегрузку, примерно как это сделано на 
+(cppreference.com)[https://en.cppreference.com/w/cpp/string/basic_string/basic_string.html].
+
 
 Директива для извлечения всех прототипов по сигнатуре выглядит так:
 
@@ -457,13 +462,13 @@ GetLastError();
 **MSDN**
 
 ```cpp
-// (1)
+// (3)
 bool
 tokenTypeIsLessGreaterShift(
   umba::tokenizer::payload_type tokenType
 );
 
-// (2)
+// (4)
 bool
 tokenTypeIsNumberLiteral(
   umba::tokenizer::payload_type tokenType

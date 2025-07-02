@@ -215,7 +215,12 @@ where FMT is one of msdn|man|tab-man|umba
 
 ## Извлечение всех прототипов
 
-Используется нумерация прототипов - опция `'frag-num'`.
+Используется нумерация прототипов - опция `'frag-num'` (`'fragment-number'`).
+
+Нумерация извлечённых прототипов используется для того, чтобы можно было в последующем описании
+ссылаться на конкретный прототип/перегрузку, примерно как это сделано на 
+(cppreference.com)[https://en.cppreference.com/w/cpp/string/basic_string/basic_string.html].
+
 
 Директива для извлечения всех прототипов по сигнатуре выглядит так:
 
@@ -233,7 +238,7 @@ where FMT is one of msdn|man|tab-man|umba
 #// **Код**
 #// #!insert                        tests/cc/templates/03_function_template.h#`bool tokenTypeIs`2-{};
 **MSDN**
-#!prototype{frag-num,proto-fmt=msdn}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`2-{};
+#!prototype{frag-num,proto-fmt=msdn,frag-start-idx=3}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`2-{};
 **Umba**
 #!prototype{frag-num,proto-fmt=umba}     _src/umba-md-pp/code-processing/utils.h#`bool tokenTypeIs`2-{};
 **Man**

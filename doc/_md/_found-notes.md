@@ -4,7 +4,7 @@ Generator: Umba Brief Scanner
 
 # _src/umba-md-pp
 
-- `[_src/umba-md-pp/snippet_options.h:147]`
+- `[_src/umba-md-pp/signature.h:38]`
   Не работает для много строчных сигнатур, если в файле они
     по другому разбиты на строки.
     Нужен новый алгоритм.
