@@ -8,7 +8,9 @@
 //
 #include "umba/filename.h"
 
-#include "code-processing/simple-processing.h"
+#include "code-processing/types.h"
+
+// #include "code-processing/simple-processing.h"
 
 
 // umba::md::
@@ -35,13 +37,19 @@ protected:
 
     // Depends only on language and user settings for the language, no backend related options here
 
+    bool                                                               m_caseSens = true;
+
     std::set<std::string>                                              m_languageFilenameExtentions;
 
     std::unordered_set<std::string>                                    m_cutPrefixes           ; //
     std::unordered_set<std::string>                                    m_genericCutStopPrefixes; // For C++ it can be "//---", for plain C: /*** - separator line, or both of them
+    std::unordered_map<std::string,std::string>                        m_commentMarkers        ;
+
+    std::unordered_set<std::string>                                    m_prototypeSkip;
 
     std::string                                                        m_blockPair;
     std::string                                                        m_statementSeparator; // expression/statement terminator/separator
+    std::string                                                        m_assignOperator;
 
 
 public: // members
@@ -59,6 +67,181 @@ public:
     CodeOptions& operator=(const CodeOptions &) = default;
     CodeOptions(CodeOptions &&) = default;
     CodeOptions& operator=(CodeOptions &&) = default;
+
+
+    std::unordered_set<std::string> getAllStopPrefixes() const
+    {
+        auto res = m_cutPrefixes;
+        for(const auto &cmntMarkerPair : m_commentMarkers)
+            res.insert(cmntMarkerPair.first);
+        res.insert(m_genericCutStopPrefixes.begin(), m_genericCutStopPrefixes.end());
+        return res;
+    }
+
+    std::string getSingleLineCommentMarker() const
+    {
+        for(auto it=m_commentMarkers.begin(); it!=m_commentMarkers.end(); ++it)
+        {
+            if (it->second.empty())
+                return it->first;
+        }
+
+        return std::string();
+    }
+
+    bool getMultiLineCommentMarker(std::string &start, std::string &end) const
+    {
+        for(auto it=m_commentMarkers.begin(); it!=m_commentMarkers.end(); ++it)
+        {
+            if (!it->second.empty())
+            {
+                start = it->first ;
+                end   = it->second;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool getCommentMarkers(std::string &start, std::string &end) const
+    {
+        end.clear();
+        start = getSingleLineCommentMarker();
+        if (!start.empty())
+             return true;
+        return getMultiLineCommentMarker(start, end);
+    }
+
+
+    //TODO: !!!  Пока у нас строки начала/окончания блока односимвольные, но надо переделать, желательно везде
+
+    std::string getBlockStartString() const
+    {
+        if (m_blockPair.size()<2)
+            return std::string();
+
+        if (m_blockPair.size()==2)
+            return std::string(1, m_blockPair[0]);
+
+        auto pos = m_blockPair.find('|');
+        if (pos==m_blockPair.npos)
+            return std::string();
+
+        return std::string(m_blockPair, 0, pos);
+    }
+
+    std::string getBlockEndString() const
+    {
+        if (m_blockPair.size()<2)
+            return std::string();
+
+        if (m_blockPair.size()==2)
+            return std::string(1, m_blockPair[1]);
+
+        auto pos = m_blockPair.find('|');
+        if (pos==m_blockPair.npos)
+            return std::string();
+
+        return std::string(m_blockPair, pos+1, m_blockPair.npos);
+    }
+
+    char getBlockStartChar() const
+    {
+        std::string str = getBlockStartString();
+        if (str.empty())
+            return 0;
+        return str[0];
+    }
+
+    char getBlockEndChar() const
+    {
+        std::string str = getBlockEndString();
+        if (str.empty())
+            return 0;
+        return str[0];
+    }
+
+    // --set-code-case-sens
+    bool setCaseSens(bool b) { m_caseSens = b; return true; }
+    bool getCaseSens() const { return m_caseSens; }
+
+    const std::unordered_set<std::string>& getPrototypeSkip() const { return m_prototypeSkip; }
+    // void addPrototypeSkip(const std::string &skip)                  { m_prototypeSkip.insert(skip); }
+    // void clrPrototypeSkip(const std::string &skip)                  { m_prototypeSkip.clear(); }
+    bool testPrototypeSkip(std::string testFor, const std::unordered_set<std::string> &s) const
+    {
+        if (!m_caseSens)
+            umba::string_plus::tolower(testFor);
+        return s.find(testFor)!=s.end();
+    }
+    bool testPrototypeSkip(const std::string &testFor) const        { return testPrototypeSkip(testFor, m_prototypeSkip); }
+
+    // --set-code-prototype-remove
+    bool setPrototypeSkip(std::string strSkipList)
+    {
+        if (strSkipList.empty())
+            return false;
+
+        int op = 0;
+
+        if (strSkipList[0]=='+')
+        {
+            op = 1;
+            strSkipList.erase(0, 1);
+        }
+        else if (strSkipList[0]=='-')
+        {
+            op = -1;
+            strSkipList.erase(0, 1);
+        }
+
+        if (strSkipList.empty())
+            return false;
+
+        auto optVec = splitAndTrimAndSkipEmpty(strSkipList, ',');
+        if (optVec.empty())
+            return false;
+
+        if (op==0)
+        {
+            m_prototypeSkip.clear();
+            op = 1;
+        }
+
+        if (!m_caseSens)
+        {
+            for(auto &s: optVec)
+                umba::string_plus::tolower(s);
+        }
+
+        for(const auto &s: optVec)
+        {
+            if (op>0)
+               m_prototypeSkip.insert(s);
+            else
+               m_prototypeSkip.erase(s);
+        }
+
+        return true;
+    }
+
+
+    const std::string& getAssignOperator() const
+    {
+        return m_assignOperator;
+    }
+
+    bool setAssignOperator(const std::string& s)
+    {
+        m_assignOperator = s;
+        return true;
+    }
+
+    const std::string& getSatementSeparator() const
+    {
+        return m_statementSeparator;
+    }
 
     bool setCodeProcessingHandler(CodeProcessingHandlerType handlerType, const std::string &handlerName)
     {
@@ -155,6 +338,16 @@ public:
     bool addCutPrefix(const std::string &p)
     {
         m_cutPrefixes.insert(p);
+        return true;
+    }
+
+    bool addCommentMarker(const std::string &p)
+    {
+        auto pos = p.find('|');
+        if (pos!=p.npos)
+            m_commentMarkers[std::string(p, 0, pos)] = std::string(p, pos+1, p.npos);
+        else
+            m_commentMarkers[p] = std::string();
         return true;
     }
 
@@ -281,9 +474,48 @@ public:
         return res;
     }
 
+    // bool setCaseSens(bool b) { m_caseSens = b; return true; }
+    // bool getCaseSens() const { return m_caseSens; }
+    // bool setPrototypeSkip(std::string strSkipList)
+
+    bool setCaseSens(const std::string &lang, bool b)
+    {
+        m_codeOptions[lang].setCaseSens(b);
+        return true;
+    }
+
+    bool setCaseSens(const std::string &lang, std::string bStr)
+    {
+        umba::string_plus::tolower(bStr);
+        if (bStr=="t" || bStr=="true" || bStr=="y" || bStr=="yes" || bStr=="1")
+            m_codeOptions[lang].setCaseSens(true);
+        else if (bStr=="f" || bStr=="false" || bStr=="n" || bStr=="no" || bStr=="0")
+            m_codeOptions[lang].setCaseSens(false);
+        else
+            return false;
+
+        return true;
+    }
+
+    bool setPrototypeSkip(const std::string &lang, const std::string &s)
+    {
+        return m_codeOptions[lang].setPrototypeSkip(s);
+    }
+
+    bool setAssignOperator(const std::string &lang, const std::string& s)
+    {
+        return m_codeOptions[lang].setAssignOperator(s);
+    }
+
     bool addCutPrefix(const std::string &lang, const std::string &p)
     {
         m_codeOptions[lang].addCutPrefix(p);
+        return true;
+    }
+
+    bool addCommentMarker(const std::string &lang, const std::string &p)
+    {
+        m_codeOptions[lang].addCommentMarker(p);
         return true;
     }
 
@@ -369,3 +601,9 @@ public:
 
 } // namespace md
 } // namespace umba
+
+
+#include "code-processing/simple-processing.h"
+
+
+

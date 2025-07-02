@@ -17,6 +17,7 @@
 @set CLS=--enum-flags=enum-class
 @set DECLCLS=--enum-flags=type-decl,enum-class
 @set FMTHEX=--enum-flags=fmt-hex
+@set FMTDEC=--enum-flags=fmt-dec
 @set SERIALIZE=--enum-flags=serialize,deserialize,lowercase
 
 @set TPL_OVERRIDE=--override-template-parameter=EnumNameFormat:$(ENAMNAME)

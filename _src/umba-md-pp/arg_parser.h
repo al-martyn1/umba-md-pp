@@ -521,9 +521,31 @@ int operator()( const StringType                                &a           //!
             }
 
             auto optArg = opt.optArg;
-            if (!appConfig.addCutPrefix(optArg))
+            if (!appConfig.addCodeCutPrefix(optArg))
             {
-                LOG_ERR<<"Addng code cut prefix failed, invalid argument: '" << optArg << "'\n";
+                LOG_ERR<<"Addng code cut prefix failed, invalid argument: '" << optArg << "' (--add-code-cut-prefix)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+        else if ( opt.setParam("LANG:MARKER_PAIR")
+               || opt.isOption("add-code-comment-marker")
+               || opt.setDescription("Add marker for comments, signle line marker or pair in form `BEGIN|END`"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.hasArg())
+            {
+                LOG_ERR<<"Adding comment marker requires argument (--add-code-comment-marker)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.addCodeCommentMarker(optArg))
+            {
+                LOG_ERR<<"Addng comment marker failed, invalid argument: '" << optArg << "' (--add-code-comment-marker)\n";
                 return -1;
             }
 
@@ -538,12 +560,12 @@ int operator()( const StringType                                &a           //!
 
             if (!opt.hasArg())
             {
-                LOG_ERR<<"Adding prefix for the separator line (--add-code-separator-prefix)\n";
+                LOG_ERR<<"Adding prefix for the separator line failed (--add-code-separator-prefix)\n";
                 return -1;
             }
 
             auto optArg = opt.optArg;
-            if (!appConfig.addSeparatorLinePrefix(optArg))
+            if (!appConfig.addCodeSeparatorLinePrefix(optArg))
             {
                 LOG_ERR<<"Addng prefix for the separator line, invalid argument: '" << optArg << "'\n";
                 return -1;
@@ -551,6 +573,77 @@ int operator()( const StringType                                &a           //!
 
             return 0;
         }
+
+
+        else if ( opt.setParam("LANG:CASE_SENS")
+               || opt.isOption("set-code-case-sens")
+               || opt.setDescription("Set code case sensitivity"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.hasArg())
+            {
+                LOG_ERR<<"Setting code case sensitivity failed (--set-code-case-sens)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.setCodeCaseSens(optArg))
+            {
+                LOG_ERR<<"Setting code case sensitivity, invalid argument: '" << optArg << "' (--set-code-case-sens)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+
+        else if ( opt.setParam("LANG:KWD_COMMA_LIST")
+               || opt.isOption("set-code-prototype-remove")
+               || opt.setDescription("Set code case sensitivity"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.hasArg())
+            {
+                LOG_ERR<<"Setting code prototype remove keywords failed (--set-code-prototype-remove)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.setCodePrototypeSkip(optArg))
+            {
+                LOG_ERR<<"Setting code prototype remove keywords, invalid argument: '" << optArg << "' (--set-code-prototype-remove)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
+
+        else if ( opt.setParam("LANG:ASSIGN_OP")
+               || opt.isOption("set-code-assign-op")
+               || opt.isOption("set-code-assign-operator")
+               || opt.setDescription("Set code assign operator"))
+        {
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.hasArg())
+            {
+                LOG_ERR<<"Setting code assign operator failed (--set-code-assign-op)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            if (!appConfig.setCodeAssignOperator(optArg))
+            {
+                LOG_ERR<<"Setting code assign operator, invalid argument: '" << optArg << "' (--set-code-assign-op)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
 
         else if ( opt.setParam("LANG:{}")
                || opt.isOption("set-code-block-chars")
@@ -565,7 +658,7 @@ int operator()( const StringType                                &a           //!
             }
 
             auto optArg = opt.optArg;
-            if (!appConfig.setBlockCharacters(optArg))
+            if (!appConfig.setCodeBlockCharacters(optArg))
             {
                 LOG_ERR<<"Setting code block open and close characters, invalid argument: '" << optArg << "'. Argument must be exact the pair of single open and close block characters\n";
                 return -1;
@@ -574,7 +667,7 @@ int operator()( const StringType                                &a           //!
             return 0;
         }
 
-        else if ( opt.setParam("LANG:{}")
+        else if ( opt.setParam("LANG:SEP")
                || opt.isOption("set-code-statement-separator")
                || opt.setDescription("Set code statement separator, like \";\" (semicolon) for C/C++"))
         {
@@ -587,7 +680,7 @@ int operator()( const StringType                                &a           //!
             }
 
             auto optArg = opt.optArg;
-            if (!appConfig.setStatementSeparator(optArg))
+            if (!appConfig.setCodeStatementSeparator(optArg))
             {
                 LOG_ERR<<"Setting code statement separator, invalid argument: '" << optArg << "'.\n"; // Argument must be exact the pair of single open and close block characters\n";
                 return -1;

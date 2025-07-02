@@ -29,7 +29,7 @@
 
 # Базовые опции
 --processing-options=generate-toc,title,meta-data-subst
---set-insert-options=fail,path,filename-line-no,trim-arround,format
+--set-insert-options=fail,path,filename-line-no,trim-arround,fragment-number,prototype-format=umba
 --batch-page-index-file=doc/Index.md
 
 # Базовые опции для Graphviz
@@ -182,9 +182,13 @@
 #,brief
 
 # Настройки для листингов различных языков программирования
+# Также используются для извлечения фрагментов кода из исходных текстов
 
 # C++
 --add-code-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
+--set-code-case-sens==C++:true
+--add-code-comment-marker=C++://
+--add-code-comment-marker=C++:/*|*/
 --add-code-cut-prefix=C++://#!
 --add-code-cut-prefix=C++://#$
 --add-code-cut-prefix=C++:/*#!
@@ -193,6 +197,8 @@
 --add-code-separator-prefix=C++:/***
 --set-code-block-chars=C++:{}
 --set-code-statement-separator=C++:;
+--set-code-assign-operator=C++:=
+--set-code-prototype-remove=C++:inline
 --set-code-listing-tag=C++:cpp
 --set-code-processing-handler=C++:fn-prototype-extract:cc-fn-ptt-extract
 --set-code-processing-handler=C++:cls-prototype-extract:cc-cls-ptt-extract
@@ -201,6 +207,9 @@
 
 # C
 --add-code-file-extentions=C:.c
+--set-code-case-sens==C:true
+--add-code-comment-marker=C://
+--add-code-comment-marker=C:/*|*/
 --add-code-cut-prefix=C://#!
 --add-code-cut-prefix=C://#$
 --add-code-cut-prefix=C:/*#!
@@ -208,19 +217,27 @@
 --add-code-separator-prefix=C://---
 --add-code-separator-prefix=C:/***
 --set-code-block-chars=C:{}
---set-code-statement-separator=C++:;
---set-code-listing-tag=C:cpp
+--set-code-statement-separator=C:;
+--set-code-assign-operator=C:=
+--set-code-prototype-remove=C:inline
+--set-code-listing-tag=C:c
 
 # Squrrel
 --add-code-file-extentions=Squrrel:.nut,.nuts
+--set-code-case-sens==Squrrel:true
+--add-code-comment-marker=Squrrel://
 --add-code-cut-prefix=Squrrel://#!
 --add-code-cut-prefix=Squrrel://#$
 --add-code-separator-prefix=Squrrel://---
 --set-code-block-chars=Squrrel:{}
+--set-code-assign-operator=Squrrel:=
+#--set-code-prototype-remove=Squrrel:inline
 --set-code-listing-tag=Squrrel:lua
 
 # CMake
 --add-code-file-extentions=CMake:CMakeLists.txt,.cmake
+--set-code-case-sens==CMake:false
+--add-code-comment-marker=CMake:#
 --add-code-cut-prefix=CMake:#//!
 --add-code-cut-prefix=CMake:#//$
 --add-code-separator-prefix=CMake:###

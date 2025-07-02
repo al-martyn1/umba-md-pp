@@ -40,12 +40,15 @@ noProtodoc,noPdoc                  = 0x10E0 // -protodoc
 protodoc,pdoc                      = 0x10E1 // Generate documentation for prototype
 
 #
-noFormat,noFmt                     = 0x10F0 // -format
-format,fmt                         = 0x10F1 // format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is
+# noFormat,noFmt                     = 0x10F0 // -format
+# format,fmt                         = 0x10F1 // format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is
 
 #
 noClass,noCls                      = 0x1100 // -class
 class,cls                          = 0x1101 // class option for prototype extraction. 
+
+noFragmentNumber,noFragmentNum,noFrgNum,noFragNum = 0x1110 // -fragmentNumber
+fragmentNumber,fragmentNum,frgNum,fragNum         = 0x1111 // add fragment numbers while multiple fragments are extracted
 
 
 # Flag only ON options
@@ -57,3 +60,9 @@ prototype                          = 0x1821 // Extract prototype from code snipp
 # Numeric options
 
 raise                              = 0x2011 // Raise section levels in included document up to RISE level
+
+prototypeFormat,protoFormat,prototypeFmt,protoFmt = 0x2021 // Prototype formatting style
+
+fragmentStart,frgStart,fragStart,fragmentStartIndex,frgStartIndex,fragStartIndex,fragmentStartIdx,frgStartIdx,fragStartIdx   = 0x2031 // set fragment numeration start index
+
+

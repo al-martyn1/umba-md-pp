@@ -78,6 +78,7 @@ struct AppConfig
     //std::unordered_map<FilenameStringType, std::string>   extToLang  ;
     //std::unordered_map<std::string, LangOptions>          langOptions;
     std::unordered_set<SnippetOptions>                    snippetOptions;
+    std::unordered_map<SnippetOptions, int>               intSnippetOptions;
     umba::macros::StringStringMap<std::string>            conditionVars;     // Изначально предназначалось для проверки условий, но теперь и для макроподстановок
 
     std::unordered_set<ProcessingOptions>                 processingOptions;
@@ -829,7 +830,7 @@ struct AppConfig
 
     bool updateInsertOptions(const std::string &opts)
     {
-        if (umba::md::deserializeSnippetOptions(opts, &snippetOptions)!=SnippetOptionsParsingResult::ok)
+        if (umba::md::deserializeSnippetOptions(opts, &snippetOptions, &intSnippetOptions)!=SnippetOptionsParsingResult::ok)
         {
             return false;
         }
@@ -1106,15 +1107,51 @@ struct AppConfig
 
 
     //----------------------------------------------------------------------------
-    // --set-code-cut-prefix=nut,//!#
-    bool addCutPrefix(const std::string &lang, const std::string &cutPrefix)
+
+
+
+    bool setCodeCaseSens(const std::string &lang, const std::string &bStr)       { return codeOptionsDatabase.setCaseSens(lang, bStr); }
+    bool setCodePrototypeSkip(const std::string &lang, const std::string &s)     { return codeOptionsDatabase.setPrototypeSkip(lang, s); }
+    bool setCodeAssignOperator(const std::string &lang, const std::string& s)    { return codeOptionsDatabase.setAssignOperator(lang, s); }
+
+    bool setCodeCaseSens(const std::string &langValPair)
     {
-        //langOptions[lang].cutPrefix = cutPrefix;
-        codeOptionsDatabase.addCutPrefix(lang, cutPrefix);
-        return true;
+        std::string lang, val;
+        if (!umba::string_plus::split_to_pair(langValPair, lang, val, ':'))
+        {
+            return false;
+        }
+
+        return setCodeCaseSens(lang, val);
     }
 
-    bool addCutPrefix(const std::string &langPrefixPair)
+    bool setCodePrototypeSkip(const std::string &langValPair)
+    {
+        std::string lang, val;
+        if (!umba::string_plus::split_to_pair(langValPair, lang, val, ':'))
+        {
+            return false;
+        }
+
+        return setCodePrototypeSkip(lang, val);
+    }
+
+    bool setCodeAssignOperator(const std::string &langValPair)
+    {
+        std::string lang, val;
+        if (!umba::string_plus::split_to_pair(langValPair, lang, val, ':'))
+        {
+            return false;
+        }
+
+        return setCodeAssignOperator(lang, val);
+    }
+
+
+    // --set-code-cut-prefix=nut,//!#
+    bool addCodeCutPrefix(const std::string &lang, const std::string &cutPrefix) { codeOptionsDatabase.addCutPrefix(lang, cutPrefix);  return true; }
+
+    bool addCodeCutPrefix(const std::string &langPrefixPair)
     {
         std::string lang, cutPrefix;
         if (!umba::string_plus::split_to_pair(langPrefixPair, lang, cutPrefix, ':'))
@@ -1122,17 +1159,30 @@ struct AppConfig
             return false;
         }
 
-        return addCutPrefix(lang, cutPrefix);
+        return addCodeCutPrefix(lang, cutPrefix);
     }
 
-    bool addSeparatorLinePrefix(const std::string &lang, const std::string &sepPrefix)
+    bool addCodeCommentMarker(const std::string &lang, const std::string &cutPrefix) { codeOptionsDatabase.addCommentMarker(lang, cutPrefix); return true; }
+
+    bool addCodeCommentMarker(const std::string &langPrefixPair)
+    {
+        std::string lang, cutPrefix;
+        if (!umba::string_plus::split_to_pair(langPrefixPair, lang, cutPrefix, ':'))
+        {
+            return false;
+        }
+
+        return addCodeCommentMarker(lang, cutPrefix);
+    }
+
+    bool addCodeSeparatorLinePrefix(const std::string &lang, const std::string &sepPrefix)
     {
         //langOptions[lang].cutPrefix = cutPrefix;
         codeOptionsDatabase.addGenericCutStopPrefix(lang, sepPrefix);
         return true;
     }
 
-    bool addSeparatorLinePrefix(const std::string &langPrefixPair)
+    bool addCodeSeparatorLinePrefix(const std::string &langPrefixPair)
     {
         std::string lang, sepPrefix;
         if (!umba::string_plus::split_to_pair(langPrefixPair, lang, sepPrefix, ':'))
@@ -1140,15 +1190,15 @@ struct AppConfig
             return false;
         }
 
-        return addSeparatorLinePrefix(lang, sepPrefix);
+        return addCodeSeparatorLinePrefix(lang, sepPrefix);
     }
 
-    bool setBlockCharacters(const std::string &lang, const std::string &blockPair)
+    bool setCodeBlockCharacters(const std::string &lang, const std::string &blockPair)
     {
         return codeOptionsDatabase.setBlockCharacters(lang, blockPair);
     }
 
-    bool setBlockCharacters(const std::string &langBlockPair)
+    bool setCodeBlockCharacters(const std::string &langBlockPair)
     {
         std::string lang, blockPair;
         if (!umba::string_plus::split_to_pair(langBlockPair, lang, blockPair, ':'))
@@ -1156,15 +1206,15 @@ struct AppConfig
             return false;
         }
 
-        return setBlockCharacters(lang, blockPair);
+        return setCodeBlockCharacters(lang, blockPair);
     }
 
-    bool setStatementSeparator(const std::string &lang, const std::string &statementSeparator)
+    bool setCodeStatementSeparator(const std::string &lang, const std::string &statementSeparator)
     {
         return codeOptionsDatabase.setStatementSeparator(lang, statementSeparator);
     }
 
-    bool setStatementSeparator(const std::string &langStatementSeparator)
+    bool setCodeStatementSeparator(const std::string &langStatementSeparator)
     {
         std::string lang, statementSeparator;
         if (!umba::string_plus::split_to_pair(langStatementSeparator, lang, statementSeparator, ':'))
@@ -1172,19 +1222,9 @@ struct AppConfig
             return false;
         }
 
-        return setStatementSeparator(lang, statementSeparator);
+        return setCodeStatementSeparator(lang, statementSeparator);
     }
 
-
-    // std::string getLangCutPrefix(const std::string &lang) const
-    // {
-    //     std::unordered_map<std::string, LangOptions>::const_iterator it = langOptions.find(lang);
-    //     if (it==langOptions.end())
-    //     {
-    //         return std::string();
-    //     }
-    //     return it->second.cutPrefix;
-    // }
 
     //----------------------------------------------------------------------------
     bool setCodeProcessingHandler(const std::string &handlerLangTypeNameTriplet)

@@ -19,56 +19,73 @@
 //#!SnippetOptions
 enum class SnippetOptions : std::uint32_t
 {
-    invalid            = (std::uint32_t)(-1) /*!<  */,
-    unknown            = (std::uint32_t)(-1) /*!<  */,
-    noLineNo           = 0x1010 /*!< Do not add line numbers to generated listing */,
-    lineNo             = 0x1011 /*!< Add line numbers to generated listing */,
-    noTrim             = 0x1020 /*!< Do not trim left inserted code */,
-    noTrimLeft         = 0x1020 /*!< Do not trim left inserted code */,
-    trim               = 0x1021 /*!< Trim left inserted code */,
-    trimLeft           = 0x1021 /*!< Trim left inserted code */,
-    noTag              = 0x1030 /*!< Do not add language tag */,
-    noLangTag          = 0x1030 /*!< Do not add language tag */,
-    tag                = 0x1031 /*!< Add language tag */,
-    langTag            = 0x1031 /*!< Add language tag */,
-    noFilename         = 0x1040 /*!< Do not add filename to listing */,
-    filename           = 0x1041 /*!< Add filename to listing */,
-    noPath             = 0x1050 /*!< Do not add full path to filename (filename option) */,
-    path               = 0x1051 /*!< Add full path to filename (filename option) */,
-    noFail             = 0x1060 /*!< If insertion file not found, don't add insert command text to result - used for C++ __has_include emulation. If there is some other failures occurs (such invalif options), wrong line will be always inserted */,
-    fail               = 0x1061 /*!< If insertion file not found, add insert command text to result. If there is some other failures occurs (such invalif options), wrong line will be always inserted. Default is set in basic configs */,
-    noKeepCutTags      = 0x1070 /*!< Don't keep nested cut tags/markers */,
-    keepCutTags        = 0x1071 /*!< Keep nested cut tags/markers */,
-    noFilenameLineNo   = 0x1080 /*!< Do not add line number to filename before liting */,
-    filenameLineNo     = 0x1081 /*!< Add line number to filename before listing */,
-    noSnippetOptions   = 0x1090 /*!< Do not add actual snippet options line before listing */,
-    snippetOptions     = 0x1091 /*!< Add actual snippet options line before listing */,
-    noTrimArround      = 0x10A0 /*!< Do not trim empty lines before and after listing */,
-    trimArround        = 0x10A1 /*!< Trim empty lines before and after listing */,
-    noDoc              = 0x10B0 /*!< -doc */,
-    doc                = 0x10B1 /*!< Insert as external document, or as snippet otherwise */,
-    noQuote            = 0x10C0 /*!< -quote */,
-    noQuot             = 0x10C0 /*!< -quote */,
-    quote              = 0x10C1 /*!< Insert as blockquote */,
-    quot               = 0x10C1 /*!< Insert as blockquote */,
-    noPre              = 0x10D0 /*!< -pre */,
-    pre                = 0x10D1 /*!< pre itself or for inserted quote lines */,
-    noProtodoc         = 0x10E0 /*!< -protodoc */,
-    noPdoc             = 0x10E0 /*!< -protodoc */,
-    protodoc           = 0x10E1 /*!< Generate documentation for prototype */,
-    pdoc               = 0x10E1 /*!< Generate documentation for prototype */,
-    noFormat           = 0x10F0 /*!< -format */,
-    noFmt              = 0x10F0 /*!< -format */,
-    format             = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
-    fmt                = 0x10F1 /*!< format option. For example, for `prototype` option `format` flag tells to format function prototype, else prototype inserted as is */,
-    noClass            = 0x1100 /*!< -class */,
-    noCls              = 0x1100 /*!< -class */,
-    class_             = 0x1101 /*!< class option for prototype extraction. */,
-    cls                = 0x1101 /*!< class option for prototype extraction. */,
-    subsection         = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
-    subsec             = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
-    prototype          = 0x1821 /*!< Extract prototype from code snippet */,
-    raise              = 0x2011 /*!< Raise section levels in included document up to RISE level */
+    invalid              = (std::uint32_t)(-1) /*!<  */,
+    unknown              = (std::uint32_t)(-1) /*!<  */,
+    noLineNo             = 0x1010 /*!< Do not add line numbers to generated listing */,
+    lineNo               = 0x1011 /*!< Add line numbers to generated listing */,
+    noTrim               = 0x1020 /*!< Do not trim left inserted code */,
+    noTrimLeft           = 0x1020 /*!< Do not trim left inserted code */,
+    trim                 = 0x1021 /*!< Trim left inserted code */,
+    trimLeft             = 0x1021 /*!< Trim left inserted code */,
+    noTag                = 0x1030 /*!< Do not add language tag */,
+    noLangTag            = 0x1030 /*!< Do not add language tag */,
+    tag                  = 0x1031 /*!< Add language tag */,
+    langTag              = 0x1031 /*!< Add language tag */,
+    noFilename           = 0x1040 /*!< Do not add filename to listing */,
+    filename             = 0x1041 /*!< Add filename to listing */,
+    noPath               = 0x1050 /*!< Do not add full path to filename (filename option) */,
+    path                 = 0x1051 /*!< Add full path to filename (filename option) */,
+    noFail               = 0x1060 /*!< If insertion file not found, don't add insert command text to result - used for C++ __has_include emulation. If there is some other failures occurs (such invalif options), wrong line will be always inserted */,
+    fail                 = 0x1061 /*!< If insertion file not found, add insert command text to result. If there is some other failures occurs (such invalif options), wrong line will be always inserted. Default is set in basic configs */,
+    noKeepCutTags        = 0x1070 /*!< Don't keep nested cut tags/markers */,
+    keepCutTags          = 0x1071 /*!< Keep nested cut tags/markers */,
+    noFilenameLineNo     = 0x1080 /*!< Do not add line number to filename before liting */,
+    filenameLineNo       = 0x1081 /*!< Add line number to filename before listing */,
+    noSnippetOptions     = 0x1090 /*!< Do not add actual snippet options line before listing */,
+    snippetOptions       = 0x1091 /*!< Add actual snippet options line before listing */,
+    noTrimArround        = 0x10A0 /*!< Do not trim empty lines before and after listing */,
+    trimArround          = 0x10A1 /*!< Trim empty lines before and after listing */,
+    noDoc                = 0x10B0 /*!< -doc */,
+    doc                  = 0x10B1 /*!< Insert as external document, or as snippet otherwise */,
+    noQuote              = 0x10C0 /*!< -quote */,
+    noQuot               = 0x10C0 /*!< -quote */,
+    quote                = 0x10C1 /*!< Insert as blockquote */,
+    quot                 = 0x10C1 /*!< Insert as blockquote */,
+    noPre                = 0x10D0 /*!< -pre */,
+    pre                  = 0x10D1 /*!< pre itself or for inserted quote lines */,
+    noProtodoc           = 0x10E0 /*!< -protodoc */,
+    noPdoc               = 0x10E0 /*!< -protodoc */,
+    protodoc             = 0x10E1 /*!< Generate documentation for prototype */,
+    pdoc                 = 0x10E1 /*!< Generate documentation for prototype */,
+    noClass              = 0x1100 /*!< -class */,
+    noCls                = 0x1100 /*!< -class */,
+    class_               = 0x1101 /*!< class option for prototype extraction. */,
+    cls                  = 0x1101 /*!< class option for prototype extraction. */,
+    noFragmentNumber     = 0x1110 /*!< -fragmentNumber */,
+    noFragmentNum        = 0x1110 /*!< -fragmentNumber */,
+    noFrgNum             = 0x1110 /*!< -fragmentNumber */,
+    noFragNum            = 0x1110 /*!< -fragmentNumber */,
+    fragmentNumber       = 0x1111 /*!< add fragment numbers while multiple fragments are extracted */,
+    fragmentNum          = 0x1111 /*!< add fragment numbers while multiple fragments are extracted */,
+    frgNum               = 0x1111 /*!< add fragment numbers while multiple fragments are extracted */,
+    fragNum              = 0x1111 /*!< add fragment numbers while multiple fragments are extracted */,
+    subsection           = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
+    subsec               = 0x1811 /*!< Insert document as subsection - adjust section levels to current insertion pos */,
+    prototype            = 0x1821 /*!< Extract prototype from code snippet */,
+    raise                = 0x2011 /*!< Raise section levels in included document up to RISE level */,
+    prototypeFormat      = 0x2021 /*!< Prototype formatting style */,
+    protoFormat          = 0x2021 /*!< Prototype formatting style */,
+    prototypeFmt         = 0x2021 /*!< Prototype formatting style */,
+    protoFmt             = 0x2021 /*!< Prototype formatting style */,
+    fragmentStart        = 0x2031 /*!< set fragment numeration start index */,
+    frgStart             = 0x2031 /*!< set fragment numeration start index */,
+    fragStart            = 0x2031 /*!< set fragment numeration start index */,
+    fragmentStartIndex   = 0x2031 /*!< set fragment numeration start index */,
+    frgStartIndex        = 0x2031 /*!< set fragment numeration start index */,
+    fragStartIndex       = 0x2031 /*!< set fragment numeration start index */,
+    fragmentStartIdx     = 0x2031 /*!< set fragment numeration start index */,
+    frgStartIdx          = 0x2031 /*!< set fragment numeration start index */,
+    fragStartIdx         = 0x2031 /*!< set fragment numeration start index */
 
 }; // enum 
 //#!
@@ -95,134 +112,191 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noKeepCutTags      , "NoKeepCutTags"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::keepCutTags        , "KeepCutTags"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "FilenameLineNo"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::fragmentStart      , "FragmentStart"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noTrimArround      , "NoTrimArround"    );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "NoSnippetOptions" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::trimArround        , "TrimArround"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noDoc              , "NoDoc"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::doc                , "Doc"              );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "PrototypeFormat"  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noQuote            , "NoQuote"          );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noPre              , "NoPre"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::pre                , "Pre"              );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noProtodoc         , "NoProtodoc"       );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFormat           , "NoFormat"         );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::protodoc           , "Protodoc"         );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::format             , "Format"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noClass            , "NoClass"          );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::class_             , "Class"            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "NoFragmentNumber" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "FragmentNumber"   );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::subsection         , "Subsection"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::prototype          , "Prototype"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( SnippetOptions::raise              , "Raise"            );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( SnippetOptions, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( SnippetOptions, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::snippetOptions     , "snippet-options"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::snippetOptions     , "snippet_options"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::snippetOptions     , "snippetoptions"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::invalid            , "invalid"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::invalid            , "unknown"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "no-filename"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "no_filename"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "nofilename"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::quote              , "quote"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::quote              , "quot"                );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "no-line-no"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "no_line_no"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "nolineno"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lineNo             , "line-no"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lineNo             , "line_no"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lineNo             , "lineno"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "no-tag"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "no_tag"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "notag"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "no-lang-tag"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "no_lang_tag"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "nolangtag"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no_trim_left"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no-trim"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "notrimleft"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no_trim"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "notrim"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no-trim-left"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trim"                );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trim-left"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trim_left"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trimleft"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "langtag"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "tag"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "lang-tag"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "lang_tag"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filename           , "filename"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "no-path"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "no_path"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "nopath"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::path               , "path"                );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "no-filename-line-no" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "no_filename_line_no" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "nofilenamelineno"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFail             , "no-fail"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFail             , "no_fail"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFail             , "nofail"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fail               , "fail"                );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noKeepCutTags      , "no-keep-cut-tags"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noKeepCutTags      , "no_keep_cut_tags"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noKeepCutTags      , "nokeepcuttags"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::keepCutTags        , "keep-cut-tags"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::keepCutTags        , "keepcuttags"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::keepCutTags        , "keep_cut_tags"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "filename-line-no"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "filename_line_no"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "filenamelineno"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrimArround      , "no-trim-arround"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrimArround      , "no_trim_arround"     );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrimArround      , "notrimarround"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "no-snippet-options"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "no_snippet_options"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "nosnippetoptions"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trim-arround"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trim_arround"        );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trimarround"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "no-doc"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "no_doc"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "nodoc"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::doc                , "doc"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquot"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quote"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quote"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quot"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquote"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quot"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no-pre"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no_pre"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "nopre"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "pre"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no-protodoc"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no_protodoc"         );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "noprotodoc"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no-pdoc"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no_pdoc"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "nopdoc"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "no_fmt"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "no-format"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "no-fmt"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "no_format"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "noformat"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFormat           , "nofmt"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::protodoc           , "protodoc"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::protodoc           , "pdoc"                );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::format             , "format"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::format             , "fmt"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no-class"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no_cls"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no_class"            );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "nocls"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "noclass"             );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no-cls"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::class_             , "class"               );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::class_             , "cls"                 );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsection"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsec"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototype          , "prototype"           );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::raise              , "raise"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::snippetOptions     , "snippet-options"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::snippetOptions     , "snippet_options"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::snippetOptions     , "snippetoptions"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::invalid            , "invalid"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::invalid            , "unknown"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "no-filename"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "no_filename"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilename         , "nofilename"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::quote              , "quote"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::quote              , "quot"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "no-line-no"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "no_line_no"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noLineNo           , "nolineno"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lineNo             , "line-no"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lineNo             , "line_no"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::lineNo             , "lineno"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "no-tag"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "no_tag"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "notag"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "no-lang-tag"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "no_lang_tag"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTag              , "nolangtag"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no_trim_left"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no-trim"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "notrimleft"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no_trim"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "notrim"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrim             , "no-trim-left"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trim"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trim-left"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trim_left"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trim               , "trimleft"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "langtag"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "tag"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "lang-tag"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::tag                , "lang_tag"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filename           , "filename"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "no-path"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "no_path"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPath             , "nopath"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::path               , "path"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "no-filename-line-no"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "no_filename_line_no"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFilenameLineNo   , "nofilenamelineno"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFail             , "no-fail"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFail             , "no_fail"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFail             , "nofail"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fail               , "fail"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noKeepCutTags      , "no-keep-cut-tags"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noKeepCutTags      , "no_keep_cut_tags"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noKeepCutTags      , "nokeepcuttags"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::keepCutTags        , "keep-cut-tags"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::keepCutTags        , "keepcuttags"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::keepCutTags        , "keep_cut_tags"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "filename-line-no"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "filename_line_no"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::filenameLineNo     , "filenamelineno"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frag-start"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragment-start"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frgstartindex"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frag_start"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragment_start"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frg-start"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragmentstart"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragmentstartindex"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frg_start"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frg_start_index"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frgstart"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragstart"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frag-start-index"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragment_start_index" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frg_start_idx"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragment-start-index" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frag_start_idx"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frg-start-index"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frag_start_index"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragstartindex"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frag-start-idx"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragment_start_idx"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragment-start-idx"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragmentstartidx"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frg-start-idx"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "frgstartidx"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentStart      , "fragstartidx"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrimArround      , "no-trim-arround"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrimArround      , "no_trim_arround"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noTrimArround      , "notrimarround"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "no-snippet-options"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "no_snippet_options"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noSnippetOptions   , "nosnippetoptions"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trim-arround"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trim_arround"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::trimArround        , "trimarround"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "no-doc"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "no_doc"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noDoc              , "nodoc"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::doc                , "doc"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "prototype-fmt"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "proto-format"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "prototype-format"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "proto_format"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "prototype_format"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "protoformat"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "prototypeformat"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "prototype_fmt"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "prototypefmt"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "proto-fmt"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "proto_fmt"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototypeFormat    , "protofmt"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquot"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quote"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quote"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no_quot"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "noquote"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noQuote            , "no-quot"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no-pre"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "no_pre"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noPre              , "nopre"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::pre                , "pre"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no-protodoc"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no_protodoc"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "noprotodoc"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no-pdoc"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "no_pdoc"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noProtodoc         , "nopdoc"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::protodoc           , "protodoc"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::protodoc           , "pdoc"                 );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no-class"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no_cls"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no_class"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "nocls"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "noclass"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noClass            , "no-cls"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::class_             , "class"                );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::class_             , "cls"                  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "no-fragment-number"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "no_fragment_number"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "no_frg_num"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "nofragmentnumber"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "no-fragment-num"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "no_fragment_num"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "nofragmentnum"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "no-frg-num"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "nofrgnum"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "no-frag-num"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "no_frag_num"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::noFragmentNumber   , "nofragnum"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "fragment-number"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "frg-num"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "fragmentnum"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "fragment_number"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "fragment-num"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "fragmentnumber"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "fragment_num"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "frg_num"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "frgnum"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "frag-num"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "frag_num"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::fragmentNumber     , "fragnum"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsection"           );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::subsection         , "subsec"               );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::prototype          , "prototype"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( SnippetOptions::raise              , "raise"                );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( SnippetOptions, std::map, 1 )
 
 

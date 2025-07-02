@@ -181,7 +181,9 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
             {
                 if (handler(LineHandlerEvent::insertCommand, resLines, line, idx, lastLineIdx))
                 {
+                    //resLines.emplace_back(std::string());
                     resLines.emplace_back(line);
+                    //resLines.emplace_back(std::string());
                 }
                 continue;
             }

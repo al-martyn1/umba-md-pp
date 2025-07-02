@@ -21,11 +21,14 @@
 #include <queue>
 
 //
+#include "signature.h"
+//
 #include "umba/container.h"
 //
 #include "marty_cpp/marty_cpp.h"
 //
 #include "code-options-database.h"
+//
 
 //----------------------------------------------------------------------------
 
@@ -77,262 +80,49 @@ bool testFlagSnippetOption(const std::unordered_set<SnippetOptions> &flagOptions
 }
 
 //----------------------------------------------------------------------------
-inline
-std::string normalizeSignatureLine(const std::string &str)
+template<typename SomeIntegralOrEnumType>
+bool testIntSnippetOption(const std::unordered_map<SnippetOptions, int> &intOptions, SnippetOptions opt, SomeIntegralOrEnumType testVal)
 {
-    std::string res; res.reserve();
+    auto baseOpt = (SnippetOptions)(((std::uint32_t)opt)|0x0001u);
 
-    for(auto ch : str)
-    {
-        std::uint8_t uch = (std::uint8_t)ch;
-        if (uch>' ' && uch!=0x7Fu)
-            res.append(1, ch);
-    }
+    auto it = intOptions.find(baseOpt);
+    if (it==intOptions.end())
+        return false;
 
-    return res;
+    return it->second==(int)testVal;
 }
 
 //----------------------------------------------------------------------------
-
-
-
-//----------------------------------------------------------------------------
-struct TextSignature
+template<typename SomeIntegralOrEnumType>
+SomeIntegralOrEnumType getIntSnippetOption(const std::unordered_map<SnippetOptions, int> &intOptions, SnippetOptions opt, SomeIntegralOrEnumType defVal)
 {
-    // using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
-    // //using signature_lines_vector_type = umba::container::small_vector<std::string, 4, void, umba::container::small_vector_option_inplace_alignment_16_t, umba::container::small_vector_option_growth_50_t >;
-    // using signature_lines_vector_type = umba::container::small_vector<std::string, 4, void, options_type >;
-    //
-    //
-    // signature_lines_vector_type    signatureLinesVector; // normalized or original? Чтобы при отладке знать, какой был оригинал, и заодно имеем тут число строк в искомой сигнатуре
-    std::string                    normalizedSignature ;
+    auto baseOpt = (SnippetOptions)(((std::uint32_t)opt)|0x0001u);
 
-    TextSignature() = default;
-    TextSignature(const TextSignature &) = default;
-    TextSignature& operator=(const TextSignature &) = default;
-    TextSignature(TextSignature &&) = default;
-    TextSignature& operator=(TextSignature &&) = default;
+    auto it = intOptions.find(baseOpt);
+    if (it==intOptions.end())
+        return defVal;
 
-    explicit TextSignature(const std::string &signature)
-        // : signatureLinesVector()
-        // , normalizedSignature()
-        : normalizedSignature(normalizeSignatureLine(marty_cpp::cUnescapeString(signature)))
-    {
-        // auto unescaped      = marty_cpp::cUnescapeString(signature);
-        // normalizedSignature = normalizeSignatureLine(unescaped);
-        // umba::string_plus::simple_string_split(std::back_inserter(signatureLinesVector), unescaped, std::string("\n") /* , nSplits = -1 */ );
-    }
-
-    template<typename IteratorType>
-    explicit TextSignature(IteratorType b, IteratorType e)
-        // : signatureLinesVector()
-        // , normalizedSignature()
-        : normalizedSignature(normalizeSignatureLine(marty_cpp::cUnescapeString(std::string(b,e))))
-    {
-        // auto unescaped      = marty_cpp::cUnescapeString(std::string(b,e));
-        // normalizedSignature = normalizeSignatureLine(unescaped);
-        // umba::string_plus::simple_string_split(std::back_inserter(signatureLinesVector), unescaped, std::string("\n") /* , nSplits = -1 */ );
-    }
-
-    void clear()
-    {
-        // signatureLinesVector.clear();
-        normalizedSignature .clear();
-    }
-
-}; // struct TextSignature
-
-//----------------------------------------------------------------------------
-//! Возвращает номер первой строки сигнатуры в тексте, или (std::size_t)-1
-/*! NOTE: !!! Не работает для много строчных сигнатур, если в файле они
-    по другому разбиты на строки.
-    Нужен новый алгоритм.
-
-    Сигнатура, которую мы ищем, всегда задаётся в одну строку.
-
-    Итак.
-    1) Очередь пуста. Тупо кладём элемент
-    2) Сигнатурная строка, сформированная из очереди, короче искомой - значит, она не может начинаться с искомой - тупо добавляем туда очередную строку (п.1 является частным случаем п.2)
-    3) Сигнатурная строка (СС), сформированная из очереди, равна по длине, или длиннее
-       Пока текущая СС больше искомой:
-         проверяем, начинается ли она с искомой
-           Если начинается, то количество элементов в очереди надо вернуть вместе с результатом.
-           Если не начинается, то удаляем элемент с начала очереди
-
-
- */
-// #define UMBA_MD_FIND_TEXT_SIGNATURE_IN_LINES_OLD_VERSION
-
-
-#if !defined(UMBA_MD_FIND_TEXT_SIGNATURE_IN_LINES_OLD_VERSION)
-
-//----------------------------------------------------------------------------
-inline
-std::size_t findTextSignatureInLines(const std::vector<std::string> &lines, const TextSignature &ts, std::size_t &foundSignatureNumLines, std::size_t startLine /* =(std::size_t)-1 */ )
-{
-    if (startLine==(std::size_t)-1)
-        startLine = 0;
-
-    if (startLine>=lines.size())
-        return (std::size_t)-1;
-
-    if (ts.normalizedSignature.empty()) // Пустые сигнатуры не ищем
-        return (std::size_t)-1;
-
-    std::size_t curLineIdx = startLine;
-
-    std::deque<std::string>  curTestLinesQue;
-    auto makeSingleTestLineFromDeque = [&]()
-    {
-        std::string res;
-        for(const auto &l: curTestLinesQue)
-            res.append(l);
-        return res;
-    };
-
-    // curLineIdx указывает на строку, следующую за нашей последней сигнатурной
-    for(; curLineIdx!=lines.size(); ++curLineIdx)
-    {
-        std::string curSignature = makeSingleTestLineFromDeque();
-        // if (curSignature.size()<ts.normalizedSignature.size())
-        // {
-        //     curTestLinesQue.emplace_back(normalizeSignatureLine(lines[curLineIdx]));
-        //     continue;
-        // }
-
-        while(curSignature.size()>=ts.normalizedSignature.size())
-        {
-            if (umba::string_plus::starts_with(curSignature, ts.normalizedSignature))
-            {
-                foundSignatureNumLines = curTestLinesQue.size();
-                return curLineIdx - curTestLinesQue.size();
-            }
-
-            curTestLinesQue.pop_front();
-            curSignature = makeSingleTestLineFromDeque();
-        }
-
-        curTestLinesQue.emplace_back(normalizeSignatureLine(lines[curLineIdx]));
-    }
-
-    std::string curSignature = makeSingleTestLineFromDeque();
-    if (umba::string_plus::starts_with(curSignature, ts.normalizedSignature))
-    {
-        foundSignatureNumLines = curTestLinesQue.size();
-        return curLineIdx - curTestLinesQue.size();
-    }
-
-    return (std::size_t)-1;
+    return SomeIntegralOrEnumType(it->second);
 }
 
-//----------------------------------------------------------------------------
-//! Возвращает номер первой строки последней сигнатуры в тексте, или (std::size_t)-1
-template<typename VectorType> inline
-std::size_t findTextSignaturePathInLines(const std::vector<std::string> &lines, const VectorType &signaturesVec, std::size_t &foundSignatureNumLines, std::size_t startLine /* =(std::size_t)-1 */ )
-{
-    if (signaturesVec.empty()) // По пустому списку сигнатур не ищем
-        return (std::size_t)-1;
-
-    //std::size_t lastSignatueLinesNumber = 0;
-    for(const auto &signature : signaturesVec)
-    {
-        startLine = findTextSignatureInLines(lines, signature, foundSignatureNumLines, startLine);
-        if (startLine==(std::size_t)-1)
-        {
-            foundSignatureNumLines = 0;
-            return startLine;
-        }
-        //lastSignatueLinesNumber = signature.signatureLinesVector.size();
-        startLine += foundSignatureNumLines; // Пропускаем найденную сигнатуру целиком
-    }
-
-    return startLine - foundSignatureNumLines; // Делаем откат на размер последней сигнатуры в строках
-}
-
+// //----------------------------------------------------------------------------
+// template<typename SomeIntegralOrEnumType>
+// bool testIntSnippetOptionNotEqual(const std::unordered_map<SnippetOptions, int> &intOptions, SnippetOptions opt, SomeIntegralOrEnumType testVal)
+// {
+//     auto baseOpt = (SnippetOptions)(((std::uint32_t)opt)|0x0001u);
+//  
+//     auto it = intOptions.find(baseOpt);
+//     if (it==flagOptions.end())
+//         return false;
+//  
+//     return it->second!=(int)testVal;
+// }
+//  
 //----------------------------------------------------------------------------
 
-#else
-
-//----------------------------------------------------------------------------
-inline
-std::size_t findTextSignatureInLines(const std::vector<std::string> &lines, const TextSignature &ts, std::size_t startLine=(std::size_t)-1)
-{
-    if (startLine==(std::size_t)-1)
-        startLine = 0;
-
-    if (startLine>=lines.size())
-        return (std::size_t)-1;
-
-    const std::size_t numSignatureLines = ts.signatureLinesVector.size();
-
-    if (numSignatureLines==0 || ts.normalizedSignature.empty())
-        return (std::size_t)-1;
 
 
-    std::size_t curLineIdx = startLine;
 
-    std::deque<std::string>  curTestLines;
-    auto makeSingleTestLineFromDeque = [&]()
-    {
-        std::string res;
-        for(const auto l: curTestLines)
-        {
-            res.append(l);
-        }
-
-        return res;
-    };
-
-    // initial fill deque
-    for(std::size_t i=0; i!=numSignatureLines && curLineIdx!=lines.size(); ++i, ++curLineIdx )
-    {
-        curTestLines.emplace_back(normalizeSignatureLine(lines[curLineIdx]));
-    }
-
-    if (curTestLines.size()!=numSignatureLines)
-        return (std::size_t)-1;
-
-    // curLineIdx указывает на строку, следующую за нашей последней сигнатурной
-    for(; curLineIdx!=lines.size(); ++curLineIdx)
-    {
-        if (umba::string_plus::starts_with(makeSingleTestLineFromDeque(), ts.normalizedSignature))
-        {
-            return curLineIdx-numSignatureLines;
-        }
-
-        curTestLines.pop_front();
-        curTestLines.emplace_back(normalizeSignatureLine(lines[curLineIdx]));
-    }
-
-    // На последней итерации запихали последнюю строку в сигнатуную очередь, но в тело цикла уже не попали и не проверили, что там получилось
-    if (umba::string_plus::starts_with(makeSingleTestLineFromDeque(), ts.normalizedSignature))
-    {
-        return curLineIdx-numSignatureLines;
-    }
-
-    return (std::size_t)-1;
-}
-
-//----------------------------------------------------------------------------
-//! Возвращает номер первой строки последней сигнатуры в тексте, или (std::size_t)-1
-template<typename VectorType> inline
-std::size_t findTextSignatureInLines(const std::vector<std::string> &lines, const VectorType &signaturesVec, std::size_t startLine=(std::size_t)-1)
-{
-    std::size_t lastSignatueLinesNumber = 0;
-    for(const auto &signature : signaturesVec)
-    {
-        startLine = findTextSignatureInLines(lines, signature, startLine);
-        if (startLine==(std::size_t)-1)
-            return startLine;
-
-        lastSignatueLinesNumber = signature.signatureLinesVector.size();
-        startLine += lastSignatueLinesNumber; // Пропускаем найденную сигнатуру целиком
-    }
-
-    return startLine-lastSignatueLinesNumber; // Делаем откат на размер последней сигнатуры в строках
-}
-
-#endif
 
 //----------------------------------------------------------------------------
 //! Возвращает номер строки, в которой найден закрывающий блок символ, или (std::size_t)-1
@@ -348,7 +138,7 @@ std::size_t findBlockInLines(const std::vector<std::string> &lines, char blockCh
     std::size_t openCount = 0;
     std::size_t curLineIdx = startLine;
 
-    // Если блочные символы разные - второй или нулевой, или закрывающий, то второй - нулевой маркерит остановится на первом
+    // Если блочные символы разные - второй или нулевой, или закрывающий, то второй - нулевой - маркерит остановится на первом
     // Если оба одинаковые - они скорее всего нулевые, и это не то
     bool stopOnOpenBlock = blockCharOpen!=blockCharClose && blockCharClose==0;
 
@@ -717,6 +507,7 @@ struct SnippetTagInfo
     SnippetTagType             startType               = SnippetTagType::invalid;
     std::size_t                startNumber             = 0; // line number
     text_signature_vector      startTagOrSignaturePath ; // start tag or text signatures path. For start tag only one element of the  vector used
+    std::size_t                extractCount            = 0;
 
     SnippetTagType             endType                 = SnippetTagType::invalid;
     std::size_t                endNumber               = 0; // end line number or number of empty lines to stop
@@ -885,7 +676,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::Co
             nextLookupStartIdx = firstFoundLineIdx + tagInfo.getLastStartSignatureLinesNumber();
         #else
         std::size_t foundSignatureNumLines = 0;
-        firstFoundLineIdx  = findTextSignaturePathInLines(lines, tagInfo.startTagOrSignaturePath, foundSignatureNumLines, startLineIdx);
+        firstFoundLineIdx  = findTextSignaturePathInLines(langOpts, lines, tagInfo.startTagOrSignaturePath, foundSignatureNumLines, startLineIdx);
         if (firstFoundLineIdx!=(std::size_t)-1)
         {
             nextLookupStartIdx = firstFoundLineIdx + foundSignatureNumLines;
@@ -893,7 +684,12 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::Co
             // В плюсиках может быть ситуация, когда всё записано в одну строчку - и искомая сигнатура, и её блок кода
             // Ну, или, как минимум, открывающая скобка при использовании K&R стиля
             // !!! Тут бы надо предусмотреть, что в первой строке поиска надо пропустить окончание сигнатуры, но пока сойдёт и так
-            if (tagInfo.endType==SnippetTagType::block && chBlockOpen!=0)
+            if ( ( tagInfo.endType==SnippetTagType::block 
+                || tagInfo.endType==SnippetTagType::blockOrSeparator
+                || tagInfo.endType==SnippetTagType::statementSeparator
+                 )
+              && chBlockOpen!=0
+               )
             {
                 if (nextLookupStartIdx>0)
                     nextLookupStartIdx -= 1;
@@ -917,7 +713,10 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::Co
     }
 
     // Если у нас задан блок, но для языка блоки не заданы - ищем окончание блока как пустую строку
-    if (((tagInfo.endType==SnippetTagType::block || tagInfo.endType==SnippetTagType::blockOrSeparator) && chBlockOpen==0) || tagInfo.endType==SnippetTagType::invalid)
+    if ( ( (tagInfo.endType==SnippetTagType::block || tagInfo.endType==SnippetTagType::blockOrSeparator) && chBlockOpen==0
+         )
+      || tagInfo.endType==SnippetTagType::invalid
+       )
     {
         tagInfo.endType   = SnippetTagType::stopOnEmptyLines;
         tagInfo.endNumber = 1;
@@ -947,7 +746,7 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::Co
         foundLastFragmentLineIdx = findTextSignatureInLines(lines, tagInfo.endSignature, nextLookupStartIdx);
         #else
         std::size_t dummyFoundSignatureLen = 0;
-        foundLastFragmentLineIdx = findTextSignatureInLines(lines, tagInfo.endSignature, dummyFoundSignatureLen, nextLookupStartIdx);
+        foundLastFragmentLineIdx = findTextSignatureInLines(langOpts, lines, tagInfo.endSignature, dummyFoundSignatureLen, nextLookupStartIdx);
         #endif
         if (foundLastFragmentLineIdx!=(std::size_t)-1)
         {
@@ -972,25 +771,25 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::Co
     }
     else if (tagInfo.endType==SnippetTagType::blockOrSeparator)
     {
-        if (!pCodeExtractor)
-            foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, std::string()                   , nextLookupStartIdx);
-        else
+        // if (!pCodeExtractor)
+        //     foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, std::string()                   , nextLookupStartIdx);
+        // else
             foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose, langOpts.getStatementSeparator(), nextLookupStartIdx);
     }
     else if (tagInfo.endType==SnippetTagType::statementSeparator)
     {
-        if (!pCodeExtractor)
-        {
+        // if (!pCodeExtractor)
+        // {
             // Мы хотим остановится на сепараторе, если это прототип, 
             // или, для извлечения прототипа мы хотим извлечь всё до начала блока
             // И нам надо удалить символ начала блока
             stripOpenBlockFromLastLine = true;
             foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, 0 /* chBlockClose */, langOpts.getStatementSeparator(), nextLookupStartIdx);
-        }
-        else
-        {
-            foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose        , std::string()                   , nextLookupStartIdx);
-        }
+        // }
+        // else
+        // {
+        //     foundLastFragmentLineIdx = findBlockInLines(lines, chBlockOpen, chBlockClose        , std::string()                   , nextLookupStartIdx);
+        // }
     }
     else if (tagInfo.endType==SnippetTagType::genericStopMarker)
     {
@@ -1140,6 +939,7 @@ Iterator parseSnippetTagFirstPart(Iterator b, Iterator e, SnippetTagInfo &parseT
     parseToSnippetTagInfo.startType    = SnippetTagType::invalid;
     parseToSnippetTagInfo.startNumber  = (std::size_t)-1 ;
     parseToSnippetTagInfo.startTagOrSignaturePath.clear();
+    parseToSnippetTagInfo.extractCount = 0;
 
     Iterator textStartIt = e;
 
@@ -1272,6 +1072,20 @@ Iterator parseSnippetTagFirstPart(Iterator b, Iterator e, SnippetTagInfo &parseT
 
                     finalizeSignaturePath();
                     return b;
+                }
+                else if (*b>='0' && *b<='9')
+                {
+                    if (parseToSnippetTagInfo.extractCount!=std::size_t(-1))
+                    {
+                        // У нас не установлено бесконечное повторение, значит, считываем конкретное значение
+                        parseToSnippetTagInfo.extractCount *= (std::size_t)10u;
+                        parseToSnippetTagInfo.extractCount += (std::size_t)((*b)-'0');
+                    }
+                    // Не меняем состояние
+                }
+                else if (*b=='*')
+                {
+                    parseToSnippetTagInfo.extractCount = std::size_t(-1);
                 }
                 else if (*b=='/')
                 {
@@ -1700,7 +1514,7 @@ void testParseSnippetTag(StreamType &s, const std::string &tag)
 
 //----------------------------------------------------------------------------
 inline
-std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec()
+std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperatorsInfoVec() //! Создаёт вектор условных операторов
 {
     return std::vector< std::pair<ConditionOperators, std::string> >{ { ConditionOperators::equal       , "==" }
                                                                     , { ConditionOperators::notEqual    , "!=" }
@@ -1713,7 +1527,7 @@ std::vector< std::pair<ConditionOperators, std::string> > makeConditionOperators
 
 //----------------------------------------------------------------------------
 inline
-const std::vector< std::pair<ConditionOperators, std::string> >& getConditionOperatorsInfoVec()
+const std::vector< std::pair<ConditionOperators, std::string>>& getConditionOperatorsInfoVec() //! Возвращает вектор условных операторов
 {
     static auto vec = makeConditionOperatorsInfoVec();
     return vec;
@@ -1872,7 +1686,11 @@ std::string serializeSnippetOptions(std::unordered_set<SnippetOptions> flagOptio
 
 //----------------------------------------------------------------------------
 inline
-SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optListStr, std::unordered_set<SnippetOptions> *pFlagOptions, std::unordered_map<SnippetOptions, int> *pIntOptions=0, const umba::macros::StringStringMap<std::string> *pCondVars=0)
+SnippetOptionsParsingResult deserializeSnippetOptions( const std::string &optListStr
+                                                     , std::unordered_set<SnippetOptions> *pFlagOptions
+                                                     , std::unordered_map<SnippetOptions, int> *pIntOptions=0
+                                                     , const umba::macros::StringStringMap<std::string> *pCondVars=0
+                                                     )
 {
     std::vector<std::string> optList = splitAndTrimAndSkipEmpty(optListStr, ',');
 
@@ -1933,16 +1751,35 @@ SnippetOptionsParsingResult deserializeSnippetOptions(const std::string &optList
                     return SnippetOptionsParsingResult::fail;
                 }
 
+                int iVal = 0;
                 try
                 {
-                    int iVal = std::stoi(optVal);
-                    std::unordered_map<SnippetOptions, int> &intOptions = *pIntOptions;
-                    intOptions[optId] = iVal;
+                    iVal = std::stoi(optVal);
                 }
                 catch(...)
                 {
-                    return SnippetOptionsParsingResult::fail;
+                    if (optId==SnippetOptions::prototypeFormat)
+                    {
+                        auto enumVal = enum_deserialize(optVal, umba::mdpp::code::PrototypeFormatStyle::invalid);
+                        if (!(enumVal==umba::mdpp::code::PrototypeFormatStyle::none
+                           || enumVal==umba::mdpp::code::PrototypeFormatStyle::msdn
+                           || enumVal==umba::mdpp::code::PrototypeFormatStyle::man
+                           || enumVal==umba::mdpp::code::PrototypeFormatStyle::tabMan
+                           || enumVal==umba::mdpp::code::PrototypeFormatStyle::mdr)
+                           )
+                            return SnippetOptionsParsingResult::fail;
+
+                        iVal = (int)enumVal;
+                    }
+                    else
+                    {
+                        return SnippetOptionsParsingResult::fail;
+                    }
                 }
+
+                std::unordered_map<SnippetOptions, int> &intOptions = *pIntOptions;
+                intOptions[optId] = iVal;
+
             }
         }
         else // flag option

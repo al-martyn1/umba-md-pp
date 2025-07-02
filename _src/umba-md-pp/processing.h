@@ -1028,8 +1028,9 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
     bool fTrimArround           =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::trimArround)   ;
     bool fAddLineNumbers        =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::lineNo)        ;
     bool fAddFilename           =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filename)      ;
-    bool fAddFilenameOnly       = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::path)         ;
+    bool fAddFilenameOnly       = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::path)          ;
     bool fAddFilenameLineNumber =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::filenameLineNo);
+    bool fAddFragmentNumber     =  umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fragmentNumber);
 
     bool noFail = !umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::fail);
 
@@ -1064,6 +1065,23 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
     bool bPrototype  = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::prototype);
     bool bProtodoc   = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::protodoc );
     bool bProtoClass = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::class_   );
+    bool bFormat = false;
+    auto protoFmtOpt = umba::md::getIntSnippetOption(intOptions, SnippetOptions::protoFmt, umba::mdpp::code::PrototypeFormatStyle::unknown);
+    if ( UMBA_THE_VALUE(protoFmtOpt).oneOf( umba::mdpp::code::PrototypeFormatStyle::msdn
+                                          , umba::mdpp::code::PrototypeFormatStyle::man
+                                          , umba::mdpp::code::PrototypeFormatStyle::tabMan
+                                          , umba::mdpp::code::PrototypeFormatStyle::umba
+                                          )
+       )
+    {
+        bFormat = true;
+    }
+
+    int fragmentStartIndex = umba::md::getIntSnippetOption(intOptions, SnippetOptions::fragmentStartIndex, int(-1));
+    fragmentStartIndex -= 1; // Индексы у нас с единицы, делаем zero-based
+    if (fragmentStartIndex<0)
+        fragmentStartIndex = 0;
+
 
     std::string lang     = appCfg.getLangByFilename(foundFullFilename);
     const auto& langOpts = appCfg.codeOptionsDatabase.getCodeOptions(lang);
@@ -1098,20 +1116,19 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
         return false;
     }
 
-    if (bPrototype)
+    if (snippetTagInfo.endType==SnippetTagType::unknown)
     {
-        if (!bProtoClass) // snippetTagInfo.endType!=SnippetTagType:: && 
+        if (bPrototype)
         {
-            if (snippetTagInfo.endType==SnippetTagType::unknown)
+            if (!bProtoClass) // snippetTagInfo.endType!=SnippetTagType:: && 
+            {
                 snippetTagInfo.endType = SnippetTagType::statementSeparator;
-        }
-        else
-        {
-            if (snippetTagInfo.endType==SnippetTagType::unknown)
+            }
+            else
+            {
                 snippetTagInfo.endType = SnippetTagType::block; // Классы извлекаем блоком
+            }
         }
-        // snippetTagInfo.endType = SnippetTagType::statementSeparator;
-        // UMBA_ARG_USED(langOpts   );
     }
 
     ListingNestedTagsMode listingNestedTagsMode = ListingNestedTagsMode::remove;
@@ -1132,6 +1149,128 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
     //std::vector<std::string> snippetLines = extractCodeFragmentBySnippetTag(appCfg.codeOptionsDatabase.getCodeOptions(lang), lang, snippetsFileLines, firstLineIdx, snippetTag, listingNestedTagsMode, 0, 4u /* tabSize */ );
     // 
     // 
+
+    auto protoExtractor     = bProtoClass ? langOpts.m_classPrototypeExtractor : langOpts.m_funcPrototypeExtractor;
+    auto protoFormatHandler = bProtoClass ? langOpts.m_classPrototypeFormatter : langOpts.m_funcPrototypeFormatter;
+
+    auto extractCountMax = snippetTagInfo.extractCount;
+    if (!extractCountMax)
+        extractCountMax = 1;
+
+    std::size_t extractCount = 0;
+
+    std::string commentStart, commentEnd;
+
+    if (fAddFragmentNumber)
+    {
+        if (!langOpts.getCommentMarkers(commentStart, commentEnd))
+            fAddFragmentNumber = false;
+    }
+
+    
+    std::vector<std::string> snippetLines;
+    //fAddFragmentNumber
+
+    auto snippetTagInfoTmp = snippetTagInfo;
+    // std::size_t                startNumber             = 0; // line number
+
+// struct SnippetTagInfo
+// {
+//     // using options_type  = umba::container::small_vector_options< umba::container::growth_factor<umba::container::growth_factor_50>, umba::container::inplace_alignment<16> >::type;
+//     // using text_signature_vector = umba::container::small_vector<TextSignature, 4, void, options_type >;
+//     using text_signature_vector = std::vector<TextSignature>;
+//  
+//     SnippetTagType             startType               = SnippetTagType::invalid;
+//     std::size_t                startNumber             = 0; // line number
+//     text_signature_vector      startTagOrSignaturePath ; // start tag or text signatures path. For start tag only one element of the  vector used
+//     std::size_t                extractCount            = 0;
+
+    umba::md::TextSignature signaturePathRepetitionPart;
+
+    if (snippetTagInfoTmp.startType!=SnippetTagType::textSignature)
+    {
+        extractCountMax = 1;
+    }
+    else // textSignature
+    {
+        if (!snippetTagInfoTmp.startTagOrSignaturePath.empty() && extractCountMax>1)
+            signaturePathRepetitionPart = snippetTagInfoTmp.startTagOrSignaturePath.back();
+    }
+
+    if (signaturePathRepetitionPart.empty())
+        extractCountMax = 1u;
+
+    if (extractCountMax<=1u)
+        fAddFragmentNumber = false;
+
+
+    for(; extractCount!=extractCountMax; ++extractCount)
+    {
+        std::size_t firstLineIdxCur = 0;
+
+        std::vector<std::string> snippetLinesCur = 
+            umba::md::extractCodeFragmentBySnippetTagInfo( langOpts             
+                                                         , lang                 
+                                                         , snippetFlagsOptions  
+                                                         // , bPrototype        
+                                                         , snippetsFileLines    
+                                                         , snippetTagInfoTmp
+                                                         , firstLineIdxCur      
+                                                         , listingNestedTagsMode
+                                                         , 4u // tabSize        
+                                                         );
+        if (extractCount==0)
+            firstLineIdx = firstLineIdxCur;
+
+        if (firstLineIdxCur==std::size_t(-1) || snippetLinesCur.empty())
+        {
+            if (extractCount==0)
+                return noFail; // Если сфейлились на первой записи - тут что-то не то
+            else
+                break;
+        }
+
+        //snippetTagInfoTmp.startNumber = firstLineIdxCur + snippetLinesCur.size();
+        snippetTagInfoTmp.startTagOrSignaturePath.push_back(signaturePathRepetitionPart);
+
+        snippetLines.push_back(std::string());
+        if (fAddFragmentNumber)
+        {
+            //snippetLines.push_back(std::string());
+
+            std::string numberLine = commentStart;
+            numberLine.append(" (");
+            numberLine.append(std::to_string(std::size_t(fragmentStartIndex)+extractCount+1u));
+            numberLine.append(")");
+            if (!commentEnd.empty())
+            {
+                numberLine.append(1, ' ');
+                numberLine.append(commentEnd);
+            }
+
+            snippetLines.push_back(numberLine);
+            //snippetLines.push_back(std::string());
+        }
+
+        if (bPrototype)
+        {
+            if (protoExtractor)
+                snippetLinesCur = protoExtractor(langOpts, lang, bFormat, snippetFlagsOptions, intOptions, snippetLinesCur);
+    
+            if (bFormat)
+            {
+                if (protoFormatHandler)
+                    snippetLinesCur = protoFormatHandler(langOpts, lang, false, snippetFlagsOptions, intOptions, snippetLinesCur);
+            }
+    
+        }
+
+        snippetLines.insert(snippetLines.end(), snippetLinesCur.begin(), snippetLinesCur.end());
+
+    }
+
+
+#if 0
     std::vector<std::string> snippetLines = umba::md::extractCodeFragmentBySnippetTagInfo( langOpts
                                                                                          , lang
                                                                                          , snippetFlagsOptions
@@ -1142,6 +1281,24 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
                                                                                          , listingNestedTagsMode
                                                                                          , 4u // tabSize
                                                                                          );
+
+
+    if (bPrototype)
+    {
+        auto handler = bProtoClass ? langOpts.m_classPrototypeExtractor : langOpts.m_funcPrototypeExtractor;
+        if (handler)
+            snippetLines = handler(langOpts, lang, bFormat, snippetFlagsOptions, intOptions, snippetLines);
+
+        if (bFormat)
+        {
+            auto fmtHandler = bProtoClass ? langOpts.m_classPrototypeFormatter : langOpts.m_funcPrototypeFormatter;
+            if (fmtHandler)
+                snippetLines = fmtHandler(langOpts, lang, false, snippetFlagsOptions, intOptions, snippetLines);
+        }
+
+    }
+
+#endif
 
     // Если snippetLines пуст и firstLineIdx==-1, то это ошибка
     std::vector<std::string>
@@ -1161,6 +1318,8 @@ bool insertSnippet( const AppConfig<FilenameStringType>           &appCfg
 
     makeShureEmptyLine(resLines);
     umba::vectorPushBack(resLines, listingLines); // вставляем листинг целиком, prepareSnippetLines уже всё оформление сделал
+
+
     return true; // всё хорошо, не включит исходную строку
 }
 
@@ -1296,7 +1455,8 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
         }
 
         auto snippetFlagsOptions = appCfg.snippetOptions;
-        std::unordered_map<SnippetOptions, int> intOptions;
+        //std::unordered_map<SnippetOptions, int> intOptions;
+        auto intOptions = appCfg.intSnippetOptions;
         std::string snippetFile;
         std::string snippetTag ;
         SnippetOptionsParsingResult parseRes = umba::md::parseSnippetInsertionCommandLine( snippetFlagsOptions, intOptions, appCfg.conditionVars

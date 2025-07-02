@@ -1,0 +1,6 @@
+invalid,unknown=-1   //!
+none,no        = 0   // Don't format prototypes
+msdn,ms              // Microsoft MSDN style
+man,linux,unix,bsd   // Linux/Unix man style
+tabMan,tabLinux,tabUnix,tabBsd,tableMan,tableLinux,tableUnix,tableBsd   // Linux/Unix table man style
+mdr,umba,dotnut      // Our own style, close similar to MSDN-style

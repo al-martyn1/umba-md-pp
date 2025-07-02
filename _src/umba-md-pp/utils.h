@@ -6,6 +6,9 @@
 
 //
 #include "enums.h"
+//
+#include "code-processing/enums.h"
+
 
 //
 #include "umba/filename.h"
