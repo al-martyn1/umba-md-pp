@@ -2042,6 +2042,8 @@ std::string processMdFile(const AppConfig<FilenameStringType> &appCfg, Document 
     }
     //std::string generateDocMetadata(const AppConfig &appCfg, Document &doc)
 
+    resLines = stripExtraBlankLines(resLines);
+
     resDoc = doc;
     resDoc.lines = resLines;
 

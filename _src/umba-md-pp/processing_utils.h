@@ -535,4 +535,37 @@ void makeShureEmptyLine(std::vector<std::string> &lines)
     }
 }
 
+//----------------------------------------------------------------------------
+inline
+std::vector<std::string> stripExtraBlankLines(const std::vector<std::string> &lines, std::size_t numBlankLines=2u)
+{
+    if (numBlankLines<2u)
+        numBlankLines = 2u;
+
+    std::vector<std::string> res; res.reserve(lines.size());
+
+    std::size_t curBlankCount = 0;
+
+    for(auto line: lines)
+    {
+        umba::string_plus::rtrim(line);
+
+        if (!line.empty())
+        {
+            curBlankCount = 0u;
+            res.emplace_back(line);
+            continue;
+        }
+
+        if (curBlankCount>=numBlankLines)
+            continue; // пропускаем лишние пустые строки
+
+        res.emplace_back(line);
+        ++curBlankCount;
+    }
+
+    return res;
+}
+
+//----------------------------------------------------------------------------
 
