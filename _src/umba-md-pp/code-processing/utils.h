@@ -8,7 +8,7 @@
 #include "types.h"
 
 //
-#include "umba/tokenizer/lang/cpp.h"
+#include "umba/tokenizer/lexers/cpp.h"
 //
 #include "umba/string.h"
 //
@@ -500,7 +500,7 @@ makeSimpleTokenInfoVec( TokenizerBuilderType  &tokenizerBuilder
     };
 
 
-    auto tokenizer = umba::tokenizer::makeTokenizerCpp( tokenizerBuilder
+    auto tokenizer = umba::tokenizer::cpp::makeTokenizer( tokenizerBuilder
                                                       , tokenHandler
                                                       );
 

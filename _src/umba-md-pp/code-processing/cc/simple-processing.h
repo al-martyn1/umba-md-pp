@@ -7,7 +7,7 @@
 //#include "../code-options-database.h"
 
 //
-#include "umba/tokenizer/lang/cpp.h"
+#include "umba/tokenizer/lexers/cpp.h"
 //
 #include "umba/string.h"
 //
@@ -85,7 +85,7 @@ std::vector<std::string> extractFunctionPrototype( const umba::md::CodeOptions  
     std::string resText;
     bool        processingStopped = false;
 
-    auto  tokenizerBuilder       = umba::tokenizer::makeTokenizerBuilderCpp<char>();
+    auto  tokenizerBuilder       = umba::tokenizer::cpp::makeTokenizerBuilder<char>();
     using TokenizerBuilderType   = decltype(tokenizerBuilder);
 
     //using tokenizer_type        = std::decay<decltype(tokenizer)>;
@@ -236,7 +236,7 @@ std::vector<std::string> extractFunctionPrototype( const umba::md::CodeOptions  
     };
 
 
-    auto tokenizer = umba::tokenizer::makeTokenizerCpp( tokenizerBuilder
+    auto tokenizer = umba::tokenizer::cpp::makeTokenizer( tokenizerBuilder
                                                       , tokenHandler
                                                       );
     UMBA_ARG_USED(tokenizer);
@@ -287,7 +287,7 @@ std::vector<std::string> formatFunctionPrototype( const umba::md::CodeOptions   
     auto text = umba::string_plus::merge<std::string, std::vector<std::string>::const_iterator>( lines.begin(), lines.end(), '\n' );
     //UMBA_ARG_USED(text);
 
-    auto tokenizerBuilder       = umba::tokenizer::makeTokenizerBuilderCpp<char>();
+    auto tokenizerBuilder       = umba::tokenizer::cpp::makeTokenizerBuilder<char>();
     utils::ParsingBasicContext ctxBasic;
 
     std::vector<SimpleTokenInfo> 
