@@ -726,17 +726,22 @@ std::vector<std::string> extractCodeFragmentBySnippetTagInfo( const umba::md::Co
 
     std::size_t foundLastFragmentLineIdx = (std::size_t)-1;
 
+    // !!! Unused variable 
+    #if 0
     bool bPrototype  = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::prototype);
     bool bProtoClass = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::class_   );
     //bool bProtodoc   = umba::md::testFlagSnippetOption(snippetFlagsOptions, SnippetOptions::protodoc );
+    #endif
 
-
+    // !!! Unused variable pCodeExtractor
+    #if 0
     auto pCodeExtractor = (mdpp::code::simpleCodeLinesProcessingFnPtr)0;
     if (bPrototype)
     {
         pCodeExtractor = bProtoClass ? langOpts.m_funcPrototypeExtractor : langOpts.m_classPrototypeExtractor;
     }
     // snippetFlagsOptions
+    #endif
 
 
     if (tagInfo.endType==SnippetTagType::textSignature)
