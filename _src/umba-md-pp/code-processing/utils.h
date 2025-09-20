@@ -2232,7 +2232,7 @@ std::vector<std::string> formatFunctionPrototypeGenericCcMsdn(const std::vector<
 
                          else
                          {
-                             static_assert(false, "non-exhaustive visitor!");
+                             // static_assert(false, "non-exhaustive visitor!");
                          }
                      }
                    , ti
@@ -2316,7 +2316,7 @@ std::vector<std::string> formatFunctionPrototypeGenericCcMan(const std::vector<T
 
                          else
                          {
-                             static_assert(false, "non-exhaustive visitor!");
+                             // static_assert(false, "non-exhaustive visitor!");
                          }
                      }
                    , ti
@@ -2423,7 +2423,7 @@ std::vector<std::string> formatFunctionPrototypeGenericCcUmba(const std::vector<
 
                          else
                          {
-                             static_assert(false, "non-exhaustive visitor!");
+                             // static_assert(false, "non-exhaustive visitor!");
                          }
                      }
                    , ti

@@ -176,40 +176,40 @@ void updateCsvTableOptions(const AppConfig<FilenameStringType> &appCfg, const um
     if (!mdHtmlTag.hasAttr("csv-title"))
     {
         if (csvTableOptions.title.empty())
-            csvTableOptions.сsvTitle = CsvTitle::use;
+            csvTableOptions.csvTitle = CsvTitle::use;
         else
-            csvTableOptions.сsvTitle = CsvTitle::merge;
+            csvTableOptions.csvTitle = CsvTitle::merge;
     }
     else
     {
-        auto сsvTitleStr = mdHtmlTag.getAttrValue("csv-title", std::string());
+        auto csvTitleStr = mdHtmlTag.getAttrValue("csv-title", std::string());
 
-        if (сsvTitleStr.empty())
+        if (csvTitleStr.empty())
         {
             // Если заголовок не пустой, мержим его с заголовком из CSV с приоритетом из атрибута title
             if (csvTableOptions.title.empty())
-                csvTableOptions.сsvTitle = CsvTitle::use;
+                csvTableOptions.csvTitle = CsvTitle::use;
             else
-                csvTableOptions.сsvTitle = CsvTitle::merge;
+                csvTableOptions.csvTitle = CsvTitle::merge;
         }
         else
         {
-            auto eTitle = enum_deserialize(сsvTitleStr, CsvTitle::invalid);
+            auto eTitle = enum_deserialize(csvTitleStr, CsvTitle::invalid);
 
             if (eTitle==CsvTitle::invalid)
             {
                 if (csvTableOptions.title.empty())
-                    csvTableOptions.сsvTitle = CsvTitle::use;
+                    csvTableOptions.csvTitle = CsvTitle::use;
                 else
-                    csvTableOptions.сsvTitle = CsvTitle::merge;
+                    csvTableOptions.csvTitle = CsvTitle::merge;
             }
             else if (eTitle==CsvTitle::none)
             {
-                csvTableOptions.сsvTitle = CsvTitle::no;
+                csvTableOptions.csvTitle = CsvTitle::no;
             }
             else
             {
-                csvTableOptions.сsvTitle = eTitle;
+                csvTableOptions.csvTitle = eTitle;
             }
         }
     }
@@ -482,9 +482,9 @@ void processCsvTableLinesImpl( CsvTableOptions csvTableOptions
 
             auto csvIt = parseResult.data.begin();
 
-            const auto сsvTitle = csvTableOptions.сsvTitle;
+            const auto csvTitle = csvTableOptions.csvTitle;
 
-            if (сsvTitle==CsvTitle::none || сsvTitle==CsvTitle::no)
+            if (csvTitle==CsvTitle::none || csvTitle==CsvTitle::no)
             {
                 // В CVS-файле нет заголовка
                 // Используем title из атрибутов
@@ -494,7 +494,7 @@ void processCsvTableLinesImpl( CsvTableOptions csvTableOptions
                     colAligns.push_back(csvTableOptions.getColAlignment(colIdx));
                 }
             }
-            else if (сsvTitle==CsvTitle::ignore)
+            else if (csvTitle==CsvTitle::ignore)
             {
                 // Игнорируем заголовок из CVS-файла
                 // Пропускаем строку CVS-файла
@@ -507,7 +507,7 @@ void processCsvTableLinesImpl( CsvTableOptions csvTableOptions
 
                 ++csvIt; // Пропускаем строку CVS-файла с заголовком
             }
-            else if (сsvTitle==CsvTitle::use) // Использовать только CSV заголовок
+            else if (csvTitle==CsvTitle::use) // Использовать только CSV заголовок
             {
                 for(std::size_t colIdx=0u; colIdx!=maxSize; ++colIdx)
                 {
@@ -517,7 +517,7 @@ void processCsvTableLinesImpl( CsvTableOptions csvTableOptions
 
                 ++csvIt; // Пропускаем строку CVS-файла с заголовком
             }
-            else if (сsvTitle==CsvTitle::merge)
+            else if (csvTitle==CsvTitle::merge)
             {
                 for(std::size_t colIdx=0u; colIdx!=maxSize; ++colIdx)
                 {
@@ -531,7 +531,7 @@ void processCsvTableLinesImpl( CsvTableOptions csvTableOptions
 
                 ++csvIt; // Пропускаем строку CVS-файла с заголовком
             }
-            else if (сsvTitle==CsvTitle::align)
+            else if (csvTitle==CsvTitle::align)
             {
                 for(std::size_t colIdx=0u; colIdx!=maxSize; ++colIdx)
                 {

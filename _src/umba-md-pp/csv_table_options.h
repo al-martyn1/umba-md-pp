@@ -24,7 +24,7 @@ struct CsvTableOptions
 
     std::vector<TableCellAlignment>  colAlignments;
 
-    CsvTitle    сsvTitle   = CsvTitle::none; //! Способ формирования заголовка таблицы
+    CsvTitle    csvTitle   = CsvTitle::none; //! Способ формирования заголовка таблицы
     char        charSep    = 0;
     char        charQuot   = '\"';
     bool        strict     = false;
