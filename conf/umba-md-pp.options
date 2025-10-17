@@ -186,6 +186,8 @@
 # Также используются для извлечения фрагментов кода из исходных текстов
 
 # C++
+# Решётка используется препроцессором и всякими прагмами
+# Но вообще надо подумать, чтобы отдельно бэктрейс по сниппету стопорился по отдельным сепараторам
 --add-code-file-extentions=C++:.cpp,.cxx,.c++,.cc,.h,.hpp,.h++,.ixx,.i++,.i
 --set-code-case-sens==C++:true
 --add-code-comment-marker=C++://
@@ -194,6 +196,7 @@
 --add-code-cut-prefix=C++://#$
 --add-code-cut-prefix=C++:/*#!
 --add-code-cut-prefix=C++:/*#$
+--add-code-separator-prefix=C++:#
 --add-code-separator-prefix=C++://---
 --add-code-separator-prefix=C++:/***
 --set-code-block-chars=C++:{}
@@ -215,6 +218,7 @@
 --add-code-cut-prefix=C://#$
 --add-code-cut-prefix=C:/*#!
 --add-code-cut-prefix=C:/*#$
+--add-code-separator-prefix=C:#
 --add-code-separator-prefix=C://---
 --add-code-separator-prefix=C:/***
 --set-code-block-chars=C:{}
