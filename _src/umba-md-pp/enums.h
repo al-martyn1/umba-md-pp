@@ -1152,18 +1152,39 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( CodeProcessingHandlerType, std::map, 1 )
 //#!MdPpTag
 enum class MdPpTag : std::uint32_t
 {
-    invalid     = (std::uint32_t)(-1) /*!<  */,
-    unknown     = (std::uint32_t)(-1) /*!<  */,
-    graph       = 0x0000 /*!<  */,
-    begin       = 0x0000 /*!<  */,
-    puml        = 0x0001 /*!<  */,
-    plantuml    = 0x0001 /*!<  */,
-    diagram     = 0x0001 /*!<  */,
-    csvTable    = 0x0002 /*!<  */,
-    argList     = 0x0003 /*!<  */,
-    valList     = 0x0004 /*!<  */,
-    valueList   = 0x0004 /*!<  */,
-    end         = 0x0005 /*!<  */
+    invalid           = (std::uint32_t)(-1) /*!<  */,
+    unknown           = (std::uint32_t)(-1) /*!<  */,
+    graph             = 0x0000 /*!<  */,
+    begin             = 0x0000 /*!<  */,
+    puml              = 0x0001 /*!<  */,
+    plantuml          = 0x0001 /*!<  */,
+    diagram           = 0x0001 /*!<  */,
+    csvTable          = 0x0002 /*!<  */,
+    argList           = 0x0003 /*!< Список аргументов, Parameters/Аргументы(Параметры) */,
+    argumentList      = 0x0003 /*!< Список аргументов, Parameters/Аргументы(Параметры) */,
+    valList           = 0x0004 /*!< Значения (какие-то) Value,Meaning/Значение,Описание */,
+    valueList         = 0x0004 /*!< Значения (какие-то) Value,Meaning/Значение,Описание */,
+    retList           = 0x0005 /*!< Return value/Возвращаемое значение - Value,Meaning/Значение,Описание */,
+    returnList        = 0x0005 /*!< Return value/Возвращаемое значение - Value,Meaning/Значение,Описание */,
+    optList           = 0x0006 /*!< Options/Опции - Option,Meaning/Опция,Описание */,
+    optionList        = 0x0006 /*!< Options/Опции - Option,Meaning/Опция,Описание */,
+    defList           = 0x0007 /*!< Definitions/Определения - Definition,Meaning/Определение,Описание */,
+    definitionList    = 0x0007 /*!< Definitions/Определения - Definition,Meaning/Определение,Описание */,
+    fieldList         = 0x0008 /*!< aka memberList  Fields(Members)/Поля Field,Meaning/Поле,Описание */,
+    termList          = 0x0009 /*!< Terms/Термины   Term,Meaning/Термин,Описание */,
+    argList2          = 0x000A /*!<  */,
+    argumentList2     = 0x000A /*!<  */,
+    valList2          = 0x000B /*!<  */,
+    valueList2        = 0x000B /*!<  */,
+    retList2          = 0x000C /*!<  */,
+    returnList2       = 0x000C /*!<  */,
+    optList2          = 0x000D /*!<  */,
+    optionList2       = 0x000D /*!<  */,
+    defList2          = 0x000E /*!<  */,
+    definitionList2   = 0x000E /*!<  */,
+    fieldList2        = 0x000F /*!<  */,
+    termList2         = 0x0010 /*!<  */,
+    end               = 0x0011 /*!<  */
 
 }; // enum 
 //#!
@@ -1171,28 +1192,61 @@ enum class MdPpTag : std::uint32_t
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(MdPpTag)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::invalid    , "invalid"   );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::argList    , "arg-list"  );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::puml       , "puml"      );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::graph      , "graph"     );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csvTable   , "csv-table" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::valList    , "val-list"  );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::end        , "end"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::invalid      , "invalid"     );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::argList      , "arg-list"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::fieldList    , "field-list"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::puml         , "puml"        );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::argList2     , "arg-list2"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::graph        , "graph"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csvTable     , "csv-table"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::retList      , "ret-list"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::valList      , "val-list"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::optList      , "opt-list"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::defList      , "def-list"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::termList     , "term-list"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::valList2     , "val-list2"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::retList2     , "ret-list2"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::optList2     , "opt-list2"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::defList2     , "def-list2"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::fieldList2   , "field-list2" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::termList2    , "term-list2"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::end          , "end"         );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MdPpTag, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid    , "invalid"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid    , "unknown"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList    , "arg-list"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml       , "puml"       );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml       , "plantuml"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml       , "diagram"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph      , "graph"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph      , "begin"      );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csvTable   , "csv-table"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList    , "val-list"   );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList    , "value-list" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::end        , "end"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid      , "invalid"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid      , "unknown"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList      , "arg-list"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList      , "argument-list"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::fieldList    , "field-list"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml         , "puml"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml         , "plantuml"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml         , "diagram"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList2     , "arg-list2"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList2     , "argument-list2"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph        , "graph"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::graph        , "begin"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csvTable     , "csv-table"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::retList      , "ret-list"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::retList      , "return-list"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList      , "val-list"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList      , "value-list"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::optList      , "opt-list"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::optList      , "option-list"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::defList      , "def-list"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::defList      , "definition-list"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::termList     , "term-list"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList2     , "val-list2"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList2     , "value-list2"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::retList2     , "ret-list2"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::retList2     , "return-list2"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::optList2     , "opt-list2"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::optList2     , "option-list2"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::defList2     , "def-list2"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::defList2     , "definition-list2" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::fieldList2   , "field-list2"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::termList2    , "term-list2"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::end          , "end"              );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( MdPpTag, std::map, 1 )
 
 

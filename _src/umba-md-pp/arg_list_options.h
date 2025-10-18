@@ -22,6 +22,14 @@ struct ArgListOptions
     //std::string                 fileName;
     std::vector<std::string>    title;
 
+    std::string                 sectionTitle;
+
+
+    bool setListSectionTitle(const std::string &t)
+    {
+        sectionTitle = t;
+        return true;
+    }
 
     bool setListType(const std::string &typeStr)
     {

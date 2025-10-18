@@ -10,6 +10,18 @@ Language   : Russian
 
 #!meta{no-document-meta-title,author,url}
 
+
+<def-list>
+
+- Определение 1
+Описание 1
+
+- Определение 2
+Описание 2
+
+
+</def-list>
+
 #// <arg-list title="Spec:|:Lang:|:Description">
 #// 
 #// - other

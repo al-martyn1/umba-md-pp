@@ -438,26 +438,45 @@ void processArgListLines( const AppConfig<FilenameStringType> &appCfg
                       , std::vector<std::string> &resLines
                       )
 {
-    auto argListOptions = appCfg.argListOptions;
+    ArgListOptions argListOptions;
+    auto optIt = appCfg.valListTagOptions.find(tagType);
+    if (optIt!=appCfg.valListTagOptions.end())
+        argListOptions = optIt->second;
     updateArgListOptions(appCfg, mdHtmlTag, argListOptions);
     processArgListLinesImpl(argListOptions, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
 }
 
 //----------------------------------------------------------------------------
-template<typename FilenameStringType>
-void processValListLines( const AppConfig<FilenameStringType> &appCfg
-                      , Document &doc // Сюда вставляем метаданные, если читаем из внешнего файла, и они там есть
-                      , umba::html::HtmlTag &mdHtmlTag
-                      , MdPpTag tagType
-                      , const FilenameStringType &docFilename
-                      , const std::vector<std::string> &tagLines
-                      , std::vector<std::string> &resLines
-                      )
-{
-    auto argListOptions = appCfg.valListOptions;
-    updateArgListOptions(appCfg, mdHtmlTag, argListOptions);
-    processArgListLinesImpl(argListOptions, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
-}
+// template<typename FilenameStringType>
+// void processValListLines( const AppConfig<FilenameStringType> &appCfg
+//                       , Document &doc // Сюда вставляем метаданные, если читаем из внешнего файла, и они там есть
+//                       , umba::html::HtmlTag &mdHtmlTag
+//                       , MdPpTag tagType
+//                       , const FilenameStringType &docFilename
+//                       , const std::vector<std::string> &tagLines
+//                       , std::vector<std::string> &resLines
+//                       )
+// {
+//     auto argListOptions = appCfg.valListTagOptions[tagType]; // valListOptions;
+//     updateArgListOptions(appCfg, mdHtmlTag, argListOptions);
+//     processArgListLinesImpl(argListOptions, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+// }
+
+//  
+//  
+// retList,returnList
+// optList,optionList
+// defList,definitionList
+// fieldList                     // aka memberList
+//  
+// # С тремя позициями вместо двух
+// argList3,argumentList3
+// valList3,valueList3
+// retList3,returnList3
+// optList3,optionList3
+// defList3,definitionList3
+// fieldList3
+
 
 
 

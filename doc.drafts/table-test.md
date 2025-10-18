@@ -26,7 +26,6 @@ Content Cell  | Content Cell
 Content Cell  | Content Cell
 
 
-
 # Table test 02
 
 ```
@@ -40,7 +39,6 @@ Content Cell  | Content Cell
 | ----: | :----: | :---- |
 | 10    | 10     | 10    |
 | 1000  | 1000   | 1000  |
-
 
 
 # Table test 03
@@ -58,7 +56,6 @@ Content Cell  | Content Cell
 | ^     | 1000   | 1000  |
 
 
-
 # Table test 04
 
 ```
@@ -74,7 +71,6 @@ Content Cell  | Content Cell
 | 1000  |||
 
 
-
 # Table test 05
 
 ```
@@ -83,11 +79,9 @@ Content Cell  | Content Cell
 | Span <td colspan=3>triple  <td colspan=2>double
 ```
 
-| One    | Two | Three | Four    | Five  | Six 
+| One    | Two | Three | Four    | Five  | Six
 |---
 | Span <td colspan=3>triple  <td colspan=2>double
-
-
 
 
 12.csv
@@ -196,6 +190,5 @@ excel_test01_comma_semicolon_multi.csv - multi-title
 |Maria|Magdalina|29|Jerusalem's Lot|
 |Charles|Boone||Preacher's Corners|
 |Calvin|McCann||Preacher's Corners|
-
 
 

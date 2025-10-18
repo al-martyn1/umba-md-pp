@@ -31,9 +31,6 @@ Generator: Umba Brief Scanner
 - [ ] `[_src/umba-md-pp/md_pp_tag_utils.h:21]`
   Набить парсеры для graph/csv
 
-- [ ] `[_src/umba-md-pp/md_pp_tag_utils.h:94]`
-  Набить процессоры для graph/csv
-
 - [ ] `[_src/umba-md-pp/processing.h:237]`
   Надо бы ещё принудительно флэттенизировать урлы, которые выходят за пределы
   каталога с документом UMBA_USED(flattenImageLinks);

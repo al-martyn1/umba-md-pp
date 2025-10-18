@@ -18,34 +18,123 @@ using TagLineExtraParsersMap = std::unordered_map<MdPpTag, TagLineExtraParser<Fi
 template<typename FilenameStringType>
 TagLineExtraParsersMap<FilenameStringType> makeTagLineExtraParsersMap()
 {
-    //TODO: !!! Набить парсеры для graph/csv
     TagLineExtraParsersMap<FilenameStringType> m;
 
-    m[MdPpTag::graph] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+    m[MdPpTag::graph    ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
                         {
                             UMBA_USED(appCfg);
                             UMBA_USED(tagType);
                             return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
                         };
-    m[MdPpTag::puml ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+
+    m[MdPpTag::puml     ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
                         {
                             UMBA_USED(appCfg);
                             UMBA_USED(tagType);
                             return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
                         };
-    m[MdPpTag::argList ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+
+    m[MdPpTag::csvTable ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
                         {
                             UMBA_USED(appCfg);
                             UMBA_USED(tagType);
                             return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
                         };
-    m[MdPpTag::valList ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+
+
+    
+    m[MdPpTag::argList  ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
                         {
                             UMBA_USED(appCfg);
                             UMBA_USED(tagType);
                             return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
                         };
-    m[MdPpTag::csvTable] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+
+    m[MdPpTag::valList  ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::retList  ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::optList  ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::defList  ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::fieldList] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::termList ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::argList2 ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::valList2 ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::retList2 ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::optList2 ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::defList2 ] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::fieldList2] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
+                        {
+                            UMBA_USED(appCfg);
+                            UMBA_USED(tagType);
+                            return umba::md::parseExtraPossibleFilenameAndTextToHtmlTag(mdHtmlTag, b, e);
+                        };
+
+    m[MdPpTag::termList2] = [](const AppConfig<FilenameStringType> &appCfg, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, std::string::const_iterator b, std::string::const_iterator e)
                         {
                             UMBA_USED(appCfg);
                             UMBA_USED(tagType);
@@ -91,29 +180,93 @@ using TagLinesProcessorsMap = std::unordered_map<MdPpTag, TagLinesProcessor<File
 template<typename FilenameStringType>
 TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
 {
-    //TODO: !!! Набить процессоры для graph/csv
     TagLinesProcessorsMap<FilenameStringType> m;
 
-    m[MdPpTag::graph] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+    m[MdPpTag::graph    ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
                         {
                              return umba::md::processGraphLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
-    m[MdPpTag::puml ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+
+    m[MdPpTag::puml     ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
                         {
                              return umba::md::processDiagramLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
-    m[MdPpTag::argList ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
-                        {
-                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
-                        };
-    m[MdPpTag::valList ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
-                        {
-                             return umba::md::processValListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
-                        };
+
     m[MdPpTag::csvTable ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
                         {
                              return umba::md::processCsvTableLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
+
+
+    m[MdPpTag::argList  ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::valList  ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::retList  ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::optList  ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::defList  ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::fieldList] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::termList ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::argList2 ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::valList2 ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::retList2 ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::optList2 ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::defList2 ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+    m[MdPpTag::fieldList2] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::termList2] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
     return m;
 }
 

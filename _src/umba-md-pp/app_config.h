@@ -66,8 +66,11 @@ struct AppConfig
 
     GraphVizOptions                                       graphVizOptions;
     PlantUmlOptions                                       plantUmlOptions;
-    ArgListOptions                                        argListOptions ;
-    ArgListOptions                                        valListOptions ;
+
+    std::unordered_map<MdPpTag, ArgListOptions>           valListTagOptions ; // arg-list, val-list, opt-list etc
+    // ArgListOptions                                        argListOptions ;
+    // ArgListOptions                                        valListOptions ;
+
     bool                                                  clearGenerationCaches = false;
 
     mutable std::string                                   java;

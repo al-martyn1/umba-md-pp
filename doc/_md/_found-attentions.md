@@ -34,7 +34,13 @@ Generator: Umba Brief Scanner
   Тут бы надо предусмотреть, что в первой строке поиска надо пропустить окончание
   сигнатуры, но пока сойдёт и так
 
-- `[_src/umba-md-pp/snippet_options.h:754]`
+- `[_src/umba-md-pp/snippet_options.h:729]`
+  Unused variable
+
+- `[_src/umba-md-pp/snippet_options.h:736]`
+  Unused variable pCodeExtractor
+
+- `[_src/umba-md-pp/snippet_options.h:759]`
   - или тут надо уменьшить на размер конечной сигнатуры в строках?
 
 - `[_src/umba-md-pp/umba-md-pp-view.cpp:501]`

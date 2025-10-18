@@ -168,6 +168,12 @@ Generator: Umba Brief Scanner
 - `viewer_utils.h` - 
 - `yaml_json_document_helpers.h` - Помогалки для YAML/JSON
 
+# patches
+
+- `marty_bigint.patch` - 
+- `marty_csv.patch` - 
+- `umba-md-pp.patch` - 
+
 # tests/cc/templates
 
 - `00_00_explicit_full_template_specialization.h` - 
