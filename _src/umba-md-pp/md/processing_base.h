@@ -74,6 +74,26 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
         }
 
 
+        else if (state==PreprocessorParsingState::alertPara) // alert mode
+        {
+            // if (isMultiLineCommentEnd(line))
+            //     state = PreprocessorParsingState::normal; // Больше ничего не делаем, строка всё ещё от комента
+            if (isEmptyLine(line))
+            {
+                state = PreprocessorParsingState::normal;
+                resLines.emplace_back(std::string());
+            }
+            else
+            {
+                if (handler(LineHandlerEvent::alertLine, resLines, line, idx, lastLineIdx))
+                {
+                    resLines.emplace_back(line);
+                }
+            }
+        }
+
+
+        //----------------------------------------------------------------------------
         else if (state==PreprocessorParsingState::normal) // normal mode
         {
             if (isSingleLineComment(line))
@@ -86,6 +106,16 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
             {
                 // Пропускаем многострочные коменты
                 state = PreprocessorParsingState::comment;
+                continue;
+            }
+
+            if (isAlertCommand(line))
+            {
+                state = PreprocessorParsingState::alertPara;
+                if (handler(LineHandlerEvent::alertStart, resLines, line, idx, lastLineIdx))
+                {
+                    resLines.emplace_back(line);
+                }
                 continue;
             }
 

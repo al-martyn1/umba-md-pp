@@ -1,0 +1,28 @@
+# GitLab Flavored Markdown (GLFM) - https://docs.gitlab.com/user/markdown/#alerts
+# [!note] [!tip] [!important] [!caution] [!warning]
+# > [!warning] Data deletion
+# > The following instructions will make your data unrecoverable.
+# Можно делать свой кастомный заголовок
+
+# GitHub Flavored Markdown (GFM)
+# https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
+# https://github.com/orgs/community/discussions/16925
+# Аналогично гитлабу, но в примерах регистр - верхний, наверное не важно
+# Не понятно, есть ли фича кастомного заголовка
+# Вроде не поддерживается
+
+
+# Не по теме, но про маркдаун и туду
+# TODO.md - https://github.com/todomd/todo.md
+# TODO.md Kanban Board
+# https://marketplace.visualstudio.com/items?itemName=coddx.coddx-alpha&ssr=false
+
+# Установка TargetRenderer также устанавливает AlertStyle
+# Для доксигена устанавливаем GFM
+
+invalid,unknown=-1
+
+default = 0  // если default, то используется text-режим, но default можно переопределять в опции target-renderer, иначе - нельзя
+text
+github,gitHubFlavoredMarkdown,gfm
+gitlab,gitLabFlavoredMarkdown,glfm

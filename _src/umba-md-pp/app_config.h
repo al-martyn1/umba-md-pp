@@ -96,6 +96,17 @@ struct AppConfig
                                                                                // Также заведем переменную MdPpRenderingTargetName - её можно использовать в условных включениях, 
                                                                                // например, или для включения различных для каждого выходгого типа файлов.
                                                                                // По умолчанию будет строка default
+    AlertStyle                                            alertStyle = AlertStyle::default_;
+    std::unordered_map<AlertType, std::string>            alertTitles;
+
+//  
+// AlertStyle.txt
+//     text = 0
+//     github,gitHubFlavoredMarkdown,gfm
+//     gitlab,gitLabFlavoredMarkdown,glfm
+// AlertType.txt
+//  
+
 
     std::unordered_map<std::string, std::string>          metaTagReplaceMap;
     std::unordered_map<std::string, std::string>          metaTagSerializeMap;
@@ -679,6 +690,34 @@ struct AppConfig
     //
     // }
 
+    bool setAlertTitle(const std::string &alertStr)
+    {
+        std::string f;
+        std::string s;
+        if (!umba::string_plus::split_to_pair(alertStr, f, s, ':'))
+            return false;
+
+        return setAlertTitle(f, s);
+    }
+
+    bool setAlertTitle(const std::string &alertTypeStr, const std::string &alertTitleStr)
+    {
+        auto alertType = enum_deserialize(alertTypeStr, AlertType::invalid);
+        if (alertType==AlertType::invalid)
+            return false;
+
+        alertTitles[alertType] = alertTitleStr;
+
+        return true;
+    }
+
+    AlertStyle getAlertStyle() const
+    {
+        if (alertStyle==AlertStyle::default_ || alertStyle==AlertStyle::invalid)
+            return AlertStyle::text;
+
+        return alertStyle;
+    }
 
     void setStrictPath(const FilenameStringType &p)
     {

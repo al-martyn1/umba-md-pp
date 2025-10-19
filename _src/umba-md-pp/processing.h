@@ -160,6 +160,8 @@ void checkPrintLineIfContainsPngExt(LineHandlerEvent event, const std::string &l
     UMBA_USED(event);
     UMBA_USED(line);
 
+    // !!! Хз, зачем это нужно было
+
     #if defined(LOG_PROCESSING_PROCESS_TEXT_LINES_SIMPLE_PRINT_PNG_LINES)
     std::string::size_type pos = line.find(".png");
     if (pos!=line.npos)
@@ -209,6 +211,10 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
             case LineHandlerEvent::metaStart:     checkPrintLineIfContainsPngExt(event, line);
                                                   return true;
             case LineHandlerEvent::metaEnd:       checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::alertStart:    checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
+            case LineHandlerEvent::alertLine:     checkPrintLineIfContainsPngExt(event, line);
                                                   return true;
 
             case LineHandlerEvent::unknown:       return true;
@@ -1415,6 +1421,22 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
             return false; // prevent to add this line to result lines
         }
 
+
+        if (event==LineHandlerEvent::alertStart)
+        {
+            std::vector<std::string> newLines;
+            umba::md::processAlertFirstLine(appCfg, line, newLines);
+            resLines.insert(resLines.end(), newLines.begin(), newLines.end());
+            return false; // prevent to add this line to result lines
+        }
+
+        if (event==LineHandlerEvent::alertLine)
+        {
+            line = "> " + line;
+            return true; // allow add this line to result lines
+        }
+
+
         if (event==LineHandlerEvent::headerCommand)
         {
             std::string levelStr;
@@ -1435,6 +1457,7 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
 
             return true;
         }
+
 
         if (event==LineHandlerEvent::normalLine)
         {

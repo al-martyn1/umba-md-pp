@@ -1,0 +1,24 @@
+# GitHub Flavored Markdown supports five types of alerts: [!NOTE], [!TIP], [!IMPORTANT], [!WARNING], and [!CAUTION]
+#     https://www.freecodecamp.org/news/github-flavored-markdown-syntax-examples/
+#
+# В тексте мы делаем так
+# !!!W: Заголовок варнинга
+# Текст варнинга,
+# продолжается до пустой строки
+#
+# Тут `!!!` - маркер алерта
+# `W` - тип алерта, W - Warning, оно же по умолчанию
+# `:` - для текста или для GFM - знак препинания после заголовка алерта, двоеточие по усочанию
+#
+# Для текстового формата задаём текст сообщений опцией типа --set-alert-title=ALERT:TITLE
+#
+#
+
+invalid,unknown=-1
+
+note,n = 0
+tip,t
+important,i
+warning,w
+caution,c
+todo,d        // дополнительный тип, нет в GFM/GLFM, будем делать как note с заголовком TODO

@@ -827,7 +827,7 @@ int operator()( const StringType                                &a           //!
         if ( !optHandled && 
                 ( opt.setParam("NAME")
                || opt.isOption("target-renderer") || opt.isOption('R')
-               || opt.setDescription("Set target renderer (`github`/`doxygen`). "))
+               || opt.setDescription("Set target renderer (`github`/`gitlab`/`doxygen`). "))
            )
         {
             optHandled = true;
@@ -849,9 +849,82 @@ int operator()( const StringType                                &a           //!
             }
 
             appConfig.targetRenderer = renderer;
+            if (appConfig.alertStyle == AlertStyle::default_)
+            {
+                if (renderer==TargetRenderer::github)
+                {
+                    appConfig.alertStyle = AlertStyle::github;
+                }
+                else if (renderer==TargetRenderer::gitlab)
+                {
+                    appConfig.alertStyle = AlertStyle::gitlab;
+                }
+                else if (renderer==TargetRenderer::doxygen)
+                {
+                    appConfig.alertStyle = AlertStyle::github;
+                }
+            }
 
             return 0;
         }
+
+
+        if ( !optHandled && 
+                ( opt.setParam("NAME")
+               || opt.isOption("set-alert-style") // || opt.isOption('R') // need to change
+               || opt.setDescription("Set alert rendering style (`text`/`github`/`gitlab`). "))
+           )
+        {
+            optHandled = true;
+
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.hasArg())
+            {
+                LOG_ERR<<"Setting alert style rendering requires argument (--set-alert-style)\n";
+                return -1;
+            }
+
+            auto optArg = opt.optArg;
+            auto alertStyle = enum_deserialize(optArg, AlertStyle::invalid);
+            if (alertStyle==AlertStyle::invalid)
+            {
+                LOG_ERR<<"Setting alert style failed, invalid argument: '" << optArg << "' (--set-alert-style)\n";
+                return -1;
+            }
+
+            appConfig.alertStyle = alertStyle;
+            return 0;
+        }
+
+
+        if ( !optHandled && 
+                ( opt.setParam("ALERT:TITLE")
+               || opt.isOption("set-alert-title") // || opt.isOption('R') // need to change
+               || opt.setDescription("Set alert title. "))
+           )
+        {
+            optHandled = true;
+
+            if (argsParser.hasHelpOption) return 0;
+
+            if (!opt.hasArg())
+            {
+                LOG_ERR<<"Setting alert title requires argument (--set-alert-title)\n";
+                return -1;
+            }
+
+            // auto optArg = opt.optArg;
+            // auto alertTitle = enum_deserialize(optArg, AlertType::invalid);
+            if (!appConfig.setAlertTitle(opt.optArg))
+            {
+                LOG_ERR<<"Setting alert title failed, invalid argument: '" << opt.optArg << "' (--set-alert-title)\n";
+                return -1;
+            }
+
+            return 0;
+        }
+
 
         if ( !optHandled && 
                 ( opt.setParam("NAME")

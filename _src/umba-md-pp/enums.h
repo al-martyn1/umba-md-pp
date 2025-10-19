@@ -16,6 +16,102 @@
 
 
 
+//#!AlertStyle
+enum class AlertStyle : std::uint32_t
+{
+    invalid                  = (std::uint32_t)(-1) /*!<  */,
+    unknown                  = (std::uint32_t)(-1) /*!<  */,
+    default_                 = 0x0000 /*!< если default, то используется text-режим, но default можно переопределять в опции target-renderer, иначе - нельзя */,
+    text                     = 0x0001 /*!<  */,
+    github                   = 0x0002 /*!<  */,
+    gitHubFlavoredMarkdown   = 0x0002 /*!<  */,
+    gfm                      = 0x0002 /*!<  */,
+    gitlab                   = 0x0003 /*!<  */,
+    gitLabFlavoredMarkdown   = 0x0003 /*!<  */,
+    glfm                     = 0x0003 /*!<  */
+
+}; // enum 
+//#!
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(AlertStyle)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( AlertStyle, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertStyle::invalid    , "Invalid" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertStyle::default_   , "Default" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertStyle::text       , "Text"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertStyle::gitlab     , "Gitlab"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertStyle::github     , "Github"  );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( AlertStyle, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( AlertStyle, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::invalid    , "invalid"                   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::invalid    , "unknown"                   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::default_   , "default"                   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::text       , "text"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::gitlab     , "gitlabflavoredmarkdown"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::gitlab     , "gitlab"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::gitlab     , "git-lab-flavored-markdown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::gitlab     , "glfm"                      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::gitlab     , "git_lab_flavored_markdown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::github     , "githubflavoredmarkdown"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::github     , "github"                    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::github     , "git-hub-flavored-markdown" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::github     , "gfm"                       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertStyle::github     , "git_hub_flavored_markdown" );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( AlertStyle, std::map, 1 )
+
+
+//#!AlertType
+enum class AlertType : std::uint32_t
+{
+    invalid     = (std::uint32_t)(-1) /*!<  */,
+    unknown     = (std::uint32_t)(-1) /*!<  */,
+    note        = 0x0000 /*!<  */,
+    n           = 0x0000 /*!<  */,
+    tip         = 0x0001 /*!<  */,
+    t           = 0x0001 /*!<  */,
+    important   = 0x0002 /*!<  */,
+    i           = 0x0002 /*!<  */,
+    warning     = 0x0003 /*!<  */,
+    w           = 0x0003 /*!<  */,
+    caution     = 0x0004 /*!<  */,
+    c           = 0x0004 /*!<  */,
+    todo        = 0x0005 /*!< дополнительный тип, нет в GFM/GLFM, будем делать как note с заголовком TODO */,
+    d           = 0x0005 /*!< дополнительный тип, нет в GFM/GLFM, будем делать как note с заголовком TODO */
+
+}; // enum 
+//#!
+
+MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(AlertType)
+
+MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( AlertType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertType::invalid     , "Invalid"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertType::todo        , "Todo"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertType::important   , "Important" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertType::note        , "Note"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertType::tip         , "Tip"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertType::warning     , "Warning"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( AlertType::caution     , "Caution"   );
+MARTY_CPP_ENUM_CLASS_SERIALIZE_END( AlertType, std::map, 1 )
+
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( AlertType, std::map, 1 )
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::invalid     , "invalid"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::invalid     , "unknown"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::todo        , "todo"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::todo        , "d"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::important   , "important" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::important   , "i"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::note        , "note"      );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::note        , "n"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::tip         , "tip"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::tip         , "t"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::warning     , "warning"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::warning     , "w"         );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::caution     , "caution"   );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( AlertType::caution     , "c"         );
+MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( AlertType, std::map, 1 )
+
+
 //#!SnippetOptions
 enum class SnippetOptions : std::uint32_t
 {
@@ -582,8 +678,8 @@ enum class TargetRenderer : std::uint32_t
     invalid   = (std::uint32_t)(-1) /*!<  */,
     unknown   = (std::uint32_t)(-1) /*!<  */,
     github    = 0x0000 /*!<  */,
-    doxygen   = 0x0001 /*!<  */,
-    gitlab    = 0x0002 /*!<  */
+    gitlab    = 0x0001 /*!<  */,
+    doxygen   = 0x0002 /*!<  */
 
 }; // enum 
 //#!
@@ -622,7 +718,9 @@ enum class LineHandlerEvent : std::uint32_t
     headerCommand   = 0x0008 /*!<  */,
     metaLine        = 0x0009 /*!<  */,
     metaStart       = 0x000A /*!<  */,
-    metaEnd         = 0x000B /*!<  */
+    metaEnd         = 0x000B /*!<  */,
+    alertStart      = 0x000C /*!<  */,
+    alertLine       = 0x000D /*!<  */
 
 }; // enum 
 //#!
@@ -643,6 +741,8 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaLine        , "MetaLine"      );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaStart       , "MetaStart"     );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "MetaEnd"       );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::alertStart      , "AlertStart"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( LineHandlerEvent::alertLine       , "AlertLine"     );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( LineHandlerEvent, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
@@ -684,18 +784,25 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( LineHandlerEvent, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "meta-end"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "meta_end"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::metaEnd         , "metaend"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::alertStart      , "alert-start"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::alertStart      , "alert_start"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::alertStart      , "alertstart"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::alertLine       , "alert-line"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::alertLine       , "alert_line"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( LineHandlerEvent::alertLine       , "alertline"      );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( LineHandlerEvent, std::map, 1 )
 
 
 //#!PreprocessorParsingState
 enum class PreprocessorParsingState : std::uint32_t
 {
-    invalid   = (std::uint32_t)(-1) /*!<  */,
-    unknown   = (std::uint32_t)(-1) /*!<  */,
-    normal    = 0x0000 /*!<  */,
-    listing   = 0x0001 /*!<  */,
-    meta      = 0x0002 /*!<  */,
-    comment   = 0x0003 /*!<  */
+    invalid     = (std::uint32_t)(-1) /*!<  */,
+    unknown     = (std::uint32_t)(-1) /*!<  */,
+    normal      = 0x0000 /*!<  */,
+    listing     = 0x0001 /*!<  */,
+    meta        = 0x0002 /*!<  */,
+    comment     = 0x0003 /*!<  */,
+    alertPara   = 0x0004 /*!<  */
 
 }; // enum 
 //#!
@@ -703,20 +810,24 @@ enum class PreprocessorParsingState : std::uint32_t
 MARTY_CPP_MAKE_ENUM_IS_FLAGS_FOR_NON_FLAGS_ENUM(PreprocessorParsingState)
 
 MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( PreprocessorParsingState, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::meta      , "Meta"    );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::invalid   , "Invalid" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::normal    , "Normal"  );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::listing   , "Listing" );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::comment   , "Comment" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::meta        , "Meta"      );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::invalid     , "Invalid"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::normal      , "Normal"    );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::alertPara   , "AlertPara" );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::listing     , "Listing"   );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( PreprocessorParsingState::comment     , "Comment"   );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( PreprocessorParsingState, std::map, 1 )
 
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( PreprocessorParsingState, std::map, 1 )
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::meta      , "meta"    );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::invalid   , "invalid" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::invalid   , "unknown" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::normal    , "normal"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::listing   , "listing" );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::comment   , "comment" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::meta        , "meta"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::invalid     , "invalid"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::invalid     , "unknown"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::normal      , "normal"     );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::alertPara   , "alert-para" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::alertPara   , "alert_para" );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::alertPara   , "alertpara"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::listing     , "listing"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( PreprocessorParsingState::comment     , "comment"    );
 MARTY_CPP_ENUM_CLASS_DESERIALIZE_END( PreprocessorParsingState, std::map, 1 )
 
 

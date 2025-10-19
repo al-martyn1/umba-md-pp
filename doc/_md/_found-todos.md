@@ -28,17 +28,17 @@ Generator: Umba Brief Scanner
   Пока у нас строки начала/окончания блока односимвольные, но надо переделать,
   желательно везде
 
-- [ ] `[_src/umba-md-pp/processing.h:237]`
+- [ ] `[_src/umba-md-pp/processing.h:243]`
   Надо бы ещё принудительно флэттенизировать урлы, которые выходят за пределы
   каталога с документом UMBA_USED(flattenImageLinks);
 
-- [ ] `[_src/umba-md-pp/processing.h:266]`
+- [ ] `[_src/umba-md-pp/processing.h:272]`
   Надо бы сделать какой-то null_insert_iterator и null_inserter
 
-- [ ] `[_src/umba-md-pp/processing.h:1003]`
+- [ ] `[_src/umba-md-pp/processing.h:1009]`
   Нужно добавить обрамление
 
-- [ ] `[_src/umba-md-pp/processing_utils.h:455]`
+- [ ] `[_src/umba-md-pp/processing_utils.h:471]`
   Доделать
 
 

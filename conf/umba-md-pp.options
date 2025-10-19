@@ -340,3 +340,16 @@
 # --val-list2-title=:Name|:Value|:Meaning
 # --val-list2-section-title=
 
+
+--set-alert-title=note:Примечание
+# --set-alert-title=note:Note
+--set-alert-title=tip:Совет
+# --set-alert-title=tip:Tip
+--set-alert-title=important:Важно
+# --set-alert-title=important:Important
+--set-alert-title=warning:Предупреждение
+# --set-alert-title=warning:Warning
+--set-alert-title=caution:Осторожно
+# --set-alert-title=caution:Caution
+
+

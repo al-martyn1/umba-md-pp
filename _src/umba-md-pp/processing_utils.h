@@ -302,6 +302,22 @@ bool isHeaderCommand(std::string line)
 }
 
 //----------------------------------------------------------------------------
+inline
+bool isAlertCommand(std::string line)
+{
+    umba::string_plus::trim(line);
+    return umba::string_plus::starts_with(line, ("!!!"));
+}
+
+//----------------------------------------------------------------------------
+inline
+bool isEmptyLine(std::string line)
+{
+    umba::string_plus::trim(line);
+    return line.empty();
+}
+
+//----------------------------------------------------------------------------
 
 
 
