@@ -19,8 +19,30 @@ Language   : Russian
 - Определение 2
 Описание 2
 
-
 </def-list>
+
+
+<arg-list>
+
+- Arg 1
+Описание 1
+
+- Arg 2
+Описание 2
+
+</arg-list>
+
+
+<val-list>
+
+- Value 1
+Value 1 description
+
+- Value 2
+Value 2 description
+
+</val-list>
+
 
 #// <arg-list title="Spec:|:Lang:|:Description">
 #// 

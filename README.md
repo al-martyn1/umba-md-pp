@@ -16,6 +16,8 @@
 
 Утилита, добавляющая некоторые возможности к Markdown
 
+          - [**Определения**](#определения)
+          - [**Параметры**](#параметры)
 - [Основные возможности](#основные-возможности)
 - [Пакетный режим](#пакетный-режим)
 - [Локальная утилита просмотра .md_ и .md файлов](#локальная-утилита-просмотра-md_-и-md-файлов)
@@ -42,10 +44,30 @@
 ---
 
 
-|||
+###### **Определения**
+
+
+**Определение 1** -
+Описание 1
+
+**Определение 2** -
+Описание 2
+
+
+###### **Параметры**
+
+
+**Arg 1** -
+Описание 1
+
+**Arg 2** -
+Описание 2
+
+
+|Значение|Описание|
 |:---|:---|
-|**Определение 1**|Описание 1|
-|**Определение 2**|Описание 2|
+|**Value 1**|Value 1 description|
+|**Value 2**|Value 2 description|
 
 
 # Основные возможности
@@ -550,6 +572,84 @@ enum class SnippetOptions : std::uint32_t
 # --set-code-block-chars=Txt:
 # No lang tag for Txt
 # --set-code-listing-tag=Txt:txt
+
+
+## *-list tags
+
+# *-value-style   : normal, bold, italic, bold-italic, italic-bold, backtick and backtick-quote
+# *-type          : table, text
+# *-title         : pipe separated titles, use ':' for left/right/center align
+# *-section-title : section title
+
+--arg-list-value-style=bold
+--arg-list-type=text
+# --arg-list-type=table
+--arg-list-title=:Значение|:Описание
+# --arg-list-title=:Value|:Meaning
+--arg-list-section-title=Параметры
+#--arg-list-section-title=Parameters
+
+--val-list-value-style=bold
+--val-list-type=table
+--val-list-title=:Значение|:Описание
+# --val-list-title=:Value|:Meaning
+# --val-list-section-title=
+
+--ret-list-value-style=bold
+--ret-list-type=table
+--ret-list-title=:Значение|:Описание
+# --ret-list-title=:Value|:Meaning
+--ret-list-section-title=Возвращаемое значение
+# --ret-list-section-title=Return value
+
+--opt-list-value-style=bold
+--opt-list-type=text
+--opt-list-title=:Опция|:Описание
+# --opt-list-title=:Option|:Meaning
+--opt-list-section-title=Опции
+# --opt-list-section-title=Options
+
+--def-list-value-style=bold
+--def-list-type=text
+--def-list-title=:Определение|:Описание
+# --def-list-title=:Definition|:Meaning
+--def-list-section-title=Определения
+# --def-list-section-title=Определения
+
+--field-list-value-style=bold
+--field-list-type=text
+--field-list-title=:Поле|:Описание
+# --field-list-title=:Field|:Meaning
+--field-list-section-title=Поля
+# --field-list-section-title=Fields
+
+--term-list-value-style=bold
+--term-list-type=text
+--term-list-title=:Термин|:Описание
+# --term-list-title=:Term|:Meaning
+--term-list-section-title=Термины
+# --term-list-section-title=Terms
+
+# ---list-value-style=
+# ---list-type=
+# ---list-title=
+# ---list-section-title=
+
+
+# С двумя позициями-ключами вместо одной, типа: Имя (символьное), Значение (числовое), Описание/Name,Value,Meaning
+# argList2,argumentList2
+# valList2,valueList2
+# retList2,returnList2
+# optList2,optionList2
+# defList2,definitionList2
+# fieldList2
+# termList2
+
+--val-list2-value-style=bold
+--val-list2-type=table
+--val-list2-title=:Имя|:Значение|:Описание
+# --val-list2-title=:Name|:Value|:Meaning
+# --val-list2-section-title=
 ```
 
 

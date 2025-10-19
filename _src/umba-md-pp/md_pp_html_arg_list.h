@@ -57,6 +57,15 @@ void updateArgListOptions(const AppConfig<FilenameStringType> &appCfg, const umb
         argListOptions.setListTitle(mdHtmlTag.getAttrValue("title", std::string()));
     }
 
+    if (mdHtmlTag.hasAttr("section-title"))
+    {
+        argListOptions.setListSectionTitle(mdHtmlTag.getAttrValue("section-title", std::string()));
+    }
+    else if (mdHtmlTag.hasAttr("sec-title"))
+    {
+        argListOptions.setListSectionTitle(mdHtmlTag.getAttrValue("sec-title", std::string()));
+    }
+
 }
 
 //----------------------------------------------------------------------------
@@ -185,7 +194,14 @@ void processArgListLinesImpl( ArgListOptions argListOptions
                       )
 {
 
-    // auto argListOptions = appCfg.argListOptions;
+    if (!argListOptions.sectionTitle.empty())
+    {
+        auto strSecTitle = std::string(6, '#');
+        strSecTitle.append(1, ' ');
+        strSecTitle.append(mdSimpleDecorate(argListOptions.sectionTitle, ArgListValueStyle::bold));
+        resLines.emplace_back(strSecTitle);
+        resLines.emplace_back(std::string());
+    }
 
     if (argListOptions.argListType==ArgListType::unknown)
         argListOptions.argListType = ArgListType::table;
