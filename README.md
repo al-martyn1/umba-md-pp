@@ -69,6 +69,12 @@
 > caution
 > caution
 
+> [!CAUTION]
+> noTitel
+> caution caution caution caution
+> caution
+> caution
+
 
 |Значение|Описание|
 |:---|:---|
