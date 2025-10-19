@@ -59,6 +59,10 @@ std::vector<std::string> raiseHeaders(const AppConfig<FilenameStringType> &appCf
 
         std::size_t newHeaderSize = levelStr.size();
 
+        // Заголовки самого минимального уровня не трогаем
+        if (newHeaderSize>=6)
+           return true;
+
         int rv = raiseVal;
 
         if (rv<0)
