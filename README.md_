@@ -10,14 +10,43 @@ Language   : Russian
 
 #!meta{no-document-meta-title,author,url}
 
+!!! Заголовок
+Предупреждение Предупреждение Предупреждение Предупреждение
+Предупреждение Предупреждение Предупреждение Предупреждение
 
-> [!WARNING] Заметка
-> Заметка Заметка Заметка Заметка Заметка 
-> Заметка Заметка Заметка Заметка Заметка 
+!!!c Titel
+caution caution caution caution 
+caution 
+caution 
 
-> [!caution]
-> Заметка Заметка Заметка Заметка Заметка 
-> Заметка Заметка Заметка Заметка Заметка 
+<val-list>
+
+- note
+примечание
+
+- tip
+совет
+
+- important
+важно
+
+- warning
+предупреждение
+
+- caution
+осторожно
+
+</val-list>
+
+```
+note,n = 0
+tip,t
+important,i
+warning,w
+caution,c
+todo,d        // дополнительный тип, нет в GFM/GLFM, будем делать как note с заголовком TODO
+```
+
 
 <def-list>
 

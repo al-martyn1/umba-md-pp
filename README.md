@@ -21,6 +21,7 @@
   - [Список важных предупреждений](#список-важных-предупреждений)
     - [_src/simple-drawing](#_srcsimple-drawing)
     - [_src/umba-md-pp](#_srcumba-md-pp)
+    - [_src/umba-md-pp/md](#_srcumba-md-ppmd)
   - [Список предупреждений](#список-предупреждений)
   - [Список задач](#список-задач)
     - [_libs/marty_format/impl](#_libsmarty_formatimpl)
@@ -57,13 +58,36 @@
 ---
 
 
-> [!WARNING] Заметка
-> Заметка Заметка Заметка Заметка Заметка
-> Заметка Заметка Заметка Заметка Заметка
+> [!WARNING]
+> **Заголовок:**
+> Предупреждение Предупреждение Предупреждение Предупреждение
+> Предупреждение Предупреждение Предупреждение Предупреждение
 
-> [!caution]
-> Заметка Заметка Заметка Заметка Заметка
-> Заметка Заметка Заметка Заметка Заметка
+> [!CAUTION]
+> **Titel:**
+> caution caution caution caution
+> caution
+> caution
+
+
+|Значение|Описание|
+|:---|:---|
+|**note**|примечание|
+|**tip**|совет|
+|**important**|важно|
+|**warning**|предупреждение|
+|**caution**|осторожно|
+
+
+```
+note,n = 0
+tip,t
+important,i
+warning,w
+caution,c
+todo,d        // дополнительный тип, нет в GFM/GLFM, будем делать как note с заголовком TODO
+```
+
 
 ###### **Определения**
 
@@ -114,13 +138,16 @@
 - `[_src/umba-md-pp/document.h:104]`
   Тут надо добавить что-то типа хидера, или break line Или - не надо?
 
-- `[_src/umba-md-pp/processing.h:385]`
+- `[_src/umba-md-pp/processing.h:163]`
+  Хз, зачем это нужно было
+
+- `[_src/umba-md-pp/processing.h:391]`
   Не понятно, с чего этот варнинг вылезает, надо разобраться
 
-- `[_src/umba-md-pp/processing.h:990]`
+- `[_src/umba-md-pp/processing.h:996]`
   Какое-то оформление надо
 
-- `[_src/umba-md-pp/processing.h:1399]`
+- `[_src/umba-md-pp/processing.h:1405]`
   JSON-META У нас универсальный парсер YAML/JSON и мета данные могут быть в
   формате JSON При вставке в JSON могут быть проблемы
 
@@ -148,6 +175,23 @@
 
 - `[_src/umba-md-pp/utils.h:542]`
   надо обдумать для других возможных путей
+
+
+### _src/umba-md-pp/md
+
+- `[_src/umba-md-pp/md/processing_utils.h:173]`
+  Тут надо быть внимательным
+
+- `[_src/umba-md-pp/md/processing_utils.h:232]`
+  Тут нужно добавить экранирование символов умножения, но они маловероятны,
+  поэтому пока не делаем
+
+- `[_src/umba-md-pp/md/processing_utils.h:242]`
+  Тут нужно добавить экранирование символов умножения, но они маловероятны,
+  поэтому пока не делаем
+
+- `[_src/umba-md-pp/md/processing_utils.h:265]`
+  Доделать
 
 
 ## Список предупреждений
@@ -181,17 +225,17 @@
   Пока у нас строки начала/окончания блока односимвольные, но надо переделать,
   желательно везде
 
-- [ ] `[_src/umba-md-pp/processing.h:237]`
+- [ ] `[_src/umba-md-pp/processing.h:243]`
   Надо бы ещё принудительно флэттенизировать урлы, которые выходят за пределы
   каталога с документом UMBA_USED(flattenImageLinks);
 
-- [ ] `[_src/umba-md-pp/processing.h:266]`
+- [ ] `[_src/umba-md-pp/processing.h:272]`
   Надо бы сделать какой-то null_insert_iterator и null_inserter
 
-- [ ] `[_src/umba-md-pp/processing.h:1003]`
+- [ ] `[_src/umba-md-pp/processing.h:1009]`
   Нужно добавить обрамление
 
-- [ ] `[_src/umba-md-pp/processing_utils.h:455]`
+- [ ] `[_src/umba-md-pp/processing_utils.h:471]`
   Доделать
 
 
@@ -835,6 +879,18 @@ enum class SnippetOptions : std::uint32_t
 --val-list2-title=:Имя|:Значение|:Описание
 # --val-list2-title=:Name|:Value|:Meaning
 # --val-list2-section-title=
+
+
+--set-alert-title=note:Примечание
+# --set-alert-title=note:Note
+--set-alert-title=tip:Совет
+# --set-alert-title=tip:Tip
+--set-alert-title=important:Важно
+# --set-alert-title=important:Important
+--set-alert-title=warning:Предупреждение
+# --set-alert-title=warning:Warning
+--set-alert-title=caution:Осторожно
+# --set-alert-title=caution:Caution
 ```
 
 
