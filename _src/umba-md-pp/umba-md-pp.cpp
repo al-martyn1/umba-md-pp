@@ -389,6 +389,8 @@ int safe_main(int argc, char* argv[])
         argsParser.args.push_back("--batch-scan-recurse="+rootPath);
         argsParser.args.push_back("--document-language=ru-RU");
         argsParser.args.push_back("--batch-scan-recurse="+rootPath+"/_libs/marty_format");
+        argsParser.args.push_back("--set-alert-style=blockquote");
+
         //argsParser.args.push_back("");
         //argsParser.args.push_back("");
         

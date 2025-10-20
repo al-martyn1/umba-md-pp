@@ -194,16 +194,16 @@ void parseAlertStartLine(std::string line, AlertType &alertType, std::string &pu
     line.erase(0, i);
     umba::string_plus::trim(line);
 
-    if (punctStr!=":" && punctStr!="." && punctStr!="!" && punctStr!="-"  /* && punctStr!="" */ )
+    if (punctStr!=":" && punctStr!="." && punctStr!="!"  /* && punctStr!="-" */   /* && punctStr!="" */ )
        punctStr.clear();
 
     if (punctStr.empty())
         punctStr = getDefaultAlertPunctuation(alertType);
 
-    if (punctStr=="-")
-        punctStr = " - ";
-    else
-        punctStr += " ";
+    // if (punctStr=="-")
+    //     punctStr = " -";
+    // else
+    //     punctStr += " ";
 
     alertTitle = line;
 
@@ -241,9 +241,13 @@ bool processAlertLine(LineHandlerEvent event, const AppConfig<FilenameStringType
             
             }
         };
-    /*
-        auto getAlertTypeDefaultTextStr = [](AlertType alertType) -> std::string
+
+        auto getAlertTypeTextStr = [&](AlertType alertType) -> std::string
         {
+            auto it = appCfg.alertTitles.find(alertType);
+            if (it!=appCfg.alertTitles.end())
+                return it->second;
+
             switch(alertType)
             {
                 case AlertType::note      : return "Note";
@@ -254,10 +258,9 @@ bool processAlertLine(LineHandlerEvent event, const AppConfig<FilenameStringType
                 case AlertType::todo      : return "TODO";
                 case AlertType::invalid   : return "Warning";
                 default                   : return "Warning";
-            
             }
         };
-    */
+
         auto makeGitHubTitleStr = [&](bool addPunct)
         {
             std::string alertHeaderStr;
@@ -267,7 +270,7 @@ bool processAlertLine(LineHandlerEvent event, const AppConfig<FilenameStringType
             // На месте '!' - знак препинания, который задан
             if (alertType==AlertType::todo)
             {
-                alertHeaderStr = alertTitle.empty() ? std::string("TODO: ") : std::string("TODO: ") + alertTitle;
+                alertHeaderStr = alertTitle.empty() ? std::string("TODO") : std::string("TODO - ") + alertTitle;
             }
             else // not todo
             {
@@ -304,11 +307,7 @@ bool processAlertLine(LineHandlerEvent event, const AppConfig<FilenameStringType
         else if (alertStyle==AlertStyle::text)
         {
             if (alertTitle.empty())
-            {
-                auto it = appCfg.alertTitles.find(alertType);
-                if (it!=appCfg.alertTitles.end())
-                    alertTitle = it->second;
-            }
+                alertTitle = getAlertTypeTextStr(alertType);
 
             std::string alertHeaderStr = makeGitHubTitleStr(true); // add punctuation
             if (!alertHeaderStr.empty())
@@ -317,11 +316,7 @@ bool processAlertLine(LineHandlerEvent event, const AppConfig<FilenameStringType
         else if (alertStyle==AlertStyle::blockquote)
         {
             if (alertTitle.empty())
-            {
-                auto it = appCfg.alertTitles.find(alertType);
-                if (it!=appCfg.alertTitles.end())
-                    alertTitle = it->second;
-            }
+                alertTitle = getAlertTypeTextStr(alertType);
 
             std::string alertHeaderStr = makeGitHubTitleStr(true); // add punctuation
             if (!alertHeaderStr.empty())
@@ -330,11 +325,7 @@ bool processAlertLine(LineHandlerEvent event, const AppConfig<FilenameStringType
         else if (alertStyle==AlertStyle::backtickNote)
         {
             if (alertTitle.empty())
-            {
-                auto it = appCfg.alertTitles.find(alertType);
-                if (it!=appCfg.alertTitles.end())
-                    alertTitle = it->second;
-            }
+                alertTitle = getAlertTypeTextStr(alertType);
 
             std::string alertHeaderStr = makeGitHubTitleStr(true); // add punctuation
             if (!alertHeaderStr.empty())
@@ -343,6 +334,9 @@ bool processAlertLine(LineHandlerEvent event, const AppConfig<FilenameStringType
         }
         else // if (alertStyle==AlertStyle::div)
         {
+            if (alertTitle.empty())
+                alertTitle = getAlertTypeTextStr(alertType);
+
             std::string color = getAlertHtmlColor(alertType);
             std::string alertHeaderStr = makeGitHubTitleStr(false); // don't add punctuation
             generatedLines.emplace_back(std::string("<div style=\"border-color: ") + color + "; border-left: 4px solid; margin: 5px; padding: 8px;\"><div><strong><span style=\"color: " + color + ";\">" + alertHeaderStr + "</span></strong></div><div>");
