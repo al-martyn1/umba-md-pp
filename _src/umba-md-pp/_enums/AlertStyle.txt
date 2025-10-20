@@ -24,5 +24,8 @@ invalid,unknown=-1
 
 default = 0  // если default, то используется text-режим, но default можно переопределять в опции target-renderer, иначе - нельзя
 text
+blockquote,bQuote
+backtickNote,btNote
+div
 github,gitHubFlavoredMarkdown,gfm
 gitlab,gitLabFlavoredMarkdown,glfm

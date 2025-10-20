@@ -119,18 +119,53 @@ int findHeadersTopLevel(const AppConfig<FilenameStringType> &appCfg, Document &d
 }
 
 //----------------------------------------------------------------------------
-template<typename FilenameStringType> inline
-bool processAlertFirstLine(const AppConfig<FilenameStringType> &appCfg, std::string str, std::vector<std::string> &generatedLines)
+inline
+std::string getAlertHtmlColor(AlertType alertType)
 {
-    umba::string_plus::trim(str);
-
-    if (!umba::string_plus::starts_with_and_strip(str, ("!!!")))
-        throw std::runtime_error("processAlertFirstLine: something goes wrong");
-
-    std::size_t i = 0u;
-    for(; i!=str.size(); ++i)
+    // https://colorscheme.ru/html-colors.html
+    switch(alertType)
     {
-        auto ch = str[i];
+        case AlertType::note      : return "#4169E1"; // RoyalBlue #4169E1
+        case AlertType::tip       : return "#2E8B57"; // SeaGreen #2E8B57
+        case AlertType::important : return "#8A2BE2"; // BlueViolet #8A2BE2
+        case AlertType::warning   : return "#800000"; // Maroon #800000
+        case AlertType::caution   : return "#8B4513"; // SaddleBrown #8B4513
+        case AlertType::todo      : return "#FF8C00"; // DarkOrange #FF8C00
+        case AlertType::invalid   : return "#FF0000"; // Red #FF0000
+        default                   : return "#4169E1"; // RoyalBlue #4169E1 as note
+    }
+}
+
+//----------------------------------------------------------------------------
+inline
+std::string getDefaultAlertPunctuation(AlertType alertType)
+{
+    switch(alertType)
+    {
+        case AlertType::note      : return ".";
+        case AlertType::tip       : return ".";
+        case AlertType::important : return "!";
+        case AlertType::warning   : return "!";
+        case AlertType::caution   : return "!";
+        case AlertType::todo      : return ".";
+        case AlertType::invalid   : return "!";
+        default                   : return "!";
+    }
+}
+
+//----------------------------------------------------------------------------
+inline
+void parseAlertStartLine(std::string line, AlertType &alertType, std::string &punctStr, std::string &alertTitle)
+{
+    umba::string_plus::trim(line);
+    if (!umba::string_plus::starts_with_and_strip(line, ("!!!")))
+        throw std::runtime_error("processAlertLine: something goes wrong");
+
+    // Вычитываем строки из букв, если есть - это типа алерта
+    std::size_t i = 0u;
+    for(; i!=line.size(); ++i)
+    {
+        auto ch = line[i];
         if ( (ch>='A' && ch<='Z')
           || (ch>='a' && ch<='z')
            )
@@ -141,134 +176,233 @@ bool processAlertFirstLine(const AppConfig<FilenameStringType> &appCfg, std::str
         break;
     }
 
-    auto alertStr  = std::string(str, 0, i);
-    auto alertType = enum_deserialize(alertStr, AlertType::invalid);
+    auto alertStr  = std::string(line, 0, i);
+    alertType = enum_deserialize(alertStr, AlertType::invalid);
     if (alertType==AlertType::invalid)
         alertType = AlertType::warning;
 
-    str.erase(0, i);
+    line.erase(0, i);
 
-    for(i = 0u; i!=str.size(); ++i)
+    for(i = 0u; i!=line.size(); ++i)
     {
-        auto ch = str[i];
+        auto ch = line[i];
         if (ch==' ')
             break;
     }
 
-    auto punctStr  = std::string(str, 0, i);
-    str.erase(0, i);
-    umba::string_plus::trim(str);
+    punctStr  = std::string(line, 0, i);
+    line.erase(0, i);
+    umba::string_plus::trim(line);
 
     if (punctStr!=":" && punctStr!="." && punctStr!="!" && punctStr!="-"  /* && punctStr!="" */ )
        punctStr.clear();
 
     if (punctStr.empty())
-        punctStr = ":";
+        punctStr = getDefaultAlertPunctuation(alertType);
 
     if (punctStr=="-")
         punctStr = " - ";
+    else
+        punctStr += " ";
 
-    const std::string &strTitle = str;
-    // alertType, punctStr, str - title
-    // !!! Тут надо быть внимательным
+    alertTitle = line;
 
-    auto getAlertTypeGfmStr = [](AlertType alertType) -> std::string
-    {
-        switch(alertType)
-        {
-            case AlertType::note      : return "[!NOTE]";
-            case AlertType::tip       : return "[!TIP]";
-            case AlertType::important : return "[!IMPORTANT]";
-            case AlertType::warning   : return "[!WARNING]";
-            case AlertType::caution   : return "[!CAUTION]";
-            case AlertType::todo      : return "[!NOTE]";
-            case AlertType::invalid   : return "[!WARNING]";
-            default                   : return "[!WARNING]";
-        
-        }
-    };
+}
 
-    auto getAlertTypeDefaultTextStr = [](AlertType alertType) -> std::string
-    {
-        switch(alertType)
-        {
-            case AlertType::note      : return "Note";
-            case AlertType::tip       : return "Tip";
-            case AlertType::important : return "Important";
-            case AlertType::warning   : return "Warning";
-            case AlertType::caution   : return "Caution";
-            case AlertType::todo      : return "TODO";
-            case AlertType::invalid   : return "Warning";
-            default                   : return "Warning";
-        
-        }
-    };
+//----------------------------------------------------------------------------
+// alertStart
+// alertLine
+// alertEnd
 
+template<typename FilenameStringType> inline
+bool processAlertLine(LineHandlerEvent event, const AppConfig<FilenameStringType> &appCfg, std::string str, std::vector<std::string> &generatedLines)
+{
     AlertStyle alertStyle = appCfg.getAlertStyle();
-    if (alertStyle==AlertStyle::github)
+
+    if (event==LineHandlerEvent::alertStart)
     {
-        // GitHub не поддерживает кастомные заголовки у алертсов
-        // Если задан заголовок, его делаем болдом в начале текста второй строкой
-
-        generatedLines.emplace_back("> " + getAlertTypeGfmStr(alertType));
-
-        // Если TODO, то заголовок вида "TODO: Заголовок!"
-        // Иначе "Заголовок!"
-        // На месте '!' - знак препинания, который задан
-
-        std::string alertHeaderStr;
-
-        if (alertType==AlertType::todo)
+        AlertType alertType;
+        std::string alertTitle;
+        std::string punctStr;
+        parseAlertStartLine(str, alertType, punctStr, alertTitle);
+    
+        auto getAlertTypeGfmStr = [](AlertType alertType) -> std::string
         {
-            alertHeaderStr = "TODO";
-            if (!strTitle.empty())
+            switch(alertType)
             {
-                alertHeaderStr += ": ";
-                alertHeaderStr += strTitle; 
+                case AlertType::note      : return "[!NOTE]";
+                case AlertType::tip       : return "[!TIP]";
+                case AlertType::important : return "[!IMPORTANT]";
+                case AlertType::warning   : return "[!WARNING]";
+                case AlertType::caution   : return "[!CAUTION]";
+                case AlertType::todo      : return "[!NOTE]";
+                case AlertType::invalid   : return "[!WARNING]";
+                default                   : return "[!WARNING]";
+            
+            }
+        };
+    /*
+        auto getAlertTypeDefaultTextStr = [](AlertType alertType) -> std::string
+        {
+            switch(alertType)
+            {
+                case AlertType::note      : return "Note";
+                case AlertType::tip       : return "Tip";
+                case AlertType::important : return "Important";
+                case AlertType::warning   : return "Warning";
+                case AlertType::caution   : return "Caution";
+                case AlertType::todo      : return "TODO";
+                case AlertType::invalid   : return "Warning";
+                default                   : return "Warning";
+            
+            }
+        };
+    */
+        auto makeGitHubTitleStr = [&](bool addPunct)
+        {
+            std::string alertHeaderStr;
+    
+            // Если TODO, то заголовок вида "TODO: Заголовок!"
+            // Иначе "Заголовок!"
+            // На месте '!' - знак препинания, который задан
+            if (alertType==AlertType::todo)
+            {
+                alertHeaderStr = alertTitle.empty() ? std::string("TODO: ") : std::string("TODO: ") + alertTitle;
+            }
+            else // not todo
+            {
+                alertHeaderStr = alertTitle;
             }
 
-            alertHeaderStr += punctStr;
+            if (!alertHeaderStr.empty() && addPunct)
+                alertHeaderStr += punctStr;
 
-            generatedLines.emplace_back("> **" + alertHeaderStr + "**" + " "); // !!! Тут нужно добавить экранирование символов умножения, но они маловероятны, поэтому пока не делаем
-        }
-        else // not todo
+            return alertHeaderStr;
+        };
+
+        if (alertStyle==AlertStyle::github)
         {
-            if (!strTitle.empty())
-            {
-                alertHeaderStr = strTitle + punctStr;
-            }
-
+            // GitHub не поддерживает кастомные заголовки у алертсов
+            // Если задан заголовок, его делаем болдом в начале текста второй строкой
+    
+            generatedLines.emplace_back("> " + getAlertTypeGfmStr(alertType));
+    
+            std::string alertHeaderStr = makeGitHubTitleStr(true); // add punctuation
+    
             if (!alertHeaderStr.empty())
-                generatedLines.emplace_back("> **" + alertHeaderStr + "**" + " "); // !!! Тут нужно добавить экранирование символов умножения, но они маловероятны, поэтому пока не делаем
+            {
+                // !!! Тут нужно добавить экранирование символов умножения, но они маловероятны, поэтому пока не делаем
+                generatedLines.emplace_back("> **" + alertHeaderStr + "**" + " ");
+            }
+
+        }
+        else if (alertStyle==AlertStyle::gitlab)
+        {
+            std::string alertHeaderStr = makeGitHubTitleStr(false); // don't add punctuation
+            generatedLines.emplace_back("> " + getAlertTypeGfmStr(alertType) + " " + alertHeaderStr);
+        }
+        else if (alertStyle==AlertStyle::text)
+        {
+            if (alertTitle.empty())
+            {
+                auto it = appCfg.alertTitles.find(alertType);
+                if (it!=appCfg.alertTitles.end())
+                    alertTitle = it->second;
+            }
+
+            std::string alertHeaderStr = makeGitHubTitleStr(true); // add punctuation
+            if (!alertHeaderStr.empty())
+                generatedLines.emplace_back("**" + alertHeaderStr + "**" + " ");
+        }
+        else if (alertStyle==AlertStyle::blockquote)
+        {
+            if (alertTitle.empty())
+            {
+                auto it = appCfg.alertTitles.find(alertType);
+                if (it!=appCfg.alertTitles.end())
+                    alertTitle = it->second;
+            }
+
+            std::string alertHeaderStr = makeGitHubTitleStr(true); // add punctuation
+            if (!alertHeaderStr.empty())
+                generatedLines.emplace_back("> **" + alertHeaderStr + "**" + " ");
+        }
+        else if (alertStyle==AlertStyle::backtickNote)
+        {
+            if (alertTitle.empty())
+            {
+                auto it = appCfg.alertTitles.find(alertType);
+                if (it!=appCfg.alertTitles.end())
+                    alertTitle = it->second;
+            }
+
+            std::string alertHeaderStr = makeGitHubTitleStr(true); // add punctuation
+            if (!alertHeaderStr.empty())
+                generatedLines.emplace_back("**" + alertHeaderStr + "**" + " ");
+            generatedLines.emplace_back("```notice");
+        }
+        else // if (alertStyle==AlertStyle::div)
+        {
+            std::string color = getAlertHtmlColor(alertType);
+            std::string alertHeaderStr = makeGitHubTitleStr(false); // don't add punctuation
+            generatedLines.emplace_back(std::string("<div style=\"border-color: ") + color + "; border-left: 4px solid; margin: 5px; padding: 8px;\"><div><strong><span style=\"color: " + color + ";\">" + alertHeaderStr + "</span></strong></div><div>");
+        }
+    
+    }
+    else if (event==LineHandlerEvent::alertLine)
+    {
+        if (alertStyle==AlertStyle::github)
+        {
+            generatedLines.emplace_back("> " + str);
+        }
+        else if (alertStyle==AlertStyle::gitlab)
+        {
+            generatedLines.emplace_back("> " + str);
+        }
+        else if (alertStyle==AlertStyle::text)
+        {
+            generatedLines.emplace_back(str);
+        }
+        else if (alertStyle==AlertStyle::blockquote)
+        {
+            generatedLines.emplace_back("> > " + str);
+        }
+        else if (alertStyle==AlertStyle::backtickNote)
+        {
+            generatedLines.emplace_back(str);
+        }
+        else // if (alertStyle==AlertStyle::div)
+        {
+            generatedLines.emplace_back(str);
         }
     }
-    else if (alertStyle==AlertStyle::gitlab)
+    else if (event==LineHandlerEvent::alertEnd)
     {
-        std::string alertHeaderStr = getAlertTypeGfmStr(alertType);
-
-        if (alertType==AlertType::todo)
+        if (alertStyle==AlertStyle::github)
         {
-            if (strTitle.empty())
-                alertHeaderStr = "TODO";
-            else
-                alertHeaderStr = "TODO: " + strTitle;
+            generatedLines.emplace_back(std::string());
         }
-        else
+        else if (alertStyle==AlertStyle::gitlab)
         {
-            alertHeaderStr = strTitle;
+            generatedLines.emplace_back(std::string());
         }
-
-        generatedLines.emplace_back("> " + getAlertTypeGfmStr(alertType) + " " + alertHeaderStr);
-    }
-    else // if (alertStyle==AlertStyle::text)
-    {
-        // !!! Надо доделать алертс для текстового варианта
-
-        // std::string alertHeaderStr;
-        // // if (alertType==AlertType::todo)
-        //  
-        // appCfg
-        // getAlertTypeDefaultTextStr
+        else if (alertStyle==AlertStyle::text)
+        {
+            generatedLines.emplace_back(std::string());
+        }
+        else if (alertStyle==AlertStyle::blockquote)
+        {
+            generatedLines.emplace_back(std::string());
+        }
+        else if (alertStyle==AlertStyle::backtickNote)
+        {
+            generatedLines.emplace_back(std::string("```"));
+            generatedLines.emplace_back(std::string());
+        }
+        else // if (alertStyle==AlertStyle::div)
+        {
+            generatedLines.emplace_back("</div></div>");
+        }
     }
 
     return true;

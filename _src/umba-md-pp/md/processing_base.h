@@ -80,8 +80,12 @@ std::vector<std::string> processLines(const AppConfig<FilenameStringType> &appCf
             //     state = PreprocessorParsingState::normal; // Больше ничего не делаем, строка всё ещё от комента
             if (isEmptyLine(line))
             {
+                if (handler(LineHandlerEvent::alertEnd, resLines, line, idx, lastLineIdx))
+                {
+                    resLines.emplace_back(line);
+                }
                 state = PreprocessorParsingState::normal;
-                resLines.emplace_back(std::string());
+                //resLines.emplace_back(std::string());
             }
             else
             {

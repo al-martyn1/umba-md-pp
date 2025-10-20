@@ -216,6 +216,8 @@ std::vector<std::string> processTextLinesSimple(const AppConfig<FilenameStringTy
                                                   return true;
             case LineHandlerEvent::alertLine:     checkPrintLineIfContainsPngExt(event, line);
                                                   return true;
+            case LineHandlerEvent::alertEnd:      checkPrintLineIfContainsPngExt(event, line);
+                                                  return true;
 
             case LineHandlerEvent::unknown:       return true;
 
@@ -1422,20 +1424,13 @@ std::vector<std::string> parseMarkdownFileLines( const AppConfig<FilenameStringT
         }
 
 
-        if (event==LineHandlerEvent::alertStart)
+        if (event==LineHandlerEvent::alertStart || event==LineHandlerEvent::alertLine || event==LineHandlerEvent::alertEnd)
         {
             std::vector<std::string> newLines;
-            umba::md::processAlertFirstLine(appCfg, line, newLines);
+            umba::md::processAlertLine(event, appCfg, line, newLines);
             resLines.insert(resLines.end(), newLines.begin(), newLines.end());
             return false; // prevent to add this line to result lines
         }
-
-        if (event==LineHandlerEvent::alertLine)
-        {
-            line = "> " + line;
-            return true; // allow add this line to result lines
-        }
-
 
         if (event==LineHandlerEvent::headerCommand)
         {
