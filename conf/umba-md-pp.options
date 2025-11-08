@@ -319,6 +319,12 @@
 --term-list-section-title=Термины   
 # --term-list-section-title=Terms
 
+--cmt-val-list-value-style=bold
+--cmt-val-list-type=table
+--cmt-val-list-title=:Значение|:Описание|:Комментарий
+# --val-list-title=:Value|:Meaning
+# --val-list-section-title=
+
 # ---list-value-style=
 # ---list-type=
 # ---list-title=

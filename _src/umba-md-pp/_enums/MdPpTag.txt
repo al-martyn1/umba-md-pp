@@ -12,6 +12,7 @@ optList,optionList            // Options/Опции - Option,Meaning/Опция,
 defList,definitionList        // Definitions/Определения - Definition,Meaning/Определение,Описание
 fieldList                     // aka memberList  Fields(Members)/Поля Field,Meaning/Поле,Описание
 termList                      // Terms/Термины   Term,Meaning/Термин,Описание
+commentedValList,commentedValueList,cmtValList         // Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий
 
 # С двумя позициями-ключами вместо одной, типа: Имя (символьное), Значение (числовое), Описание/Name,Value,Meaning
 argList2,argumentList2
@@ -21,6 +22,7 @@ optList2,optionList2
 defList2,definitionList2
 fieldList2
 termList2
+commentedValList2,commentedValueList2,cmtValList2
 
 
 # stage-list - список стадий. Нумеруется арабскими или римскими цифрами. Нумерацию делаем мы сами, а не оставляем её маркдауну. \

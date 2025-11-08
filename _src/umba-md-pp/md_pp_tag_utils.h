@@ -233,6 +233,12 @@ TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
                              return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
 
+    m[MdPpTag::cmtValList] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+
     m[MdPpTag::argList2 ] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
                         {
                              return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
@@ -263,6 +269,11 @@ TagLinesProcessorsMap<FilenameStringType> makeTagLinesProcessorsMap()
                         };
 
     m[MdPpTag::termList2] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
+                        {
+                             return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
+                        };
+
+    m[MdPpTag::cmtValList2] = [](const AppConfig<FilenameStringType> &appCfg, Document& doc, umba::html::HtmlTag &mdHtmlTag, MdPpTag tagType, const FilenameStringType &docFilename, const std::vector<std::string> &tagLines, std::vector<std::string> &resLines)
                         {
                              return umba::md::processArgListLines(appCfg, doc, mdHtmlTag, tagType, docFilename, tagLines, resLines);
                         };
