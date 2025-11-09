@@ -1,12 +1,12 @@
+@echo off
+setlocal enabledelayedexpansion
+
 @set ACC=al-martyn1
 @set BASE=github.com
-
 
 @if "%1"=="SSH"  goto SETUP_SSH
 @if "%1"=="GIT"  goto SETUP_SSH
 @if "%1"=="HTTP" goto SETUP_HTTP
-
-
 
 @rem Default is HTTPS mode
 
@@ -24,18 +24,46 @@ goto DO_CLONE
 set PREFIX=git@%BASE%:%ACC%
 
 :DO_CLONE
-@git clone --recurse-submodules %PREFIX%/umba_mm_mod_encodings.git   %~dp0\encoding
-@git clone --recurse-submodules %PREFIX%/marty_bigint.git            %~dp0\marty_bigint
-@git clone --recurse-submodules %PREFIX%/marty_cpp.git               %~dp0\marty_cpp
-@git clone --recurse-submodules %PREFIX%/marty_csv.git               %~dp0\marty_csv
-@git clone --recurse-submodules %PREFIX%/marty_decimal.git           %~dp0\marty_decimal
-@git clone --recurse-submodules %PREFIX%/marty_format.git            %~dp0\marty_format
-@git clone --recurse-submodules %PREFIX%/marty_tr.git                %~dp0\marty_tr
-@git clone --recurse-submodules %PREFIX%/marty_utf.git               %~dp0\marty_utf
-@git clone --recurse-submodules %PREFIX%/marty_yaml_toml_json.git    %~dp0\marty_yaml_toml_json
-@git clone --recurse-submodules %PREFIX%/forks-nlohmann-json.git     %~dp0\nlohmann
-@git clone --recurse-submodules %PREFIX%/umba_mm_mod_sfmt.git        %~dp0\sfmt
-@git clone --recurse-submodules %PREFIX%/umba_mm_mod_umba.git        %~dp0\umba
-@git clone --recurse-submodules %PREFIX%/umba_tokenizer.git          %~dp0\umba_tokenizer
-@git clone --recurse-submodules %PREFIX%/forks-jbeder-yaml-cpp.git   %~dp0\yaml-cpp
+@set "GIT_OPTS=--recurse-submodules"
+@set "MAIN_REPO=%PREFIX%"
+@set "INPUT_FILE=%~dp0\libs.list"
 
+for /f "tokens=1,2" %%A in (%INPUT_FILE%) do (
+    @echo.
+    @set first=%%A
+    @if /i "!first:~0,1!"=="#" (
+      @echo Skip %%A %%B
+    ) else (
+      @if "%%B"=="" (
+          call :process_single "%%A"
+      ) else (
+          call :process_double "%%A" "%%B"
+      )
+    )
+)
+@goto :eof
+
+:process_single
+@rem echo Обрабатываю одно значение: %1 с префиксом %MAIN_REPO%
+echo git clone %GIT_OPTS% %MAIN_REPO%/%~1.git %~1
+git clone %GIT_OPTS% %MAIN_REPO%/%~1.git %~1
+@exit /B 0
+
+:process_double
+@rem echo Обрабатываю два значения: %1 и %2
+@set "value=%~2"
+@if /i "!value:~0,8!"=="https://" (
+  echo git clone %GIT_OPTS% %value%.git %~1
+  git clone %GIT_OPTS% %value%.git %~1
+) else if /i "!value:~0,7!"=="http://" (
+  echo git clone %GIT_OPTS% %value%.git %~1
+  git clone %GIT_OPTS% %value%.git %~1
+) else if /i "!value:~0,4!"=="git@" (
+  echo git clone %GIT_OPTS% %value%.git %~1
+  git clone %GIT_OPTS% %value%.git %~1
+) else (
+  echo git clone %GIT_OPTS% %MAIN_REPO%/%value%.git %~1
+  git clone %GIT_OPTS% %MAIN_REPO%/%value%.git %~1
+)
+
+@exit /B 0
