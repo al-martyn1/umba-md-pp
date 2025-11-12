@@ -298,6 +298,13 @@
 --opt-list-section-title=Опции
 # --opt-list-section-title=Options
 
+--cli-opt-list-value-style=backtick
+--cli-opt-list-type=text
+--cli-opt-list-title=:Опция|:Описание
+# --cli-opt-list-title=:Option|:Meaning
+--cli-opt-list-section-title=Опции командной строки
+# --cli-opt-list-section-title=Options
+
 --def-list-value-style=bold
 --def-list-type=text
 --def-list-title=:Определение|:Описание
@@ -322,8 +329,8 @@
 --cmt-val-list-value-style=bold
 --cmt-val-list-type=table
 --cmt-val-list-title=:Значение|:Описание|:Комментарий
-# --val-list-title=:Value|:Meaning
-# --val-list-section-title=
+# --cmt-val-list-title=:Value|:Meaning
+# --cmt-val-list-section-title=
 
 # ---list-value-style=
 # ---list-type=

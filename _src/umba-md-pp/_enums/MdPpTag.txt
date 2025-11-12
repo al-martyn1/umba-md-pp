@@ -9,6 +9,7 @@ valList,valueList             // Значения (какие-то) Value,Meanin
 # new tags
 retList,returnList            // Return value/Возвращаемое значение - Value,Meaning/Значение,Описание
 optList,optionList            // Options/Опции - Option,Meaning/Опция,Описание
+cliOptList,cliOptionList      // Command Line Options/Опции командной строки - Option,Description/Опция,Описание
 defList,definitionList        // Definitions/Определения - Definition,Meaning/Определение,Описание
 fieldList                     // aka memberList  Fields(Members)/Поля Field,Meaning/Поле,Описание
 termList                      // Terms/Термины   Term,Meaning/Термин,Описание
@@ -19,6 +20,7 @@ argList2,argumentList2
 valList2,valueList2
 retList2,returnList2
 optList2,optionList2
+cliOptList2,cliOptionList2
 defList2,definitionList2
 fieldList2
 termList2
