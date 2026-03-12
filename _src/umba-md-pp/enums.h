@@ -1297,39 +1297,45 @@ enum class MdPpTag : std::uint32_t
     csvTable              = 0x0002 /*!<  */,
     argList               = 0x0003 /*!< Список аргументов, Parameters/Аргументы(Параметры) */,
     argumentList          = 0x0003 /*!< Список аргументов, Parameters/Аргументы(Параметры) */,
-    valList               = 0x0004 /*!< Значения (какие-то) Value,Meaning/Значение,Описание */,
-    valueList             = 0x0004 /*!< Значения (какие-то) Value,Meaning/Значение,Описание */,
-    retList               = 0x0005 /*!< Return value/Возвращаемое значение - Value,Meaning/Значение,Описание */,
-    returnList            = 0x0005 /*!< Return value/Возвращаемое значение - Value,Meaning/Значение,Описание */,
-    optList               = 0x0006 /*!< Options/Опции - Option,Meaning/Опция,Описание */,
-    optionList            = 0x0006 /*!< Options/Опции - Option,Meaning/Опция,Описание */,
-    cliOptList            = 0x0007 /*!< Command Line Options/Опции командной строки - Option,Description/Опция,Описание */,
-    cliOptionList         = 0x0007 /*!< Command Line Options/Опции командной строки - Option,Description/Опция,Описание */,
-    defList               = 0x0008 /*!< Definitions/Определения - Definition,Meaning/Определение,Описание */,
-    definitionList        = 0x0008 /*!< Definitions/Определения - Definition,Meaning/Определение,Описание */,
-    fieldList             = 0x0009 /*!< aka memberList  Fields(Members)/Поля Field,Meaning/Поле,Описание */,
-    termList              = 0x000A /*!< Terms/Термины   Term,Meaning/Термин,Описание */,
-    commentedValList      = 0x000B /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
-    commentedValueList    = 0x000B /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
-    cmtValList            = 0x000B /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
-    argList2              = 0x000C /*!<  */,
-    argumentList2         = 0x000C /*!<  */,
-    valList2              = 0x000D /*!<  */,
-    valueList2            = 0x000D /*!<  */,
-    retList2              = 0x000E /*!<  */,
-    returnList2           = 0x000E /*!<  */,
-    optList2              = 0x000F /*!<  */,
-    optionList2           = 0x000F /*!<  */,
-    cliOptList2           = 0x0010 /*!<  */,
-    cliOptionList2        = 0x0010 /*!<  */,
-    defList2              = 0x0011 /*!<  */,
-    definitionList2       = 0x0011 /*!<  */,
-    fieldList2            = 0x0012 /*!<  */,
-    termList2             = 0x0013 /*!<  */,
-    commentedValList2     = 0x0014 /*!<  */,
-    commentedValueList2   = 0x0014 /*!<  */,
-    cmtValList2           = 0x0014 /*!<  */,
-    end                   = 0x0015 /*!<  */
+    attrList              = 0x0004 /*!< Список атрибутов, Attribute,Meaning/Атрибут,Описание */,
+    attributeList         = 0x0004 /*!< Список атрибутов, Attribute,Meaning/Атрибут,Описание */,
+    valList               = 0x0005 /*!< Значения (какие-то) Value,Meaning/Значение,Описание */,
+    valueList             = 0x0005 /*!< Значения (какие-то) Value,Meaning/Значение,Описание */,
+    retList               = 0x0006 /*!< Return value/Возвращаемое значение - Value,Meaning/Значение,Описание */,
+    returnList            = 0x0006 /*!< Return value/Возвращаемое значение - Value,Meaning/Значение,Описание */,
+    optList               = 0x0007 /*!< Options/Опции - Option,Meaning/Опция,Описание */,
+    optionList            = 0x0007 /*!< Options/Опции - Option,Meaning/Опция,Описание */,
+    cliOptList            = 0x0008 /*!< Command Line Options/Опции командной строки - Option,Description/Опция,Описание */,
+    cliOptionList         = 0x0008 /*!< Command Line Options/Опции командной строки - Option,Description/Опция,Описание */,
+    defList               = 0x0009 /*!< Definitions/Определения - Definition,Meaning/Определение,Описание */,
+    definitionList        = 0x0009 /*!< Definitions/Определения - Definition,Meaning/Определение,Описание */,
+    fieldList             = 0x000A /*!< aka memberList  Fields(Members)/Поля Field,Meaning/Поле,Описание */,
+    termList              = 0x000B /*!< Terms/Термины   Term,Meaning/Термин,Описание */,
+    tagList               = 0x000C /*!< Tags/Тэги       Tag,Meaning/Тэг,Описание */,
+    commentedValList      = 0x000D /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
+    commentedValueList    = 0x000D /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
+    cmtValList            = 0x000D /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
+    argList2              = 0x000E /*!<  */,
+    argumentList2         = 0x000E /*!<  */,
+    attrList2             = 0x000F /*!<  */,
+    attributeList2        = 0x000F /*!<  */,
+    valList2              = 0x0010 /*!<  */,
+    valueList2            = 0x0010 /*!<  */,
+    retList2              = 0x0011 /*!<  */,
+    returnList2           = 0x0011 /*!<  */,
+    optList2              = 0x0012 /*!<  */,
+    optionList2           = 0x0012 /*!<  */,
+    cliOptList2           = 0x0013 /*!<  */,
+    cliOptionList2        = 0x0013 /*!<  */,
+    defList2              = 0x0014 /*!<  */,
+    definitionList2       = 0x0014 /*!<  */,
+    fieldList2            = 0x0015 /*!<  */,
+    termList2             = 0x0016 /*!<  */,
+    tagList2              = 0x0017 /*!<  */,
+    commentedValList2     = 0x0018 /*!<  */,
+    commentedValueList2   = 0x0018 /*!<  */,
+    cmtValList2           = 0x0018 /*!<  */,
+    end                   = 0x0019 /*!<  */
 
 }; // enum 
 //#!
@@ -1340,13 +1346,18 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::commentedValList2   , "commented-val-list2" );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::optList2            , "opt-list2"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::valList2            , "val-list2"           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::tagList2            , "tag-list2"           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::commentedValList    , "commented-val-list"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::tagList             , "tag-list"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::invalid             , "invalid"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::defList2            , "def-list2"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::cliOptList2         , "cli-opt-list2"       );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::graph               , "graph"               );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::puml                , "puml"                );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csvTable            , "csv-table"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::argList             , "arg-list"            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::attrList2           , "attr-list2"          );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::csvTable            , "csv-table"           );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::attrList            , "attr-list"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::termList2           , "term-list2"          );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::argList2            , "arg-list2"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::valList             , "val-list"            );
@@ -1357,7 +1368,6 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::cliOptList          , "cli-opt-list"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::retList2            , "ret-list2"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::optList             , "opt-list"            );
-    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::commentedValList    , "commented-val-list"  );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::defList             , "def-list"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::fieldList           , "field-list"          );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MdPpTag, std::map, 1 )
@@ -1370,6 +1380,11 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::optList2            , "opt-list2"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList2            , "value-list2"           );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::valList2            , "val-list2"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::tagList2            , "tag-list2"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::commentedValList    , "cmt-val-list"          );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::commentedValList    , "commented-value-list"  );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::commentedValList    , "commented-val-list"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::tagList             , "tag-list"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid             , "unknown"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid             , "invalid"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::defList2            , "definition-list2"      );
@@ -1381,9 +1396,13 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml                , "diagram"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml                , "plantuml"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::puml                , "puml"                  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csvTable            , "csv-table"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList             , "argument-list"         );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList             , "arg-list"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::attrList2           , "attribute-list2"       );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::attrList2           , "attr-list2"            );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::csvTable            , "csv-table"             );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::attrList            , "attribute-list"        );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::attrList            , "attr-list"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::termList2           , "term-list2"            );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList2            , "argument-list2"        );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::argList2            , "arg-list2"             );
@@ -1400,9 +1419,6 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::retList2            , "ret-list2"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::optList             , "option-list"           );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::optList             , "opt-list"              );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::commentedValList    , "cmt-val-list"          );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::commentedValList    , "commented-value-list"  );
-    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::commentedValList    , "commented-val-list"    );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::defList             , "definition-list"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::defList             , "def-list"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::fieldList           , "field-list"            );

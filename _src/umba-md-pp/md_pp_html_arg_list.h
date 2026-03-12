@@ -66,6 +66,15 @@ void updateArgListOptions(const AppConfig<FilenameStringType> &appCfg, const umb
         argListOptions.setListSectionTitle(mdHtmlTag.getAttrValue("sec-title", std::string()));
     }
 
+    if (mdHtmlTag.hasAttr("no-section-title"))
+    {
+        argListOptions.setListSectionTitle(std::string());
+    }
+    else if (mdHtmlTag.hasAttr("no-sec-title"))
+    {
+        argListOptions.setListSectionTitle(std::string());
+    }
+
 }
 
 //----------------------------------------------------------------------------
@@ -240,25 +249,33 @@ void processArgListLinesImpl( ArgListOptions argListOptions
         curTableLine.clear();
     };
 
+    // bool cellListMode = false;
+    // bool cellListMode
+
+    // https://chat.deepseek.com/share/obs9fdtglqbwt6cxxv
 
     for(auto tagLine : tagLines)
     {
-        umba::string_plus::trim(tagLine); // Обрезаем незначащие пробелы с обеих сторон
+        // umba::string_plus::trim(tagLine); // Обрезаем незначащие пробелы с обеих сторон
+        auto tagLineRightTrimmed = umba::string_plus::rtrim_copy(tagLine); // !!! Или маркер у нас должен идти всегда в начале строки? Лучше так, тогда можно внутри делать списки
+
+        //auto tagLineTrimmed = umba::string_plus::trim_copy(tagLine);
 
         //auto tmp = umba::string_plus::ltrim_copy(tagLine);
 
-        if (!tagLine.empty() && tagLine[0]=='-')
+        if (!tagLineRightTrimmed.empty() && tagLineRightTrimmed[0]=='-')
         {
             // нашли новый элемент
             appendCurTableLine();
             tagLine.erase(0,1);
             umba::string_plus::trim(tagLine);
             curTableLine.emplace_back(tagLine);
+            // cellListMode = false;
         }
         
-        else if (!tagLine.empty() || !curTableLine.empty())
+        else if (!tagLineRightTrimmed.empty() || !curTableLine.empty())
         {
-            curTableLine.emplace_back(tagLine);
+            curTableLine.emplace_back(tagLineRightTrimmed);
         }
     }
 

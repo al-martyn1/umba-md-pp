@@ -1704,6 +1704,8 @@ int operator()( const StringType                                &a           //!
         // UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("", )
 
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("arg-list"      , argList      )
+        UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("attr-list"     , attrList     )
+        UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("tag-list"      , tagList      )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("val-list"      , valList      )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("ret-list"      , retList      )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("opt-list"      , optList      )
@@ -1714,6 +1716,8 @@ int operator()( const StringType                                &a           //!
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("cmt-val-list"  , cmtValList   )
 
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("arg-list2"     , argList2     )
+        UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("attr-list2"    , attrList2    )
+        UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("tag-list2"     , tagList2     )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("val-list2"     , valList2     )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("ret-list2"     , retList2     )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("opt-list2"     , optList2     )

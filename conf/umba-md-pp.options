@@ -278,6 +278,22 @@
 --arg-list-section-title=Параметры
 #--arg-list-section-title=Parameters
 
+--attr-list-value-style=bold
+#--attr-list-type=text
+ --attr-list-type=table
+--attr-list-title=:Атрибут|:Описание
+# --attr-list-title=:Value|:Meaning
+--attr-list-section-title=Атрибуты
+#--attr-list-section-title=Parameters
+
+--tag-list-value-style=bold
+#--tag-list-type=text
+ --tag-list-type=table
+--tag-list-title=:Тэг|:Описание
+# --tag-list-title=:Value|:Meaning
+--tag-list-section-title=Тэги
+#--tag-list-section-title=Parameters
+
 --val-list-value-style=bold
 --val-list-type=table
 --val-list-title=:Значение|:Описание
@@ -319,11 +335,11 @@
 --field-list-section-title=Поля
 # --field-list-section-title=Fields
 
---term-list-value-style=bold
+--term-list-value-style=bold-italic
 --term-list-type=text
 --term-list-title=:Термин|:Описание
 # --term-list-title=:Term|:Meaning
---term-list-section-title=Термины   
+#--term-list-section-title=Термины   
 # --term-list-section-title=Terms
 
 --cmt-val-list-value-style=bold
