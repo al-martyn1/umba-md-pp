@@ -75,8 +75,13 @@ struct ArgListOptions
         if (!titleStr.empty() && titleStr.front()=='|')
             titleStr.erase(0, 1);
 
-        if (!titleStr.empty() && titleStr.back()!='|')
-            titleStr.append(1, '|');
+        // !!! Вот это не понятно
+        // if (!titleStr.empty() && titleStr.back()!='|')
+        //     titleStr.append(1, '|');
+
+        // Удаляем хвостовой разделитель
+        if (!titleStr.empty() && titleStr.back()=='|')
+            titleStr.erase(titleStr.size()-1, 1);
 
         title = marty_cpp::splitToLinesSimple(titleStr, false, '|');
         while(title.size()<2)
