@@ -57,6 +57,11 @@ void updateArgListOptions(const AppConfig<FilenameStringType> &appCfg, const umb
         argListOptions.setListTitle(mdHtmlTag.getAttrValue("title", std::string()));
     }
 
+    if (mdHtmlTag.hasAttr("no-title"))
+    {
+        argListOptions.setListTitle(std::string());
+    }
+
     if (mdHtmlTag.hasAttr("section-title"))
     {
         argListOptions.setListSectionTitle(mdHtmlTag.getAttrValue("section-title", std::string()));
