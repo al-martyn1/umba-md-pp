@@ -8,16 +8,51 @@ Date       : April 25, 2024
 Language   : Russian
 ---
 
-<val-list2 no-sec-title title="|Arg|Description|">
+<val-list2 type=table no-sec-title title="|Arg|Description|">
 
 - value1
 value1 description
+
+value1 description continuation 1
+
+value1 description continuation 1
 
 - value2
 value2 description
  - list item 1
  - list item 2
  - list item 3
+
+value2 description 2
+ - list item 2.1
+ - list item 2.2
+ - list item 2.3
+
+- value3
+value3 description
+
+</val-list2>
+
+
+<val-list2 type=text no-sec-title title="|Arg|Description|">
+
+- value1
+value1 description
+
+value1 description continuation 1
+
+value1 description continuation 1
+
+- value2
+value2 description
+ - list item 1
+ - list item 2
+ - list item 3
+
+value2 description 2
+ - list item 2.1
+ - list item 2.2
+ - list item 2.3
 
 - value3
 value3 description

@@ -49,9 +49,31 @@
 
 |Arg|Description|
 |:---|:---|
-|**value1**|value1 description|
-|**value2**|value2 description  - list item 1  - list item 2  - list item 3|
+|**value1**|value1 description<br/><br/>value1 description continuation 1<br/><br/>value1 description continuation 1|
+|**value2**|value2 description <ul><li>list item 1 </li><li>list item 2 </li><li>list item 3</li></ul><br/>value2 description 2 <ul><li>list item 2.1 </li><li>list item 2.2 </li><li>list item 2.3</li><ul>|
 |**value3**|value3 description|
+
+
+**value1** -
+value1 description
+
+value1 description continuation 1
+
+value1 description continuation 1
+
+**value2** -
+value2 description
+  - list item 1
+  - list item 2
+  - list item 3
+
+value2 description 2
+  - list item 2.1
+  - list item 2.2
+  - list item 2.3
+
+**value3** -
+value3 description
 
 
 ---

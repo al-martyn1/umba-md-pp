@@ -288,6 +288,14 @@ void processArgListLinesImpl( ArgListOptions argListOptions
 
     // argListEscape(const std::string &str, char chEscape)
 
+    auto isListItem = [](std::string str) -> bool
+    {
+        umba::string::trim(str);
+        return !str.empty() && str.front()=='-';
+    };
+
+
+
     if (argListOptions.argListType==ArgListType::table)
     {
         resLines.emplace_back(std::string());
@@ -352,29 +360,80 @@ void processArgListLinesImpl( ArgListOptions argListOptions
 
         // Заголовок сделали, делаем таблицу
 
+        auto prepareListItem = [&](std::string str)
+        {
+            UMBA_ASSERT(isListItem(str));
+            umba::string::trim(str);
+            str.erase(0, 1);
+            umba::string::trim(str);
+            return str;
+        };
+
         std::string composedTableLine;
 
         for(auto && tableLine : tableLines)
         {
+            bool prevBreak = false;
+            std::size_t listItemNumber = 0;
+
             std::vector<std::string> preparedLine;
-            for(auto && l : tableLine)
+            for(auto l : tableLine)
             {
-                if (preparedLine.size()<title.size())
+                if (preparedLine.size()<title.size()) // первые строки идут отдельно - это первая, и, возможно, вторая ячейки (ключи)
                 {
                     preparedLine.emplace_back(l);
                 }
-                else
+                else // тут формируем строку для ячейки с описанием
                 {
                     if (l.empty())
                     {
-                        preparedLine.back().append("<br/><br/>");
+                        if (listItemNumber) // у нас незакрытый список
+                            preparedLine.back().append("</li></ul><br/>");
+                        else
+                            preparedLine.back().append("<br/><br/>"); // делаем просто разрыв
+
+                        prevBreak = true;
+                        listItemNumber = 0; // сбрасываем счётчик элементов списка
                     }
                     else
                     {
-                        preparedLine.back().append(1, ' ');
-                        preparedLine.back().append(l); // First time escape
+                        if (!prevBreak) 
+                            preparedLine.back().append(1, ' ');
+                        // else
+                        //  Если предыдущая строка была пустой, список точно закончен
+
+                        if (isListItem(l)) // у нас - элемент списка
+                        {
+                            if (!listItemNumber)
+                            {
+                                // первый элемент списка
+                                preparedLine.back().append("<ul><li>");
+                                preparedLine.back().append(prepareListItem(l));
+                            }
+                            else
+                            {
+                                preparedLine.back().append("</li><li>"); // следующий элемент списка
+                                preparedLine.back().append(prepareListItem(l));
+                            }
+
+                            ++listItemNumber;
+                        }
+                        else
+                        {
+                            // Строка не списочная
+                            preparedLine.back().append(l);
+                        }
+
+                        prevBreak = false;
                     }
                 }
+
+            } // for(auto l : tableLine)
+
+            if (listItemNumber)
+            {
+                // имеется незакрытый список
+                preparedLine.back().append("</li><ul>");
             }
 
             composedTableLine.clear(); // assign(1, '|');
@@ -421,12 +480,20 @@ void processArgListLinesImpl( ArgListOptions argListOptions
 
     else // if (argListOptions.argListType==ArgListType::text)
     {
+        auto prepareListItem = [&](std::string str)
+        {
+            UMBA_ASSERT(isListItem(str));
+            umba::string::trim(str);
+            return "  " + str;
+        };
+
+
         resLines.emplace_back(std::string());
 
         for(auto && tableLine : tableLines)
         {
             std::size_t cnt = std::size_t(-1);
-            for(auto && l : tableLine)
+            for(auto l : tableLine)
             {
                 ++cnt;
 
@@ -448,6 +515,8 @@ void processArgListLinesImpl( ArgListOptions argListOptions
                 }
                 else
                 {
+                    if (isListItem(l))
+                        l = prepareListItem(l);
                     resLines.emplace_back(l);
                 }
             }
