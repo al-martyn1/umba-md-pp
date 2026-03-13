@@ -11,6 +11,7 @@ marty_format
 #marty_gdl
 #marty_hex
 #marty_mem
+marty_rich_text
 #marty_svg
 marty_tr
 marty_utf
