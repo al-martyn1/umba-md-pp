@@ -8,6 +8,23 @@ Date       : April 25, 2024
 Language   : Russian
 ---
 
+<val-list2 no-sec-title title="|Arg|Description|">
+
+- value1
+value1 description
+
+- value2
+value2 description
+ - list item 1
+ - list item 2
+ - list item 3
+
+- value3
+value3 description
+
+</val-list2>
+
+
 #!meta{no-document-meta-title,author,url}
 
 !!! Заголовок

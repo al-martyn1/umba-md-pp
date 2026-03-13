@@ -17,19 +17,27 @@ Generator: Umba Brief Scanner
 
 # _src/umba-md-pp
 
+- `[_src/umba-md-pp/arg_list_options.h:78]`
+  Вот это не понятно if (!titleStr.empty() && titleStr.back()!='|')
+  titleStr.append(1, '|');
+
 - `[_src/umba-md-pp/document.h:104]`
   Тут надо добавить что-то типа хидера, или break line Или - не надо?
+
+- `[_src/umba-md-pp/md_pp_html_arg_list.h:265]`
+  Или маркер у нас должен идти всегда в начале строки? Лучше так, тогда можно
+  внутри делать списки
 
 - `[_src/umba-md-pp/processing.h:163]`
   Хз, зачем это нужно было
 
-- `[_src/umba-md-pp/processing.h:391]`
+- `[_src/umba-md-pp/processing.h:393]`
   Не понятно, с чего этот варнинг вылезает, надо разобраться
 
-- `[_src/umba-md-pp/processing.h:996]`
+- `[_src/umba-md-pp/processing.h:998]`
   Какое-то оформление надо
 
-- `[_src/umba-md-pp/processing.h:1405]`
+- `[_src/umba-md-pp/processing.h:1407]`
   JSON-META У нас универсальный парсер YAML/JSON и мета данные могут быть в
   формате JSON При вставке в JSON могут быть проблемы
 
@@ -62,17 +70,7 @@ Generator: Umba Brief Scanner
 
 # _src/umba-md-pp/md
 
-- `[_src/umba-md-pp/md/processing_utils.h:173]`
-  Тут надо быть внимательным
-
-- `[_src/umba-md-pp/md/processing_utils.h:232]`
+- `[_src/umba-md-pp/md/processing_utils.h:297]`
   Тут нужно добавить экранирование символов умножения, но они маловероятны,
   поэтому пока не делаем
-
-- `[_src/umba-md-pp/md/processing_utils.h:242]`
-  Тут нужно добавить экранирование символов умножения, но они маловероятны,
-  поэтому пока не делаем
-
-- `[_src/umba-md-pp/md/processing_utils.h:265]`
-  Доделать
 

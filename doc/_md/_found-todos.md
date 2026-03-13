@@ -22,20 +22,50 @@ Generator: Umba Brief Scanner
 
 
 
+# _libs/marty_rich_text
+
+- [ ] `[_libs/marty_rich_text/Para.h:232]`
+  isImage - содержит только img/image и ничего больше. Также завести ещё одно
+  значение EParaType для Image
+
+- [ ] `[_libs/marty_rich_text/PugixmlFb2Parser_DocumentBody.h:100]`
+  Пока изображение представляем, как пустой параграф, но надо доделать
+
+- [ ] `[_libs/marty_rich_text/PugixmlFb2Parser_DocumentBody.h:632]`
+  std::vector<Block>          annotation
+
+- [ ] `[_libs/marty_rich_text/PugixmlFb2Parser_DocumentHeader.h:149]`
+  Тут надо бы распарсить содержимое document-info, но это пока никому не нужно
+
+- [ ] `[_libs/marty_rich_text/PugixmlGenericRichParaWalker.h:231]`
+  Отпроцессить следующие тэги
+
+- [ ] `[_libs/marty_rich_text/PugixmlGenericRichParaWalker.h:252]`
+  Тут может быть нюанс, что идут два одинаковых тэга с доп параметрами, их надо
+  проверить, пока не сделано (теперь вроде сделано) Или вложенные тэги - хотя,
+  вложенность, по идее, схлопывается
+
+- [ ] `[_libs/marty_rich_text/PugixmlGenericRichParaWalker.h:308]`
+  Тут может быть нюанс, что идут два одинаковых тэга с доп параметрами, их надо
+  проверить, пока не сделано (теперь вроде сделано) Или вложенные тэги - хотя,
+  вложенность, по идее, схлопывается
+
+
+
 # _src/umba-md-pp
 
 - [ ] `[_src/umba-md-pp/code-options-database.h:117]`
   Пока у нас строки начала/окончания блока односимвольные, но надо переделать,
   желательно везде
 
-- [ ] `[_src/umba-md-pp/processing.h:243]`
+- [ ] `[_src/umba-md-pp/processing.h:245]`
   Надо бы ещё принудительно флэттенизировать урлы, которые выходят за пределы
   каталога с документом UMBA_USED(flattenImageLinks);
 
-- [ ] `[_src/umba-md-pp/processing.h:272]`
+- [ ] `[_src/umba-md-pp/processing.h:274]`
   Надо бы сделать какой-то null_insert_iterator и null_inserter
 
-- [ ] `[_src/umba-md-pp/processing.h:1009]`
+- [ ] `[_src/umba-md-pp/processing.h:1011]`
   Нужно добавить обрамление
 
 - [ ] `[_src/umba-md-pp/processing_utils.h:471]`

@@ -5,6 +5,10 @@ Generator: Umba Brief Scanner
 
 
 
+# _libs
+
+- `libs.list` - 
+
 # _libs/marty_bigint
 
 - `defs.h` - Definitions for marty_format
@@ -73,6 +77,39 @@ Generator: Umba Brief Scanner
 
 - `undef_min_max.h` - 
 - `utils.h` - Типы для marty::format
+
+# _libs/marty_rich_text
+
+- `ArtworkInfo.h` - 
+- `AuthorInfo.h` - 
+- `CiteEpigraphPoemSection.h` - 
+- `DateInfo.h` - 
+- `Document.h` - 
+- `DocumentHeader.h` - 
+- `DocumentInfo.h` - 
+- `Enums.h` - 
+- `Para.h` - 
+- `PublishingInfo.h` - 
+- `PugixmlFb2Parser.h` - 
+- `PugixmlFb2Parser_Document.h` - 
+- `PugixmlFb2Parser_DocumentBody.h` - 
+- `PugixmlFb2Parser_DocumentHeader.h` - 
+- `PugixmlFb2Parser_Para.h` - 
+- `PugixmlGenericRichParaWalker.h` - 
+- `Stanza.h` - 
+- `StyleSheet.h` - 
+- `Table.h` - 
+- `TdTh.h` - 
+- `TextAttributes.h` - 
+- `TextAuthor.h` - 
+- `TextFragment.h` - 
+- `Title.h` - 
+- `TitleInfo.h` - 
+- `Tr.h` - 
+- `TranslaterInfo.h` - 
+- `VariantValue.h` - 
+- `parsePugixml_AttrsIdLangStyle.h` - 
+- `utils.h` - 
 
 # _src/simple-drawing
 

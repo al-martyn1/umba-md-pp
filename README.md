@@ -16,19 +16,20 @@
 
 Утилита, добавляющая некоторые возможности к Markdown
 
-          - [**Определения**](#определения)
-          - [**Параметры**](#параметры)
   - [Список важных предупреждений](#список-важных-предупреждений)
     - [_src/simple-drawing](#_srcsimple-drawing)
     - [_src/umba-md-pp](#_srcumba-md-pp)
     - [_src/umba-md-pp/md](#_srcumba-md-ppmd)
   - [Список предупреждений](#список-предупреждений)
+    - [_libs/marty_rich_text](#_libsmarty_rich_text)
   - [Список задач](#список-задач)
     - [_libs/marty_format/impl](#_libsmarty_formatimpl)
+    - [_libs/marty_rich_text](#_libsmarty_rich_text-1)
     - [_src/umba-md-pp](#_srcumba-md-pp-1)
     - [_src/umba-md-pp/code-processing](#_srcumba-md-ppcode-processing)
   - [Список недоделанного](#список-недоделанного)
   - [Список заметок](#список-заметок)
+    - [_libs/marty_rich_text](#_libsmarty_rich_text-2)
     - [_src/umba-md-pp](#_srcumba-md-pp-2)
   - [Список "см. также"](#список-см-также)
     - [_libs/marty_format](#_libsmarty_format)
@@ -46,6 +47,13 @@
 - [Boost MSM](#boost-msm)
 
 
+|Arg|Description|
+|:---|:---|
+|**value1**|value1 description|
+|**value2**|value2 description  - list item 1  - list item 2  - list item 3|
+|**value3**|value3 description|
+
+
 ---
 **Авторы**:
 - Имя <name@at.domain.com>
@@ -59,12 +67,12 @@
 
 
 > [!WARNING]
-> **Заголовок! **
+> **Заголовок!**
 > Предупреждение Предупреждение Предупреждение Предупреждение
 > Предупреждение Предупреждение Предупреждение Предупреждение
 
 > [!CAUTION]
-> **Titel! **
+> **Titel!**
 > caution caution caution caution
 > caution
 > caution
@@ -141,19 +149,27 @@ todo,d        // дополнительный тип, нет в GFM/GLFM, буд
 
 ### _src/umba-md-pp
 
+- `[_src/umba-md-pp/arg_list_options.h:78]`
+  Вот это не понятно if (!titleStr.empty() && titleStr.back()!='|')
+  titleStr.append(1, '|');
+
 - `[_src/umba-md-pp/document.h:104]`
   Тут надо добавить что-то типа хидера, или break line Или - не надо?
+
+- `[_src/umba-md-pp/md_pp_html_arg_list.h:265]`
+  Или маркер у нас должен идти всегда в начале строки? Лучше так, тогда можно
+  внутри делать списки
 
 - `[_src/umba-md-pp/processing.h:163]`
   Хз, зачем это нужно было
 
-- `[_src/umba-md-pp/processing.h:391]`
+- `[_src/umba-md-pp/processing.h:393]`
   Не понятно, с чего этот варнинг вылезает, надо разобраться
 
-- `[_src/umba-md-pp/processing.h:996]`
+- `[_src/umba-md-pp/processing.h:998]`
   Какое-то оформление надо
 
-- `[_src/umba-md-pp/processing.h:1405]`
+- `[_src/umba-md-pp/processing.h:1407]`
   JSON-META У нас универсальный парсер YAML/JSON и мета данные могут быть в
   формате JSON При вставке в JSON могут быть проблемы
 
@@ -185,22 +201,19 @@ todo,d        // дополнительный тип, нет в GFM/GLFM, буд
 
 ### _src/umba-md-pp/md
 
-- `[_src/umba-md-pp/md/processing_utils.h:173]`
-  Тут надо быть внимательным
-
-- `[_src/umba-md-pp/md/processing_utils.h:232]`
+- `[_src/umba-md-pp/md/processing_utils.h:297]`
   Тут нужно добавить экранирование символов умножения, но они маловероятны,
   поэтому пока не делаем
-
-- `[_src/umba-md-pp/md/processing_utils.h:242]`
-  Тут нужно добавить экранирование символов умножения, но они маловероятны,
-  поэтому пока не делаем
-
-- `[_src/umba-md-pp/md/processing_utils.h:265]`
-  Доделать
 
 
 ## Список предупреждений
+
+
+### _libs/marty_rich_text
+
+- `[_libs/marty_rich_text/Para.h:286]`
+  C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre
+  switch specified
 
 
 ## Список задач
@@ -225,20 +238,49 @@ todo,d        // дополнительный тип, нет в GFM/GLFM, буд
   эту возможность
 
 
+### _libs/marty_rich_text
+
+- [ ] `[_libs/marty_rich_text/Para.h:232]`
+  isImage - содержит только img/image и ничего больше. Также завести ещё одно
+  значение EParaType для Image
+
+- [ ] `[_libs/marty_rich_text/PugixmlFb2Parser_DocumentBody.h:100]`
+  Пока изображение представляем, как пустой параграф, но надо доделать
+
+- [ ] `[_libs/marty_rich_text/PugixmlFb2Parser_DocumentBody.h:632]`
+  std::vector<Block>          annotation
+
+- [ ] `[_libs/marty_rich_text/PugixmlFb2Parser_DocumentHeader.h:149]`
+  Тут надо бы распарсить содержимое document-info, но это пока никому не нужно
+
+- [ ] `[_libs/marty_rich_text/PugixmlGenericRichParaWalker.h:231]`
+  Отпроцессить следующие тэги
+
+- [ ] `[_libs/marty_rich_text/PugixmlGenericRichParaWalker.h:252]`
+  Тут может быть нюанс, что идут два одинаковых тэга с доп параметрами, их надо
+  проверить, пока не сделано (теперь вроде сделано) Или вложенные тэги - хотя,
+  вложенность, по идее, схлопывается
+
+- [ ] `[_libs/marty_rich_text/PugixmlGenericRichParaWalker.h:308]`
+  Тут может быть нюанс, что идут два одинаковых тэга с доп параметрами, их надо
+  проверить, пока не сделано (теперь вроде сделано) Или вложенные тэги - хотя,
+  вложенность, по идее, схлопывается
+
+
 ### _src/umba-md-pp
 
 - [ ] `[_src/umba-md-pp/code-options-database.h:117]`
   Пока у нас строки начала/окончания блока односимвольные, но надо переделать,
   желательно везде
 
-- [ ] `[_src/umba-md-pp/processing.h:243]`
+- [ ] `[_src/umba-md-pp/processing.h:245]`
   Надо бы ещё принудительно флэттенизировать урлы, которые выходят за пределы
   каталога с документом UMBA_USED(flattenImageLinks);
 
-- [ ] `[_src/umba-md-pp/processing.h:272]`
+- [ ] `[_src/umba-md-pp/processing.h:274]`
   Надо бы сделать какой-то null_insert_iterator и null_inserter
 
-- [ ] `[_src/umba-md-pp/processing.h:1009]`
+- [ ] `[_src/umba-md-pp/processing.h:1011]`
   Нужно добавить обрамление
 
 - [ ] `[_src/umba-md-pp/processing_utils.h:471]`
@@ -277,6 +319,23 @@ todo,d        // дополнительный тип, нет в GFM/GLFM, буд
 
 
 ## Список заметок
+
+
+### _libs/marty_rich_text
+
+- `[_libs/marty_rich_text/CiteEpigraphPoemSection.h:101]`
+  blockType::code, blockType::teletype и blockType::pre могут содержать
+  произвольное количество para - для группировки с одним фоном Но могут и по
+  одному para содержать
+
+- `[_libs/marty_rich_text/CiteEpigraphPoemSection.h:148]`
+  либо берем textAuthors как есть либо компонуем в один параграф через запятую
+
+- `[_libs/marty_rich_text/CiteEpigraphPoemSection.h:157]`
+  Тут надо бы со стилями что-то мутить
+
+- `[_libs/marty_rich_text/CiteEpigraphPoemSection.h:211]`
+  либо берем textAuthors как есть либо компонуем в один параграф через запятую
 
 
 ### _src/umba-md-pp
@@ -824,6 +883,22 @@ enum class SnippetOptions : std::uint32_t
 --arg-list-section-title=Параметры
 #--arg-list-section-title=Parameters
 
+--attr-list-value-style=bold
+#--attr-list-type=text
+ --attr-list-type=table
+--attr-list-title=:Атрибут|:Описание
+# --attr-list-title=:Value|:Meaning
+--attr-list-section-title=Атрибуты
+#--attr-list-section-title=Parameters
+
+--tag-list-value-style=bold
+#--tag-list-type=text
+ --tag-list-type=table
+--tag-list-title=:Тэг|:Описание
+# --tag-list-title=:Value|:Meaning
+--tag-list-section-title=Тэги
+#--tag-list-section-title=Parameters
+
 --val-list-value-style=bold
 --val-list-type=table
 --val-list-title=:Значение|:Описание
@@ -844,6 +919,13 @@ enum class SnippetOptions : std::uint32_t
 --opt-list-section-title=Опции
 # --opt-list-section-title=Options
 
+--cli-opt-list-value-style=backtick
+--cli-opt-list-type=text
+--cli-opt-list-title=:Опция|:Описание
+# --cli-opt-list-title=:Option|:Meaning
+--cli-opt-list-section-title=Опции командной строки
+# --cli-opt-list-section-title=Options
+
 --def-list-value-style=bold
 --def-list-type=text
 --def-list-title=:Определение|:Описание
@@ -858,12 +940,18 @@ enum class SnippetOptions : std::uint32_t
 --field-list-section-title=Поля
 # --field-list-section-title=Fields
 
---term-list-value-style=bold
+--term-list-value-style=bold-italic
 --term-list-type=text
 --term-list-title=:Термин|:Описание
 # --term-list-title=:Term|:Meaning
---term-list-section-title=Термины
+#--term-list-section-title=Термины
 # --term-list-section-title=Terms
+
+--cmt-val-list-value-style=bold
+--cmt-val-list-type=table
+--cmt-val-list-title=:Значение|:Описание|:Комментарий
+# --cmt-val-list-title=:Value|:Meaning
+# --cmt-val-list-section-title=
 
 # ---list-value-style=
 # ---list-type=
