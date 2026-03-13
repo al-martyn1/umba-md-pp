@@ -1714,6 +1714,7 @@ int operator()( const StringType                                &a           //!
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("field-list"    , fieldList    )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("term-list"     , termList     )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("cmt-val-list"  , cmtValList   )
+        UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("cmd-list"      , cmdList      )
 
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("arg-list2"     , argList2     )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("attr-list2"    , attrList2    )
@@ -1726,6 +1727,7 @@ int operator()( const StringType                                &a           //!
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("field-list2"   , fieldList2   )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("term-list2"    , termList2    )
         UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("cmt-val-list2" , cmtValList2  )
+        UMBA_MD_PP_ARGLIST_PARSER_HANDLE_VALLISTTAG_HANDLE_OPTIONS("cmd-list2"     , cmdList2     )
 
 
 #if 0

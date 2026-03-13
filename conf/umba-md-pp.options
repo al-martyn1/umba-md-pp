@@ -294,6 +294,14 @@
 --tag-list-section-title=Тэги
 #--tag-list-section-title=Parameters
 
+--cmd-list-value-style=backtick
+#--cmd-list-type=text
+ --cmd-list-type=table
+--cmd-list-title=:Команда|:Описание
+# --cmd-list-title=:Value|:Meaning
+--cmd-list-section-title=Команды
+#--cmd-list-section-title=Parameters
+
 --val-list-value-style=bold
 --val-list-type=table
 --val-list-title=:Значение|:Описание

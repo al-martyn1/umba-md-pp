@@ -15,6 +15,7 @@ defList,definitionList        // Definitions/Определения - Definition
 fieldList                     // aka memberList  Fields(Members)/Поля Field,Meaning/Поле,Описание
 termList                      // Terms/Термины   Term,Meaning/Термин,Описание
 tagList                       // Tags/Тэги       Tag,Meaning/Тэг,Описание
+cmdList                       // Commands/Команды       Command,Description/Команда,Описание
 commentedValList,commentedValueList,cmtValList         // Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий
 
 # С двумя позициями-ключами вместо одной, типа: Имя (символьное), Значение (числовое), Описание/Name,Value,Meaning
@@ -28,6 +29,7 @@ defList2,definitionList2
 fieldList2
 termList2
 tagList2
+cmdList2
 commentedValList2,commentedValueList2,cmtValList2
 
 

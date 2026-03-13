@@ -1312,30 +1312,32 @@ enum class MdPpTag : std::uint32_t
     fieldList             = 0x000A /*!< aka memberList  Fields(Members)/Поля Field,Meaning/Поле,Описание */,
     termList              = 0x000B /*!< Terms/Термины   Term,Meaning/Термин,Описание */,
     tagList               = 0x000C /*!< Tags/Тэги       Tag,Meaning/Тэг,Описание */,
-    commentedValList      = 0x000D /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
-    commentedValueList    = 0x000D /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
-    cmtValList            = 0x000D /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
-    argList2              = 0x000E /*!<  */,
-    argumentList2         = 0x000E /*!<  */,
-    attrList2             = 0x000F /*!<  */,
-    attributeList2        = 0x000F /*!<  */,
-    valList2              = 0x0010 /*!<  */,
-    valueList2            = 0x0010 /*!<  */,
-    retList2              = 0x0011 /*!<  */,
-    returnList2           = 0x0011 /*!<  */,
-    optList2              = 0x0012 /*!<  */,
-    optionList2           = 0x0012 /*!<  */,
-    cliOptList2           = 0x0013 /*!<  */,
-    cliOptionList2        = 0x0013 /*!<  */,
-    defList2              = 0x0014 /*!<  */,
-    definitionList2       = 0x0014 /*!<  */,
-    fieldList2            = 0x0015 /*!<  */,
-    termList2             = 0x0016 /*!<  */,
-    tagList2              = 0x0017 /*!<  */,
-    commentedValList2     = 0x0018 /*!<  */,
-    commentedValueList2   = 0x0018 /*!<  */,
-    cmtValList2           = 0x0018 /*!<  */,
-    end                   = 0x0019 /*!<  */
+    cmdList               = 0x000D /*!< Commands/Команды       Command,Description/Команда,Описание */,
+    commentedValList      = 0x000E /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
+    commentedValueList    = 0x000E /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
+    cmtValList            = 0x000E /*!< Без заголовка, Value,Meaning,Comment/Значение,Описание,Коментарий */,
+    argList2              = 0x000F /*!<  */,
+    argumentList2         = 0x000F /*!<  */,
+    attrList2             = 0x0010 /*!<  */,
+    attributeList2        = 0x0010 /*!<  */,
+    valList2              = 0x0011 /*!<  */,
+    valueList2            = 0x0011 /*!<  */,
+    retList2              = 0x0012 /*!<  */,
+    returnList2           = 0x0012 /*!<  */,
+    optList2              = 0x0013 /*!<  */,
+    optionList2           = 0x0013 /*!<  */,
+    cliOptList2           = 0x0014 /*!<  */,
+    cliOptionList2        = 0x0014 /*!<  */,
+    defList2              = 0x0015 /*!<  */,
+    definitionList2       = 0x0015 /*!<  */,
+    fieldList2            = 0x0016 /*!<  */,
+    termList2             = 0x0017 /*!<  */,
+    tagList2              = 0x0018 /*!<  */,
+    cmdList2              = 0x0019 /*!<  */,
+    commentedValList2     = 0x001A /*!<  */,
+    commentedValueList2   = 0x001A /*!<  */,
+    cmtValList2           = 0x001A /*!<  */,
+    end                   = 0x001B /*!<  */
 
 }; // enum 
 //#!
@@ -1348,6 +1350,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::valList2            , "val-list2"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::tagList2            , "tag-list2"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::commentedValList    , "commented-val-list"  );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::cmdList             , "cmd-list"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::tagList             , "tag-list"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::invalid             , "invalid"             );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::defList2            , "def-list2"           );
@@ -1368,6 +1371,7 @@ MARTY_CPP_ENUM_CLASS_SERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::cliOptList          , "cli-opt-list"        );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::retList2            , "ret-list2"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::optList             , "opt-list"            );
+    MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::cmdList2            , "cmd-list2"           );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::defList             , "def-list"            );
     MARTY_CPP_ENUM_CLASS_SERIALIZE_ITEM( MdPpTag::fieldList           , "field-list"          );
 MARTY_CPP_ENUM_CLASS_SERIALIZE_END( MdPpTag, std::map, 1 )
@@ -1384,6 +1388,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::commentedValList    , "cmt-val-list"          );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::commentedValList    , "commented-value-list"  );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::commentedValList    , "commented-val-list"    );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::cmdList             , "cmd-list"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::tagList             , "tag-list"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid             , "unknown"               );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::invalid             , "invalid"               );
@@ -1419,6 +1424,7 @@ MARTY_CPP_ENUM_CLASS_DESERIALIZE_BEGIN( MdPpTag, std::map, 1 )
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::retList2            , "ret-list2"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::optList             , "option-list"           );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::optList             , "opt-list"              );
+    MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::cmdList2            , "cmd-list2"             );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::defList             , "definition-list"       );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::defList             , "def-list"              );
     MARTY_CPP_ENUM_CLASS_DESERIALIZE_ITEM( MdPpTag::fieldList           , "field-list"            );
