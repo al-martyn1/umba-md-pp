@@ -14,7 +14,7 @@
 @exit /B 1
 :DEPLOY_ROOT_IS_SET
 @rem
-@call "%~dp0.bat\deploy_impl.bat"
+@call "%~dp0.umba.bat\deploy_impl.bat"
 @rem
 @rem Add extra deploy code here
 

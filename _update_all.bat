@@ -1,1 +1,1 @@
-@call "%~dp0.bat\update_all_impl.bat" %1
+@call "%~dp0.umba.bat\update_all_impl.bat" %1
