@@ -283,16 +283,16 @@
  --attr-list-type=table
 --attr-list-title=:Атрибут|:Описание
 # --attr-list-title=:Value|:Meaning
---attr-list-section-title=Атрибуты
-#--attr-list-section-title=Parameters
+#--attr-list-section-title=Атрибуты
+#--attr-list-section-title=Attributes
 
 --tag-list-value-style=bold
 #--tag-list-type=text
- --tag-list-type=table
+--tag-list-type=table
 --tag-list-title=:Тэг|:Описание
 # --tag-list-title=:Value|:Meaning
---tag-list-section-title=Тэги
-#--tag-list-section-title=Parameters
+#--tag-list-section-title=Тэги
+#--tag-list-section-title=Tags
 
 --val-list-value-style=bold
 --val-list-type=table
