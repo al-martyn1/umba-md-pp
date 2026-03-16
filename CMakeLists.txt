@@ -14,7 +14,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(UMBA_STATIC_RUNTIME ON)
 set(UMBA_USE_BOOST      OFF)
 
-include(${CMAKE_CURRENT_LIST_DIR}/.cmake/umba.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/.umba.cmake/umba.cmake)
 
 
 
@@ -45,7 +45,7 @@ set(COMMON_LIBS encoding::encoding marty::cpp marty::csv sfmt::sfmt umba::umba u
 set(JSON_YAML_LIB nlohmann_json::nlohmann_json yaml-cpp::yaml-cpp)
 
 
-umba_configure_boost("STATIC_LIBS" "MULTITHREADED" "${STATIC_RUNTIME}")
+# umba_configure_boost("STATIC_LIBS" "MULTITHREADED" "${STATIC_RUNTIME}")
 
 
 #-O0 

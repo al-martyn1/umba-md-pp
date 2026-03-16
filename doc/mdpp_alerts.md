@@ -1,3 +1,9 @@
+**Информация о документе**
+
+**URL**: https://github.com/al-martyn1/umba-md-pp/blob/main/doc/mdpp_alerts.md
+
+---
+
 - [MD++ Alerts](#md-alerts)
 
 # MD++ Alerts

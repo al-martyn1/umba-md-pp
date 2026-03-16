@@ -23,3 +23,6 @@ $*$.*
 /tests/test_006/*.txt
 tmp*.txt
 /.set_msvc.bat
+/.claude
+/.gemini
+/.opencode

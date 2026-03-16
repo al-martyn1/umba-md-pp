@@ -124,7 +124,7 @@ std::vector<std::string> generateSecionsExtra( const AppConfig<FilenameStringTyp
 
         if (updateDocInfo)
         {
-            if (appCfg.tocMaxLevel==0 || curSectionLevel<=(std::size_t)appCfg.tocMaxLevel)
+            if ((appCfg.tocMaxLevel==0 || curSectionLevel<=(std::size_t)appCfg.tocMaxLevel) && curSectionLevel<6)
             {
                 std::string tocLine = std::string(curSectionLevel*2u /* +2u */ , ' ');
                 tocLine.append("- ");

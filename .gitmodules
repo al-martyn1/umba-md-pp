@@ -1,9 +1,9 @@
-[submodule ".cmake"]
-	path = .cmake
-	url = https://github.com/al-martyn1/.cmake.git
-[submodule ".bat"]
-	path = .bat
-	url = https://github.com/al-martyn1/.bat.git
 [submodule ".wiki"]
 	path = .wiki
 	url = https://github.com/al-martyn1/umba-md-pp.wiki.git
+[submodule ".umba.bat"]
+	path = .umba.bat
+	url = https://github.com/al-martyn1/.umba.bat.git
+[submodule ".umba.cmake"]
+	path = .umba.cmake
+	url = https://github.com/al-martyn1/.umba.cmake.git

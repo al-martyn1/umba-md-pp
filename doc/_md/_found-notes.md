@@ -2,6 +2,24 @@
 Generator: Umba Brief Scanner
 ---
 
+# _libs/marty_rich_text
+
+- `[_libs/marty_rich_text/CiteEpigraphPoemSection.h:101]`
+  blockType::code, blockType::teletype и blockType::pre могут содержать
+  произвольное количество para - для группировки с одним фоном Но могут и по
+  одному para содержать
+
+- `[_libs/marty_rich_text/CiteEpigraphPoemSection.h:148]`
+  либо берем textAuthors как есть либо компонуем в один параграф через запятую
+
+- `[_libs/marty_rich_text/CiteEpigraphPoemSection.h:157]`
+  Тут надо бы со стилями что-то мутить
+
+- `[_libs/marty_rich_text/CiteEpigraphPoemSection.h:211]`
+  либо берем textAuthors как есть либо компонуем в один параграф через запятую
+
+
+
 # _src/umba-md-pp
 
 - `[_src/umba-md-pp/signature.h:38]`
