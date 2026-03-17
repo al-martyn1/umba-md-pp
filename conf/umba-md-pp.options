@@ -70,6 +70,7 @@
 #--batch-exclude-dirs=_text,_text_,text_
 
 --batch-exclude-dir=.out,.build,.git,.bat,.cmake,.msvc,.vscode,.vs,.config
+--batch-exclude-files=*/.*
 
 
 # При генерации вьювером название файла задается на основании заголовка (из тэгов или первого заголовка, 

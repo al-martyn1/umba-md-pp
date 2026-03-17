@@ -16,8 +16,6 @@
 
 Утилита, добавляющая некоторые возможности к Markdown
 
-          - [**Определения**](#определения)
-          - [**Параметры**](#параметры)
   - [Список важных предупреждений](#список-важных-предупреждений)
     - [_src/simple-drawing](#_srcsimple-drawing)
     - [_src/umba-md-pp](#_srcumba-md-pp)
@@ -51,8 +49,8 @@
 
 |Arg|Description|
 |:---|:---|
-|**value1**|value1 description<br/><br/> value1 description continuation 1<br/><br/> value1 description continuation 1|
-|**value2**|value2 description  - list item 1  - list item 2  - list item 3<br/><br/> value2 description 2  - list item 2.1  - list item 2.2  - list item 2.3|
+|**value1**|value1 description<br/><br/>value1 description continuation 1<br/><br/>value1 description continuation 1|
+|**value2**|value2 description <ul><li>list item 1 </li><li>list item 2 </li><li>list item 3</li></ul><br/>value2 description 2 <ul><li>list item 2.1 </li><li>list item 2.2 </li><li>list item 2.3</li><ul>|
 |**value3**|value3 description|
 
 
@@ -65,14 +63,14 @@ value1 description continuation 1
 
 **value2** -
 value2 description
- - list item 1
- - list item 2
- - list item 3
+  - list item 1
+  - list item 2
+  - list item 3
 
 value2 description 2
- - list item 2.1
- - list item 2.2
- - list item 2.3
+  - list item 2.1
+  - list item 2.2
+  - list item 2.3
 
 **value3** -
 value3 description
@@ -699,6 +697,7 @@ enum class SnippetOptions : std::uint32_t
 #--batch-exclude-dirs=_text,_text_,text_
 
 --batch-exclude-dir=.out,.build,.git,.bat,.cmake,.msvc,.vscode,.vs,.config
+--batch-exclude-files=*/.*
 
 
 # При генерации вьювером название файла задается на основании заголовка (из тэгов или первого заголовка,
