@@ -498,12 +498,16 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
 
     std::vector<std::string> inputNames;
     inputNames.emplace_back(mdFile);
+    inputNames.emplace_back("."+mdFile);
     {
         std::string newExt = umba::filename::getExt(mdFile);
         umba::string_plus::trim(newExt, umba::string_plus::is_one_of<char>("_"));
         std::string name2 = umba::filename::appendExt(umba::filename::getPathFile(mdFile), newExt);
         if (name2!=mdFile)
+        {
             inputNames.emplace_back(name2);
+            inputNames.emplace_back("."+name2);
+        }
     }
 
     foundOptionsFiles.clear();
