@@ -69,7 +69,7 @@
 --batch-exclude-dirs=doc.dox,doc.doxy,doc.doxygen,.dox,.doxy,.doxygen,dox,doxy,doxygen
 #--batch-exclude-dirs=_text,_text_,text_
 
---batch-exclude-dir=.out,.build,.git,.bat,.cmake,.msvc,.vscode,.vs,.config
+--batch-exclude-dir=.out,.build,.git,.bat,.cmake,.umba.bat,.umba.cmake,.msvc,.vscode,.vs,.config
 --batch-exclude-files=*/.*
 
 
