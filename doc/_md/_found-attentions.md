@@ -63,7 +63,7 @@ Generator: Umba Brief Scanner
 - `[_src/umba-md-pp/umba_md_processing_utils.h:572]`
   Не понятно, что за состояние, и почему я его не обработал
 
-- `[_src/umba-md-pp/utils.h:542]`
+- `[_src/umba-md-pp/utils.h:546]`
   надо обдумать для других возможных путей
 
 

@@ -498,17 +498,38 @@ void findProjectOptionsFiles(const std::string &mdFile, std::string renderingTar
 
     std::vector<std::string> inputNames;
     inputNames.emplace_back(mdFile);
-    inputNames.emplace_back("."+mdFile);
+    //inputNames.emplace_back("."+mdFile);
     {
-        std::string newExt = umba::filename::getExt(mdFile);
-        umba::string_plus::trim(newExt, umba::string_plus::is_one_of<char>("_"));
-        std::string name2 = umba::filename::appendExt(umba::filename::getPathFile(mdFile), newExt);
-        if (name2!=mdFile)
-        {
-            inputNames.emplace_back(name2);
-            inputNames.emplace_back("."+name2);
-        }
+        std::string mdFilePath = umba::filename::getPath(mdFile);
+        std::string mdFileName = umba::filename::getFileName(mdFile);
+        inputNames.emplace_back(umba::filename::appendPath(mdFilePath, "."+mdFileName));
     }
+
+    {
+        std::vector<std::string> inputNames2;
+        for(const auto &inputName : inputNames)
+        {
+            std::string prevExt = umba::filename::getExt(inputName);
+            std::string newExt  = prevExt;
+            umba::string_plus::trim(newExt, umba::string_plus::is_one_of<char>("_"));
+            if (newExt==prevExt)
+            {
+                // У нас не было подчёркивания в расширении, добавляем
+                newExt.append(1, '_');
+            }
+
+            auto pathFile = umba::filename::getPathFile(inputName);
+            std::string name2 = umba::filename::appendExt(pathFile, newExt);
+            if (name2!=inputName)
+            {
+                inputNames2.emplace_back(name2);
+                // inputNames2.emplace_back("."+name2);
+            }
+        }
+    
+        inputNames.insert(inputNames.end(), inputNames2.begin(), inputNames2.end());
+    }
+
 
     foundOptionsFiles.clear();
 
